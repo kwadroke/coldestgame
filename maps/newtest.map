@@ -1,0 +1,415 @@
+TileSize 30
+HeightScale .8
+ZeroHeight 20
+NumTextures 17
+NumObjects 8
+
+1 textures/sky.png
+2 textures/Grass1.png
+3 textures/Grass2.png
+4 textures/Rock.png
+5 textures/test.png
+6 textures/dirt.png
+7 textures/stone.png
+8 textures/highcontrastgrass.png
+9 textures/treebark.png
+10 textures/treebarkbase.png
+11 textures/leaves2.png
+12 textures/water.png
+13 textures/metal.png
+14 textures/leaves6.png
+15 textures/leaves3.png
+16 textures/leaves4.png
+17 textures/leaves6.png
+9999 dummy
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+150 -1 250
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 2
+numbranches0 8
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 20
+heightreductionperc .8
+firstleaflevel 2
+leafsize 20
+trunkrad 6
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 120
+250 -1 250
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 7
+numbranches1 5
+numbranches2 3
+numbranches3 2
+numsegs 6
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 25
+initrad 8
+radreductionperc .2
+initheight 40
+heightreductionperc .9
+firstleaflevel 20
+leafsize 30
+trunkrad 7
+trunknumslices 6
+trunktaper .5
+trunknumsegs 1
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+150 -1 350
+0 0 0
+
+proctree
+10 10 14
+numlevels 1
+numslices 3
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 8
+initrad 3
+radreductionperc .2
+initheight 100
+heightreductionperc .4
+firstleaflevel 20
+leafsize 10
+trunkrad 5
+trunknumslices 10
+trunktaper .8
+trunknumsegs 8
+branchevery 1
+sidebranches 5
+maxsidebranchangle 5
+split 0
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+sidetaper .8
+endopts
+impdist 150
+size 160
+150 -1 450
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 7
+numbranches1 5
+numbranches2 3
+numbranches3 2
+numsegs 6
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 25
+initrad 8
+radreductionperc .2
+initheight 40
+heightreductionperc .9
+firstleaflevel 20
+leafsize 30
+trunkrad 7
+trunknumslices 6
+trunktaper .5
+trunknumsegs 1
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+250 -1 400
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 7
+numbranches1 5
+numbranches2 3
+numbranches3 2
+numsegs 6
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 25
+initrad 8
+radreductionperc .2
+initheight 40
+heightreductionperc .9
+firstleaflevel 20
+leafsize 30
+trunkrad 7
+trunknumslices 6
+trunktaper .5
+trunknumsegs 1
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+300 -1 550
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+250 -1 500
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+150 -1 550
+0 0 0
+
+bush
+15
+10
+555 -1 525
+0 0 0
+10
+
+bush
+16
+14
+655 -1 205
+0 0 0
+8
+
+bush
+11
+14
+500 500 500
+0 0 0
+8
+
+tree
+9 10 16
+5 3 50 25 10
+375 -15 585
+0 0 0
+10
+
+tree
+9 10 11
+5 3 50 25 10
+475 -1 485
+0 0 0
+12
+
+tree
+9 10 16
+5 3 50 25 10
+305 -1 505
+0 0 0
+12
+
+tree
+9 10 11
+20 10 100 25 10
+375 -14 385
+0 20 0
+12
+
+tree
+9 10 11
+10 5 100 15 10
+375 -1 185
+0 0 0
+10
+
+tree
+9 10 16
+10 5 100 25 10
+475 -1 285
+0 0 0
+10
+
+tree
+9 10 11
+10 5 100 25 10
+345 -1 255
+0 0 0
+12
+
+tree
+9 10 11
+10 5 100 25 10
+435 -1 485
+0 0 0
+10
+
+tree
+9 10 14
+10 5 100 25 10
+375 -1 385
+0 0 0
+10
+
+tree
+9 10 11
+10 5 100 25 10
+555 -1 425
+0 0 0
+10
+
+tristrip
+2
+0 0 0
+100 100 100
+100 150 100
+150 100 100
+150 150 100
+0 0 0
+
+cylinder
+13
+10 5 400 25 10
+700 -1 300
+0 0 0

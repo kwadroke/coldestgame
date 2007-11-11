@@ -1,0 +1,35 @@
+matView = lookat(camera, cameradir)
+
+matProj = perspective(fov, aspect, near, far)
+
+lightobj.matOrientation = lookat(lightobj.position, zero)
+lightobj.matOrientation.invert()
+
+lightdir = lightobj.position - zero
+lightdir.normalize
+
+matViewPrime = matView
+//matViewPrime.43 = slideback
+
+//matProjPrime = matProj
+//matProjPrime *= ortho(50, 50, near, far) ???
+matProjPrime = perspective(angle, aspect, near, far /*+ slideback*/);
+
+matViewProjPrime = matProjPrime * matViewPrime
+
+lightpos = transform(lightdir)
+if (z == 0)
+   lightpos = transform(-lightdir)
+   if (z == 0)
+      something, not going to worry about it
+      
+view = lookat(lightpos, zero)
+
+proj = perspective(fov, 1, near, far)
+
+matTemp = matProjPrime * matViewPrime
+matTemp2 = proj * view
+matShadowBuffer = matTemp * matTemp2
+
+Bias?  Only for lookups
+Transpose before rendering?

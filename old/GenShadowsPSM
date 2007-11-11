@@ -1,0 +1,179 @@
+// Generates the depth texture that will be used in shadowing
+// Uses PSM, probably won't be worth my time, but meh
+// Won't work anymore because GenShadows has changed significantly
+// since this was split off
+void GenShadows()
+{
+   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, shadowmapfbo);
+   
+   // Adjust a few global settings
+   int saveviewdist = viewdist;
+   viewdist = Light::infinity + 10000;
+   glDisable(GL_FOG);
+   glDisable(GL_LIGHTING);
+   
+   glPushAttrib(GL_VIEWPORT_BIT);
+   glViewport(0, 0, shadowmapsize, shadowmapsize);
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   
+   // Set up matrices
+   Vector3 lightlookat = player[0].pos;
+   /* This will all need to be rewritten because it doesn't properly
+      shadow what's being looked at in many cases. */
+   Vector3 lookdir(0, 0, -1);
+   GraphicMatrix mat;
+   mat.rotatex(player[0].pitch);
+   mat.rotatey(player[0].facing + player[0].rotation);
+   mat.rotatez(player[0].roll);
+   lookdir.transform(mat.members);
+   
+   lookdir *= 100;
+   //lookdir.y = lightlookat.y;
+   //lookdir.print();
+   
+   lightlookat += lookdir;
+   
+   // Set up camera matrices
+   glMatrixMode(GL_PROJECTION);
+   glPushMatrix();
+   {
+      glLoadIdentity();
+      gluPerspective(fov, aspect, nearclip, farclip);
+      glGetFloatv(GL_PROJECTION_MATRIX, cameraproj);
+   }
+   glPopMatrix();
+   
+   glMatrixMode(GL_MODELVIEW);
+   Vector3 camlookat = lookdir - player[0].pos;
+   glPushMatrix();
+   {
+      glLoadIdentity();
+      gluLookAt(player[0].pos.x, player[0].pos.y, player[0].pos.z, camlookat.x, camlookat.y, camlookat.z, 0, 1, 0);
+      glGetFloatv(GL_MODELVIEW_MATRIX, cameraview);
+   }
+   glPopMatrix();
+   
+   GraphicMatrix proj = cameraview;
+   proj *= cameraproj; // Remember *= is backwards
+   
+   // Set up light matrices
+   Vector3 lightpos = lights.GetPos(0);
+   Vector3 tlightpos = lightpos * -1;
+   tlightpos.normalize();
+   tlightpos.transform(proj);
+   tlightpos.print();
+   
+   glMatrixMode(GL_PROJECTION);
+   glPushMatrix();
+   {
+      float lpdist = tlightpos.magnitude();
+      float lpfov = atan(1 / lpdist);
+      cout << lpfov << endl;
+      glLoadIdentity();
+      gluPerspective(lpfov, 1, .01, 1000);//lpdist - 2, lpdist + 2);
+      glGetFloatv(GL_PROJECTION_MATRIX, lightproj);
+   }
+   glPopMatrix();
+   
+   glMatrixMode(GL_MODELVIEW);
+   glPushMatrix();
+   {
+      glLoadIdentity();
+      gluLookAt(tlightpos.x, tlightpos.y, tlightpos.z, 0, 0, 0, 0, 1, 0);
+      glGetFloatv(GL_MODELVIEW_MATRIX, lightview);
+   }
+   glPopMatrix();
+   
+   
+   glMatrixMode(GL_PROJECTION);
+   /*glLoadMatrixf(cameraproj);
+   glMultMatrixf(cameraview);
+   glMultMatrixf(lightproj);*/
+   glLoadMatrixf(lightproj);
+   glMultMatrixf(lightview);
+   glMultMatrixf(cameraproj);
+   
+   glMatrixMode(GL_MODELVIEW);
+   //glLoadMatrixf(lightview);
+   glLoadMatrixf(cameraview);
+   
+   glShadeModel(GL_FLAT);
+#ifndef DEBUGSMT
+   glEnable(GL_CULL_FACE);
+   glCullFace(GL_FRONT);
+   glColorMask(0, 0, 0, 0);
+#endif
+   
+   // Need to reset kdtree frustum...
+   Vector3 rots;
+   Vector3 dir = lights.GetDir(0);
+   Vector3 p = lights.GetPos(0);
+   Vector3 start(0, 0, -1); // Initial view direction
+   Vector3 neg;
+   
+   // Direction returned is where it's coming from, we want going to
+   dir *= -1;
+   dir.y = 0;
+   dir.normalize();
+   rots.y = acos(start.dot(dir)) * 180.f / PI;
+   neg = start.cross(dir);
+   if (neg.y > 0)
+      rots.y *= -1;
+   dir = lights.GetDir(0);
+   dir *= -1;
+   GraphicMatrix rotm;
+   rotm.rotatey(rots.y);
+   start.transform(rotm.members);
+   rots.x = acos(start.dot(dir)) * 180.f / PI;
+   /*rots.print();  // Debugging
+   
+   start = Vector3(0, 0, -1);
+   rotm.identity();
+   rotm.rotatex(rots.x);
+   rotm.rotatey(rots.y);
+   start.transform(rotm.members);
+   start.print();
+   dir.print();
+   cout << endl;*/
+   
+   float lightaspect = 45;//tan(100 / Light::infinity);
+   kdtree.setfrustum(p, rots, Light::infinity - 1000, Light::infinity + 3000, lightaspect, 1);
+   
+   dir = lights.GetDir(0);
+   dir *= -1;
+   GraphicMatrix m;
+   m.rotatey(rots.y);
+   m.rotatex(rots.x);
+   Vector3 temp(0, 0, -1);
+   temp.transform(m.members);
+   
+   glEnable(GL_POLYGON_OFFSET_FILL);
+   glPolygonOffset(2.0f, 2.0f);
+   
+   // Render objects to depth map
+   glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+   shadowrender = true;
+   RenderObjects();
+   RenderDynamicObjects();
+   shadowrender = false;
+   glDisable(GL_POLYGON_OFFSET_FILL);
+   
+   // Reset globals
+   glPopAttrib();
+   //glCullFace(GL_BACK);
+   glDisable(GL_CULL_FACE);
+   glShadeModel(GL_SMOOTH);
+   glColorMask(1, 1, 1, 1);
+   
+   glEnable(GL_FOG);
+   glEnable(GL_LIGHTING);
+   viewdist = saveviewdist;
+   
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluPerspective(fov, aspect, nearclip, farclip);
+   
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
