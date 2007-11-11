@@ -93,5 +93,4 @@ void UpdateUnitSelection()
    player[0].weapons[Torso] = torsobox->Selected();
    player[0].weapons[LArm] = larmbox->Selected();
    player[0].weapons[RArm] = rarmbox->Selected();
-   //player[0]
 }

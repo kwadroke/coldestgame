@@ -130,14 +130,16 @@ int NetSend(void* dummy)
       if (spawnrequest)
       {
          Packet p(outpack, &outsock, &addr);
-         p.ack = true;
+         //p.ack = true;  No ack method in place yet
          p << "S\n";
          p << sendpacketnum << eol;
          p << servplayernum << eol;
          SDL_mutexP(clientmutex);
          p << player[0].unit << eol;
          for (int i = 0; i < numbodyparts; ++i)
+         {
             p << player[0].weapons[i] << eol;
+         }
          SDL_mutexV(clientmutex);
          SDL_mutexP(sendmutex);
          sendqueue.push_back(p);

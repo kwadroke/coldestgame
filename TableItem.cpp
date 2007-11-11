@@ -100,7 +100,7 @@ void TableItem::ProcessEvent(SDL_Event* event)
             if (InWidget(event->motion.x, event->motion.y))
             {
                selected = true;
-               cout << (y / tp->rowheight) << endl;
+               //cout << (y / tp->rowheight) << endl;
             }
             else selected = false;
          }

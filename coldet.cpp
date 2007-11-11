@@ -178,14 +178,16 @@ void InitWeapons()
    dummy.splashradius = 0.f;
    dummy.explode = true;
    dummy.damage = 10;
-   dummy.reloadtime = 300;
+   dummy.reloadtime = 500;
    for (short i = 0; i < numweapons; ++i)
       weapons.push_back(dummy);
    
-   weapons[MachineGun].reloadtime = 2;
+   weapons[MachineGun].reloadtime = 20;
    weapons[MachineGun].velocity = 20.f;
    weapons[MachineGun].radius = 5.f;
    weapons[MachineGun].weight = .1f;
+   weapons[GaussRifle].reloadtime = 1000;
+   weapons[Laser].reloadtime = 300;
 }
 
 
@@ -574,6 +576,7 @@ while( SDL_PollEvent( &event ) )
       break;
    }
    SDL_ShowCursor(0);
+   SDL_mutexP(clientmutex);
    switch( event.type ) 
    {
       case SDL_KEYDOWN:
@@ -704,15 +707,24 @@ while( SDL_PollEvent( &event ) )
          {
             player[0].leftclick = true;
          }
+         else if (event.button.button == SDL_BUTTON_WHEELDOWN)
+         {
+            player[0].currweapon = (player[0].currweapon + 1) % numbodyparts;
+         }
+         else if (event.button.button == SDL_BUTTON_WHEELUP)
+         {
+            player[0].currweapon = player[0].currweapon == 0 ? numbodyparts - 1 : player[0].currweapon - 1;
+         }
          break;
       case SDL_MOUSEBUTTONUP:
-         if (event.button.button == SDL_BUTTON_RIGHT)
+         if (event.button.button == SDL_BUTTON_LEFT)
             player[0].leftclick = false;
          break;
 
       case SDL_QUIT:
          Quit();
    }
+   SDL_mutexV(clientmutex);
 }
 // update the screen
 Repaint();

@@ -62,6 +62,7 @@ void Table::Render()
 
 void Table::ProcessEvent(SDL_Event* event)
 {
+   if (!visible) return;
    switch (event->type)
    {
       case SDL_MOUSEBUTTONDOWN:

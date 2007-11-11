@@ -290,64 +290,6 @@ int ServerListen()
                serverplayers[oppnum].lastupdate = SDL_GetTicks();
                
                //cout << oppx << "  " << oppy << "  " << oppz << endl << flush;
-#if 0
-               // Get new particles
-               unsigned long tempid;
-               get >> tempid;
-               while (tempid != 0)
-               {
-                  Particle temp;
-                  get >> temp.dir.x >> temp.dir.y >> temp.dir.z;
-                  get >> temp.pos.x >> temp.pos.y >> temp.pos.z;
-                  get >> temp.velocity;
-                  get >> temp.accel;
-                  get >> temp.radius;
-                  get >> temp.explode;
-                  if (serverplayers[oppnum].partids.find(tempid) == 
-                      serverplayers[oppnum].partids.end())
-                  {
-                     serverplayers[oppnum].partids.insert(tempid);
-                     temp.playerid = tempid;
-                     temp.unsent = true;
-                     temp.senttimes = 0;
-                     temp.playernum = oppnum;
-                     temp.id = nextservparticleid;
-                     ++nextservparticleid;
-                     servparticles.push_back(temp);
-                  }
-                  get >> tempid;
-               }
-               
-               // Get hits
-               serverplayers[oppnum].servhits.clear();
-               Hit temphit(0);
-               get >> tempid;
-               while (tempid != 0)
-               {
-                  cout << "Server got hit " << tempid << endl;
-                  temphit.id = tempid;
-                  get >> temphit.player;
-                  get >> temphit.damage;
-                  if (serverplayers[oppnum].hitids.find(tempid) == serverplayers[oppnum].hitids.end())
-                  {
-                     serverplayers[oppnum].hitids.insert(tempid);
-                     serverplayers[temphit.player].hp -= temphit.damage;
-                     if (serverplayers[temphit.player].hp <= 0)
-                     {
-                        serverplayers[temphit.player].deaths++;
-                        serverplayers[temphit.player].hp = 100;
-                        serverplayers[oppnum].kills++;
-                        cout << "Player " << temphit.player << " was killed by Player "
-                              << oppnum << endl;
-                     }
-                  }
-                  // Reuse the player field to indicate which player it came from
-                  //   rather than which player was hit. 
-                  temphit.player = oppnum;
-                  serverplayers[oppnum].servhits.push_back(temphit);
-                  get >> tempid;
-               }
-#endif
                
                // Freak out if we get a packet whose checksum isn't right
                unsigned long value = 0;
@@ -457,10 +399,13 @@ int ServerListen()
             SDL_mutexP(servermutex);
             get >> serverplayers[oppnum].unit;
             for (int i = 0; i < numbodyparts; ++i)
+            {
                get >> serverplayers[oppnum].weapons[i];
+            }
             SDL_mutexV(servermutex);
             
             // Need to ack this, but no method in place as yet
+            // Also need to validate their configuration
          }
          
       }
