@@ -1,0 +1,2 @@
+#!/bin/bash
+BUGLE_CHAIN=$1 LD_PRELOAD=libbugle.so SDL_VIDEO_GL_DRIVER=libbugle.so ./coldet

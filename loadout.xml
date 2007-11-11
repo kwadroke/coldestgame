@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
+   <Label x="400" y="50" width="200" height="50" text="Loadout" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ComboBoxItem>UnitTest</ComboBoxItem>
+      <ComboBoxItem>Ultra</ComboBoxItem>
+      <ComboBoxItem>Omega</ComboBoxItem>
+      <ValueChangedAction>updateunitselection</ValueChangedAction>
+   </ComboBox>
+   <ComboBox x="700"  y="150" width="200" height="40" name="Left Arm" text="Left Arm">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ComboBoxItem>None</ComboBoxItem>
+      <ComboBoxItem>Machine Gun</ComboBoxItem>
+      <ComboBoxItem>Laser</ComboBoxItem>
+      <ComboBoxItem>Autocannon</ComboBoxItem>
+      <ComboBoxItem>Gauss Rifle</ComboBoxItem>
+      <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
+      <ValueChangedAction>updateunitselection</ValueChangedAction>
+   </ComboBox>
+   <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" text="Right Arm">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ComboBoxItem>None</ComboBoxItem>
+      <ComboBoxItem>Machine Gun</ComboBoxItem>
+      <ComboBoxItem>Laser</ComboBoxItem>
+      <ComboBoxItem>Autocannon</ComboBoxItem>
+      <ComboBoxItem>Gauss Rifle</ComboBoxItem>
+      <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
+      <ValueChangedAction>updateunitselection</ValueChangedAction>
+   </ComboBox>
+   <ComboBox x="700"  y="250" width="200" height="40" name="Torso" text="Torso">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ComboBoxItem>None</ComboBoxItem>
+      <ComboBoxItem>Machine Gun</ComboBoxItem>
+      <ComboBoxItem>Laser</ComboBoxItem>
+      <ComboBoxItem>Autocannon</ComboBoxItem>
+      <ComboBoxItem>Gauss Rifle</ComboBoxItem>
+      <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
+      <ValueChangedAction>updateunitselection</ValueChangedAction>
+   </ComboBox>
+   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ValueChangedAction>updateunitselection</ValueChangedAction>
+   </ComboBox>
+   <Button x="700" y="900" width="200" height="50" text="Spawn" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Hover>textures/buttonhover.png</Hover>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <LeftClickAction>spawn</LeftClickAction>
+   </Button>
+   <Button x="100" y="900" width="200" height="50" text="Back" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Hover>textures/buttonhover.png</Hover>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <LeftClickAction>loadouttomain</LeftClickAction>
+   </Button>
+   <Label x="200" y="100" width="400" height="400" text="Unit Preview" readonly="true" xmargin="100" ymargin="100" align="center"/>
+</GUI>

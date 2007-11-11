@@ -1,0 +1,65 @@
+/*float smoothnoise(vec3 p)
+{
+   vec4 samples;
+   float test;
+   samples.x = (snoise(p + vec3(-1, -1, -1)) + snoise(p + vec3(1, -1, -1)) +
+               snoise(p + vec3(-1, 1, -1)) + snoise(p + vec3(-1, -1, 1)) +
+               snoise(p + vec3(1, 1, -1)) + snoise(p + vec3(-1, 1, 1)) +
+               snoise(p + vec3(1, -1, 1)) + snoise(p + vec3(1, 1, 1))) / 32.0;
+   samples.y = (snoise(p + vec3(0, 1, 1)) + snoise(p + vec3(0, -1, 1)) +
+         snoise(p + vec3(0, -1, -1)) +  snoise(p + vec3(0, 1, -1)) + 
+         snoise(p + vec3(1, 0, 1)) + snoise(p + vec3(-1, 0, 1)) + 
+         snoise(p + vec3(-1, 0, -1)) + snoise(p + vec3(1, 0, -1)) + 
+         snoise(p + vec3(1, 1, 0)) + snoise(p + vec3(-1, 1, 0)) + 
+         snoise(p + vec3(-1, -1, 0)) + snoise(p + vec3(1, -1, 0))) / 24.0;
+   samples.z = snoise(p) / 4.0;
+   samples.w = samples.x + samples.y + samples.z * 4;
+   return samples.w;
+}
+
+
+float cosmix(vec3 vals)
+{
+   vec2 f;
+   f.x = vals.z * 3.14159265;
+   f.y = (1 - cos(f.x)) * .5;
+   return vals.x * (1 - f.y) + vals.y * f.y;
+}
+
+
+float noise(vec3 p)
+{
+   vec4 s = vec4(0, 0, 0, 0);
+   vec3 frac;
+   
+   vec3 ints;
+   vec4 s1 = vec4(0, 0, 0, 0);
+   ints.x = int(p.x);
+   frac.x = p.x - ints.x;
+   ints.y = int(p.y);
+   frac.y = p.y - ints.y;
+   ints.z = int(p.z);
+   frac.z = p.z - ints.z;
+   
+   s.x = smoothnoise(ints + vec3(0, 0, 0));
+   s.y = smoothnoise(ints + vec3(1, 0, 0));
+   s.z = smoothnoise(ints + vec3(0, 1, 0));
+   s.w = smoothnoise(ints + vec3(1, 1, 0));
+   s1.x = smoothnoise(ints + vec3(0, 0, 1));
+   s1.y = smoothnoise(ints + vec3(1, 0, 1));
+   s1.z = smoothnoise(ints + vec3(0, 1, 1));
+   s1.w = smoothnoise(ints + vec3(1, 1, 1));
+   
+   {
+      vec4 i;
+      i.x = cosmix(vec3(s.x, s.y, frac.x));
+      i.y = cosmix(vec3(s.z, s.w, frac.x));
+      i.z = cosmix(vec3(s1.x, s1.y, frac.x));
+      i.w = cosmix(vec3(s1.z, s1.w, frac.x));
+      
+      s.x = cosmix(vec3(i.x, i.y, frac.y));
+      s.y = cosmix(vec3(i.z, i.w, frac.y));
+   }
+   
+   return cosmix(vec3(s.x, s.y, frac.z));
+}*/

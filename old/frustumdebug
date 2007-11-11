@@ -1,0 +1,125 @@
+// Debugging frustum culling
+#if 0
+   WorldPrimitives p[6];
+   list<WorldObjects> tempo;
+   list<WorldObjects>::iterator o;
+   Vector3 currpoint;
+   
+   float nearx, neary, farx, fary;
+   float radfov = fov * PI / 180.;
+   float near = -1;
+   float far = -1000;
+   float aspect = 1280. / 800.;
+   neary = 2 * tan(radfov / 2) * near / 2;
+   nearx = neary * aspect;
+   fary = 2 * tan(radfov / 2) * far / 2;
+   farx = fary * aspect;
+   
+   /*tempo.push_back(WorldObjects());
+   o = tempo.begin();
+   o->type = "tristrip";
+   o->x = o->y = o->z = 0;
+   for (int i = 0; i < 6; ++i)
+   {
+      p[i].type = "tristrip";
+      p[i].texnum = 1;
+      p[i].object = tempo.begin();
+   }*/
+   
+   currpoint.x = nearx;
+   currpoint.y = neary;
+   currpoint.z = near;
+   p[0].v[0] = currpoint;
+   p[2].v[1] = currpoint;
+   p[3].v[3] = currpoint;
+   
+   currpoint.x = nearx;
+   currpoint.y = -neary;
+   p[0].v[1] = currpoint;
+   p[3].v[1] = currpoint;
+   p[4].v[3] = currpoint;
+   
+   currpoint.x = -nearx;
+   currpoint.y = neary;
+   p[0].v[2] = currpoint;
+   p[2].v[3] = currpoint;
+   p[5].v[1] = currpoint;
+   
+   currpoint.x = -nearx;
+   currpoint.y = -neary;
+   p[0].v[3] = currpoint;
+   p[4].v[1] = currpoint;
+   p[5].v[3] = currpoint;
+   
+   currpoint.x = -farx;
+   currpoint.y = fary;
+   currpoint.z = far;
+   p[1].v[0] = currpoint;
+   p[2].v[2] = currpoint;
+   p[5].v[0] = currpoint;
+   
+   currpoint.x = -farx;
+   currpoint.y = -fary;
+   p[1].v[1] = currpoint;
+   p[4].v[0] = currpoint;
+   p[5].v[2] = currpoint;
+   
+   currpoint.x = farx;
+   currpoint.y = fary;
+   p[1].v[2] = currpoint;
+   p[2].v[0] = currpoint;
+   p[3].v[2] = currpoint;
+   
+   currpoint.x = farx;
+   currpoint.y = -fary;
+   p[1].v[3] = currpoint;
+   p[3].v[0] = currpoint;
+   p[4].v[2] = currpoint;
+   
+   GraphicMatrix m;
+   
+   glColor4f(1, 1, 1, .5);
+   //glEnable(GL_CULL_FACE);
+   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   for (int i = 2; i < 3; ++i)
+   {
+      for (int j = 0; j < 4; ++j)
+      {
+         m.identity();
+         m.translate(0, 0, -1);
+         m.rotatex(-player[0].pitch);
+         m.rotatey(player[0].facing + player[0].rotation);
+         m.translate(player[0].pos);
+         p[i].v[j].transform(m.members);
+         
+         if (j == 3)
+         {
+            texhand.BindTexture(textures[12]);
+            glBegin(GL_TRIANGLE_STRIP);
+            glNormal3f(1, 1, 1);
+            glTexCoord2f(0, 0);
+            glVertex3f(p[i].v[0].x, p[i].v[0].y, p[i].v[0].z);
+            glTexCoord2f(0, 1);
+            glVertex3f(p[i].v[1].x, p[i].v[1].y, p[i].v[1].z);
+            glTexCoord2f(1, 0);
+            glVertex3f(p[i].v[2].x, p[i].v[2].y, p[i].v[2].z);
+            glTexCoord2f(1, 1);
+            glVertex3f(p[i].v[3].x, p[i].v[3].y, p[i].v[3].z);
+            glEnd();
+         }
+         /*glPushMatrix();
+         glColor4f(1, 0, 0, .8);
+         glBindTexture(GL_TEXTURE_2D, textures[1]);
+         glTranslatef(p[i].v[j].x, p[i].v[j].y, p[i].v[j].z);
+         GLUquadricObj *s = gluNewQuadric();
+         gluQuadricTexture(s, GL_TRUE);
+         gluSphere(s, 10, 50, 50);
+         glPopMatrix();
+         gluDeleteQuadric(s);
+         glColor4f(1, 1, 1, 1);*/
+      }
+   }
+   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+   glDisable(GL_CULL_FACE);
+   glColor4f(1, 1, 1, 1);
+#endif

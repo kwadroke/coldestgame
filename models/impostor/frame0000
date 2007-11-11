@@ -1,0 +1,41 @@
+Version1
+1
+Type = tristrip
+ID = 0
+Parent ID = -1
+Texture = 0
+Shader = 0
+X Rot 1 = 0
+Y Rot 1 = 0
+Z Rot 1 = 0
+X Rot 2 = 0
+Y Rot 2 = 0
+Z Rot 2 = 0
+X Trans = 0
+Y Trans = 0
+Z Trans = 0
+p0x = -1000
+p0y = 1000
+p0z = 0
+tc0x = 0
+tc0y = 0
+p1x = -1000
+p1y = -1000
+p1z = 0
+tc1x = 0
+tc1y = 1
+p2x = 1000
+p2y = 1000
+p2z = 0
+tc2x = 1
+tc2y = 0
+p3x = 1000
+p3y = -1000
+p3z = 0
+tc3x = 1
+tc3y = 1
+Transparent = 0
+Translucent = 0
+Collide = 0
+Facing = 1
+EOP

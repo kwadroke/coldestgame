@@ -1,0 +1,41 @@
+#ifndef __TYPES_H
+#define __TYPES_H
+
+#include "Vector3.h"
+
+// Define types used multiple places
+
+/* The last item in each of the enums is a value to indicate how many enums each type
+   actually has.  Iterating from 0...lastitem (i.e. numweapons) should always hit
+   each possible weapon.*/
+enum Weapons{Empty, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, numweapons};
+enum Units{UnitTest, Ultra, Omega, numunits};
+enum BodyParts{Torso, LArm, RArm, numbodyparts};
+
+typedef vector<float> floatvec;
+typedef vector<Vector3> Vector3vec;
+
+struct UnitData
+{
+   int weight;
+   int baseweight;
+   string file;
+   float turnspeed;
+   float maxspeed;
+};
+
+
+struct WeaponData
+{
+   float radius;
+   float velocity;
+   float acceleration;
+   float splashradius;
+   float weight;
+   int damage;
+   int reloadtime;
+   bool explode;
+   string file;
+};
+
+#endif

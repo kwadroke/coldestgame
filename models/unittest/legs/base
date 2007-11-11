@@ -1,0 +1,7 @@
+Version1
+NumFrames 1
+Collide 0 
+AnimationDelay 500
+InitialLocation 360 100 600
+Scale .01 
+Size 15000

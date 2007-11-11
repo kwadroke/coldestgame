@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/lcd.ttf">
+   <ScrollView x="400" y="700" width="200" height="150" name="loadingprogress">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Button x="10" y="10" width="180" height="30" text="Loading Progress..." name="progresstext">
+         <Normal>textures/buttonnorm.png</Normal>
+      </Button>
+      <ProgressBar x="10" y="100" width="180" height="30" name="loadprogressbar">
+         <Normal>textures/buttonhover.png</Normal>
+         <Hover>textures/buttonpressed.png</Hover>
+      </ProgressBar>
+   </ScrollView>
+</GUI>

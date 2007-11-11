@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf">
+   <Label x="400" y="50" width="200" height="50" text="Coldest" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"/>
+   <Button x="400" y="300" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <Hover>textures/buttonhover.png</Hover>
+      <LeftClickAction>connect</LeftClickAction>
+   </Button>
+   <Button x="400" y="350" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <Hover>textures/buttonhover.png</Hover>
+      <LeftClickAction>connectip</LeftClickAction>
+   </Button>
+   <LineEdit x="400" y="400" width="200" height="24" text="nemesis" name="servername">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Hover>textures/buttonhover.png</Hover>
+   </LineEdit>
+   <Button x="400" y="450" width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="6" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <Hover>textures/buttonhover.png</Hover>
+      <LeftClickAction>resume</LeftClickAction>
+   </Button>
+   <Button x="400" y="500" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <Hover>textures/buttonhover.png</Hover>
+      <LeftClickAction>exit</LeftClickAction>
+   </Button>
+   
+   <!--<ScrollView x="440" y="50" width="120" height="120" name="testsv">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Button x="10" y="10" width="30" height="20" text="dummy" name="dummy">
+         <Normal>textures/buttonnorm.png</Normal>
+         <Hover>textures/buttonhover.png</Hover>
+         <LeftClickAction>showprogress</LeftClickAction>
+      </Button>
+      <Button x="10" y="200" width="30" height="20" text="dummy1" name="dummy1">
+         <Normal>textures/buttonnorm.png</Normal>
+         <Hover>textures/buttonhover.png</Hover>
+         <LeftClickAction>exit</LeftClickAction>
+      </Button>
+   </ScrollView>-->
+   <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="525|225|25" rowheight="25">
+      <Normal>textures/buttonnorm.png</Normal>
+      <!--<TableItem>test|10</TableItem>
+      <TableItem>another|20</TableItem>
+      <TableItem>Moar|30</TableItem>
+      <TableItem>Ican|40</TableItem>
+      <TableItem>Haz|50</TableItem>
+      <TableItem>Cheezburger|60</TableItem>
+      <TableItem>kthxbai|70</TableItem>-->
+   </Table>
+   <ComboBox x="140" y="500" width="120" height="20" name="testcb" text="Test">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ComboBoxItem>Test</ComboBoxItem>
+      <ComboBoxItem>They have weapons</ComboBoxItem>
+      <ComboBoxItem>So what?</ComboBoxItem>
+      <ComboBoxItem>Fuck!</ComboBoxItem>
+      <ComboBoxItem>Mutated</ComboBoxItem>
+      <ComboBoxItem>Sheep</ComboBoxItem>
+      <ComboBoxItem>28 Days</ComboBoxItem>
+      <ComboBoxItem>Later</ComboBoxItem>
+      <ComboBoxItem>Test</ComboBoxItem>
+      <ComboBoxItem>They have weapons</ComboBoxItem>
+      <ComboBoxItem>So what?</ComboBoxItem>
+      <ComboBoxItem>Fuck!</ComboBoxItem>
+   </ComboBox>
+</GUI>
