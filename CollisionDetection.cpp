@@ -10,6 +10,7 @@ CollisionDetection::CollisionDetection()
    intmethod = 0;
    listvalid = false;
    quiet = true;
+   server = false;
 }
 
 
@@ -67,8 +68,12 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
             int temp2 = i->animframe;
             GLuint temp3 = i->prims.size();
             DynamicObject* iptr = &(*i);
-            //cout << i->size << endl;
-            //cout << i->animframe << endl;
+            if (i->complete != 164264)
+            {
+               cout << "WTF?!" << endl;
+               cout << i->complete << endl;
+               cout << "Called by " << server << endl;
+            }
             for (j = i->prims[i->animframe].begin(); j != i->prims[i->animframe].end(); j++)
             {
                DynamicPrimitive *jptr = *j;

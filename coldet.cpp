@@ -44,19 +44,8 @@ int main(int argc, char* argv[])
    SetupOpenGL();
    LoadShaders();
    LoadDOTextures("models/testex");
-   //GetMap("maps/newtest");
-   //LoadObject("water");
-   //LoadObject("bush");
-   //LoadObject("matrixtest");
-   //LoadObject("facetest");
-   //LoadObject("armtest");
    lastdelaytick = SDL_GetTicks(); // Otherwise our first step is huge
    //coldet.octree = ot;
-   
-   // This still doesn't belong here
-   glGenTextures(2, texnum);
-   bool alpha;
-   texhand.LoadTexture("textures/reticle.png", texnum[0], true, &alpha);
    
    // Start network threads
    netin = SDL_CreateThread(NetListen, NULL);
@@ -131,6 +120,7 @@ void InitGlobals()
    //coldet.dynobj = &dynobjects;
    noiseres = 128;
    nextmap = mapname = "";
+   clientmutex = SDL_CreateMutex();
    
    ReadConfig();
    
@@ -740,8 +730,11 @@ void Quit()
 void Cleanup()
 {
    running = false;
+   cout << "Waiting for netout thread to end" << endl;
    SDL_WaitThread(netout, NULL);
+   cout << "Waiting for netin thread to end" << endl;
    SDL_WaitThread(netin, NULL);
+   cout << "Waiting for server to end" << endl;
    SDL_WaitThread(serverthread, NULL);
    SDL_DestroyMutex(clientmutex);
 #ifdef LINUX
@@ -1027,6 +1020,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
    DynamicObject tempobj = DynamicObject();
    dynobj.push_front(tempobj);
    list<DynamicObject>::iterator temp = dynobj.begin();
+   temp->complete = 1337;
    temp->pitch = temp->rotation = temp->roll = 0;
       
    temp->position.x = initpos.x;
@@ -1208,109 +1202,6 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
          //++j;
          getline(lf, buffer);
       }
-      /*while (!lf.eof())
-      {
-         DynamicPrimitive *pbuffer = new DynamicPrimitive();
-         
-         // Set default texture coordinates
-         vector<float> tc(2);
-         tc[0] = 0;
-         tc[1] = 0;
-         vector< vector<float> > tcv;
-         for (int c = 0; c < 4; ++c)
-            tcv.push_back(tc);
-         
-         for (int m = 0; m < 6; ++m)
-         {
-            pbuffer->texcoords.push_back(tcv);
-            pbuffer->texcoords[m][1][1] = 1;
-            pbuffer->texcoords[m][2][0] = 1;
-            pbuffer->texcoords[m][3][0] = 1;
-            pbuffer->texcoords[m][3][1] = 1;
-         }
-         
-         pbuffer->type = buffer;
-         lf >> pbuffer->id;
-         lf >> pbuffer->parentid;
-         lf >> pbuffer->texnum;
-         lf >> pbuffer->rot1.x;
-         lf >> pbuffer->rot1.y;
-         lf >> pbuffer->rot1.z;
-         lf >> pbuffer->rot2.x;
-         lf >> pbuffer->rot2.y;
-         lf >> pbuffer->rot2.z;
-         lf >> pbuffer->trans.x;
-         lf >> pbuffer->trans.y;
-         lf >> pbuffer->trans.z;
-         if (pbuffer->type == "tristrip")
-         {
-            for (int k = 0; k < 4; ++k)
-            {
-               lf >> pbuffer->v[k].x;
-               lf >> pbuffer->v[k].y;
-               lf >> pbuffer->v[k].z;
-               pbuffer->v[k] *= scale;
-               pbuffer->orig[k] = pbuffer->v[k];
-            }
-            // Apply scaling
-            pbuffer->trans *= scale;
-            // Dummy values
-            pbuffer->rad = pbuffer->rad1 = -1;
-            
-            lf >> buffer;
-            pbuffer->transparent = false;
-            if (buffer == "1")
-               pbuffer->transparent = true;
-            lf >> buffer;
-            pbuffer->translucent = false;
-            if (buffer == "1")
-               pbuffer->translucent = true;
-            lf >> buffer;
-            pbuffer->collide = false;
-            if (buffer == "1")
-            {
-               temp->collide = true;
-               pbuffer->collide = true;
-            }
-            lf >> buffer;
-            pbuffer->facing = false;
-            if (buffer == "1")
-               pbuffer->facing = true;
-         }
-         else if (pbuffer->type == "cylinder")
-         {
-            lf >> pbuffer->rad;
-            lf >> pbuffer->rad1;
-            lf >> pbuffer->height;
-            lf >> pbuffer->slices;
-            lf >> pbuffer->stacks;
-            
-            // Apply scaling
-            pbuffer->trans *= scale;
-            pbuffer->rad *= scale;
-            pbuffer->rad1 *= scale;
-            pbuffer->height *= scale;
-         
-            lf >> buffer;
-            pbuffer->transparent = false;
-            if (buffer == "1")
-               pbuffer->transparent = true;
-            lf >> buffer;
-            pbuffer->translucent = false;
-            if (buffer == "1")
-               pbuffer->translucent = true;
-            lf >> buffer;
-            pbuffer->collide = false;
-            if (buffer == "1")
-               pbuffer->collide = true;
-         }
-         pbuffer->parentobj = temp;
-         pbuffer->dynamic = true;
-         
-         temp->prims[i].push_back(pbuffer);
-         ++j;
-         lf >> buffer;
-      }*/
       
       /* Now that the primitives are loaded into a vector, we need to rebuild
          the tree that is used to render them properly
@@ -1338,6 +1229,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
       
    }
    lo.close();
+   temp->complete = 164264;
    return temp;
 }
 

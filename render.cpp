@@ -136,6 +136,7 @@ void Repaint()
       // Update player position
       SDL_mutexP(clientmutex);
       Move(player[0], dynobjects, coldet);
+      localplayer = player[0];
       SDL_mutexV(clientmutex);
       
       // Update any animated objects
@@ -171,68 +172,6 @@ void Repaint()
          look.transform(rot);
          
          GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo);
-         
-         // This isn't quite as elegant as the above:-)
-         // Generate the light's axes in world space
-         /*Vector3 rots = lights.GetRots(0);
-         Vector3 lightxaxis(0, 0, -1);
-         Vector3 lightzaxis(0, 0, -1);
-         float shadowmapsizeworld = 200 * 1.42;
-         float worldperoneshadow = shadowmapsizeworld / shadowmapsize;
-         
-         GraphicMatrix rot;
-         rot.rotatey(rots.y);
-         lightzaxis.transform(rot);
-         rot.rotatey(90);
-         lightxaxis.transform(rot);
-         
-         rots.x *= PI / 180.f;  // Need everything in radians
-         
-         // Find out where we're looking, a little rough ATM
-         rot.identity();
-         rot.rotatex(localplayer.pitch);
-         rot.rotatey(localplayer.facing + localplayer.rotation);
-         rot.rotatez(localplayer.roll);
-         Vector3 look(0, 0, -100);
-         look.transform(rot);
-         static Vector3 oldshadowpos = localplayer.pos + look;
-         Vector3 rawlook = localplayer.pos + look;
-         Vector3 lookat = oldshadowpos;
-         rawlook.y = lookat.y = 0;
-         float error = lookat.distance2(rawlook);
-         
-         float step = 1.f / sin(rots.x);
-         float totalsize = worldperoneshadow * step;
-         
-         lightxaxis.normalize();
-         lightzaxis.normalize();
-         lightxaxis *= worldperoneshadow;
-         lightzaxis *= totalsize;
-         
-         float olderror = error;
-         while ((lookat + lightxaxis).distance2(rawlook) < olderror)
-         {
-            lookat += lightxaxis;
-            olderror = lookat.distance2(rawlook);
-         }
-         while ((lookat - lightxaxis).distance2(rawlook) < olderror)
-         {
-            lookat -= lightxaxis;
-            olderror = lookat.distance2(rawlook);
-         }
-         while ((lookat + lightzaxis).distance2(rawlook) < olderror)
-         {
-            lookat += lightzaxis;
-            olderror = lookat.distance2(rawlook);
-         }
-         while ((lookat - lightzaxis).distance2(rawlook) < olderror)
-         {
-            lookat -= lightzaxis;
-            olderror = lookat.distance2(rawlook);
-         }
-         oldshadowpos = lookat;
-         
-         GenShadows(lookat, shadowmapsizeworld / 2.f, shadowmapfbo);*/
       }
       
       // Set the camera's location and orientation
@@ -498,7 +437,7 @@ void RenderObjects()
          lights.Place();
          
          DynamicPrimitive* primptr;
-         SDL_mutexP(clientmutex);
+         //SDL_mutexP(clientmutex);  Already necessarily locked earlier
          if (i->dynobj == dynobjects.end())
          {
             dotextures.push_back(i->imptex);
@@ -522,7 +461,7 @@ void RenderObjects()
          primptr = *(i->dynobj->prims[0].begin());
          primptr->facing = true;
          i->dynobj->visible = true;
-         SDL_mutexP(clientmutex);
+         //SDL_mutexV(clientmutex);  Ditto
          // Should really do this last so time to update isn't included
          i->lastimpupdate = SDL_GetTicks();
          

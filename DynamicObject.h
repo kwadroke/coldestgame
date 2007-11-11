@@ -26,7 +26,8 @@ class DynamicObject
       bool visible;
       bool collide;
       bool billboard;
-      vector<GLuint> texnums;  // Also need random access, this is probably not necessary
+      int complete;
+      //vector<GLuint> texnums;  // Also need random access, this is probably not necessary
 };
 
 #endif
