@@ -33,7 +33,6 @@ class CollisionDetection
       bool quiet;
       int tilesize;
       WorldPrimitives worldbounds[6];
-      bool server;
       
    private:
       bool InVector(list<DynamicObject>::iterator&, vector<list<DynamicObject>::iterator>&);

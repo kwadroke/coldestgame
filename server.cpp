@@ -27,8 +27,6 @@ extern string nextmap, mapname;
 extern ObjectKDTree kdtree;
 extern CollisionDetection coldet;
 extern list<WorldObjects> objects;
-//extern vector<PlayerData> player;
-//extern list<DynamicObject> dynobjects;
 extern WorldPrimitives worldbounds[6];
 extern vector<UnitData> units;
 extern vector<WeaponData> weapons;
@@ -38,9 +36,6 @@ int ServerSend(void*);
 int ServerListen();
 void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
 void ServerLoadMap();
-//Vector3 GetTerrainNormal(int, int, int, int);
-//float GetSmoothedTerrain(int, int, int, int, vector< vector<float> >&);
-//float Max(float, float);
 void HandleHit(Particle& p);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
@@ -50,7 +45,6 @@ float Random(float, float);
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
-//list<Hit> servhits;
 SDL_mutex* servermutex;
 unsigned long servsendpacketnum;
 unsigned short servertickrate;
@@ -237,7 +231,7 @@ int ServerListen()
       {
          if (j->Update(&serverdynobjects))
          {
-            if (j->damage != 0)// && j->playernum == 0)
+            if (j->damage != 0)
                HandleHit(*j);
             serverdynobjects.erase(j->obj);
             j = servparticles.erase(j);
@@ -368,8 +362,6 @@ int ServerListen()
             fill.addr = serverplayers[respondto].addr;
             servqueue.push_back(fill);
             SDL_mutexV(servermutex);
-            //servackpack.push(packetnum);
-            //servackpacknum.push(respondto);
          }
          else if (packettype == "p")
          {
@@ -518,21 +510,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
          }
          temp << 0 << eol;
          
-         // Write hit acknowledgements
-         /*list<Hit>::iterator j;
-         for (int i = 1; i < serverplayers.size(); ++i)
-         {
-            if (serverplayers[i].connected)
-            {
-               for (j = serverplayers[i].servhits.begin(); 
-                  j != serverplayers[i].servhits.end(); ++j)
-               {
-                  temp << j->id << eol;
-                  temp << j->player << eol;
-               }
-            }
-         }
-         temp << 0 << eol;*/
          SDL_mutexV(servermutex);
          
          // Quick and dirty checksumming
@@ -569,16 +546,12 @@ int ServerSend(void* dummy)  // Thread for sending updates
             
             pingpack << "P\n";
             pingpack << servsendpacketnum << eol;
-            //strcpy((char*)outpack->data, pingpack.str().c_str());
-            //outpack->len = strlen((char*)outpack->data) + 1;
             SDL_mutexP(servermutex);
             for (int i = 1; i < serverplayers.size(); ++i)
             {
                pingpack.addr = serverplayers[i].addr;
                servqueue.push_back(pingpack);
-               //outpack->address = serverplayers[i].addr;
                serverplayers[i].pingtick = SDL_GetTicks();
-               //SDLNet_UDP_Send(outsock, -1, outpack);
             }
             servsendpacketnum++;
             pingtick = 0;
@@ -601,14 +574,10 @@ int ServerSend(void* dummy)  // Thread for sending updates
                }
             }
             occup << 0 << eol;
-            //strcpy((char*)outpack->data, occup.str().c_str());
-            //outpack->len = strlen((char*)outpack->data) + 1;
             for (int i = 1; i < serverplayers.size(); ++i)
             {
                occup.addr = serverplayers[i].addr;
                servqueue.push_back(occup);
-               //outpack->address = serverplayers[i].addr;
-               //SDLNet_UDP_Send(outsock, -1, outpack);
             }
             
             // Broadcast announcement packets to the subnet for LAN servers
@@ -630,7 +599,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
       while (i != servqueue.end())
       {
          i->Send();
-         if (!i->ack)// || i->attempts > 30) // Non-ack packets get sent once and then are on their own
+         if (!i->ack) // Non-ack packets get sent once and then are on their own
          {
             i = servqueue.erase(i);
          }
@@ -655,7 +624,6 @@ void ServerLoadMap()
    
    servercoldet = coldet;
    servercoldet.kdtree = &serverkdtree;
-   servercoldet.server = true;
    cout << "Map loaded" << endl;
 }
 
@@ -669,9 +637,6 @@ void HandleHit(Particle& p)
       curr = p.hitobjs.top();
       for (int i = 1; i < serverplayers.size(); ++i)
       {
-         //if (i == servplayernum)
-         //   continue;
-         
          if (curr == serverplayers[i].legs)  // Or other parts of player unit
          {
             serverplayers[i].hp -= p.damage;
