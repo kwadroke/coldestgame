@@ -1,7 +1,7 @@
 LDLIBS = -lGL -lGLU -lSDL_ttf -lSDL_image -lSDL_net -lGLEW -lxerces-c
 CXX = g++
 #`sdl-config --cflags`
-DEBUG=0
+DEBUG=1
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
@@ -200,9 +200,9 @@ CollisionDetection.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 CollisionDetection.o: /usr/include/gnu/stubs-32.h
 CollisionDetection.o: /usr/include/bits/huge_val.h
 CollisionDetection.o: /usr/include/bits/mathdef.h
-CollisionDetection.o: /usr/include/bits/mathcalls.h DynamicObject.h
-CollisionDetection.o: GraphicMatrix.h Quaternion.h FBO.h TextureHandler.h
-CollisionDetection.o: Shader.h Timer.h PrimitiveOctree.h
+CollisionDetection.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
+CollisionDetection.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+CollisionDetection.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
 ComboBox.o: ComboBox.h GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ComboBox.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 ComboBox.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -347,6 +347,13 @@ ComboBox.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
 ComboBox.o: TextureHandler.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 ComboBox.o: /usr/include/GL/gl.h Table.h TableItem.h LineEdit.h ScrollView.h
 ComboBox.o: Button.h
+DynamicPrimitive.o: DynamicPrimitive.h GenericPrimitive.h Vector3.h
+DynamicPrimitive.o: /usr/include/math.h /usr/include/features.h
+DynamicPrimitive.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+DynamicPrimitive.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
+DynamicPrimitive.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
+DynamicPrimitive.o: /usr/include/bits/mathcalls.h GraphicMatrix.h
+DynamicPrimitive.o: Quaternion.h DynamicObject.h
 FBO.o: FBO.h TextureHandler.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h
 GUI.o: GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -490,6 +497,12 @@ GUI.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
 GUI.o: TextureHandler.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 GUI.o: /usr/include/GL/gl.h Button.h LineEdit.h ScrollView.h ProgressBar.h
 GUI.o: Table.h TableItem.h ComboBox.h
+GenericPrimitive.o: DynamicObject.h Vector3.h /usr/include/math.h
+GenericPrimitive.o: /usr/include/features.h /usr/include/sys/cdefs.h
+GenericPrimitive.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
+GenericPrimitive.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
+GenericPrimitive.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
+GenericPrimitive.o: GenericPrimitive.h
 GraphicMatrix.o: GraphicMatrix.h /usr/include/math.h /usr/include/features.h
 GraphicMatrix.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 GraphicMatrix.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
@@ -651,8 +664,8 @@ ObjectKDTree.o: /usr/include/features.h /usr/include/sys/cdefs.h
 ObjectKDTree.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 ObjectKDTree.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ObjectKDTree.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-ObjectKDTree.o: DynamicObject.h GraphicMatrix.h Quaternion.h FBO.h
-ObjectKDTree.o: TextureHandler.h Shader.h Timer.h
+ObjectKDTree.o: DynamicObject.h FBO.h TextureHandler.h Shader.h
+ObjectKDTree.o: GraphicMatrix.h Timer.h
 Packet.o: Packet.h
 Particle.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
 Particle.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
@@ -661,9 +674,9 @@ Particle.o: /usr/include/math.h /usr/include/features.h
 Particle.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 Particle.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Particle.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
-Particle.o: /usr/include/bits/mathcalls.h DynamicObject.h GraphicMatrix.h
-Particle.o: Quaternion.h FBO.h TextureHandler.h Shader.h Timer.h
-Particle.o: PrimitiveOctree.h
+Particle.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
+Particle.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+Particle.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
 PrimitiveOctree.o: PrimitiveOctree.h GenericPrimitive.h Vector3.h
 PrimitiveOctree.o: /usr/include/math.h /usr/include/features.h
 PrimitiveOctree.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -677,8 +690,8 @@ ProceduralTree.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ProceduralTree.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
 ProceduralTree.o: WorldObjects.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 ProceduralTree.o: /usr/include/GL/gl.h WorldPrimitives.h GenericPrimitive.h
-ProceduralTree.o: Vector3.h DynamicObject.h GraphicMatrix.h Quaternion.h
-ProceduralTree.o: FBO.h TextureHandler.h Shader.h
+ProceduralTree.o: Vector3.h DynamicObject.h FBO.h TextureHandler.h Shader.h
+ProceduralTree.o: GraphicMatrix.h
 ProgressBar.o: ProgressBar.h GUI.h
 ProgressBar.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ProgressBar.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -1277,14 +1290,17 @@ WorldObjects.o: Vector3.h /usr/include/math.h /usr/include/features.h
 WorldObjects.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 WorldObjects.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 WorldObjects.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
-WorldObjects.o: /usr/include/bits/mathcalls.h DynamicObject.h GraphicMatrix.h
-WorldObjects.o: Quaternion.h FBO.h TextureHandler.h Shader.h
+WorldObjects.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
+WorldObjects.o: TextureHandler.h Shader.h
+WorldPrimitives.o: WorldObjects.h /usr/include/GL/glew.h
+WorldPrimitives.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 WorldPrimitives.o: WorldPrimitives.h GenericPrimitive.h Vector3.h
 WorldPrimitives.o: /usr/include/math.h /usr/include/features.h
 WorldPrimitives.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 WorldPrimitives.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 WorldPrimitives.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
-WorldPrimitives.o: /usr/include/bits/mathcalls.h
+WorldPrimitives.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
+WorldPrimitives.o: TextureHandler.h Shader.h
 actions.o: GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 actions.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -1430,8 +1446,7 @@ actions.o: /usr/include/GL/gl.h ProgressBar.h ServerInfo.h Table.h
 actions.o: TableItem.h LineEdit.h ScrollView.h ComboBox.h Button.h
 actions.o: PlayerData.h Vector3.h /usr/include/math.h
 actions.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
-actions.o: /usr/include/bits/mathcalls.h DynamicObject.h GenericPrimitive.h
-actions.o: GraphicMatrix.h Quaternion.h Hit.h types.h
+actions.o: /usr/include/bits/mathcalls.h DynamicObject.h Hit.h types.h
 coldet.o: defines.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 coldet.o: /usr/include/GL/gl.h /usr/include/stdio.h /usr/include/features.h
 coldet.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -1448,10 +1463,11 @@ coldet.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
 coldet.o: /usr/include/alloca.h /usr/include/math.h
 coldet.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 coldet.o: /usr/include/bits/mathcalls.h GenericPrimitive.h Vector3.h
-coldet.o: TextureHandler.h GraphicMatrix.h DynamicObject.h Quaternion.h
-coldet.o: WorldPrimitives.h WorldObjects.h FBO.h Shader.h ObjectKDTree.h
-coldet.o: Timer.h CollisionDetection.h PrimitiveOctree.h ProceduralTree.h
-coldet.o: Particle.h Hit.h PlayerData.h types.h Light.h GUI.h
+coldet.o: TextureHandler.h GraphicMatrix.h DynamicObject.h WorldPrimitives.h
+coldet.o: WorldObjects.h FBO.h Shader.h ObjectKDTree.h Timer.h
+coldet.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h
+coldet.o: PrimitiveOctree.h ProceduralTree.h Particle.h Hit.h PlayerData.h
+coldet.o: types.h Light.h GUI.h
 coldet.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldet.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldet.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -1592,8 +1608,8 @@ console.o: /usr/include/features.h /usr/include/sys/cdefs.h
 console.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 console.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 console.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-console.o: DynamicObject.h GraphicMatrix.h Quaternion.h FBO.h
-console.o: TextureHandler.h Shader.h Timer.h PrimitiveOctree.h Hit.h
+console.o: DynamicObject.h FBO.h TextureHandler.h Shader.h GraphicMatrix.h
+console.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h Hit.h
 console.o: PlayerData.h types.h
 getmap.o: ProgressBar.h GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -1741,8 +1757,9 @@ getmap.o: /usr/include/GL/gl.h CollisionDetection.h ObjectKDTree.h
 getmap.o: WorldObjects.h WorldPrimitives.h GenericPrimitive.h Vector3.h
 getmap.o: /usr/include/math.h /usr/include/bits/huge_val.h
 getmap.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-getmap.o: DynamicObject.h GraphicMatrix.h Quaternion.h FBO.h Shader.h Timer.h
-getmap.o: PrimitiveOctree.h ProceduralTree.h Light.h types.h
+getmap.o: DynamicObject.h FBO.h Shader.h GraphicMatrix.h Timer.h
+getmap.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ProceduralTree.h
+getmap.o: Light.h types.h
 net.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
 net.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 net.o: WorldPrimitives.h GenericPrimitive.h Vector3.h /usr/include/math.h
@@ -1750,19 +1767,19 @@ net.o: /usr/include/features.h /usr/include/sys/cdefs.h
 net.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 net.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 net.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-net.o: DynamicObject.h GraphicMatrix.h Quaternion.h FBO.h TextureHandler.h
-net.o: Shader.h Timer.h PrimitiveOctree.h PlayerData.h Hit.h types.h Packet.h
-net.o: ServerInfo.h
+net.o: DynamicObject.h FBO.h TextureHandler.h Shader.h GraphicMatrix.h
+net.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h PlayerData.h
+net.o: Hit.h types.h Packet.h ServerInfo.h
 render.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 render.o: WorldObjects.h WorldPrimitives.h GenericPrimitive.h Vector3.h
 render.o: /usr/include/math.h /usr/include/features.h
 render.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 render.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 render.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
-render.o: /usr/include/bits/mathcalls.h DynamicObject.h GraphicMatrix.h
-render.o: Quaternion.h FBO.h TextureHandler.h Shader.h PlayerData.h Hit.h
-render.o: types.h PrimitiveOctree.h ObjectKDTree.h Timer.h
-render.o: CollisionDetection.h Light.h GUI.h
+render.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
+render.o: TextureHandler.h Shader.h PlayerData.h Hit.h types.h
+render.o: PrimitiveOctree.h ObjectKDTree.h GraphicMatrix.h Timer.h
+render.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h Light.h GUI.h
 render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -1907,6 +1924,6 @@ server.o: /usr/include/features.h /usr/include/sys/cdefs.h
 server.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 server.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 server.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-server.o: DynamicObject.h GraphicMatrix.h Quaternion.h FBO.h TextureHandler.h
-server.o: Shader.h Timer.h PrimitiveOctree.h PlayerData.h Hit.h types.h
-server.o: Packet.h ProceduralTree.h
+server.o: DynamicObject.h FBO.h TextureHandler.h Shader.h GraphicMatrix.h
+server.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
+server.o: PlayerData.h Hit.h types.h Packet.h ProceduralTree.h
