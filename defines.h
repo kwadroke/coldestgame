@@ -222,6 +222,7 @@ string mapname;         // The name of the current map
 GUI hud;                // Handles drawing the HUD
 GUI loadprogress;       // Shows loading progress
 GUI loadoutmenu;        // The loadout screen
+GUI statsdisp;          // Display FPS etc.
 vector<ServerInfo> servers; // List of what we know about available servers
 set<ServerInfo> knownservers; // Quick way to check whether we already know about a server
 int partupdateinterval; // Update particles every this many frames

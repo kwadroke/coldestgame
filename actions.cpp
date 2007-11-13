@@ -7,7 +7,7 @@
 #include "PlayerData.h"
 #include "types.h"
 
-extern GUI mainmenu, loadprogress, loadoutmenu;
+extern GUI mainmenu, loadprogress, loadoutmenu, hud;
 extern vector<ServerInfo> servers;
 extern bool spawnrequest;
 extern vector<PlayerData> player;
@@ -64,6 +64,7 @@ void TestAction()
 void Resume()
 {
    mainmenu.visible = false;
+   hud.visible = true;
 }
 
 
@@ -71,6 +72,7 @@ void Spawn()
 {
    spawnrequest = true;
    loadoutmenu.visible = false;
+   hud.visible = true;
 }
 
 

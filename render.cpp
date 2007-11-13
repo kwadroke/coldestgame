@@ -53,7 +53,7 @@ extern Shader shaderhand;
 extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;
 extern string terrainshader, cloudgenshader;
 extern GraphicMatrix cameraproj, cameraview, lightproj, lightview;
-extern GUI mainmenu, hud, loadprogress, loadoutmenu;
+extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp;
 extern CollisionDetection coldet;
 extern vector<WeaponData> weapons;
 
@@ -1419,11 +1419,11 @@ void RenderFPS()
 
 void RenderHud()
 {
-   static GUI* fpslabel = hud.GetWidget("fps");
-   static GUI* tpslabel = hud.GetWidget("trispersec");
-   static GUI* tpflabel = hud.GetWidget("trisperframe");
-   static GUI* pinglabel = hud.GetWidget("ping");
-   static GUI* mpflabel = hud.GetWidget("msperframe");
+   static GUI* fpslabel = statsdisp.GetWidget("fps");
+   static GUI* tpslabel = statsdisp.GetWidget("trispersec");
+   static GUI* tpflabel = statsdisp.GetWidget("trisperframe");
+   static GUI* pinglabel = statsdisp.GetWidget("ping");
+   static GUI* mpflabel = statsdisp.GetWidget("msperframe");
    static GUI* hplabel = hud.GetWidget("hp");
    static GUI* killslabel = hud.GetWidget("kills");
    static GUI* deathslabel = hud.GetWidget("deaths");
@@ -1491,6 +1491,7 @@ void RenderHud()
    hud.Render();
    loadprogress.Render();
    loadoutmenu.Render();
+   statsdisp.Render();
    
    SDL_GL_Exit2dMode();
 }
