@@ -55,6 +55,8 @@ extern string terrainshader, cloudgenshader;
 extern GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 extern GUI mainmenu, hud, loadprogress, loadoutmenu;
 extern CollisionDetection coldet;
+extern vector<WeaponData> weapons;
+
 
 void RenderSkybox();
 void RenderConsole();
@@ -1425,6 +1427,12 @@ void RenderHud()
    static GUI* hplabel = hud.GetWidget("hp");
    static GUI* killslabel = hud.GetWidget("kills");
    static GUI* deathslabel = hud.GetWidget("deaths");
+   static GUI* torsoweaponlabel = hud.GetWidget("torsoweapon");
+   static GUI* larmweaponlabel = hud.GetWidget("larmweapon");
+   static GUI* rarmweaponlabel = hud.GetWidget("rarmweapon");
+   static GUI* torsoselectedlabel = hud.GetWidget("torsoselected");
+   static GUI* larmselectedlabel = hud.GetWidget("larmselected");
+   static GUI* rarmselectedlabel = hud.GetWidget("rarmselected");
    
    if (frames >= 30) // Update FPS
    {
@@ -1445,30 +1453,21 @@ void RenderHud()
    hplabel->text = "HP: " + ToString(localplayer.hp);
    killslabel->text = "Kills: " + ToString(localplayer.kills);
    deathslabel->text = "Deaths: " + ToString(localplayer.deaths);
-   /*string temp = "Kills: ";
    SDL_mutexP(clientmutex);
-   temp += ToString(localplayer.kills);
-   RenderText(temp, screenwidth / 2, screenheight - 30, 0, lcd);
-   temp = "Deaths: ";
-   temp += ToString(localplayer.deaths);
-   RenderText(temp, screenwidth / 2 + 200, screenheight - 30, 0, lcd);
-   temp = "HP: ";
-   temp += ToString(localplayer.hp);
+   torsoweaponlabel->text = weapons[player[0].weapons[Torso]].name;
+   larmweaponlabel->text = weapons[player[0].weapons[LArm]].name;
+   rarmweaponlabel->text = weapons[player[0].weapons[RArm]].name;
+   if (player[0].currweapon == Torso)
+      torsoselectedlabel->visible = true;
+   else torsoselectedlabel->visible = false;
+   if (player[0].currweapon == LArm)
+      larmselectedlabel->visible = true;
+   else larmselectedlabel->visible = false;
+   if (player[0].currweapon == RArm)
+      rarmselectedlabel->visible = true;
+   else rarmselectedlabel->visible = false;
    SDL_mutexV(clientmutex);
-   RenderText(temp, screenwidth / 2 - 200, screenheight - 30, 0, lcd);*/
    
-   // Display targeting reticle
-   /*texhand.BindTexture(texnum[0]);
-   glBegin(GL_TRIANGLE_STRIP);
-   glTexCoord2f(0, 0);
-   glVertex2f(screenwidth / 2 - 16, screenheight / 2 - 16);
-   glTexCoord2f(1, 0);
-   glVertex2f(screenwidth / 2 + 16, screenheight / 2 - 16);
-   glTexCoord2f(0, 1);
-   glVertex2f(screenwidth / 2 - 16, screenheight / 2 + 16);
-   glTexCoord2f(1, 1);
-   glVertex2f(screenwidth / 2 + 16, screenheight / 2 + 16);
-   glEnd();*/
    
 #ifdef DEBUGSMT
    // Debug the shadowmap texture

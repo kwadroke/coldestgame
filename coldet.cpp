@@ -171,6 +171,7 @@ void InitWeapons()
 {
    WeaponData dummy;
    dummy.file = "projectile";
+   dummy.name = "None";
    dummy.acceleration = 1.f;
    dummy.velocity = .5f;
    dummy.weight = .5f;
@@ -186,8 +187,11 @@ void InitWeapons()
    weapons[MachineGun].velocity = 20.f;
    weapons[MachineGun].radius = 5.f;
    weapons[MachineGun].weight = .1f;
+   weapons[MachineGun].name = "Machine Gun";
    weapons[GaussRifle].reloadtime = 1000;
+   weapons[GaussRifle].name = "Gauss Rifle";
    weapons[Laser].reloadtime = 300;
+   weapons[Laser].name = "Laser";
 }
 
 
