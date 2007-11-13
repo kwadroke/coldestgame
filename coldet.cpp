@@ -147,6 +147,9 @@ void InitGUI()
    loadoutmenu.SetTextureHandler(&texhand);
    loadoutmenu.SetActualSize(screenwidth, screenheight);
    loadoutmenu.InitFromFile("loadout.xml");
+   statsdisp.SetTextureHandler(&texhand);
+   statsdisp.SetActualSize(screenwidth, screenheight);
+   statsdisp.InitFromFile("stats.xml");
 }
 
 
@@ -191,6 +194,7 @@ void InitWeapons()
    weapons[GaussRifle].reloadtime = 1000;
    weapons[GaussRifle].name = "Gauss Rifle";
    weapons[Laser].reloadtime = 300;
+   weapons[Laser].weight = 0.f;
    weapons[Laser].name = "Laser";
 }
 
@@ -590,6 +594,7 @@ while( SDL_PollEvent( &event ) )
             {
                case SDLK_ESCAPE:
                   mainmenu.visible = !mainmenu.visible;
+                  hud.visible = !hud.visible;
                   break;
                case SDLK_a:
                   player[0].moveleft = true;
