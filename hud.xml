@@ -5,9 +5,25 @@
    <Label x="0" y="40" width="200" height="20" text="" name="trisperframe" xmargin="2" ymargin="0"></Label>
    <Label x="0" y="60" width="200" height="20" text="" name="ping" xmargin="2" ymargin="0"></Label>
    <Label x="0" y="80" width="200" height="20" text="" name="msperframe" xmargin="2" ymargin="0"></Label>
-   <Label x="350" y="960" width="100" height="30" text="" name="hp" align="center"></Label>
-   <Label x="450" y="960" width="100" height="30" text="" name="kills" align="center"></Label>
-   <Label x="550" y="960" width="100" height="30" text="" name="deaths" align="center"></Label>
+   
+   <Label x="10" y="900" width="100" height="30" text="" name="hp"></Label>
+   <Label x="10" y="930" width="100" height="30" text="" name="kills"></Label>
+   <Label x="10" y="960" width="100" height="30" text="" name="deaths"></Label>
+   
+   <!-- The selection indicator labels need to be first so they don't get rendered over the text labels -->
+   <Label x="850" y="10" width="150" height="30" text="" name="torsoselected">
+      <Normal>textures/buttonnorm.png</Normal>
+   </Label>
+   <Label x="850" y="40" width="150" height="30" text="" name="larmselected">
+      <Normal>textures/buttonnorm.png</Normal>
+   </Label>
+   <Label x="850" y="70" width="150" height="30" text="" name="rarmselected">
+      <Normal>textures/buttonnorm.png</Normal>
+   </Label>
+   <Label x="850" y="10" width="150" height="30" text="Torso" name="torsoweapon"></Label>
+   <Label x="850" y="40" width="150" height="30" text="Left Arm" name="larmweapon"></Label>
+   <Label x="850" y="70" width="150" height="30" text="Right Arm" name="rarmweapon"></Label>
+   
    <Label x="490" y="484" width="20" height="32" text="" name="reticle">
       <Normal>textures/reticle.png</Normal>
    </Label>

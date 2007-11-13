@@ -36,6 +36,7 @@ struct WeaponData
    int reloadtime;
    bool explode;
    string file;
+   string name;
 };
 
 #endif
