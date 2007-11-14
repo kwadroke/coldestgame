@@ -22,6 +22,13 @@ void LineEdit::ReadNode(DOMNode* current, GUI* parent)
       if (type == DOMNode::ELEMENT_NODE)
       {
          ReadTextures(current);
+         
+         string curr;
+         curr = ReadStringTag(current, tag.leftclickaction);
+         if (curr != "")
+         {
+            leftclickaction = curr;
+         }
       }
    }
    DestroyTags();
@@ -37,6 +44,8 @@ void LineEdit::Render()
    int w, h;
    if (active)
    {
+      if (offset > text.length()) offset = 0;
+      if (cursorpos > text.length()) cursorpos = 0;
       string textlen = text.substr(offset, cursorpos);
       StringDim(font, textlen, w, h);
       float fw = (float)w / wratio * fontscale;

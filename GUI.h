@@ -169,6 +169,7 @@ void Resume();
 void Spawn();
 void LoadoutToMain();
 void UpdateUnitSelection();
+void SubmitCommand();
 
 template <typename T>
 string ToString(const T &input);

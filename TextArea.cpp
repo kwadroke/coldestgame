@@ -20,23 +20,32 @@ TextArea::~TextArea()
 
 void TextArea::ReadNode(DOMNode *current, GUI* parentw)
 {
-   if (current->getNodeType() &&
-       current->getNodeType() == DOMNode::ELEMENT_NODE)
+   short type = current->getNodeType();
+   if (type)
    {
-      InitTags();
-      
-      ReadTextures(current);
-      
-      DestroyTags();
-   }
-   else if (current->getNodeType() &&
-       current->getNodeType() == DOMNode::TEXT_NODE)
-   {
-      char *currstr;
-      currstr = XMLString::transcode(current->getNodeValue());
-      if (string(currstr).find_first_not_of(" \n") != string::npos)
-         Append(currstr);
-      XMLString::release(&currstr);
+      if (type == DOMNode::ELEMENT_NODE)
+      {
+         InitTags();
+         
+         ReadTextures(current);
+         
+         string curr;
+         curr = ReadStringTag(current, tag.leftclickaction);
+         if (curr != "")
+         {
+            leftclickaction = curr;
+         }
+         
+         DestroyTags();
+      }
+      else if (type == DOMNode::TEXT_NODE)
+      {
+         char *currstr;
+         currstr = XMLString::transcode(current->getNodeValue());
+         if (string(currstr).find_first_not_of(" \n") != string::npos)
+            Append(currstr);
+         XMLString::release(&currstr);
+      }
    }
 }
 
