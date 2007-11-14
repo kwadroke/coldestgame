@@ -7,6 +7,7 @@
 #include "CollisionDetection.h"
 #include "Hit.h"
 #include "PlayerData.h"
+#include "TextArea.h"
 #include "SDL_opengl.h"
 #include "SDL_net.h"
 
@@ -24,6 +25,7 @@ extern CollisionDetection coldet;
 extern vector<PlayerData> player;
 extern TextureHandler texhand;
 extern string currentmap;
+extern GUI console;
 
 void SetupSDL();
 void SetupOpenGL();
@@ -97,13 +99,20 @@ string SimplifyWhitespace(string str)
 
 void ConsoleHandler(string command)
 {
+   static TextArea* consoleout = (TextArea*)console.GetWidget("consoleoutput");
    string newcommand = SimplifyWhitespace(command);
    
-   if (newcommand == "")
-{
-      consolebuffer.push_front(string(""));
+   if (!consoleout)
+   {
+      cout << "WTF?!" << endl;
       return;
-}
+   }
+   if (newcommand == "")
+   {
+      //consolebuffer.push_front(string(""));
+      consoleout->Append("\n");
+      return;
+   }
    
    int ntokens = NumTokens(newcommand);
    if (ntokens == 0)  // Nothing to do
@@ -116,9 +125,11 @@ void ConsoleHandler(string command)
    {
       if (ntokens == 2 && Token(newcommand, 1) == "help")
       {
-         consolebuffer.push_front(string("Variables available"));
+         consoleout->Append("Variables available\n");
+         consoleout->Append("quiet showfps consoletop consolebottom consoleleft consoleright consoletrans movestep ghost freelook fov screenwidth screenheight viewdist playersize intmethod showkdtree tickrate");
+         /*consolebuffer.push_front(string("Variables available"));
          consolebuffer.push_front(string("quiet showfps consoletop consolebottom consoleleft consoleright consoletrans movestep ghost freelook"));
-         consolebuffer.push_front(string("fov screenwidth screenheight viewdist playersize intmethod showkdtree tickrate"));
+         consolebuffer.push_front(string("fov screenwidth screenheight viewdist playersize intmethod showkdtree tickrate"));*/
          return;
       }
       

@@ -150,6 +150,9 @@ void InitGUI()
    statsdisp.SetTextureHandler(&texhand);
    statsdisp.SetActualSize(screenwidth, screenheight);
    statsdisp.InitFromFile("stats.xml");
+   console.SetTextureHandler(&texhand);
+   console.SetActualSize(screenwidth, screenheight);
+   console.InitFromFile("console.xml");
 }
 
 
@@ -583,6 +586,13 @@ while( SDL_PollEvent( &event ) )
       loadoutmenu.ProcessEvent(&event);
       break;
    }
+   if (console.visible)
+   {
+      SDL_ShowCursor(1);
+      console.ProcessEvent(&event);
+      break;
+   }
+   
    SDL_ShowCursor(0);
    SDL_mutexP(clientmutex);
    switch( event.type ) 
@@ -627,11 +637,11 @@ while( SDL_PollEvent( &event ) )
                   player[0].pos.z = 200;
                   break;
                case SDLK_BACKQUOTE:
-                  consolevisible = true;
+                  console.visible = true;
                   break;
             }
          }
-         else
+         /*else
          {
             switch (event.key.keysym.sym) 
             {
@@ -663,7 +673,7 @@ while( SDL_PollEvent( &event ) )
                   consoleinput.append(string(1, c));
                   break;
             }
-         }
+         }*/
          break;
          
       case SDL_KEYUP:
@@ -696,7 +706,7 @@ while( SDL_PollEvent( &event ) )
          
       case SDL_MOUSEMOTION:
          if ((event.motion.x != screenwidth / 2 || 
-             event.motion.y != screenheight / 2) && !consolevisible)
+             event.motion.y != screenheight / 2) && !console.visible)
          {
             player[0].pitch += event.motion.yrel / 4.;
             if (player[0].pitch < -90) player[0].pitch = -90;

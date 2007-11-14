@@ -4,10 +4,11 @@
 #include "ServerInfo.h"
 #include "Table.h"
 #include "ComboBox.h"
+#include "TextArea.h"
 #include "PlayerData.h"
 #include "types.h"
 
-extern GUI mainmenu, loadprogress, loadoutmenu, hud;
+extern GUI mainmenu, loadprogress, loadoutmenu, hud, console;
 extern vector<ServerInfo> servers;
 extern bool spawnrequest;
 extern vector<PlayerData> player;
@@ -101,4 +102,16 @@ void UpdateUnitSelection()
    player[0].weapons[RArm] = rarmbox->Selected();
    if (player[0].weapons[RArm] < 0 || player[0].weapons[RArm] > numweapons)
       player[0].weapons[RArm] = 0;
+}
+
+
+void SubmitCommand()
+{
+   cout << "Submitting command" << endl;
+   LineEdit* currcommand = (LineEdit*)console.GetWidget("consoleinput");
+   TextArea* consoleout = (TextArea*)console.GetWidget("consoleoutput");
+   ConsoleHandler(currcommand->text);
+   consoleout->Append(currcommand->text + '\n');
+   currcommand->text = "";
+   console.visible = false;
 }

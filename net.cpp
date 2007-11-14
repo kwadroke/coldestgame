@@ -94,7 +94,7 @@ int NetSend(void* dummy)
          }
          occpacketcounter++;
       }
-      if (occpacketcounter > 600)
+      if (occpacketcounter > 100)
       {
          // Send a request for the server's information
          SDL_mutexP(clientmutex);

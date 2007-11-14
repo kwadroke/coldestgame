@@ -745,4 +745,6 @@ void GUI::DoAction(string action)
       LoadoutToMain();
    else if (action == "updateunitselection")
       UpdateUnitSelection();
+   else if (action == "submitcommand")
+      SubmitCommand();
 }

@@ -53,7 +53,7 @@ extern Shader shaderhand;
 extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;
 extern string terrainshader, cloudgenshader;
 extern GraphicMatrix cameraproj, cameraview, lightproj, lightview;
-extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp;
+extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp, console;
 extern CollisionDetection coldet;
 extern vector<WeaponData> weapons;
 
@@ -1492,6 +1492,7 @@ void RenderHud()
    loadprogress.Render();
    loadoutmenu.Render();
    statsdisp.Render();
+   console.Render();
    
    SDL_GL_Exit2dMode();
 }
