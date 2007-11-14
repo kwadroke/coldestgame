@@ -608,8 +608,9 @@ while( SDL_PollEvent( &event ) )
                case SDLK_s:
                   player[0].moveback = true;
                   break;
-               /* Doesn't currently work due to the gimbal lock caused by using
-                  Euler angles for camera direction.
+               /* Doesn't currently work, most likely due to using Euler angles for player
+                  rotation, but this probably doesn't make sense in this type of game
+                  anyway so Euler angles it is!:-)
                case SDLK_e:
                   player[0].roll = 45;
                   break;
@@ -1374,13 +1375,6 @@ string AddressToDD(Uint32 ahost)
    ostringstream dotteddec;
    dotteddec << parts[0] << '.' << parts[1] << '.' << parts[2] << '.' << parts[3];
    return dotteddec.str();
-}
-
-
-float Max(float one, float two)
-{
-   if (one > two) return one;
-   return two;
 }
 
 

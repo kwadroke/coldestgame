@@ -7,6 +7,7 @@
 #include "ProgressBar.h"
 #include "Table.h"
 #include "ComboBox.h"
+#include "TextArea.h"
 
 GUI::GUI(float aw, float ah, TextureHandler* th)
 {
@@ -32,6 +33,8 @@ void GUI::Init(GUI* p, TextureManager* tm)
 {
    visible = true;
    x = y = 0.f;
+   width = p->width;
+   height = p->height;
    xoff = p->x + p->xoff;
    yoff = p->y + p->yoff;
    name = "";
@@ -261,6 +264,7 @@ void GUI::InitTags()
    tag.tableitem = XMLString::transcode("TableItem");
    tag.combobox = XMLString::transcode("ComboBox");
    tag.comboboxitem = XMLString::transcode("ComboBoxItem");
+   tag.textarea = XMLString::transcode("TextArea");
    
    attrib.x = XMLString::transcode("x");
    attrib.y = XMLString::transcode("y");
@@ -280,6 +284,8 @@ void GUI::InitTags()
    attrib.colwidths = XMLString::transcode("colwidths");
    attrib.rowheight = XMLString::transcode("rowheight");
    attrib.align = XMLString::transcode("align");
+   attrib.headerheight = XMLString::transcode("headerheight");
+   attrib.menuheight = XMLString::transcode("menuheight");
    
    tag.normal = XMLString::transcode("Normal");
    tag.hover = XMLString::transcode("Hover");
@@ -304,6 +310,7 @@ void GUI::DestroyTags()
       XMLString::release(&tag.tableitem);
       XMLString::release(&tag.combobox);
       XMLString::release(&tag.comboboxitem);
+      XMLString::release(&tag.textarea);
       
       XMLString::release(&attrib.x);
       XMLString::release(&attrib.y);
@@ -323,6 +330,8 @@ void GUI::DestroyTags()
       XMLString::release(&attrib.colwidths);
       XMLString::release(&attrib.rowheight);
       XMLString::release(&attrib.align);
+      XMLString::release(&attrib.headerheight);
+      XMLString::release(&attrib.menuheight);
       
       XMLString::release(&tag.normal);
       XMLString::release(&tag.hover);
@@ -396,6 +405,8 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             newwidget = new Table(parent, texman);
          else if (XMLString::equals(current->getNodeName(), tag.combobox))
             newwidget = new ComboBox(parent, texman);
+         else if (XMLString::equals(current->getNodeName(), tag.textarea))
+            newwidget = new TextArea(parent, texman);
          else return; // Not a node we recognize
          
          // Read basic attributes
@@ -482,6 +493,15 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
                newwidget->ReadNode(cbchildren->item(i), newwidget);
             }
             children.push_back((ComboBox*)newwidget);
+         }
+         else if (XMLString::equals(current->getNodeName(), tag.textarea))
+         {
+            DOMNodeList* tachildren = current->getChildNodes();
+            for (int i = 0; i < tachildren->getLength(); ++i)
+            {
+               newwidget->ReadNode(tachildren->item(i), newwidget);
+            }
+            children.push_back((TextArea*)newwidget);
          }
       }
    }

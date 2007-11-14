@@ -1,6 +1,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 #include "ProgressBar.h"
 #include "GUI.h"
 #include "CollisionDetection.h"
@@ -129,7 +130,7 @@ void GetMap(string fn)
          gm >> currobj->rotation;
          gm >> currobj->pitch;
          gm >> currobj->roll;
-         currobj->size = Max(tempprim.height, Max(tempprim.rad, tempprim.rad1));
+         currobj->size = max(tempprim.height, max(tempprim.rad, tempprim.rad1));
          tempprim.type = "cylinder";
          tempprim.object = currobj;
          tempprim.texnums[0] = currobj->texnum;
@@ -345,7 +346,7 @@ void GetMap(string fn)
          gm >> currobj->rotation;
          gm >> currobj->pitch;
          gm >> currobj->roll;
-         currobj->size = Max(tempprim.v[0].distance(tempprim.v[3]),
+         currobj->size = max(tempprim.v[0].distance(tempprim.v[3]),
                              tempprim.v[1].distance(tempprim.v[2]));
          tempprim.type = "tristrip";
          tempprim.object = currobj;
