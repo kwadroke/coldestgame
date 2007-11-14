@@ -1,5 +1,12 @@
-/* Simplex noise generating shader. Note that large amounts of this code
-   were shamelessly ripped from other sources. */
+/* 
+ * Author: Stefan Gustavson ITN-LiTH (stegu@itn.liu.se) 2004-12-05
+ * Simplex indexing functions by Bill Licea-Kane, ATI (bill@ati.com)
+ *
+ * You may use, modify and redistribute this code free of charge,
+ * provided that the author's names and this notice appear intact.
+ *
+ * Additional modifications by Ben Nemec in 2007.
+ */
 uniform sampler2D permTexture;
 uniform int time;
 
@@ -38,7 +45,9 @@ float snoise(vec3 P)
 #define ONE 0.00390625
 #define ONEHALF 0.001953125*/
    
-   /* Exceeding register limits, lets group some stuff up*/
+   /* Exceeding register limits, lets group some stuff up
+      This is no longer actually necessary as we're no longer register limited,
+      but it would be more work than it's worth to go through and change it again.*/
    const vec4 consts = vec4(0.333333333333, 0.166666666667, 0.00390625, 0.001953125);
 
    /* Skew the (x,y,z) space to determine which cell of 6 simplices we're in*/

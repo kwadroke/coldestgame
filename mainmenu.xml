@@ -30,19 +30,6 @@
       <LeftClickAction>exit</LeftClickAction>
    </Button>
    
-   <!--<ScrollView x="440" y="50" width="120" height="120" name="testsv">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Button x="10" y="10" width="30" height="20" text="dummy" name="dummy">
-         <Normal>textures/buttonnorm.png</Normal>
-         <Hover>textures/buttonhover.png</Hover>
-         <LeftClickAction>showprogress</LeftClickAction>
-      </Button>
-      <Button x="10" y="200" width="30" height="20" text="dummy1" name="dummy1">
-         <Normal>textures/buttonnorm.png</Normal>
-         <Hover>textures/buttonhover.png</Hover>
-         <LeftClickAction>exit</LeftClickAction>
-      </Button>
-   </ScrollView>-->
    <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="525|225|25" rowheight="25">
       <Normal>textures/buttonnorm.png</Normal>
       <!--<TableItem>test|10</TableItem>
@@ -68,4 +55,9 @@
       <ComboBoxItem>So what?</ComboBoxItem>
       <ComboBoxItem>Fuck!</ComboBoxItem>
    </ComboBox>
+   
+   <TextArea x="100" y="100" width="200" height="100" name="testta">
+      <Normal>textures/buttonnorm.png</Normal>
+Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
+   </TextArea>
 </GUI>

@@ -46,6 +46,7 @@ struct Tags
    XMLCh* tableitem;
    XMLCh* combobox;
    XMLCh* comboboxitem;
+   XMLCh* textarea;
    
    // General tags
    XMLCh* normal;
@@ -76,6 +77,8 @@ struct Attribs
    XMLCh* colwidths;
    XMLCh* rowheight;
    XMLCh* align;
+   XMLCh* headerheight;
+   XMLCh* menuheight;
 };
 
 enum {Normal, Hover, Clicked};
@@ -89,6 +92,7 @@ class GUI
    friend class Table;
    friend class TableItem;
    friend class ComboBox;
+   friend class TextArea;
    public:
       GUI(float aw = 480.f, float ah = 640.f, TextureHandler* th = NULL);
       virtual ~GUI();

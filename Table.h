@@ -10,6 +10,7 @@ class Table : public GUI
    friend class GUI;
    friend class TableItem;
    friend class ComboBox;
+   friend class TextArea;
    public:
       Table(GUI*, TextureManager*);
       ~Table();

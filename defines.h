@@ -111,7 +111,6 @@ void HandleHit(Particle);
 void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 int Server(void* dummy);
 void UpdateServerList();
-float Max(float, float);
 bool floatzero(float, float error = .00001);
 float Random(float, float);
 void GLError();
