@@ -96,13 +96,18 @@ void TextArea::Refresh()
    int lastbreak = 0;
    bool foundbreak = false;
    bool newline = false;
+   table->clear();
    for (int i = 1; i < working.length(); ++i)
    {
       if (working[i] == ' ' || working[i] == '\n')
       {
          lastbreak = i;
          foundbreak = true;
-         if (working[i] == '\n') newline = true;
+         if (working[i] == '\n')
+         {
+            newline = true;
+            foundbreak = false;
+         }
       }
       
       StringDim(font, working.substr(0, i), swidth, sheight);
@@ -117,7 +122,7 @@ void TextArea::Refresh()
          table->Add(working.substr(0, lastbreak));
          
          // If we didn't actually find a space then don't skip a character
-         if (!foundbreak)
+         if (!foundbreak && !newline)
             --lastbreak;
          working = working.substr(lastbreak + 1);
          foundbreak = false;

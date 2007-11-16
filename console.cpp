@@ -30,6 +30,8 @@ extern GUI console;
 void SetupSDL();
 void SetupOpenGL();
 void GetMap(string);
+void WriteToConsole(string);
+void ConsoleBufferToGUI();
 
 // Just counts spaces, make sure to run through simplifywhitespace first
 int NumTokens(string str)
@@ -99,20 +101,15 @@ string SimplifyWhitespace(string str)
 
 void ConsoleHandler(string command)
 {
-   static TextArea* consoleout = (TextArea*)console.GetWidget("consoleoutput");
    string newcommand = SimplifyWhitespace(command);
    
-   if (!consoleout)
-   {
-      cout << "WTF?!" << endl;
-      return;
-   }
    if (newcommand == "")
    {
-      //consolebuffer.push_front(string(""));
-      consoleout->Append("\n");
+      WriteToConsole("");
       return;
    }
+   
+   WriteToConsole(newcommand);
    
    int ntokens = NumTokens(newcommand);
    if (ntokens == 0)  // Nothing to do
@@ -125,17 +122,14 @@ void ConsoleHandler(string command)
    {
       if (ntokens == 2 && Token(newcommand, 1) == "help")
       {
-         consoleout->Append("Variables available\n");
-         consoleout->Append("quiet showfps consoletop consolebottom consoleleft consoleright consoletrans movestep ghost freelook fov screenwidth screenheight viewdist playersize intmethod showkdtree tickrate");
-         /*consolebuffer.push_front(string("Variables available"));
-         consolebuffer.push_front(string("quiet showfps consoletop consolebottom consoleleft consoleright consoletrans movestep ghost freelook"));
-         consolebuffer.push_front(string("fov screenwidth screenheight viewdist playersize intmethod showkdtree tickrate"));*/
+         WriteToConsole("Variables available");
+         WriteToConsole("quiet showfps consoletop consolebottom consoleleft consoleright consoletrans movestep ghost freelook fov screenwidth screenheight viewdist playersize intmethod showkdtree tickrate");
          return;
       }
       
       if (ntokens < 3)
       {
-         consolebuffer.push_front(string("Invalid command"));
+         WriteToConsole("Invalid Command");
          return;
       }
       if (Token(newcommand, 1) == "quiet")
@@ -185,7 +179,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 10000)
             camdist = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "consoletop")
@@ -193,7 +187,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < screenheight && value < consolebottom)
             consoletop = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "consolebottom")
@@ -201,7 +195,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < screenheight && value > consoletop)
             consolebottom = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "consoleleft")
@@ -209,7 +203,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < screenwidth && value < consoleright)
             consoleleft = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "consoleright")
@@ -217,7 +211,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < screenwidth && value > consoleleft)
             consoleright = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "consoletrans")
@@ -225,7 +219,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 256)
             consoletrans = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "movestep")
@@ -233,7 +227,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0)
             movestep = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "fov")
@@ -241,7 +235,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 180)
             fov = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "screenwidth")
@@ -249,7 +243,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 10000)
             screenwidth = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "screenheight")
@@ -257,7 +251,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 10000)
             screenheight = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "viewdist")
@@ -265,7 +259,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 100000)
             viewdist = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          glFogf(GL_FOG_START, viewdist * .8);
          glFogf(GL_FOG_END, viewdist);
          farclip = viewdist;
@@ -281,7 +275,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value < 1000)
             player[0].size = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "intmethod")
@@ -289,7 +283,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value >= 0 && value < 2)
             coldet.intmethod = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "showkdtree")
@@ -318,7 +312,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value > 0 && value <= 120)
             tickrate = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "serveraddr")
@@ -331,7 +325,7 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value >= 0 && value <= 16)
             aalevel = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "af")
@@ -339,7 +333,7 @@ void ConsoleHandler(string command)
          float value = atof(Token(newcommand, 2).c_str());
          if (value >= .999f && value <= 16.001f)
             texhand.af = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       else if (Token(newcommand, 1) == "map")
@@ -359,18 +353,18 @@ void ConsoleHandler(string command)
          int value = atoi(Token(newcommand, 2).c_str());
          if (value >= 0 && value <= 10)
             partupdateinterval = value;
-         else consolebuffer.push_front(string("Invalid value"));
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       
       // If we get to here then we matched nothing
-      consolebuffer.push_front(string("Unrecognized variable name"));
+      WriteToConsole(string("Unrecognized variable name"));
    }
    
    else if (Token(newcommand, 0) == "help")
    {
-      consolebuffer.push_front(string("set <variable name> <value>"));
-      consolebuffer.push_front(string("help"));
+      WriteToConsole(string("set <variable name> <value>"));
+      WriteToConsole(string("help"));
       return;
    }
    
@@ -381,7 +375,7 @@ void ConsoleHandler(string command)
    }
    else if (Token(newcommand, 0) == "loadmap")
    {
-      consolebuffer.push_front(string("This doesn't work right now, use set map"));
+      WriteToConsole(string("This doesn't work right now, use set map"));
       //GetMap("maps/" + Token(newcommand, 1));
       return;
    }
@@ -391,5 +385,40 @@ void ConsoleHandler(string command)
       SetupOpenGL();
       return;
    }
-   consolebuffer.push_front(string("Unrecognized command"));
+   WriteToConsole(string("Unrecognized command"));
+}
+
+
+/* The console needs to be written to in the process of loading autoexec.cfg, which means
+   we can't have instantiated the console GUI yet, so if that is the case then we write to a
+   temporary buffer that can later be loaded into the GUI portion.
+*/
+void WriteToConsole(string line)
+{
+   cout << line << endl;
+   TextArea* consoleout = (TextArea*)console.GetWidget("consoleoutput");
+   if (consoleout)
+   {
+      consoleout->Append(line + "\n");
+      return;
+   }
+   consolebuffer.push_front(line + "\n");
+}
+
+
+void ConsoleBufferToGUI()
+{
+   TextArea* consoleout = (TextArea*)console.GetWidget("consoleoutput");
+   if (!consoleout)
+   {
+      cout << "Warning, ConsoleBufferToGUI aborting" << endl;
+      return;
+   }
+   
+   deque<string>::iterator i = consolebuffer.begin();
+   while (i != consolebuffer.end())
+   {
+      consoleout->Append(*i);
+      i = consolebuffer.erase(i);
+   }
 }
