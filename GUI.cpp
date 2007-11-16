@@ -128,7 +128,6 @@ void GUI::ProcessEvent(SDL_Event* event)
          else 
          {
             state = Normal;
-            //break;
          }
          break;
          
@@ -160,6 +159,7 @@ void GUI::ProcessEvent(SDL_Event* event)
 }
 
 
+// I'm not sure this works, since I've never had occasion to use it
 void GUI::Add(GUI* widget, string parentname)
 {
    if (parentname == name)

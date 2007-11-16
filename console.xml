@@ -4,7 +4,7 @@
       <Normal>textures/skyold.png</Normal>
    </TextArea>
    <LineEdit x="10" y="610" width="980" height="30" text="" name="consoleinput">
-      <Normal>textures/buttonnorm.png</Normal>
+      <Normal>textures/buttonnormsquare.png</Normal>
       <Hover>textures/buttonhover.png</Hover>
       <Pressed>textures/buttonpressed.png</Pressed>
    </LineEdit>

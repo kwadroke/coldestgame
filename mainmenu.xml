@@ -23,7 +23,13 @@
       <Hover>textures/buttonhover.png</Hover>
       <LeftClickAction>resume</LeftClickAction>
    </Button>
-   <Button x="400" y="500" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center">
+   <Button x="400" y="500" width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="6" align="center">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <Hover>textures/buttonhover.png</Hover>
+      <LeftClickAction>exit</LeftClickAction>
+   </Button>
+   <Button x="400" y="550" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center">
       <Normal>textures/buttonnorm.png</Normal>
       <Pressed>textures/buttonpressed.png</Pressed>
       <Hover>textures/buttonhover.png</Hover>
@@ -31,7 +37,7 @@
    </Button>
    
    <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="525|225|25" rowheight="25">
-      <Normal>textures/buttonnorm.png</Normal>
+      <Normal>textures/buttonnormsquare.png</Normal>
       <!--<TableItem>test|10</TableItem>
       <TableItem>another|20</TableItem>
       <TableItem>Moar|30</TableItem>
@@ -57,7 +63,7 @@
    </ComboBox>
    
    <TextArea x="100" y="100" width="200" height="100" name="testta">
-      <Normal>textures/buttonnorm.png</Normal>
+      <Normal>textures/buttonnormsquare.png</Normal>
 Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
    </TextArea>
 </GUI>
