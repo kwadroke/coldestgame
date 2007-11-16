@@ -153,6 +153,7 @@ void InitGUI()
    console.SetTextureHandler(&texhand);
    console.SetActualSize(screenwidth, screenheight);
    console.InitFromFile("console.xml");
+   ConsoleBufferToGUI();
 }
 
 
@@ -211,7 +212,6 @@ void ReadConfig()
    while (!getconf.eof())
    {
       getline(getconf, buffer);
-      cout << buffer << endl << flush;
       ConsoleHandler(buffer);
    }
 }
@@ -420,17 +420,6 @@ void LoadShaders()
    shaderhand.SetUniform1i(cloudgenshader, "basenoise", 0);
    shaderhand.SetUniform1f(cloudgenshader, "noiseres", noiseres);
    
-   /*shaderhand.LoadShader("shaders/reflection");
-   cout << "Loaded reflection shader\n";
-   shaderhand.SetUniform1i("shaders/reflection", "tex", 0);
-   shaderhand.SetUniform1i("shaders/reflection", "tex1", 1);
-   shaderhand.SetUniform1i("shaders/reflection", "tex2", 2);
-   shaderhand.SetUniform1i("shaders/reflection", "tex3", 3);
-   shaderhand.SetUniform1i("shaders/reflection", "tex4", 4);
-   shaderhand.SetUniform1i("shaders/reflection", "tex5", 5);
-   shaderhand.SetUniform1i("shaders/reflection", "shadowtex", 6);
-   shaderhand.SetUniform1i("shaders/reflection", "worldshadowtex", 7);*/
-   
    shaderhand.SetUniform1i(standardshader, "tex", 0);
    shaderhand.SetUniform1i(standardshader, "shadowtex", 6);
    shaderhand.SetUniform1i(standardshader, "worldshadowtex", 7);
@@ -466,7 +455,7 @@ void LoadShaders()
 // Sets up textures for noise shader
 void InitNoise()
 {
-   int perm[256]= {151,160,137,91,90,15,
+   int perm[256] = {151,160,137,91,90,15,
   131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
   190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
   88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
@@ -496,8 +485,9 @@ void InitNoise()
    texhand.BindTexture(noisetex); // Bind the texture to texture unit 0
    
    GLubyte pixels[256 * 256 * 4];
-   for(i = 0; i<256; i++)
-      for(j = 0; j<256; j++) {
+   for (i = 0; i<256; i++)
+      for (j = 0; j<256; j++)
+      {
          int offset = (i*256+j)*4;
          char value = perm[(j+perm[i]) & 0xFF];
          pixels[offset] = grad3[value & 0x0F][0] * 64 + 64;   // Gradient x
@@ -586,6 +576,41 @@ while( SDL_PollEvent( &event ) )
       loadoutmenu.ProcessEvent(&event);
       break;
    }
+   
+   // Mini keyboard handler to deal with the console
+   switch (event.type)
+   {
+      case SDL_KEYDOWN:
+         switch(event.key.keysym.sym)
+         {
+            case SDLK_BACKQUOTE:
+               console.visible = !console.visible;
+               continue;
+            case SDLK_ESCAPE:
+               console.visible = false;
+               break;
+            case SDLK_RETURN:
+               if (console.visible)
+               {
+                  GUI* consolein = console.GetWidget("consoleinput");
+                  ConsoleHandler(consolein->text);
+                  consolein->text = "";
+                  continue;
+               }
+               break;
+               
+            /*case SDLK_PAGEUP:
+               if (consolebottomline < consolebuffer.size())
+                  consolebottomline++;
+               break;
+            case SDLK_PAGEDOWN:
+               if (consolebottomline > 0)
+                  consolebottomline--;
+               break;*/
+         }
+      
+   };
+   
    if (console.visible)
    {
       SDL_ShowCursor(1);
@@ -595,10 +620,10 @@ while( SDL_PollEvent( &event ) )
    
    SDL_ShowCursor(0);
    SDL_mutexP(clientmutex);
-   switch( event.type ) 
+   switch(event.type) 
    {
       case SDL_KEYDOWN:
-         if (!consolevisible)
+         if (!console.visible)
          {
             switch (event.key.keysym.sym) 
             {
@@ -636,44 +661,8 @@ while( SDL_PollEvent( &event ) )
                   player[0].pos.y = 200;
                   player[0].pos.z = 200;
                   break;
-               case SDLK_BACKQUOTE:
-                  console.visible = true;
-                  break;
             }
          }
-         /*else
-         {
-            switch (event.key.keysym.sym) 
-            {
-               case SDLK_BACKQUOTE:
-                  consolevisible = false;
-                  break;
-               case SDLK_ESCAPE:
-                  consolevisible = false;
-                  break;
-               case SDLK_RETURN:
-                  consolebuffer.push_front(consoleinput);
-                  ConsoleHandler(consoleinput);
-                  consoleinput = "";
-                  break;
-               case SDLK_PAGEUP:
-                  if (consolebottomline < consolebuffer.size())
-                     consolebottomline++;
-                  break;
-               case SDLK_PAGEDOWN:
-                  if (consolebottomline > 0)
-                     consolebottomline--;
-                  break;
-               case SDLK_BACKSPACE:
-                  if (consoleinput.length() > 0)
-                     consoleinput = consoleinput.substr(0, consoleinput.length() - 1);
-                  break;
-               default:
-                  char c = event.key.keysym.sym;
-                  consoleinput.append(string(1, c));
-                  break;
-            }
-         }*/
          break;
          
       case SDL_KEYUP:
