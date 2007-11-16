@@ -205,6 +205,8 @@ void LineEdit::BSChar()
    if (cursorpos < 0)
    {
       --offset;
+      if (offset < 0)
+         offset = 0;
       cursorpos = 0;
    }
 }
