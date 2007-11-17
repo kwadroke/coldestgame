@@ -17,12 +17,17 @@ void main()
    vec4 base = gl_Color;
    base.a = 1.;
    vec4 color = vec4(0, 0, 0, 0);
-   color += texweight.r * texture2D(tex, gl_TexCoord[0].st);
-   color += texweight.g * texture2D(tex1, gl_TexCoord[0].st);
-   color += texweight.b * texture2D(tex2, gl_TexCoord[0].st);
-   color += texweight1.r * texture2D(tex3, gl_TexCoord[0].st);
-   /*color += texweight1.g * texture2D(tex4, gl_TexCoord[0].st);
-   color += texweight1.b * texture2D(tex5, gl_TexCoord[0].st);*/
+   
+   float normweight = smoothstep(-200., 500., dist);
+   float detailweight = 1. - normweight;
+   color += texweight.r * texture2D(tex, gl_TexCoord[0].st) * detailweight;
+   color += texweight.g * texture2D(tex1, gl_TexCoord[0].st) * detailweight;
+   color += texweight.b * texture2D(tex2, gl_TexCoord[0].st) * detailweight;
+   color += texweight1.r * texture2D(tex3, gl_TexCoord[0].st) * detailweight;
+   color += texweight.r * texture2D(tex, gl_TexCoord[0].pq) * normweight;
+   color += texweight.g * texture2D(tex1, gl_TexCoord[0].pq) * normweight;
+   color += texweight.b * texture2D(tex2, gl_TexCoord[0].pq) * normweight;
+   color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
    color *= base;
    vec4 color1 = color;
    float alpha = color.a;

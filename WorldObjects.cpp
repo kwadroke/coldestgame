@@ -5,27 +5,6 @@ int WorldObjects::numobjs = 0; // Not sure we really need this anymore
 
 WorldObjects::WorldObjects()
 {
-   // Generate FBO - less ugly than it used to be pre-GLEW
-   /*glGenFramebuffersEXT(1, &impostorfbo);
-   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, impostorfbo);
-   
-   glGenRenderbuffersEXT(1, &depthbuffer);
-   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthbuffer);
-   glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, FBODIM, FBODIM);
-   glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthbuffer);
-   
-   glGenTextures(1, &imptex);
-   glBindTexture(GL_TEXTURE_2D, imptex);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FBODIM, FBODIM, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-   
-   glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, imptex, 0);
-   if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
-      cout << "Failed to create framebuffer in WorldObjects.\n" << glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) << endl;
-   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);*/
-   
    lastimpupdate = SDL_GetTicks();
    impdist = 0;
    hasfbo = hasvbo = false;
@@ -146,28 +125,6 @@ bool WorldObjects::operator>(const WorldObjects& o) const
 
 void WorldObjects::GenFbo(TextureHandler* texhand)
 {
-   // Generate FBO - less ugly than it used to be pre-GLEW
-   /*glGenFramebuffersEXT(1, &impostorfbo);
-   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, impostorfbo);
-   
-   glGenRenderbuffersEXT(1, &depthbuffer);
-   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthbuffer);
-   glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, FBODIM, FBODIM);
-   glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthbuffer);
-   
-   glGenTextures(1, &imptex);
-   glBindTexture(GL_TEXTURE_2D, imptex);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FBODIM, FBODIM, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-   
-   glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, imptex, 0);
-   if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
-      cout << "Failed to create framebuffer in WorldObjects.\n" << glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) << endl;
-   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);*/
    impostorfbo = FBO(FBODIM, FBODIM, false, texhand);
    imptex = impostorfbo.GetTexture();
    hasfbo = true;
@@ -203,7 +160,7 @@ void WorldObjects::GenVbo(Shader* s)
       }
       if (i->type == "tristrip" || i->type == "terrain")
       {
-         for (int k = 0; k < 6; ++k)
+         for (int k = 0; k < 6; ++k) // Triangles now, six vertices per quad
          {
             int j = 0;
             switch (k)
@@ -242,7 +199,7 @@ void WorldObjects::GenVbo(Shader* s)
             {
                attribs1.push_back(i->terraintex[j][k]);
             }
-            for (int m = 0; m < 6; ++m)
+            for (int m = 0; m < 6; ++m) // Six texture units currently allowed, probably never use all of them
             {
                for (int k = 0; k < 2; ++k)
                   texcoords[m].push_back(i->texcoords[m][j][k]);
