@@ -3,6 +3,7 @@ HeightScale .8
 ZeroHeight 20
 NumTextures 17
 NumObjects 8
+Stretch 8
 
 1 textures/sky.png
 2 textures/photograss.png

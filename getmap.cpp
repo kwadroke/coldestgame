@@ -25,7 +25,7 @@ float Random(float, float);
 void GenShadows(Vector3, float, FBO&);
 
 extern GUI mainmenu, loadprogress;
-extern int tilesize, terrobjsize;
+extern int tilesize, terrobjsize, terrainstretch;
 extern bool shadows;
 extern CollisionDetection coldet;
 extern vector<GLuint> textures;
@@ -55,6 +55,7 @@ void GetMap(string fn)
    vector<floatvec> maparray;  // Heightmap data scaled by heightscale
    ProgressBar* progress = (ProgressBar*)loadprogress.GetWidget("loadprogressbar");
    GUI* progtext = loadprogress.GetWidget("progresstext");
+   
    ifstream gm(dataname.c_str(), ios_base::in);
    gm >> dummy;
    gm >> tilesize;
@@ -67,6 +68,8 @@ void GetMap(string fn)
    gm >> numtextures;
    gm >> dummy;
    gm >> numobjects;
+   gm >> dummy;
+   gm >> terrainstretch;
    
    
    
@@ -425,7 +428,6 @@ void GetMap(string fn)
    for (int i = 0; i < mapw - 1; ++i)
       terrprims.push_back(temp);
    
-   //typedef vector<Vector3> Vector3vec;
    vector<Vector3vec> normals;
    Vector3vec temp1;
    Vector3 v;
@@ -706,12 +708,17 @@ void GetMap(string fn)
          tempprim.color[1][3] = texpercent[x][y + 1];
          tempprim.color[2][3] = texpercent[x + 1][y];
          tempprim.color[3][3] = texpercent[x + 1][y + 1];
-         /*if (textrans[texarray[layer][y][x]])
-         {
-            tempprim.transparent = true;
-            currobj->tprims.push_back(tempprim);
-         }
-         else*/ 
+         
+         float texpiece = 1.f / (float)(terrainstretch);
+         tempprim.texcoords[1][0][0] = (x % terrainstretch) * texpiece;
+         tempprim.texcoords[1][0][1] = (y % terrainstretch) * texpiece;
+         tempprim.texcoords[1][1][0] = (x % terrainstretch) * texpiece;
+         tempprim.texcoords[1][1][1] = ((y % terrainstretch) + 1) * texpiece;
+         tempprim.texcoords[1][2][0] = ((x % terrainstretch) + 1) * texpiece;
+         tempprim.texcoords[1][2][1] = (y % terrainstretch) * texpiece;
+         tempprim.texcoords[1][3][0] = ((x % terrainstretch) + 1) * texpiece;
+         tempprim.texcoords[1][3][1] = ((y % terrainstretch) + 1) * texpiece;
+         
          currobj->prims.push_back(tempprim);
          tempprim = WorldPrimitives();
       }

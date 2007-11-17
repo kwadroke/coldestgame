@@ -10,7 +10,8 @@ attribute vec3 terrainwt, terrainwt1;
 
 void main()
 {
-   gl_TexCoord[0] = gl_MultiTexCoord0;
+   gl_TexCoord[0].st = gl_MultiTexCoord0.st;
+   gl_TexCoord[0].pq = gl_MultiTexCoord1.st;
    
    vec4 ambient;
    

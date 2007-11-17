@@ -83,13 +83,6 @@ void ConsoleBufferToGUI();
 int NumTokens(string);
 string Token(string, int);
 string SimplifyWhitespace(string);
-/*void RenderSkybox();
-void RenderConsole();
-void RenderFPS();
-void RenderObjects();
-void RenderHud();
-void RenderDynamicObjects();
-void RenderDOTree(DynamicPrimitive*);*/
 void GenShadows(Vector3, float, FBO&);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void Animate();
@@ -134,8 +127,11 @@ float farclip = 2000;  // Why didn't I just use viewdist?
 int screenwidth, screenheight;  // Current resolution
 float aspect;
 int tilesize;           // How much to scale terrain in the x and z directions
+int terrainstretch;     // How many tiles to stretch non-detail terrain textures over
+// The following should probably never be used
 TTF_Font *lcd;          // The font for FPS display
 TTF_Font *consolefont;  // The font for the console
+
 int lasttick, frames;   // For FPS calculation
 float fps;              // Previously calculated FPS value
 bool showfps, fly;      // Display FPS and allow flying
@@ -157,10 +153,8 @@ int nummaplayers;       // How many layers of textures the current map has
 int fov;                // What field of view to use
 int viewdist;           // How far the player can see
 int nextprim;           // Next available primitive in the array
-//int intmethod;          // Which method to use for collision detection
 int aalevel;            // How much antialiasing to apply
 vector<GLuint> dotextures; // Dynamic object textures
-//PrimitiveOctree *ot;
 bool terrainlistvalid;  // Is display list for terrain up to date?
 GLuint terrainlist;     // Terrain display list
 bool showkdtree;        // Visualize the kdtree for debugging?
@@ -188,8 +182,6 @@ list<Particle> particles; // List of active particles
 Light lights;           // Container for the data to set OpenGL lights
 GLuint shadowmaptex[2]; // GL identifier for the shadow map textures
 GLuint worldshadowmaptex[2]; // Static shadow map textures
-//GLuint shadowmapfbo;    // GL id for the shadow map fbo
-//GLuint worldshadowmapfbo; // GL id for static shadow map
 FBO shadowmapfbo, worldshadowmapfbo; // Shadowmap framebuffer objects
 bool shadows;           // Whether to render shadows
 Shader shaderhand;      // Encapsulate shaders

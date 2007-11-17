@@ -21,7 +21,7 @@ class GenericPrimitive
       bool collide;
       bool dynamic;
       int vboindex;
-      vector< vector< vector<float> > > texcoords;
+      vector< vector< vector<float> > > texcoords; // texcoords[texunit][vertex][st]
       int texnum;
       GLuint texnums[6];
       string shader;
