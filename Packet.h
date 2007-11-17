@@ -20,6 +20,8 @@ class Packet
       bool ack;
       int attempts;
       unsigned long num;
+      int lagcounter;
+      static int laghax;
    
    private:
       UDPpacket* packet;

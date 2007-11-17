@@ -103,6 +103,7 @@ bool floatzero(float, float error = .00001);
 float Random(float, float);
 void GLError();
 string AddressToDD(Uint32);
+void SynchronizePosition();
 
 template <typename T>
 string ToString(const T &input)
@@ -214,6 +215,7 @@ vector<ServerInfo> servers; // List of what we know about available servers
 set<ServerInfo> knownservers; // Quick way to check whether we already know about a server
 int partupdateinterval; // Update particles every this many frames
 bool spawnrequest;      // Tell net thread to send spawn request
+int laghax;             // Test server's lag tolerance
 
 list<WorldObjects> objects;
 WorldPrimitives worldbounds[6];
@@ -221,4 +223,5 @@ list<DynamicObject> dynobjects;
 vector<PlayerData> player;
 vector<UnitData> units;
 vector<WeaponData> weapons;
+deque<OldPosition> oldpos;
 #endif

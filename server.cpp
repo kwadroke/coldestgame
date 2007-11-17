@@ -599,11 +599,15 @@ int ServerSend(void* dummy)  // Thread for sending updates
       while (i != servqueue.end())
       {
          i->Send();
-         if (!i->ack) // Non-ack packets get sent once and then are on their own
+         if (!i->ack && i->lagcounter <= 0) // Non-ack packets get sent once and then are on their own
          {
             i = servqueue.erase(i);
          }
-         else ++i;
+         else 
+         {
+            i->lagcounter--;
+            ++i;
+         }
       }
       SDL_mutexV(servermutex);
       //t.stop();

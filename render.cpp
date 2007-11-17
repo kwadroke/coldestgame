@@ -82,6 +82,7 @@ void GLError();
 void UpdateClouds();
 void SetReflection(bool);
 void UpdateNoise();
+void SynchronizePosition();
 
 int rendercount;
 
@@ -138,6 +139,7 @@ void Repaint()
       // Update player position
       SDL_mutexP(clientmutex);
       Move(player[0], dynobjects, coldet);
+      SynchronizePosition();
       localplayer = player[0];
       SDL_mutexV(clientmutex);
       

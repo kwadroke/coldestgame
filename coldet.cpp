@@ -851,11 +851,6 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
          mplayer.fallvelocity = 10.f;
    }
    
-   /*if (!onground && !fly)
-   {
-      d.x *= .5f;
-      d.z *= .5f;
-   }*/
    mplayer.pos.x += d.x * step;
    mplayer.pos.z -= d.z * step;
    
@@ -881,31 +876,62 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
          }
       }
    }
-   
-   // This most likely won't work well now
-   //if (!quiet)
-   //   cout << mplayer.pos.x << "  "  << mplayer.pos.y << "  " << mplayer.pos.z << endl;
 }
 
 
-void Fire()
+// No mutex needed, only called from mutex'd code
+void SynchronizePosition()
 {
-   /*Vector3 dir(0, 0, -1);
-   GraphicMatrix m;
-   m.rotatex(-player[0].pitch);
-   m.rotatey(player[0].facing + player[0].rotation);
-   //m.rotatez(player[0].roll);
-   dir.transform(m.members);
+   OldPosition temp;
+   Uint32 currtick = SDL_GetTicks();
    
-   list<DynamicObject>::iterator temp = LoadObject("projectile");
-   Particle part(player[0].pos, dir, .4, 1, 10, 1, temp, SDL_GetTicks());
-   part.pos += part.dir * 40;
-   part.cd = &coldet;
-   part.playernum = 0;
-   part.damage = 10;
-   part.dmgrad = 10;
+   //SDL_mutexP(clientmutex);
+   temp.facing = player[0].facing;
+   temp.tick = currtick;
+   temp.pos = player[0].pos;
    
-   particles.push_back(part);*/
+   oldpos.push_back(temp);
+   
+   int currindex = oldpos.size() / 2;
+   int upper = oldpos.size();
+   int lower = 0;
+   int ping = player[servplayernum].ping;
+   
+   while ((oldpos[currindex].tick != currtick - ping) && (upper - lower > 1))
+   {
+      if (oldpos[currindex].tick < currtick - ping)
+      {
+         lower = currindex;
+         currindex = (currindex + upper) / 2;
+      }
+      else
+      {
+         upper = currindex;
+         currindex = (currindex + lower) / 2;
+      }
+   }
+   
+   float difference = player[servplayernum].pos.distance(oldpos[currindex].pos);
+   float facingdiff = player[servplayernum].facing - oldpos[currindex].facing;
+   float maxdifference = .1f;
+   float maxfacediff = .03f;
+   int tickdiff = currtick - ping - oldpos[currindex].tick;
+   
+   cout << facingdiff << endl;
+   
+   if ((difference > (maxdifference * tickdiff)) ||
+      (facingdiff > (maxfacediff * tickdiff)))
+   {
+      Vector3 vecdiff = player[servplayernum].pos - oldpos[currindex].pos;
+      player[0].pos += vecdiff * .1f;
+      player[0].facing += facingdiff * .1f;
+      for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
+      {
+         i->pos += vecdiff;
+         i->facing += facingdiff;
+      }
+   }
+   //SDL_mutexV(clientmutex);
 }
 
 
