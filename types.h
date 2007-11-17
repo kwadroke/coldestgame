@@ -6,7 +6,7 @@
 // Define types used multiple places
 
 /* The last item in each of the enums is a value to indicate how many enums each type
-   actually has.  Iterating from 0...lastitem (i.e. numweapons) should always hit
+   actually has.  Iterating from 0...lastitem - 1 (i.e. numweapons) should always hit
    each possible weapon.*/
 enum Weapons{Empty, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, numweapons};
 enum Units{UnitTest, Ultra, Omega, numunits};
@@ -37,6 +37,14 @@ struct WeaponData
    bool explode;
    string file;
    string name;
+};
+
+
+struct OldPosition
+{
+   Vector3 pos;
+   Uint32 tick;
+   float facing;
 };
 
 #endif

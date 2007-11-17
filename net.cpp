@@ -337,7 +337,7 @@ int NetListen(void* dummy)
                   player[oppnum].pos.x = oppx;
                   player[oppnum].pos.y = oppy;
                   player[oppnum].pos.z = oppz;
-                  if (oppnum == servplayernum)
+                  /*if (oppnum == servplayernum)
                   {
                      player[0].pos.x = (oppx + player[0].pos.x * 2.f) / 3.f;
                      player[0].pos.y = (oppy + player[0].pos.y * 2.f) / 3.f;
@@ -349,7 +349,7 @@ int NetListen(void* dummy)
                      interpamount = 1.f / interpamount * player[0].ping;
                      player[0].facing = (oppfacing + player[0].facing * interpamount) / (1.f + interpamount);
                      player[0].ping = player[oppnum].ping;
-                  }
+                  }*/
                   player[oppnum].connected = true;
                   
                   if (oppnum != servplayernum && player[oppnum].unit != 0)

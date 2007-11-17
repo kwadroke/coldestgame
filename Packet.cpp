@@ -1,5 +1,7 @@
 #include "Packet.h"
 
+int Packet::laghax = 0;
+
 Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string s)
 {
    packet = outpack;
@@ -10,6 +12,7 @@ Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string
    data = s;
    ack = false;
    attempts = 0;
+   lagcounter = laghax;
 }
 
 
@@ -17,7 +20,7 @@ void Packet::Send()
 {
    if (!packet || !socket)
    {
-      cout << "**********************NULL!!!111" << endl;
+      cout << "Error: Packet has null packet or socket" << endl;
       return;
    }
    packet->address = addr;
