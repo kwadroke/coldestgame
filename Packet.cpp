@@ -1,6 +1,6 @@
 #include "Packet.h"
 
-int Packet::laghax = 0;
+int Packet::laghax = 40;
 
 Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string s)
 {
