@@ -884,13 +884,23 @@ void SynchronizePosition()
 {
    OldPosition temp;
    Uint32 currtick = SDL_GetTicks();
+   static deque<Uint32> pings;
+   pings.push_back(player[servplayernum].ping);
+   while (pings.size() > 100)
+      pings.pop_front();
    
    //SDL_mutexP(clientmutex);
    
    int currindex = oldpos.size() / 2;
    int upper = oldpos.size();
    int lower = 0;
-   int ping = player[servplayernum].ping;
+   
+   // Smooth out our ping so we don't get jumpy movement
+   int ping;
+   for (deque<Uint32>::iterator i = pings.begin(); i != pings.end(); ++i)
+      ping += *i;
+   ping /= pings.size();
+   
    
    while ((oldpos[currindex].tick != currtick - ping) && (upper - lower > 1))
    {
@@ -907,6 +917,7 @@ void SynchronizePosition()
    }
    
    float difference = player[servplayernum].pos.distance(oldpos[currindex].pos);
+   //cout << difference << endl;
    float facingdiff = player[servplayernum].facing - oldpos[currindex].facing;
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
    float pingslop = .1f;
@@ -917,7 +928,7 @@ void SynchronizePosition()
    
    bool neg = false;
    if (facingdiff < 0) neg = true;
-   facingdiff = fabs(facingdiff) - tickdiff * facepingslop > 0 ? (fabs(facingdiff) - tickdiff * facepingslop) : 0.f;
+   facingdiff = fabs(facingdiff) - (float)tickdiff * facepingslop > 0 ? (fabs(facingdiff) - tickdiff * facepingslop) : 0.f;
    if (neg) facingdiff = -facingdiff;
          
    Vector3 vecdiff = player[servplayernum].pos - oldpos[currindex].pos;
@@ -926,6 +937,18 @@ void SynchronizePosition()
    Vector3 posadj = vecdiff;//difference / posthresh > 1 ? vecdiff : vecdiff * difference / posthresh;
    float faceadj = facingdiff;//fabs(facingdiff / facethresh) > 1 ? facingdiff : facingdiff * fabs(facingdiff / facethresh);
    
+   if(0)
+   {
+      vecdiff.print();
+      posadj.print();
+      player[servplayernum].pos.print();
+      oldpos[currindex].pos.print();
+      cout << currindex << endl;
+      cout << oldpos[currindex].tick << endl;
+      cout << (currtick - ping) << endl;
+      cout << difference << endl;
+      cout << tickdiff << endl << endl;
+   }
    // Debugging stuff
    /*vecdiff.print();
    posadj.print();
@@ -937,12 +960,12 @@ void SynchronizePosition()
    cout << "difference: " << difference << endl;
    cout << "tickdiff: " << tickdiff << endl << endl;*/
    
-   player[0].pos += posadj;// * .1f;
-   player[0].facing += faceadj * .1f;
+   player[0].pos += posadj * .8f;
+   player[0].facing += faceadj;// * .1f;
    if (player[0].facing > 360.f) player[0].facing -= 360.f;
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
    {
-      i->pos += posadj;
+      i->pos += posadj * .8f;
       i->facing += faceadj;
       if (i->facing > 360.f) i->facing -= 360.f;
    }

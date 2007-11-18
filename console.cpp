@@ -7,6 +7,7 @@
 #include "CollisionDetection.h"
 #include "Hit.h"
 #include "PlayerData.h"
+#include "Packet.h"
 #include "TextArea.h"
 #include "SDL_opengl.h"
 #include "SDL_net.h"
@@ -354,6 +355,11 @@ void ConsoleHandler(string command)
          if (value >= 0 && value <= 10)
             partupdateinterval = value;
          else WriteToConsole(string("Invalid value"));
+         return;
+      }
+      else if (Token(newcommand, 1) == "laghax")
+      {
+         Packet::laghax = atoi(Token(newcommand, 2).c_str());
          return;
       }
       
