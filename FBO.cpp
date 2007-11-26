@@ -57,7 +57,7 @@ FBO& FBO::operator=(const FBO &f)
 void FBO::init()
 {
    glGenFramebuffersEXT(1, &fboid);
-   cout << "Creating framebuffer object " << fboid << endl;
+   //cout << "Creating framebuffer object " << fboid << endl;
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboid);
    
    glGenTextures(2, tex);
