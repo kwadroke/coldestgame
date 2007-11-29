@@ -20,7 +20,7 @@ class Packet
       bool ack;
       int attempts;
       unsigned long num;
-      int lagcounter;
+      Uint32 sendtick;
       static int laghax;
    
    private:

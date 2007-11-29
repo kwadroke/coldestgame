@@ -74,7 +74,6 @@ void InitUnits();
 void InitWeapons();
 void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
 void HitTerrain();
-void CheckFall();
 int PowerOf2(int);
 void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
@@ -216,6 +215,8 @@ set<ServerInfo> knownservers; // Quick way to check whether we already know abou
 int partupdateinterval; // Update particles every this many frames
 bool spawnrequest;      // Tell net thread to send spawn request
 int laghax;             // Test server's lag tolerance
+bool serversync;        // Probably not useful once server syncing is working properly
+TextureManager *texman;  // Handles string versions of texture identifiers
 
 list<WorldObjects> objects;
 WorldPrimitives worldbounds[6];
@@ -223,5 +224,4 @@ list<DynamicObject> dynobjects;
 vector<PlayerData> player;
 vector<UnitData> units;
 vector<WeaponData> weapons;
-deque<OldPosition> oldpos;
 #endif

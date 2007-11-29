@@ -16,7 +16,7 @@ using namespace std;
 // Necessary declarations - these appear in defines.h
 extern deque<string> consolebuffer;
 extern bool quiet, showfps, ghost, fly, thirdperson, server;
-extern bool showkdtree, doconnect, shadows, reflection, fullscreen;
+extern bool showkdtree, doconnect, shadows, reflection, fullscreen, serversync;
 extern int camdist, screenwidth, screenheight, consoletop, consolebottom;
 extern int consoleright, consoleleft, consoletrans, movestep, fov;
 extern int viewdist, tickrate, aalevel, partupdateinterval;
@@ -362,6 +362,13 @@ void ConsoleHandler(string command)
          Packet::laghax = atoi(Token(newcommand, 2).c_str());
          return;
       }
+      else if (Token(newcommand, 1) == "serversync")
+      {
+         if (Token(newcommand, 2) == "1")
+            serversync = true;
+         else serversync = false;
+         return;
+      }
       
       // If we get to here then we matched nothing
       WriteToConsole(string("Unrecognized variable name"));
@@ -408,7 +415,7 @@ void WriteToConsole(string line)
       consoleout->Append(line + "\n");
       return;
    }
-   consolebuffer.push_front(line + "\n");
+   consolebuffer.push_back(line + "\n");
 }
 
 

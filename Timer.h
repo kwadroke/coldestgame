@@ -12,7 +12,9 @@ class Timer
    public:
       Timer();
       void start();
-      void stop();
+      Uint32 stop();
+      Uint32 elapsed();
+      
    private:
       Uint32 starttick;
 };

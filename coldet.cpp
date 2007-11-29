@@ -89,6 +89,7 @@ void InitGlobals()
    reflectionres = 512;
    cloudres = 1024;
    partupdateinterval = 0;
+   serversync = true;
    
    // Variables that cannot be set from the console
    tilesize = 0;
@@ -121,6 +122,7 @@ void InitGlobals()
    noiseres = 128;
    nextmap = mapname = "";
    clientmutex = SDL_CreateMutex();
+   texman = new TextureManager(&texhand);
    
    ReadConfig();
    
@@ -882,101 +884,129 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
 // No mutex needed, only called from mutex'd code
 void SynchronizePosition()
 {
+   static deque<OldPosition> oldpos;
+   static int smoothfactor = 1;
    OldPosition temp;
    Uint32 currtick = SDL_GetTicks();
+   Vector3 smoothserverpos;
+   Vector3 smootholdpos;
+   
+   // Smooth out our ping so we don't get jumpy movement
    static deque<Uint32> pings;
-   pings.push_back(player[servplayernum].ping);
-   while (pings.size() > 100)
+   if (player[servplayernum].ping >= 0 && player[servplayernum].ping < 2000)
+      pings.push_back(player[servplayernum].ping);
+   while (pings.size() > 200)
       pings.pop_front();
    
-   //SDL_mutexP(clientmutex);
+   int ping = 0;
+   for (deque<Uint32>::iterator i = pings.begin(); i != pings.end(); ++i)
+      ping += *i;
+   ping /= pings.size();
+   
+   // Also smooth out positions over a few frames to further reduce jumpiness
+   static deque<int> recentoldpos;
+   static deque<PlayerData> recentservinfo;
+   
+   recentservinfo.push_back(player[servplayernum]);
+   while (recentservinfo.size() > smoothfactor)
+      recentservinfo.pop_front();
+   for (deque<PlayerData>::iterator i = recentservinfo.begin(); i != recentservinfo.end(); ++i)
+      smoothserverpos += i->pos;
+   smoothserverpos /= recentservinfo.size();
    
    int currindex = oldpos.size() / 2;
    int upper = oldpos.size();
    int lower = 0;
    
-   // Smooth out our ping so we don't get jumpy movement
-   int ping;
-   for (deque<Uint32>::iterator i = pings.begin(); i != pings.end(); ++i)
-      ping += *i;
-   ping /= pings.size();
-   
-   
-   while ((oldpos[currindex].tick != currtick - ping) && (upper - lower > 1))
+   while ((oldpos[currindex].tick != currtick - ping) && (upper - lower > 0))
    {
       if (oldpos[currindex].tick < currtick - ping)
       {
-         lower = currindex;
+         if (lower != currindex)
+            lower = currindex;
+         else ++lower;
          currindex = (currindex + upper) / 2;
       }
       else
       {
-         upper = currindex;
+         if (upper != currindex)
+            upper = currindex;
+         else --upper;
          currindex = (currindex + lower) / 2;
       }
    }
    
-   float difference = player[servplayernum].pos.distance(oldpos[currindex].pos);
-   //cout << difference << endl;
-   float facingdiff = player[servplayernum].facing - oldpos[currindex].facing;
+   /*if (oldpos[currindex].tick < currtick - ping)
+   {
+      float perc = (float)(currtick - ping - oldpos[currindex].tick) / (float)(oldpos[currindex + 1].tick - oldpos[currindex].tick);
+      smootholdpos = oldpos[currindex].pos * (1.f - perc) + oldpos[currindex + 1].pos * perc;
+   }
+   else
+   {
+      smootholdpos = oldpos[currindex].pos;
+   }*/
+   
+   recentoldpos.push_back(currindex);
+   while (recentoldpos.size() > smoothfactor)
+      recentoldpos.pop_front();
+   for (deque<int>::iterator i = recentoldpos.begin(); i != recentoldpos.end(); ++i)
+      smootholdpos += oldpos[*i].pos;
+   smootholdpos /= recentoldpos.size();
+   
+   float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
    float pingslop = .1f;
-   float facepingslop = .01f;
    float posthresh = 1.f;
-   float facethresh = 1.f;
-   difference = difference - (float)tickdiff * pingslop > 0 ? (difference - (float)tickdiff * pingslop) : 0.f;
+   float diffslop = difference - (float)tickdiff * pingslop;
+   difference = diffslop > 0 ? diffslop : 0.f;
    
-   bool neg = false;
-   if (facingdiff < 0) neg = true;
-   facingdiff = fabs(facingdiff) - (float)tickdiff * facepingslop > 0 ? (fabs(facingdiff) - tickdiff * facepingslop) : 0.f;
-   if (neg) facingdiff = -facingdiff;
-         
-   Vector3 vecdiff = player[servplayernum].pos - oldpos[currindex].pos;
+   Vector3 vecdiff = smoothserverpos - smootholdpos;
    vecdiff.normalize();
    vecdiff *= difference;
    Vector3 posadj = vecdiff;//difference / posthresh > 1 ? vecdiff : vecdiff * difference / posthresh;
-   float faceadj = facingdiff;//fabs(facingdiff / facethresh) > 1 ? facingdiff : facingdiff * fabs(facingdiff / facethresh);
    
-   if(0)
-   {
-      vecdiff.print();
-      posadj.print();
-      player[servplayernum].pos.print();
-      oldpos[currindex].pos.print();
-      cout << currindex << endl;
-      cout << oldpos[currindex].tick << endl;
-      cout << (currtick - ping) << endl;
-      cout << difference << endl;
-      cout << tickdiff << endl << endl;
-   }
-   // Debugging stuff
-   /*vecdiff.print();
+#if 0
+   vecdiff.print();
    posadj.print();
-   player[servplayernum].pos.print();
-   oldpos[currindex].pos.print();*/
-   /*cout << player[servplayernum].facing << endl;
-   cout << oldpos[currindex].facing << endl;
-   cout << "facingdiff: " << facingdiff << endl;
+   //player[servplayernum].pos.print();
+   //oldpos[currindex].pos.print();
+   smoothserverpos.print();
+   smootholdpos.print();
+   cout << "currindex: " << currindex << endl;
+   cout << "old tick: " << oldpos[currindex].tick << endl;
+   cout << "currtick - ping: " << (currtick - ping) << endl;
    cout << "difference: " << difference << endl;
-   cout << "tickdiff: " << tickdiff << endl << endl;*/
+   cout << "moving: " << player[0].moveforward << endl;
+   cout << "tickdiff: " << tickdiff << endl << endl;
+   if (currindex - 1 > 0 && oldpos[currindex].pos.distance(oldpos[currindex - 1].pos) > 3)
+   {
+      cout << "Hitch detected\n";
+      oldpos[currindex].pos.print();
+      oldpos[currindex - 1].pos.print();
+      cout << (oldpos[currindex].pos.distance(oldpos[currindex - 1].pos)) << endl;
+      cout << tickdiff << endl;
+      cout << endl;
+   }
+#endif
    
-   player[0].pos += posadj * .8f;
-   player[0].facing += faceadj;// * .1f;
-   if (player[0].facing > 360.f) player[0].facing -= 360.f;
+   
+   if (difference > 10.f)
+      posadj *= .5f;
+   else if (!player[0].moveforward && !player[0].moveback)
+      posadj *= .1f;
+   else if (difference > .1f)
+      posadj *= .05f;
+   
+   player[0].pos += posadj;
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
    {
-      i->pos += posadj * .8f;
-      i->facing += faceadj;
-      if (i->facing > 360.f) i->facing -= 360.f;
+      i->pos += posadj;
    }
    
-   temp.facing = player[0].facing;
    temp.tick = currtick;
    temp.pos = player[0].pos;
    
    oldpos.push_back(temp);
-   
-   //SDL_mutexV(clientmutex);
 }
 
 

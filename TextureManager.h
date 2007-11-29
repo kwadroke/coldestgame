@@ -15,7 +15,7 @@ class TextureManager
    public:
       TextureManager(TextureHandler* th = NULL);
       ~TextureManager();
-      void LoadTexture(string);
+      GLuint LoadTexture(string);
       void BindTexture(string);
       TextureHandler* texhand;
       

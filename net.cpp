@@ -150,12 +150,16 @@ int NetSend(void* dummy)
       list<Packet>::iterator i = sendqueue.begin();
       while (i != sendqueue.end())
       {
-         i->Send();
-         if (!i->ack)// || i->attempts > 30) // Non-ack packets get sent once and then are on their own
+         if (i->sendtick <= currnettick)
          {
-            i = sendqueue.erase(i);
+            i->Send();
+            if (!i->ack) // Non-ack packets get sent once and then are on their own
+            {
+               i = sendqueue.erase(i);
+               continue;
+            }
          }
-         else ++i;
+         ++i;
       }
       SDL_mutexV(sendmutex);
       //t.stop();

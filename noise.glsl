@@ -119,7 +119,7 @@ void main()
 {
    float nval = 0;
    
-   nval += snoise(vec3(gl_FragCoord.xy, time / 500.));
+   nval = snoise(vec3(gl_FragCoord.xy, time / 500.));
    
    /* Duh, it's scaled from -1 to 1, we need 0 to 1*/
    nval *= .5;

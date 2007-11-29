@@ -35,6 +35,7 @@ extern int lasttick, frames, camdist, shadowmapsize, trislastframe;
 extern int cloudres, reflectionres, noiseres, servplayernum;
 extern float fps;
 extern bool consolevisible, showfps, quiet, thirdperson, showkdtree, shadows, reflection;
+extern bool serversync;
 extern float nearclip, farclip, aspect;
 extern TextureHandler texhand;
 extern GLuint noisetex;
@@ -46,7 +47,6 @@ extern TTF_Font *lcd;
 extern TTF_Font *consolefont;
 extern SDL_mutex* clientmutex;
 extern GLuint texnum[], shadowmaptex[], worldshadowmaptex[];
-//extern PrimitiveOctree *ot;
 extern ObjectKDTree kdtree;
 extern Light lights;
 extern Shader shaderhand;
@@ -73,7 +73,6 @@ void GenClouds();
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
-//void RenderText(string, int, int, int, TTF_Font*, float, bool);
 int PowerOf2(int);
 void Animate();
 void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
@@ -119,6 +118,8 @@ PlayerData localplayer;
 
 void Repaint()
 {
+   static Timer t, ts;
+   t.start();
    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
    // The accum buffer is no longer used (atm anyway), and the color buffer
    // should be overwritten by the skybox because we shut off the depth
@@ -133,13 +134,13 @@ void Repaint()
    SDL_mutexP(clientmutex);
    localplayer = player[0];
    SDL_mutexV(clientmutex);
-   
    if (!mainmenu.visible && !loadprogress.visible && !loadoutmenu.visible)
    {
       // Update player position
       SDL_mutexP(clientmutex);
       Move(player[0], dynobjects, coldet);
-      SynchronizePosition();
+      if (serversync)
+         SynchronizePosition();
       localplayer = player[0];
       SDL_mutexV(clientmutex);
       
@@ -196,20 +197,6 @@ void Repaint()
       
       glTranslatef(-localplayer.pos.x, -localplayer.pos.y, -localplayer.pos.z);
       
-      // For debugging only
-      /*glDisable(GL_FOG);
-      for (int i = 0; i < 6; i++)
-      {
-         glBegin(GL_TRIANGLE_STRIP);
-         for (int j = 0; j < 4; j++)
-         {
-            glColor4f(0, 0, 0, .5);
-            glVertex3f(worldbounds[i].v[j].x, worldbounds[i].v[j].y, worldbounds[i].v[j].z);
-         }
-         glEnd();
-      }
-      glEnable(GL_FOG);*/
-      
       /* This has to be set here instead of in RenderObjects because RenderObjects
          is called when shadowing as well, and that needs a different frustum setup.
       */
@@ -252,9 +239,9 @@ void Repaint()
          glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
          
          texhand.ActiveTexture(0);
-   #ifdef NOPSM
+#ifdef NOPSM
          shaderhand.UseShader(standardshader);
-   #endif
+#endif
       }
       
       if (updateclouds)
@@ -274,7 +261,10 @@ void Repaint()
       
       if (reflection && localplayer.pos.y > 0)
       {
+         //ts.start();
          UpdateNoise();
+         //cout << "Partial: ";
+         //ts.stop();
          RenderWater();
       }
       
@@ -310,7 +300,15 @@ void Repaint()
    }
    
    // And finally, copy all of this stuff to the screen
+   ts.start();
    SDL_GL_SwapBuffers();
+   cout << "SwapBuffers: ";
+   ts.stop();
+   if (t.elapsed() > (1000.f / fps) * 2.f)
+   {
+      cout << "Average ms/frame: " << (1000.f / fps) << endl;
+      t.stop();
+   }
    //sleep(1);
 }
 
@@ -377,29 +375,7 @@ void RenderObjects()
       {
          if (!floatzero(i->impdist) && i->dynobj != dynobjects.end() && !shadowrender)
             i->dynobj->visible = false;
-         if (1)
-         {
-            RenderPrimitives(i->prims);
-         }
-         else // Display lists are really buggy for some reason
-         {
-            if (i->dlcurrent)
-            {
-               shaderhand.UseShader(i->prims[0].shader);
-               i->RenderList();
-            }
-            else
-            {
-               texhand.ForgetCurrent();
-               shaderhand.ForgetCurrent();
-               glNewList(i->displaylist, GL_COMPILE);
-               RenderPrimitives(i->prims);
-               RenderPrimitives(i->tprims, true);
-               glEndList();
-               i->dlcurrent = true;
-               i->RenderList();
-            }
-         }
+         RenderPrimitives(i->prims);
       }
       // Billboarding - this should really be moved elsewhere, possibly to WorldObjects itself
       else if (SDL_GetTicks() - i->lastimpupdate > dist / (1000 / dist) && !reflectionrender)
@@ -635,165 +611,6 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
       }
    }
 }
-
-
-#if 0
-void RenderPrimitives(vector<WorldPrimitives> &prims)
-{
-   // Render primitives in prims
-   int i = 0;
-   
-   // Sort primitives back to front so blending works right
-   // Non-transparent ones actually go front to back for better
-   // performance, only transparent prims need to be back to front
-   vector<primitivedistance> v;
-   vector<primitivedistance> transv;
-   list<WorldObjects>::iterator o;
-   Vector3 playerpos = localplayer.pos;
-   float dist;
-   primitivedistance pd;
-   while (i < prims.size())
-   {
-      dist = 0;
-      o = prims[i].object;
-      pd.primnum = i; 
-      if (prims[i].transparent)
-      {
-         if (prims[i].type == "cylinder")
-         {
-            Vector3 center(0, 0, prims[i].height / 2);
-            center.rotate(o->pitch, o->rotation, o->roll);
-            center.translate(o->x, o->y, o->z);
-            dist = (center.x - playerpos.x) * (center.x - playerpos.x) +
-                  (center.y - playerpos.y) * (center.y - playerpos.y) +
-                  (center.z - playerpos.z) * (center.z - playerpos.z);
-         }
-         else if (prims[i].type == "tristrip" || prims[i].type == "terrain")
-         {
-            float x = (prims[i].v[0].x + prims[i].v[1].x + prims[i].v[2].x + prims[i].v[3].x) / 4;
-            float y = (prims[i].v[0].y + prims[i].v[1].y + prims[i].v[2].y + prims[i].v[3].y) / 4;
-            float z = (prims[i].v[0].z + prims[i].v[1].z + prims[i].v[2].z + prims[i].v[3].z) / 4;
-            dist = (x - playerpos.x) * (x - playerpos.x) +
-                  (y - playerpos.y) * (y - playerpos.y) +
-                  (z - playerpos.z) * (z - playerpos.z);
-            // Terrain needs to be adjusted slightly so that steep surfaces
-            // don't get mixed up due to rounding errors.  Adding the y
-            // translation should add the appropriate layer gap to the 
-            // calculated distance, ensuring that lower layers always 
-            // stay below upper layers.  Remember the y translation is
-            // negative, hence the -= below.
-            // The * 100 may cause problems down the road, but we'll cross
-            // that bridge when we come to it.  Otherwise we get gaps
-            // where there are transparent textures meeting at a steep angle
-            if (o->type == "terrain")
-               dist -= o->y;// * 100;
-         }
-         if (dist <= viewdist * viewdist)
-         {
-            pd.dist = dist;
-            transv.push_back(pd);
-         }
-      }
-      else
-      {
-         pd.dist = prims[i].texnum;  // Probably better to sort these by texture
-         v.push_back(pd);
-      }
-      ++i;
-   }
-   
-   for (int z = 0; z < 2; z++)
-   {
-      if (z)
-         sort(v.begin(), v.end());
-      else
-         sort(v.begin(), v.end());//, greater<primitivedistance>());
-      
-      i = 0;
-      glColor4f(1, 1, 1, 1);
-      while (!v.empty())
-      {
-         i = v.back().primnum;
-         v.pop_back();
-         o = prims[i].object;
-         
-         /* Never actually disable the depth test now anyway
-         if (prims[i].depthtest == false)
-            glDisable(GL_DEPTH_TEST);
-         else glEnable(GL_DEPTH_TEST);*/
-         if (prims[i].type == "cylinder")
-         {
-            glPushMatrix();
-            glTranslatef(o->x, o->y, o->z);
-            glRotatef(o->rotation, 0, 1, 0);
-            glRotatef(o->pitch, 1, 0, 0);
-            glRotatef(o->roll, 0, 0, 1);
-            texhand.BindTexture(textures[prims[i].texnum]);
-            GLUquadricObj *c = gluNewQuadric();
-            gluQuadricTexture(c, GL_TRUE);
-            gluCylinder(c, prims[i].rad, prims[i].rad1, prims[i].height, prims[i].slices, prims[i].stacks);
-            gluDeleteQuadric(c);
-            glPopMatrix();
-            trislastframe += prims[i].slices * prims[i].stacks * 2;
-            
-         }
-         else if (prims[i].type == "tristrip" || prims[i].type == "terrain")
-         {
-            // There's no actual difference between tristrip and terrain,
-            // but differentiating them lets us handle them differently
-            // for collision detection
-            
-            if (o->type == "tree" ||
-                o->type == "bush" ||
-                o->type == "proctree")
-            {
-               //glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
-               // Nice alpha textured tree leaves
-               glAlphaFunc(GL_GREATER, 0.5);
-               glEnable(GL_ALPHA_TEST);
-               glBlendFunc(GL_ONE, GL_ZERO);
-               //glDisable(GL_LIGHTING);
-            }
-            if (1)
-            {
-               texhand.BindTexture(textures[prims[i].texnum]);
-               o->RenderVbo(prims[i].vboindex);
-            }
-            else
-            {
-               texhand.BindTexture(textures[prims[i].texnum]);
-               glBegin(GL_TRIANGLE_STRIP);
-               glTexCoord2f(0, 0);
-               glNormal3f(prims[i].n[0].x, prims[i].n[0].y, prims[i].n[0].z);
-               glVertex3f(prims[i].v[0].x, prims[i].v[0].y, prims[i].v[0].z);
-               glTexCoord2f(0, 1);
-               glNormal3f(prims[i].n[1].x, prims[i].n[1].y, prims[i].n[1].z);
-               glVertex3f(prims[i].v[1].x, prims[i].v[1].y, prims[i].v[1].z);
-               glTexCoord2f(1, 0);
-               glNormal3f(prims[i].n[2].x, prims[i].n[2].y, prims[i].n[2].z);
-               glVertex3f(prims[i].v[2].x, prims[i].v[2].y, prims[i].v[2].z);
-               glTexCoord2f(1, 1);
-               glNormal3f(prims[i].n[3].x, prims[i].n[3].y, prims[i].n[3].z);
-               glVertex3f(prims[i].v[3].x, prims[i].v[3].y, prims[i].v[3].z);
-               glEnd();
-            }
-            if (o->type == "tree" ||
-                o->type == "bush" ||
-                o->type == "proctree")
-            {
-               //glAlphaFunc(GL_GREATER, 0.5);
-               glDisable(GL_ALPHA_TEST);
-               glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-               //glPopAttrib();
-            }
-            
-            trislastframe += 2;
-         }
-      }
-      v = transv;
-   }
-}
-#endif
 
 
 void RenderDynamicObjects()
@@ -1116,12 +933,12 @@ void UpdateNoise()
 {
    noisefbo.Bind();
    shaderhand.UseShader(noiseshader);
-   texhand.BindTexture(noisetex);
+   //texhand.BindTexture(noisetex);
    shaderhand.SetUniform1i(noiseshader, "time", SDL_GetTicks());
    
    glViewport(0, 0, noiseres, noiseres);
    
-   glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+   //glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
@@ -1135,6 +952,7 @@ void UpdateNoise()
    //glEnable(GL_BLEND);
    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    
+   glDisable(GL_DEPTH_TEST);
    glDisable(GL_TEXTURE_2D);
    glColor4f(1, 1, 1, 1);
    glBegin(GL_TRIANGLE_STRIP);
@@ -1144,6 +962,7 @@ void UpdateNoise()
    glVertex2f(noiseres, noiseres);
    glEnd();
    glEnable(GL_TEXTURE_2D);
+   glEnable(GL_DEPTH_TEST);
    
    //glDisable(GL_BLEND);
    
