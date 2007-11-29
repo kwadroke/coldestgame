@@ -269,11 +269,11 @@ int ServerListen()
                get >> serverplayers[oppnum].rotation;
                get >> serverplayers[oppnum].pitch;
                get >> serverplayers[oppnum].roll;
-               get >> dummy; // We tell them their facing now
+               get >> serverplayers[oppnum].facing;//dummy; // We tell them their facing now Edit: or not
                get >> serverplayers[oppnum].moveforward;
                get >> serverplayers[oppnum].moveback;
-               get >> serverplayers[oppnum].moveleft;
-               get >> serverplayers[oppnum].moveright;
+               get >> dummy;//serverplayers[oppnum].moveleft;
+               get >> dummy;//sserverplayers[oppnum].moveright;
                get >> serverplayers[oppnum].leftclick;
                get >> serverplayers[oppnum].rightclick;
                get >> serverplayers[oppnum].unit;
@@ -300,7 +300,7 @@ int ServerListen()
                if (checksum != value)
                {
                   cout << "Freaking out on packet " << packetnum << endl;
-                  //cout << debug << endl;
+                  cout << debug << endl;
                   cout << checksum << "  " << value << endl;
                }
             }
@@ -343,6 +343,7 @@ int ServerListen()
                temp.legs = LoadObject(units[unit].file + "/legs", serverdynobjects);
                temp.torso = temp.larm = temp.rarm = serverdynobjects.end();
                temp.currweapon = Torso;
+               temp.ping = 0;
                for (int i = 0; i < numbodyparts; ++i)
                   temp.weapons.push_back(Empty);
                
@@ -598,16 +599,16 @@ int ServerSend(void* dummy)  // Thread for sending updates
       list<Packet>::iterator i = servqueue.begin();
       while (i != servqueue.end())
       {
-         i->Send();
-         if (!i->ack && i->lagcounter <= 0) // Non-ack packets get sent once and then are on their own
+         if (i->sendtick <= currnettick)
          {
-            i = servqueue.erase(i);
+            i->Send();
+            if (!i->ack) // Non-ack packets get sent once and then are on their own
+            {
+               i = servqueue.erase(i);
+               continue;
+            }
          }
-         else 
-         {
-            i->lagcounter--;
-            ++i;
-         }
+         ++i;
       }
       SDL_mutexV(servermutex);
       //t.stop();

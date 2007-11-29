@@ -1,6 +1,6 @@
 #include "Packet.h"
 
-int Packet::laghax = 40;
+int Packet::laghax = 0;
 
 Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string s)
 {
@@ -12,7 +12,7 @@ Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string
    data = s;
    ack = false;
    attempts = 0;
-   lagcounter = laghax;
+   sendtick = SDL_GetTicks() + laghax;
 }
 
 

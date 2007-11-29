@@ -38,6 +38,7 @@ extern ObjectKDTree kdtree;
 extern FBO worldshadowmapfbo;
 extern Light lights;
 extern string mapname;
+extern TextureManager *texman;
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -88,15 +89,16 @@ void GetMap(string fn)
    
    glDeleteTextures(textures.size(), &textures[0]);
    textures.clear();
-   //textures.reserve(numtextures + 1); // +1 is for text texture
+   //textures.reserve(numtextures + 1); // +1 is for text texture Edit: which we no longer use
    for (int i = 0; i <= numtextures; ++i)
       textures.push_back(0);
-   glGenTextures(numtextures + 1, &textures[0]);
+   //glGenTextures(numtextures + 1, &textures[0]);
    gm >> currtex;
    gm >> texpath;
    for (int i = 1; i <= numtextures; i++)
    {
-      texhand.LoadTexture(texpath, textures[i], true, &alpha);
+      //texhand.LoadTexture(texpath, textures[i], true, &alpha);
+      textures[i] = texman->LoadTexture(texpath);
       cout << ".";
       
       gm >> currtex;
@@ -757,34 +759,6 @@ void GetMap(string fn)
    progress->value = 6;
    progtext->text = "Entering game";
    Repaint();
-   
-   // Add primitives to an octree to speed up collision detection
-   /*vector<GenericPrimitive> p;
-   
-   list<WorldObjects>::iterator i;
-   vector<WorldPrimitives>::iterator j;
-   for (i = objects.begin(); i != objects.end(); ++i)
-   {
-      for (j = i->prims.begin(); j != i->prims.end(); ++j)
-      {
-         p.push_back(*j);
-      }
-   }
-   
-   ot = new PrimitiveOctree(p);
-   Vector3 points[8];
-   for (int i = 0; i < 4; ++i)
-   {
-      points[i] = worldbounds[0].v[i] - Vector3(0, 10, 0);
-   }
-   for (int i = 0; i < 4; ++i)
-   {
-      points[i + 4] = worldbounds[5].v[i];
-   }
-   ot->setvertices(points);
-   cout << "Refining octree..." << flush;
-   ot->refine();
-   cout << "Done\n";*/
    
    // Render static shadow map
    if (shadows)

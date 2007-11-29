@@ -11,7 +11,14 @@ void Timer::start()
 }
 
 
-void Timer::stop()
+Uint32 Timer::stop()
 {
    cout << "Time: " << (SDL_GetTicks() - starttick) << endl;
+   return (SDL_GetTicks() - starttick);
+}
+
+
+Uint32 Timer::elapsed()
+{
+   return (SDL_GetTicks() - starttick);
 }

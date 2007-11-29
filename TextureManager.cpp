@@ -14,7 +14,7 @@ TextureManager::~TextureManager()
 }
 
 
-void TextureManager::LoadTexture(string filename)
+GLuint TextureManager::LoadTexture(string filename)
 {
    if (loaded.find(filename) == loaded.end())
    {
@@ -24,7 +24,9 @@ void TextureManager::LoadTexture(string filename)
       texhand->LoadTexture(filename, texnum, true, &alpha);
       texnames.insert(make_pair(filename, texnum));
       loaded.insert(filename);
+      return texnum;
    }
+   return(texnames[filename]);
 }
 
 
