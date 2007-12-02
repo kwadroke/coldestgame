@@ -1,7 +1,7 @@
 LDLIBS = -lGL -lGLU -lSDL_ttf -lSDL_image -lSDL_net -lGLEW -lxerces-c
 CXX = g++
 #`sdl-config --cflags`
-DEBUG=1
+DEBUG=0
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
@@ -21,13 +21,16 @@ DEFINES += -DNOPSM
 CXXFLAGS=$(DEBUGOPTS) $(WARNINGS) $(DEFINES)
 DEPEND = makedepend $(CXXFLAGS)
 
-OBJS = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
+GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Particle.o ProceduralTree.o TextureHandler.o Hit.o\
 		WorldPrimitives.o WorldObjects.o console.o server.o render.o\
-		ObjectKDTree.o Light.o Shader.o net.o FBO.o GUI.o Button.o\
-		TextureManager.o LineEdit.o ScrollView.o ProgressBar.o\
-		actions.o Packet.o Timer.o Table.o TableItem.o ServerInfo.o\
-		getmap.o ComboBox.o GenericPrimitive.o DynamicPrimitive.o
+		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
+      Timer.o ServerInfo.o getmap.o GenericPrimitive.o DynamicPrimitive.o
+      
+GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o\
+		actions.o Table.o TableItem.o ComboBox.o TextArea.o
+
+OBJS = $(GENERAL) $(GUI)
 
 #all:
 #	g++ $(CFLAGS) coldet.cpp $(LDLIBS) -o coldet
@@ -1274,6 +1277,149 @@ TableItem.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 TableItem.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
 TableItem.o: TextureHandler.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 TableItem.o: /usr/include/GL/gl.h LineEdit.h Table.h ScrollView.h
+TextArea.o: TextArea.h GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+TextArea.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMDocument.hpp
+TextArea.o: /usr/include/xercesc/util/XercesDefs.hpp
+TextArea.o: /usr/include/xercesc/util/XercesVersion.hpp
+TextArea.o: /usr/include/xercesc/util/AutoSense.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMNode.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+TextArea.o: /usr/include/xercesc/util/RefVectorOf.hpp
+TextArea.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+TextArea.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+TextArea.o: /usr/include/xercesc/util/XMLException.hpp
+TextArea.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
+TextArea.o: /usr/include/features.h /usr/include/sys/cdefs.h
+TextArea.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
+TextArea.o: /usr/include/gnu/stubs-32.h /usr/include/sys/types.h
+TextArea.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+TextArea.o: /usr/include/time.h /usr/include/endian.h
+TextArea.o: /usr/include/bits/endian.h /usr/include/sys/select.h
+TextArea.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+TextArea.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+TextArea.o: /usr/include/bits/pthreadtypes.h /usr/include/alloca.h
+TextArea.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMError.hpp
+TextArea.o: /usr/include/xercesc/util/XMLUni.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+TextArea.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+TextArea.o: /usr/include/xercesc/util/PlatformUtils.hpp
+TextArea.o: /usr/include/xercesc/util/PanicHandler.hpp
+TextArea.o: /usr/include/xercesc/framework/MemoryManager.hpp
+TextArea.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+TextArea.o: /usr/include/xercesc/util/RefVectorOf.c
+TextArea.o: /usr/include/xercesc/framework/XMLAttr.hpp
+TextArea.o: /usr/include/xercesc/util/QName.hpp
+TextArea.o: /usr/include/xercesc/util/XMLString.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+TextArea.o: /usr/include/string.h /usr/include/assert.h
+TextArea.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+TextArea.o: /usr/include/xercesc/internal/XSerializable.hpp
+TextArea.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+TextArea.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+TextArea.o: /usr/include/xercesc/util/HashBase.hpp
+TextArea.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+TextArea.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+TextArea.o: /usr/include/xercesc/util/RuntimeException.hpp
+TextArea.o: /usr/include/xercesc/util/HashXMLCh.hpp
+TextArea.o: /usr/include/xercesc/util/RefHashTableOf.c
+TextArea.o: /usr/include/xercesc/util/Janitor.hpp
+TextArea.o: /usr/include/xercesc/util/Janitor.c
+TextArea.o: /usr/include/xercesc/util/NullPointerException.hpp
+TextArea.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+TextArea.o: /usr/include/xercesc/util/ValueVectorOf.c
+TextArea.o: /usr/include/xercesc/internal/XSerializationException.hpp
+TextArea.o: /usr/include/xercesc/internal/XProtoType.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+TextArea.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+TextArea.o: /usr/include/xercesc/util/KVStringPair.hpp
+TextArea.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+TextArea.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+TextArea.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+TextArea.o: /usr/include/xercesc/util/regx/Op.hpp
+TextArea.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+TextArea.o: /usr/include/xercesc/util/regx/Token.hpp
+TextArea.o: /usr/include/xercesc/util/Mutexes.hpp
+TextArea.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+TextArea.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+TextArea.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
+TextArea.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+TextArea.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+TextArea.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+TextArea.o: /usr/include/xercesc/framework/ValidationContext.hpp
+TextArea.o: /usr/include/xercesc/util/NameIdPool.hpp
+TextArea.o: /usr/include/xercesc/util/NameIdPool.c
+TextArea.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+TextArea.o: /usr/include/xercesc/util/SecurityManager.hpp
+TextArea.o: /usr/include/xercesc/util/ValueStackOf.hpp
+TextArea.o: /usr/include/xercesc/util/EmptyStackException.hpp
+TextArea.o: /usr/include/xercesc/util/ValueStackOf.c
+TextArea.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+TextArea.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+TextArea.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+TextArea.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+TextArea.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
+TextArea.o: /usr/include/xercesc/dom/DOM.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMAttr.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMText.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMComment.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMElement.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMEntity.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMException.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMNotation.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMRange.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMBuilder.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMInputSource.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMLocator.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMWriter.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+TextArea.o: /usr/include/xercesc/framework/XMLFormatter.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+TextArea.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
+TextArea.o: TextureHandler.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+TextArea.o: /usr/include/GL/gl.h Table.h TableItem.h LineEdit.h ScrollView.h
 TextureHandler.o: TextureHandler.h /usr/include/GL/glew.h
 TextureHandler.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 TextureManager.o: TextureManager.h TextureHandler.h /usr/include/GL/glew.h
