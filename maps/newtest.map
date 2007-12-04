@@ -1,11 +1,12 @@
 TileSize 30
 HeightScale .8
 ZeroHeight 20
-NumTextures 17
+NumTextures 18
 NumObjects 8
 Stretch 8
 
-1 textures/sky.png
+0 textures/sky.png
+1 textures/test.png
 2 textures/Grass1.png
 3 textures/Grass1.png
 4 textures/Rockt.png
@@ -23,6 +24,32 @@ Stretch 8
 16 textures/leaves4.png
 17 textures/leaves6.png
 9999 dummy
+
+TerrainTextures
+Num 2
+HeightRange -10000 10000
+SlopeRange 0 0
+RandRange 0 10
+Num 3
+HeightRange -10000 10000
+SlopeRange 0 0
+RandRange 0 10
+Num 4
+HeightRange -10000 -10000
+SlopeRange 0 .75
+RandRange 50 50
+Num 6
+HeightRange -10000 5
+SlopeRange 0 0
+RandRange 50 50
+Num 2
+HeightRange -10000 -10000
+SlopeRange 0 0
+RandRange 0 10
+Num 2
+HeightRange -10000 -10000
+SlopeRange 0 0
+RandRange 0 10
 
 proctree
 10 10 14
