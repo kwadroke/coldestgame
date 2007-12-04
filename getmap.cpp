@@ -17,6 +17,16 @@ using namespace std;
 vector<floatvec> heightmap;  // Smoothed heightmap data
 vector<Vector3vec> lightmap; // Terrain lightmap
 
+struct TerrainParams
+{
+   int texture;
+   float minheight, maxheight;
+   float minslope, maxslope;
+   float minrand, maxrand;
+};
+
+vector<TerrainParams> terrparams;
+
 void Repaint();
 float Max(float, float);
 Vector3 GetTerrainNormal(int, int, int, int);
@@ -47,6 +57,7 @@ void GetMap(string fn)
    int numtextures;
    int numobjects;
    int mapw, maph;
+   int maxterrainparams = 6;
    float zeroheight;
    float heightscale;
    string dummy;
@@ -89,15 +100,12 @@ void GetMap(string fn)
    
    glDeleteTextures(textures.size(), &textures[0]);
    textures.clear();
-   //textures.reserve(numtextures + 1); // +1 is for text texture Edit: which we no longer use
-   for (int i = 0; i <= numtextures; ++i)
+   for (int i = 0; i < numtextures; ++i)
       textures.push_back(0);
-   //glGenTextures(numtextures + 1, &textures[0]);
    gm >> currtex;
    gm >> texpath;
-   for (int i = 1; i <= numtextures; i++)
+   for (int i = 0; i < numtextures; i++)
    {
-      //texhand.LoadTexture(texpath, textures[i], true, &alpha);
       textures[i] = texman->LoadTexture(texpath);
       cout << ".";
       
@@ -105,6 +113,31 @@ void GetMap(string fn)
       gm >> texpath;
    }
    cout << endl;
+   
+   /*
+   Num 2
+   HeightRange -10000 10000
+   SlopeRange 0 1
+   RandRange 0 10
+         */
+   // Read terrain parameters
+   gm >> dummy;
+   TerrainParams dummytp;
+   for (int i = 0; i < maxterrainparams; ++i)
+   {
+      terrparams.push_back(dummytp);
+      gm >> dummy;
+      gm >> terrparams[i].texture;
+      gm >> dummy;
+      gm >> terrparams[i].minheight;
+      gm >> terrparams[i].maxheight;
+      gm >> dummy;
+      gm >> terrparams[i].minslope;
+      gm >> terrparams[i].maxslope;
+      gm >> dummy;
+      gm >> terrparams[i].minrand;
+      gm >> terrparams[i].maxrand;
+   }
    
    WorldObjects tempobj;
    WorldPrimitives tempprim;
@@ -552,28 +585,33 @@ void GetMap(string fn)
          normals[x][y] = GetTerrainNormal(x, y, mapw, maph);
          
          // Calculate vertex weights
-         for (int i = 0; i < 6; ++i)
+         for (int i = 0; i < maxterrainparams; ++i)
+         {
+            texweights[i] = 0;
+            if (heightmap[x][y] >= terrparams[i].minheight && heightmap[x][y] <= terrparams[i].maxheight)
+               texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand);
+            if (normals[x][y].y >= terrparams[i].minslope && normals[x][y].y <= terrparams[i].maxslope)
+               texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand);
+         }
+         /*for (int i = 0; i < 6; ++i)
             texweights[i] = 0;
          if (heightmap[x][y] < heightcutoff)
             texweights[0] = 30;
          else if (heightmap[x][y] < heightcutoff + 2)
             texweights[0] = 7;
-         //else texweights[0] = Random(.0, .5);
-         //texweights[1] = Random(5, 10);
-         //texweights[2] = Random(2, 7);
          texweights[1] = Random(0, 10);
          texweights[2] = Random(0, 10);
          if (normals[x][y].y < slopecutoff)
             texweights[3] = 30;
          else if (normals[x][y].y < slopecutoff + .1)
-            texweights[3] = 3;
+            texweights[3] = 3;*/
          
          /*texweights[0] = heightcutoff / maparray[y][x];
          texweights[1] = 1.f; // Eventually will be somewhat randomized
          texweights[2] = .95;//vals[1]; // Just for now
          texweights[3] = slopecutoff / normals[x][y].y;*/
-         texweights[4] = 0;
-         texweights[5] = 0;
+         //texweights[4] = 0;
+         //texweights[5] = 0;
          
          textouse[0] = 0;
          textouse[1] = 0;
@@ -656,12 +694,8 @@ void GetMap(string fn)
          tempprim.n[1] = normals[x][y + 1];
          tempprim.n[2] = normals[x + 1][y];
          tempprim.n[3] = normals[x + 1][y + 1];
-         tempprim.texnums[0] = 6;
-         tempprim.texnums[1] = 2;
-         tempprim.texnums[2] = 3;
-         tempprim.texnums[3] = 4;
-         tempprim.texnums[4] = 0;//5;
-         tempprim.texnums[5] = 0;//5;
+         for (int i = 0; i < maxterrainparams; ++i)
+            tempprim.texnums[i] = terrparams[i].texture;
          tempprim.shader = "shaders/terrain";
          
          for (int i = 0; i < 6; ++i)

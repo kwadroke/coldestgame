@@ -1033,7 +1033,7 @@ void RenderSkybox()
    glDisable(GL_BLEND);
    
    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   texhand.BindTexture(textures[1]);
+   texhand.BindTexture(textures[0]);
    //SetTextureParams();
    glTexCoord3f(0, 0, 0);
    GLUquadricObj *s = gluNewQuadric();
