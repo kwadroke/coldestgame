@@ -300,10 +300,10 @@ void Repaint()
    }
    
    // And finally, copy all of this stuff to the screen
-   ts.start();
+   //ts.start();
    SDL_GL_SwapBuffers();
-   cout << "SwapBuffers: ";
-   ts.stop();
+   //cout << "SwapBuffers: ";
+   //ts.stop();
    if (t.elapsed() > (1000.f / fps) * 2.f)
    {
       cout << "Average ms/frame: " << (1000.f / fps) << endl;
@@ -933,7 +933,8 @@ void UpdateNoise()
 {
    noisefbo.Bind();
    shaderhand.UseShader(noiseshader);
-   //texhand.BindTexture(noisetex);
+   // Don't remove this, it's not being rendered to, it's used in the noise shader
+   texhand.BindTexture(noisetex);
    shaderhand.SetUniform1i(noiseshader, "time", SDL_GetTicks());
    
    glViewport(0, 0, noiseres, noiseres);
