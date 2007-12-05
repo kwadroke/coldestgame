@@ -5,6 +5,12 @@ NumTextures 18
 NumObjects 8
 Stretch 8
 
+LightData
+Direction -1 1 -1
+Diffuse 1 1 1 1
+Specular 1 1 1 1
+Ambient .4 .4 .4 1
+
 0 textures/sky.png
 1 textures/test.png
 2 textures/Grass1.png
