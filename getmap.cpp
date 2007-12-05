@@ -83,7 +83,26 @@ void GetMap(string fn)
    gm >> dummy;
    gm >> terrainstretch;
    
+   // Read global lighting information
+   lights.Add();
+   float diff[4];
+   float spec[4];
+   float amb[4];
+   float fromx, fromy, fromz;
    
+   gm >> dummy >> dummy;
+   gm >> fromx >> fromy >> fromz;
+   gm >> dummy;
+   gm >> diff[0] >> diff[1] >> diff[2] >> diff[3];
+   gm >> dummy;
+   gm >> spec[0] >> spec[1] >> spec[2] >> spec[3];
+   gm >> dummy;
+   gm >> amb[0] >> amb[1] >> amb[2] >> amb[3];
+   
+   lights.SetDir(0, Vector3(fromx, fromy, fromz));
+   lights.SetDiffuse(0, diff);
+   lights.SetSpecular(0, spec);
+   lights.SetAmbient(0, amb);
    
    // Load the textures themselves
    // Note: first texture must always be the skybox
@@ -114,12 +133,6 @@ void GetMap(string fn)
    }
    cout << endl;
    
-   /*
-   Num 2
-   HeightRange -10000 10000
-   SlopeRange 0 1
-   RandRange 0 10
-         */
    // Read terrain parameters
    gm >> dummy;
    TerrainParams dummytp;
@@ -139,6 +152,7 @@ void GetMap(string fn)
       gm >> terrparams[i].maxrand;
    }
    
+   // Load objects
    WorldObjects tempobj;
    WorldPrimitives tempprim;
    list<WorldObjects>::iterator currobj;

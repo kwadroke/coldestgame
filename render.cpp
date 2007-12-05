@@ -203,14 +203,7 @@ void Repaint()
       Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
       kdtree.setfrustum(localplayer.pos, look, nearclip, viewdist, fov, aspect);
       
-      float diff[4] = {1, 1, 1, 1};
-      float spec[4] = {1, 1, 1, 1};
-      float amb[4] = {.1, .1, .1, .1};
-      lights.SetDiffuse(0, diff);
-      lights.SetSpecular(0, spec);
-      lights.SetAmbient(0, amb);
-      
-      // Place the light
+      // Place the light(s)
       lights.Place();
       
       // Activate shadowing

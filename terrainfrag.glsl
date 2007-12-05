@@ -11,8 +11,7 @@ varying vec4 diffuse;
 
 void main()
 {
-   vec4 ambient;
-   ambient = vec4(.4, .4, .4, .4);
+   vec4 ambient = vec4(.4, .4, .4, .4);
    // Texturing
    vec4 base = gl_Color;
    base.a = 1.;

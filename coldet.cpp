@@ -371,9 +371,6 @@ void SetupOpenGL()
       exit(-1);
    }
    
-   lights.Add();
-   lights.SetDir(0, Vector3(-1, 1, -1));
-   
    if (shadows)
    {
       // Generate FBO to render to the shadow map texture
@@ -882,6 +879,9 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
 
 
 // No mutex needed, only called from mutex'd code
+
+/* This is a mess and needs to be cleaned up, but I've been staring at it so long trying to get
+   it to work in a semi-acceptable fashion that I just don't want to deal with it right now.*/
 void SynchronizePosition()
 {
    static deque<OldPosition> oldpos;
@@ -955,7 +955,7 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .1f;
+   float pingslop = .01f;
    float posthresh = 1.f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
@@ -993,7 +993,7 @@ void SynchronizePosition()
    if (difference > 10.f)
       posadj *= .5f;
    else if (!player[0].moveforward && !player[0].moveback)
-      posadj *= .1f;
+      posadj *= .3f;
    else if (difference > .1f)
       posadj *= .05f;
    

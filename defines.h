@@ -33,11 +33,9 @@
 #include "TextureHandler.h"
 #include "Vector3.h"
 #include "GraphicMatrix.h"
-//#include "Quaternion.h" // Not actually used atm
 #include "DynamicObject.h"
 #include "WorldPrimitives.h"
 #include "WorldObjects.h"
-//#include "PrimitiveOctree.h" // No longer used
 #include "ObjectKDTree.h"
 #include "CollisionDetection.h"
 #include "ProceduralTree.h"
@@ -113,7 +111,7 @@ string ToString(const T &input)
 }
 
 const int maxtexlayers = 2;
-const int fpstexnum = 0;  // Also used for other text - pretty sure this is obsolete too
+//const int fpstexnum = 0;  // Also used for other text - pretty sure this is obsolete too
 const string objectfilever = "Version1";
 extern const int terrobjsize = 8;
 
