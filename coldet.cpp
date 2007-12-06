@@ -567,13 +567,13 @@ while( SDL_PollEvent( &event ) )
    {
       SDL_ShowCursor(1);
       mainmenu.ProcessEvent(&event);
-      break;
+      continue;
    }
    else if (loadoutmenu.visible)
    {
       SDL_ShowCursor(1);
       loadoutmenu.ProcessEvent(&event);
-      break;
+      continue;
    }
    
    // Mini keyboard handler to deal with the console
@@ -594,9 +594,9 @@ while( SDL_PollEvent( &event ) )
                   GUI* consolein = console.GetWidget("consoleinput");
                   ConsoleHandler(consolein->text);
                   consolein->text = "";
-                  continue;
+                  //continue;
                }
-               break;
+               continue;
                
             /*case SDLK_PAGEUP:
                if (consolebottomline < consolebuffer.size())
@@ -614,7 +614,7 @@ while( SDL_PollEvent( &event ) )
    {
       SDL_ShowCursor(1);
       console.ProcessEvent(&event);
-      break;
+      continue;
    }
    
    SDL_ShowCursor(0);
