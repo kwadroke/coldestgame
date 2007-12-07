@@ -1176,7 +1176,6 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
       lf >> dummy; // nextid is irrelevant here
       
       
-      //int j = 0;
       getline(lf, buffer);
       getline(lf, buffer);
       while (!lf.eof())
@@ -1191,7 +1190,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
          for (int c = 0; c < 4; ++c)
             tcv.push_back(tc);
          
-         for (int m = 0; m < 6; ++m)
+         for (int m = 0; m < 16; ++m)
          {
             pbuffer->texcoords.push_back(tcv);
             pbuffer->texcoords[m][1][1] = 1;
@@ -1214,8 +1213,11 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
                pbuffer->id = value;
             else if (optname == "Parent ID")
                pbuffer->parentid = value;
-            else if (optname == "Texture")
-               pbuffer->texnums[0] = atoi(value.c_str());
+            else if (optname.substr(0, 7) == "Texture")
+            {
+               int i = atoi(optname.substr(7).c_str());
+               pbuffer->texnums[i] = atoi(value.c_str());
+            }
             else if (optname == "Shader")
                pbuffer->shader = value;
             else if (optname == "X Rot 1")
@@ -1260,22 +1262,27 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
                pbuffer->v[3].y = atoi(value.c_str());
             else if (optname == "p3z")
                pbuffer->v[3].z = atoi(value.c_str());
-            else if (optname == "tc0x")
-               pbuffer->texcoords[0][0][0] = atof(value.c_str());
-            else if (optname == "tc0y")
-               pbuffer->texcoords[0][0][1] = atof(value.c_str());
-            else if (optname == "tc1x")
-               pbuffer->texcoords[0][1][0] = atof(value.c_str());
-            else if (optname == "tc1y")
-               pbuffer->texcoords[0][1][1] = atof(value.c_str());
-            else if (optname == "tc2x")
-               pbuffer->texcoords[0][2][0] = atof(value.c_str());
-            else if (optname == "tc2y")
-               pbuffer->texcoords[0][2][1] = atof(value.c_str());
-            else if (optname == "tc3x")
-               pbuffer->texcoords[0][3][0] = atof(value.c_str());
-            else if (optname == "tc3y")
-               pbuffer->texcoords[0][3][1] = atof(value.c_str());
+            else if (optname.substr(0, 2) == "tc")
+            {
+               int i = atoi(optname.substr(2, 2).c_str());
+               optname = optname.substr(4, 2);
+               if (optname == "0x")
+                  pbuffer->texcoords[i][0][0] = atof(value.c_str());
+               else if (optname == "0y")
+                  pbuffer->texcoords[i][0][1] = atof(value.c_str());
+               else if (optname == "1x")
+                  pbuffer->texcoords[i][1][0] = atof(value.c_str());
+               else if (optname == "1y")
+                  pbuffer->texcoords[i][1][1] = atof(value.c_str());
+               else if (optname == "2x")
+                  pbuffer->texcoords[i][2][0] = atof(value.c_str());
+               else if (optname == "2y")
+                  pbuffer->texcoords[i][2][1] = atof(value.c_str());
+               else if (optname == "3x")
+                  pbuffer->texcoords[i][3][0] = atof(value.c_str());
+               else if (optname == "3y")
+                  pbuffer->texcoords[i][3][1] = atof(value.c_str());
+            }
             else if (optname == "Radius 1")
                pbuffer->rad = atoi(value.c_str());
             else if (optname == "Radius 2")
@@ -1323,7 +1330,6 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
          pbuffer->trans *= scale;
          
          temp->prims[i].push_back(pbuffer);
-         //++j;
          getline(lf, buffer);
       }
       
@@ -1336,13 +1342,11 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
          if ((*it)->parentid != "-1")
          {
             DynamicPrimitive *p = GetDynPrimById((*it)->parentid, &(temp->prims[i]));
-            //int c = GetDynPrimById(it->id, &(dynobj[nextobj].prims[i]));
             if (p)
             {
                (*it)->parent = p;
                p->child.push_back(*it);
             }
-            //   dynobjects[nextobj].prims[i][p].child.push_back(c);
             else
             {
                cout << "Error building object tree: " << currfile << endl << flush;
@@ -1353,7 +1357,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
       
    }
    lo.close();
-   temp->complete = 164264;
+   temp->complete = 164264;  // This was for debugging
    return temp;
 }
 

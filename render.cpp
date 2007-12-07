@@ -60,7 +60,6 @@ extern vector<WeaponData> weapons;
 
 void RenderSkybox();
 void RenderConsole();
-void RenderFPS();
 void RenderPrimitives(vector<WorldPrimitives>&, bool distsort = false);
 void RenderObjects();
 void RenderHud();
@@ -272,8 +271,6 @@ void Repaint()
    RenderHud();
    
    RenderConsole();
-   
-   RenderFPS();
    
    //if (showoctree)
    //   ot->visualize();
@@ -1202,33 +1199,6 @@ void RenderConsole()
       
       SDL_GL_Exit2dMode();
    }
-}
-
-
-void RenderFPS()
-{
-   // Render FPS if desired
-   /*if (frames >= 30)
-   {
-      int currtick = SDL_GetTicks();
-      fps = (float) frames / ((currtick - lasttick) / 1000.);
-      frames = 0;
-      lasttick = currtick;
-   }
-   if (showfps)
-   {
-      float trispersec = trislastframe * fps;
-      SDL_GL_Enter2dMode();
-      RenderText(ToString(fps), 0, 0, 0, lcd);
-      RenderText(string("Tris/frame: ") + ToString(trislastframe), 0, 20, 0, lcd);
-      string tps = ToString(trispersec / 1000000.f);
-      tps += " million";
-      RenderText(string("Tris/sec: ") + tps, 0, 40, 0, lcd);
-      SDL_GL_Exit2dMode();
-   }
-   if (!quiet)
-      cout << "FPS: " << fps << "      \r";*/
-   //frames++;
 }
 
 

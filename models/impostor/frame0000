@@ -1,9 +1,9 @@
-Version1
+Version2
 1
 Type = tristrip
 ID = 0
 Parent ID = -1
-Texture = 0
+Texture0 = 0
 Shader = ../coldest/shaders/standard
 X Rot 1 = 0
 Y Rot 1 = 0
@@ -17,23 +17,23 @@ Z Trans = 0
 p0x = -1000
 p0y = 1000
 p0z = 0
-tc0x = 0
-tc0y = 0
+tc000x = 0
+tc000y = 0
 p1x = -1000
 p1y = -1000
 p1z = 0
-tc1x = 0
-tc1y = 1
+tc001x = 0
+tc001y = 1
 p2x = 1000
 p2y = 1000
 p2z = 0
-tc2x = 1
-tc2y = 0
+tc002x = 1
+tc002y = 0
 p3x = 1000
 p3y = -1000
 p3z = 0
-tc3x = 1
-tc3y = 1
+tc003x = 1
+tc003y = 1
 Transparent = 0
 Translucent = 0
 Collide = 0

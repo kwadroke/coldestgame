@@ -418,6 +418,15 @@ void GetMap(string fn)
          currobj->prims.push_back(tempprim);
          tempprim = WorldPrimitives();
       }
+      else if (currobj->type == "dynobj")
+      {
+         /* Note that this will result in pushing a dummy object into the objects list, but
+            since we may need something like that eventually for spatial partitioning I'm
+            going to let it slide for now.*/
+         string fname;
+         gm >> fname;
+         LoadObject(fname);
+      }
    }
    
    progress->value = 2;
@@ -588,7 +597,6 @@ void GetMap(string fn)
    {
       for (int y = 0; y < maph; ++y)
       {
-         //heightmap[x][y] = maparray[y][x];
          heightmap[x][y] = GetSmoothedTerrain(x, y, mapw, maph, maparray);
       }
    }
@@ -607,25 +615,6 @@ void GetMap(string fn)
             if (normals[x][y].y >= terrparams[i].minslope && normals[x][y].y <= terrparams[i].maxslope)
                texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand);
          }
-         /*for (int i = 0; i < 6; ++i)
-            texweights[i] = 0;
-         if (heightmap[x][y] < heightcutoff)
-            texweights[0] = 30;
-         else if (heightmap[x][y] < heightcutoff + 2)
-            texweights[0] = 7;
-         texweights[1] = Random(0, 10);
-         texweights[2] = Random(0, 10);
-         if (normals[x][y].y < slopecutoff)
-            texweights[3] = 30;
-         else if (normals[x][y].y < slopecutoff + .1)
-            texweights[3] = 3;*/
-         
-         /*texweights[0] = heightcutoff / maparray[y][x];
-         texweights[1] = 1.f; // Eventually will be somewhat randomized
-         texweights[2] = .95;//vals[1]; // Just for now
-         texweights[3] = slopecutoff / normals[x][y].y;*/
-         //texweights[4] = 0;
-         //texweights[5] = 0;
          
          textouse[0] = 0;
          textouse[1] = 0;
@@ -649,7 +638,6 @@ void GetMap(string fn)
          texpercent[x][y] = currweights[0] / (currweights[0] + currweights[1]);
          tex1[x][y] = textouse[0];
          tex2[x][y] = textouse[1];
-         //cout << textouse[0] << "  " << textouse[1] << "  " << texpercent[x][y] << endl;
       }
    }
    

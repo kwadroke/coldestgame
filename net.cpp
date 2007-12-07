@@ -89,7 +89,6 @@ int NetSend(void* dummy)
             sendqueue.push_back(p);
             SDL_mutexV(sendmutex);
             
-            //cout << "Sending " << outpack->data << endl << flush;
             sendpacketnum++;
          }
          occpacketcounter++;
