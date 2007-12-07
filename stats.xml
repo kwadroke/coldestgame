@@ -5,4 +5,5 @@
    <Label x="0" y="40" width="200" height="20" text="" name="trisperframe" xmargin="2" ymargin="0"></Label>
    <Label x="0" y="60" width="200" height="20" text="" name="ping" xmargin="2" ymargin="0"></Label>
    <Label x="0" y="80" width="200" height="20" text="" name="msperframe" xmargin="2" ymargin="0"></Label>
+   <Label x="0" y="100" width="200" height="20" text="Position:" name="position" xmargin="2" ymargin="0"></Label>
 </GUI>

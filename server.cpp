@@ -200,7 +200,13 @@ int ServerListen()
                float w = weapons[currplayerweapon].weight;
                float rad = weapons[currplayerweapon].radius;
                bool exp = weapons[currplayerweapon].explode;
-               Particle part(serverplayers[i].pos, dir, vel, acc, w, rad, exp, temp, SDL_GetTicks());
+               Vector3 startpos = serverplayers[i].pos;
+               /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
+                  slide the player around as much because this way they see their shots going exactly where
+                  they expect, even if the positions don't match exactly (and they rarely will:-).*/
+               if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
+                  startpos = serverplayers[i].clientpos;
+               Particle part(startpos, dir, vel, acc, w, rad, exp, temp, SDL_GetTicks());
                part.pos += part.dir * 40;
                part.cd = &servercoldet;
                part.playernum = i;
@@ -278,9 +284,9 @@ int ServerListen()
                get >> serverplayers[oppnum].rightclick;
                get >> serverplayers[oppnum].unit;
                get >> serverplayers[oppnum].currweapon;
-               /*serverplayers[oppnum].pos.x = oppx; // Position is controlled server side
-               serverplayers[oppnum].pos.y = oppy;
-               serverplayers[oppnum].pos.z = oppz;*/
+               serverplayers[oppnum].clientpos.x = oppx; // Keep track of where the player thinks they are
+               serverplayers[oppnum].clientpos.y = oppy;
+               serverplayers[oppnum].clientpos.z = oppz;
                serverplayers[oppnum].lastupdate = SDL_GetTicks();
                
                //cout << oppx << "  " << oppy << "  " << oppz << endl << flush;
