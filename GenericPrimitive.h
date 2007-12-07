@@ -8,8 +8,6 @@
 
 using namespace std;
 
-class DynamicObject;
-
 class GenericPrimitive
 {
    public:

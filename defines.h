@@ -112,7 +112,7 @@ string ToString(const T &input)
 
 const int maxtexlayers = 2;
 //const int fpstexnum = 0;  // Also used for other text - pretty sure this is obsolete too
-const string objectfilever = "Version1";
+const string objectfilever = "Version2";
 extern const int terrobjsize = 8;
 
 int shadowmapsize = 1024;
