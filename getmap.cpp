@@ -33,6 +33,7 @@ Vector3 GetTerrainNormal(int, int, int, int);
 float GetSmoothedTerrain(int, int, int, int, vector< vector<float> >&);
 float Random(float, float);
 void GenShadows(Vector3, float, FBO&);
+list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 
 extern GUI mainmenu, loadprogress;
 extern int tilesize, terrobjsize, terrainstretch;
@@ -49,6 +50,7 @@ extern FBO worldshadowmapfbo;
 extern Light lights;
 extern string mapname;
 extern TextureManager *texman;
+extern list<DynamicObject> dynobjects;
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -425,7 +427,7 @@ void GetMap(string fn)
             going to let it slide for now.*/
          string fname;
          gm >> fname;
-         LoadObject(fname);
+         LoadObject(fname, dynobjects);
       }
    }
    
