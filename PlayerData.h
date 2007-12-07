@@ -12,6 +12,7 @@
 struct PlayerData
 {
    Vector3 pos;
+   Vector3 clientpos; // So server can keep track of both
    float pitch, rotation, roll, facing;
    bool moveforward, moveleft, moveright, moveback;
    bool leftclick, rightclick;

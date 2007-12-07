@@ -1239,6 +1239,7 @@ void RenderHud()
    static GUI* tpflabel = statsdisp.GetWidget("trisperframe");
    static GUI* pinglabel = statsdisp.GetWidget("ping");
    static GUI* mpflabel = statsdisp.GetWidget("msperframe");
+   static GUI* poslabel = statsdisp.GetWidget("position");
    static GUI* hplabel = hud.GetWidget("hp");
    static GUI* killslabel = hud.GetWidget("kills");
    static GUI* deathslabel = hud.GetWidget("deaths");
@@ -1265,6 +1266,7 @@ void RenderHud()
    tpslabel->text = "Tris/sec: " + ToString(trislastframe * fps / 1000000.f) + " million";
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
+   poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
    hplabel->text = "HP: " + ToString(localplayer.hp);
    killslabel->text = "Kills: " + ToString(localplayer.kills);
    deathslabel->text = "Deaths: " + ToString(localplayer.deaths);
@@ -1306,7 +1308,8 @@ void RenderHud()
    hud.Render();
    loadprogress.Render();
    loadoutmenu.Render();
-   statsdisp.Render();
+   if (showfps)
+      statsdisp.Render();
    console.Render();
    
    SDL_GL_Exit2dMode();

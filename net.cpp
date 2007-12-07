@@ -195,32 +195,6 @@ string FillUpdatePacket()
    temp << player[0].currweapon << eol;
    SDL_mutexV(clientmutex);
    
-   /*list<Particle>::iterator i;
-   for (i = particles.begin(); i != particles.end(); ++i)
-   {
-      if (i->unsent)
-      {
-         temp << i->id << eol;
-         temp << i->dir.x << eol << i->dir.y << eol << i->dir.z << eol;
-         temp << i->pos.x << eol << i->pos.y << eol << i->pos.z << eol;
-         temp << i->velocity << eol;
-         temp << i->accel << eol;
-         temp << i->radius << eol;
-         temp << i->explode << eol;
-      }
-   }*/
-   //temp << 0 << eol;
-   
-   /*list<Hit>::iterator j;
-   for (j = hits.begin(); j != hits.end(); ++j)
-   {
-      temp << j->id << eol;
-      temp << j->player << eol;
-      temp << j->damage << eol;
-   }*/
-   //temp << 0 << eol;
-   
-   
    //cout << "Client Update Size: " << (sizeof(temp.str()) * temp.str().length()) << "\r" << flush;
    //strcpy((char*)pack->data, temp.str().c_str());
    
@@ -331,8 +305,8 @@ int NetListen(void* dummy)
                   get >> player[oppnum].ping;
                   
                   /*cout << "Player " << oppnum << endl;
-                  if (player[oppnum].unit != "unittest")
-                     cout << "Died on packet " << packetnum << endl;*/
+                  //if (player[oppnum].unit != "unittest")
+                  //   cout << "Died on packet " << packetnum << endl;*/
                   /*cout << oppnum << ": " << oppx << "  " << oppy << "  " << oppz << endl << flush;
                   cout << oppfacing << "  ";
                   cout << opppitch << "  ";
@@ -341,19 +315,7 @@ int NetListen(void* dummy)
                   player[oppnum].pos.x = oppx;
                   player[oppnum].pos.y = oppy;
                   player[oppnum].pos.z = oppz;
-                  /*if (oppnum == servplayernum)
-                  {
-                     player[0].pos.x = (oppx + player[0].pos.x * 2.f) / 3.f;
-                     player[0].pos.y = (oppy + player[0].pos.y * 2.f) / 3.f;
-                     player[0].pos.z = (oppz + player[0].pos.z * 2.f) / 3.f;
-                     //player[0].pos.x = oppx;
-                     //player[0].pos.y = oppy;
-                     //player[0].pos.z = oppz;
-                     float interpamount = fabs(player[0].facing - oppfacing) + .0001; // This cannot be zero
-                     interpamount = 1.f / interpamount * player[0].ping;
-                     player[0].facing = (oppfacing + player[0].facing * interpamount) / (1.f + interpamount);
-                     player[0].ping = player[oppnum].ping;
-                  }*/
+                  
                   player[oppnum].connected = true;
                   
                   if (oppnum != servplayernum && player[oppnum].unit != 0)
