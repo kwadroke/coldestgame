@@ -1,10 +1,10 @@
 #version 110
 
 varying vec4 shadowmappos, worldshadowmappos;
-varying float dist;
 varying vec3 texweight, texweight1;
-varying vec3 worldcoords;
+varying vec4 worldcoords;
 varying vec4 diffuse;
+varying vec4 ambient;
 
 attribute vec3 terrainwt, terrainwt1;
 
@@ -12,8 +12,6 @@ void main()
 {
    gl_TexCoord[0].st = gl_MultiTexCoord0.st;
    gl_TexCoord[0].pq = gl_MultiTexCoord1.st;
-   
-   vec4 ambient;
    
    vec3 normal, lightdir;
    float ndotl;
@@ -39,7 +37,8 @@ void main()
    worldshadowmappos = gl_TextureMatrix[7] * gl_Vertex;
    
    /* For fogging */
-   dist = distance(gl_Vertex, gl_ModelViewMatrixInverse[3]);
+   //dist = distance(gl_Vertex, gl_ModelViewMatrixInverse[3]);
+   worldcoords.w = distance(gl_Vertex, gl_ModelViewMatrixInverse[3]);
    
    worldcoords.xyz = gl_Vertex.xyz;
    

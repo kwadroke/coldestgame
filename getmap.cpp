@@ -426,8 +426,11 @@ void GetMap(string fn)
             since we may need something like that eventually for spatial partitioning I'm
             going to let it slide for now.*/
          string fname;
+         list<DynamicObject>::iterator dyn;
          gm >> fname;
-         LoadObject(fname, dynobjects);
+         dyn = LoadObject(fname, dynobjects);
+         gm >> dyn->position.x >> dyn->position.y >> dyn->position.z;
+         gm >> dyn->rotation >> dyn->pitch >> dyn->roll;
       }
    }
    
