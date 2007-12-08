@@ -272,8 +272,6 @@ void Repaint()
    
    RenderConsole();
    
-   //if (showoctree)
-   //   ot->visualize();
    if (showkdtree)
       kdtree.visualize();
    
@@ -319,16 +317,13 @@ void RenderObjects()
    //cout << "Rendering " << objs.size() << " objects     \r\n" << flush;
    
    list<WorldObjects*>::iterator iptr;
-   if (1)
+   for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
    {
-      for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
-      {
-         WorldObjects *i = *iptr;
-         i->dist = playerpos.distance2(Vector3(i->x, i->y, i->z));
-      }
-      
-      objs.sort(objcomp);
+      WorldObjects *i = *iptr;
+      i->dist = playerpos.distance2(Vector3(i->x, i->y, i->z));
    }
+   
+   objs.sort(objcomp);
    
    for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
    {
@@ -443,7 +438,6 @@ void RenderObjects()
          primptr->facing = false;
       }
       SDL_mutexV(clientmutex);
-      i->UnbindVbo();
       if (i->type == "tree" ||
          i->type == "bush" ||
          i->type == "proctree")
@@ -458,6 +452,7 @@ void RenderObjects()
          //glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
       }
    }
+   WorldObjects::UnbindVbo();
 }
 
 

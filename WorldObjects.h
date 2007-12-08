@@ -26,7 +26,7 @@ class WorldObjects     // Define objects in the world
       void RenderVbo(int, int);
       void RenderVbo();
       void BindVbo();
-      void UnbindVbo();
+      static void UnbindVbo();
       void GenFbo(TextureHandler*);
       void RenderList();
       void SetHeightAndWidth();

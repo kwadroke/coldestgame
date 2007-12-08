@@ -993,11 +993,11 @@ void SynchronizePosition()
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
    if (difference > 10.f)
-      posadj *= .8f;
+      posadj *= .5f;
    else if (!player[0].moveforward && !player[0].moveback)
       posadj *= 0.f;//.3f;
    else if (difference > .3f)
-      posadj *= .1f;
+      posadj *= .2f;
    
    player[0].pos += posadj;
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
