@@ -215,6 +215,7 @@ bool spawnrequest;      // Tell net thread to send spawn request
 int laghax;             // Test server's lag tolerance
 bool serversync;        // Probably not useful once server syncing is working properly
 TextureManager *texman;  // Handles string versions of texture identifiers
+vector<FBO> impfbolist;   // FBO's for impostoring
 
 list<WorldObjects> objects;
 WorldPrimitives worldbounds[6];

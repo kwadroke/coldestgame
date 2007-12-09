@@ -63,7 +63,7 @@ WorldObjects::WorldObjects(const WorldObjects &o)
    if (o.hasfbo)
    {
       impostorfbo = o.impostorfbo;
-      imptex = impostorfbo.GetTexture();
+      //imptex = impostorfbo->GetTexture();
       hasfbo = true;
       //GenFbo();
    }
@@ -103,7 +103,7 @@ WorldObjects& WorldObjects::operator=(const WorldObjects &o)
    if (o.hasfbo)
    {
       impostorfbo = o.impostorfbo;
-      imptex = impostorfbo.GetTexture();
+      //imptex = impostorfbo->GetTexture();
       hasfbo = true;
       //GenFbo();
    }
@@ -125,9 +125,9 @@ bool WorldObjects::operator>(const WorldObjects& o) const
 
 void WorldObjects::GenFbo(TextureHandler* texhand)
 {
-   impostorfbo = FBO(FBODIM, FBODIM, false, texhand);
-   imptex = impostorfbo.GetTexture();
-   hasfbo = true;
+   //impostorfbo = FBO(FBODIM, FBODIM, false, texhand);
+   //imptex = impostorfbo.GetTexture();
+   //hasfbo = true;
 }
 
 

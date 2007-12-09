@@ -56,6 +56,7 @@ extern GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp, console;
 extern CollisionDetection coldet;
 extern vector<WeaponData> weapons;
+extern vector<FBO> impfbolist;
 
 
 void RenderSkybox();
@@ -67,6 +68,7 @@ void RenderClouds();
 void RenderDynamicObjects();
 void RenderDOTree(DynamicPrimitive*);
 void RenderWater();
+void UpdateFBO();
 void GenShadows(Vector3, float, FBO&);
 void GenClouds();
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
@@ -82,8 +84,6 @@ void SetReflection(bool);
 void UpdateNoise();
 void SynchronizePosition();
 
-int rendercount;
-
 template <typename T>
 string ToString(const T &input)
 {
@@ -92,28 +92,13 @@ string ToString(const T &input)
    return temp.str();
 }
 
-// Structure to aid in sorting objects back to front
-// No longer needed because primitives can be sorted directly
-/*struct primitivedistance
-{
-   float dist;
-   vector<WorldPrimitives>::iterator prim;
-   
-   bool operator<(const primitivedistance& r) const
-   {
-      return dist < r.dist;
-   }
-   bool operator>(const primitivedistance& r) const
-   {
-      return dist > r.dist;
-   }
-};*/
-
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
 bool billboardrender;   // Indicates whether object is being rendered to billboard
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 PlayerData localplayer;
+set<WorldObjects*> implist;
+vector<WorldObjects*> assignlist;
 
 void Repaint()
 {
@@ -129,7 +114,6 @@ void Repaint()
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    trislastframe = 0;
-   rendercount = 0;
    SDL_mutexP(clientmutex);
    localplayer = player[0];
    SDL_mutexV(clientmutex);
@@ -303,7 +287,7 @@ void Repaint()
 
 bool objcomp(const WorldObjects* l, const WorldObjects* r)
 {
-   return l->dist > r->dist;
+   return l->dist < r->dist;
 }
 
 
@@ -311,9 +295,11 @@ void RenderObjects()
 {
    float dist;
    bool debug = false; // Turns off impostoring
+   //debug = true;
    
    list<WorldObjects*> objs = kdtree.getobjs();
    Vector3 playerpos = localplayer.pos;
+   assignlist.clear();
    //cout << "Rendering " << objs.size() << " objects     \r\n" << flush;
    
    list<WorldObjects*>::iterator iptr;
@@ -362,82 +348,22 @@ void RenderObjects()
             i->dynobj->visible = false;
          RenderPrimitives(i->prims);
       }
-      // Billboarding - this should really be moved elsewhere, possibly to WorldObjects itself
-      else if (SDL_GetTicks() - i->lastimpupdate > dist / (1000 / dist) && !reflectionrender)
+      else 
       {
-         //Uint32 t = SDL_GetTicks();
-         
-         i->impostorfbo.Bind();
-         glPushAttrib(GL_VIEWPORT_BIT);
-         glViewport(0, 0, FBODIM, FBODIM); // Needs to be dynamic at some point
-         
-         glPushMatrix();
-         glLoadIdentity();
-         // Why is the up vector pointing down?  In X at least, framebuffers are y-inverted from
-         // normal OpenGL, so everything is upside down.  Need a better fix than this hack since it
-         // screws up lighting.  Fixed temporarily by hardcoding inverted texcoords.
-         gluLookAt(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z, center.x, center.y, center.z, 0, 1, 0);
-         
-         glMatrixMode(GL_PROJECTION);
-         glPushMatrix();
-         glLoadIdentity();
-         float tempfov = atan(i->height / 2.f / dist) * 360. / PI;
-         float tempaspect = i->width / i->height;
-         gluPerspective(tempfov, tempaspect, 10, 10000.0);
-         
-         glMatrixMode(GL_MODELVIEW);
-         glClearColor(0, 0, 0, 0);
-         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-         lights.Place();
-         RenderPrimitives(i->prims);
-         RenderPrimitives(i->tprims, true);
-         
-         glMatrixMode(GL_PROJECTION);
-         glPopMatrix();
-         glMatrixMode(GL_MODELVIEW);
-         
-         glPopMatrix();
-         glPopAttrib();
-         i->impostorfbo.Unbind();
-         lights.Place();
-         
-         DynamicPrimitive* primptr;
-         //SDL_mutexP(clientmutex);  Already necessarily locked earlier
-         if (i->dynobj == dynobjects.end())
+         assignlist.push_back(i);
+         if (SDL_GetTicks() - i->lastimpupdate > dist / (1000 / dist) && !reflectionrender)
          {
-            dotextures.push_back(i->imptex);
-            i->dynobj = LoadObject("impostor", dynobjects);
-            (*(i->dynobj->prims[0].begin()))->texnums[0] = dotextures.size() - 1;
-            i->dynobj->position = center;
-            i->dynobj->billboard = true;
-            primptr = *(i->dynobj->prims[0].begin());
-            float width2 = i->width / 2.f;
-            float height2 = i->height / 2.f;
-            primptr->orig[0].x = -width2;
-            primptr->orig[0].y = height2;
-            primptr->orig[1].x = -width2;
-            primptr->orig[1].y = -height2;
-            primptr->orig[2].x = width2;
-            primptr->orig[2].y = height2;
-            primptr->orig[3].x = width2;
-            primptr->orig[3].y = -height2;
-            primptr->transparent = true;
+            implist.insert(i);
+            
          }
-         primptr = *(i->dynobj->prims[0].begin());
-         primptr->facing = true;
-         i->dynobj->visible = true;
-         //SDL_mutexV(clientmutex);  Ditto
-         // Should really do this last so time to update isn't included
-         i->lastimpupdate = SDL_GetTicks();
-         
-         //cout << (SDL_GetTicks() - t) << endl << flush;
-      }
-      else if (!floatzero(i->impdist) && i->dynobj != dynobjects.end() && !reflectionrender)
-      {
-         DynamicPrimitive* primptr = *(i->dynobj->prims[0].begin());
-         primptr->facing = false;
+         else if (!floatzero(i->impdist) && i->dynobj != dynobjects.end() && !reflectionrender)
+         {
+            DynamicPrimitive* primptr = *(i->dynobj->prims[0].begin());
+            primptr->facing = false;
+         }
       }
       SDL_mutexV(clientmutex);
+      
       if (i->type == "tree" ||
          i->type == "bush" ||
          i->type == "proctree")
@@ -452,6 +378,10 @@ void RenderObjects()
          //glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
       }
    }
+   
+   if (!shadowrender && !reflectionrender && !debug)
+      UpdateFBO();
+   
    WorldObjects::UnbindVbo();
 }
 
@@ -543,19 +473,9 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
                shaderhand.UseShader(shadowshader);
             else if (shadowrender)
                shaderhand.UseShader("none");
-            /*if (o->vbocount[currindex] == 1)
-            {
-               cout << i->type << endl;
-               cout << "Texture: " << i->texnums[0] << endl;
-               cout << "Shader: " << i->shader << endl;
-            }*/
-            if (1)
-            {
-               o->RenderVbo(i->vboindex, o->vbocount[currindex]);
-               i += o->vbocount[currindex] - 1;
-               ++currindex;
-            }
-            else o->RenderVbo(i->vboindex, 1);
+            o->RenderVbo(i->vboindex, o->vbocount[currindex]);
+            i += o->vbocount[currindex] - 1;
+            ++currindex;
          }
          else
          {
@@ -677,7 +597,7 @@ void RenderDOTree(DynamicPrimitive* root)
       }
       
       texhand.ActiveTexture(0);
-      texhand.BindTextureDebug(dotextures[root->texnums[0]]);
+      texhand.BindTextureDebug(root->texnums[0]);
       //glGenerateMipmapEXT(GL_TEXTURE_2D);
       
       if (root->transparent)
@@ -794,6 +714,167 @@ void RenderDOTree(DynamicPrimitive* root)
       }
       //glPopMatrix();
    //}
+}
+
+
+bool sortbyimpdim(const WorldObjects* l, const WorldObjects* r)
+{
+   return impfbolist[l->impostorfbo].GetWidth() < impfbolist[r->impostorfbo].GetWidth();
+}
+
+
+void UpdateFBO()
+{
+   vector<WorldObjects*>::iterator iptr;
+   vector<WorldObjects*> sortedbyimpdim;
+   vector<WorldObjects*> needsupdate;
+   WorldObjects* i;
+   FBO* currfbo = &(impfbolist[0]);
+   int counter = 0;
+   int desireddim = 32;
+   Vector3 playerpos = localplayer.pos;
+   
+   for (iptr = assignlist.begin(); iptr != assignlist.end(); ++iptr)
+      sortedbyimpdim.push_back(*iptr);
+   
+   sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
+   
+   for (iptr = assignlist.begin(); iptr != assignlist.end(); ++iptr)
+   {
+      i = *iptr;
+      if (implist.find(i) != implist.end())
+      {
+         needsupdate.push_back(i);
+         
+         currfbo = &(impfbolist[i->impostorfbo]);
+         // Note, these values need to match those in getmap.  They should probably be shared at some point.
+         if (counter > 20)
+            desireddim = 32;
+         else if (counter > 10)
+            desireddim = 256;
+         else desireddim = 512;
+         
+         int current = 0;
+         int count = 0;
+         WorldObjects* toswap;
+         while (desireddim != currfbo->GetWidth())
+         {
+            if (desireddim == 256 ||
+               (desireddim == 512 && currfbo->GetWidth() == 32) ||
+               (desireddim == 32 && currfbo->GetWidth() == 512))
+            {
+               current = 11;
+               count = 10;
+            }
+            else if (desireddim == 512)
+            {
+               current = 0;
+               count = 11; // 0...10 inclusive <-- That was probably a bad choice, but it's temporary
+            }
+            else if (desireddim == 32)
+            {
+               current = 21;
+               count = sortedbyimpdim.size() - 20;
+            }
+            
+            toswap = sortedbyimpdim[current];
+            // Find the object we want to swap with
+            while (count > 0 && current < sortedbyimpdim.size())
+            {
+               if (desireddim > currfbo->GetWidth())
+               {
+                  if (sortedbyimpdim[current]->dist > toswap->dist)
+                     toswap = sortedbyimpdim[current];
+               }
+               else if (sortedbyimpdim[current]->dist < toswap->dist)
+               {
+                  toswap = sortedbyimpdim[current];
+               }
+               --count;
+               ++current;
+            }
+            
+            // Do the swap and add the swapped object to our list of things to update
+            int tempfbo = i->impostorfbo;
+            i->impostorfbo = toswap->impostorfbo;
+            toswap->impostorfbo = tempfbo;
+            needsupdate.push_back(toswap);
+            currfbo = &(impfbolist[i->impostorfbo]);
+         }
+      }
+      ++counter;
+   }
+   
+   for (iptr = needsupdate.begin(); iptr != needsupdate.end(); ++iptr)
+   {
+      i = *iptr;
+      currfbo = &(impfbolist[i->impostorfbo]);
+      currfbo->Bind();
+      
+      Vector3 currpos(i->x, i->y, i->z);
+      Vector3 center = currpos;
+      center.y += i->height / 2.f;
+      float dist = playerpos.distance(center);
+         
+      glPushAttrib(GL_VIEWPORT_BIT);
+      glViewport(0, 0, currfbo->GetWidth(), currfbo->GetHeight());
+      
+      glPushMatrix();
+      glLoadIdentity();
+      // Why is the up vector pointing down?  In X at least, framebuffers are y-inverted from
+      // normal OpenGL, so everything is upside down.  Need a better fix than this hack since it
+      // screws up lighting.  Fixed temporarily by hardcoding inverted texcoords.
+      gluLookAt(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z, center.x, center.y, center.z, 0, 1, 0);
+      
+      glMatrixMode(GL_PROJECTION);
+      glPushMatrix();
+      glLoadIdentity();
+      float tempfov = atan(i->height / 2.f / dist) * 360. / PI;
+      float tempaspect = i->width / i->height;
+      gluPerspective(tempfov, tempaspect, 10, 10000.0);
+      
+      glMatrixMode(GL_MODELVIEW);
+      glClearColor(0, 0, 0, 0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      lights.Place();
+      RenderPrimitives(i->prims);
+      RenderPrimitives(i->tprims, true);
+      
+      glMatrixMode(GL_PROJECTION);
+      glPopMatrix();
+      glMatrixMode(GL_MODELVIEW);
+      
+      glPopMatrix();
+      glPopAttrib();
+      currfbo->Unbind();
+      lights.Place();
+      
+      DynamicPrimitive* primptr;
+      if (i->dynobj == dynobjects.end())
+      {
+         i->dynobj = LoadObject("impostor", dynobjects);
+         i->dynobj->position = center;
+         i->dynobj->billboard = true;
+         primptr = *(i->dynobj->prims[0].begin());
+         float width2 = i->width / 2.f;
+         float height2 = i->height / 2.f;
+         primptr->orig[0].x = -width2;
+         primptr->orig[0].y = height2;
+         primptr->orig[1].x = -width2;
+         primptr->orig[1].y = -height2;
+         primptr->orig[2].x = width2;
+         primptr->orig[2].y = height2;
+         primptr->orig[3].x = width2;
+         primptr->orig[3].y = -height2;
+         primptr->transparent = true;
+      }
+      (*(i->dynobj->prims[0].begin()))->texnums[0] = currfbo->GetTexture();
+      primptr = *(i->dynobj->prims[0].begin());
+      primptr->facing = true;
+      i->dynobj->visible = true;
+      // Should really do this last so time to update isn't included
+      i->lastimpupdate = SDL_GetTicks();
+   }
 }
 
 

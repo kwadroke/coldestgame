@@ -23,11 +23,6 @@ void Debug()
    q.rotate(Vector3(0, 0, 1), 90);
    q.v.print();*/
    
-   TextureHandler th;
-   GUI g(1000, 1000, &th);
-   g.InitFromFile("mainmenu.xml");
-   g.Render();
-   
    exit(0);
 }
 
@@ -137,22 +132,22 @@ void InitGlobals()
 
 void InitGUI()
 {
-   mainmenu.SetTextureHandler(&texhand);
+   mainmenu.SetTextureManager(texman);
    mainmenu.SetActualSize(screenwidth, screenheight);
    mainmenu.InitFromFile("mainmenu.xml");
-   hud.SetTextureHandler(&texhand);
+   hud.SetTextureManager(texman);
    hud.SetActualSize(screenwidth, screenheight);
    hud.InitFromFile("hud.xml");
-   loadprogress.SetTextureHandler(&texhand);
+   loadprogress.SetTextureManager(texman);
    loadprogress.SetActualSize(screenwidth, screenheight);
    loadprogress.InitFromFile("loadprogress.xml");
-   loadoutmenu.SetTextureHandler(&texhand);
+   loadoutmenu.SetTextureManager(texman);
    loadoutmenu.SetActualSize(screenwidth, screenheight);
    loadoutmenu.InitFromFile("loadout.xml");
-   statsdisp.SetTextureHandler(&texhand);
+   statsdisp.SetTextureManager(texman);
    statsdisp.SetActualSize(screenwidth, screenheight);
    statsdisp.InitFromFile("stats.xml");
-   console.SetTextureHandler(&texhand);
+   console.SetTextureManager(texman);
    console.SetActualSize(screenwidth, screenheight);
    console.InitFromFile("console.xml");
    ConsoleBufferToGUI();
@@ -1216,7 +1211,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
             else if (optname.substr(0, 7) == "Texture")
             {
                int i = atoi(optname.substr(7).c_str());
-               pbuffer->texnums[i] = atoi(value.c_str());
+               pbuffer->texnums[i] = dotextures[atoi(value.c_str())];
             }
             else if (optname == "Shader")
                pbuffer->shader = value;
