@@ -94,7 +94,7 @@ class GUI
    friend class ComboBox;
    friend class TextArea;
    public:
-      GUI(float aw = 480.f, float ah = 640.f, TextureHandler* th = NULL);
+      GUI(float aw = 480.f, float ah = 640.f, TextureManager* texm = NULL);
       virtual ~GUI();
       virtual void Render();
       virtual void ProcessEvent(SDL_Event*);
@@ -103,7 +103,7 @@ class GUI
       void InitFromFile(string);
       string ReadAttribute(DOMNode*, XMLCh*);
       string ReadStringTag(DOMNode*, XMLCh*);
-      void SetTextureHandler(TextureHandler*);
+      void SetTextureManager(TextureManager*);
       void SetActualSize(int, int);
       virtual bool InWidget(float, float);
       void RenderText(string, string, int, int, int, TTF_Font*, GLuint, float scale = 1.f, bool shadow = true);
@@ -149,7 +149,6 @@ class GUI
       vector<string> textures;
       Tags tag;
       Attribs attrib;
-      TextureManager realtm;
       TextureManager *texman;
       TTF_Font* font;
       

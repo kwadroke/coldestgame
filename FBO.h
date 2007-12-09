@@ -19,6 +19,8 @@ class FBO
       void Bind();
       void Unbind();
       GLuint GetTexture();
+      int GetWidth();
+      int GetHeight();
    
    private:
       void init();

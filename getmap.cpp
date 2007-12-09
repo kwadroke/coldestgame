@@ -51,6 +51,7 @@ extern Light lights;
 extern string mapname;
 extern TextureManager *texman;
 extern list<DynamicObject> dynobjects;
+extern vector<FBO> impfbolist;
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -159,6 +160,7 @@ void GetMap(string fn)
    WorldPrimitives tempprim;
    list<WorldObjects>::iterator currobj;
    objects.clear();
+   impfbolist.clear();
    progtext->text = "Loading objects";
    progress->value = 1;
    Repaint();
@@ -770,10 +772,24 @@ void GetMap(string fn)
    progress->value = 4;
    progtext->text = "Generating buffers";
    Repaint();
+   int fbodim = 32;
+   int counter = 0;
+   FBO dummyfbo;
    for (list<WorldObjects>::iterator i = objects.begin(); i != objects.end(); ++i)
    {
       if (i->impdist)
-         i->GenFbo(&texhand);
+      {
+         if (counter > 20)
+            fbodim = 32;
+         else if (counter > 10)
+            fbodim = 256;
+         else fbodim = 512;
+         dummyfbo = FBO(fbodim, fbodim, false, &texhand);
+         impfbolist.push_back(dummyfbo);
+         //i->GenFbo(&texhand);
+         i->impostorfbo = counter;
+         ++counter;
+      }
       i->GenVbo(&shaderhand);
       i->SetHeightAndWidth();
    }

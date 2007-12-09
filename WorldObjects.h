@@ -44,8 +44,10 @@ class WorldObjects     // Define objects in the world
       vector<WorldPrimitives> prims;
       vector<WorldPrimitives> tprims; // Translucent primitives
       // Variables for impostoring
-      FBO impostorfbo;
+      //FBO* impostorfbo;
+      int impostorfbo;
       GLuint imptex;
+      
       GLuint vbo;
       int normstart, colorstart, attstart, att1start, tcstart[6]; // VBO offsets
       vector<int> vbocount;

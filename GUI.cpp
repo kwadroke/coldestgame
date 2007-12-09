@@ -9,17 +9,16 @@
 #include "ComboBox.h"
 #include "TextArea.h"
 
-GUI::GUI(float aw, float ah, TextureHandler* th)
+GUI::GUI(float aw, float ah, TextureManager* texm)
 {
    actualw = aw;
    actualh = ah;
    virtualw = virtualh = 1000.f;
    wratio = actualw / virtualw;
    hratio = actualh / virtualh;
-   realtm = TextureManager(th);
    name = "root";
    xoff = yoff = 0;
-   Init(this, &realtm);
+   Init(this, texm);
 }
 
 
@@ -70,9 +69,10 @@ void GUI::Cleanup()
 }
 
 
-void GUI::SetTextureHandler(TextureHandler* th)
+void GUI::SetTextureManager(TextureManager* texm)
 {
-   realtm = TextureManager(th);
+   //realtm = texm;
+   texman = texm;
 }
 
 
