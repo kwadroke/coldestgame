@@ -293,15 +293,6 @@ void WorldObjects::GenVbo(Shader* s)
 // IMPORTANT: Must call BindVbo before calling this function
 void WorldObjects::RenderVbo(int prim, int count)
 {
-   /*vector<GLint> indices(count);
-   vector<GLsizei> indexcount(count);
-   for (int i = 0; i < count; ++i)
-   {
-      indices[i] = (prim + i) * 4;
-      indexcount[i] = 4;
-   }
-   glMultiDrawArrays(GL_TRIANGLE_STRIP, &indices[0], &indexcount[0], count);*/
-   //glDrawArrays(GL_TRIANGLE_STRIP, prim * 4, 4);
    glDrawArrays(GL_TRIANGLES, prim * 6, 3 * count * 2);
 }
 
@@ -438,5 +429,4 @@ void WorldObjects::SetHeightAndWidth()
    width *= .5;
    if (type != "terrain")
       size = height > width ? height : width;
-   //cout << height << "  " << width << endl;
 }

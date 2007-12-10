@@ -2,7 +2,7 @@ TileSize 30
 HeightScale .8
 ZeroHeight 20
 NumTextures 18
-NumObjects 9
+NumObjects 13
 Stretch 8
 
 LightData
@@ -345,6 +345,150 @@ endopts
 impdist 150
 size 160
 150 -1 550
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+150 -1 550
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+200 -1 550
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+300 -1 450
+0 0 0
+
+proctree
+10 10 14
+numlevels 2
+numslices 3
+numbranches0 12
+numbranches1 3
+numbranches2 3
+numbranches3 2
+numsegs 3
+numleaves 1
+maxangle 70
+minangle 2
+maxbranchangle 15
+initrad 8
+radreductionperc .2
+initheight 50
+heightreductionperc .8
+firstleaflevel 2
+leafsize 30
+trunkrad 10
+trunknumslices 10
+trunktaper .7
+trunknumsegs 2
+branchevery 999
+sidebranches 999
+maxsidebranchangle 10
+split 1
+continuebranch 0
+multitrunk 0
+branchwithleaves 1
+endopts
+impdist 150
+size 160
+450 -1 650
 0 0 0
 
 bush
