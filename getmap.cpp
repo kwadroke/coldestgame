@@ -52,6 +52,7 @@ extern string mapname;
 extern TextureManager *texman;
 extern list<DynamicObject> dynobjects;
 extern vector<FBO> impfbolist;
+extern vector<WorldObjects*> impobjs;
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -786,8 +787,8 @@ void GetMap(string fn)
          else fbodim = 512;
          dummyfbo = FBO(fbodim, fbodim, false, &texhand);
          impfbolist.push_back(dummyfbo);
-         //i->GenFbo(&texhand);
          i->impostorfbo = counter;
+         impobjs.push_back(&(*i));
          ++counter;
       }
       i->GenVbo(&shaderhand);

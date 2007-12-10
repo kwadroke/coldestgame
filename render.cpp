@@ -57,6 +57,7 @@ extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp, console;
 extern CollisionDetection coldet;
 extern vector<WeaponData> weapons;
 extern vector<FBO> impfbolist;
+extern vector<WorldObjects*> impobjs;
 
 
 void RenderSkybox();
@@ -83,6 +84,8 @@ void UpdateClouds();
 void SetReflection(bool);
 void UpdateNoise();
 void SynchronizePosition();
+void InitGLState(WorldObjects*);
+void RestoreGLState(WorldObjects*);
 
 template <typename T>
 string ToString(const T &input)
@@ -98,7 +101,7 @@ bool billboardrender;   // Indicates whether object is being rendered to billboa
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 PlayerData localplayer;
 set<WorldObjects*> implist;
-vector<WorldObjects*> assignlist;
+set<WorldObjects*> visibleobjs;
 
 void Repaint()
 {
@@ -299,7 +302,8 @@ void RenderObjects()
    
    list<WorldObjects*> objs = kdtree.getobjs();
    Vector3 playerpos = localplayer.pos;
-   assignlist.clear();
+   implist.clear();
+   visibleobjs.clear();
    //cout << "Rendering " << objs.size() << " objects     \r\n" << flush;
    
    list<WorldObjects*>::iterator iptr;
@@ -307,6 +311,7 @@ void RenderObjects()
    {
       WorldObjects *i = *iptr;
       i->dist = playerpos.distance2(Vector3(i->x, i->y, i->z));
+      visibleobjs.insert(i);
    }
    
    objs.sort(objcomp);
@@ -321,27 +326,10 @@ void RenderObjects()
       dist = playerpos.distance(center);
       if (dist > viewdist + i->size) continue;
       
-      if (i->type == "tree" ||
-         i->type == "bush" ||
-         i->type == "proctree")
-      {
-         //glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
-         // Nice alpha textured tree leaves
-         //glAlphaFunc(GL_GREATER, 0.5);
-         
-         glEnable(GL_ALPHA_TEST);
-         glBlendFunc(GL_ONE, GL_ZERO);
-         glEnable(GL_BLEND);
-         
-         /* Not really happy with the way this looks
-         glEnable(GL_MULTISAMPLE);
-         glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-         glSampleCoverage(1.f, GL_FALSE);*/
-         
-         //glDisable(GL_LIGHTING);
-      }
-      
       SDL_mutexP(clientmutex);
+      
+      InitGLState(i);
+      
       if (floatzero(i->impdist) || dist < i->impdist || shadowrender || debug)
       {
          if (!floatzero(i->impdist) && i->dynobj != dynobjects.end() && !shadowrender)
@@ -350,7 +338,6 @@ void RenderObjects()
       }
       else 
       {
-         assignlist.push_back(i);
          if (SDL_GetTicks() - i->lastimpupdate > dist / (1000 / dist) && !reflectionrender)
          {
             implist.insert(i);
@@ -362,21 +349,10 @@ void RenderObjects()
             primptr->facing = false;
          }
       }
-      SDL_mutexV(clientmutex);
       
-      if (i->type == "tree" ||
-         i->type == "bush" ||
-         i->type == "proctree")
-      {
-         //glAlphaFunc(GL_GREATER, 0.5);
-         
-         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-         glDisable(GL_ALPHA_TEST);
-         
-         //glDisable(GL_BLEND);
-         
-         //glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-      }
+      RestoreGLState(i);
+      
+      SDL_mutexV(clientmutex);
    }
    
    if (!shadowrender && !reflectionrender && !debug)
@@ -514,6 +490,48 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
          
          trislastframe += 2 * o->vbocount[currindex - 1];
       }
+   }
+}
+
+
+void InitGLState(WorldObjects *i)
+{
+   if (i->type == "tree" ||
+      i->type == "bush" ||
+      i->type == "proctree")
+   {
+      //glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
+      // Nice alpha textured tree leaves
+      //glAlphaFunc(GL_GREATER, 0.5);
+      
+      glEnable(GL_ALPHA_TEST);
+      glBlendFunc(GL_ONE, GL_ZERO);
+      glEnable(GL_BLEND);
+      
+      /* Not really happy with the way this looks
+      glEnable(GL_MULTISAMPLE);
+      glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+      glSampleCoverage(1.f, GL_FALSE);*/
+      
+      //glDisable(GL_LIGHTING);
+   }
+}
+
+
+void RestoreGLState(WorldObjects *i)
+{
+   if (i->type == "tree" ||
+      i->type == "bush" ||
+      i->type == "proctree")
+   {
+      //glAlphaFunc(GL_GREATER, 0.5);
+      
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glDisable(GL_ALPHA_TEST);
+      
+      //glDisable(GL_BLEND);
+      
+      //glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
    }
 }
 
@@ -717,9 +735,10 @@ void RenderDOTree(DynamicPrimitive* root)
 }
 
 
+// This needs to sort descending, hence the >
 bool sortbyimpdim(const WorldObjects* l, const WorldObjects* r)
 {
-   return impfbolist[l->impostorfbo].GetWidth() < impfbolist[r->impostorfbo].GetWidth();
+   return impfbolist[l->impostorfbo].GetWidth() > impfbolist[r->impostorfbo].GetWidth();
 }
 
 
@@ -734,12 +753,13 @@ void UpdateFBO()
    int desireddim = 32;
    Vector3 playerpos = localplayer.pos;
    
-   for (iptr = assignlist.begin(); iptr != assignlist.end(); ++iptr)
+   for (iptr = impobjs.begin(); iptr != impobjs.end(); ++iptr)
       sortedbyimpdim.push_back(*iptr);
    
    sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
+   sort(impobjs.begin(), impobjs.end(), objcomp);
    
-   for (iptr = assignlist.begin(); iptr != assignlist.end(); ++iptr)
+   for (iptr = impobjs.begin(); iptr != impobjs.end(); ++iptr)
    {
       i = *iptr;
       if (implist.find(i) != implist.end())
@@ -757,11 +777,10 @@ void UpdateFBO()
          int current = 0;
          int count = 0;
          WorldObjects* toswap;
-         while (desireddim != currfbo->GetWidth())
+         while (desireddim > currfbo->GetWidth())
          {
             if (desireddim == 256 ||
-               (desireddim == 512 && currfbo->GetWidth() == 32) ||
-               (desireddim == 32 && currfbo->GetWidth() == 512))
+               (desireddim == 512 && currfbo->GetWidth() == 32))
             {
                current = 11;
                count = 10;
@@ -781,25 +800,25 @@ void UpdateFBO()
             // Find the object we want to swap with
             while (count > 0 && current < sortedbyimpdim.size())
             {
-               if (desireddim > currfbo->GetWidth())
-               {
-                  if (sortedbyimpdim[current]->dist > toswap->dist)
-                     toswap = sortedbyimpdim[current];
-               }
-               else if (sortedbyimpdim[current]->dist < toswap->dist)
+               if (sortedbyimpdim[current]->dist > toswap->dist)
                {
                   toswap = sortedbyimpdim[current];
+                  cout << "Swapping " << counter << " for " << current << endl;
                }
                --count;
                ++current;
             }
             
-            // Do the swap and add the swapped object to our list of things to update
+            // Do the swap and add the swapped object to our list of things to update (maybe)
+            cout << "Swapping for " << impfbolist[toswap->impostorfbo].GetWidth() << endl;
+            cout << desireddim << "  " << currfbo->GetWidth() << endl;
             int tempfbo = i->impostorfbo;
             i->impostorfbo = toswap->impostorfbo;
             toswap->impostorfbo = tempfbo;
-            needsupdate.push_back(toswap);
+            if (visibleobjs.find(toswap) != visibleobjs.end())
+               needsupdate.push_back(toswap);
             currfbo = &(impfbolist[i->impostorfbo]);
+            sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
          }
       }
       ++counter;
@@ -837,8 +856,14 @@ void UpdateFBO()
       glClearColor(0, 0, 0, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       lights.Place();
+      
+      i->BindVbo();
+      InitGLState(i);
+      
       RenderPrimitives(i->prims);
       RenderPrimitives(i->tprims, true);
+      
+      RestoreGLState(i);
       
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
