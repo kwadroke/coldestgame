@@ -240,10 +240,7 @@ void Repaint()
       
       if (reflection && localplayer.pos.y > 0)
       {
-         //ts.start();
          UpdateNoise();
-         //cout << "Partial: ";
-         //ts.stop();
          RenderWater();
       }
       
@@ -253,6 +250,7 @@ void Repaint()
    else
    {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      shaderhand.UseShader("none");
    }
    
    RenderHud();
@@ -297,7 +295,7 @@ bool objcomp(const WorldObjects* l, const WorldObjects* r)
 void RenderObjects()
 {
    float dist;
-   bool debug = false; // Turns off impostoring
+   bool debug = false; // Turns off impostoring if true
    //debug = true;
    
    list<WorldObjects*> objs = kdtree.getobjs();

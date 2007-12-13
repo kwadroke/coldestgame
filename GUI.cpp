@@ -627,6 +627,8 @@ void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
 */
 void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_Font *font, GLuint tex, float scale, bool shadow)
 {
+   SDL_Surface *text;
+         
    if (str.length() == 0 || !TTF_WasInit())
       return;
    SDL_Color col;
@@ -645,25 +647,24 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
    
    texman->texhand->BindTexture(tex);
    
-   // Unfortunately the following has to be done regardless or the FreeSurface at the end
-   // causes problems.  Probably not the part that causes a performance hit anyway though
-   Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-   rmask = 0xff000000;
-   gmask = 0x00ff0000;
-   bmask = 0x0000ff00;
-   amask = 0x000000ff;
-#else
-   rmask = 0x000000ff;
-   gmask = 0x0000ff00;
-   bmask = 0x00ff0000;
-   amask = 0xff000000;
-#endif
-   SDL_Surface *text = SDL_CreateRGBSurface(SDL_SWSURFACE, neww, newh, 32,
-                              rmask, gmask, bmask, amask);
-   
    if (oldstr != str)
    {
+      Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+      rmask = 0xff000000;
+      gmask = 0x00ff0000;
+      bmask = 0x0000ff00;
+      amask = 0x000000ff;
+#else
+      rmask = 0x000000ff;
+      gmask = 0x0000ff00;
+      bmask = 0x00ff0000;
+      amask = 0xff000000;
+#endif
+      text = SDL_CreateRGBSurface(SDL_SWSURFACE, neww, newh, 32,
+                              rmask, gmask, bmask, amask);
+   
+  
       SDL_BlitSurface(t, NULL, text, NULL);
       
       SDL_LockSurface(text);
@@ -722,7 +723,8 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
    glColor4f(1, 1, 1, 1);
    
    SDL_FreeSurface(t);
-   SDL_FreeSurface(text);
+   if (oldstr != str)
+      SDL_FreeSurface(text);
 }
 
 
