@@ -3,8 +3,9 @@ Version2
 Type = tristrip
 ID = 0
 Parent ID = -1
-Texture0 = 6
-Shader = ../coldest/shaders/standard
+Texture0 = 8
+Texture1 = 9
+Shader = ../coldest/shaders/bump
 X Rot 1 = 0
 Y Rot 1 = 0
 Z Rot 1 = 0

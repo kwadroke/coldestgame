@@ -32,6 +32,7 @@ struct WeaponData
    float acceleration;
    float splashradius;
    float weight;
+   float heat;
    int damage;
    int reloadtime;
    bool explode;

@@ -1,5 +1,5 @@
 Version2Textures
-8
+10
 ../coldest/textures/grass.png
 ../coldest/textures/metal.png
 ../coldest/textures/water.png
@@ -8,3 +8,5 @@ Version2Textures
 ../coldest/textures/flames.png
 ../coldest/textures/projectile.png
 ../coldest/textures/leaves5.png
+../coldest/textures/test.png
+../coldest/textures/normal_map.jpg

@@ -7,15 +7,10 @@
 #include "TextArea.h"
 #include "PlayerData.h"
 #include "types.h"
+#include "globals.h"
+#include "netdefs.h"
+#include "renderdefs.h"
 
-extern GUI mainmenu, loadprogress, loadoutmenu, hud, console;
-extern vector<ServerInfo> servers;
-extern bool spawnrequest;
-extern vector<PlayerData> player;
-extern SDL_mutex* clientmutex;
-
-void GetMap(string);
-void Repaint();
 void ConsoleHandler(string);
 
 void Connect()

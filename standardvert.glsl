@@ -1,5 +1,7 @@
 #version 110
 
+void basiclighting(out vec4 amb, out vec4 diff);
+
 varying vec4 shadowmappos, worldshadowmappos;
 varying float dist;
 varying vec4 ambient, diffuse;
@@ -12,22 +14,7 @@ void main()
    gl_TexCoord[2] = gl_MultiTexCoord2;
    gl_TexCoord[3] = gl_MultiTexCoord3;*/
    
-   vec3 normal, lightdir;
-   float ndotl;
-   
-   /* Diffuse calculations */
-   normal = normalize(gl_NormalMatrix * gl_Normal);
-   lightdir = normalize(vec3(gl_LightSource[0].position));
-   ndotl = max(dot(normal, lightdir), dot(-normal, lightdir));
-   diffuse = gl_FrontMaterial.diffuse * gl_LightSource[0].diffuse;
-   
-   /* Ambient calculations */
-   ambient = gl_FrontMaterial.ambient * gl_LightSource[0].ambient;
-   ambient += gl_FrontMaterial.ambient * gl_LightModel.ambient;
-   
-   /* Combine our lighting calculations to get a color*/
-   gl_FrontColor = ndotl * diffuse + ambient;
-   gl_FrontColor *= gl_Color;
+   basiclighting(ambient, diffuse);
    gl_BackColor = gl_FrontColor;
    
    /* Shadow calculations, the grunt work is done on the CPU and passed in

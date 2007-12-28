@@ -14,6 +14,8 @@ WorldObjects::WorldObjects()
    //displaylist = glGenLists(1);
    dlcurrent = false;
    dynobj = dummydolist.end();
+   x = y = z = 0;
+   rotation = pitch = roll = 0;
 }
 
 

@@ -14,6 +14,7 @@ class GenericPrimitive
       GenericPrimitive();
       void Init();
       Vector3 v[4];
+      Vector3 tangent;
       float rad, rad1;
       string type;
       bool collide;

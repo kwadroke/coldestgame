@@ -13,7 +13,7 @@
       <Hover>textures/buttonhover.png</Hover>
       <LeftClickAction>connectip</LeftClickAction>
    </Button>
-   <LineEdit x="400" y="400" width="200" height="24" text="nemesis" name="servername">
+   <LineEdit x="400" y="400" width="200" height="24" text="localhost" name="servername">
       <Normal>textures/buttonnorm.png</Normal>
       <Hover>textures/buttonhover.png</Hover>
    </LineEdit>

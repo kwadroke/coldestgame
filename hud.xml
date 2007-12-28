@@ -17,6 +17,14 @@
    <Label x="850" y="10" width="150" height="30" text="Torso" name="torsoweapon"></Label>
    <Label x="850" y="40" width="150" height="30" text="Left Arm" name="larmweapon"></Label>
    <Label x="850" y="70" width="150" height="30" text="Right Arm" name="rarmweapon"></Label>
+   <ProgressBar x="450" y="950" width="100" height="30" name="temperature">
+      <Normal>textures/buttonhover.png</Normal>
+      <Hover>textures/buttonpressed.png</Hover>
+   </ProgressBar>
+   <ProgressBar x="400" y="900" width="200" height="30" name="facing">
+      <Normal>textures/buttonhover.png</Normal>
+      <Hover>textures/buttonpressed.png</Hover>
+   </ProgressBar>
    
    <Label x="490" y="484" width="20" height="32" text="" name="reticle">
       <Normal>textures/reticle.png</Normal>

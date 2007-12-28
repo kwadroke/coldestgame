@@ -11,10 +11,12 @@
 #include "TextArea.h"
 #include "SDL_opengl.h"
 #include "SDL_net.h"
+#include "renderdefs.h"
+#include "netdefs.h"
+#include "globals.h"
 
 using namespace std;
 // Necessary declarations - these appear in defines.h
-extern deque<string> consolebuffer;
 extern bool quiet, showfps, ghost, fly, thirdperson, server;
 extern bool showkdtree, doconnect, shadows, reflection, fullscreen, serversync;
 extern int camdist, screenwidth, screenheight, consoletop, consolebottom;
@@ -33,6 +35,8 @@ void SetupOpenGL();
 void GetMap(string);
 void WriteToConsole(string);
 void ConsoleBufferToGUI();
+
+deque<string> consolebuffer;
 
 // Just counts spaces, make sure to run through simplifywhitespace first
 int NumTokens(string str)

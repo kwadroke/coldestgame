@@ -1,4 +1,7 @@
 Vertex:
 terrainvert.glsl
+basiclighting.glsl
 Pixel:
 terrainfrag.glsl
+shadowfrag.glsl
+fogfrag.glsl

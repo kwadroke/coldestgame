@@ -1,99 +1,13 @@
 // Rendering functions
+#include "globals.h"
+#include "renderdefs.h"
 
-#define NO_SDL_GLEXT
-#include <list>
-#include <vector>
-#include <stack>
-#include <deque>
-#include <sstream>
-#include <algorithm>
-#include <GL/glew.h>
-#include "WorldObjects.h"
-#include "PlayerData.h"
-#include "DynamicObject.h"
-#include "TextureHandler.h"
-#include "PrimitiveOctree.h"
-#include "ObjectKDTree.h"
-#include "CollisionDetection.h"
-#include "Light.h"
-#include "Shader.h"
-#include "FBO.h"
-#include "GUI.h"
-#include "Timer.h"
-#include "SDL_opengl.h"
-#include "SDL_ttf.h"
-
-#define PI 3.14159265
-
-extern list<WorldObjects> objects;
-extern vector<PlayerData> player;
-extern list<DynamicObject> dynobjects;
-extern vector<GLuint> dotextures;
-extern int viewdist, screenwidth, screenheight, fov, consoletrans, consoleleft;
-extern int consoleright, consoletop, consolebottom, consolebottomline;
-extern int lasttick, frames, camdist, shadowmapsize, trislastframe;
-extern int cloudres, reflectionres, noiseres, servplayernum;
-extern float fps;
-extern bool consolevisible, showfps, quiet, thirdperson, showkdtree, shadows, reflection;
-extern bool serversync;
-extern float nearclip, farclip, aspect;
-extern TextureHandler texhand;
-extern GLuint noisetex;
-extern vector<GLuint> textures;
-extern FBO shadowmapfbo, cloudfbo, reflectionfbo, noisefbo;
-extern string consoleinput;
-extern deque<string> consolebuffer;
-extern TTF_Font *lcd;
-extern TTF_Font *consolefont;
 extern SDL_mutex* clientmutex;
-extern GLuint texnum[], shadowmaptex[], worldshadowmaptex[];
-extern ObjectKDTree kdtree;
-extern Light lights;
-extern Shader shaderhand;
-extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;
-extern string terrainshader, cloudgenshader;
-extern GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp, console;
 extern CollisionDetection coldet;
 extern vector<WeaponData> weapons;
-extern vector<FBO> impfbolist;
-extern vector<WorldObjects*> impobjs;
-
-
-void RenderSkybox();
-void RenderConsole();
-void RenderPrimitives(vector<WorldPrimitives>&, bool distsort = false);
-void RenderObjects();
-void RenderHud();
-void RenderClouds();
-void RenderDynamicObjects();
-void RenderDOTree(DynamicPrimitive*);
-void RenderWater();
-void UpdateFBO();
-void GenShadows(Vector3, float, FBO&);
-void GenClouds();
-list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
-void SDL_GL_Enter2dMode();
-void SDL_GL_Exit2dMode();
-int PowerOf2(int);
-void Animate();
-void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
-bool floatzero(float, float error = .00001);
-void GLError();
-void UpdateClouds();
-void SetReflection(bool);
-void UpdateNoise();
-void SynchronizePosition();
-void InitGLState(WorldObjects*);
-void RestoreGLState(WorldObjects*);
-
-template <typename T>
-string ToString(const T &input)
-{
-   stringstream temp;
-   temp << input;
-   return temp.str();
-}
+extern int servplayernum;
+extern vector<PlayerData> player;
 
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
@@ -132,6 +46,7 @@ void Repaint()
       
       // Update any animated objects
       Animate();
+      
       if (shadows)
       {
          Vector3 rots = lights.GetRots(0);
@@ -255,8 +170,6 @@ void Repaint()
    
    RenderHud();
    
-   RenderConsole();
-   
    if (showkdtree)
       kdtree.visualize();
    
@@ -273,14 +186,11 @@ void Repaint()
    }
    
    // And finally, copy all of this stuff to the screen
-   //ts.start();
    SDL_GL_SwapBuffers();
-   //cout << "SwapBuffers: ";
-   //ts.stop();
    if (t.elapsed() > (1000.f / fps) * 2.f)
    {
-      cout << "Average ms/frame: " << (1000.f / fps) << endl;
-      t.stop();
+      //cout << "Average ms/frame: " << (1000.f / fps) << endl;
+      //t.stop();
    }
    //sleep(1);
 }
@@ -317,6 +227,7 @@ void RenderObjects()
    for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
    {
       WorldObjects *i = *iptr;
+      if (i->type == "water") continue;
       i->BindVbo();
       Vector3 currpos(i->x, i->y, i->z);
       Vector3 center = currpos;
@@ -395,7 +306,6 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
       else sort(prims.begin(), prims.end(), greater<WorldPrimitives>());
    }
    
-   //glColor4f(1, 1, 1, 1); // Taken care of by a color VBO
    for (vector<WorldPrimitives>::iterator i = prims.begin(); i != prims.end(); ++i)
    {
       o = i->object;
@@ -426,19 +336,19 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
       {
          if (1)
          {
-            texhand.BindTextureDebug(textures[i->texnums[0]]);
+            texhand.BindTextureDebug(i->texnums[0]);
             if (i->type == "terrain" && !shadowrender)
             {
                texhand.ActiveTexture(1);
-               texhand.BindTextureDebug(textures[i->texnums[1]]);
+               texhand.BindTextureDebug(i->texnums[1]);
                texhand.ActiveTexture(2);
-               texhand.BindTextureDebug(textures[i->texnums[2]]);
+               texhand.BindTextureDebug(i->texnums[2]);
                texhand.ActiveTexture(3);
-               texhand.BindTextureDebug(textures[i->texnums[3]]);
+               texhand.BindTextureDebug(i->texnums[3]);
                texhand.ActiveTexture(4);
-               texhand.BindTextureDebug(textures[i->texnums[4]]);
+               texhand.BindTextureDebug(i->texnums[4]);
                texhand.ActiveTexture(5);
-               texhand.BindTextureDebug(textures[i->texnums[5]]);
+               texhand.BindTextureDebug(i->texnums[5]);
                texhand.ActiveTexture(0);
             }
             if (!shadowrender)
@@ -451,21 +361,21 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
             i += o->vbocount[currindex] - 1;
             ++currindex;
          }
-         else
+         else // This probably doesn't work (right) anymore
          {
-            texhand.BindTextureDebug(textures[i->texnums[0]]);
+            texhand.BindTextureDebug(i->texnums[0]);
             if (i->type == "terrain" && !shadowrender)
             {
                texhand.ActiveTexture(1);
-               texhand.BindTextureDebug(textures[i->texnums[1]]);
+               texhand.BindTextureDebug(i->texnums[1]);
                texhand.ActiveTexture(2);
-               texhand.BindTextureDebug(textures[i->texnums[2]]);
+               texhand.BindTextureDebug(i->texnums[2]);
                texhand.ActiveTexture(3);
-               texhand.BindTextureDebug(textures[i->texnums[3]]);
+               texhand.BindTextureDebug(i->texnums[3]);
                texhand.ActiveTexture(4);
-               texhand.BindTextureDebug(textures[i->texnums[4]]);
+               texhand.BindTextureDebug(i->texnums[4]);
                texhand.ActiveTexture(5);
-               texhand.BindTextureDebug(textures[i->texnums[5]]);
+               texhand.BindTextureDebug(i->texnums[5]);
                texhand.ActiveTexture(0);
             }
             if (!shadowrender)
@@ -614,6 +524,10 @@ void RenderDOTree(DynamicPrimitive* root)
       
       texhand.ActiveTexture(0);
       texhand.BindTextureDebug(root->texnums[0]);
+      texhand.ActiveTexture(1);
+      texhand.BindTextureDebug(root->texnums[1]);
+      texhand.ActiveTexture(0);
+      shaderhand.UseShader(root->shader);
       //glGenerateMipmapEXT(GL_TEXTURE_2D);
       
       if (root->transparent)
@@ -670,11 +584,21 @@ void RenderDOTree(DynamicPrimitive* root)
          for (int i = 0; i < 4; ++i)
             root->v[i].transform(root->m);
          
+         // Just for testing bumpmapping
+         norm = (root->v[2] - root->v[0]).cross(
+                 root->v[1] - root->v[0]);
+         norm.normalize();
+         Vector3 tangent = root->v[0] - root->v[2];
+         tangent.normalize();
+         
+         GLint loc = shaderhand.GetAttribLocation(bumpshader, "tangent");
+         
          // Temporarily hardcoded flipped texcoords for billboards
          glColor4f(1, 1, 1, 1);
          glBegin(GL_TRIANGLE_STRIP);
          glTexCoord2f(1, 1);
          glNormal3fv(norm.array(temp));
+         glVertexAttrib3fv(loc, tangent.array(temp));
          glVertex3fv(root->v[0].array(temp));
          glTexCoord2f(1, 0);
          glVertex3fv(root->v[1].array(temp));
@@ -1207,97 +1131,23 @@ void RenderWater()
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    
-   shaderhand.UseShader(watershader);
-   //glColor4f(.7, .7, .9, .2);
-   //glEnable(GL_POLYGON_OFFSET_FILL);
-   glPolygonOffset(.1f, .1f);
-   
    float height = 0;
    Vector3 norm = lights.GetPos(0);
    norm.normalize();
    
-   texhand.BindTexture(reflectionfbo.GetTexture());
    texhand.ActiveTexture(1);
    texhand.BindTexture(noisefbo.GetTexture());
    texhand.ActiveTexture(0);
    
-   glBegin(GL_TRIANGLE_STRIP);
-   glNormal3f(norm.x, norm.y, norm.z);
-   glMultiTexCoord2i(GL_TEXTURE1, 0, 0);
-   glVertex3f(-10000, height, -10000);
-   glMultiTexCoord2i(GL_TEXTURE1, 0, 1);
-   glVertex3f(-10000, height, 10000);
-   glMultiTexCoord2i(GL_TEXTURE1, 1, 0);
-   glVertex3f(10000, height, -10000);
-   glMultiTexCoord2i(GL_TEXTURE1, 1, 1);
-   glVertex3f(10000, height, 10000);
-   glEnd();
-   glColor4f(1, 1, 1, 1);
-   glDisable(GL_POLYGON_OFFSET_FILL);
-   glDisable(GL_CULL_FACE);
+   waterobj->BindVbo();
+   RenderPrimitives(waterobj->prims);
+   WorldObjects::UnbindVbo();
    
    glMatrixMode(GL_TEXTURE);
    glPopMatrix();
    
    glMatrixMode(GL_MODELVIEW);
    shaderhand.UseShader("none");
-}
-
-
-// This needs to be rewritten into a GUI so that it doesn't need to use RenderText
-void RenderConsole()
-{
-   // Display console
-   if (0)//consolevisible)
-   {
-      SDL_GL_Enter2dMode();
-      
-      glDisable(GL_TEXTURE_2D);
-      glColor4f(0, 0, 0, consoletrans / 255.);
-      glBegin(GL_TRIANGLE_STRIP);
-      glVertex2f(consoleleft, consoletop);
-      glVertex2f(consoleleft, consolebottom);
-      glVertex2f(consoleright, consoletop);
-      glVertex2f(consoleright, consolebottom);
-      glEnd();
-      glEnable(GL_TEXTURE_2D);
-      glColor4f(1, 1, 1, 1);
-      
-      // Output the current input line
-      //GUI::RenderText(consoleinput, consoleleft + 2, consolebottom -  TTF_FontHeight(consolefont) - 2, 0, consolefont, textures[0]);
-      
-      stack<string> flipbuffer;
-      // Remove bottom lines if we scrolled
-      for (int i = 0; i < consolebottomline; i++)
-      {
-         string buffer = consolebuffer.front();
-         flipbuffer.push(buffer);
-         consolebuffer.pop_front();
-      }
-      // Output visible lines
-      int s = consolebuffer.size();
-      for (int i = 0; i < s; i++)
-      {
-         string buffer = consolebuffer.front();
-         flipbuffer.push(buffer);
-         int loc = consolebottom - (TTF_FontHeight(consolefont) + 2) * (i + 2);
-         if (loc > consoletop)
-         {
-            //GUI::RenderText(buffer, consoleleft + 2, loc, 0, consolefont, textures[0]);
-         }
-         consolebuffer.pop_front();
-      }
-      // Put everything back in the right order
-      s = flipbuffer.size();
-      for (int i = 0; i < s; i++)
-      {
-         string buffer = flipbuffer.top();
-         consolebuffer.push_front(buffer);
-         flipbuffer.pop();
-      }
-      
-      SDL_GL_Exit2dMode();
-   }
 }
 
 
@@ -1318,6 +1168,8 @@ void RenderHud()
    static GUI* torsoselectedlabel = hud.GetWidget("torsoselected");
    static GUI* larmselectedlabel = hud.GetWidget("larmselected");
    static GUI* rarmselectedlabel = hud.GetWidget("rarmselected");
+   static ProgressBar* tempbar = (ProgressBar*)hud.GetWidget("temperature");
+   static ProgressBar* rotbar = (ProgressBar*)hud.GetWidget("facing");
    
    if (frames >= 30) // Update FPS
    {
@@ -1352,6 +1204,10 @@ void RenderHud()
    if (player[0].currweapon == RArm)
       rarmselectedlabel->visible = true;
    else rarmselectedlabel->visible = false;
+   tempbar->SetRange(0, 100);
+   tempbar->value = (int)localplayer.temperature;
+   rotbar->SetRange(-90, 90);
+   rotbar->value = (int)localplayer.rotation;
    SDL_mutexV(clientmutex);
    
    

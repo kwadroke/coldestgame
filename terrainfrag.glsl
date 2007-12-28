@@ -1,9 +1,9 @@
+void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
+void fog(float dist, inout vec4 color);
+
 uniform sampler2D tex, tex1, tex2, tex3;
-uniform sampler2DShadow shadowtex;
-uniform sampler2DShadow worldshadowtex;
 uniform float reflectval;
 
-varying vec4 shadowmappos, worldshadowmappos;
 varying vec3 texweight, texweight1;
 varying vec4 worldcoords;
 varying vec4 diffuse;
@@ -33,25 +33,10 @@ void main()
    color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
    
    color *= base;
-   vec4 color1 = color;
-   float alpha = color.a;
-   float detailmapsize = 200.;
    
-   // Shadows
-   color.rgb *= ambient.rgb + (shadow2DProj(shadowtex, shadowmappos).rgb * diffuse.rgb * diffuse.a);
-   color.a = alpha;
+   shadow(ambient, diffuse, dist, color);
    
-   color1.rgb *= ambient.rgb + (shadow2DProj(worldshadowtex, worldshadowmappos).rgb * diffuse.rgb * diffuse.a);
-   color1.a = alpha;
-   
-   color = mix(color, color1, smoothstep(0.8, 1.0, dist / detailmapsize));
-   
-   // Fogging
-//   if (dist > gl_Fog.start)
-   {
-      float fogval = (dist - gl_Fog.start) * gl_Fog.scale;
-      color = mix(color, gl_Fog.color, clamp(fogval, 0.0, 1.0));
-   }
+   fog(dist, color);
    
    // Reflection
    if (worldcoords.y < 0. && reflectval > .5) discard;
