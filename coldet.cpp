@@ -2,6 +2,9 @@
 
 // Necessary include(s)
 #include "defines.h"
+#include "globals.h"
+#include "renderdefs.h"
+#include "netdefs.h"
 
 /* Do anything function that can be handy for debugging various things
    in a more limited context than the entire engine.*/
@@ -33,14 +36,11 @@ int main(int argc, char* argv[])
    //system("ulimit -c unlimited");
 #endif
    //Debug();
-   LoadFonts(); // Needs to happen before GUI elements are initialized
    InitGlobals();
    SetupSDL();
    SetupOpenGL();
    LoadShaders();
    LoadDOTextures("models/testex");
-   lastdelaytick = SDL_GetTicks(); // Otherwise our first step is huge
-   //coldet.octree = ot;
    
    // Start network threads
    netin = SDL_CreateThread(NetListen, NULL);
@@ -85,9 +85,9 @@ void InitGlobals()
    cloudres = 1024;
    partupdateinterval = 0;
    serversync = true;
+   aalevel = 2;
    
    // Variables that cannot be set from the console
-   tilesize = 0;
    dummy.pos.x = 300;
    dummy.pos.y = 50;
    dummy.pos.z = 300;
@@ -98,15 +98,13 @@ void InitGlobals()
    dummy.leftclick = dummy.rightclick = false;
    dummy.currweapon = Torso;
    dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
+   dummy.temperature = 0;
    for (int i = 0; i < numbodyparts; ++i)
       dummy.weapons.push_back(Empty);
    player.push_back(dummy);
    
    lasttick = SDL_GetTicks();
    frames = 0;
-   consoleinput = "";
-   consolebottomline = 0;
-   aalevel = 2;
    //terrainlistvalid = false;
    running = true;
    sendpacketnum = 1;  // 0 has special meaning
@@ -124,6 +122,7 @@ void InitGlobals()
    consoletop = consoleleft = 10;
    consolebottom = screenheight - 300;
    consoleright = screenwidth - 10;
+   
    InitGUI();
    InitUnits();
    InitWeapons();
@@ -132,6 +131,12 @@ void InitGlobals()
 
 void InitGUI()
 {
+   // SDL_ttf must be initialized before GUI's are build
+   if (TTF_Init() == -1)
+   {
+      cout << "Failed to initialize font system: " << TTF_GetError() << endl;
+      exit(1);
+   }
    mainmenu.SetTextureManager(texman);
    mainmenu.SetActualSize(screenwidth, screenheight);
    mainmenu.InitFromFile("mainmenu.xml");
@@ -177,13 +182,14 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = .5f;
+   dummy.velocity = .0f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
    dummy.explode = true;
    dummy.damage = 10;
    dummy.reloadtime = 500;
+   dummy.heat = 0.f;
    for (short i = 0; i < numweapons; ++i)
       weapons.push_back(dummy);
    
@@ -197,6 +203,7 @@ void InitWeapons()
    weapons[Laser].reloadtime = 300;
    weapons[Laser].weight = 0.f;
    weapons[Laser].name = "Laser";
+   weapons[Laser].heat = 25.f;
 }
 
 
@@ -263,7 +270,7 @@ void SetupSDL()
       exit(1);
    }
    
-   SDL_WM_SetCaption("SDL OpenGL Engine", "");
+   SDL_WM_SetCaption("Coldest", "");
    
    SDL_ShowCursor(0);
    //SDL_WM_GrabInput(SDL_GRAB_ON);
@@ -366,18 +373,6 @@ void SetupOpenGL()
       exit(-1);
    }
    
-   if (shadows)
-   {
-      // Generate FBO to render to the shadow map texture
-#ifndef DEBUGSMT
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
-#else
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
-#endif
-   }
-   
    cloudfbo = FBO(cloudres, cloudres, false, &texhand);
    reflectionfbo = FBO(reflectionres, reflectionres, false, &texhand);
    noisefbo = FBO(noiseres, noiseres, false, &texhand);
@@ -394,9 +389,10 @@ void LoadShaders()
    noiseshader = "shaders/noise";
    terrainshader = "shaders/terrain";
    cloudshader = "shaders/test";
-   shadowshader = "shaders/shadow";
+   shadowshader = "shaders/shadowmap";
    watershader = "shaders/water";
    cloudgenshader = "shaders/cloudgen";
+   bumpshader = "../coldest/shaders/bump";
    
    shaderhand.LoadShader(standardshader);
    cout << "Loaded standard shader\n";
@@ -440,6 +436,12 @@ void LoadShaders()
    cout << "Loaded water shader\n";
    shaderhand.SetUniform1i(watershader, "tex", 0);
    shaderhand.SetUniform1i(watershader, "noisetex", 1);
+   
+   shaderhand.LoadShader(bumpshader);
+   cout << "Loaded bump shader\n";
+   shaderhand.SetUniform1i(bumpshader, "tex", 0);
+   shaderhand.SetUniform1i(bumpshader, "bumptex", 1);
+   shaderhand.SetUniform1f(bumpshader, "reflectval", 0.f);
    
    InitNoise();
    shaderhand.UseShader("none");
@@ -493,33 +495,6 @@ void InitNoise()
    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-}
-
-
-static void LoadFonts()
-{
-   // Make sure we have a texture to render to
-   //textures.reserve(1);
-   textures.push_back(0);
-   glGenTextures(1, &textures[0]);
-   cout << "Loading fonts...\n";
-   if (TTF_Init() == -1)
-   {
-      cout << "Failed to initialize font system: " << TTF_GetError() << endl;
-      exit(1);
-   }
-   lcd = TTF_OpenFont("fonts/chp-fire.ttf", 24);
-   if (!lcd)
-   {
-      cout << "Failed to initialize font: " << TTF_GetError() << endl;
-      exit(1);
-   }
-   consolefont = TTF_OpenFont("fonts/lcd.ttf", 14);
-   if (!consolefont)
-   {
-      cout << "Failed to initialize font: " << TTF_GetError() << endl;
-      exit(1);
-   }
 }
 
 
@@ -886,6 +861,14 @@ void SynchronizePosition()
    Vector3 smoothserverpos;
    Vector3 smootholdpos;
    
+   if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object
+   {
+      temp.tick = currtick;
+      temp.pos = player[0].pos;
+   
+      oldpos.push_back(temp);
+   }
+   
    // Smooth out our ping so we don't get jumpy movement
    static deque<Uint32> pings;
    if (player[servplayernum].ping >= 0 && player[servplayernum].ping < 2000)
@@ -1094,7 +1077,7 @@ DynamicPrimitive* GetDynPrimById(string id, list<DynamicPrimitive*>* primlist)
 }
 
 
-/* Returns an iterator to the object that was loaded, or dynobjects.end() if 
+/* Returns an iterator to the object that was loaded, or dynobj.end() if 
    loading failed.
 */
 list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& dynobj)
@@ -1316,6 +1299,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
          }
          pbuffer->parentobj = temp;
          pbuffer->dynamic = true;
+         pbuffer->tangent = Vector3();
          for (int k = 0; k < 4; ++k)
          {
             pbuffer->v[k] *= scale;

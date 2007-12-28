@@ -27,7 +27,7 @@ void ProgressBar::Render()
    if (!visible) return;
    RenderBase();
    
-   float position = (float)value / (float)(maxvalue - minvalue) * width;
+   float position = (float)(value - minvalue) / (float)(maxvalue - minvalue) * width;
    texman->BindTexture(textures[Hover]);
    glBegin(GL_TRIANGLE_STRIP);
    glTexCoord2i(0, 0);

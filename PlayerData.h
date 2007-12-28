@@ -28,6 +28,7 @@ struct PlayerData
    Uint32 lastupdate;  // How long since last player update?
    Uint32 lastmovetick;
    Uint32 lastfiretick;
+   Uint32 lastcoolingtick;
    float size;
    float fallvelocity;
    short id;
@@ -40,5 +41,6 @@ struct PlayerData
    short ping;
    short hp;
    short kills, deaths;
+   float temperature;
 };
 #endif

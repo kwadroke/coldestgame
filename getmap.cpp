@@ -11,6 +11,8 @@
 #include "Light.h"
 #include "Vector3.h"
 #include "types.h"
+#include "globals.h"
+#include "renderdefs.h"
 
 using namespace std;
 
@@ -26,6 +28,9 @@ struct TerrainParams
 };
 
 vector<TerrainParams> terrparams;
+int terrainstretch;
+int tilesize;
+WorldPrimitives worldbounds[6];
 
 void Repaint();
 float Max(float, float);
@@ -34,25 +39,6 @@ float GetSmoothedTerrain(int, int, int, int, vector< vector<float> >&);
 float Random(float, float);
 void GenShadows(Vector3, float, FBO&);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
-
-extern GUI mainmenu, loadprogress;
-extern int tilesize, terrobjsize, terrainstretch;
-extern bool shadows;
-extern CollisionDetection coldet;
-extern vector<GLuint> textures;
-extern list<WorldObjects> objects;
-extern TextureHandler texhand;
-extern list<DynamicObject> dynobjects;
-extern WorldPrimitives worldbounds[6];
-extern Shader shaderhand;
-extern ObjectKDTree kdtree;
-extern FBO worldshadowmapfbo;
-extern Light lights;
-extern string mapname;
-extern TextureManager *texman;
-extern list<DynamicObject> dynobjects;
-extern vector<FBO> impfbolist;
-extern vector<WorldObjects*> impobjs;
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -115,6 +101,7 @@ void GetMap(string fn)
    progtext->text = "Loading textures";
    Repaint();
    
+   // Pretty sure this call is irrelevant now that we're using shaders
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
    cout << "Loading textures(" << numtextures << ")" << endl;
    int currtex;
@@ -175,7 +162,8 @@ void GetMap(string fn)
       gm >> currobj->type;
       if (currobj->type == "cylinder")
       {
-         gm >> currobj->texnum;
+         gm >> currtex;
+         currobj->texnum = textures[currtex];
          gm >> tempprim.rad;
          gm >> tempprim.rad1;
          gm >> tempprim.height;
@@ -217,9 +205,12 @@ void GetMap(string fn)
       else if (currobj->type == "tree")
       {
          int numleaves;  // Don't need to store this value
-         gm >> currobj->texnum;
-         gm >> currobj->texnum1;
-         gm >> currobj->texnum2;
+         gm >> currtex;
+         currobj->texnum = textures[currtex];
+         gm >> currtex;
+         currobj->texnum1 = textures[currtex];
+         gm >> currtex;
+         currobj->texnum2 = textures[currtex];
          gm >> tempprim.rad;
          gm >> tempprim.rad1;
          gm >> tempprim.height;
@@ -305,9 +296,12 @@ void GetMap(string fn)
       {
          string dummy;
          ProceduralTree t;
-         gm >> currobj->texnum;
-         gm >> currobj->texnum1;
-         gm >> currobj->texnum2;
+         gm >> currtex;
+         currobj->texnum = textures[currtex];
+         gm >> currtex;
+         currobj->texnum1 = textures[currtex];
+         gm >> currtex;
+         currobj->texnum2 = textures[currtex];
          currobj->size = 0; // Size is required
          t.ReadParams(gm);
          gm >> dummy >> currobj->impdist;
@@ -325,7 +319,8 @@ void GetMap(string fn)
       else if (currobj->type == "bush")
       {
          int numleaves;  // Don't need to store this value
-         gm >> currobj->texnum;
+         gm >> currtex;
+         currobj->texnum = textures[currtex];
          gm >> tempprim.height;
          gm >> currobj->x;
          gm >> currobj->y;
@@ -384,7 +379,8 @@ void GetMap(string fn)
       }
       else if (currobj->type == "tristrip")
       {
-         gm >> currobj->texnum;
+         gm >> currtex;
+         currobj->texnum = textures[currtex];
          gm >> currobj->x;
          gm >> currobj->y;
          gm >> currobj->z;
@@ -593,11 +589,7 @@ void GetMap(string fn)
    
    float slopecutoff = .75;
    float heightcutoff = 4;
-   vector<float> texweights(6); // Because six available texture units right now
-                        // 0 is the "beach" texture at low elevations
-                        // 1 and 2 are standard textures that will be
-                        // mixed randomly on average terrain
-                        // 3 is cliff, and 4 and 5 are not used ATM
+   vector<float> texweights(6); // Can be increased, but will require a number of other changes
    int textouse[2];
    float currweights[2];
    
@@ -658,12 +650,6 @@ void GetMap(string fn)
    vector<list<WorldObjects>::iterator> objits;
    tempobj = WorldObjects();
    tempobj.type = "terrain";
-   tempobj.x = 0;
-   tempobj.y = 0;
-   tempobj.z = 0;
-   tempobj.rotation = 0;
-   tempobj.pitch = 0;
-   tempobj.roll = 0;
    tempobj.size = tilesize * terrobjsize * sqrt(2);
    tempobj.dynobj = dynobjects.end();
    for (int y = 0; y < numobjsy; ++y)
@@ -705,7 +691,7 @@ void GetMap(string fn)
          tempprim.n[2] = normals[x + 1][y];
          tempprim.n[3] = normals[x + 1][y + 1];
          for (int i = 0; i < maxterrainparams; ++i)
-            tempprim.texnums[i] = terrparams[i].texture;
+            tempprim.texnums[i] = textures[terrparams[i].texture];
          tempprim.shader = "shaders/terrain";
          
          for (int i = 0; i < 6; ++i)
@@ -770,6 +756,63 @@ void GetMap(string fn)
       }
    }
    
+   
+   // Build water object
+   float waterminx, waterminy;
+   float watermaxx, watermaxy;
+   float waterchunksize = 300.f;
+   waterminx = waterminy = -5000.f;
+   watermaxx = mapw * tilesize + 5000.f;
+   watermaxy = maph * tilesize + 5000.f;
+   int numwaterx = (int)(watermaxx - waterminx) / (int)waterchunksize;
+   int numwatery = (int)(watermaxy - waterminy) / (int)waterchunksize;
+   
+   tempobj = WorldObjects();
+   tempobj.type = "water";
+   tempobj.size = (watermaxx - waterminx) + (watermaxy - waterminy);
+   tempobj.dynobj = dynobjects.end();
+   objects.push_front(tempobj);
+   currobj = objects.begin();
+   waterobj = currobj;
+   
+   for (int i = 0; i < numwaterx; ++i)
+   {
+      for (int j = 0; j < numwatery; ++j)
+      {
+         tempprim.type = "tristrip";
+         tempprim.object = currobj;
+         tempprim.v[0].x = i * waterchunksize + waterminx;
+         tempprim.v[0].y = 0;
+         tempprim.v[0].z = j * waterchunksize + waterminy;
+         tempprim.v[1].x = i * waterchunksize + waterminx;
+         tempprim.v[1].y = 0;
+         tempprim.v[1].z = (j + 1) * waterchunksize + waterminy;
+         tempprim.v[2].x = (i + 1) * waterchunksize + waterminx;
+         tempprim.v[2].y = 0;
+         tempprim.v[2].z = j * waterchunksize + waterminy;
+         tempprim.v[3].x = (i + 1) * waterchunksize + waterminx;
+         tempprim.v[3].y = 0;
+         tempprim.v[3].z = (j + 1) * waterchunksize + waterminy;
+         
+         tempprim.texcoords[1][0][0] = (watermaxx - i * waterchunksize) / (watermaxx - waterminx);
+         tempprim.texcoords[1][0][1] = (watermaxy - j * waterchunksize) / (watermaxy - waterminy);
+         tempprim.texcoords[1][1][0] = (watermaxx - i * waterchunksize) / (watermaxx - waterminx);
+         tempprim.texcoords[1][1][1] = (watermaxy - (j + 1) * waterchunksize) / (watermaxy - waterminy);
+         tempprim.texcoords[1][2][0] = (watermaxx - (i + 1) * waterchunksize) / (watermaxx - waterminx);
+         tempprim.texcoords[1][2][1] = (watermaxy - j * waterchunksize) / (watermaxy - waterminy);
+         tempprim.texcoords[1][3][0] = (watermaxx - (i + 1) * waterchunksize) / (watermaxx - waterminx);
+         tempprim.texcoords[1][3][1] = (watermaxy - (j + 1) * waterchunksize) / (watermaxy - waterminy);
+         
+         for (int k = 0; k < 4; ++k)
+            tempprim.n[k] = Vector3(0, 1, 0);
+         tempprim.shader = "shaders/water";
+         tempprim.texnums[0] = reflectionfbo.GetTexture();
+         tempprim.texnums[1] = noisefbo.GetTexture();
+         currobj->prims.push_back(tempprim);
+         tempprim = WorldPrimitives();
+      }
+   }
+   
    progress->value = 4;
    progtext->text = "Generating buffers";
    Repaint();
@@ -821,6 +864,14 @@ void GetMap(string fn)
    // Render static shadow map
    if (shadows)
    {
+      // Generate FBO to render to the shadow map texture
+#ifndef DEBUGSMT
+      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+#else
+      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+#endif
       int shadowsize = mapw > maph ? mapw : maph;
       shadowsize *= tilesize;
       Vector3 center(mapw / 2.f, 0, maph / 2.f);

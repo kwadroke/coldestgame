@@ -16,22 +16,12 @@
 #include "ProceduralTree.h"
 #include "DynamicObject.h"
 #include "Timer.h"
+#include "globals.h"
+#include "netdefs.h"
 
 using namespace std;
 
 // Necessary declarations
-extern bool running;
-extern char eol;
-extern const int terrobjsize;
-extern string nextmap, mapname;
-extern ObjectKDTree kdtree;
-extern CollisionDetection coldet;
-extern list<WorldObjects> objects;
-extern WorldPrimitives worldbounds[6];
-extern vector<UnitData> units;
-extern vector<WeaponData> weapons;
-
-
 int ServerSend(void*);
 int ServerListen();
 void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
@@ -40,7 +30,7 @@ void HandleHit(Particle& p);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 void UpdateDOTree(DynamicPrimitive*);
-float Random(float, float);
+void ServerUpdatePlayer(int);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -180,42 +170,7 @@ int ServerListen()
          }
          else if (serverplayers[i].connected)
          {
-            //cout << "*****************Moving player " << i << endl;
-            Move(serverplayers[i], serverdynobjects, servercoldet);
-            UpdatePlayerModel(serverplayers[i], serverdynobjects);
-            short currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
-            if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= weapons[currplayerweapon].reloadtime))
-            {
-               serverplayers[i].lastfiretick = SDL_GetTicks();
-               Vector3 dir(0, 0, -1);
-               GraphicMatrix m;
-               m.rotatex(-serverplayers[i].pitch);
-               m.rotatey(serverplayers[i].facing + serverplayers[i].rotation);
-               //m.rotatez(player[0].roll);
-               dir.transform(m.members);
-               
-               list<DynamicObject>::iterator temp = LoadObject(weapons[currplayerweapon].file, serverdynobjects);
-               float vel = weapons[currplayerweapon].velocity;
-               float acc = weapons[currplayerweapon].acceleration;
-               float w = weapons[currplayerweapon].weight;
-               float rad = weapons[currplayerweapon].radius;
-               bool exp = weapons[currplayerweapon].explode;
-               Vector3 startpos = serverplayers[i].pos;
-               /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
-                  slide the player around as much because this way they see their shots going exactly where
-                  they expect, even if the positions don't match exactly (and they rarely will:-).*/
-               if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
-                  startpos = serverplayers[i].clientpos;
-               Particle part(startpos, dir, vel, acc, w, rad, exp, temp, SDL_GetTicks());
-               part.pos += part.dir * 40;
-               part.cd = &servercoldet;
-               part.playernum = i;
-               part.damage = weapons[currplayerweapon].damage;
-               part.dmgrad = weapons[currplayerweapon].splashradius;
-               part.unsent = true;
-               
-               servparticles.push_back(part);
-            }
+            ServerUpdatePlayer(i);
          }
       }
       // Update server dynamic objects
@@ -350,6 +305,7 @@ int ServerListen()
                temp.torso = temp.larm = temp.rarm = serverdynobjects.end();
                temp.currweapon = Torso;
                temp.ping = 0;
+               temp.temperature = 0.f;
                for (int i = 0; i < numbodyparts; ++i)
                   temp.weapons.push_back(Empty);
                
@@ -470,6 +426,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                temp << serverplayers[i].pitch << eol;
                temp << serverplayers[i].roll << eol;
                temp << serverplayers[i].facing << eol;
+               temp << serverplayers[i].temperature << eol;
                temp << serverplayers[i].moveforward << eol;
                temp << serverplayers[i].moveback << eol;
                temp << serverplayers[i].moveleft << eol;
@@ -704,5 +661,54 @@ void UpdateDOTree(DynamicPrimitive* root)
    for (i = root->child.begin(); i != root->child.end(); i++)
    {
       UpdateDOTree(*i);
+   }
+}
+
+
+// Note: must be called from within mutex'd code
+void ServerUpdatePlayer(int i)
+{
+   Move(serverplayers[i], serverdynobjects, servercoldet);
+   UpdatePlayerModel(serverplayers[i], serverdynobjects);
+   
+   Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
+   serverplayers[i].lastcoolingtick += ticks;
+   serverplayers[i].temperature -= ticks * .01;
+   if (serverplayers[i].temperature < 0)
+      serverplayers[i].temperature = 0;
+   
+   short currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
+   if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= weapons[currplayerweapon].reloadtime))
+   {
+      serverplayers[i].lastfiretick = SDL_GetTicks();
+      serverplayers[i].temperature += weapons[currplayerweapon].heat;
+      Vector3 dir(0, 0, -1);
+      GraphicMatrix m;
+      m.rotatex(-serverplayers[i].pitch);
+      m.rotatey(serverplayers[i].facing + serverplayers[i].rotation);
+      //m.rotatez(player[0].roll);
+      dir.transform(m.members);
+               
+      list<DynamicObject>::iterator temp = LoadObject(weapons[currplayerweapon].file, serverdynobjects);
+      float vel = weapons[currplayerweapon].velocity;
+      float acc = weapons[currplayerweapon].acceleration;
+      float w = weapons[currplayerweapon].weight;
+      float rad = weapons[currplayerweapon].radius;
+      bool exp = weapons[currplayerweapon].explode;
+      Vector3 startpos = serverplayers[i].pos;
+      /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
+      slide the player around as much because this way they see their shots going exactly where
+      they expect, even if the positions don't match exactly (and they rarely will:-).*/
+      if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
+         startpos = serverplayers[i].clientpos;
+      Particle part(startpos, dir, vel, acc, w, rad, exp, temp, SDL_GetTicks());
+      part.pos += part.dir * 50;
+      part.cd = &servercoldet;
+      part.playernum = i;
+      part.damage = weapons[currplayerweapon].damage;
+      part.dmgrad = weapons[currplayerweapon].splashradius;
+      part.unsent = true;
+               
+      servparticles.push_back(part);
    }
 }

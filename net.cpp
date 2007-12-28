@@ -13,24 +13,10 @@
 #include "Packet.h"
 #include "ServerInfo.h"
 #include "types.h"
+#include "netdefs.h"
+#include "globals.h"
 
 using namespace std;
-
-extern string serveraddr, mapname, nextmap;
-extern bool running, connected, doconnect, pingresponse, spawnrequest;
-extern int tickrate;
-extern unsigned long sendpacketnum, recpacketnum, ackpack;
-extern vector<PlayerData> player;
-extern short servplayernum;
-extern list<Particle> particles;
-extern list<Hit> hits;
-extern SDL_mutex* clientmutex;
-extern list<DynamicObject> dynobjects;
-extern CollisionDetection coldet;
-extern set<unsigned long> partids;
-extern vector<ServerInfo> servers;
-extern set<ServerInfo> knownservers;
-extern SDL_Thread* netout;
 
 int NetSend(void*);
 int NetListen(void*);
@@ -41,7 +27,6 @@ void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 string AddressToDD(Uint32);
 
 list<Packet> sendqueue;
-char eol = '\n';
 UDPsocket outsock;
 UDPpacket *outpack;
 IPaddress addr;
@@ -295,6 +280,9 @@ int NetListen(void* dummy)
                   player[oppnum].roll = opproll;
                   get >> oppfacing;
                   player[oppnum].facing = oppfacing;
+                  get >> player[oppnum].temperature;
+                  if (oppnum = servplayernum)
+                     player[0].temperature = player[oppnum].temperature;
                   get >> player[oppnum].moveforward;
                   get >> player[oppnum].moveback;
                   get >> player[oppnum].moveleft;

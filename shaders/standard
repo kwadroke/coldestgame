@@ -1,4 +1,7 @@
 Vertex:
 standardvert.glsl
+basiclighting.glsl
 Pixel:
 standardfrag.glsl
+shadowfrag.glsl
+fogfrag.glsl
