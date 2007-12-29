@@ -1,0 +1,6 @@
+Vertex:
+bumpvert.glsl
+basiclighting.glsl
+Pixel:
+bumpfrag.glsl
+fogfrag.glsl
