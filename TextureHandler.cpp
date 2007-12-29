@@ -24,6 +24,11 @@ void TextureHandler::LoadTexture(string filename, GLuint texnum, bool mipmap, bo
    BindTexture(texnum);
    SetTextureParams();
    loadtex = IMG_Load(filename.c_str());
+   if (!loadtex)
+   {
+      cout << "Error loading texture: " << filename << endl;
+      return;
+   }
    SDL_LockSurface(loadtex);
    
    if (loadtex->format->BytesPerPixel == 3)
