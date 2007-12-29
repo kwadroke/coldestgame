@@ -2,7 +2,7 @@ TileSize 30
 HeightScale .8
 ZeroHeight 20
 NumTextures 18
-NumObjects 2
+NumObjects 26
 Stretch 8
 
 LightData
