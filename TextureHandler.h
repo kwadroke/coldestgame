@@ -24,7 +24,7 @@ class TextureHandler
       float af;
       
    private:
-      void SetTextureParams();
+      void SetTextureParams(bool);
       GLuint boundtex[8];
       bool bound[8];
       int curractive;
