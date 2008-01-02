@@ -11,10 +11,13 @@ void main()
    // Texturing
    vec4 shiftedtc = gl_TexCoord[0];
    vec4 shiftamount;
-   shiftamount.x = texture2D(noisetex, gl_TexCoord[1].st * 200.).r - .5;
-   shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 150.).r - .5;
-   shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 51.).r - .5;
-   shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 40.).r - .5;
+   //vec2 shiftamount1;
+   shiftamount.x = texture2D(noisetex, gl_TexCoord[1].st * 30.).r - .5;
+   shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 25.).r - .5;
+   shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 5.).r - .5;
+   shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 4.).r - .5;
+   //shiftamount1.x = texture2D(noisetex, gl_TexCoord[1].st * 150.).r - .5;
+   //shiftamount1.y = texture2D(noisetex, gl_TexCoord[1].st * 140.).r - .5;
    //shiftamount *= .9;
    shiftamount.zw *= 3.;
    shiftamount.x += shiftamount.z;

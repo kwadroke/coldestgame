@@ -19,6 +19,10 @@
 #include "globals.h"
 #include "netdefs.h"
 
+#include <sys/types.h>
+#include <linux/unistd.h>
+#include <errno.h>
+
 using namespace std;
 
 // Necessary declarations
@@ -136,7 +140,10 @@ int ServerListen()
    float dummy;
    unsigned short oppnum;
    Uint32 currtick;
+   
+   // Debugging
    Timer t;
+   unsigned long runtimes = 0;
    
    if (!(insock = SDLNet_UDP_Open(1337)))
    {
@@ -150,8 +157,11 @@ int ServerListen()
       return -1;
    }
    
+   cout << "ServerListen " << syscall(224) << endl;
+   
    while (running)
    {
+      ++runtimes;
       //t.start();
       SDL_Delay(0); // Prevent CPU hogging
       
@@ -173,6 +183,7 @@ int ServerListen()
             ServerUpdatePlayer(i);
          }
       }
+      
       // Update server dynamic objects
       list<DynamicObject>::iterator k;
       for (k = serverdynobjects.begin(); k != serverdynobjects.end(); ++k)
@@ -186,6 +197,7 @@ int ServerListen()
             }
          }
       }
+      
       // Update particles
       list<Particle>::iterator j = servparticles.begin();
       while (j != servparticles.end())
@@ -367,6 +379,8 @@ int ServerListen()
       //t.stop();
    }
    
+   cout << "Server Listen " << runtimes << endl;
+   
    // Clean up
    SDLNet_FreePacket(inpack);
    SDLNet_UDP_Close(insock);
@@ -379,7 +393,10 @@ int ServerSend(void* dummy)  // Thread for sending updates
    Uint32 currnettick = 0;
    short int pingtick = 0;
    UDPsocket broadcastsock;
+   
+   // Debugging
    Timer t;
+   unsigned long runtimes = 0;
    
    if (!(servoutsock = SDLNet_UDP_Open(0)))  // Use any open port
    {
@@ -399,8 +416,11 @@ int ServerSend(void* dummy)  // Thread for sending updates
       return -1;
    }
    
+   cout << "ServerSend " << syscall(224) << endl;
+   
    while (running)
    {
+      ++runtimes;
       //t.start();
       SDL_Delay(0);  // Keep the loop from eating too much CPU
       
@@ -576,6 +596,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
       SDL_mutexV(servermutex);
       //t.stop();
    }
+   cout << "Server Send " << runtimes << endl;
    return 0;
 }
 

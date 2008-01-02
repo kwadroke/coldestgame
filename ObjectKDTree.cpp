@@ -190,7 +190,7 @@ void ObjectKDTree::refine(int level)
       int size0 = children[0].size() + 1; // +1 to avoid div by zero
       int size1 = children[1].size() + 1;
       if (((float)size0 / (float)size1 > .9 && 
-           (float)size0 / (float)size1 < 1.1) || iterations >= 5)
+           (float)size0 / (float)size1 < 1.1) || true)//iterations >= 5) // Try skipping best-fit, since it doesn't work well in some situations
       {
          if ((children[0].size() >= 1 || children[1].size() >= 1) &&
             (level + 1 < 10))
@@ -275,31 +275,39 @@ bool ObjectKDTree::insert(WorldObjects *obj)
 
 bool ObjectKDTree::innode(Vector3 v, float size)
 {
-   return (v.x >= vertices[0].x - size / 2 &&
-           v.y <= vertices[0].y + size / 2 &&
-           v.z >= vertices[0].z - size / 2 &&
-           v.x <= vertices[7].x + size / 2 &&
-           v.y >= vertices[7].y - size / 2 &&
-           v.z <= vertices[7].z + size / 2);
+   float size2 = size / 2.f;
+   return (v.x >= vertices[0].x - size2 &&
+           v.y <= vertices[0].y + size2 &&
+           v.z >= vertices[0].z - size2 &&
+           v.x <= vertices[7].x + size2 &&
+           v.y >= vertices[7].y - size2 &&
+           v.z <= vertices[7].z + size2);
 }
 
 
 // Just for terrain because we only care about x and z coords
 bool ObjectKDTree::innode2d(Vector3 v, float size)
 {
-   return (v.x >= vertices[0].x - size / 2 &&
-           v.z >= vertices[0].z - size / 2 &&
-           v.x <= vertices[7].x + size / 2 &&
-           v.z <= vertices[7].z + size / 2);
+   float size2 = size / 2.f;
+   return (v.x >= vertices[0].x - size2 &&
+           v.z >= vertices[0].z - size2 &&
+           v.x <= vertices[7].x + size2 &&
+           v.z <= vertices[7].z + size2);
 }
 
 
 vector<GenericPrimitive*> ObjectKDTree::getprims(Vector3 pos, float size)
 {
    vector<GenericPrimitive*> ret;
-   vector<GenericPrimitive*> temp;
-   
    ret.reserve(1000);
+   getprims(pos, size, ret);
+   return ret;
+}
+
+
+void ObjectKDTree::getprims(Vector3 pos, float size, vector<GenericPrimitive*>& ret)
+{
+   vector<GenericPrimitive*> temp;
    
    Timer t;
    
@@ -313,10 +321,8 @@ vector<GenericPrimitive*> ObjectKDTree::getprims(Vector3 pos, float size)
    {
       if (haschildren)
       {
-         temp = children[0].getprims(pos, size);
-         vecappend(ret, temp);
-         temp = children[1].getprims(pos, size);
-         vecappend(ret, temp);
+         children[0].getprims(pos, size, ret);
+         children[1].getprims(pos, size, ret);
       }
       else
       {
@@ -336,15 +342,6 @@ vector<GenericPrimitive*> ObjectKDTree::getprims(Vector3 pos, float size)
          }
       }
    }
-   
-   return ret;
-}
-
-
-void ObjectKDTree::vecappend(vector<GenericPrimitive*> &dest, vector<GenericPrimitive*> &source)
-{
-   for (vector<GenericPrimitive*>::iterator i = source.begin(); i != source.end(); ++i)
-      dest.push_back(*i);
 }
 
 
@@ -354,6 +351,13 @@ void ObjectKDTree::vecappend(vector<GenericPrimitive*> &dest, vector<GenericPrim
 list<WorldObjects*> ObjectKDTree::getobjs()
 {
    list<WorldObjects*> ret;
+   getobjs(ret);
+   return ret;
+}
+
+
+void ObjectKDTree::getobjs(list<WorldObjects*>& ret)
+{
    list<WorldObjects*> temp;
    
    if (root)
@@ -366,10 +370,8 @@ list<WorldObjects*> ObjectKDTree::getobjs()
    {
       if (haschildren)
       {
-         temp = children[0].getobjs();
-         objvecappend(ret, temp);
-         temp = children[1].getobjs();
-         objvecappend(ret, temp);
+         children[0].getobjs(ret);
+         children[1].getobjs(ret);
       }
       else
       {
@@ -383,15 +385,6 @@ list<WorldObjects*> ObjectKDTree::getobjs()
          }
       }
    }
-   
-   return ret;
-}
-
-
-void ObjectKDTree::objvecappend(list<WorldObjects*> &dest, list<WorldObjects*> &source)
-{
-   for (list<WorldObjects*>::iterator i = source.begin(); i != source.end(); ++i)
-      dest.push_back(*i);
 }
 
 

@@ -108,8 +108,10 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
    if (!quiet)
       cout << "Primitives to collision detect: " << p.size() << endl;
    
+   int psize = p.size();
+   
    GenericPrimitive *current;
-   for (int i = 0; i < p.size(); i++)
+   for (int i = 0; i < psize; i++)
    {
       current = p[i];
       if (current->collide)  // Can't hit it?  Don't check.
@@ -242,7 +244,7 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
    // Check edges of polys as well.
    if (!adjust.distance2(Vector3()))
    {
-      for (int i = 0; i < p.size(); i++)
+      for (int i = 0; i < psize; i++)
       {
          current = p[i];
          if (current->collide)

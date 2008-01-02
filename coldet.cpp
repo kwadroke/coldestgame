@@ -131,7 +131,7 @@ void InitGlobals()
 
 void InitGUI()
 {
-   // SDL_ttf must be initialized before GUI's are build
+   // SDL_ttf must be initialized before GUI's are built
    if (TTF_Init() == -1)
    {
       cout << "Failed to initialize font system: " << TTF_GetError() << endl;
