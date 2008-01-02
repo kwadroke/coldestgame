@@ -1,13 +1,7 @@
 // Rendering functions
+
 #include "globals.h"
 #include "renderdefs.h"
-
-extern SDL_mutex* clientmutex;
-extern GUI mainmenu, hud, loadprogress, loadoutmenu, statsdisp, console;
-extern CollisionDetection coldet;
-extern vector<WeaponData> weapons;
-extern int servplayernum;
-extern vector<PlayerData> player;
 
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
