@@ -740,6 +740,7 @@ void UpdateFBO()
       ++counter;
    }
    
+   // Now go through and update the impostor for any objects that need it
    for (iptr = needsupdate.begin(); iptr != needsupdate.end(); ++iptr)
    {
       i = *iptr;
@@ -940,7 +941,7 @@ void UpdateNoise()
 {
    noisefbo.Bind();
    shaderhand.UseShader(noiseshader);
-   // Don't remove this, it's not being rendered to, it's used in the noise shader
+   // Don't remove this, it's not the texture we're trying to render to, it's used in the noise shader
    texhand.BindTexture(noisetex);
    shaderhand.SetUniform1i(noiseshader, "time", SDL_GetTicks());
    
@@ -1175,7 +1176,7 @@ void RenderHud()
    }
    ++frames;
    
-   // Display hud
+   // Update GUI values
    SDL_GL_Enter2dMode();
    fpslabel->text = ToString(fps);
    tpslabel->text = "Tris/sec: " + ToString(trislastframe * fps / 1000000.f) + " million";
@@ -1185,24 +1186,24 @@ void RenderHud()
    hplabel->text = "HP: " + ToString(localplayer.hp);
    killslabel->text = "Kills: " + ToString(localplayer.kills);
    deathslabel->text = "Deaths: " + ToString(localplayer.deaths);
-   SDL_mutexP(clientmutex);
-   torsoweaponlabel->text = weapons[player[0].weapons[Torso]].name;
-   larmweaponlabel->text = weapons[player[0].weapons[LArm]].name;
-   rarmweaponlabel->text = weapons[player[0].weapons[RArm]].name;
-   if (player[0].currweapon == Torso)
+   
+   torsoweaponlabel->text = weapons[localplayer.weapons[Torso]].name;
+   larmweaponlabel->text = weapons[localplayer.weapons[LArm]].name;
+   rarmweaponlabel->text = weapons[localplayer.weapons[RArm]].name;
+   if (localplayer.currweapon == Torso)
       torsoselectedlabel->visible = true;
    else torsoselectedlabel->visible = false;
-   if (player[0].currweapon == LArm)
+   if (localplayer.currweapon == LArm)
       larmselectedlabel->visible = true;
    else larmselectedlabel->visible = false;
-   if (player[0].currweapon == RArm)
+   if (localplayer.currweapon == RArm)
       rarmselectedlabel->visible = true;
    else rarmselectedlabel->visible = false;
+   
    tempbar->SetRange(0, 100);
    tempbar->value = (int)localplayer.temperature;
    rotbar->SetRange(-90, 90);
    rotbar->value = (int)localplayer.rotation;
-   SDL_mutexV(clientmutex);
    
    
 #ifdef DEBUGSMT
@@ -1223,6 +1224,7 @@ void RenderHud()
    glColor4f(1, 1, 1, 1);
 #endif
    
+   // Render all of the GUI objects, they know whether they're visible or not
    mainmenu.Render();
    hud.Render();
    loadprogress.Render();
