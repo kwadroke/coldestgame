@@ -39,9 +39,9 @@ class ObjectKDTree
       bool innode2d(Vector3, float);
       bool infrustum();//Vector3, Vector3, float, float, float, float);
       bool infrustum(WorldObjects*);
-      void vecappend(vector<GenericPrimitive*> &, vector<GenericPrimitive*> &);
-      void objvecappend(list<WorldObjects*> &, list<WorldObjects*> &);
       void setretobjs(set<WorldObjects*>*);
+      void getprims(Vector3, float, vector<GenericPrimitive*>&);
+      void getobjs(list<WorldObjects*>&);
       
       
       vector<ObjectKDTree> children;

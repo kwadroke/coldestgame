@@ -16,6 +16,10 @@
 #include "netdefs.h"
 #include "globals.h"
 
+#include <sys/types.h>
+#include <linux/unistd.h>
+#include <errno.h>
+
 using namespace std;
 
 int NetSend(void*);
@@ -39,8 +43,11 @@ int NetSend(void* dummy)
    Uint32 currnettick = 0;
    Uint32 occpacketcounter = 0;
    sendmutex = SDL_CreateMutex();
+   
+   // Debugging
    Timer t;
-      
+   unsigned long runtimes = 0;
+   
    if (!(outsock = SDLNet_UDP_Open(0)))  // Use any open port
    {
       cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
@@ -53,8 +60,11 @@ int NetSend(void* dummy)
       return -1;
    }
    
+   cout << "NetSend " << syscall(224) << endl;
+   
    while (running)
    {
+      ++runtimes;
       //t.start();
       /* If we allow this to be a very tight loop (which is what it will
       be since most of the iterations are going to skip this section), it
@@ -148,6 +158,8 @@ int NetSend(void* dummy)
       SDL_mutexV(sendmutex);
       //t.stop();
    }
+   
+   cout << "NetSend " << runtimes << endl;
    SDLNet_FreePacket(outpack);
    SDLNet_UDP_Close(outsock);
    return 0;
@@ -205,7 +217,10 @@ int NetListen(void* dummy)
    unsigned short oppnum;
    string getdata;
    string packettype;
+   
+   // Debugging
    Timer t;
+   unsigned long runtimes = 0;
    
    if (!(insock = SDLNet_UDP_Open(1336)))
    {
@@ -220,9 +235,11 @@ int NetListen(void* dummy)
    }
    
    netout = SDL_CreateThread(NetSend, NULL); // Start send thread
+   cout << "NetListen " << syscall(224) << endl;
    
    while (running)
    {
+      ++runtimes;
       //t.start();
       SDL_Delay(0); // See comments for NetSend loop
       
@@ -522,6 +539,8 @@ int NetListen(void* dummy)
       }
       //t.stop();
    }
+   
+   cout << "NetListen " << runtimes << endl;
    SDLNet_FreePacket(inpack);
    SDLNet_UDP_Close(insock);
    return 0;
