@@ -19,13 +19,13 @@ class CollisionDetection
    public:
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
-      Vector3 CheckSphereHit(Vector3, Vector3, float, list<DynamicObject>*,
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, list<DynamicObject>*,
                              stack<list<DynamicObject>::iterator>* = NULL);
-      Vector3 CheckSphereHit(Vector3, Vector3, float, list<DynamicObject>*,
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, list<DynamicObject>*,
                              vector<list<DynamicObject>::iterator>&,
                              stack<list<DynamicObject>::iterator>* = NULL);
-      Vector3 PlaneSphereCollision(Vector3[], Vector3, Vector3, float);
-      Vector3 PlaneEdgeSphereCollision(Vector3[], Vector3, float);
+      Vector3 PlaneSphereCollision(Vector3[], const Vector3&, const Vector3&, const float&);
+      Vector3 PlaneEdgeSphereCollision(Vector3[], const Vector3&, const float&);
       //PrimitiveOctree *octree;
       ObjectKDTree *kdtree;
       int intmethod;

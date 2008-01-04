@@ -11,13 +11,13 @@ class Vector3
    public:
       Vector3();
       Vector3(const float&, const float&, const float&);
-      Vector3 operator* (const float&);
+      Vector3 operator* (const float&) const;
       void operator*= (const float&);
-      Vector3 operator+ (const Vector3&);
+      Vector3 operator+ (const Vector3&) const;
       void operator+= (const Vector3&);
-      Vector3 operator- (const Vector3&);
+      Vector3 operator- (const Vector3&) const;
       void operator-= (const Vector3&);
-      Vector3 operator/ (const float&);
+      Vector3 operator/ (const float&) const;
       void operator /= (const float&);
       Vector3 cross(const Vector3&) const;
       void normalize();
@@ -27,9 +27,9 @@ class Vector3
       void translate(float, float, float);
       void transform(const GLfloat[16]);
       void transform4(const GLfloat[16]);
-      float distance(const Vector3&);
-      float distance2(const Vector3& v = Vector3());
-      float magnitude();
+      float distance(const Vector3&) const;
+      float distance2(const Vector3& v = Vector3()) const;
+      float magnitude() const;
       float x, y, z;
       float *array(float*);
 };

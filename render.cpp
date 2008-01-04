@@ -669,8 +669,7 @@ void UpdateFBO()
    int desireddim = 32;
    Vector3 playerpos = localplayer.pos;
    
-   for (iptr = impobjs.begin(); iptr != impobjs.end(); ++iptr)
-      sortedbyimpdim.push_back(*iptr);
+   sortedbyimpdim = impobjs;
    
    sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
    sort(impobjs.begin(), impobjs.end(), objcomp);

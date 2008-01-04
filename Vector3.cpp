@@ -14,7 +14,7 @@ Vector3::Vector3(const float& xin, const float& yin, const float& zin)
    z = zin;
 }
 
-Vector3 Vector3::operator* (const float& i)
+Vector3 Vector3::operator* (const float& i) const
 {
    return Vector3(x * i, y * i, z * i);
 }
@@ -26,7 +26,7 @@ void Vector3::operator*= (const float& i)
    z *= i;
 }
 
-Vector3 Vector3::operator+ (const Vector3& v)
+Vector3 Vector3::operator+ (const Vector3& v) const
 {
    return Vector3(x + v.x, y + v.y, z + v.z);
 }
@@ -38,7 +38,7 @@ void Vector3::operator+= (const Vector3& v)
    z += v.z;
 }
 
-Vector3 Vector3::operator- (const Vector3& v)
+Vector3 Vector3::operator- (const Vector3& v) const
 {
    return Vector3(x - v.x, y - v.y, z - v.z);
 }
@@ -50,7 +50,7 @@ void Vector3::operator-= (const Vector3& v)
    z -= v.z;
 }
 
-Vector3 Vector3::operator/ (const float& i)
+Vector3 Vector3::operator/ (const float& i) const
 {
    return Vector3(x / i, y / i, z / i);
 }
@@ -141,7 +141,7 @@ void Vector3::transform4(const GLfloat matrix[16])
 }
 
 
-float Vector3::distance(const Vector3& v)
+float Vector3::distance(const Vector3& v) const
 {
    return sqrt((x - v.x) * (x - v.x) + 
                (y - v.y) * (y - v.y) + 
@@ -150,7 +150,7 @@ float Vector3::distance(const Vector3& v)
 
 
 // Return the distance ^ 2 because it's faster and may be sufficient
-float Vector3::distance2(const Vector3& v)
+float Vector3::distance2(const Vector3& v) const
 {
    return (x - v.x) * (x - v.x) + 
          (y - v.y) * (y - v.y) + 
@@ -158,7 +158,7 @@ float Vector3::distance2(const Vector3& v)
 }
 
 
-float Vector3::magnitude()
+float Vector3::magnitude() const
 {
    return sqrt(x * x + y * y + z * z);
 }

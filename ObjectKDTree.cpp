@@ -299,7 +299,7 @@ bool ObjectKDTree::innode2d(Vector3 v, float size)
 vector<GenericPrimitive*> ObjectKDTree::getprims(Vector3 pos, float size)
 {
    vector<GenericPrimitive*> ret;
-   ret.reserve(1000);
+   ret.reserve(10000);
    getprims(pos, size, ret);
    return ret;
 }
@@ -407,11 +407,10 @@ bool ObjectKDTree::infrustum()
       u = (*frustum)[i].v[3];
       norm = (s - v).cross(t - v);
       norm.normalize();
+      d = -norm.dot(s);
       
       for (int j = 0; j < 8; ++j)
       {
-         d = -norm.dot(s);
-         
          startside = norm.dot(vertices[j]) + d;
          
          if (startside > -.0001)  // Completely inside
