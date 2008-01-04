@@ -25,7 +25,7 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 }
 
 
-Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float radius, list<DynamicObject>* dynobj,
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
                                            stack<list<DynamicObject>::iterator>* retobjs)
 {
    vector<list<DynamicObject>::iterator> dummy;
@@ -39,7 +39,7 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
 
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
-Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float radius, list<DynamicObject>* dynobj,
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
                                            vector<list<DynamicObject>::iterator>& ignoreobjs,
                                            stack<list<DynamicObject>::iterator>* retobjs)
 {
@@ -320,7 +320,7 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
 // May want to precalculate normals to speed things up - keep in mind that
 // dynamic primitives don't have precalculated normals, so if this is implemented
 // that will have to be done before calling this function
-Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], Vector3 pos, Vector3 pos1, float radius)
+Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& pos, const Vector3& pos1, const float& radius)
 {
    Vector3 adjust;
    Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
@@ -441,7 +441,7 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], Vector3 pos, Vect
 }
 
 
-Vector3 CollisionDetection::PlaneEdgeSphereCollision(Vector3 v[3], Vector3 pos, float radius)
+Vector3 CollisionDetection::PlaneEdgeSphereCollision(Vector3 v[3], const Vector3& pos, const float& radius)
 {
    Vector3 adjust;
    int numhits = 0;
