@@ -61,4 +61,5 @@ inline void Vector3::normalize()
    }
 }
 
+
 #endif

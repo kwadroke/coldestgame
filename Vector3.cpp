@@ -7,6 +7,7 @@ Vector3::Vector3()
    x = y = z = 0;
 }
 
+
 Vector3::Vector3(const float& xin, const float& yin, const float& zin)
 {
    x = xin;
@@ -14,10 +15,12 @@ Vector3::Vector3(const float& xin, const float& yin, const float& zin)
    z = zin;
 }
 
+
 Vector3 Vector3::operator* (const float& i) const
 {
    return Vector3(x * i, y * i, z * i);
 }
+ 
  
 void Vector3::operator*= (const float& i)
 {
@@ -26,10 +29,12 @@ void Vector3::operator*= (const float& i)
    z *= i;
 }
 
+
 Vector3 Vector3::operator+ (const Vector3& v) const
 {
    return Vector3(x + v.x, y + v.y, z + v.z);
 }
+
 
 void Vector3::operator+= (const Vector3& v)
 {
@@ -38,10 +43,12 @@ void Vector3::operator+= (const Vector3& v)
    z += v.z;
 }
 
+
 Vector3 Vector3::operator- (const Vector3& v) const
 {
    return Vector3(x - v.x, y - v.y, z - v.z);
 }
+
 
 void Vector3::operator-= (const Vector3& v)
 {
@@ -50,10 +57,12 @@ void Vector3::operator-= (const Vector3& v)
    z -= v.z;
 }
 
+
 Vector3 Vector3::operator/ (const float& i) const
 {
    return Vector3(x / i, y / i, z / i);
 }
+
 
 void Vector3::operator/= (const float& i)
 {
@@ -67,6 +76,7 @@ void Vector3::print()
 {
    cout << x << "  " << y << "  " << z << endl;
 }
+
 
 void Vector3::rotate(float pitch, float rotation, float roll)
 {

@@ -1,5 +1,9 @@
 #include "ObjectKDTree.h"
 
+// Whatever you do, don't set this much higher.  It causes serious and difficult to track down
+// performance problems
+int ObjectKDTree::maxlevels = 5;
+
 ObjectKDTree::ObjectKDTree(list<WorldObjects> *objs, Vector3 v[8])
 {
    haschildren = false;
@@ -193,7 +197,7 @@ void ObjectKDTree::refine(int level)
            (float)size0 / (float)size1 < 1.1) || true)//iterations >= 5) // Try skipping best-fit, since it doesn't work well in some situations
       {
          if ((children[0].size() >= 1 || children[1].size() >= 1) &&
-            (level + 1 < 10))
+            (level + 1 < maxlevels))
          {
             children[0].refine(level + 1);
             children[1].refine(level + 1);
@@ -533,12 +537,6 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
          p[i].v[j].transform(m.members);
       }
    }
-   /*frustum = &p;
-   if (haschildren)
-   {
-      children[0].setfrustum(frustum);
-      children[1].setfrustum(frustum);
-   }*/
 }
 
 
