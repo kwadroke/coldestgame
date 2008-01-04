@@ -36,6 +36,8 @@ class CollisionDetection
       
    private:
       bool InVector(list<DynamicObject>::iterator&, vector<list<DynamicObject>::iterator>&);
+      bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const Vector3&);
+      bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&);
       
       vector<GenericPrimitive*> p;
       SDL_mutex* mutex;
