@@ -1,0 +1,2 @@
+#!/bin/bash
+gprof --graph ./coldet | less
