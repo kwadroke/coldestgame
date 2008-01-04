@@ -52,6 +52,7 @@ class ObjectKDTree
       bool root;
       vector<WorldPrimitives> p; // Only set in root node
       vector<WorldPrimitives>* frustum; // Pointer to root's p
+      static int maxlevels;
 };
 
 #endif

@@ -162,8 +162,8 @@ int ServerListen()
    while (running)
    {
       ++runtimes;
-      //t.start();
       SDL_Delay(0); // Prevent CPU hogging
+      //t.start();
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
