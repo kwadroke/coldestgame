@@ -7,55 +7,55 @@ Vector3::Vector3()
    x = y = z = 0;
 }
 
-Vector3::Vector3(float xin, float yin, float zin)
+Vector3::Vector3(const float& xin, const float& yin, const float& zin)
 {
    x = xin;
    y = yin;
    z = zin;
 }
 
-Vector3 Vector3::operator* (float i)
+Vector3 Vector3::operator* (const float& i)
 {
    return Vector3(x * i, y * i, z * i);
 }
  
-void Vector3::operator*= (float i)
+void Vector3::operator*= (const float& i)
 {
    x *= i;
    y *= i;
    z *= i;
 }
 
-Vector3 Vector3::operator+ (Vector3 v)
+Vector3 Vector3::operator+ (const Vector3& v)
 {
    return Vector3(x + v.x, y + v.y, z + v.z);
 }
 
-void Vector3::operator+= (Vector3 v)
+void Vector3::operator+= (const Vector3& v)
 {
    x += v.x;
    y += v.y;
    z += v.z;
 }
 
-Vector3 Vector3::operator- (Vector3 v)
+Vector3 Vector3::operator- (const Vector3& v)
 {
    return Vector3(x - v.x, y - v.y, z - v.z);
 }
 
-void Vector3::operator-= (Vector3 v)
+void Vector3::operator-= (const Vector3& v)
 {
    x -= v.x;
    y -= v.y;
    z -= v.z;
 }
 
-Vector3 Vector3::operator/ (float i)
+Vector3 Vector3::operator/ (const float& i)
 {
    return Vector3(x / i, y / i, z / i);
 }
 
-void Vector3::operator/= (float i)
+void Vector3::operator/= (const float& i)
 {
    x /= i;
    y /= i;
@@ -104,7 +104,7 @@ void Vector3::translate(float xt, float yt, float zt)
 }
 
 
-void Vector3::transform(GLfloat matrix[16])
+void Vector3::transform(const GLfloat matrix[16])
 {
    float oldx, oldy, oldz;
    oldx = x;
@@ -117,7 +117,7 @@ void Vector3::transform(GLfloat matrix[16])
 }
 
 
-void Vector3::transform4(GLfloat matrix[16])
+void Vector3::transform4(const GLfloat matrix[16])
 {
    float oldx, oldy, oldz, w;
    oldx = x;
@@ -141,7 +141,7 @@ void Vector3::transform4(GLfloat matrix[16])
 }
 
 
-float Vector3::distance(Vector3 v)
+float Vector3::distance(const Vector3& v)
 {
    return sqrt((x - v.x) * (x - v.x) + 
                (y - v.y) * (y - v.y) + 
@@ -150,7 +150,7 @@ float Vector3::distance(Vector3 v)
 
 
 // Return the distance ^ 2 because it's faster and may be sufficient
-float Vector3::distance2(Vector3 v)
+float Vector3::distance2(const Vector3& v)
 {
    return (x - v.x) * (x - v.x) + 
          (y - v.y) * (y - v.y) + 

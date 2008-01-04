@@ -198,12 +198,10 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
       Vector3 norm;
       norm = (s - v).cross(t - v);
       norm.normalize();
+      
       float d = -norm.dot(s);
       
-      float startside = norm.dot(oldpos) + d;
-      float endside = norm.dot(newpos) + d;
-      
-      if (startside * endside < -.0001)  // Crossed the plane
+      if (CrossesPlane(oldpos, newpos, norm, d))  // Crossed the plane
       {
          adjust += norm * radius;
          adjusted++;
@@ -212,18 +210,7 @@ Vector3 CollisionDetection::CheckSphereHit(Vector3 oldpos, Vector3 newpos, float
       {
          Vector3 start = newpos;
          Vector3 end = newpos - norm * radius;
-               
-         startside = norm.dot(start) + d;
-         endside = norm.dot(end) + d;
-         
-         /* Because if the signs are the same, this will end up positive
-            At times, when one of these variables should be zero, it will
-            actually be a very small number (7E-6 for instance) of the
-            opposite sign from the other variable, which means if we just
-            check the signs it appears we hit when we didn't.  Including
-            values very close to 0 as non-hits fixes this.
-         */
-         if (startside * endside < -.0001)
+         if (CrossesPlane(start, end, norm, d))
          {
             // We're talking infinite planes here, so if we crossed we hit
             // However, we need to know how far to adjust the player's
@@ -342,7 +329,6 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], Vector3 pos, Vect
    
    // First check whether the sphere center completely crossed the plane
    float startside = norm.dot(pos) + d;
-   float endside = norm.dot(pos1) + d;
    
    /* Allows for checking both sides of polygons - not sure we need this 
    though since almost all collidable polys are going to be facing out*/
@@ -351,13 +337,10 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], Vector3 pos, Vect
       norm = (v[2] - v[0]).cross(v[1] - v[0]);
       norm.normalize();
       d = -norm.dot(v[0]);
-   
-      startside = norm.dot(pos) + d;
-      endside = norm.dot(pos1) + d;
    }
    
    // If the signs don't match then we crossed the infinite plane
-   if (startside * endside < -.0001)
+   if (CrossesPlane(pos, pos1, norm, d))
    {
       Vector3 move = pos1 - pos;
       float denominator = norm.dot(move);
@@ -398,10 +381,7 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], Vector3 pos, Vect
    Vector3 start = pos1;
    Vector3 end = pos1 - norm * radius;
    
-   startside = norm.dot(start) + d;
-   endside = norm.dot(end) + d;
-   
-   if (startside * endside < -.0001)
+   if (CrossesPlane(start, end, norm, d))
    {
       Vector3 move = end - start;
       float denominator = norm.dot(move);
@@ -515,6 +495,33 @@ bool CollisionDetection::InVector(list<DynamicObject>::iterator& iter, vector<li
    for (int i = 0; i < vec.size(); ++i)
       if (vec[i] == iter) return true;
    return false;
+}
+
+
+// I don't think this one is ever used because in most cases we want to reuse d, so it doesn't make sense to 
+// calculate it each time
+bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm, const Vector3& polypoint)
+{
+   float d = -norm.dot(polypoint);
+   
+   return CrossesPlane(start, end, norm, d);
+}
+
+
+bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm, const float& d)
+{
+   
+   float startside = norm.dot(start) + d;
+   float endside = norm.dot(end) + d;
+   
+   /* Because if the signs are the same, this will end up positive
+      At times, when one of these variables should be zero, it will
+      actually be a very small number (7E-6 for instance) of the
+      opposite sign from the other variable, which means if we just
+      check the signs it appears we hit when we didn't.  Including
+      values very close to 0 as non-hits fixes this.
+   */
+   return (startside * endside < -.0001);
 }
 
 

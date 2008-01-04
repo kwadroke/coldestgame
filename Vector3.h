@@ -10,37 +10,37 @@ class Vector3
 {
    public:
       Vector3();
-      Vector3(float, float, float);
-      Vector3 operator* (float);
-      void operator*= (float);
-      Vector3 operator+ (Vector3);
-      void operator+= (Vector3);
-      Vector3 operator- (Vector3);
-      void operator-= (Vector3);
-      Vector3 operator/ (float);
-      void operator /= (float);
-      Vector3 cross(Vector3);
+      Vector3(const float&, const float&, const float&);
+      Vector3 operator* (const float&);
+      void operator*= (const float&);
+      Vector3 operator+ (const Vector3&);
+      void operator+= (const Vector3&);
+      Vector3 operator- (const Vector3&);
+      void operator-= (const Vector3&);
+      Vector3 operator/ (const float&);
+      void operator /= (const float&);
+      Vector3 cross(const Vector3&) const;
       void normalize();
       void print();
-      float dot(Vector3);
+      float dot(const Vector3&) const;
       void rotate(float, float, float);
       void translate(float, float, float);
-      void transform(GLfloat[16]);
-      void transform4(GLfloat[16]);
-      float distance(Vector3);
-      float distance2(Vector3 v = Vector3());
+      void transform(const GLfloat[16]);
+      void transform4(const GLfloat[16]);
+      float distance(const Vector3&);
+      float distance2(const Vector3& v = Vector3());
       float magnitude();
       float x, y, z;
       float *array(float*);
 };
 
 
-inline float Vector3::dot(Vector3 v)
+inline float Vector3::dot(const Vector3& v) const
 {
    return x * v.x + y * v.y + z * v.z;
 }
 
-inline Vector3 Vector3::cross(Vector3 v)
+inline Vector3 Vector3::cross(const Vector3& v) const
 {
 /*   Vector3 newv(0, 0, 0);
    newv.x = y * v.z - z * v.y;
