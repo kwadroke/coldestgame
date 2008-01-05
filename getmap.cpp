@@ -823,9 +823,9 @@ void GetMap(string fn)
    {
       if (i->impdist)
       {
-         if (counter > 20)
+         if (counter >= fbostarts[2])
             fbodim = 32;
-         else if (counter > 10)
+         else if (counter >= fbostarts[1])
             fbodim = 256;
          else fbodim = 512;
          dummyfbo = FBO(fbodim, fbodim, false, &texhand);

@@ -683,9 +683,9 @@ void UpdateFBO()
          
          currfbo = &(impfbolist[i->impostorfbo]);
          // Note, these values need to match those in getmap.  They should probably be shared at some point.
-         if (counter > 20)
+         if (counter >= fbostarts[2])
             desireddim = 32;
-         else if (counter > 10)
+         else if (counter >= fbostarts[1])
             desireddim = 256;
          else desireddim = 512;
          
@@ -697,18 +697,18 @@ void UpdateFBO()
             if (desireddim == 256 ||
                (desireddim == 512 && currfbo->GetWidth() == 32))
             {
-               current = 11;
-               count = 10;
+               current = fbostarts[1];
+               count = fbostarts[2] - fbostarts[1];
             }
             else if (desireddim == 512)
             {
-               current = 0;
-               count = 11; // 0...10 inclusive <-- That was probably a bad choice, but it's temporary
+               current = fbostarts[0];
+               count = fbostarts[1] - fbostarts[0];
             }
             else if (desireddim == 32)
             {
-               current = 21;
-               count = sortedbyimpdim.size() - 20;
+               current = fbostarts[2];
+               count = sortedbyimpdim.size() - fbostarts[2] + 1;
             }
             
             toswap = sortedbyimpdim[current];
