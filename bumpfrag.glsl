@@ -31,7 +31,7 @@ void main()
    vec3 diffuse = vec3(1, 1, 1) * ndotl;
    
    gl_FragColor.rgb = ambient.rgb + diffuse;
-   gl_FragColor.rgb *= color;
+   gl_FragColor.rgb *= color.rgb;
    //gl_FragColor.rgb += ndotl;// * diffuse;// + ambient.rgb;
    //gl_FragColor.rgb = -view;
    //gl_FragColor.rgb = vec3(ndotl, ndotl, ndotl);

@@ -22,6 +22,12 @@ struct UnitData
    string file;
    float turnspeed;
    float maxspeed;
+   Vector3 larmattach;
+   Vector3 rarmattach;
+   Vector3 legattach;
+   Vector3 lweapattach;
+   Vector3 rweapattach;
+   Vector3 torsoweapattach;
 };
 
 
