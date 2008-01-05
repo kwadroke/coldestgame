@@ -61,6 +61,7 @@ extern int viewdist, screenwidth, screenheight, fov, consoletrans, consoleleft;
 extern int consoleright, consoletop, consolebottom, consolebottomline;
 extern int lasttick, frames, camdist, shadowmapsize, trislastframe;
 extern int cloudres, reflectionres, noiseres;
+extern int fbostarts[3];
 extern float fps;
 extern bool consolevisible, showfps, quiet, thirdperson, showkdtree, shadows, reflection;
 extern bool serversync;
