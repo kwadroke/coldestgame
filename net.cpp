@@ -270,21 +270,13 @@ int NetListen(void* dummy)
                short oldunit;
                while (oppnum != 0)
                {
-                  /* Warning: race condition.  Because we can't be sure that the
-                     packets from the server will arrive in the correct order
-                     it's possible for us to add the player and not have it be
-                     in the vector slot that matches their playernum.  Whether
-                     this matters remains to be seen (this problem may sort itself
-                     out as we get more update packets)
-                  
-                     I think this has been taken care of by simply making this
-                     a while loop instead of a one-shot if.*/
                   while (oppnum >= player.size())  // Add new player(s)
                   {
                      PlayerData dummy;
                      dummy.unit = UnitTest;
                      dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
                      player.push_back(dummy);
+                     cout << "Adding player " << player.size() << endl;
                   }
                   // It's not necessary to load these into buffers, but for debugging
                   // it's handy to.
@@ -298,7 +290,7 @@ int NetListen(void* dummy)
                   get >> oppfacing;
                   player[oppnum].facing = oppfacing;
                   get >> player[oppnum].temperature;
-                  if (oppnum = servplayernum)
+                  if (oppnum == servplayernum)
                      player[0].temperature = player[oppnum].temperature;
                   get >> player[oppnum].moveforward;
                   get >> player[oppnum].moveback;
