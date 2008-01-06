@@ -224,9 +224,6 @@ int ServerListen()
       */
       while (SDLNet_UDP_Recv(insock, inpack))
       {
-         if (!connected) // It can cause problems when we reconnect to a server otherwise
-            continue;
-         
          getdata = (char*)inpack->data;
          stringstream get(getdata);
          
@@ -508,6 +505,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          temp << "&\n";
          temp << value << eol;
          
+         // Add updates to send queue
          if (temp.data.length() < 5000)
          {
             SDL_mutexP(servermutex);
