@@ -861,7 +861,7 @@ void SynchronizePosition()
    Vector3 smoothserverpos;
    Vector3 smootholdpos;
    
-   if (player.size() <= servplayernum || servplayernum <= 0) // Generally because we just connected and don't have an update packet yet
+   if (player.size() <= servplayernum || servplayernum <= 0)
       return;
    
    if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object

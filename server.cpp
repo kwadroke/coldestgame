@@ -321,7 +321,7 @@ int ServerListen()
                for (int i = 0; i < numbodyparts; ++i)
                   temp.weapons.push_back(Empty);
                
-               SDLNet_Write16(1336, &(serverplayers[respondto].addr.port)); // NBO bites me for the first time...
+               SDLNet_Write16(1336, &(temp.addr.port)); // NBO bites me for the first time...
                serverplayers.push_back(temp);
                respondto = serverplayers.size() - 1;
                cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
