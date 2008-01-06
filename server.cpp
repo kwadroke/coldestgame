@@ -291,7 +291,7 @@ int ServerListen()
                if (serverplayers[i].addr.host == inpack->address.host)
                {
                   respondto = i;
-                  if (serverplayers[i].acked.find(packetnum) != serverplayers[i].acked.end())
+                  //if (serverplayers[i].acked.find(packetnum) != serverplayers[i].acked.end())
                      add = false;
                }
             }

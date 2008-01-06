@@ -221,7 +221,7 @@ void RenderObjects()
    for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
    {
       WorldObjects *i = *iptr;
-      if (i->type == "water") continue;
+      if (i->type == "water" || i->type == "dynobj") continue;
       i->BindVbo();
       Vector3 currpos(i->x, i->y, i->z);
       Vector3 center = currpos;
@@ -682,7 +682,7 @@ void UpdateFBO()
          needsupdate.push_back(i);
          
          currfbo = &(impfbolist[i->impostorfbo]);
-         // Note, these values need to match those in getmap.  They should probably be shared at some point.
+         
          if (counter >= fbostarts[2])
             desireddim = 32;
          else if (counter >= fbostarts[1])
@@ -718,15 +718,15 @@ void UpdateFBO()
                if (sortedbyimpdim[current]->dist > toswap->dist)
                {
                   toswap = sortedbyimpdim[current];
-                  cout << "Swapping " << counter << " for " << current << endl;
+                  //cout << "Swapping " << counter << " for " << current << endl;
                }
                --count;
                ++current;
             }
             
             // Do the swap and add the swapped object to our list of things to update (maybe)
-            cout << "Swapping for " << impfbolist[toswap->impostorfbo].GetWidth() << endl;
-            cout << desireddim << "  " << currfbo->GetWidth() << endl;
+            //cout << "Swapping for " << impfbolist[toswap->impostorfbo].GetWidth() << endl;
+            //cout << desireddim << "  " << currfbo->GetWidth() << endl;
             int tempfbo = i->impostorfbo;
             i->impostorfbo = toswap->impostorfbo;
             toswap->impostorfbo = tempfbo;
