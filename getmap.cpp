@@ -108,7 +108,8 @@ void GetMap(string fn)
    string texpath;
    bool alpha;
    
-   glDeleteTextures(textures.size(), &textures[0]);
+   if (textures.size() > 0)
+      glDeleteTextures(textures.size(), &textures[0]);
    textures.clear();
    for (int i = 0; i < numtextures; ++i)
       textures.push_back(0);
@@ -821,20 +822,23 @@ void GetMap(string fn)
    FBO dummyfbo;
    for (list<WorldObjects>::iterator i = objects.begin(); i != objects.end(); ++i)
    {
-      if (i->impdist)
+      if (i->type != "dynobj")
       {
-         if (counter >= fbostarts[2])
-            fbodim = 32;
-         else if (counter >= fbostarts[1])
-            fbodim = 256;
-         else fbodim = 512;
-         dummyfbo = FBO(fbodim, fbodim, false, &texhand);
-         impfbolist.push_back(dummyfbo);
-         i->impostorfbo = counter;
-         impobjs.push_back(&(*i));
-         ++counter;
+         if (i->impdist)
+         {
+            if (counter >= fbostarts[2])
+               fbodim = 32;
+            else if (counter >= fbostarts[1])
+               fbodim = 256;
+            else fbodim = 512;
+            dummyfbo = FBO(fbodim, fbodim, false, &texhand);
+            impfbolist.push_back(dummyfbo);
+            i->impostorfbo = counter;
+            impobjs.push_back(&(*i));
+            ++counter;
+         }
+         i->GenVbo(&shaderhand);
       }
-      i->GenVbo(&shaderhand);
       i->SetHeightAndWidth();
    }
    

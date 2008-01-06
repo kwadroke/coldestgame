@@ -16,6 +16,7 @@ WorldObjects::WorldObjects()
    dynobj = dummydolist.end();
    x = y = z = 0;
    rotation = pitch = roll = 0;
+   render = true;
 }
 
 
@@ -57,6 +58,7 @@ WorldObjects::WorldObjects(const WorldObjects &o)
    dynobj = o.dynobj;
    lastimpupdate = o.lastimpupdate;
    dist = o.dist;
+   render = o.render;
    dlcurrent = false;
    //displaylist = glGenLists(1);
    
@@ -97,6 +99,7 @@ WorldObjects& WorldObjects::operator=(const WorldObjects &o)
    dynobj = o.dynobj;
    lastimpupdate = o.lastimpupdate;
    dist = o.dist;
+   render = o.render;
    dlcurrent = false;
    //displaylist = glGenLists(1);
    

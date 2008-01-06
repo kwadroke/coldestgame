@@ -273,10 +273,10 @@ int NetListen(void* dummy)
                   while (oppnum >= player.size())  // Add new player(s)
                   {
                      PlayerData dummy;
-                     dummy.unit = UnitTest;
+                     dummy.unit = numunits; // This is an invalid value, but it will be reset below
                      dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
                      player.push_back(dummy);
-                     cout << "Adding player " << player.size() << endl;
+                     cout << "Adding player " << (player.size() - 1) << endl;
                   }
                   // It's not necessary to load these into buffers, but for debugging
                   // it's handy to.
@@ -314,7 +314,7 @@ int NetListen(void* dummy)
                   
                   player[oppnum].connected = true;
                   
-                  if (oppnum != servplayernum && player[oppnum].unit != 0)
+                  if (oppnum != servplayernum)// && player[oppnum].unit != 0)
                   {
                      if (oldunit != player[oppnum].unit)
                      {

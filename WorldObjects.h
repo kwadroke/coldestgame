@@ -34,13 +34,13 @@ class WorldObjects     // Define objects in the world
       string type;
       
       int texnum, texnum1, texnum2;
-      //int firstprim;
       
       float x, y, z;   // Translation of object
       float rotation, pitch, roll;
       float size;
       float height, width;
       float impdist;
+      bool render;
       vector<WorldPrimitives> prims;
       vector<WorldPrimitives> tprims; // Translucent primitives
       // Variables for impostoring
@@ -56,6 +56,8 @@ class WorldObjects     // Define objects in the world
       Uint32 lastimpupdate;
       bool hasfbo, hasvbo;
       float dist;
+      
+      // These will probably not be used anymore
       bool dlcurrent;
       GLuint displaylist;
       
