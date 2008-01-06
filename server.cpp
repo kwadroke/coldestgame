@@ -291,8 +291,7 @@ int ServerListen()
                if (serverplayers[i].addr.host == inpack->address.host)
                {
                   respondto = i;
-                  //if (serverplayers[i].acked.find(packetnum) != serverplayers[i].acked.end())
-                     add = false;
+                  add = false;
                }
             }
             if (add)
@@ -326,6 +325,13 @@ int ServerListen()
                respondto = serverplayers.size() - 1;
                cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
             }
+            
+            if (!serverplayers[respondto].connected)
+            {
+               serverplayers[respondto].lastupdate = SDL_GetTicks();
+               serverplayers[respondto].recpacketnum = packetnum;
+            }
+            serverplayers[respondto].connected = true;
             
             Packet fill(servoutpack, &servoutsock);
             fill << "c\n";
