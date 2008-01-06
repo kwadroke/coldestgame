@@ -224,6 +224,9 @@ int ServerListen()
       */
       while (SDLNet_UDP_Recv(insock, inpack))
       {
+         if (!connected) // It can cause problems when we reconnect to a server otherwise
+            continue;
+         
          getdata = (char*)inpack->data;
          stringstream get(getdata);
          
