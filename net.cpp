@@ -252,6 +252,9 @@ int NetListen(void* dummy)
          
          get >> packettype;
          get >> packetnum;
+         
+         if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
+            continue;
          if (packettype == "U") // Update packet
          {
             if (packetnum > recpacketnum) // Ignore older out of order packets
