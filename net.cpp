@@ -456,11 +456,6 @@ int NetListen(void* dummy)
                SDL_mutexV(clientmutex);
             }
          }
-         /*else if (packettype == "A") // Acknowledge packet
-         {
-            cout << "Received Acknowledge packet\n" << flush;
-            ackpack = packetnum;
-         }*/
          else if (packettype == "c") // Connect packet
          {
             get >> servplayernum;

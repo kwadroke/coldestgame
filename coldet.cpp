@@ -861,7 +861,7 @@ void SynchronizePosition()
    Vector3 smoothserverpos;
    Vector3 smootholdpos;
    
-   if (player.size() <= servplayernum) // Generally because we just connected and don't have an update packet yet
+   if (player.size() <= servplayernum || servplayernum <= 0) // Generally because we just connected and don't have an update packet yet
       return;
    
    if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object
@@ -882,7 +882,9 @@ void SynchronizePosition()
    int ping = 0;
    for (deque<Uint32>::iterator i = pings.begin(); i != pings.end(); ++i)
       ping += *i;
-   ping /= pings.size();
+   if (pings.size() != 0)
+      ping /= pings.size();
+   else ping = 0;
    
    // Also smooth out positions over a few frames to further reduce jumpiness
    static deque<int> recentoldpos;
