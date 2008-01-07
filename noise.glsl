@@ -8,7 +8,7 @@
  * Additional modifications by Ben Nemec in 2007.
  */
 uniform sampler2D permTexture;
-uniform int time;
+uniform float time;
 
 /*
  * Efficient simplex indexing functions by Bill Licea-Kane, ATI. Thanks!
@@ -119,7 +119,7 @@ void main()
 {
    float nval = 0;
    
-   nval = snoise(vec3(gl_FragCoord.xy, time / 700.));
+   nval = snoise(vec3(gl_FragCoord.xy, time));
    
    /* Duh, it's scaled from -1 to 1, we need 0 to 1*/
    nval *= .5;

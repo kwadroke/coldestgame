@@ -32,7 +32,6 @@ void main()
    
    gl_FragColor.rgb = ambient.rgb + diffuse;
    gl_FragColor.rgb *= color.rgb;
-   //gl_FragColor.rgb += ndotl;// * diffuse;// + ambient.rgb;
    //gl_FragColor.rgb = -view;
    //gl_FragColor.rgb = vec3(ndotl, ndotl, ndotl);
    //gl_FragColor.rgb = lightdir * .5 + .5;

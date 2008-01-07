@@ -454,7 +454,6 @@ void RenderDynamicObjects()
                glPushMatrix();
                RenderDOTree(*j);
                glPopMatrix();
-               
             }
          }
       }
@@ -466,188 +465,165 @@ void RenderDynamicObjects()
 // Recursively traverse the tree under *root and render the primitives
 void RenderDOTree(DynamicPrimitive* root)
 {
-//   if (root)
-//   {
-      list<DynamicObject>::iterator parent = root->parentobj;
+   list<DynamicObject>::iterator parent = root->parentobj;
+   
+   for (int i = 0; i < 4; ++i)
+      root->v[i] = root->orig[i];
+   
+   root->m = GraphicMatrix();
+   
+   root->m.rotatex(root->rot2.x);
+   root->m.rotatey(root->rot2.y);
+   root->m.rotatez(root->rot2.z);
+   
+   root->m.translate(root->trans.x, root->trans.y, root->trans.z);
+   root->m.rotatex(root->rot1.x);
+   root->m.rotatey(root->rot1.y);
+   root->m.rotatez(root->rot1.z);
+   
+   if (root->parentid == "-1")  // Move to object position only for root nodes
+   {
+      root->m.rotatex(-parent->pitch);
+      root->m.rotatey(parent->rotation);
+      root->m.rotatez(parent->roll);
+      root->m.translate(parent->position.x, parent->position.y, parent->position.z);
+   }
+   else
+   {
+      root->m *= root->parent->m;
+   }
+   
+   texhand.ActiveTexture(0);
+   texhand.BindTextureDebug(root->texnums[0]);
+   texhand.ActiveTexture(1);
+   texhand.BindTextureDebug(root->texnums[1]);
+   texhand.ActiveTexture(0);
+   shaderhand.UseShader(root->shader);
+   //glGenerateMipmapEXT(GL_TEXTURE_2D);
+   
+   if (root->transparent)
+   {
+      //glAlphaFunc(GL_GREATER, 0.5);
+      glEnable(GL_ALPHA_TEST);
+      glBlendFunc(GL_ONE, GL_ZERO);
+      glEnable(GL_BLEND);
+   }
+   if (root->translucent)
+   {
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glEnable(GL_ALPHA_TEST);
+      glAlphaFunc(GL_GREATER, .01);
+      glDepthMask(GL_FALSE);
+   }
+   
+   if (root->type == "tristrip")
+   {
+      float temp[3];
+      Vector3 norm;
       
-      /*glPushMatrix();
-      glRotatef(root->rot1.x, 1, 0, 0);
-      glRotatef(root->rot1.y, 0, 1, 0);
-      glRotatef(root->rot1.z, 0, 0, 1);
-      glTranslatef(root->trans.x, root->trans.y, root->trans.z);
-      glRotatef(root->rot2.x, 1, 0, 0);
-      glRotatef(root->rot2.y, 0, 1, 0);
-      glRotatef(root->rot2.z, 0, 0, 1);*/
+      norm = (root->v[2] - root->v[0]).cross(
+         root->v[1] - root->v[0]);
+      norm.normalize();
+      
+      if (root->facing)
+      {
+         Vector3 dir = localplayer.pos - parent->position;
+         Vector3 start = norm; // Initial view direction
+         
+         dir.y = 0;
+         dir.normalize();
+         root->rot2.y = acos(start.dot(dir)) * 180.f / 3.14159265;
+         if (start.cross(dir).y >= 0)
+            root->rot2.y *= -1;
+         dir = localplayer.pos - parent->position;
+         dir.normalize();
+         GraphicMatrix rotm;
+         rotm.rotatey(root->rot2.y);
+         start.transform(rotm);
+         root->rot2.x = acos(start.dot(dir)) * 180.f / 3.14159265;
+         if (dir.y <= 0)
+            root->rot2.x *= -1;
+      }
+      if (parent->billboard)
+      {
+         Vector3 lightn = lights.GetPos(0);
+         lightn.normalize();
+         norm = lightn;
+      }
+      
+      // Apply the matrix of transforms
+      for (int i = 0; i < 4; ++i)
+         root->v[i].transform(root->m);
+      
+      // Just for testing bumpmapping
+      norm = (root->v[2] - root->v[0]).cross(
+               root->v[1] - root->v[0]);
+      norm.normalize();
+      Vector3 tangent = root->v[0] - root->v[2];
+      tangent.normalize();
+      
+      GLint loc = shaderhand.GetAttribLocation(bumpshader, "tangent");
+      
+      // Temporarily hardcoded flipped texcoords for billboards
+      glColor4f(1, 1, 1, 1);
+      glBegin(GL_TRIANGLE_STRIP);
+      glTexCoord2f(1, 1);
+      glNormal3fv(norm.array(temp));
+      glVertexAttrib3fv(loc, tangent.array(temp));
+      glVertex3fv(root->v[0].array(temp));
+      glTexCoord2f(1, 0);
+      glVertex3fv(root->v[1].array(temp));
+      glTexCoord2f(0, 1);
+      glVertex3fv(root->v[2].array(temp));
+      glTexCoord2f(0, 0);
+      glVertex3fv(root->v[3].array(temp));
+      glEnd();
+   }
+   else if (root->type == "cylinder")
+   {
+      glPushMatrix();
+      glMultMatrixf(root->m.members);
+      
+      GLUquadricObj *c = gluNewQuadric();
+      gluQuadricTexture(c, GL_TRUE);
+      gluCylinder(c, root->rad, root->rad1,
+                  root->height, root->slices,
+                  root->stacks);
+      gluDeleteQuadric(c);
+      glPopMatrix();
+      
+      // For collision detection
+      root->v[0].x = root->v[1].x = root->v[2].x = root->v[3].x = 0;
+      root->v[0].z = root->v[1].z = root->height;
+      root->v[0].y = root->v[1].y = root->v[2].y = root->v[3].y = 0;
+      root->v[2].z = root->v[3].z = 0;
+      root->v[0].x -= .01;
+      root->v[2].x -= .01;
       
       for (int i = 0; i < 4; ++i)
-         root->v[i] = root->orig[i];
-      
-      root->m = GraphicMatrix();
-      /*if (root->parentid == "-1")
-      {
-         root->m.rotatey(parent->rotation);
-         root->m.rotatex(-parent->pitch);
-         root->m.rotatez(-parent->roll);
-      }*/
-      
-      
-      root->m.rotatex(root->rot2.x);
-      root->m.rotatey(root->rot2.y);
-      root->m.rotatez(root->rot2.z);
-      
-      root->m.translate(root->trans.x, root->trans.y, root->trans.z);
-      root->m.rotatex(root->rot1.x);
-      root->m.rotatey(root->rot1.y);
-      root->m.rotatez(root->rot1.z);
-      
-      if (root->parentid == "-1")  // Move to object position only for root nodes
-      {
-         /*glTranslatef(parent->position.x, parent->position.y, parent->position.z);
-         glRotatef(parent->rotation, 0, -1, 0);
-         glRotatef(parent->pitch, -1, 0, 0);
-         glRotatef(parent->roll, 0, 0, -1);*/
-         root->m.rotatex(-parent->pitch);
-         root->m.rotatey(parent->rotation);
-         root->m.rotatez(parent->roll);
-         root->m.translate(parent->position.x, parent->position.y, parent->position.z);
-      }
-      else
-      {
-         root->m *= root->parent->m;
-      }
-      
-      texhand.ActiveTexture(0);
-      texhand.BindTextureDebug(root->texnums[0]);
-      texhand.ActiveTexture(1);
-      texhand.BindTextureDebug(root->texnums[1]);
-      texhand.ActiveTexture(0);
-      shaderhand.UseShader(root->shader);
-      //glGenerateMipmapEXT(GL_TEXTURE_2D);
-      
-      if (root->transparent)
-      {
-         //glAlphaFunc(GL_GREATER, 0.5);
-         glEnable(GL_ALPHA_TEST);
-         glBlendFunc(GL_ONE, GL_ZERO);
-         glEnable(GL_BLEND);
-      }
-      if (root->translucent)
-      {
-         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-         glEnable(GL_ALPHA_TEST);
-         glAlphaFunc(GL_GREATER, .01);
-         glDepthMask(GL_FALSE);
-      }
-      
-      if (root->type == "tristrip")
-      {
-         float temp[3];
-         Vector3 norm;
-         
-         norm = (root->v[2] - root->v[0]).cross(
-            root->v[1] - root->v[0]);
-         norm.normalize();
-         
-         if (root->facing)
-         {
-            Vector3 dir = localplayer.pos - parent->position;
-            Vector3 start = norm; // Initial view direction
-            
-            dir.y = 0;
-            dir.normalize();
-            root->rot2.y = acos(start.dot(dir)) * 180.f / 3.14159265;
-            if (start.cross(dir).y >= 0)
-               root->rot2.y *= -1;
-            dir = localplayer.pos - parent->position;
-            dir.normalize();
-            GraphicMatrix rotm;
-            rotm.rotatey(root->rot2.y);
-            start.transform(rotm);
-            root->rot2.x = acos(start.dot(dir)) * 180.f / 3.14159265;
-            if (dir.y <= 0)
-               root->rot2.x *= -1;
-         }
-         if (parent->billboard)
-         {
-            Vector3 lightn = lights.GetPos(0);
-            lightn.normalize();
-            norm = lightn;
-         }
-         
-         // Apply the matrix of transforms
-         for (int i = 0; i < 4; ++i)
-            root->v[i].transform(root->m);
-         
-         // Just for testing bumpmapping
-         norm = (root->v[2] - root->v[0]).cross(
-                 root->v[1] - root->v[0]);
-         norm.normalize();
-         Vector3 tangent = root->v[0] - root->v[2];
-         tangent.normalize();
-         
-         GLint loc = shaderhand.GetAttribLocation(bumpshader, "tangent");
-         
-         // Temporarily hardcoded flipped texcoords for billboards
-         glColor4f(1, 1, 1, 1);
-         glBegin(GL_TRIANGLE_STRIP);
-         glTexCoord2f(1, 1);
-         glNormal3fv(norm.array(temp));
-         glVertexAttrib3fv(loc, tangent.array(temp));
-         glVertex3fv(root->v[0].array(temp));
-         glTexCoord2f(1, 0);
-         glVertex3fv(root->v[1].array(temp));
-         glTexCoord2f(0, 1);
-         glVertex3fv(root->v[2].array(temp));
-         glTexCoord2f(0, 0);
-         glVertex3fv(root->v[3].array(temp));
-         glEnd();
-      }
-      else if (root->type == "cylinder")
-      {
-         glPushMatrix();
-         glMultMatrixf(root->m.members);
-         
-         GLUquadricObj *c = gluNewQuadric();
-         gluQuadricTexture(c, GL_TRUE);
-         gluCylinder(c, root->rad, root->rad1,
-                     root->height, root->slices,
-                     root->stacks);
-         gluDeleteQuadric(c);
-         glPopMatrix();
-         
-         // For collision detection
-         root->v[0].x = root->v[1].x = root->v[2].x = root->v[3].x = 0;
-         root->v[0].z = root->v[1].z = root->height;
-         root->v[0].y = root->v[1].y = root->v[2].y = root->v[3].y = 0;
-         root->v[2].z = root->v[3].z = 0;
-         root->v[0].x -= .01;
-         root->v[2].x -= .01;
-         
-         for (int i = 0; i < 4; ++i)
-            root->v[i].transform(root->m.members);
-      }
-      
-      if (root->transparent)
-      {
-         glDisable(GL_ALPHA_TEST);
-         //glDisable(GL_BLEND);
-      }
-      
-      if (root->translucent)
-      {
-         glDisable(GL_ALPHA_TEST);
-         glAlphaFunc(GL_GREATER, .5);
-         glDepthMask(GL_TRUE);
-      }
-      
-      // Render children, siblings should be taken care of by the parent
-      list<DynamicPrimitive*>::iterator i;
-      for (i = root->child.begin(); i != root->child.end(); i++)
-      {
-         RenderDOTree(*i);
-      }
-      //glPopMatrix();
-   //}
+         root->v[i].transform(root->m.members);
+   }
+   
+   if (root->transparent)
+   {
+      glDisable(GL_ALPHA_TEST);
+      //glDisable(GL_BLEND);
+   }
+   
+   if (root->translucent)
+   {
+      glDisable(GL_ALPHA_TEST);
+      glAlphaFunc(GL_GREATER, .5);
+      glDepthMask(GL_TRUE);
+   }
+   
+   // Render children, siblings should be taken care of by the parent
+   list<DynamicPrimitive*>::iterator i;
+   for (i = root->child.begin(); i != root->child.end(); i++)
+   {
+      RenderDOTree(*i);
+   }
+   //glPopMatrix();
 }
 
 
@@ -942,7 +918,7 @@ void UpdateNoise()
    shaderhand.UseShader(noiseshader);
    // Don't remove this, it's not the texture we're trying to render to, it's used in the noise shader
    texhand.BindTexture(noisetex);
-   shaderhand.SetUniform1i(noiseshader, "time", SDL_GetTicks());
+   shaderhand.SetUniform1f(noiseshader, "time", (float)SDL_GetTicks() / 700.f);
    
    glViewport(0, 0, noiseres, noiseres);
    
@@ -1039,9 +1015,7 @@ void RenderSkybox()
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_BLEND);
    
-   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
    texhand.BindTexture(textures[0]);
-   //SetTextureParams();
    glTexCoord3f(0, 0, 0);
    GLUquadricObj *s = gluNewQuadric();
    gluQuadricTexture(s, GL_TRUE);
