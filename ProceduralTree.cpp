@@ -77,6 +77,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
 {
    if (lev > numlevels) return;
    vector<Vector3> newpts;
+   vector<Vector3> normals;
    
    float anglex, angley, anglez;
    float startrad, endrad;
@@ -150,8 +151,19 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatey(angley);
          m.rotatez(anglez);
          m *= trans;
-         temp.transform(m.members);
+         temp.transform(m);
          newpts.push_back(temp);
+         
+         Vector3 norm = Vector3();
+         m.identity();
+         m.translate(0, height, 0);
+         m.rotatey(-sliceangle * j);
+         m.rotatex(anglex);
+         m.rotatey(angley);
+         m.rotatez(anglez);
+         m *= trans;
+         norm.transform(m);
+         normals.push_back(temp - norm);
       }
       
       if (side == 1) // Then we don't care about oldpts
@@ -189,13 +201,21 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          temp.v[2] = newpts[newind1 % numslices];
          temp.v[3] = oldpts[(j + 1) % oldpts.size()];
          // Generate normals
+         temp.n[0] = normals[newind];
+         temp.n[1] = normals[newind];
+         temp.n[2] = normals[newind1 % numslices];
+         temp.n[3] = normals[newind1 % numslices];
          for (int n = 0; n < 4; n++)
          {
+            /*
             Vector3 temp1 = temp.v[1] - temp.v[0];
             Vector3 temp2 = temp.v[2] - temp.v[0];
             temp.n[n] = temp1.cross(temp2);
             temp.n[n].normalize();
+            */
+            temp.n[n].normalize();
          }
+         
          object->prims.push_back(temp);
          ++totalprims;
       }
@@ -204,7 +224,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       for the branches*/
    numslices = savenumslices;
    
-   // Generate leaves if necesary
+   // Generate leaves if necessary
    if (lev >= firstleaflevel && (!seg || side == 1))
    {
       vector<Vector3> verts;
