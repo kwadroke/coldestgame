@@ -16,6 +16,9 @@ typedef list<DynamicPrimitive*> DPList;
 class DynamicObject
 {
    public:
+      DynamicObject();
+      DynamicPrimitive* GetDynPrimById(const string, const int frame) const;
+      
       vector<DPList> prims;  // Need random access, so needs to be vector
       Vector3 position;
       float rotation, pitch, roll;

@@ -623,7 +623,7 @@ while( SDL_PollEvent( &event ) )
                   break;*/
                case SDLK_LSHIFT:
                case SDLK_RSHIFT:
-                  movestep *= 2;
+                  player[0].run = true;
                   break;
                case SDLK_SPACE:
                   player[0].pos.x = 200;
@@ -657,7 +657,7 @@ while( SDL_PollEvent( &event ) )
                break;
             case SDLK_LSHIFT:
             case SDLK_RSHIFT:
-               movestep /= 2;
+               player[0].run = false;
                break;
          }
          break;
@@ -742,6 +742,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    int numticks = SDL_GetTicks() - mplayer.lastmovetick;
    mplayer.lastmovetick += numticks;
    float step = (float)numticks * (movestep / 1000.);
+   if (mplayer.run) step *= 2.f;
    
    /* Had some problems that I think stemmed from step being negative, possibly due to the
       cast of numticks above.  In any case, we never want step to be negative anyway so this
@@ -1067,21 +1068,6 @@ void UpdateServerList()
 }
 
 
-// Utility function for LoadObject when rebuilding tree
-DynamicPrimitive* GetDynPrimById(string id, list<DynamicPrimitive*>* primlist)
-{
-   list<DynamicPrimitive*>::iterator i;
-   for (i = primlist->begin(); i != primlist->end(); i++)
-   {
-      if ((*i)->id == id)
-         return *i;
-   }
-   // Passed in an id that was not in list
-   cout << "Error: Could not find primitive: " << id << endl;
-   return NULL;
-}
-
-
 /* Returns an iterator to the object that was loaded, or dynobj.end() if 
    loading failed.
 */
@@ -1196,6 +1182,8 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
                pbuffer->id = value;
             else if (optname == "Parent ID")
                pbuffer->parentid = value;
+            else if (optname == "Name")
+               pbuffer->name = value;
             else if (optname.substr(0, 7) == "Texture")
             {
                int i = atoi(optname.substr(7).c_str());
@@ -1325,7 +1313,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
       {
          if ((*it)->parentid != "-1")
          {
-            DynamicPrimitive *p = GetDynPrimById((*it)->parentid, &(temp->prims[i]));
+            DynamicPrimitive *p = temp->GetDynPrimById((*it)->parentid, i);
             if (p)
             {
                (*it)->parent = p;

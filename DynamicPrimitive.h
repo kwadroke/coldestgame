@@ -14,11 +14,9 @@ class DynamicPrimitive : public GenericPrimitive
       string id;
       //string type;
       string parentid;
+      string name;
       DynamicPrimitive *parent;
-      list<DynamicPrimitive*> child; // This is a problem, these pointers are
-                                     // not deleted when these objects are
-                                     // destroyed.  Not a big deal atm, but it
-                                     // will be a problem eventually
+      list<DynamicPrimitive*> child; // These need to be deleted in a destructor at some point
       list<DynamicObject>::iterator parentobj;
       //Vector3 point[4];
       //int texnum;
