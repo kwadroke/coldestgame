@@ -95,7 +95,7 @@ void InitGlobals()
    dummy.moveforward = dummy.moveback = dummy.moveleft = dummy.moveright = false;
    dummy.unit = UnitTest;
    dummy.kills = dummy.deaths = dummy.hp = 0;
-   dummy.leftclick = dummy.rightclick = false;
+   dummy.leftclick = dummy.rightclick = dummy.run = false;
    dummy.currweapon = Torso;
    dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
    dummy.temperature = 0;

@@ -192,9 +192,6 @@ string FillUpdatePacket()
    temp << player[0].currweapon << eol;
    SDL_mutexV(clientmutex);
    
-   //cout << "Client Update Size: " << (sizeof(temp.str()) * temp.str().length()) << "\r" << flush;
-   //strcpy((char*)pack->data, temp.str().c_str());
-   
    // Quick and dirty checksumming
    unsigned long value = 0;
    for (int i = 0; i < temp.str().length(); ++i)
