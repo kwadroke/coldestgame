@@ -16,6 +16,7 @@ struct PlayerData
    float pitch, rotation, roll, facing;
    bool moveforward, moveleft, moveright, moveback;
    bool leftclick, rightclick;
+   bool run;
    list<DynamicObject>::iterator torso;
    list<DynamicObject>::iterator legs;
    list<DynamicObject>::iterator larm;

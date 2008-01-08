@@ -26,7 +26,7 @@ GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		WorldPrimitives.o WorldObjects.o console.o server.o render.o\
 		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
 		Timer.o ServerInfo.o getmap.o GenericPrimitive.o DynamicPrimitive.o\
-		renderdefs.o globals.o netdefs.o
+		renderdefs.o globals.o netdefs.o DynamicObject.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o

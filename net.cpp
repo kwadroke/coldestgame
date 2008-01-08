@@ -187,6 +187,7 @@ string FillUpdatePacket()
    temp << player[0].moveright << eol;
    temp << player[0].leftclick << eol;
    temp << player[0].rightclick << eol;
+   temp << player[0].run << eol;
    temp << player[0].unit << eol;
    temp << player[0].currweapon << eol;
    SDL_mutexV(clientmutex);

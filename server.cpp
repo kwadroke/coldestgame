@@ -249,6 +249,7 @@ int ServerListen()
                get >> dummy;//serverplayers[oppnum].moveright;
                get >> serverplayers[oppnum].leftclick;
                get >> serverplayers[oppnum].rightclick;
+               get >> serverplayers[oppnum].run;
                get >> serverplayers[oppnum].unit;
                get >> serverplayers[oppnum].currweapon;
                serverplayers[oppnum].clientpos.x = oppx; // Keep track of where the player thinks they are
