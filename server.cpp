@@ -312,7 +312,7 @@ int ServerListen()
                temp.moveleft = temp.moveright = temp.moveforward = temp.moveback = false;
                temp.size = 10;
                temp.lastfiretick = SDL_GetTicks();
-               temp.leftclick = temp.rightclick = false;
+               temp.leftclick = temp.rightclick = temp.run = false;
                temp.legs = LoadObject(units[unit].file + "/legs", serverdynobjects);
                temp.torso = temp.larm = temp.rarm = serverdynobjects.end();
                temp.currweapon = Torso;
