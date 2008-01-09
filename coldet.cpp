@@ -1368,12 +1368,33 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
    {
       p.legs = LoadObject(units[p.unit].file + "/legs", dynobj);
    }
+   if (p.torso == dynobj.end())
+   {
+      p.torso = LoadObject(units[p.unit].file + "/torso", dynobj);
+   }
+   if (p.larm == dynobj.end())
+   {
+      p.larm = LoadObject(units[p.unit].file + "/larm", dynobj);
+   }
+   if (p.rarm == dynobj.end())
+   {
+      p.rarm = LoadObject(units[p.unit].file + "/rarm", dynobj);
+   }
    p.legs->position.x = p.pos.x;
    p.legs->position.y = p.pos.y;
    p.legs->position.z = p.pos.z;
    p.legs->rotation = p.facing;
    p.legs->pitch = p.pitch;
    p.legs->roll = p.roll;
+   
+   p.torso->position.x = p.pos.x;
+   p.torso->position.y = p.pos.y;
+   p.torso->position.z = p.pos.z;
+   p.torso->rotation = p.rotation;
+   p.torso->pitch = 0.f;
+   p.torso->roll = 0.f;
+   
+   
 }
 
 

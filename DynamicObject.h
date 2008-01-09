@@ -18,6 +18,7 @@ class DynamicObject
    public:
       DynamicObject();
       DynamicPrimitive* GetDynPrimById(const string, const int frame) const;
+      DynamicPrimitive* GetContainerByName(const string, const int frame) const;
       
       vector<DPList> prims;  // Need random access, so needs to be vector
       Vector3 position;

@@ -321,7 +321,16 @@ int NetListen(void* dummy)
                      {
                         if (player[oppnum].legs != dynobjects.end())
                            dynobjects.erase(player[oppnum].legs);
+                        if (player[oppnum].torso != dynobjects.end())
+                           dynobjects.erase(player[oppnum].torso);
+                        if (player[oppnum].larm != dynobjects.end())
+                           dynobjects.erase(player[oppnum].larm);
+                        if (player[oppnum].rarm != dynobjects.end())
+                           dynobjects.erase(player[oppnum].rarm);
                         player[oppnum].legs = dynobjects.end();
+                        player[oppnum].torso = dynobjects.end();
+                        player[oppnum].larm = dynobjects.end();
+                        player[oppnum].rarm = dynobjects.end();
                      }
                      UpdatePlayerModel(player[oppnum], dynobjects);
                   }
