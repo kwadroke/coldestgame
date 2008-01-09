@@ -1394,7 +1394,19 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
    p.torso->pitch = 0.f;
    p.torso->roll = 0.f;
    
+   p.larm->rotation = 0;
+   p.larm->pitch = 0;
+   p.larm->roll = 0;
+   DynamicPrimitive* firstprim = *(p.larm->prims[p.larm->animframe].begin());
+   firstprim->parent = p.torso->GetContainerByName("Left Arm Connector", p.torso->animframe);
+   firstprim->parentid = "-2";
    
+   p.rarm->rotation = 0;
+   p.rarm->pitch = 0;
+   p.rarm->roll = 0;
+   firstprim = *(p.rarm->prims[p.rarm->animframe].begin());
+   firstprim->parent = p.torso->GetContainerByName("Right Arm Connector", p.torso->animframe);
+   firstprim->parentid = "-2";
 }
 
 
