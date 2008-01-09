@@ -24,7 +24,7 @@ class DynamicObject
       Vector3 position;
       float rotation, pitch, roll;
       float size;
-      int animframe;
+      int animframe; // Current frame of animation
       int animdelay;
       Uint32 lasttick;
       bool visible;
