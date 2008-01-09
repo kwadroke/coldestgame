@@ -30,7 +30,7 @@ DynamicPrimitive* DynamicObject::GetContainerByName(const string name, const int
    list<DynamicPrimitive*>::iterator i;
    for (i = primlist.begin(); i != primlist.end(); ++i)
    {
-      if ((*i)->type == "container" && (*i)->id == name)
+      if ((*i)->type == "container" && (*i)->name == name)
          return *i;
    }
    // Passed in an id that was not in list
