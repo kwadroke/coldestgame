@@ -91,7 +91,6 @@ void Cleanup();
 void Quit();
 void Fire();
 void HandleHit(Particle);
-void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 int Server(void* dummy);
 void UpdateServerList();
 void GLError();

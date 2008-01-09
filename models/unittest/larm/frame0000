@@ -1,24 +1,9 @@
 Version2
-12
+17
 Type = container
-ID = 0
+ID = 12
 Parent ID = -1
-Name = Legs
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 0
-EOP
-Type = container
-ID = 1
-Parent ID = 0
-Name = Left Leg
+Name = Left Arm
 Shader = 
 X Rot 1 = 0
 Y Rot 1 = 0
@@ -31,8 +16,8 @@ Y Trans = -500
 Z Trans = 0
 EOP
 Type = tristrip
-ID = 3
-Parent ID = 1
+ID = 13
+Parent ID = 12
 Texture0 = 1
 Shader = 
 X Rot 1 = 0
@@ -70,8 +55,8 @@ Collide = 1
 Facing = 0
 EOP
 Type = tristrip
-ID = 4
-Parent ID = 1
+ID = 14
+Parent ID = 12
 Texture0 = 1
 Shader = 
 X Rot 1 = 0
@@ -109,8 +94,8 @@ Collide = 1
 Facing = 0
 EOP
 Type = tristrip
-ID = 5
-Parent ID = 1
+ID = 15
+Parent ID = 12
 Texture0 = 1
 Shader = 
 X Rot 1 = 0
@@ -148,8 +133,8 @@ Collide = 1
 Facing = 0
 EOP
 Type = tristrip
-ID = 6
-Parent ID = 1
+ID = 16
+Parent ID = 12
 Texture0 = 1
 Shader = 
 X Rot 1 = 0

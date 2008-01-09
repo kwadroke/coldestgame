@@ -182,7 +182,7 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = 5.0f;
+   dummy.velocity = .0f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
@@ -328,6 +328,7 @@ void SetupOpenGL()
    // Do draw back-facing polygons
    glDisable(GL_CULL_FACE);
    //glEnable(GL_CULL_FACE);
+   //glCullFace(GL_BACK);
    
    // Set the alpha function, then can disable or enable
    glAlphaFunc(GL_GREATER, 0.5);
@@ -392,7 +393,7 @@ void LoadShaders()
    shadowshader = "shaders/shadowmap";
    watershader = "shaders/water";
    cloudgenshader = "shaders/cloudgen";
-   bumpshader = "../coldest/shaders/bump";
+   bumpshader = "shaders/bump";
    
    shaderhand.LoadShader(standardshader);
    cout << "Loaded standard shader\n";
@@ -1039,6 +1040,13 @@ void Animate()
          i->lasttick = ticks - (ticks - i->lasttick - i->animdelay);
       }
    }
+   
+   // Also need to update player models because they need to change each animation frame
+   for (int k = 1; k < player.size(); ++k)
+   {
+      if (k != servplayernum)
+         UpdatePlayerModel(player[k], dynobjects);
+   }
    SDL_mutexV(clientmutex);
 }
 
@@ -1380,31 +1388,33 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
    {
       p.rarm = LoadObject(units[p.unit].file + "/rarm", dynobj);
    }
-   p.legs->position.x = p.pos.x;
-   p.legs->position.y = p.pos.y;
-   p.legs->position.z = p.pos.z;
+   p.legs->position = p.pos;
    p.legs->rotation = p.facing;
-   p.legs->pitch = p.pitch;
-   p.legs->roll = p.roll;
+   p.legs->pitch = 0.f;
+   p.legs->roll = 0.f;
    
-   p.torso->position.x = p.pos.x;
-   p.torso->position.y = p.pos.y;
-   p.torso->position.z = p.pos.z;
-   p.torso->rotation = p.rotation;
-   p.torso->pitch = 0.f;
-   p.torso->roll = 0.f;
+   p.torso->position = p.pos;
+   p.torso->rotation = p.facing + p.rotation;
+   p.torso->pitch = p.pitch;
+   p.torso->roll = p.roll;
    
+   //p.larm->position = p.torso->position;
    p.larm->rotation = 0;
    p.larm->pitch = 0;
    p.larm->roll = 0;
    DynamicPrimitive* firstprim = *(p.larm->prims[p.larm->animframe].begin());
+   if (firstprim->type != "container")
+      cout << "Warning: Left Arm not in container\n";
    firstprim->parent = p.torso->GetContainerByName("Left Arm Connector", p.torso->animframe);
    firstprim->parentid = "-2";
    
+   //p.rarm->position = p.torso->position;
    p.rarm->rotation = 0;
    p.rarm->pitch = 0;
    p.rarm->roll = 0;
    firstprim = *(p.rarm->prims[p.rarm->animframe].begin());
+   if (firstprim->type != "container")
+      cout << "Warning: Right Arm not in container\n";
    firstprim->parent = p.torso->GetContainerByName("Right Arm Connector", p.torso->animframe);
    firstprim->parentid = "-2";
 }

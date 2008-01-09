@@ -43,7 +43,7 @@ void main()
    vec3 location = gl_ModelViewMatrixInverse[3].xyz;
    worldcoords = gl_Vertex.xyz;
    //lightdir = normalize(gl_ModelViewMatrixInverse * gl_LightSource[0].position).xyz;
-   lightdir = vec3(-1, 0, -1);
+   lightdir = vec3(-1, 1, -1);
    lightdir = normalize(lightdir);
    //lightdir = normalize(gl_LightSource[0].position.xyz);
    //lightdir.x *= -1.; // Not entirely clear on why this is necessary, but it is
