@@ -449,7 +449,7 @@ void RenderDynamicObjects()
          list<DynamicPrimitive*>::iterator j;
          for (j = i->prims[i->animframe].begin(); j != i->prims[i->animframe].end(); ++j)
          {
-            if ((*j)->parentid == "-1")
+            if ((*j)->parentid == "-1" || (*j)->parentid == "-2")
             {
                glPushMatrix();
                RenderDOTree(*j);
@@ -821,6 +821,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glShadeModel(GL_FLAT);
 #ifndef DEBUGSMT
    glCullFace(GL_FRONT);
+   glEnable(GL_CULL_FACE);
    glColorMask(0, 0, 0, 0);
 #endif
    
@@ -847,6 +848,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glViewport(0, 0, screenwidth, screenheight);
    //glCullFace(GL_BACK);
    glShadeModel(GL_SMOOTH);
+   glDisable(GL_CULL_FACE);
    glColorMask(1, 1, 1, 1);
    
    glEnable(GL_FOG);

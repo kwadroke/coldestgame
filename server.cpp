@@ -32,7 +32,6 @@ void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
 void ServerLoadMap();
 void HandleHit(Particle& p);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
-void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 void UpdateDOTree(DynamicPrimitive*);
 void ServerUpdatePlayer(int);
 

@@ -27,7 +27,6 @@ int NetListen(void*);
 //void SendPacket(UDPpacket*, string, IPaddress, UDPsocket);
 string FillUpdatePacket();
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
-void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 string AddressToDD(Uint32);
 
 list<Packet> sendqueue;

@@ -56,6 +56,8 @@ string ToString(const T &input)
    return temp.str();
 }
 
+void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
+
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
 

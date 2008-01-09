@@ -36,7 +36,7 @@ void main()
    //gl_FragColor.rgb = vec3(ndotl, ndotl, ndotl);
    //gl_FragColor.rgb = lightdir * .5 + .5;
    //gl_FragColor.rgb = lightdir;
-   //gl_FragColor.rgb = bump / 2 + .5;
+   //gl_FragColor.rgb = bump * .5 + .5;
    
    gl_FragColor.a = 1.;
 }
