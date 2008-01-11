@@ -237,19 +237,20 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
             temp = Vector3();
             m.identity();
             float leafscale = 1.5;
+            float overlap = 5;
             switch(j)
             {
                case 0:
                   m.translate(-leafsize, height * (locnumsegs - seg) * leafscale, radius);
                   break;
                case 1:
-                  m.translate(-leafsize, 0, radius);
+                  m.translate(-leafsize, -overlap, radius);
                   break;
                case 2:
                   m.translate(leafsize, height * (locnumsegs - seg) * leafscale, radius);
                   break;
                case 3:
-                  m.translate(leafsize, 0, radius);
+                  m.translate(leafsize, -overlap, radius);
                   break;
             };
                
