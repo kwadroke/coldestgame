@@ -91,7 +91,7 @@ maxsidebranchangle 10
 split 1
 continuebranch 0
 multitrunk 0
-branchwithleaves 1
+branchwithleaves 0
 endopts
 impdist 150
 size 160
