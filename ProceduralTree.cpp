@@ -2,7 +2,7 @@
 
 /*
 Ideas:
--Err, I got nothin'
+-Define curves of branches
 */
 
 ProceduralTree::ProceduralTree()
@@ -29,10 +29,12 @@ ProceduralTree::ProceduralTree()
    trunknumsegs = 8;
    branchevery = 8;
    sidebranches = 12;
+   minsidebranchangle = -10;
    maxsidebranchangle = 10;
    minheightvar = .75;
    maxheightvar = 1.25;
    sidetaper = .7;
+   curvecoeff = 0.f;
    split = false;
    continuebranch = true;
    multitrunk = false;
@@ -128,7 +130,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    }
    else if (side == 1)
    {
-      anglex = 90 + Random(-maxsidebranchangle, maxsidebranchangle);
+      anglex = 90 + Random(minsidebranchangle, maxsidebranchangle);
       angley = Random(0, 360);
       anglez = 0;
    }
@@ -151,6 +153,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatey(angley);
          m.rotatez(anglez);
          m *= trans;
+         m.translate(0, curvecoeff * (float)(side * side) * height, 0);
          temp.transform(m);
          newpts.push_back(temp);
          
@@ -220,7 +223,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          ++totalprims;
       }
    }
-   /* If this was a trunk piece we're done with numslices so set it back 
+   /* If this was a trunk piece we're done with numslices so set it back
       for the branches*/
    numslices = savenumslices;
    
@@ -292,6 +295,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    m.rotatey(angley);
    m.rotatez(anglez);
    m *= trans;
+   m.translate(0, curvecoeff * (float)(side * side) * height, 0);
    
    if (seg && (seg % branchevery == 0))  // Side branches
    {
@@ -379,6 +383,8 @@ void ProceduralTree::ReadParams(ifstream &get)
          get >> branchevery;
       else if (name == "sidebranches")
          get >> sidebranches;
+      else if (name == "minsidebranchangle")
+         get >> minsidebranchangle;
       else if (name == "maxsidebranchangle")
          get >> maxsidebranchangle;
       else if (name == "split")
@@ -397,6 +403,8 @@ void ProceduralTree::ReadParams(ifstream &get)
          get >> minheightvar;
       else if (name == "maxheightvar")
          get >> maxheightvar;
+      else if (name == "curvecoeff")
+         get >> curvecoeff;
       else cout << "Unknown tree param: " << name << endl << flush;
       
       get >> name;

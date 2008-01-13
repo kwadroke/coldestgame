@@ -43,10 +43,12 @@ class ProceduralTree
       float leafsize;
       float trunkrad;
       float trunktaper;
+      float minsidebranchangle;
       float maxsidebranchangle;
       float minheightvar;
       float maxheightvar;
       float sidetaper;
+      float curvecoeff;
       bool continuebranch;
       bool multitrunk;
       bool split;

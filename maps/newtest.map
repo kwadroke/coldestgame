@@ -79,7 +79,7 @@ initrad 8
 radreductionperc .2
 initheight 50
 heightreductionperc .8
-firstleaflevel 2
+firstleaflevel 22
 leafsize 30
 trunkrad 10
 trunknumslices 10
