@@ -153,7 +153,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatey(angley);
          m.rotatez(anglez);
          m *= trans;
-         m.translate(0, curvecoeff * (float)(side * side) * height, 0);
+         int square = side ? side : seg;
+         m.translate(0, curvecoeff * (float)(square * square) * height, 0);
          temp.transform(m);
          newpts.push_back(temp);
          
@@ -295,7 +296,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    m.rotatey(angley);
    m.rotatez(anglez);
    m *= trans;
-   m.translate(0, curvecoeff * (float)(side * side) * height, 0);
+   int square = side ? side : seg;
+   m.translate(0, curvecoeff * (float)(square * square) * height, 0);
    
    if (seg && (seg % branchevery == 0))  // Side branches
    {

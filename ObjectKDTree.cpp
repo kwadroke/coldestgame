@@ -8,7 +8,7 @@ ObjectKDTree::ObjectKDTree(list<WorldObjects> *objs, Vector3 v[8])
 {
    haschildren = false;
    root = true;
-   retobjs = new set<WorldObjects*>();
+   retobjs = new ObjectSet();
    // Get pointers to objects
    for (list<WorldObjects>::iterator i = objs->begin(); i != objs->end(); ++i)
    {
@@ -77,7 +77,7 @@ ObjectKDTree& ObjectKDTree::operator=(const ObjectKDTree& o)
    }
    if (root)
    {
-      retobjs = new set<WorldObjects*>();
+      retobjs = new ObjectSet();
       setretobjs(retobjs);
    }
    return *this;
@@ -101,7 +101,7 @@ ObjectKDTree::ObjectKDTree(const ObjectKDTree& o)
    }
    if (root)
    {
-      retobjs = new set<WorldObjects*>();
+      retobjs = new ObjectSet();
       setretobjs(retobjs);
    }
 }
@@ -593,7 +593,7 @@ int ObjectKDTree::size()
 }
 
 
-void ObjectKDTree::setretobjs(set<WorldObjects*>* in)
+void ObjectKDTree::setretobjs(ObjectSet* in)
 {
    retobjs = in;
    if (haschildren)

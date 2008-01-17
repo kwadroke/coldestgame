@@ -302,7 +302,6 @@ int ServerListen()
                temp.connected = true;
                temp.lastupdate = SDL_GetTicks();
                temp.unit = unit;
-               temp.hp = 100;
                temp.kills = 0;
                temp.deaths = 0;
                temp.acked.insert(packetnum);
@@ -318,7 +317,10 @@ int ServerListen()
                temp.ping = 0;
                temp.temperature = 0.f;
                for (int i = 0; i < numbodyparts; ++i)
+               {
                   temp.weapons.push_back(Empty);
+                  temp.hp[i] = 100;
+               }
                
                SDLNet_Write16(1336, &(temp.addr.port)); // NBO bites me for the first time...
                serverplayers.push_back(temp);
@@ -560,7 +562,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
                   occup << serverplayers[i].unit << eol;
                   occup << serverplayers[i].kills << eol;
                   occup << serverplayers[i].deaths << eol;
-                  occup << serverplayers[i].hp << eol;
+                  for (int j = 0; j < numbodyparts; ++j)
+                     occup << serverplayers[i].hp[i] << eol;
                   occup << serverplayers[i].ping << eol;
                }
             }
@@ -633,16 +636,53 @@ void HandleHit(Particle& p)
       curr = p.hitobjs.top();
       for (int i = 1; i < serverplayers.size(); ++i)
       {
+         // Note that some of this code is placeholder until I get a proper spawn system implemented
          if (curr == serverplayers[i].legs)  // Or other parts of player unit
          {
-            serverplayers[i].hp -= p.damage;
-            if (serverplayers[i].hp <= 0)
+            serverplayers[i].hp[Legs] -= p.damage;
+            if (serverplayers[i].hp[Legs] <= 0)
             {
                serverplayers[i].deaths++;
-               serverplayers[i].hp = 100;
+               serverplayers[i].hp[Legs] = 100;
                serverplayers[p.playernum].kills++;
                cout << "Player " << i << " was killed by Player "
                      << p.playernum << endl;
+            }
+            break;
+         }
+         if (curr == serverplayers[i].torso)
+         {
+            serverplayers[i].hp[Torso] -= p.damage;
+            if (serverplayers[i].hp[Torso] <= 0)
+            {
+               serverplayers[i].deaths++;
+               serverplayers[i].hp[Torso] = 100;
+               serverplayers[p.playernum].kills++;
+               cout << "Player " << i << " was killed by Player " << p.playernum << endl;
+            }
+            break;
+         }
+         if (curr == serverplayers[i].larm)
+         {
+            serverplayers[i].hp[LArm] -= p.damage;
+            if (serverplayers[i].hp[LArm] <= 0)
+            {
+               serverplayers[i].deaths++;
+               serverplayers[i].hp[LArm] = 100;
+               serverplayers[p.playernum].kills++;
+               cout << "Player " << i << " was killed by Player " << p.playernum << endl;
+            }
+            break;
+         }
+         if (curr == serverplayers[i].rarm)
+         {
+            serverplayers[i].hp[RArm] -= p.damage;
+            if (serverplayers[i].hp[RArm] <= 0)
+            {
+               serverplayers[i].deaths++;
+               serverplayers[i].hp[RArm] = 100;
+               serverplayers[p.playernum].kills++;
+               cout << "Player " << i << " was killed by Player " << p.playernum << endl;
             }
             break;
          }

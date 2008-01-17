@@ -70,7 +70,7 @@ numbranches0 12
 numbranches1 3
 numbranches2 3
 numbranches3 2
-numsegs 3
+numsegs 6
 numleaves 1
 maxangle 70
 minangle 2
@@ -79,7 +79,7 @@ initrad 8
 radreductionperc .2
 initheight 50
 heightreductionperc .8
-firstleaflevel 22
+firstleaflevel 2
 leafsize 30
 trunkrad 10
 trunknumslices 10
@@ -92,6 +92,7 @@ split 1
 continuebranch 0
 multitrunk 0
 branchwithleaves 0
+curvecoeff .02
 endopts
 impdist 150
 size 160
@@ -159,11 +160,13 @@ trunktaper .5
 trunknumsegs 1
 branchevery 999
 sidebranches 999
+minsidebranchangle -10
 maxsidebranchangle 10
 split 1
 continuebranch 0
 multitrunk 0
 branchwithleaves 1
+curvecoeff .02
 endopts
 impdist 150
 size 160
@@ -174,7 +177,7 @@ proctree
 10 10 14
 numlevels 1
 numslices 3
-numsegs 3
+numsegs 5
 numleaves 1
 maxangle 70
 minangle 2
@@ -190,13 +193,15 @@ trunknumslices 10
 trunktaper .8
 trunknumsegs 8
 branchevery 1
-sidebranches 5
-maxsidebranchangle 5
+sidebranches 10
+minsidebranchangle 20
+maxsidebranchangle 25
 split 0
 continuebranch 0
 multitrunk 0
 branchwithleaves 1
 sidetaper .8
+curvecoeff .02
 endopts
 impdist 150
 size 160
