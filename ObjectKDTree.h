@@ -10,11 +10,25 @@
 #include <set>
 #include "SDL_thread.h"
 #include "Timer.h"
-//#include <ext/hash_set>
+#include <ext/hash_set>
 
 #define PI 3.14159265
 
 using namespace std;
+
+struct eqptr
+{
+   bool operator()(WorldObjects* p1, WorldObjects* p2) const
+   {
+      return (p1 == p2);
+   }
+   bool operator()(WorldObjects* hashme) const
+   {
+      return (unsigned long)hashme % 500000; // Umm, probably not ideal, but we can fix it later
+   }
+};
+
+typedef __gnu_cxx::hash_set<WorldObjects*, eqptr, eqptr> ObjectSet;
 
 class ObjectKDTree
 {
@@ -39,7 +53,7 @@ class ObjectKDTree
       bool innode2d(Vector3, float);
       bool infrustum();//Vector3, Vector3, float, float, float, float);
       bool infrustum(WorldObjects*);
-      void setretobjs(set<WorldObjects*>*);
+      void setretobjs(ObjectSet*);
       void getprims(Vector3, float, vector<GenericPrimitive*>&);
       void getobjs(list<WorldObjects*>&);
       
@@ -48,7 +62,8 @@ class ObjectKDTree
       list<WorldObjects*> members;
       bool haschildren;
       Vector3 vertices[8];
-      set<WorldObjects*>* retobjs;
+      //set<WorldObjects*>* retobjs;
+      ObjectSet* retobjs;
       bool root;
       vector<WorldPrimitives> p; // Only set in root node
       vector<WorldPrimitives>* frustum; // Pointer to root's p

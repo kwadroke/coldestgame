@@ -10,7 +10,7 @@
    each possible weapon.*/
 enum Weapons{Empty, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, numweapons};
 enum Units{UnitTest, Ultra, Omega, numunits};
-enum BodyParts{Torso, LArm, RArm, numbodyparts};
+enum BodyParts{Legs, Torso, LArm, RArm, numbodyparts};
 
 typedef vector<float> floatvec;
 typedef vector<Vector3> Vector3vec;

@@ -40,7 +40,7 @@ struct PlayerData
    short currweapon;
    short pingtick;
    short ping;
-   short hp;
+   short hp[numbodyparts];
    short kills, deaths;
    float temperature;
 };

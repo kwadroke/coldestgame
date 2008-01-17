@@ -94,13 +94,16 @@ void InitGlobals()
    dummy.pitch = dummy.roll = dummy.rotation = dummy.facing = 0.;
    dummy.moveforward = dummy.moveback = dummy.moveleft = dummy.moveright = false;
    dummy.unit = UnitTest;
-   dummy.kills = dummy.deaths = dummy.hp = 0;
+   dummy.kills = dummy.deaths = 0;
    dummy.leftclick = dummy.rightclick = dummy.run = false;
    dummy.currweapon = Torso;
    dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
    dummy.temperature = 0;
    for (int i = 0; i < numbodyparts; ++i)
+   {
       dummy.weapons.push_back(Empty);
+      dummy.hp[i] = 100;
+   }
    player.push_back(dummy);
    
    lasttick = SDL_GetTicks();
@@ -797,6 +800,9 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    // Build list of objects to ignore for collision detection (a player can't hit themself)
    vector<list<DynamicObject>::iterator> ignoreobjs;
    ignoreobjs.push_back(mplayer.legs);
+   ignoreobjs.push_back(mplayer.torso);
+   ignoreobjs.push_back(mplayer.larm);
+   ignoreobjs.push_back(mplayer.rarm);
    
    if (fly)
       mplayer.pos.y += d.y * step;

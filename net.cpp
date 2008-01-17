@@ -454,13 +454,15 @@ int NetListen(void* dummy)
                   get >> player[oppnum].unit;
                   get >> player[oppnum].kills;
                   get >> player[oppnum].deaths;
-                  get >> player[oppnum].hp;
+                  for (int i = 0; i < numbodyparts; ++i)
+                     get >> player[oppnum].hp[i];
                   get >> player[oppnum].ping;
                   get >> oppnum;
                }
                player[0].kills = player[servplayernum].kills;
                player[0].deaths = player[servplayernum].deaths;
-               player[0].hp = player[servplayernum].hp;
+               for (int i = 0; i < numbodyparts; ++i)
+                  player[0].hp[i] = player[servplayernum].hp[i];
                player[0].ping = player[servplayernum].ping;
                SDL_mutexV(clientmutex);
             }
