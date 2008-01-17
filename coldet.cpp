@@ -185,7 +185,7 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = .0f;
+   dummy.velocity = .3f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
@@ -1404,7 +1404,6 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
    p.torso->pitch = p.pitch;
    p.torso->roll = p.roll;
    
-   //p.larm->position = p.torso->position;
    p.larm->rotation = 0;
    p.larm->pitch = 0;
    p.larm->roll = 0;
@@ -1414,7 +1413,6 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
    firstprim->parent = p.torso->GetContainerByName("Left Arm Connector", p.torso->animframe);
    firstprim->parentid = "-2";
    
-   //p.rarm->position = p.torso->position;
    p.rarm->rotation = 0;
    p.rarm->pitch = 0;
    p.rarm->roll = 0;
