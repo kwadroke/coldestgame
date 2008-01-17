@@ -513,7 +513,7 @@ void RenderDOTree(DynamicPrimitive* root)
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glEnable(GL_ALPHA_TEST);
       glAlphaFunc(GL_GREATER, .01);
-      glDepthMask(GL_FALSE);
+      //glDepthMask(GL_FALSE);
    }
    
    if (root->type == "tristrip")
@@ -1158,7 +1158,7 @@ void RenderHud()
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
-   hplabel->text = "HP: " + ToString(localplayer.hp);
+   hplabel->text = "HP: " + ToString(localplayer.hp[0]);
    killslabel->text = "Kills: " + ToString(localplayer.kills);
    deathslabel->text = "Deaths: " + ToString(localplayer.deaths);
    

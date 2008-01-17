@@ -190,7 +190,7 @@ int ServerListen()
          list<DynamicPrimitive*>::iterator j;
          for (j = k->prims[k->animframe].begin(); j != k->prims[k->animframe].end(); ++j)
          {
-            if ((*j)->parentid == "-1")
+            if ((*j)->parentid == "-1" || (*j)->parentid == "-2")
             {
                UpdateDOTree(*j);
             }
@@ -311,8 +311,8 @@ int ServerListen()
                temp.size = 10;
                temp.lastfiretick = SDL_GetTicks();
                temp.leftclick = temp.rightclick = temp.run = false;
-               temp.legs = LoadObject(units[unit].file + "/legs", serverdynobjects);
-               temp.torso = temp.larm = temp.rarm = serverdynobjects.end();
+               temp.legs = temp.torso = temp.larm = temp.rarm = serverdynobjects.end();
+               UpdatePlayerModel(temp, serverdynobjects);
                temp.currweapon = Torso;
                temp.ping = 0;
                temp.temperature = 0.f;
@@ -611,6 +611,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
 }
 
 
+// Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
 void ServerLoadMap()
 {
    nextmap = "maps/" + currentmap;
@@ -639,6 +640,7 @@ void HandleHit(Particle& p)
          // Note that some of this code is placeholder until I get a proper spawn system implemented
          if (curr == serverplayers[i].legs)  // Or other parts of player unit
          {
+            cout << "Hit legs\n";
             serverplayers[i].hp[Legs] -= p.damage;
             if (serverplayers[i].hp[Legs] <= 0)
             {
@@ -652,6 +654,7 @@ void HandleHit(Particle& p)
          }
          if (curr == serverplayers[i].torso)
          {
+            cout << "Hit torso\n";
             serverplayers[i].hp[Torso] -= p.damage;
             if (serverplayers[i].hp[Torso] <= 0)
             {
@@ -664,6 +667,7 @@ void HandleHit(Particle& p)
          }
          if (curr == serverplayers[i].larm)
          {
+            cout << "Hit left\n";
             serverplayers[i].hp[LArm] -= p.damage;
             if (serverplayers[i].hp[LArm] <= 0)
             {
@@ -676,6 +680,7 @@ void HandleHit(Particle& p)
          }
          if (curr == serverplayers[i].rarm)
          {
+            cout << "Hit right\n";
             serverplayers[i].hp[RArm] -= p.damage;
             if (serverplayers[i].hp[RArm] <= 0)
             {
@@ -687,6 +692,7 @@ void HandleHit(Particle& p)
             break;
          }
       }
+      cout << flush;
       p.hitobjs.pop();
    }
 }
@@ -736,15 +742,18 @@ void UpdateDOTree(DynamicPrimitive* root)
 // Note: must be called from within mutex'd code
 void ServerUpdatePlayer(int i)
 {
+   // Movement and necessary model updates
    Move(serverplayers[i], serverdynobjects, servercoldet);
    UpdatePlayerModel(serverplayers[i], serverdynobjects);
    
+   // Cooling
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
    serverplayers[i].lastcoolingtick += ticks;
    serverplayers[i].temperature -= ticks * .01;
    if (serverplayers[i].temperature < 0)
       serverplayers[i].temperature = 0;
    
+   // Shots fired!
    short currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
    if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= weapons[currplayerweapon].reloadtime))
    {
