@@ -740,6 +740,7 @@ void Cleanup()
 
 void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& cd)
 {
+   Timer t;
    // In case we hit something
    Vector3 old = mplayer.pos;
    
@@ -811,16 +812,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    static const float threshold = .35f;
    static float gravity = .1f;
    
-   // A bunch of debugging hackery
-   static list<DynamicObject>::iterator debugobj = LoadObject("debug", dynobj);
-   static list<DynamicObject>& firstdo = dynobj;
-   static bool haveobj = false;
-   if (&firstdo != &dynobj && !haveobj)
-   {
-      debugobj = LoadObject("debug", dynobj);
-      haveobj = true;
-   }
-   
+   t.start();
    if (fly)
       mplayer.pos.y += d.y * step;
    else
@@ -842,8 +834,6 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
             height, so calculate the exact height so we know whether we're on a downslope.*/
          groundcheck.y = GetTerrainHeight(old.x, old.z);
          groundcheck.y += .01f;
-         if (&firstdo != &dynobj && moving)
-            debugobj->position = groundcheck;
          cd.listvalid = false;
          groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
          /* If this vector comes back zero then it means they're on a downslope and might need a little help
@@ -859,6 +849,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
          mplayer.pos.y -= mplayer.fallvelocity * step;
       }
    }
+   t.stop();
    
    // Did we hit something?  If so, deal with it
    if (!ghost)

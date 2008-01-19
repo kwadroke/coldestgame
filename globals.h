@@ -17,7 +17,7 @@ using std::list;
 using std::vector;
 using std::set;
 
-const int terrobjsize = 8;
+const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 const string objectfilever = "Version2";
 
 extern bool fly;               // Allow flying

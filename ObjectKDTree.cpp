@@ -2,7 +2,7 @@
 
 // Whatever you do, don't set this much higher.  It causes serious and difficult to track down
 // performance problems
-int ObjectKDTree::maxlevels = 5;
+int ObjectKDTree::maxlevels = 10;
 
 ObjectKDTree::ObjectKDTree(list<WorldObjects> *objs, Vector3 v[8])
 {
@@ -305,6 +305,12 @@ vector<GenericPrimitive*> ObjectKDTree::getprims(Vector3 pos, float size)
    vector<GenericPrimitive*> ret;
    ret.reserve(10000);
    getprims(pos, size, ret);
+   cout << retobjs->size() << endl;
+   for (ObjectSet::iterator i = retobjs->begin(); i != retobjs->end(); ++i)
+   {
+      cout << (*i)->type << endl;
+   }
+   
    return ret;
 }
 
@@ -332,7 +338,7 @@ void ObjectKDTree::getprims(Vector3 pos, float size, vector<GenericPrimitive*>& 
       {
          for (list<WorldObjects*>::iterator i = members.begin(); i != members.end(); ++i)
          {
-            if (retobjs->find(*i) == retobjs->end())
+            if (retobjs->find(*i) == retobjs->end() && (*i)->type != "water")
             {
                retobjs->insert(*i);
                for (vector<WorldPrimitives>::iterator j = (*i)->prims.begin(); j != (*i)->prims.end(); ++j)
