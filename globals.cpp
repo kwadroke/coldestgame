@@ -28,3 +28,5 @@ list<DynamicObject> dynobjects;
 int servplayernum;
 SDL_Thread* serverthread;
 ObjectKDTree kdtree;
+vector<floatvec> heightmap;  // Smoothed heightmap data
+int tilesize;

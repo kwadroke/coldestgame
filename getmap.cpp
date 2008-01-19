@@ -16,7 +16,6 @@
 
 using namespace std;
 
-vector<floatvec> heightmap;  // Smoothed heightmap data
 vector<Vector3vec> lightmap; // Terrain lightmap
 
 struct TerrainParams
@@ -29,7 +28,6 @@ struct TerrainParams
 
 vector<TerrainParams> terrparams;
 int terrainstretch;
-int tilesize;
 WorldPrimitives worldbounds[6];
 
 void Repaint();
