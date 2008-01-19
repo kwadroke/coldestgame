@@ -99,6 +99,7 @@ void InitGlobals()
    dummy.currweapon = Torso;
    dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
    dummy.temperature = 0;
+   dummy.fallvelocity = 0.f;
    for (int i = 0; i < numbodyparts; ++i)
    {
       dummy.weapons.push_back(Empty);
@@ -751,7 +752,8 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    /* Had some problems that I think stemmed from step being negative, possibly due to the
       cast of numticks above.  In any case, we never want step to be negative anyway so this
       check isn't hurting anything.*/
-   if (step < 0.f) step == 0.f;
+   // I think this was actually from an unitialized value, so I don't think we need this anymore
+   //if (step < 0.f) step == 0.f;
    
    bool onground = false;
    bool moving = false;
@@ -791,11 +793,13 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
       rot.rotatex(-89.99);
    else rot.rotatex(mplayer.pitch);
    rot.rotatey(-mplayer.facing);
-   //rot.rotatez(mplayer.roll);
    d.transform(rot);
    if (!fly)
       d.y = 0.f;
    d.normalize();
+   
+   mplayer.pos.x += d.x * step;
+   mplayer.pos.z -= d.z * step;
    
    // Build list of objects to ignore for collision detection (a player can't hit themself)
    vector<list<DynamicObject>::iterator> ignoreobjs;
@@ -804,49 +808,74 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    ignoreobjs.push_back(mplayer.larm);
    ignoreobjs.push_back(mplayer.rarm);
    
+   static const float threshold = .35f;
+   static float gravity = .1f;
+   
+   // A bunch of debugging hackery
+   static list<DynamicObject>::iterator debugobj = LoadObject("debug", dynobj);
+   static list<DynamicObject>& firstdo = dynobj;
+   static bool haveobj = false;
+   if (&firstdo != &dynobj && !haveobj)
+   {
+      debugobj = LoadObject("debug", dynobj);
+      haveobj = true;
+   }
+   
    if (fly)
       mplayer.pos.y += d.y * step;
    else
    {
-      if (!fly)
+      Vector3 groundcheck = old;
+      groundcheck.y -= mplayer.size + mplayer.size * threshold;
+      cd.listvalid = false;
+      groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
+      if (groundcheck.magnitude() > .00001f) // They were on the ground
       {
-         Vector3 groundcheck = mplayer.pos;
-         groundcheck.y -= mplayer.size + mplayer.size * .35f;
-         groundcheck = cd.CheckSphereHit(mplayer.pos, groundcheck, .01, &dynobj, ignoreobjs, NULL);
-         if (groundcheck.magnitude() > .00001f)
-            onground = true;
-         else
-            mplayer.pos.y -= mplayer.fallvelocity * step;
-         if (onground && moving)
-            mplayer.pos.y -= mplayer.fallvelocity * step;
-         
+         if (mplayer.fallvelocity > .00001f)
+         {
+            // Eventually this might do damage if they fall too far
+            //cout << "Hit ground " << mplayer.fallvelocity << endl;
+         }
+         mplayer.fallvelocity = 0.f;
+         groundcheck = mplayer.pos;
+         /* It turns out that our collision detection isn't accurate enough to just use our previous
+            height, so calculate the exact height so we know whether we're on a downslope.*/
+         groundcheck.y = GetTerrainHeight(old.x, old.z);
+         groundcheck.y += .01f;
+         if (&firstdo != &dynobj && moving)
+            debugobj->position = groundcheck;
+         cd.listvalid = false;
+         groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
+         /* If this vector comes back zero then it means they're on a downslope and might need a little help
+            staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
+         if (moving && groundcheck.magnitude() < .00001f)
+         {
+            mplayer.pos.y -= step;
+         }
       }
-      if (onground)
-         mplayer.fallvelocity = .3f;
-      else mplayer.fallvelocity += step * .1f;
-      if (mplayer.fallvelocity > 10.f)
-         mplayer.fallvelocity = 10.f;
+      else
+      {
+         mplayer.fallvelocity += step * gravity;
+         mplayer.pos.y -= mplayer.fallvelocity * step;
+      }
    }
-   
-   mplayer.pos.x += d.x * step;
-   mplayer.pos.z -= d.z * step;
    
    // Did we hit something?  If so, deal with it
    if (!ghost)
    {
-      coldet.listvalid = false;
+      cd.listvalid = false;
       Vector3 adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dynobj, ignoreobjs, NULL);
       int count = 0;
-      Vector3 normadj;
+      //Vector3 normadj;
       
-      while (adjust.distance2(Vector3()) > .001) // Not zero vector
+      while (adjust.distance2() > .001) // Not zero vector
       {
          mplayer.pos += adjust * 1.1f;
          adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dynobj, ignoreobjs, NULL);
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
-            cout << "Collision Detection Error " << adjust.distance2(Vector3()) << endl;
+            cout << "Collision Detection Error " << adjust.distance2() << endl;
             // Simply don't allow the movement at all
             mplayer.pos = old;
             break;
@@ -1421,6 +1450,34 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
       cout << "Warning: Right Arm not in container\n";
    firstprim->parent = p.torso->GetContainerByName("Right Arm Connector", p.torso->animframe);
    firstprim->parentid = "-2";
+}
+
+
+float lerp(float x, float y, float a)
+{
+   return (x * a + y * (1 - a));
+}
+
+
+float GetTerrainHeight(const float x, const float y)
+{
+   int xindex = (int)floor(x / (float)tilesize);
+   int yindex = (int)floor(y / (float)tilesize);
+   
+   float xweight = x / (float)tilesize - xindex;
+   xweight = 1 - xweight;
+   float yweight = y / (float)tilesize - yindex;
+   yweight = 1 - yweight;
+   
+   float h0 = heightmap[xindex][yindex];
+   float h1 = heightmap[xindex + 1][yindex];
+   float h2 = heightmap[xindex][yindex + 1];
+   float h3 = heightmap[xindex + 1][yindex + 1];
+   
+   float intermediate = lerp(h0, h1, xweight);
+   float intermediate1 = lerp(h2, h3, xweight);
+   
+   return lerp(intermediate, intermediate1, yweight);
 }
 
 

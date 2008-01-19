@@ -7,6 +7,7 @@
 #include "ServerInfo.h"
 #include "GUI.h"
 #include "PlayerData.h"
+#include "types.h"
 
 #define PI 3.14159265
 
@@ -47,6 +48,8 @@ extern list<DynamicObject> dynobjects;
 extern int servplayernum;
 extern SDL_Thread* serverthread;
 extern ObjectKDTree kdtree;
+extern vector<floatvec> heightmap;  // Smoothed heightmap data
+extern int tilesize;
 
 template <typename T>
 string ToString(const T &input)
@@ -57,6 +60,7 @@ string ToString(const T &input)
 }
 
 void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
+float GetTerrainHeight(const float x, const float y);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);

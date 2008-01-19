@@ -316,6 +316,7 @@ int ServerListen()
                temp.currweapon = Torso;
                temp.ping = 0;
                temp.temperature = 0.f;
+               temp.fallvelocity = 0.f;
                for (int i = 0; i < numbodyparts; ++i)
                {
                   temp.weapons.push_back(Empty);
