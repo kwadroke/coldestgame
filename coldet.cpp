@@ -740,7 +740,6 @@ void Cleanup()
 
 void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& cd)
 {
-   Timer t;
    // In case we hit something
    Vector3 old = mplayer.pos;
    
@@ -812,7 +811,6 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    static const float threshold = .35f;
    static float gravity = .1f;
    
-   t.start();
    if (fly)
       mplayer.pos.y += d.y * step;
    else
@@ -849,7 +847,6 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
          mplayer.pos.y -= mplayer.fallvelocity * step;
       }
    }
-   t.stop();
    
    // Did we hit something?  If so, deal with it
    if (!ghost)
