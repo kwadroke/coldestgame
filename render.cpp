@@ -147,7 +147,7 @@ void Repaint()
       shaderhand.UseShader(standardshader);
       RenderDynamicObjects();
       
-      if (reflection && localplayer.pos.y > 0)
+      if (localplayer.pos.y > 0)
       {
          UpdateNoise();
          RenderWater();
@@ -1058,22 +1058,25 @@ void RenderWater()
       
       RenderClouds();
       
-      // Remember, rotations not vector
-      Vector3 invlook(-localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-      Vector3 invpos = localplayer.pos;
-      invpos.y *= -1;
-      kdtree.setfrustum(invpos, invlook, nearclip, viewdist, fov, aspect);
-      
-      lights.Place();
-      SetReflection(true);
-      
-      glFrontFace(GL_CW);
-      RenderObjects();
-      shaderhand.UseShader(standardshader);
-      RenderDynamicObjects();
-      glFrontFace(GL_CCW);
-      
-      SetReflection(false);
+      if (reflection)
+      {
+         // Remember, rotations not vector
+         Vector3 invlook(-localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
+         Vector3 invpos = localplayer.pos;
+         invpos.y *= -1;
+         kdtree.setfrustum(invpos, invlook, nearclip, viewdist, fov, aspect);
+         
+         lights.Place();
+         SetReflection(true);
+         
+         glFrontFace(GL_CW);
+         RenderObjects();
+         shaderhand.UseShader(standardshader);
+         RenderDynamicObjects();
+         glFrontFace(GL_CCW);
+         
+         SetReflection(false);
+      }
       
       GraphicMatrix biasmat, camproj, camview;
       GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
@@ -1095,8 +1098,8 @@ void RenderWater()
       glViewport(0, 0, screenwidth, screenheight);
    }
    glPopMatrix();
-   lights.Place();
    reflectionfbo.Unbind();
+   lights.Place();
    
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1129,7 +1132,10 @@ void RenderHud()
    static GUI* pinglabel = statsdisp.GetWidget("ping");
    static GUI* mpflabel = statsdisp.GetWidget("msperframe");
    static GUI* poslabel = statsdisp.GetWidget("position");
-   static GUI* hplabel = hud.GetWidget("hp");
+   static GUI* torsohplabel = hud.GetWidget("torsohp");
+   static GUI* legshplabel = hud.GetWidget("legshp");
+   static GUI* leftarmhplabel = hud.GetWidget("leftarmhp");
+   static GUI* rightarmhplabel = hud.GetWidget("rightarmhp");
    static GUI* killslabel = hud.GetWidget("kills");
    static GUI* deathslabel = hud.GetWidget("deaths");
    static GUI* torsoweaponlabel = hud.GetWidget("torsoweapon");
@@ -1158,7 +1164,10 @@ void RenderHud()
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
-   hplabel->text = "HP: " + ToString(localplayer.hp[0]);
+   torsohplabel->text = "Torso: " + ToString(localplayer.hp[Torso]);
+   legshplabel->text = "Legs: " + ToString(localplayer.hp[Legs]);
+   leftarmhplabel->text = "Left Arm: " + ToString(localplayer.hp[LArm]);
+   rightarmhplabel->text = "Right Arm: " + ToString(localplayer.hp[RArm]);
    killslabel->text = "Kills: " + ToString(localplayer.kills);
    deathslabel->text = "Deaths: " + ToString(localplayer.deaths);
    

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/lcd.ttf" visible="false">
-   <Label x="10" y="900" width="100" height="30" text="" name="hp"></Label>
    <Label x="10" y="930" width="100" height="30" text="" name="kills"></Label>
    <Label x="10" y="960" width="100" height="30" text="" name="deaths"></Label>
+   
+   <Label x="110" y="870" width="150" height="30" text="" name="torsohp"></Label>
+   <Label x="110" y="900" width="150" height="30" text="" name="legshp"></Label>
+   <Label x="110" y="930" width="150" height="30" text="" name="leftarmhp"></Label>
+   <Label x="110" y="960" width="150" height="30" text="" name="rightarmhp"></Label>
    
    <!-- The selection indicator labels need to be first so they don't get rendered over the text labels -->
    <Label x="850" y="10" width="150" height="30" text="" name="torsoselected">

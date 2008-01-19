@@ -53,7 +53,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    {
       //p = octree->getprims(newpos, radius);
       p = kdtree->getprims(newpos, radius);
-      cout << p.size() << endl;
+      //cout << p.size() << endl;
    
       list<DynamicObject>::iterator i;
       vector<DynamicPrimitive> dyntemp; // Hold actual dummy objects so we can point to them.
