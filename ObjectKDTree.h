@@ -24,7 +24,7 @@ struct eqptr
    }
    bool operator()(WorldObjects* hashme) const
    {
-      return (unsigned long)hashme % 500000; // Umm, probably not ideal, but we can fix it later
+      return (unsigned long)hashme; // Umm, probably not ideal, but we can fix it later
    }
 };
 

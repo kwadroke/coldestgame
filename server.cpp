@@ -161,7 +161,7 @@ int ServerListen()
    while (running)
    {
       ++runtimes;
-      SDL_Delay(0); // Prevent CPU hogging
+      SDL_Delay(1); // Prevent CPU hogging
       //t.start();
       
       currtick = SDL_GetTicks();
@@ -182,6 +182,7 @@ int ServerListen()
             ServerUpdatePlayer(i);
          }
       }
+      //t.stop();
       
       // Update server dynamic objects
       list<DynamicObject>::iterator k;
@@ -431,7 +432,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
    {
       ++runtimes;
       //t.start();
-      SDL_Delay(0);  // Keep the loop from eating too much CPU
+      SDL_Delay(1);  // Keep the loop from eating too much CPU
       
       currnettick = SDL_GetTicks();
       if (currnettick - lastnettick >= 1000 / servertickrate)
@@ -618,7 +619,7 @@ void ServerLoadMap()
    nextmap = "maps/" + currentmap;
    while (mapname != nextmap)
    {
-      SDL_Delay(0); // Wait for main thread to load map
+      SDL_Delay(1); // Wait for main thread to load map
    }
    
    serverkdtree = kdtree;

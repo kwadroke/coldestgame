@@ -69,7 +69,7 @@ int NetSend(void* dummy)
       be since most of the iterations are going to skip this section), it
       kills the performance of the main thread so we do the delay to
       force it to give up CPU time.*/
-      SDL_Delay(0);
+      SDL_Delay(1);
       
       currnettick = SDL_GetTicks();
       if (currnettick - lastnettick >= 1000 / tickrate)
@@ -238,7 +238,7 @@ int NetListen(void* dummy)
    {
       ++runtimes;
       //t.start();
-      SDL_Delay(0); // See comments for NetSend loop
+      SDL_Delay(1); // See comments for NetSend loop
       
       while (SDLNet_UDP_Recv(insock, inpack))
       {
