@@ -5,3 +5,8 @@ Pixel:
 standardfrag.glsl
 shadowfrag.glsl
 fogfrag.glsl
+Uniforms:
+int tex 0
+int shadowtex 6
+int worldshadowtex 7
+float reflectval 0

@@ -2,3 +2,6 @@ Vertex:
 watervert.glsl
 Pixel:
 waterfrag.glsl
+Uniforms:
+int tex 0
+int noisetex 1

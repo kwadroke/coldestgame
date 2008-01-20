@@ -25,7 +25,7 @@ void Shader::LoadShader(string file)
       getline(in, buffer);
    }
    getline(in, buffer);
-   while (!in.eof())
+   while (buffer != "Uniforms:" && !in.eof())
    {
       shader = CreatePixelShader();
       InitShader(shader, buffer);
@@ -63,6 +63,24 @@ void Shader::LoadShader(string file)
    
    UseProgram(0);
    programs.insert(make_pair(file, program));
+   
+   // Set uniforms
+   in >> buffer;
+   string uniname;
+   while (!in.eof())
+   {
+      if (buffer == "int")
+      {
+         in >> uniname >> buffer;
+         SetUniform1i(file, uniname, atoi(buffer.c_str()));
+      }
+      else
+      {
+         in >> uniname >> buffer;
+         SetUniform1f(file, uniname, atof(buffer.c_str()));
+      }
+      in >> buffer;
+   }
 }
 
 
