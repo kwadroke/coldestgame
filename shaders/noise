@@ -2,3 +2,5 @@ Vertex:
 noisevert.glsl
 Pixel:
 noise.glsl
+Uniforms:
+int permTexture 0

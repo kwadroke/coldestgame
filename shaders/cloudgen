@@ -2,3 +2,5 @@ Vertex:
 cloudgenvert.glsl
 Pixel:
 cloudgenfrag.glsl
+Uniforms:
+int basenoise 0

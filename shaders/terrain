@@ -5,3 +5,13 @@ Pixel:
 terrainfrag.glsl
 shadowfrag.glsl
 fogfrag.glsl
+Uniforms:
+int tex 0
+int tex1 1
+int tex2 2
+int tex3 3
+int tex4 4
+int tex5 5
+int shadowtex 6
+int worldshadowtex 7
+float reflectval 0

@@ -393,7 +393,7 @@ void LoadShaders()
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
    terrainshader = "shaders/terrain";
-   cloudshader = "shaders/test";
+   cloudshader = "shaders/cloud";
    shadowshader = "shaders/shadowmap";
    watershader = "shaders/water";
    cloudgenshader = "shaders/cloudgen";
@@ -408,19 +408,14 @@ void LoadShaders()
    
    shaderhand.LoadShader(cloudshader);
    cout << "Loaded cloud shader\n";
-   shaderhand.SetUniform1i(cloudshader, "tex", 0);
+   //shaderhand.SetUniform1i(cloudshader, "tex", 0);
    
    shaderhand.LoadShader(cloudgenshader);
    cout << "Loaded cloud gen shader\n";
-   shaderhand.SetUniform1i(cloudgenshader, "basenoise", 0);
+   //shaderhand.SetUniform1i(cloudgenshader, "basenoise", 0);
    shaderhand.SetUniform1f(cloudgenshader, "noiseres", noiseres);
    
-   shaderhand.SetUniform1i(standardshader, "tex", 0);
-   shaderhand.SetUniform1i(standardshader, "shadowtex", 6);
-   shaderhand.SetUniform1i(standardshader, "worldshadowtex", 7);
-   shaderhand.SetUniform1f(standardshader, "reflectval", 0.f);
-   
-   shaderhand.SetUniform1i(terrainshader, "tex", 0);
+   /*shaderhand.SetUniform1i(terrainshader, "tex", 0);
    shaderhand.SetUniform1i(terrainshader, "tex1", 1);
    shaderhand.SetUniform1i(terrainshader, "tex2", 2);
    shaderhand.SetUniform1i(terrainshader, "tex3", 3);
@@ -428,25 +423,25 @@ void LoadShaders()
    shaderhand.SetUniform1i(terrainshader, "tex5", 5);
    shaderhand.SetUniform1i(terrainshader, "shadowtex", 6);
    shaderhand.SetUniform1i(terrainshader, "worldshadowtex", 7);
-   shaderhand.SetUniform1f(terrainshader, "reflectval", 0.f);
+   shaderhand.SetUniform1f(terrainshader, "reflectval", 0.f);*/
    
-   shaderhand.SetUniform1i(noiseshader, "permTexture", 0);
+   //shaderhand.SetUniform1i(noiseshader, "permTexture", 0);
    shaderhand.SetUniform1i(noiseshader, "time", SDL_GetTicks());
    
    shaderhand.LoadShader(shadowshader);
    cout << "Loaded shadow shader\n";
-   shaderhand.SetUniform1i(shadowshader, "tex", 0);
+   //shaderhand.SetUniform1i(shadowshader, "tex", 0);
    
    shaderhand.LoadShader(watershader);
    cout << "Loaded water shader\n";
-   shaderhand.SetUniform1i(watershader, "tex", 0);
-   shaderhand.SetUniform1i(watershader, "noisetex", 1);
+   //shaderhand.SetUniform1i(watershader, "tex", 0);
+   //shaderhand.SetUniform1i(watershader, "noisetex", 1);
    
    shaderhand.LoadShader(bumpshader);
    cout << "Loaded bump shader\n";
-   shaderhand.SetUniform1i(bumpshader, "tex", 0);
+   /*shaderhand.SetUniform1i(bumpshader, "tex", 0);
    shaderhand.SetUniform1i(bumpshader, "bumptex", 1);
-   shaderhand.SetUniform1f(bumpshader, "reflectval", 0.f);
+   shaderhand.SetUniform1f(bumpshader, "reflectval", 0.f);*/
    
    InitNoise();
    shaderhand.UseShader("none");
@@ -1003,7 +998,7 @@ void SynchronizePosition()
    if (difference > 10.f)
       posadj *= .5f;
    else if (!player[0].moveforward && !player[0].moveback)
-      posadj *= 0.f;//.3f;
+      posadj *= 0.f;
    else if (difference > .3f)
       posadj *= .2f;
    
