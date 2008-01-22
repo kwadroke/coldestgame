@@ -2,3 +2,5 @@ Vertex:
 testvert.glsl
 Pixel:
 testfrag.glsl
+Uniforms:
+int tex 0
