@@ -56,8 +56,7 @@ int main(int argc, char* argv[])
 
 void InitGlobals()
 {
-   PlayerData dummy = PlayerData(); // Local player is always index 0
-   
+   PlayerData dummy = PlayerData(dynobjects); // Local player is always index 0
    // Variables that can be set by the console
    screenwidth = 640;
    screenheight = 480;
@@ -72,7 +71,6 @@ void InitGlobals()
    ghost = false;
    fov = 60;
    viewdist = 1000;
-   dummy.size = 25;
    coldet.intmethod = 0;
    showkdtree = 0;
    tickrate = 30;
@@ -88,23 +86,7 @@ void InitGlobals()
    aalevel = 2;
    
    // Variables that cannot be set from the console
-   dummy.pos.x = 300;
-   dummy.pos.y = 50;
-   dummy.pos.z = 300;
-   dummy.pitch = dummy.roll = dummy.rotation = dummy.facing = 0.;
-   dummy.moveforward = dummy.moveback = dummy.moveleft = dummy.moveright = false;
    dummy.unit = UnitTest;
-   dummy.kills = dummy.deaths = 0;
-   dummy.leftclick = dummy.rightclick = dummy.run = false;
-   dummy.currweapon = Torso;
-   dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
-   dummy.temperature = 0;
-   dummy.fallvelocity = 0.f;
-   for (int i = 0; i < numbodyparts; ++i)
-   {
-      dummy.weapons.push_back(Empty);
-      dummy.hp[i] = 100;
-   }
    player.push_back(dummy);
    
    lasttick = SDL_GetTicks();
@@ -166,9 +148,10 @@ void InitGUI()
 void InitUnits()
 {
    UnitData dummy;
-   dummy.file = "";
+   dummy.file = "unittest";
    dummy.turnspeed = 1.f;
    dummy.maxspeed = 1.f;
+   dummy.size = 10.f;
    dummy.weight = 100;
    dummy.baseweight = 50;
    for (short i = 0; i < numunits; ++i)
@@ -828,6 +811,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
          groundcheck.y = GetTerrainHeight(old.x, old.z);
          groundcheck.y += .01f;
          cd.listvalid = false;
+         Vector3 debug = groundcheck;
          groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
          /* If this vector comes back zero then it means they're on a downslope and might need a little help
             staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
@@ -1433,6 +1417,8 @@ void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
       cout << "Warning: Right Arm not in container\n";
    firstprim->parent = p.torso->GetContainerByName("Right Arm Connector", p.torso->animframe);
    firstprim->parentid = "-2";
+   
+   p.size = units[p.unit].size;
 }
 
 

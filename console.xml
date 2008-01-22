@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/lcd.ttf" visible="false">
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
    <TextArea x="10" y="10" width="980" height="600" name="consoleoutput">
       <Normal>textures/skyold.png</Normal>
    </TextArea>

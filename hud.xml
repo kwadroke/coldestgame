@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/lcd.ttf" visible="false">
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
    <Label x="10" y="930" width="100" height="30" text="" name="kills"></Label>
    <Label x="10" y="960" width="100" height="30" text="" name="deaths"></Label>
    

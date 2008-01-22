@@ -7,7 +7,7 @@ bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
 bool billboardrender;   // Indicates whether object is being rendered to billboard
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
-PlayerData localplayer;
+PlayerData localplayer(dynobjects);
 set<WorldObjects*> implist;
 set<WorldObjects*> visibleobjs;
 
@@ -1041,8 +1041,9 @@ void RenderWater()
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glPushMatrix();
    {
-      glScalef(1, -1, 1);
       glViewport(0, 0, reflectionres, reflectionres);
+      
+      glScalef(1, -1, 1);
       
       glPushMatrix();
       {
@@ -1209,6 +1210,8 @@ void RenderHud()
 #endif
    
    // Render all of the GUI objects, they know whether they're visible or not
+   shaderhand.UseShader("none");
+   glColor4f(1, 1, 1, 1);
    mainmenu.Render();
    hud.Render();
    loadprogress.Render();
@@ -1221,6 +1224,7 @@ void RenderHud()
 }
 
 
+// Still need this, even though we don't mess with the shaders anymore
 void SetReflection(bool on)
 {
    if (!reflection) on = false;

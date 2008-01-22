@@ -133,6 +133,9 @@ int NetSend(void* dummy)
          {
             p << player[0].weapons[i] << eol;
          }
+         p << selectedspawn.position.x << eol;
+         p << selectedspawn.position.y << eol;
+         p << selectedspawn.position.z << eol;
          SDL_mutexV(clientmutex);
          SDL_mutexP(sendmutex);
          sendqueue.push_back(p);
@@ -272,9 +275,7 @@ int NetListen(void* dummy)
                {
                   while (oppnum >= player.size())  // Add new player(s)
                   {
-                     PlayerData dummy;
-                     dummy.unit = numunits; // This is an invalid value, but it will be reset below
-                     dummy.legs = dummy.torso = dummy.rarm = dummy.larm = dynobjects.end();
+                     PlayerData dummy(dynobjects);
                      player.push_back(dummy);
                      cout << "Adding player " << (player.size() - 1) << endl;
                   }
@@ -370,41 +371,8 @@ int NetListen(void* dummy)
                      partids.insert(partnum);
                      particles.push_back(temppart);
                   }
-                  // If it's our particle, note that it was received by server
-                  /*else if (playernum == servplayernum)
-                  {
-                     list<Particle>::iterator i;
-                     for (i = particles.begin(); i != particles.end(); ++i)
-                     {
-                        if (i->playernum == 0 && i->id == temppart.playerid)
-                        {
-                           i->unsent = false;
-                        }
-                     }
-                  }*/
                   get >> partnum;
                }
-               
-               // Find out which hits the server has ack'd
-               /*unsigned long hitnum;
-               list<Hit>::iterator j;
-               get >> hitnum;
-               while (hitnum != 0)
-               {
-                  get >> playernum;
-                  if (playernum == servplayernum)
-                  {
-                     for (j = hits.begin(); j != hits.end(); ++j)
-                     {
-                        if (j->id == hitnum)
-                        {
-                           hits.erase(j);
-                           break;
-                        }
-                     }
-                  }
-                  get >> hitnum;
-               }*/
                
                // Freak out if we get a packet whose checksum isn't right
                unsigned long value = 0;
@@ -429,7 +397,7 @@ int NetListen(void* dummy)
                ++i;  // Skip first element because that's local player
                for (; i != player.end(); ++i)
                {
-                  if (!i->connected)
+                  if (!i->spawned)
                   {
                      if (i->legs != dynobjects.end())
                      {
@@ -457,6 +425,7 @@ int NetListen(void* dummy)
                   for (int i = 0; i < numbodyparts; ++i)
                      get >> player[oppnum].hp[i];
                   get >> player[oppnum].ping;
+                  get >> player[oppnum].spawned;
                   get >> oppnum;
                }
                player[0].kills = player[servplayernum].kills;
@@ -533,6 +502,22 @@ int NetListen(void* dummy)
                }
             }
             SDL_mutexV(clientmutex);
+         }
+         else if (packettype == "S")
+         {
+            bool accepted;
+            get >> accepted;
+            if (accepted)
+            {
+               loadoutmenu.visible = false;
+               hud.visible = true;
+               player[0].pos = selectedspawn.position;
+               player[0].size = units[player[0].unit].size;
+            }
+            else
+            {
+               cout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
+            }
          }
       }
       //t.stop();

@@ -35,7 +35,7 @@ void main()
    
    color.a = .3;
    color *= vec4(.6, .6, .8, 1.);
-   color.a = .4;
+   color.a = .6;
    
    color += vec4(specval, specval, specval, specval);
    //color += gl_FrontMaterial.specular * gl_LightSource[0].specular * pow(ndothv, gl_FrontMaterial.shininess);

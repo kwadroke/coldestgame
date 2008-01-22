@@ -30,3 +30,5 @@ SDL_Thread* serverthread;
 ObjectKDTree kdtree;
 vector<floatvec> heightmap;  // Smoothed heightmap data
 int tilesize;
+vector<SpawnPointData> spawnpoints;
+SpawnPointData selectedspawn;
