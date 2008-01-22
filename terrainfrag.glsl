@@ -11,6 +11,9 @@ varying vec4 ambient;
 
 void main()
 {
+   /* Reflection */
+   if (worldcoords.y < 0 && reflectval > .5) discard;
+   
    float dist = worldcoords.w;
    // Texturing
    vec4 base = gl_Color;
@@ -37,9 +40,6 @@ void main()
    shadow(ambient, diffuse, dist, color);
    
    fog(dist, color);
-   
-   // Reflection
-   if (worldcoords.y < 0. && reflectval > .5) discard;
    
    gl_FragColor = color;
 }

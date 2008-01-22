@@ -50,6 +50,8 @@ extern SDL_Thread* serverthread;
 extern ObjectKDTree kdtree;
 extern vector<floatvec> heightmap;  // Smoothed heightmap data
 extern int tilesize;
+extern vector<SpawnPointData> spawnpoints;
+extern SpawnPointData selectedspawn;
 
 template <typename T>
 string ToString(const T &input)

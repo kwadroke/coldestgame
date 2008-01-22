@@ -142,6 +142,28 @@ void GetMap(string fn)
       gm >> terrparams[i].maxrand;
    }
    
+   // Read spawnpoints
+   spawnpoints.clear();
+   SpawnPointData spawntemp;
+   gm >> dummy;
+   gm >> dummy;
+   gm >> spawntemp.team;
+   cout << spawntemp.team << endl;
+   while (spawntemp.team >= 0 && spawntemp.team < 3)
+   {
+      cout << spawntemp.team << endl;
+      gm >> dummy;
+      gm >> spawntemp.position.x;
+      gm >> spawntemp.position.y;
+      gm >> spawntemp.position.z;
+      
+      spawnpoints.push_back(spawntemp);
+      
+      gm >> dummy;
+      gm >> spawntemp.team;
+   }
+   selectedspawn = spawnpoints[0];
+   
    // Load objects
    WorldObjects tempobj;
    WorldPrimitives tempprim;

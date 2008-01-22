@@ -22,6 +22,7 @@ struct UnitData
    string file;
    float turnspeed;
    float maxspeed;
+   float size;
    Vector3 larmattach;
    Vector3 rarmattach;
    Vector3 legattach;
@@ -52,6 +53,13 @@ struct OldPosition
    Vector3 pos;
    Uint32 tick;
    float facing;
+};
+
+
+struct SpawnPointData
+{
+   Vector3 position;
+   int team;
 };
 
 #endif

@@ -67,8 +67,6 @@ void Resume()
 void Spawn()
 {
    spawnrequest = true;
-   loadoutmenu.visible = false;
-   hud.visible = true;
 }
 
 

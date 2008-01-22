@@ -115,8 +115,7 @@ int Server(void* dummy)
    if (currentmap == "")
       currentmap = "newtest";
    ServerLoadMap();
-   PlayerData local; // Dummy placeholder for the local player
-   local.legs = local.torso = local.larm = local.rarm = serverdynobjects.end();
+   PlayerData local(serverdynobjects); // Dummy placeholder for the local player
    serverplayers.push_back(local);
    servermutex = SDL_CreateMutex();
    serversend = SDL_CreateThread(ServerSend, NULL);
@@ -174,10 +173,10 @@ int ServerListen()
       {
          if (serverplayers[i].connected && currtick - serverplayers[i].lastupdate > 5000)
          {
-            serverplayers[i].connected = false;
+            serverplayers[i].Disconnect();
             cout << "Player " << i << " timed out.\n" << flush;
          }
-         else if (serverplayers[i].connected)
+         else if (serverplayers[i].spawned)
          {
             ServerUpdatePlayer(i);
          }
@@ -297,32 +296,15 @@ int ServerListen()
             }
             if (add)
             {
-               PlayerData temp;
+               PlayerData temp(serverdynobjects);
                temp.recpacketnum = packetnum;
                temp.addr = inpack->address;
                temp.connected = true;
                temp.lastupdate = SDL_GetTicks();
                temp.unit = unit;
-               temp.kills = 0;
-               temp.deaths = 0;
                temp.acked.insert(packetnum);
                temp.lastmovetick = SDL_GetTicks();
-               temp.pos = Vector3(100, 100, 200);
-               temp.moveleft = temp.moveright = temp.moveforward = temp.moveback = false;
-               temp.size = 10;
-               temp.lastfiretick = SDL_GetTicks();
-               temp.leftclick = temp.rightclick = temp.run = false;
-               temp.legs = temp.torso = temp.larm = temp.rarm = serverdynobjects.end();
                UpdatePlayerModel(temp, serverdynobjects);
-               temp.currweapon = Torso;
-               temp.ping = 0;
-               temp.temperature = 0.f;
-               temp.fallvelocity = 0.f;
-               for (int i = 0; i < numbodyparts; ++i)
-               {
-                  temp.weapons.push_back(Empty);
-                  temp.hp[i] = 100;
-               }
                
                SDLNet_Write16(1336, &(temp.addr.port)); // NBO bites me for the first time...
                serverplayers.push_back(temp);
@@ -372,6 +354,7 @@ int ServerListen()
          }
          else if (packettype == "S")
          {
+            bool accepted = true;
             get >> oppnum;
             SDL_mutexP(servermutex);
             get >> serverplayers[oppnum].unit;
@@ -379,6 +362,23 @@ int ServerListen()
             {
                get >> serverplayers[oppnum].weapons[i];
             }
+            Vector3 spawnpointreq;
+            get >> spawnpointreq.x;
+            get >> spawnpointreq.y;
+            get >> spawnpointreq.z;
+            serverplayers[oppnum].pos = spawnpointreq;
+            serverplayers[oppnum].spawned = true;
+            
+            // TODO: At this point we just hope this packet doesn't get lost, need better acking
+            Packet response(servoutpack, &servoutsock, &inpack->address);
+            SDLNet_Write16(1336, &(response.addr.port));
+            response << "S\n";
+            response << 0 << eol;  // Not sure this is okay either...
+            if (accepted)
+               response << 1 << eol;
+            else response << 0 << eol;
+            
+            servqueue.push_back(response);
             SDL_mutexV(servermutex);
             
             // Need to ack this, but no method in place as yet
@@ -567,6 +567,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                   for (int j = 0; j < numbodyparts; ++j)
                      occup << serverplayers[i].hp[i] << eol;
                   occup << serverplayers[i].ping << eol;
+                  occup << serverplayers[i].spawned << eol;
                }
             }
             occup << 0 << eol;
