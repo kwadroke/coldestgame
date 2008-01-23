@@ -17,7 +17,7 @@
 
 using namespace std;
 // Necessary declarations - these appear in defines.h
-extern bool quiet, showfps, ghost, fly, thirdperson, server;
+/*extern bool quiet, showfps, ghost, fly, thirdperson, server;
 extern bool showkdtree, doconnect, shadows, reflection, fullscreen, serversync;
 extern int camdist, screenwidth, screenheight, consoletop, consolebottom;
 extern int consoleright, consoleleft, consoletrans, movestep, fov;
@@ -28,7 +28,7 @@ extern CollisionDetection coldet;
 extern vector<PlayerData> player;
 extern TextureHandler texhand;
 extern string currentmap;
-extern GUI console;
+extern GUI console;*/
 
 void SetupSDL();
 void SetupOpenGL();
@@ -354,7 +354,8 @@ void ConsoleHandler(string command)
       }
       else if (Token(newcommand, 1) == "map")
       {
-         currentmap = Token(newcommand, 2);
+         //currentmap = Token(newcommand, 2);
+         WriteToConsole(string("Note: This command is non-functional at the moment"));
          return;
       }
       else if (Token(newcommand, 1) == "fullscreen")
@@ -382,6 +383,48 @@ void ConsoleHandler(string command)
          if (Token(newcommand, 2) == "1")
             serversync = true;
          else serversync = false;
+         return;
+      }
+      else if (Token(newcommand, 1) == "shadowmapsize")
+      {
+         int value = atoi(Token(newcommand, 2).c_str());
+         if (value >= 8  && value <= 8192)
+         {
+            shadowmapsize = value;
+#ifndef DEBUGSMT
+            shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+#else
+            shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+#endif
+         }
+         else WriteToConsole(string("Invalid value"));
+         return;
+      }
+      else if (Token(newcommand, 1) == "reflectionres")
+      {
+         int value = atoi(Token(newcommand, 2).c_str());
+         if (value >= 8  && value <= 8192)
+         {
+            reflectionres = value;
+            reflectionfbo = FBO(reflectionres, reflectionres, false, &texhand);
+            if (initialized)
+            {
+               for (vector<WorldPrimitives>::iterator i = waterobj->prims.begin(); i != waterobj->prims.end(); ++i)
+                  i->texnums[0] = reflectionfbo.GetTexture();
+            }
+         }
+         else WriteToConsole(string("Invalid value"));
+         return;
+      }
+      else if (Token(newcommand, 1) == "cloudres")
+      {
+         int value = atoi(Token(newcommand, 2).c_str());
+         if (value >= 8  && value <= 8192)
+         {
+            cloudres = value;
+            cloudfbo = FBO(cloudres, cloudres, false, &texhand);
+         }
+         else WriteToConsole(string("Invalid value"));
          return;
       }
       

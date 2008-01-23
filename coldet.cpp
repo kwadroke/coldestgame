@@ -38,8 +38,9 @@ int main(int argc, char* argv[])
    //Debug();
    initialized = false;
    InitGlobals();
-   SetupSDL();
-   SetupOpenGL();
+   // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
+   //SetupSDL();
+   //SetupOpenGL();
    LoadShaders();
    InitNoise();
    LoadDOTextures("models/testex");
@@ -374,8 +375,10 @@ void SetupOpenGL()
       exit(-1);
    }
    
-   cloudfbo = FBO(cloudres, cloudres, false, &texhand);
-   reflectionfbo = FBO(reflectionres, reflectionres, false, &texhand);
+   if (!cloudfbo.IsValid())
+      cloudfbo = FBO(cloudres, cloudres, false, &texhand);
+   if (!reflectionfbo.IsValid())
+      reflectionfbo = FBO(reflectionres, reflectionres, false, &texhand);
    noisefbo = FBO(noiseres, noiseres, false, &texhand);
    texhand.BindTexture(noisefbo.GetTexture());
    // Need different tex params for this texture

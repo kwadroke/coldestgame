@@ -21,6 +21,7 @@ class FBO
       GLuint GetTexture();
       int GetWidth();
       int GetHeight();
+      bool IsValid();
    
    private:
       void init();
