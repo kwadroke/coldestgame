@@ -1,4 +1,5 @@
 #include "WorldObjects.h"
+#include "renderdefs.h"
 #include "WorldPrimitives.h"
 
 /* If we don't point the object member of this class at something in the constructor,
@@ -7,7 +8,7 @@
 */
 extern list<WorldObjects> objects;
 
-WorldPrimitives::WorldPrimitives()
+WorldPrimitives::WorldPrimitives(bool needshader)
 {
    type = "none";
    depthtest = true;
@@ -41,7 +42,8 @@ WorldPrimitives::WorldPrimitives()
       for (int j = 0; j < 4; ++j)
          color[i][j] = 1.f;
    }
-   shader = "shaders/standard";
+   if (needshader)
+      shader = standardshader;
    dist = 0.f;
    object = objects.end();
 }

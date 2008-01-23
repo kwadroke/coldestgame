@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "renderdefs.h"
 
 bool fly;               // Allow flying
 bool ghost;             // Walk through walls
@@ -32,3 +33,4 @@ vector<floatvec> heightmap;  // Smoothed heightmap data
 int tilesize;
 vector<SpawnPointData> spawnpoints;
 SpawnPointData selectedspawn;
+bool initialized;

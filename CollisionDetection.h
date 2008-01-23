@@ -23,8 +23,11 @@ class CollisionDetection
                              stack<list<DynamicObject>::iterator>* = NULL);
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, list<DynamicObject>*,
                              vector<list<DynamicObject>::iterator>&,
+                             stack<list<DynamicObject>::iterator>* = NULL, const bool debug = false);
+      Vector3 CheckSphereHitDebug(const Vector3&, const Vector3&, const float&, list<DynamicObject>*,
+                             vector<list<DynamicObject>::iterator>&,
                              stack<list<DynamicObject>::iterator>* = NULL);
-      Vector3 PlaneSphereCollision(Vector3[], const Vector3&, const Vector3&, const float&);
+      Vector3 PlaneSphereCollision(Vector3[], const Vector3&, const Vector3&, const float&, const bool debug = false);
       Vector3 PlaneEdgeSphereCollision(Vector3[], const Vector3&, const float&);
       //PrimitiveOctree *octree;
       ObjectKDTree *kdtree;
@@ -32,7 +35,7 @@ class CollisionDetection
       bool listvalid;
       bool quiet;
       int tilesize;
-      WorldPrimitives worldbounds[6];
+      vector<WorldPrimitives> worldbounds;
       
    private:
       bool InVector(list<DynamicObject>::iterator&, vector<list<DynamicObject>::iterator>&);

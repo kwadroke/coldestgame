@@ -8,7 +8,7 @@ class WorldObjects;
 class WorldPrimitives : public GenericPrimitive
 {
    public:
-      WorldPrimitives();
+      WorldPrimitives(bool needshader = true); // needshader is a vicious hack to get around static initializer problems
       bool operator<(const WorldPrimitives &) const;
       bool operator>(const WorldPrimitives &) const;
       

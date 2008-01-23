@@ -1,2 +1,2 @@
 #!/bin/bash
-svn commit *.h *.cpp *.xml *.glsl maps textures/* models/ fonts/* shaders Makefile commitall
+svn commit *.h *.cpp *.xml *.glsl maps textures/* models/ fonts/* shaders/* Makefile commitall

@@ -1,7 +1,7 @@
 #include "renderdefs.h"
 
 // Variables that need to be shared for rendering
-int shadowmapsize = 1024;
+int shadowmapsize;
 float nearclip = 1;
 float farclip = 2000;  // Why didn't I just use viewdist?
 int fbostarts[3] = {0, 10, 20};

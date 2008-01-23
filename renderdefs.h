@@ -54,6 +54,7 @@ void UpdateNoise();
 void SynchronizePosition();
 void InitGLState(WorldObjects*);
 void RestoreGLState(WorldObjects*);
+void LoadShaders();
 
 extern list<WorldObjects> objects;
 extern vector<GLuint> dotextures;
