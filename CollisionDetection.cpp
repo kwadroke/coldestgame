@@ -220,12 +220,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       
       float d = -norm.dot(s);
       
-      if (newpos.z < 0 && !CrossesPlane(oldpos, newpos, norm, d) && norm.z > .9)
-      {
-         cout << "WTF again?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-         oldpos.print();
-         newpos.print();
-      }
       if (CrossesPlane(oldpos, newpos, norm, d))  // Crossed the plane
       {
          adjust += norm * radius;
@@ -236,14 +230,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          Vector3 start = newpos;
          Vector3 end = newpos - norm * radius;
          
-         if (newpos.z < 10 && !CrossesPlane(start, end, norm, d) && norm.z > .9 && radius > 1)
-         {
-            cout << "WTF again????????????????????????????????????????????????????????????????????????????????????????????????????????????????\n";
-            start.print();
-            end.print();
-            norm.print();
-            cout << d << endl;
-         }
          if (CrossesPlane(start, end, norm, d))
          {
             // We're talking infinite planes here, so if we crossed we hit
@@ -413,30 +399,8 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& po
             */
             if (pos.distance2(pos1) < radius * radius)
                cout << "Crossed the plane\n";
-            if (debug)
-            {
-               cout << "Crossed the plane\n";
-               cout << angle << endl;
-               intpoint.print();
-               v[0].print();
-               v[1].print();
-               v[2].print();
-               adjust.print();
-            }
             
             return adjust;
-         }
-         else
-         {
-            if (debug)
-            {
-               cout << "Crossed the plane, but not on poly\n";
-               cout << angle << endl;
-               intpoint.print();
-               v[0].print();
-               v[1].print();
-               v[2].print();
-            }
          }
       }
    }
