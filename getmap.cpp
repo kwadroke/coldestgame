@@ -887,11 +887,15 @@ void GetMap(string fn)
    // Render static shadow map
    // Generate FBO to render to the shadow map texture
 #ifndef DEBUGSMT
-   shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
-   worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+   if (!shadowmapfbo.IsValid())
+      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+   if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
+      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
 #else
-   shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
-   worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+   if (!shadowmapfbo.IsValid())
+      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+   if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
+      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
 #endif
    int shadowsize = mapw > maph ? mapw : maph;
    shadowsize *= tilesize;

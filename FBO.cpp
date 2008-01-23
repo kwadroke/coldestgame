@@ -137,3 +137,9 @@ void FBO::Unbind()
 {
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 }
+
+
+bool FBO::IsValid()
+{
+   return valid;
+}
