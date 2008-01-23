@@ -10,6 +10,8 @@ CollisionDetection::CollisionDetection()
    intmethod = 0;
    listvalid = false;
    quiet = true;
+   for (int i = 0; i < 6; ++i)
+      worldbounds.push_back(WorldPrimitives(false));
 }
 
 
@@ -20,8 +22,25 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
    quiet = o.quiet;
    tilesize = o.tilesize;
    kdtree = o.kdtree;
-   for (int i = 0; i < 6; ++i)
-      worldbounds[i] = o.worldbounds[i];
+   worldbounds = o.worldbounds;
+   //for (int i = 0; i < 6; ++i)
+   //   worldbounds.push_back(o.worldbounds[i]);
+}
+
+
+Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
+                                           vector<list<DynamicObject>::iterator>& ignoreobjs,
+                                           stack<list<DynamicObject>::iterator>* retobjs)
+{
+   cout << "Detecting " << radius << endl;
+   Vector3 retval = CheckSphereHit(oldpos, newpos, radius, dynobj, ignoreobjs, retobjs, false);
+   if (oldpos.y > -100)
+   {
+      oldpos.print();
+      newpos.print();
+      retval.print();
+   }
+   return retval;
 }
 
 
@@ -41,7 +60,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    NULL for retobjs, otherwise pass in the appropriate pointer*/
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
                                            vector<list<DynamicObject>::iterator>& ignoreobjs,
-                                           stack<list<DynamicObject>::iterator>* retobjs)
+                                           stack<list<DynamicObject>::iterator>* retobjs, bool debug)
 {
    Vector3 adjust;
    Vector3 temp;
@@ -53,7 +72,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    {
       //p = octree->getprims(newpos, radius);
       p = kdtree->getprims(newpos, radius);
-      //cout << p.size() << endl;
+      //cout << "Objects to collision detect " << p.size() << endl;
    
       list<DynamicObject>::iterator i;
       vector<DynamicPrimitive> dyntemp; // Hold actual dummy objects so we can point to them.
@@ -141,7 +160,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                      points[2] = current->v[2];
                   }
                   temp = adjust;
-                  adjust += PlaneSphereCollision(points, oldpos, newpos, radius);
+                  adjust += PlaneSphereCollision(points, oldpos, newpos, radius, debug);
                   if (adjust.distance2(temp) > .00001)
                   {
                      adjusted++;
@@ -201,6 +220,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       
       float d = -norm.dot(s);
       
+      if (newpos.z < 0 && !CrossesPlane(oldpos, newpos, norm, d) && norm.z > .9)
+      {
+         cout << "WTF again?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+         oldpos.print();
+         newpos.print();
+      }
       if (CrossesPlane(oldpos, newpos, norm, d))  // Crossed the plane
       {
          adjust += norm * radius;
@@ -210,6 +235,15 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       {
          Vector3 start = newpos;
          Vector3 end = newpos - norm * radius;
+         
+         if (newpos.z < 10 && !CrossesPlane(start, end, norm, d) && norm.z > .9 && radius > 1)
+         {
+            cout << "WTF again????????????????????????????????????????????????????????????????????????????????????????????????????????????????\n";
+            start.print();
+            end.print();
+            norm.print();
+            cout << d << endl;
+         }
          if (CrossesPlane(start, end, norm, d))
          {
             // We're talking infinite planes here, so if we crossed we hit
@@ -320,7 +354,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 // May want to precalculate normals to speed things up - keep in mind that
 // dynamic primitives don't have precalculated normals, so if this is implemented
 // that will have to be done before calling this function
-Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& pos, const Vector3& pos1, const float& radius)
+Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& pos, const Vector3& pos1, const float& radius, bool debug)
 {
    Vector3 adjust;
    Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
@@ -353,15 +387,22 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& po
                      
          // Determine whether we're on the poly
          float angle = 0;
+         bool forcehit = false;
          for (int i = 0; i < 3; i++)
          {
+            // When intpoint == v[i], we have problems because the dot product below ends up zero, which is wrong
+            if (intpoint.distance2(v[i]) < .001)
+            {
+               forcehit = true;
+               break;
+            }
             Vector3 p = intpoint - v[i];
             Vector3 p1 = intpoint - v[(i + 1) % 3];
             p.normalize();
             p1.normalize();
             angle += acos(p.dot(p1));
          }
-         if (angle > 2 * PI - .05 && angle < 2 * PI + .05)
+         if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
          {
             if (startside > 0)
                adjust = norm * radius;
@@ -372,7 +413,30 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& po
             */
             if (pos.distance2(pos1) < radius * radius)
                cout << "Crossed the plane\n";
+            if (debug)
+            {
+               cout << "Crossed the plane\n";
+               cout << angle << endl;
+               intpoint.print();
+               v[0].print();
+               v[1].print();
+               v[2].print();
+               adjust.print();
+            }
+            
             return adjust;
+         }
+         else
+         {
+            if (debug)
+            {
+               cout << "Crossed the plane, but not on poly\n";
+               cout << angle << endl;
+               intpoint.print();
+               v[0].print();
+               v[1].print();
+               v[2].print();
+            }
          }
       }
    }

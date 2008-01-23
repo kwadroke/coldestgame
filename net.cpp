@@ -513,6 +513,7 @@ int NetListen(void* dummy)
                hud.visible = true;
                player[0].pos = selectedspawn.position;
                player[0].size = units[player[0].unit].size;
+               player[0].lastmovetick = SDL_GetTicks();
             }
             else
             {

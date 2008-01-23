@@ -21,7 +21,7 @@ class Vector3
       void operator /= (const float&);
       Vector3 cross(const Vector3&) const;
       void normalize();
-      void print();
+      void print() const;
       float dot(const Vector3&) const;
       void rotate(float, float, float);
       void translate(float, float, float);
@@ -53,7 +53,7 @@ inline Vector3 Vector3::cross(const Vector3& v) const
 inline void Vector3::normalize()
 {
    float mag = sqrt(x * x + y * y + z * z);
-   if (mag != 0)
+   if (mag > .000001)
    {
       x /= mag;
       y /= mag;

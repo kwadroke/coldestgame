@@ -347,10 +347,10 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
             }
             if (!shadowrender)
                shaderhand.UseShader(i->shader);
-            else if (shadowrender && i->type == "terrain")
+            else// if (shadowrender && i->type == "terrain")
                shaderhand.UseShader(shadowshader);
-            else if (shadowrender)
-               shaderhand.UseShader("none");
+            //else if (shadowrender)
+            //   shaderhand.UseShader("none");
             o->RenderVbo(i->vboindex, o->vbocount[currindex]);
             i += o->vbocount[currindex] - 1;
             ++currindex;

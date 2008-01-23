@@ -151,7 +151,6 @@ void GetMap(string fn)
    cout << spawntemp.team << endl;
    while (spawntemp.team >= 0 && spawntemp.team < 3)
    {
-      cout << spawntemp.team << endl;
       gm >> dummy;
       gm >> spawntemp.position.x;
       gm >> spawntemp.position.y;
@@ -713,7 +712,7 @@ void GetMap(string fn)
          tempprim.n[3] = normals[x + 1][y + 1];
          for (int i = 0; i < maxterrainparams; ++i)
             tempprim.texnums[i] = textures[terrparams[i].texture];
-         tempprim.shader = "shaders/terrain";
+         tempprim.shader = terrainshader;
          
          for (int i = 0; i < 6; ++i)
          {
@@ -886,44 +885,42 @@ void GetMap(string fn)
    Repaint();
    
    // Render static shadow map
-   if (shadows)
-   {
-      // Generate FBO to render to the shadow map texture
+   // Generate FBO to render to the shadow map texture
 #ifndef DEBUGSMT
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+   shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+   worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
 #else
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+   shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+   worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
 #endif
-      int shadowsize = mapw > maph ? mapw : maph;
-      shadowsize *= tilesize;
-      Vector3 center(mapw / 2.f, 0, maph / 2.f);
-      center *= tilesize;
-      GenShadows(center, shadowsize / 1.4, worldshadowmapfbo);
-      texhand.ActiveTexture(7);
-      
-      texhand.BindTexture(worldshadowmapfbo.GetTexture());
-      
-      GraphicMatrix biasmat, proj, view;
-      GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
-      for (int i = 0; i < 16; ++i)
-         biasmat.members[i] = bias[i];
-      proj = lights.GetProj(0, shadowsize / 1.4);
-      view = lights.GetView(0, center);
-      glMatrixMode(GL_TEXTURE);
-      glLoadMatrixf(biasmat);
-      glMultMatrixf(proj);
-      glMultMatrixf(view);
-      
-      glMatrixMode(GL_MODELVIEW);
-      
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-      glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
-      
-      texhand.ActiveTexture(0);
-   }
+   int shadowsize = mapw > maph ? mapw : maph;
+   shadowsize *= tilesize;
+   Vector3 center(mapw / 2.f, 0, maph / 2.f);
+   center *= tilesize;
+   GenShadows(center, shadowsize / 1.4, worldshadowmapfbo);
+   texhand.ActiveTexture(7);
+   
+   texhand.BindTexture(worldshadowmapfbo.GetTexture());
+   
+   GraphicMatrix biasmat, proj, view;
+   GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
+   for (int i = 0; i < 16; ++i)
+      biasmat.members[i] = bias[i];
+   proj = lights.GetProj(0, shadowsize / 1.4);
+   view = lights.GetView(0, center);
+   glMatrixMode(GL_TEXTURE);
+   glLoadMatrixf(biasmat);
+   glMultMatrixf(proj);
+   glMultMatrixf(view);
+   
+   glMatrixMode(GL_MODELVIEW);
+   
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+   glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+   
+   texhand.ActiveTexture(0);
+   
    mapname = fn; // Must do this last as it signals the server thread that the map has been loaded
 }
 

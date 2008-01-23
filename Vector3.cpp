@@ -72,7 +72,7 @@ void Vector3::operator/= (const float& i)
 }
 
 
-void Vector3::print()
+void Vector3::print() const
 {
    cout << x << "  " << y << "  " << z << endl;
 }

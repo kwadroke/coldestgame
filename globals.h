@@ -52,6 +52,7 @@ extern vector<floatvec> heightmap;  // Smoothed heightmap data
 extern int tilesize;
 extern vector<SpawnPointData> spawnpoints;
 extern SpawnPointData selectedspawn;
+extern bool initialized;
 
 template <typename T>
 string ToString(const T &input)

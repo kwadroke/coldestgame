@@ -36,10 +36,12 @@ int main(int argc, char* argv[])
    //system("ulimit -c unlimited");
 #endif
    //Debug();
+   initialized = false;
    InitGlobals();
    SetupSDL();
    SetupOpenGL();
    LoadShaders();
+   InitNoise();
    LoadDOTextures("models/testex");
    
    // Start network threads
@@ -48,6 +50,7 @@ int main(int argc, char* argv[])
    if (server)
       serverthread = SDL_CreateThread(Server, NULL);
    
+   initialized = true;
    MainLoop();
 
    return 0;
@@ -81,6 +84,7 @@ void InitGlobals()
    reflection = true;
    reflectionres = 512;
    cloudres = 1024;
+   shadowmapsize = 1024;
    partupdateinterval = 0;
    serversync = true;
    aalevel = 2;
@@ -103,11 +107,20 @@ void InitGlobals()
    clientmutex = SDL_CreateMutex();
    texman = new TextureManager(&texhand);
    
+   standardshader = "shaders/standard";
+   noiseshader = "shaders/noise";
+   terrainshader = "shaders/terrain";
+   cloudshader = "shaders/cloud";
+   shadowshader = "shaders/shadowmap";
+   watershader = "shaders/water";
+   cloudgenshader = "shaders/cloudgen";
+   bumpshader = "shaders/bump";
+   
    ReadConfig();
    
-   consoletop = consoleleft = 10;
+   /*consoletop = consoleleft = 10;
    consolebottom = screenheight - 300;
-   consoleright = screenwidth - 10;
+   consoleright = screenwidth - 10;*/
    
    InitGUI();
    InitUnits();
@@ -212,7 +225,7 @@ void SetupSDL()
 {
    const SDL_VideoInfo* video;
    
-   if (SDL_Init(SDL_INIT_VIDEO) < 0) 
+   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) 
    {
       cout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
       exit(1);
@@ -373,60 +386,24 @@ void SetupOpenGL()
 
 void LoadShaders()
 {
-   standardshader = "shaders/standard";
-   noiseshader = "shaders/noise";
-   terrainshader = "shaders/terrain";
-   cloudshader = "shaders/cloud";
-   shadowshader = "shaders/shadowmap";
-   watershader = "shaders/water";
-   cloudgenshader = "shaders/cloudgen";
-   bumpshader = "shaders/bump";
-   
    shaderhand.LoadShader(standardshader);
-   cout << "Loaded standard shader\n";
+   
    shaderhand.LoadShader(noiseshader);
-   cout << "Loaded noise shader\n";
+   shaderhand.SetUniform1f(noiseshader, "time", SDL_GetTicks());
+   
    shaderhand.LoadShader(terrainshader);
-   cout << "Loaded terrain shader\n";
    
    shaderhand.LoadShader(cloudshader);
-   cout << "Loaded cloud shader\n";
-   //shaderhand.SetUniform1i(cloudshader, "tex", 0);
    
    shaderhand.LoadShader(cloudgenshader);
-   cout << "Loaded cloud gen shader\n";
-   //shaderhand.SetUniform1i(cloudgenshader, "basenoise", 0);
    shaderhand.SetUniform1f(cloudgenshader, "noiseres", noiseres);
    
-   /*shaderhand.SetUniform1i(terrainshader, "tex", 0);
-   shaderhand.SetUniform1i(terrainshader, "tex1", 1);
-   shaderhand.SetUniform1i(terrainshader, "tex2", 2);
-   shaderhand.SetUniform1i(terrainshader, "tex3", 3);
-   shaderhand.SetUniform1i(terrainshader, "tex4", 4);
-   shaderhand.SetUniform1i(terrainshader, "tex5", 5);
-   shaderhand.SetUniform1i(terrainshader, "shadowtex", 6);
-   shaderhand.SetUniform1i(terrainshader, "worldshadowtex", 7);
-   shaderhand.SetUniform1f(terrainshader, "reflectval", 0.f);*/
-   
-   //shaderhand.SetUniform1i(noiseshader, "permTexture", 0);
-   shaderhand.SetUniform1i(noiseshader, "time", SDL_GetTicks());
-   
    shaderhand.LoadShader(shadowshader);
-   cout << "Loaded shadow shader\n";
-   //shaderhand.SetUniform1i(shadowshader, "tex", 0);
    
    shaderhand.LoadShader(watershader);
-   cout << "Loaded water shader\n";
-   //shaderhand.SetUniform1i(watershader, "tex", 0);
-   //shaderhand.SetUniform1i(watershader, "noisetex", 1);
    
    shaderhand.LoadShader(bumpshader);
-   cout << "Loaded bump shader\n";
-   /*shaderhand.SetUniform1i(bumpshader, "tex", 0);
-   shaderhand.SetUniform1i(bumpshader, "bumptex", 1);
-   shaderhand.SetUniform1f(bumpshader, "reflectval", 0.f);*/
    
-   InitNoise();
    shaderhand.UseShader("none");
 }
 
@@ -723,7 +700,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    
    // Calculate how far to move based on time since last frame
    int numticks = SDL_GetTicks() - mplayer.lastmovetick;
-   mplayer.lastmovetick += numticks;
+   mplayer.lastmovetick = SDL_GetTicks();
    float step = (float)numticks * (movestep / 1000.);
    if (mplayer.run) step *= 2.f;
    

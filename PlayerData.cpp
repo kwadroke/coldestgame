@@ -2,16 +2,21 @@
 
 PlayerData::PlayerData(list<DynamicObject>& dynobjs)
 {
+   Uint32 ticks = 0;
+   if (SDL_WasInit(SDL_INIT_TIMER))
+   {
+      ticks = SDL_GetTicks();
+   }
    recpacketnum = 0;
    addr.host = INADDR_NONE;
    addr.port = 0; // Theoretically this should be 0 regardless of byte-order...but I could be wrong
    connected = false;
    spawned = false;
-   lastupdate = SDL_GetTicks();
+   lastupdate = ticks;
    unit = numunits;
    kills = 0;
    deaths = 0;
-   lastmovetick = SDL_GetTicks();
+   lastmovetick = ticks;
    pos = Vector3();
    pitch = roll = rotation = facing = 0.f;
    moveleft = moveright = moveforward = moveback = false;

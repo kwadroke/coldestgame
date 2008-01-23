@@ -300,9 +300,20 @@ void ConsoleHandler(string command)
       }
       else if (Token(newcommand, 1) == "shadows")
       {
-         if (Token(newcommand, 2) == "1")
+         if (Token(newcommand, 2) != "0")
+         {
+            standardshader = "shaders/standard";
+            terrainshader = "shaders/terrain";
             shadows = true;
-         else shadows = false;
+         }
+         else
+         {
+            standardshader = "shaders/standardnoshadow";
+            terrainshader = "shaders/terrainnoshadow";
+            shadows = false;
+         }
+         if (initialized)
+            LoadShaders();
          return;
       }
       else if (Token(newcommand, 1) == "reflection")
@@ -400,6 +411,11 @@ void ConsoleHandler(string command)
    {
       SetupSDL();
       SetupOpenGL();
+      return;
+   }
+   else if (Token(newcommand, 0) == "reloadshaders")
+   {
+      LoadShaders();
       return;
    }
    WriteToConsole(string("Unrecognized command"));

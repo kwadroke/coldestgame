@@ -303,7 +303,6 @@ int ServerListen()
                temp.lastupdate = SDL_GetTicks();
                temp.unit = unit;
                temp.acked.insert(packetnum);
-               temp.lastmovetick = SDL_GetTicks();
                UpdatePlayerModel(temp, serverdynobjects);
                
                SDLNet_Write16(1336, &(temp.addr.port)); // NBO bites me for the first time...
@@ -368,6 +367,7 @@ int ServerListen()
             get >> spawnpointreq.z;
             serverplayers[oppnum].pos = spawnpointreq;
             serverplayers[oppnum].spawned = true;
+            serverplayers[oppnum].lastmovetick = SDL_GetTicks();
             
             // TODO: At this point we just hope this packet doesn't get lost, need better acking
             Packet response(servoutpack, &servoutsock, &inpack->address);
@@ -739,6 +739,154 @@ void UpdateDOTree(DynamicPrimitive* root)
    {
       UpdateDOTree(*i);
    }
+}
+
+
+void ServerMove(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& cd)
+{
+   // In case we hit something
+   Vector3 old = mplayer.pos;
+   
+   // Calculate how far to move based on time since last frame
+   int numticks = SDL_GetTicks() - mplayer.lastmovetick;
+   mplayer.lastmovetick = SDL_GetTicks();
+   float step = (float)numticks * (movestep / 1000.);
+   if (mplayer.run) step *= 2.f;
+   
+   /* Had some problems that I think stemmed from step being negative, possibly due to the
+      cast of numticks above.  In any case, we never want step to be negative anyway so this
+      check isn't hurting anything.*/
+   // I think this was actually from an unitialized value, so I don't think we need this anymore
+   //if (step < 0.f) step == 0.f;
+   
+   bool onground = false;
+   bool moving = false;
+   
+   Vector3 temp;
+   if (mplayer.moveforward)
+   {
+      temp.z += 1;
+      
+   }
+   if (mplayer.moveback)
+   {
+      temp.z -= 1;
+   }
+   
+   if (mplayer.moveleft)
+   {
+      //temp.x -= 1;
+      mplayer.facing -= step * 2;
+      if (mplayer.facing < 0) mplayer.facing += 360;
+   }
+   if (mplayer.moveright)
+   {
+      //temp.x += 1;
+      mplayer.facing += step * 2;
+      if (mplayer.facing > 360) mplayer.facing -= 360;
+   }
+   //temp.normalize();
+   if (mplayer.moveforward || mplayer.moveback)// || mplayer.moveleft || mplayer.moveright)
+      moving = true;
+   
+   Vector3 d = temp;
+   GraphicMatrix rot;
+   if (mplayer.pitch > 89.99)
+      rot.rotatex(89.99);
+   else if (mplayer.pitch < -89.99)
+      rot.rotatex(-89.99);
+   else rot.rotatex(mplayer.pitch);
+   rot.rotatey(-mplayer.facing);
+   d.transform(rot);
+   if (!fly)
+      d.y = 0.f;
+   d.normalize();
+   
+   mplayer.pos.x += d.x * step;
+   mplayer.pos.z -= d.z * step;
+   
+   // Build list of objects to ignore for collision detection (a player can't hit themself)
+   vector<list<DynamicObject>::iterator> ignoreobjs;
+   ignoreobjs.push_back(mplayer.legs);
+   ignoreobjs.push_back(mplayer.torso);
+   ignoreobjs.push_back(mplayer.larm);
+   ignoreobjs.push_back(mplayer.rarm);
+   
+   static const float threshold = .35f;
+   static float gravity = .1f;
+   
+   if (fly)
+      mplayer.pos.y += d.y * step;
+   else
+   {
+      Vector3 groundcheck = old;
+      groundcheck.y -= mplayer.size + mplayer.size * threshold;
+      cd.listvalid = false;
+      stack<list<DynamicObject>::iterator> hitobjs;
+      groundcheck = cd.CheckSphereHitDebug(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
+      if (groundcheck.magnitude() > .00001f) // They were on the ground
+      {
+         if (mplayer.fallvelocity > .00001f)
+         {
+            // Eventually this might do damage if they fall too far
+            //cout << "Hit ground " << mplayer.fallvelocity << endl;
+         }
+         mplayer.fallvelocity = 0.f;
+         groundcheck = mplayer.pos;
+         /* It turns out that our collision detection isn't accurate enough to just use our previous
+            height, so calculate the exact height so we know whether we're on a downslope.*/
+         groundcheck.y = GetTerrainHeight(old.x, old.z);
+         groundcheck.y += .01f;
+         cd.listvalid = false;
+         Vector3 debug = groundcheck;
+         groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
+         /* If this vector comes back zero then it means they're on a downslope and might need a little help
+            staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
+         if (moving && groundcheck.magnitude() < .00001f)
+         {
+            mplayer.pos.y -= step;
+         }
+      }
+      else
+      {
+         mplayer.fallvelocity += step * gravity;
+         mplayer.pos.y -= mplayer.fallvelocity * step;
+      }
+   }
+   
+   // Did we hit something?  If so, deal with it
+   if (!ghost)
+   {
+      cd.listvalid = false;
+      Vector3 adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dynobj, ignoreobjs, NULL);
+      int count = 0;
+      //Vector3 normadj;
+      cout << "Movement info:\n";
+      adjust.print();
+      mplayer.pos.print();
+         
+      while (adjust.distance2() > .001) // Not zero vector
+      {
+         mplayer.pos += adjust * 1.1f;
+         adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dynobj, ignoreobjs, NULL);
+         cout << "Movement info:\n";
+         adjust.print();
+         mplayer.pos.print();
+         ++count;
+         if (count > 25) // Damage control in case something goes wrong
+         {
+            cout << "Collision Detection Error " << adjust.distance2() << endl;
+            // Simply don't allow the movement at all
+            mplayer.pos = old;
+            break;
+         }
+      }
+   }
+   if (mplayer.pos.y < 8)
+   {
+      cout << "WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFff\n";
+   }
+   
 }
 
 

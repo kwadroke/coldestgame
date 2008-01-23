@@ -9,6 +9,7 @@ Shader::Shader()
 
 void Shader::LoadShader(string file)
 {
+   cout << "Loading " << file << endl;
    ifstream in(file.c_str());
    string buffer;
    GLhandleARB shader, program;
@@ -63,6 +64,10 @@ void Shader::LoadShader(string file)
    
    UseProgram(0);
    programs.insert(make_pair(file, program));
+   // If the entry already exists then the above will do nothing, but at least now we know for sure
+   // that the key exists, so we can set it and then even if it was already present it gets the new
+   // value.  Notes that this is currently a memory leak if that happens
+   programs[file] = program;
    
    // Set uniforms
    in >> buffer;

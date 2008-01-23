@@ -1,4 +1,5 @@
 #include "WorldObjects.h"
+#include "renderdefs.h"
 
 int WorldObjects::numobjs = 0; // Not sure we really need this anymore
 
@@ -342,10 +343,10 @@ void WorldObjects::BindVbo()
    glTexCoordPointer(2, GL_FLOAT, 0, (void*)tcstart[5]);
    
    int location;
-   location = shaderhand->GetAttribLocation("shaders/terrain", "terrainwt");
+   location = shaderhand->GetAttribLocation(terrainshader, "terrainwt");
    glEnableVertexAttribArrayARB(location);
    glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
-   location = shaderhand->GetAttribLocation("shaders/terrain", "terrainwt1");
+   location = shaderhand->GetAttribLocation(terrainshader, "terrainwt1");
    glEnableVertexAttribArrayARB(location);
    glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);
    
