@@ -13,7 +13,7 @@
 
 #define FBODIM 512
 
-class WorldObjects     // Define objects in the world
+class WorldObjects
 {
    public:
       WorldObjects();

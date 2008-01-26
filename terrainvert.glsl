@@ -1,9 +1,9 @@
 #version 110
 
-void basiclighting(out vec4 amb, out vec4 diff);
+//void basiclighting(out vec4 amb, out vec4 diff);
 
 varying vec4 shadowmappos, worldshadowmappos;
-varying vec3 texweight, texweight1;
+//varying vec3 texweight, texweight1;
 varying vec4 worldcoords;
 varying vec4 diffuse;
 varying vec4 ambient;
@@ -15,7 +15,10 @@ void main()
    gl_TexCoord[0].st = gl_MultiTexCoord0.st;
    gl_TexCoord[0].pq = gl_MultiTexCoord1.st;
    
-   basiclighting(ambient, diffuse);
+   //basiclighting(ambient, diffuse);
+   // Debugging
+   ambient = vec4(.2, .2, .2, .2);
+   diffuse = vec4(.7, .7, .7, .7);
    
    /* Shadow calculations, the grunt work is done on the CPU and passed in
       using the texture matrix. */
@@ -29,8 +32,8 @@ void main()
    worldcoords.xyz = gl_Vertex.xyz;
    
    /* Terrain */
-   texweight = terrainwt;
-   texweight1 = terrainwt1;
+   //texweight = terrainwt;
+   //texweight1 = terrainwt1;
    
    gl_Position = ftransform();
    
