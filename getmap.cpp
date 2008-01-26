@@ -260,6 +260,8 @@ void GetMap(string fn)
          currobj->texnum2 = textures[currtex];
          currobj->size = 0; // Size is required
          t.ReadParams(currnode);
+         currnode.Read(currobj->impdist, "impdist");
+         currnode.Read(currobj->size, "size");
          currnode.Read(currobj->x, "Position", 0);
          currnode.Read(currobj->y, "Position", 1);
          currnode.Read(currobj->z, "Position", 2);
@@ -267,24 +269,6 @@ void GetMap(string fn)
          currnode.Read(currobj->pitch, "Rotations", 1);
          currnode.Read(currobj->roll, "Rotations", 2);
          
-         /*string dummy;
-         ProceduralTree t;
-         gm >> currtex;
-         currobj->texnum = textures[currtex];
-         gm >> currtex;
-         currobj->texnum1 = textures[currtex];
-         gm >> currtex;
-         currobj->texnum2 = textures[currtex];
-         currobj->size = 0; // Size is required
-         t.ReadParams(gm);
-         gm >> dummy >> currobj->impdist;
-         gm >> dummy >> currobj->size;
-         gm >> currobj->x;
-         gm >> currobj->y;
-         gm >> currobj->z;
-         gm >> currobj->rotation;
-         gm >> currobj->pitch;
-         gm >> currobj->roll;*/
          currobj->dynobj = dynobjects.end();
          int save = t.GenTree(currobj);
          cout << "Tree primitives: " << save << endl;
@@ -965,10 +949,10 @@ void GetMap(string fn)
          if (i->impdist)
          {
             if (counter >= fbostarts[2])
-               fbodim = 32;
+               fbodim = fbodims[2];
             else if (counter >= fbostarts[1])
-               fbodim = 256;
-            else fbodim = 512;
+               fbodim = fbodims[1];
+            else fbodim = fbodims[0];
             dummyfbo = FBO(fbodim, fbodim, false, &texhand);
             impfbolist.push_back(dummyfbo);
             i->impostorfbo = counter;

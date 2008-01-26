@@ -1072,6 +1072,7 @@ list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& d
 {
    string currfile = "models/" + filename + "/base";
    ifstream lo(currfile.c_str(), ios_base::in);
+   IniReader reader(currfile);
    string ver;
    string dummy;
    string buffer;

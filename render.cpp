@@ -200,7 +200,7 @@ void RenderObjects()
 {
    float dist;
    bool debug = false; // Turns off impostoring if true
-   debug = true;
+   //debug = true;
    
    list<WorldObjects*> objs = kdtree.getobjs();
    Vector3 playerpos = localplayer.pos;
@@ -662,28 +662,28 @@ void UpdateFBO()
          currfbo = &(impfbolist[i->impostorfbo]);
          
          if (counter >= fbostarts[2])
-            desireddim = 32;
+            desireddim = fbodims[2];
          else if (counter >= fbostarts[1])
-            desireddim = 256;
-         else desireddim = 512;
+            desireddim = fbodims[1];
+         else desireddim = fbodims[0];
          
          int current = 0;
          int count = 0;
          WorldObjects* toswap;
          while (desireddim > currfbo->GetWidth())
          {
-            if (desireddim == 256 ||
-               (desireddim == 512 && currfbo->GetWidth() == 32))
+            if (desireddim == fbodims[1] ||
+               (desireddim == fbodims[0] && currfbo->GetWidth() == fbodims[2]))
             {
                current = fbostarts[1];
                count = fbostarts[2] - fbostarts[1];
             }
-            else if (desireddim == 512)
+            else if (desireddim == fbodims[0])
             {
                current = fbostarts[0];
                count = fbostarts[1] - fbostarts[0];
             }
-            else if (desireddim == 32)
+            else if (desireddim == fbodims[2])
             {
                current = fbostarts[2];
                count = sortedbyimpdim.size() - fbostarts[2] + 1;
