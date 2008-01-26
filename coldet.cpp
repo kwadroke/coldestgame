@@ -10,21 +10,25 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   /*GraphicMatrix m1, m2;
-   Vector3 test;
+   /*IniReader ir("maps/newtest.map");
+   //IniReader test = ir(0);
+   int t = 100;
+   float tf = 200.f;
+   string ts = "100";
    
-   m1.rotatey(90);
-   m1.translate(10, 10, 10);
-   //m1.rotatey(90);
+   ir.ReadInt(t, "Stretch");
+   ir.ReadFloat(tf, "zzz");
+   ir.ReadString(ts, "zzz");
+   cout << t << tf << ts << endl;
    
-   test.x = 10;
-   Quaternion q(Vector3(), 0);
-   q += Quaternion(Vector3(10, 10, 10), 0);
-   q.rotate(Vector3(0, 1, 0), 90);
-   q.v.print();
-   q += Quaternion(Vector3(0, 0, 10), 0);
-   q.rotate(Vector3(0, 0, 1), 90);
-   q.v.print();*/
+   ir.ReadInt(t, "Lines");
+   ir.ReadFloat(tf, "Lines");
+   ir.ReadString(ts, "Line");
+   cout << t << tf << ts << endl;
+   
+   cout << "L:" << ir.ReadInt(t, "Line") << endl;
+   cout << ir.ReadInt(t, "Lines") << endl;
+   //cout << test.ReadInt(t, "Lines") << endl;*/
    
    exit(0);
 }
@@ -334,6 +338,9 @@ void SetupOpenGL()
    // Set the alpha function, then can disable or enable
    glAlphaFunc(GL_GREATER, 0.5);
    glDisable(GL_ALPHA_TEST);
+   
+   if (aalevel)
+      glEnable(GL_MULTISAMPLE);
    
    glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
    

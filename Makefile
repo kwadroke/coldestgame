@@ -26,7 +26,8 @@ GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		WorldPrimitives.o WorldObjects.o console.o server.o render.o\
 		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
 		Timer.o ServerInfo.o getmap.o GenericPrimitive.o DynamicPrimitive.o\
-		renderdefs.o globals.o netdefs.o DynamicObject.o PlayerData.o
+		renderdefs.o globals.o netdefs.o DynamicObject.o PlayerData.o\
+		IniReader.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o
@@ -205,149 +206,8 @@ CollisionDetection.o: /usr/include/gnu/stubs-32.h
 CollisionDetection.o: /usr/include/bits/huge_val.h
 CollisionDetection.o: /usr/include/bits/mathdef.h
 CollisionDetection.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
-CollisionDetection.o: TextureHandler.h Shader.h renderdefs.h PlayerData.h
-CollisionDetection.o: Hit.h types.h PrimitiveOctree.h Light.h GraphicMatrix.h
-CollisionDetection.o: GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
-CollisionDetection.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocument.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XercesDefs.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XercesVersion.hpp
-CollisionDetection.o: /usr/include/xercesc/util/AutoSense.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNode.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMemory.hpp
-CollisionDetection.o: /usr/include/stdlib.h /usr/include/sys/types.h
-CollisionDetection.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
-CollisionDetection.o: /usr/include/time.h /usr/include/endian.h
-CollisionDetection.o: /usr/include/bits/endian.h /usr/include/sys/select.h
-CollisionDetection.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
-CollisionDetection.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
-CollisionDetection.o: /usr/include/bits/pthreadtypes.h /usr/include/alloca.h
-CollisionDetection.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMError.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLUni.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-CollisionDetection.o: /usr/include/xercesc/util/PlatformUtils.hpp
-CollisionDetection.o: /usr/include/xercesc/util/PanicHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/MemoryManager.hpp
-CollisionDetection.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/util/RefVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/framework/XMLAttr.hpp
-CollisionDetection.o: /usr/include/xercesc/util/QName.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLString.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-CollisionDetection.o: /usr/include/string.h /usr/include/assert.h
-CollisionDetection.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-CollisionDetection.o: /usr/include/xercesc/internal/XSerializable.hpp
-CollisionDetection.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/HashBase.hpp
-CollisionDetection.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RuntimeException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/HashXMLCh.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefHashTableOf.c
-CollisionDetection.o: /usr/include/xercesc/util/Janitor.hpp
-CollisionDetection.o: /usr/include/xercesc/util/Janitor.c
-CollisionDetection.o: /usr/include/xercesc/util/NullPointerException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/internal/XSerializationException.hpp
-CollisionDetection.o: /usr/include/xercesc/internal/XProtoType.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-CollisionDetection.o: /usr/include/xercesc/util/KVStringPair.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/util/regx/Op.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/Token.hpp
-CollisionDetection.o: /usr/include/xercesc/util/Mutexes.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/ValidationContext.hpp
-CollisionDetection.o: /usr/include/xercesc/util/NameIdPool.hpp
-CollisionDetection.o: /usr/include/xercesc/util/NameIdPool.c
-CollisionDetection.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/util/SecurityManager.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueStackOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/EmptyStackException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueStackOf.c
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOM.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMAttr.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMText.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMComment.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMElement.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMEntity.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMException.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNotation.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMRange.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMLocator.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMWriter.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-CollisionDetection.o: TextureManager.h ProgressBar.h Timer.h
-CollisionDetection.o: DynamicPrimitive.h Quaternion.h
+CollisionDetection.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+CollisionDetection.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
 ComboBox.o: ComboBox.h GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ComboBox.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 ComboBox.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -661,6 +521,7 @@ GraphicMatrix.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 GraphicMatrix.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 GraphicMatrix.o: /usr/include/bits/mathcalls.h Vector3.h
 Hit.o: Hit.h
+IniReader.o: IniReader.h
 Light.o: Light.h Vector3.h /usr/include/math.h /usr/include/features.h
 Light.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 Light.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
@@ -816,150 +677,8 @@ ObjectKDTree.o: /usr/include/features.h /usr/include/sys/cdefs.h
 ObjectKDTree.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 ObjectKDTree.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ObjectKDTree.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-ObjectKDTree.o: DynamicObject.h FBO.h TextureHandler.h Shader.h renderdefs.h
-ObjectKDTree.o: PlayerData.h Hit.h types.h PrimitiveOctree.h
-ObjectKDTree.o: CollisionDetection.h DynamicPrimitive.h GraphicMatrix.h
-ObjectKDTree.o: Quaternion.h Timer.h Light.h GUI.h
-ObjectKDTree.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-ObjectKDTree.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMDocument.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XercesDefs.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XercesVersion.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/AutoSense.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMNode.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/RefVectorOf.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XMLException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-ObjectKDTree.o: /usr/include/sys/types.h /usr/include/bits/types.h
-ObjectKDTree.o: /usr/include/bits/typesizes.h /usr/include/time.h
-ObjectKDTree.o: /usr/include/endian.h /usr/include/bits/endian.h
-ObjectKDTree.o: /usr/include/sys/select.h /usr/include/bits/select.h
-ObjectKDTree.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-ObjectKDTree.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
-ObjectKDTree.o: /usr/include/alloca.h
-ObjectKDTree.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMError.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XMLUni.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/PlatformUtils.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/PanicHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/MemoryManager.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-ObjectKDTree.o: /usr/include/xercesc/util/RefVectorOf.c
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLAttr.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/QName.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/XMLString.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-ObjectKDTree.o: /usr/include/string.h /usr/include/assert.h
-ObjectKDTree.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-ObjectKDTree.o: /usr/include/xercesc/internal/XSerializable.hpp
-ObjectKDTree.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/HashBase.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/RuntimeException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/HashXMLCh.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/RefHashTableOf.c
-ObjectKDTree.o: /usr/include/xercesc/util/Janitor.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/Janitor.c
-ObjectKDTree.o: /usr/include/xercesc/util/NullPointerException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/ValueVectorOf.c
-ObjectKDTree.o: /usr/include/xercesc/internal/XSerializationException.hpp
-ObjectKDTree.o: /usr/include/xercesc/internal/XProtoType.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-ObjectKDTree.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/KVStringPair.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-ObjectKDTree.o: /usr/include/xercesc/util/regx/Op.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/Token.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/Mutexes.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-ObjectKDTree.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/ValidationContext.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/NameIdPool.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/NameIdPool.c
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/SecurityManager.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/ValueStackOf.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/EmptyStackException.hpp
-ObjectKDTree.o: /usr/include/xercesc/util/ValueStackOf.c
-ObjectKDTree.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-ObjectKDTree.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-ObjectKDTree.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-ObjectKDTree.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOM.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMAttr.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMText.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMComment.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMElement.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMEntity.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMException.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMNotation.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMRange.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMLocator.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMWriter.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-ObjectKDTree.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-ObjectKDTree.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-ObjectKDTree.o: TextureManager.h ProgressBar.h
+ObjectKDTree.o: DynamicObject.h FBO.h TextureHandler.h Shader.h
+ObjectKDTree.o: GraphicMatrix.h Timer.h
 Packet.o: Packet.h
 Particle.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
 Particle.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
@@ -969,147 +688,8 @@ Particle.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 Particle.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Particle.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 Particle.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
-Particle.o: TextureHandler.h Shader.h renderdefs.h PlayerData.h Hit.h types.h
-Particle.o: PrimitiveOctree.h Light.h GraphicMatrix.h GUI.h
-Particle.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-Particle.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-Particle.o: /usr/include/xercesc/dom/DOMDocument.hpp
-Particle.o: /usr/include/xercesc/util/XercesDefs.hpp
-Particle.o: /usr/include/xercesc/util/XercesVersion.hpp
-Particle.o: /usr/include/xercesc/util/AutoSense.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNode.hpp
-Particle.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-Particle.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-Particle.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-Particle.o: /usr/include/xercesc/util/RefVectorOf.hpp
-Particle.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-Particle.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-Particle.o: /usr/include/xercesc/util/XMLException.hpp
-Particle.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-Particle.o: /usr/include/sys/types.h /usr/include/bits/types.h
-Particle.o: /usr/include/bits/typesizes.h /usr/include/time.h
-Particle.o: /usr/include/endian.h /usr/include/bits/endian.h
-Particle.o: /usr/include/sys/select.h /usr/include/bits/select.h
-Particle.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-Particle.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
-Particle.o: /usr/include/alloca.h /usr/include/xercesc/util/XMLExceptMsgs.hpp
-Particle.o: /usr/include/xercesc/dom/DOMError.hpp
-Particle.o: /usr/include/xercesc/util/XMLUni.hpp
-Particle.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-Particle.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-Particle.o: /usr/include/xercesc/util/PlatformUtils.hpp
-Particle.o: /usr/include/xercesc/util/PanicHandler.hpp
-Particle.o: /usr/include/xercesc/framework/MemoryManager.hpp
-Particle.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-Particle.o: /usr/include/xercesc/util/RefVectorOf.c
-Particle.o: /usr/include/xercesc/framework/XMLAttr.hpp
-Particle.o: /usr/include/xercesc/util/QName.hpp
-Particle.o: /usr/include/xercesc/util/XMLString.hpp
-Particle.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-Particle.o: /usr/include/string.h /usr/include/assert.h
-Particle.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-Particle.o: /usr/include/xercesc/internal/XSerializable.hpp
-Particle.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-Particle.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-Particle.o: /usr/include/xercesc/util/HashBase.hpp
-Particle.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-Particle.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-Particle.o: /usr/include/xercesc/util/RuntimeException.hpp
-Particle.o: /usr/include/xercesc/util/HashXMLCh.hpp
-Particle.o: /usr/include/xercesc/util/RefHashTableOf.c
-Particle.o: /usr/include/xercesc/util/Janitor.hpp
-Particle.o: /usr/include/xercesc/util/Janitor.c
-Particle.o: /usr/include/xercesc/util/NullPointerException.hpp
-Particle.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-Particle.o: /usr/include/xercesc/util/ValueVectorOf.c
-Particle.o: /usr/include/xercesc/internal/XSerializationException.hpp
-Particle.o: /usr/include/xercesc/internal/XProtoType.hpp
-Particle.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-Particle.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-Particle.o: /usr/include/xercesc/util/KVStringPair.hpp
-Particle.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-Particle.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-Particle.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-Particle.o: /usr/include/xercesc/util/regx/Op.hpp
-Particle.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-Particle.o: /usr/include/xercesc/util/regx/Token.hpp
-Particle.o: /usr/include/xercesc/util/Mutexes.hpp
-Particle.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-Particle.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-Particle.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-Particle.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-Particle.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-Particle.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-Particle.o: /usr/include/xercesc/framework/ValidationContext.hpp
-Particle.o: /usr/include/xercesc/util/NameIdPool.hpp
-Particle.o: /usr/include/xercesc/util/NameIdPool.c
-Particle.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-Particle.o: /usr/include/xercesc/util/SecurityManager.hpp
-Particle.o: /usr/include/xercesc/util/ValueStackOf.hpp
-Particle.o: /usr/include/xercesc/util/EmptyStackException.hpp
-Particle.o: /usr/include/xercesc/util/ValueStackOf.c
-Particle.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-Particle.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-Particle.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-Particle.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-Particle.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-Particle.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-Particle.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-Particle.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-Particle.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-Particle.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-Particle.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-Particle.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-Particle.o: /usr/include/xercesc/dom/DOM.hpp
-Particle.o: /usr/include/xercesc/dom/DOMAttr.hpp
-Particle.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-Particle.o: /usr/include/xercesc/dom/DOMText.hpp
-Particle.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-Particle.o: /usr/include/xercesc/dom/DOMComment.hpp
-Particle.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-Particle.o: /usr/include/xercesc/dom/DOMElement.hpp
-Particle.o: /usr/include/xercesc/dom/DOMEntity.hpp
-Particle.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-Particle.o: /usr/include/xercesc/dom/DOMException.hpp
-Particle.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-Particle.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-Particle.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNotation.hpp
-Particle.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-Particle.o: /usr/include/xercesc/dom/DOMRange.hpp
-Particle.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-Particle.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-Particle.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-Particle.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-Particle.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-Particle.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-Particle.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-Particle.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLocator.hpp
-Particle.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-Particle.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-Particle.o: /usr/include/xercesc/dom/DOMWriter.hpp
-Particle.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-Particle.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-Particle.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h
+Particle.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+Particle.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
 PlayerData.o: PlayerData.h Vector3.h /usr/include/math.h
 PlayerData.o: /usr/include/features.h /usr/include/sys/cdefs.h
 PlayerData.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
@@ -1130,149 +710,7 @@ ProceduralTree.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
 ProceduralTree.o: WorldObjects.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 ProceduralTree.o: /usr/include/GL/gl.h WorldPrimitives.h GenericPrimitive.h
 ProceduralTree.o: Vector3.h DynamicObject.h FBO.h TextureHandler.h Shader.h
-ProceduralTree.o: renderdefs.h PlayerData.h Hit.h types.h PrimitiveOctree.h
-ProceduralTree.o: ObjectKDTree.h GraphicMatrix.h Timer.h CollisionDetection.h
-ProceduralTree.o: DynamicPrimitive.h Quaternion.h Light.h GUI.h
-ProceduralTree.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-ProceduralTree.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMDocument.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XercesDefs.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XercesVersion.hpp
-ProceduralTree.o: /usr/include/xercesc/util/AutoSense.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMNode.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/util/RefVectorOf.hpp
-ProceduralTree.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-ProceduralTree.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XMLException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-ProceduralTree.o: /usr/include/sys/types.h /usr/include/bits/types.h
-ProceduralTree.o: /usr/include/bits/typesizes.h /usr/include/time.h
-ProceduralTree.o: /usr/include/endian.h /usr/include/bits/endian.h
-ProceduralTree.o: /usr/include/sys/select.h /usr/include/bits/select.h
-ProceduralTree.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-ProceduralTree.o: /usr/include/sys/sysmacros.h
-ProceduralTree.o: /usr/include/bits/pthreadtypes.h /usr/include/alloca.h
-ProceduralTree.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMError.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XMLUni.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-ProceduralTree.o: /usr/include/xercesc/util/PlatformUtils.hpp
-ProceduralTree.o: /usr/include/xercesc/util/PanicHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/MemoryManager.hpp
-ProceduralTree.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-ProceduralTree.o: /usr/include/xercesc/util/RefVectorOf.c
-ProceduralTree.o: /usr/include/xercesc/framework/XMLAttr.hpp
-ProceduralTree.o: /usr/include/xercesc/util/QName.hpp
-ProceduralTree.o: /usr/include/xercesc/util/XMLString.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-ProceduralTree.o: /usr/include/string.h /usr/include/assert.h
-ProceduralTree.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-ProceduralTree.o: /usr/include/xercesc/internal/XSerializable.hpp
-ProceduralTree.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-ProceduralTree.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-ProceduralTree.o: /usr/include/xercesc/util/HashBase.hpp
-ProceduralTree.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/RuntimeException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/HashXMLCh.hpp
-ProceduralTree.o: /usr/include/xercesc/util/RefHashTableOf.c
-ProceduralTree.o: /usr/include/xercesc/util/Janitor.hpp
-ProceduralTree.o: /usr/include/xercesc/util/Janitor.c
-ProceduralTree.o: /usr/include/xercesc/util/NullPointerException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-ProceduralTree.o: /usr/include/xercesc/util/ValueVectorOf.c
-ProceduralTree.o: /usr/include/xercesc/internal/XSerializationException.hpp
-ProceduralTree.o: /usr/include/xercesc/internal/XProtoType.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-ProceduralTree.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-ProceduralTree.o: /usr/include/xercesc/util/KVStringPair.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-ProceduralTree.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-ProceduralTree.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-ProceduralTree.o: /usr/include/xercesc/util/regx/Op.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/Token.hpp
-ProceduralTree.o: /usr/include/xercesc/util/Mutexes.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-ProceduralTree.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-ProceduralTree.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/ValidationContext.hpp
-ProceduralTree.o: /usr/include/xercesc/util/NameIdPool.hpp
-ProceduralTree.o: /usr/include/xercesc/util/NameIdPool.c
-ProceduralTree.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/util/SecurityManager.hpp
-ProceduralTree.o: /usr/include/xercesc/util/ValueStackOf.hpp
-ProceduralTree.o: /usr/include/xercesc/util/EmptyStackException.hpp
-ProceduralTree.o: /usr/include/xercesc/util/ValueStackOf.c
-ProceduralTree.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-ProceduralTree.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-ProceduralTree.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-ProceduralTree.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOM.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMAttr.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMText.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMComment.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMElement.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMEntity.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMException.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMNotation.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMRange.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMLocator.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMWriter.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-ProceduralTree.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-ProceduralTree.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-ProceduralTree.o: TextureManager.h ProgressBar.h
+ProceduralTree.o: GraphicMatrix.h
 ProgressBar.o: ProgressBar.h GUI.h
 ProgressBar.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ProgressBar.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -2459,8 +1897,8 @@ actions.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 actions.o: /usr/include/bits/mathcalls.h DynamicObject.h Hit.h types.h
 actions.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h
 actions.o: WorldObjects.h WorldPrimitives.h GenericPrimitive.h FBO.h Shader.h
-actions.o: renderdefs.h PrimitiveOctree.h Light.h GraphicMatrix.h Timer.h
-actions.o: DynamicPrimitive.h Quaternion.h netdefs.h
+actions.o: GraphicMatrix.h Timer.h DynamicPrimitive.h Quaternion.h
+actions.o: PrimitiveOctree.h netdefs.h renderdefs.h Light.h
 coldet.o: defines.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 coldet.o: /usr/include/GL/gl.h /usr/include/stdio.h /usr/include/features.h
 coldet.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -2478,9 +1916,10 @@ coldet.o: /usr/include/alloca.h /usr/include/math.h
 coldet.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 coldet.o: /usr/include/bits/mathcalls.h GenericPrimitive.h Vector3.h
 coldet.o: TextureHandler.h GraphicMatrix.h DynamicObject.h WorldPrimitives.h
-coldet.o: WorldObjects.h FBO.h Shader.h renderdefs.h PlayerData.h Hit.h
-coldet.o: types.h PrimitiveOctree.h ObjectKDTree.h Timer.h
-coldet.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h Light.h GUI.h
+coldet.o: WorldObjects.h FBO.h Shader.h ObjectKDTree.h Timer.h
+coldet.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h
+coldet.o: PrimitiveOctree.h ProceduralTree.h Particle.h Hit.h PlayerData.h
+coldet.o: types.h Light.h GUI.h
 coldet.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldet.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldet.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2612,8 +2051,8 @@ coldet.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 coldet.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 coldet.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 coldet.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-coldet.o: ProgressBar.h ProceduralTree.h Particle.h ServerInfo.h Table.h
-coldet.o: TableItem.h LineEdit.h ScrollView.h globals.h netdefs.h
+coldet.o: ProgressBar.h ServerInfo.h Table.h TableItem.h LineEdit.h
+coldet.o: ScrollView.h IniReader.h globals.h renderdefs.h netdefs.h
 console.o: CollisionDetection.h ObjectKDTree.h WorldObjects.h
 console.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 console.o: WorldPrimitives.h GenericPrimitive.h Vector3.h /usr/include/math.h
@@ -2621,9 +2060,9 @@ console.o: /usr/include/features.h /usr/include/sys/cdefs.h
 console.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 console.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 console.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-console.o: DynamicObject.h FBO.h TextureHandler.h Shader.h renderdefs.h
-console.o: PlayerData.h Hit.h types.h PrimitiveOctree.h Light.h
-console.o: GraphicMatrix.h GUI.h
+console.o: DynamicObject.h FBO.h TextureHandler.h Shader.h GraphicMatrix.h
+console.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h Hit.h
+console.o: PlayerData.h types.h Packet.h TextArea.h GUI.h
 console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 console.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2761,9 +2200,8 @@ console.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 console.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 console.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-console.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h Packet.h
-console.o: TextArea.h Table.h TableItem.h LineEdit.h ScrollView.h netdefs.h
-console.o: ServerInfo.h Particle.h globals.h
+console.o: Table.h TableItem.h LineEdit.h ScrollView.h renderdefs.h Light.h
+console.o: ProgressBar.h netdefs.h ServerInfo.h Particle.h globals.h
 getmap.o: ProgressBar.h GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -2910,10 +2348,10 @@ getmap.o: /usr/include/GL/gl.h CollisionDetection.h ObjectKDTree.h
 getmap.o: WorldObjects.h WorldPrimitives.h GenericPrimitive.h Vector3.h
 getmap.o: /usr/include/math.h /usr/include/bits/huge_val.h
 getmap.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-getmap.o: DynamicObject.h FBO.h Shader.h renderdefs.h PlayerData.h Hit.h
-getmap.o: types.h PrimitiveOctree.h Light.h GraphicMatrix.h Timer.h
-getmap.o: DynamicPrimitive.h Quaternion.h ProceduralTree.h globals.h
-getmap.o: Particle.h ServerInfo.h
+getmap.o: DynamicObject.h FBO.h Shader.h GraphicMatrix.h Timer.h
+getmap.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ProceduralTree.h
+getmap.o: Light.h types.h globals.h Particle.h ServerInfo.h PlayerData.h
+getmap.o: Hit.h renderdefs.h
 globals.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h
 globals.o: WorldObjects.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 globals.o: /usr/include/GL/gl.h WorldPrimitives.h GenericPrimitive.h
@@ -2922,9 +2360,9 @@ globals.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 globals.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 globals.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 globals.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
-globals.o: TextureHandler.h Shader.h renderdefs.h PlayerData.h Hit.h types.h
-globals.o: PrimitiveOctree.h Light.h GraphicMatrix.h GUI.h
-globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+globals.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+globals.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ServerInfo.h
+globals.o: GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
 globals.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -3061,7 +2499,7 @@ globals.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-globals.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h ServerInfo.h
+globals.o: PlayerData.h Hit.h types.h renderdefs.h Light.h ProgressBar.h
 net.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
 net.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 net.o: WorldPrimitives.h GenericPrimitive.h Vector3.h /usr/include/math.h
@@ -3069,9 +2507,10 @@ net.o: /usr/include/features.h /usr/include/sys/cdefs.h
 net.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 net.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 net.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-net.o: DynamicObject.h FBO.h TextureHandler.h Shader.h renderdefs.h
-net.o: PlayerData.h Hit.h types.h PrimitiveOctree.h Light.h GraphicMatrix.h
-net.o: GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+net.o: DynamicObject.h FBO.h TextureHandler.h Shader.h GraphicMatrix.h
+net.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h PlayerData.h
+net.o: Hit.h types.h Packet.h ServerInfo.h netdefs.h globals.h GUI.h
+net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
 net.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -3207,12 +2646,10 @@ net.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-net.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h Packet.h
-net.o: ServerInfo.h netdefs.h globals.h /usr/include/linux/unistd.h
-net.o: /usr/include/asm/unistd.h /usr/include/errno.h
-net.o: /usr/include/bits/errno.h /usr/include/linux/errno.h
-net.o: /usr/include/asm/errno.h /usr/include/asm-generic/errno.h
-net.o: /usr/include/asm-generic/errno-base.h
+net.o: /usr/include/linux/unistd.h /usr/include/asm/unistd.h
+net.o: /usr/include/errno.h /usr/include/bits/errno.h
+net.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+net.o: /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h
 netdefs.o: netdefs.h ServerInfo.h CollisionDetection.h ObjectKDTree.h
 netdefs.o: WorldObjects.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 netdefs.o: /usr/include/GL/gl.h WorldPrimitives.h GenericPrimitive.h
@@ -3221,146 +2658,9 @@ netdefs.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 netdefs.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 netdefs.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 netdefs.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
-netdefs.o: TextureHandler.h Shader.h renderdefs.h PlayerData.h Hit.h types.h
-netdefs.o: PrimitiveOctree.h Light.h GraphicMatrix.h GUI.h
-netdefs.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-netdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
-netdefs.o: /usr/include/xercesc/util/XercesDefs.hpp
-netdefs.o: /usr/include/xercesc/util/XercesVersion.hpp
-netdefs.o: /usr/include/xercesc/util/AutoSense.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMNode.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-netdefs.o: /usr/include/xercesc/util/RefVectorOf.hpp
-netdefs.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-netdefs.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-netdefs.o: /usr/include/xercesc/util/XMLException.hpp
-netdefs.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-netdefs.o: /usr/include/sys/types.h /usr/include/bits/types.h
-netdefs.o: /usr/include/bits/typesizes.h /usr/include/time.h
-netdefs.o: /usr/include/endian.h /usr/include/bits/endian.h
-netdefs.o: /usr/include/sys/select.h /usr/include/bits/select.h
-netdefs.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-netdefs.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
-netdefs.o: /usr/include/alloca.h /usr/include/xercesc/util/XMLExceptMsgs.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMError.hpp
-netdefs.o: /usr/include/xercesc/util/XMLUni.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-netdefs.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-netdefs.o: /usr/include/xercesc/util/PlatformUtils.hpp
-netdefs.o: /usr/include/xercesc/util/PanicHandler.hpp
-netdefs.o: /usr/include/xercesc/framework/MemoryManager.hpp
-netdefs.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-netdefs.o: /usr/include/xercesc/util/RefVectorOf.c
-netdefs.o: /usr/include/xercesc/framework/XMLAttr.hpp
-netdefs.o: /usr/include/xercesc/util/QName.hpp
-netdefs.o: /usr/include/xercesc/util/XMLString.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLBuffer.hpp /usr/include/string.h
-netdefs.o: /usr/include/assert.h /usr/include/xercesc/util/XMLUniDefs.hpp
-netdefs.o: /usr/include/xercesc/internal/XSerializable.hpp
-netdefs.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-netdefs.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-netdefs.o: /usr/include/xercesc/util/HashBase.hpp
-netdefs.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-netdefs.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-netdefs.o: /usr/include/xercesc/util/RuntimeException.hpp
-netdefs.o: /usr/include/xercesc/util/HashXMLCh.hpp
-netdefs.o: /usr/include/xercesc/util/RefHashTableOf.c
-netdefs.o: /usr/include/xercesc/util/Janitor.hpp
-netdefs.o: /usr/include/xercesc/util/Janitor.c
-netdefs.o: /usr/include/xercesc/util/NullPointerException.hpp
-netdefs.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-netdefs.o: /usr/include/xercesc/util/ValueVectorOf.c
-netdefs.o: /usr/include/xercesc/internal/XSerializationException.hpp
-netdefs.o: /usr/include/xercesc/internal/XProtoType.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-netdefs.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-netdefs.o: /usr/include/xercesc/util/KVStringPair.hpp
-netdefs.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-netdefs.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-netdefs.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-netdefs.o: /usr/include/xercesc/util/regx/Op.hpp
-netdefs.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-netdefs.o: /usr/include/xercesc/util/regx/Token.hpp
-netdefs.o: /usr/include/xercesc/util/Mutexes.hpp
-netdefs.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-netdefs.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-netdefs.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-netdefs.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-netdefs.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-netdefs.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-netdefs.o: /usr/include/xercesc/framework/ValidationContext.hpp
-netdefs.o: /usr/include/xercesc/util/NameIdPool.hpp
-netdefs.o: /usr/include/xercesc/util/NameIdPool.c
-netdefs.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-netdefs.o: /usr/include/xercesc/util/SecurityManager.hpp
-netdefs.o: /usr/include/xercesc/util/ValueStackOf.hpp
-netdefs.o: /usr/include/xercesc/util/EmptyStackException.hpp
-netdefs.o: /usr/include/xercesc/util/ValueStackOf.c
-netdefs.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-netdefs.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-netdefs.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-netdefs.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-netdefs.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-netdefs.o: /usr/include/xercesc/dom/DOM.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMAttr.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMText.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMComment.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMElement.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMEntity.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMException.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMNotation.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMRange.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMLocator.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMWriter.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-netdefs.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-netdefs.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-netdefs.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h Particle.h
+netdefs.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+netdefs.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h PlayerData.h
+netdefs.o: Hit.h types.h Particle.h
 render.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h
 render.o: WorldObjects.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 render.o: /usr/include/GL/gl.h WorldPrimitives.h GenericPrimitive.h Vector3.h
@@ -3369,9 +2669,9 @@ render.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 render.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 render.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
 render.o: /usr/include/bits/mathcalls.h DynamicObject.h FBO.h
-render.o: TextureHandler.h Shader.h renderdefs.h PlayerData.h Hit.h types.h
-render.o: PrimitiveOctree.h Light.h GraphicMatrix.h GUI.h
-render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+render.o: TextureHandler.h Shader.h GraphicMatrix.h Timer.h
+render.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ServerInfo.h
+render.o: GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
 render.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -3508,7 +2808,7 @@ render.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-render.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h ServerInfo.h
+render.o: PlayerData.h Hit.h types.h renderdefs.h Light.h ProgressBar.h
 renderdefs.o: renderdefs.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 renderdefs.o: /usr/include/GL/gl.h WorldObjects.h WorldPrimitives.h
 renderdefs.o: GenericPrimitive.h Vector3.h /usr/include/math.h
@@ -3666,10 +2966,10 @@ server.o: /usr/include/features.h /usr/include/sys/cdefs.h
 server.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
 server.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 server.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
-server.o: DynamicObject.h FBO.h TextureHandler.h Shader.h renderdefs.h
-server.o: PlayerData.h Hit.h types.h PrimitiveOctree.h Light.h
-server.o: GraphicMatrix.h GUI.h
-server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+server.o: DynamicObject.h FBO.h TextureHandler.h Shader.h GraphicMatrix.h
+server.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
+server.o: PlayerData.h Hit.h types.h Packet.h ProceduralTree.h globals.h
+server.o: ServerInfo.h GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 server.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 server.o: /usr/include/xercesc/dom/DOMDocument.hpp
 server.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -3806,9 +3106,7 @@ server.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-server.o: ProgressBar.h Timer.h DynamicPrimitive.h Quaternion.h Packet.h
-server.o: ProceduralTree.h globals.h ServerInfo.h netdefs.h
-server.o: /usr/include/linux/unistd.h /usr/include/asm/unistd.h
+server.o: netdefs.h /usr/include/linux/unistd.h /usr/include/asm/unistd.h
 server.o: /usr/include/errno.h /usr/include/bits/errno.h
 server.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
 server.o: /usr/include/asm-generic/errno.h

@@ -4,13 +4,15 @@ void fog(float dist, inout vec4 color);
 uniform sampler2D tex, tex1, tex2, tex3;
 uniform float reflectval;
 
-varying vec3 texweight, texweight1;
+//varying vec3 texweight, texweight1;
 varying vec4 worldcoords;
 varying vec4 diffuse;
 varying vec4 ambient;
 
 void main()
 {
+   vec3 texweight = vec3(.5, .5, .5);
+   vec3 texweight1 = {.5, .5, .5};
    /* Reflection */
    if (worldcoords.y < 0 && reflectval > .5) discard;
    
@@ -20,7 +22,7 @@ void main()
    base.a = 1.;
    vec4 color = vec4(0, 0, 0, 0);
    
-   float normweight = smoothstep(-500., 1000., dist) * .7;
+   float normweight = smoothstep(-300., 600., dist) * .7;
    float detailweight = 1. - normweight;
    
    color += texweight.r * texture2D(tex, gl_TexCoord[0].st) * detailweight;
@@ -35,7 +37,10 @@ void main()
    color += texweight1.r * texture2D(tex3, gl_TexCoord[0].st) * detailweight;
    color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
    
-   color *= base;
+   // Debugging
+   color = texture2D(tex, gl_TexCoord[0].st);
+   
+   //color *= base;
    
    shadow(ambient, diffuse, dist, color);
    

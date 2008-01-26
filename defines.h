@@ -50,6 +50,7 @@
 #include "ServerInfo.h"
 #include "Table.h"
 #include "types.h"
+#include "IniReader.h"
 
 /* Sorry bwkaz, the hassle just isn't worth it :-)
 using std::cout;

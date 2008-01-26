@@ -200,7 +200,7 @@ void RenderObjects()
 {
    float dist;
    bool debug = false; // Turns off impostoring if true
-   //debug = true;
+   debug = true;
    
    list<WorldObjects*> objs = kdtree.getobjs();
    Vector3 playerpos = localplayer.pos;
@@ -410,10 +410,11 @@ void InitGLState(WorldObjects *i)
       glBlendFunc(GL_ONE, GL_ZERO);
       glEnable(GL_BLEND);
       
-      /* Not really happy with the way this looks
-      glEnable(GL_MULTISAMPLE);
+      /* Not really happy with the way this looks*/
       glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-      glSampleCoverage(1.f, GL_FALSE);*/
+      glSampleCoverage(1.f, GL_FALSE);
+      glDisable(GL_BLEND);
+      //glAlphaFunc(GL_GREATER, 0.5);
       
       //glDisable(GL_LIGHTING);
    }
@@ -433,7 +434,8 @@ void RestoreGLState(WorldObjects *i)
       
       //glDisable(GL_BLEND);
       
-      //glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+      glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+      glEnable(GL_BLEND);
    }
 }
 
