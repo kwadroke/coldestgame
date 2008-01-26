@@ -13,6 +13,7 @@
 #include "types.h"
 #include "globals.h"
 #include "renderdefs.h"
+#include "IniReader.h"
 
 using namespace std;
 
@@ -56,20 +57,15 @@ void GetMap(string fn)
    ProgressBar* progress = (ProgressBar*)loadprogress.GetWidget("loadprogressbar");
    GUI* progtext = loadprogress.GetWidget("progresstext");
    
-   ifstream gm(dataname.c_str(), ios_base::in);
-   gm >> dummy;
-   gm >> tilesize;
+   IniReader mapdata(dataname);
+   
+   mapdata.ReadInt(tilesize, "TileSize");
    coldet.tilesize = tilesize;
-   gm >> dummy;
-   gm >> heightscale;
-   gm >> dummy;
-   gm >> zeroheight;
-   gm >> dummy;
-   gm >> numtextures;
-   gm >> dummy;
-   gm >> numobjects;
-   gm >> dummy;
-   gm >> terrainstretch;
+   mapdata.ReadFloat(heightscale, "HeightScale");
+   mapdata.ReadFloat(zeroheight, "ZeroHeight");
+   mapdata.ReadInt(numtextures, "NumTextures");
+   mapdata.ReadInt(numobjects, "NumObjects");
+   mapdata.ReadInt(terrainstretch, "Stretch");
    
    // Read global lighting information
    lights.Add();
@@ -78,14 +74,16 @@ void GetMap(string fn)
    float amb[4];
    float fromx, fromy, fromz;
    
-   gm >> dummy >> dummy;
-   gm >> fromx >> fromy >> fromz;
-   gm >> dummy;
-   gm >> diff[0] >> diff[1] >> diff[2] >> diff[3];
-   gm >> dummy;
-   gm >> spec[0] >> spec[1] >> spec[2] >> spec[3];
-   gm >> dummy;
-   gm >> amb[0] >> amb[1] >> amb[2] >> amb[3];
+   mapdata.ReadFloat(fromx, "Direction", 0);
+   mapdata.ReadFloat(fromy, "Direction", 1);
+   mapdata.ReadFloat(fromz, "Direction", 2);
+   
+   for (int i = 0; i < 4; ++i)
+   {
+      mapdata.ReadFloat(diff[i], "Diffuse", i);
+      mapdata.ReadFloat(spec[i], "Specular", i);
+      mapdata.ReadFloat(amb[i], "Ambient", i);
+   }
    
    lights.SetDir(0, Vector3(fromx, fromy, fromz));
    lights.SetDiffuse(0, diff);
@@ -111,55 +109,45 @@ void GetMap(string fn)
    textures.clear();
    for (int i = 0; i < numtextures; ++i)
       textures.push_back(0);
-   gm >> currtex;
-   gm >> texpath;
+   
    for (int i = 0; i < numtextures; i++)
    {
+      mapdata.ReadString(texpath, ToString(i));
       textures[i] = texman->LoadTexture(texpath);
-      cout << ".";
-      
-      gm >> currtex;
-      gm >> texpath;
    }
-   cout << endl;
    
    // Read terrain parameters
-   gm >> dummy;
    TerrainParams dummytp;
+   string nodename;
    for (int i = 0; i < maxterrainparams; ++i)
    {
       terrparams.push_back(dummytp);
-      gm >> dummy;
-      gm >> terrparams[i].texture;
-      gm >> dummy;
-      gm >> terrparams[i].minheight;
-      gm >> terrparams[i].maxheight;
-      gm >> dummy;
-      gm >> terrparams[i].minslope;
-      gm >> terrparams[i].maxslope;
-      gm >> dummy;
-      gm >> terrparams[i].minrand;
-      gm >> terrparams[i].maxrand;
+      nodename = "Texture" + ToString(i);
+      
+      IniReader currtex = mapdata.GetItemByName(nodename);
+      currtex.ReadInt(terrparams[i].texture, "Num");
+      currtex.ReadFloat(terrparams[i].minheight, "HeightRange", 0);
+      currtex.ReadFloat(terrparams[i].maxheight, "HeightRange", 1);
+      currtex.ReadFloat(terrparams[i].minslope, "SlopeRange", 0);
+      currtex.ReadFloat(terrparams[i].maxslope, "SlopeRange", 1);
+      currtex.ReadFloat(terrparams[i].minrand, "RandRange", 0);
+      currtex.ReadFloat(terrparams[i].maxrand, "RandRange", 1);
    }
    
    // Read spawnpoints
    spawnpoints.clear();
    SpawnPointData spawntemp;
-   gm >> dummy;
-   gm >> dummy;
-   gm >> spawntemp.team;
-   cout << spawntemp.team << endl;
-   while (spawntemp.team >= 0 && spawntemp.team < 3)
+   IniReader spawnnode = mapdata.GetItemByName("SpawnPoints");
+   IniReader currnode("");
+   
+   for (int i = 0; i < spawnnode.NumChildren(); ++i)
    {
-      gm >> dummy;
-      gm >> spawntemp.position.x;
-      gm >> spawntemp.position.y;
-      gm >> spawntemp.position.z;
-      
+      currnode = spawnnode(i);
+      currnode.ReadInt(spawntemp.team, "Team");
+      currnode.ReadFloat(spawntemp.position.x, "Location", 0);
+      currnode.ReadFloat(spawntemp.position.y, "Location", 1);
+      currnode.ReadFloat(spawntemp.position.z, "Location", 2);
       spawnpoints.push_back(spawntemp);
-      
-      gm >> dummy;
-      gm >> spawntemp.team;
    }
    selectedspawn = spawnpoints[0];
    
@@ -173,6 +161,92 @@ void GetMap(string fn)
    progress->value = 1;
    Repaint();
    
+   IniReader objectlist = mapdata.GetItemByName("Objects");
+   for (int i = 0; i < objectlist.NumChildren(); ++i)
+   {
+      tempobj = WorldObjects();
+      tempobj.dynobj = dynobjects.end();
+      objects.push_front(tempobj);
+      currobj = objects.begin();
+      
+      currnode = objectlist(i);
+      currnode.ReadString(currobj->type, "Type");
+      if (currobj->type == "dynobj")
+      {
+         /* Note that this will result in pushing a dummy object into the objects list, but
+            since we may need something like that eventually for spatial partitioning I'm
+            going to let it slide for now.*/
+         string fname;
+         currnode.ReadString(fname, "File");
+         list<DynamicObject>::iterator dyn;
+         dyn = LoadObject(fname, dynobjects);
+         currnode.ReadFloat(dyn->position.x, "Position", 0);
+         currnode.ReadFloat(dyn->position.y, "Position", 1);
+         currnode.ReadFloat(dyn->position.z, "Position", 2);
+         currnode.ReadFloat(dyn->rotation, "Rotations", 0);
+         currnode.ReadFloat(dyn->pitch, "Rotations", 1);
+         currnode.ReadFloat(dyn->roll, "Rotations", 2);
+      }
+      else if (currobj->type == "bush")
+      {
+         int numleaves;  // Don't need to store this value
+         currnode.ReadInt(currtex, "Texture");
+         currobj->texnum = textures[currtex];
+         currnode.ReadFloat(tempprim.height, "Size");
+         currnode.ReadFloat(currobj->x, "Position", 0);
+         currnode.ReadFloat(currobj->y, "Position", 1);
+         currnode.ReadFloat(currobj->z, "Position", 2);
+         currnode.ReadFloat(currobj->rotation, "Rotations", 0);
+         currnode.ReadFloat(currobj->pitch, "Rotations", 1);
+         currnode.ReadFloat(currobj->roll, "Rotations", 2);
+         currnode.ReadInt(numleaves, "NumLeaves");
+         currobj->size = tempprim.height;
+         
+         // Generate leaves
+         float height = currobj->size;
+         for (int j = 0; j < numleaves; j++)
+         {
+            tempprim.texnums[0] = currobj->texnum;
+            tempprim.object = currobj;
+            tempprim.type = "tristrip";
+            tempprim.transparent = false;
+            tempprim.collide = false;
+            float leafratio = .5;
+            tempprim.v[0].x = height / leafratio;
+            tempprim.v[0].y = 0;
+            tempprim.v[0].z = height / leafratio;
+            tempprim.v[1].x = height / leafratio;
+            tempprim.v[1].y = 0;
+            tempprim.v[1].z = -height / leafratio;
+            tempprim.v[2].x = -height / leafratio;
+            tempprim.v[2].y = 0;
+            tempprim.v[2].z = height / leafratio;
+            tempprim.v[3].x = -height / leafratio;
+            tempprim.v[3].y = 0;
+            tempprim.v[3].z = -height / leafratio;
+            float amount = j * 360 / numleaves;
+            for (int v = 0; v < 4; v++)
+            {
+               tempprim.v[v].rotate(amount * 2.5, amount * 3.3, amount);
+               tempprim.v[v].translate(0, height / 2, 0);// / 3 * 2);
+               tempprim.v[v].rotate(currobj->pitch, currobj->rotation, currobj->roll);
+               tempprim.v[v].translate(currobj->x, currobj->y, currobj->z);
+            }
+            /* Right now we shut off lighting for tree leaves because
+               it doesn't really look very good, so this step is not necessary
+            for (int n = 0; n < 4; n++)
+            {
+               Vector3 temp1 = prims[nextprim].v[1] - prims[nextprim].v[0];
+               Vector3 temp2 = prims[nextprim].v[2] - prims[nextprim].v[0];
+               prims[nextprim].n[n] = temp1.cross(temp2);
+               prims[nextprim].n[n].normalize();
+            }*/
+            currobj->prims.push_back(tempprim);
+            tempprim = WorldPrimitives();
+         }
+      }
+   }
+#if 0
    for (int i = 0; i < numobjects; i++)
    {
       tempobj = WorldObjects();
@@ -452,6 +526,7 @@ void GetMap(string fn)
          gm >> dyn->rotation >> dyn->pitch >> dyn->roll;
       }
    }
+#endif
    
    progress->value = 2;
    progtext->text = "Loading map data";
