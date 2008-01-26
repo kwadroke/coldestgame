@@ -23,9 +23,12 @@ class IniReader
       IniReader(string, int lev = 0);
       const IniReader& GetItem(const int) const;
       const IniReader& operator()(const int num) const;
+      const IniReader& GetItemByName(const string) const;
+      int GetItemIndex(const string) const;
       string ReadString(string&, const string, const int num = 0);
       int ReadInt(int&, const string, const int num = 0);
       float ReadFloat(float&, const string, const int num = 0);
+      int NumChildren() const;
       
    private:
       string Parse(string);
@@ -35,6 +38,7 @@ class IniReader
       vector<IniReader> children;
       map<string, string, std::less<string> > values;
       int level;
+      string name;
 };
 
 #endif

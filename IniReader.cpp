@@ -1,6 +1,6 @@
 #include "IniReader.h"
 
-IniReader::IniReader(string filename, int lev) : level(lev)
+IniReader::IniReader(string filename, int lev) : level(lev), name("")
 {
    if (filename == "") return;
    
@@ -27,12 +27,20 @@ string IniReader::Parse(string instr)
    string valname = "";
    stringstream line;
    int strpos = 0;
+   bool firstline = true;
    while(getline(in, currline))
    {
       linelevel = currline.find_first_not_of(" \t");
       if (linelevel == string::npos) // Skip whitespace
       {
          continue;
+      }
+      
+      if (firstline)
+      {
+         name = currline.substr(linelevel);
+         cout << name << endl;
+         firstline = false;
       }
       
       if (linelevel > level)
@@ -70,6 +78,23 @@ const IniReader& IniReader::GetItem(const int num) const
 const IniReader& IniReader::operator()(const int num) const
 {
    return GetItem(num);
+}
+
+
+const IniReader& IniReader::GetItemByName(const string name) const
+{
+   return GetItem(GetItemIndex(name));
+}
+
+
+int IniReader::GetItemIndex(const string name) const
+{
+   for (int i = 0; i < children.size(); ++i)
+   {
+      if (children[i].name == name)
+         return i;
+   }
+   return -1;
 }
 
 
@@ -120,4 +145,10 @@ string IniReader::ReadVal(const string line, const int num)
 bool IniReader::HaveValue(const string name) const
 {
    return (values.find(name) != values.end());
+}
+
+
+int IniReader::NumChildren() const
+{
+   return children.size();
 }
