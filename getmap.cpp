@@ -59,13 +59,13 @@ void GetMap(string fn)
    
    IniReader mapdata(dataname);
    
-   mapdata.ReadInt(tilesize, "TileSize");
+   mapdata.Read(tilesize, "TileSize");
    coldet.tilesize = tilesize;
-   mapdata.ReadFloat(heightscale, "HeightScale");
-   mapdata.ReadFloat(zeroheight, "ZeroHeight");
-   mapdata.ReadInt(numtextures, "NumTextures");
-   mapdata.ReadInt(numobjects, "NumObjects");
-   mapdata.ReadInt(terrainstretch, "Stretch");
+   mapdata.Read(heightscale, "HeightScale");
+   mapdata.Read(zeroheight, "ZeroHeight");
+   mapdata.Read(numtextures, "NumTextures");
+   mapdata.Read(numobjects, "NumObjects");
+   mapdata.Read(terrainstretch, "Stretch");
    
    // Read global lighting information
    lights.Add();
@@ -74,15 +74,15 @@ void GetMap(string fn)
    float amb[4];
    float fromx, fromy, fromz;
    
-   mapdata.ReadFloat(fromx, "Direction", 0);
-   mapdata.ReadFloat(fromy, "Direction", 1);
-   mapdata.ReadFloat(fromz, "Direction", 2);
+   mapdata.Read(fromx, "Direction", 0);
+   mapdata.Read(fromy, "Direction", 1);
+   mapdata.Read(fromz, "Direction", 2);
    
    for (int i = 0; i < 4; ++i)
    {
-      mapdata.ReadFloat(diff[i], "Diffuse", i);
-      mapdata.ReadFloat(spec[i], "Specular", i);
-      mapdata.ReadFloat(amb[i], "Ambient", i);
+      mapdata.Read(diff[i], "Diffuse", i);
+      mapdata.Read(spec[i], "Specular", i);
+      mapdata.Read(amb[i], "Ambient", i);
    }
    
    lights.SetDir(0, Vector3(fromx, fromy, fromz));
@@ -112,9 +112,10 @@ void GetMap(string fn)
    
    for (int i = 0; i < numtextures; i++)
    {
-      mapdata.ReadString(texpath, ToString(i));
+      mapdata.Read(texpath, ToString(i));
       textures[i] = texman->LoadTexture(texpath);
    }
+   
    
    // Read terrain parameters
    TerrainParams dummytp;
@@ -125,14 +126,15 @@ void GetMap(string fn)
       nodename = "Texture" + ToString(i);
       
       IniReader currtex = mapdata.GetItemByName(nodename);
-      currtex.ReadInt(terrparams[i].texture, "Num");
-      currtex.ReadFloat(terrparams[i].minheight, "HeightRange", 0);
-      currtex.ReadFloat(terrparams[i].maxheight, "HeightRange", 1);
-      currtex.ReadFloat(terrparams[i].minslope, "SlopeRange", 0);
-      currtex.ReadFloat(terrparams[i].maxslope, "SlopeRange", 1);
-      currtex.ReadFloat(terrparams[i].minrand, "RandRange", 0);
-      currtex.ReadFloat(terrparams[i].maxrand, "RandRange", 1);
+      currtex.Read(terrparams[i].texture, "Num");
+      currtex.Read(terrparams[i].minheight, "HeightRange", 0);
+      currtex.Read(terrparams[i].maxheight, "HeightRange", 1);
+      currtex.Read(terrparams[i].minslope, "SlopeRange", 0);
+      currtex.Read(terrparams[i].maxslope, "SlopeRange", 1);
+      currtex.Read(terrparams[i].minrand, "RandRange", 0);
+      currtex.Read(terrparams[i].maxrand, "RandRange", 1);
    }
+   
    
    // Read spawnpoints
    spawnpoints.clear();
@@ -143,13 +145,14 @@ void GetMap(string fn)
    for (int i = 0; i < spawnnode.NumChildren(); ++i)
    {
       currnode = spawnnode(i);
-      currnode.ReadInt(spawntemp.team, "Team");
-      currnode.ReadFloat(spawntemp.position.x, "Location", 0);
-      currnode.ReadFloat(spawntemp.position.y, "Location", 1);
-      currnode.ReadFloat(spawntemp.position.z, "Location", 2);
+      currnode.Read(spawntemp.team, "Team");
+      currnode.Read(spawntemp.position.x, "Location", 0);
+      currnode.Read(spawntemp.position.y, "Location", 1);
+      currnode.Read(spawntemp.position.z, "Location", 2);
       spawnpoints.push_back(spawntemp);
    }
    selectedspawn = spawnpoints[0];
+   
    
    // Load objects
    WorldObjects tempobj;
@@ -170,36 +173,36 @@ void GetMap(string fn)
       currobj = objects.begin();
       
       currnode = objectlist(i);
-      currnode.ReadString(currobj->type, "Type");
+      currnode.Read(currobj->type, "Type");
       if (currobj->type == "dynobj")
       {
          /* Note that this will result in pushing a dummy object into the objects list, but
             since we may need something like that eventually for spatial partitioning I'm
             going to let it slide for now.*/
          string fname;
-         currnode.ReadString(fname, "File");
+         currnode.Read(fname, "File");
          list<DynamicObject>::iterator dyn;
          dyn = LoadObject(fname, dynobjects);
-         currnode.ReadFloat(dyn->position.x, "Position", 0);
-         currnode.ReadFloat(dyn->position.y, "Position", 1);
-         currnode.ReadFloat(dyn->position.z, "Position", 2);
-         currnode.ReadFloat(dyn->rotation, "Rotations", 0);
-         currnode.ReadFloat(dyn->pitch, "Rotations", 1);
-         currnode.ReadFloat(dyn->roll, "Rotations", 2);
+         currnode.Read(dyn->position.x, "Position", 0);
+         currnode.Read(dyn->position.y, "Position", 1);
+         currnode.Read(dyn->position.z, "Position", 2);
+         currnode.Read(dyn->rotation, "Rotations", 0);
+         currnode.Read(dyn->pitch, "Rotations", 1);
+         currnode.Read(dyn->roll, "Rotations", 2);
       }
       else if (currobj->type == "bush")
       {
          int numleaves;  // Don't need to store this value
-         currnode.ReadInt(currtex, "Texture");
+         currnode.Read(currtex, "Texture");
          currobj->texnum = textures[currtex];
-         currnode.ReadFloat(tempprim.height, "Size");
-         currnode.ReadFloat(currobj->x, "Position", 0);
-         currnode.ReadFloat(currobj->y, "Position", 1);
-         currnode.ReadFloat(currobj->z, "Position", 2);
-         currnode.ReadFloat(currobj->rotation, "Rotations", 0);
-         currnode.ReadFloat(currobj->pitch, "Rotations", 1);
-         currnode.ReadFloat(currobj->roll, "Rotations", 2);
-         currnode.ReadInt(numleaves, "NumLeaves");
+         currnode.Read(tempprim.height, "Size");
+         currnode.Read(currobj->x, "Position", 0);
+         currnode.Read(currobj->y, "Position", 1);
+         currnode.Read(currobj->z, "Position", 2);
+         currnode.Read(currobj->rotation, "Rotations", 0);
+         currnode.Read(currobj->pitch, "Rotations", 1);
+         currnode.Read(currobj->roll, "Rotations", 2);
+         currnode.Read(numleaves, "NumLeaves");
          currobj->size = tempprim.height;
          
          // Generate leaves
@@ -244,6 +247,47 @@ void GetMap(string fn)
             currobj->prims.push_back(tempprim);
             tempprim = WorldPrimitives();
          }
+      }
+      else if (currobj->type == "proctree")
+      {
+         ProceduralTree t;
+         
+         currnode.Read(currtex, "Textures", 0);
+         currobj->texnum = textures[currtex];
+         currnode.Read(currtex, "Textures", 1);
+         currobj->texnum1 = textures[currtex];
+         currnode.Read(currtex, "Textures", 2);
+         currobj->texnum2 = textures[currtex];
+         currobj->size = 0; // Size is required
+         t.ReadParams(currnode);
+         currnode.Read(currobj->x, "Position", 0);
+         currnode.Read(currobj->y, "Position", 1);
+         currnode.Read(currobj->z, "Position", 2);
+         currnode.Read(currobj->rotation, "Rotations", 0);
+         currnode.Read(currobj->pitch, "Rotations", 1);
+         currnode.Read(currobj->roll, "Rotations", 2);
+         
+         /*string dummy;
+         ProceduralTree t;
+         gm >> currtex;
+         currobj->texnum = textures[currtex];
+         gm >> currtex;
+         currobj->texnum1 = textures[currtex];
+         gm >> currtex;
+         currobj->texnum2 = textures[currtex];
+         currobj->size = 0; // Size is required
+         t.ReadParams(gm);
+         gm >> dummy >> currobj->impdist;
+         gm >> dummy >> currobj->size;
+         gm >> currobj->x;
+         gm >> currobj->y;
+         gm >> currobj->z;
+         gm >> currobj->rotation;
+         gm >> currobj->pitch;
+         gm >> currobj->roll;*/
+         currobj->dynobj = dynobjects.end();
+         int save = t.GenTree(currobj);
+         cout << "Tree primitives: " << save << endl;
       }
    }
 #if 0

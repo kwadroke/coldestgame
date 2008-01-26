@@ -331,86 +331,42 @@ float ProceduralTree::Random(float min, float max)
 
 
 // Reads tree parameters from the designated stringstream
-void ProceduralTree::ReadParams(ifstream &get)
+void ProceduralTree::ReadParams(IniReader &get)
 {
-   string name;
-   get >> name;
-   while (name != "endopts")
-   {
-      if (name == "numlevels")
-         get >> numlevels;
-      else if (name == "numslices")
-         get >> numslices;
-      else if (name == "numbranches0")
-         get >> numbranches[0];
-      else if (name == "numbranches1")
-         get >> numbranches[1];
-      else if (name == "numbranches2")
-         get >> numbranches[2];
-      else if (name == "numbranches3")
-         get >> numbranches[3];
-      else if (name == "numbranches4")
-         get >> numbranches[4];
-      else if (name == "maxangle")
-         get >> maxangle;
-      else if (name == "minangle")
-         get >> minangle;
-      else if (name == "maxbranchangle")
-         get >> maxbranchangle;
-      else if (name == "initrad")
-         get >> initrad;
-      else if (name == "radreductionperc")
-         get >> radreductionperc;
-      else if (name == "initheight")
-         get >> initheight;
-      else if (name == "heightreductionperc")
-         get >> heightreductionperc;
-      else if (name == "firstleaflevel")
-         get >> firstleaflevel;
-      else if (name == "leafsize")
-         get >> leafsize;
-      else if (name == "numsegs")
-         get >> numsegs;
-      else if (name == "numleaves")
-         get >> numleaves;
-      else if (name == "trunkrad")
-         get >> trunkrad;
-      else if (name == "trunknumslices")
-         get >> trunknumslices;
-      else if (name == "trunktaper")
-         get >> trunktaper;
-      else if (name == "trunknumsegs")
-         get >> trunknumsegs;
-      else if (name == "branchevery")
-         get >> branchevery;
-      else if (name == "sidebranches")
-         get >> sidebranches;
-      else if (name == "minsidebranchangle")
-         get >> minsidebranchangle;
-      else if (name == "maxsidebranchangle")
-         get >> maxsidebranchangle;
-      else if (name == "split")
-         get >> split;
-      else if (name == "continuebranch")
-         get >> continuebranch;
-      else if (name == "multitrunk")
-         get >> multitrunk;
-      else if (name == "branchwithleaves")
-         get >> branchwithleaves;
-      else if (name == "sidebranchdirection")
-         get >> sidebranchdirection;
-      else if (name == "sidetaper")
-         get >> sidetaper;
-      else if (name == "minheightvar")
-         get >> minheightvar;
-      else if (name == "maxheightvar")
-         get >> maxheightvar;
-      else if (name == "curvecoeff")
-         get >> curvecoeff;
-      else cout << "Unknown tree param: " << name << endl << flush;
-      
-      get >> name;
-   }
+   get.Read(numlevels, "numlevels");
+   get.Read(numslices, "numslices");
+   get.Read(numbranches[0], "numbranches0");
+   get.Read(numbranches[1], "numbranches1");
+   get.Read(numbranches[2], "numbranches2");
+   get.Read(numbranches[3], "numbranches3");
+   get.Read(numbranches[4], "numbranches4");
+   get.Read(maxangle, "maxangle");
+   get.Read(minangle, "minangle");
+   get.Read(maxbranchangle, "maxbranchangle");
+   get.Read(initrad, "initrad");
+   get.Read(radreductionperc, "radreductionperc");
+   get.Read(initheight, "initheight");
+   get.Read(heightreductionperc, "heightreductionperc");
+   get.Read(firstleaflevel, "firstleaflevel");
+   get.Read(leafsize, "leafsize");
+   get.Read(numsegs, "numsegs");
+   get.Read(numleaves, "numleaves");
+   get.Read(trunkrad, "trunkrad");
+   get.Read(trunknumslices, "trunknumslices");
+   get.Read(trunktaper, "trunktaper");
+   get.Read(trunknumsegs, "trunknumsegs");
+   get.Read(branchevery, "branchevery");
+   get.Read(sidebranches, "sidebranches");
+   get.Read(minsidebranchangle, "minsidebranchangle");
+   get.Read(maxsidebranchangle, "maxsidebranchangle");
+   get.Read(split, "split");
+   get.Read(continuebranch, "continuebranch");
+   get.Read(multitrunk, "multitrunk");
+   get.Read(branchwithleaves, "branchwithleaves");
+   get.Read(sidetaper, "sidetaper");
+   get.Read(minheightvar, "minheightvar");
+   get.Read(maxheightvar, "maxheightvar");
+   get.Read(curvecoeff, "curvecoeff");
 }
 
 

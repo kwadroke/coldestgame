@@ -98,7 +98,7 @@ int IniReader::GetItemIndex(const string name) const
 }
 
 
-string IniReader::ReadString(string& ret, const string name, const int num)
+string IniReader::Read(string& ret, const string name, const int num)
 {
    if (HaveValue(name))
    {
@@ -109,7 +109,7 @@ string IniReader::ReadString(string& ret, const string name, const int num)
 }
 
 
-int IniReader::ReadInt(int& ret, const string name, const int num)
+int IniReader::Read(int& ret, const string name, const int num)
 {
    if (HaveValue(name))
    {
@@ -120,11 +120,22 @@ int IniReader::ReadInt(int& ret, const string name, const int num)
 }
 
 
-float IniReader::ReadFloat(float& ret, const string name, const int num)
+float IniReader::Read(float& ret, const string name, const int num)
 {
    if (HaveValue(name))
    {
       ret = atof(ReadVal(values[name], num).c_str());
+      return ret;
+   }
+   return 0;
+}
+
+
+bool IniReader::Read(bool& ret, const string name, const int num)
+{
+   if (HaveValue(name))
+   {
+      ret = ReadVal(values[name], num) != "0";
       return ret;
    }
    return 0;
@@ -144,7 +155,10 @@ string IniReader::ReadVal(const string line, const int num)
 
 bool IniReader::HaveValue(const string name) const
 {
-   return (values.find(name) != values.end());
+   bool retval = values.find(name) != values.end();
+   if (!retval)
+      cout << "Warning: Attempt to read non-existent value " << name << endl;
+   return retval;
 }
 
 

@@ -55,7 +55,7 @@ short maxplayers;
 int Server(void* dummy)
 {
    srand(time(0));
-   int choosename = (int)Random(0, 16);
+   int choosename = (int)Random(0, 16);  // Just for fun:-)
    switch (choosename)
    {
       case 0:

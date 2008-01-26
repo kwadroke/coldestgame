@@ -10,6 +10,7 @@
 #include <fstream>
 #include "WorldObjects.h"
 #include "GraphicMatrix.h"
+#include "IniReader.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ class ProceduralTree
    public:
       ProceduralTree();
       long GenTree(list<WorldObjects>::iterator);
-      void ReadParams(ifstream&);
+      void ReadParams(IniReader&);
       
       int numlevels;
       int firstleaflevel;
@@ -32,7 +33,6 @@ class ProceduralTree
       int trunknumsegs;
       int branchevery;
       int sidebranches;
-      int sidebranchdirection;
       float maxangle;
       float minangle;
       float maxbranchangle;
