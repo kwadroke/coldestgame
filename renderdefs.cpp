@@ -5,6 +5,7 @@ int shadowmapsize;
 float nearclip = 1;
 float farclip = 2000;  // Why didn't I just use viewdist?
 int fbostarts[3] = {0, 10, 20};
+int fbodims[3] = {512, 256, 32};
 
 list<WorldObjects> objects;
 //list<DynamicObject> dynobjects;
