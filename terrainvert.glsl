@@ -1,6 +1,6 @@
 #version 110
 
-//void basiclighting(out vec4 amb, out vec4 diff);
+void basiclighting(out vec4 amb, out vec4 diff);
 
 varying vec4 shadowmappos, worldshadowmappos;
 //varying vec3 texweight, texweight1;
@@ -15,7 +15,7 @@ void main()
    gl_TexCoord[0].st = gl_MultiTexCoord0.st;
    gl_TexCoord[0].pq = gl_MultiTexCoord1.st;
    
-   //basiclighting(ambient, diffuse);
+   basiclighting(ambient, diffuse);
    // Debugging
    ambient = vec4(.2, .2, .2, .2);
    diffuse = vec4(.7, .7, .7, .7);

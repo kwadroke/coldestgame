@@ -39,7 +39,6 @@ string IniReader::Parse(string instr)
       if (firstline)
       {
          name = currline.substr(linelevel);
-         cout << name << endl;
          firstline = false;
       }
       
@@ -156,8 +155,8 @@ string IniReader::ReadVal(const string line, const int num)
 bool IniReader::HaveValue(const string name) const
 {
    bool retval = values.find(name) != values.end();
-   if (!retval)
-      cout << "Warning: Attempt to read non-existent value " << name << endl;
+   //if (!retval)
+   //   cout << "Warning: Attempt to read non-existent value " << name << endl;
    return retval;
 }
 

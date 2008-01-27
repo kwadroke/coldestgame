@@ -8,7 +8,7 @@
 #include "Hit.h"
 #include "PlayerData.h"
 #include "Packet.h"
-#include "TextArea.h"
+#include "gui/TextArea.h"
 #include "SDL_opengl.h"
 #include "SDL_net.h"
 #include "renderdefs.h"

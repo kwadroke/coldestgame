@@ -83,7 +83,7 @@ Node
       Type dynobj
       File unittest/torso
       Position 400 200 300
-      Rotations 45 45 0
+      Rotations -30 45 0
    Node   
       Type bush
       Texture 15

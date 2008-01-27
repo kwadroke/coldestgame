@@ -530,7 +530,7 @@ void RenderDOTree(DynamicPrimitive* root)
       if (root->facing)
       {
          Vector3 dir = localplayer.pos - parent->position;
-         Vector3 start = norm; // Initial view direction
+         Vector3 start = norm * -1; // Initial view direction
          
          dir.y = 0;
          dir.normalize();
@@ -543,7 +543,7 @@ void RenderDOTree(DynamicPrimitive* root)
          rotm.rotatey(root->rot2.y);
          start.transform(rotm);
          root->rot2.x = acos(start.dot(dir)) * 180.f / 3.14159265;
-         if (dir.y <= 0)
+         if (dir.y >= 0)
             root->rot2.x *= -1;
       }
       if (parent->billboard)
@@ -566,18 +566,17 @@ void RenderDOTree(DynamicPrimitive* root)
       
       GLint loc = shaderhand.GetAttribLocation(bumpshader, "tangent");
       
-      // Temporarily hardcoded flipped texcoords for billboards
       glColor4f(1, 1, 1, 1);
       glBegin(GL_TRIANGLE_STRIP);
-      glTexCoord2f(1, 1);
+      glTexCoord2fv(&root->texcoords[0][0][0]);
       glNormal3fv(norm.array(temp));
       glVertexAttrib3fv(loc, tangent.array(temp));
       glVertex3fv(root->v[0].array(temp));
-      glTexCoord2f(1, 0);
+      glTexCoord2fv(&root->texcoords[0][1][0]);
       glVertex3fv(root->v[1].array(temp));
-      glTexCoord2f(0, 1);
+      glTexCoord2fv(&root->texcoords[0][2][0]);
       glVertex3fv(root->v[2].array(temp));
-      glTexCoord2f(0, 0);
+      glTexCoord2fv(&root->texcoords[0][3][0]);
       glVertex3fv(root->v[3].array(temp));
       glEnd();
    }
@@ -786,6 +785,16 @@ void UpdateFBO()
          primptr->orig[3].x = width2;
          primptr->orig[3].y = -height2;
          primptr->transparent = true;
+         // Have to flip texture coordinates vertically because FBO's in X are upside down
+         // This may have to be ifdef'd for a Windows port because it's platform-specific
+         primptr->texcoords[0][0][0] = 1;
+         primptr->texcoords[0][0][1] = 1;
+         primptr->texcoords[0][1][0] = 1;
+         primptr->texcoords[0][1][1] = 0;
+         primptr->texcoords[0][2][0] = 0;
+         primptr->texcoords[0][2][1] = 1;
+         primptr->texcoords[0][3][0] = 0;
+         primptr->texcoords[0][3][1] = 0;
       }
       (*(i->dynobj->prims[0].begin()))->texnums[0] = currfbo->GetTexture();
       primptr = *(i->dynobj->prims[0].begin());
