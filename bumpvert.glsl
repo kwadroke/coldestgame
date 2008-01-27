@@ -2,8 +2,6 @@
 
 void basiclighting(out vec4 amb, out vec4 diff);
 
-//void gettbn(out vec3 t, out vec3 b, out vec3 n);
-
 //varying vec4 shadowmappos, worldshadowmappos;
 varying float dist;
 varying vec4 ambient;//, diffuse;
@@ -36,9 +34,9 @@ void main()
    worldcoords.xyz = gl_Vertex.xyz;
    
    vec3 t, b, n;
-   n = normalize(gl_Normal);
+   n = -normalize(gl_Normal);
    t = normalize(tangent);
-   b = normalize(cross(n, t));
+   b = normalize(cross(t, n));
    
    vec3 location = gl_ModelViewMatrixInverse[3].xyz;
    worldcoords = gl_Vertex.xyz;
@@ -63,31 +61,3 @@ void main()
    gl_Position = ftransform();
 }
 
-
-/*void gettbn(out vec3 t, out vec3 b, out vec3 n)
-{
-   vec3 tangent;
-   vec3 binormal;
-   vec3 normal = normalize(gl_NormalMatrix * gl_Normal);
-   
-   vec3 c1 = cross(normal, vec3(0.0, 0.0, 1.0)); 
-   vec3 c2 = cross(normal, vec3(0.0, 1.0, 0.0)); 
-   
-   if (length(c1) > length(c2))
-   {
-      tangent = c1;
-   }
-   else
-   {
-      tangent = c2;
-   }
-   
-   tangent = normalize(tangent);
-   
-   binormal = cross(normal, tangent); 
-   binormal = normalize(binormal);
-   
-   t = tangent;
-   b = binormal;
-   n = normal;
-}*/

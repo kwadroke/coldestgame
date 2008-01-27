@@ -5,7 +5,7 @@
 #include <sstream>
 #include "Particle.h"
 #include "ServerInfo.h"
-#include "GUI.h"
+#include "gui/GUI.h"
 #include "PlayerData.h"
 #include "types.h"
 

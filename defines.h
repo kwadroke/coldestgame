@@ -45,10 +45,10 @@
 #include "Light.h"
 #include "Shader.h"
 #include "FBO.h"
-#include "GUI.h"
-#include "ProgressBar.h"
+#include "gui/GUI.h"
+#include "gui/ProgressBar.h"
 #include "ServerInfo.h"
-#include "Table.h"
+#include "gui/Table.h"
 #include "types.h"
 #include "IniReader.h"
 

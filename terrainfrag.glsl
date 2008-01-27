@@ -12,7 +12,7 @@ varying vec4 ambient;
 void main()
 {
    vec3 texweight = vec3(.5, .5, .5);
-   vec3 texweight1 = {.5, .5, .5};
+   vec3 texweight1 = vec3(.5, .5, .5);
    /* Reflection */
    if (worldcoords.y < 0 && reflectval > .5) discard;
    
@@ -38,9 +38,9 @@ void main()
    color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
    
    // Debugging
-   color = texture2D(tex, gl_TexCoord[0].st);
+   //color = texture2D(tex, gl_TexCoord[0].st);
    
-   //color *= base;
+   color *= base;
    
    shadow(ambient, diffuse, dist, color);
    

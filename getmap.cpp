@@ -2,8 +2,8 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include "ProgressBar.h"
-#include "GUI.h"
+#include "gui/ProgressBar.h"
+#include "gui/GUI.h"
 #include "CollisionDetection.h"
 #include "TextureHandler.h"
 #include "ProceduralTree.h"
