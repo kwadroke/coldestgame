@@ -60,20 +60,22 @@ void Table::Render()
 }
 
 
-void Table::ProcessEvent(SDL_Event* event)
+void Table::CustomProcessEvent(SDL_Event* event)
 {
-   if (!visible) return;
-   switch (event->type)
+   if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
    {
-      case SDL_MOUSEBUTTONDOWN:
-         if (InWidget(event->motion.x, event->motion.y))
-            scrollview->ProcessEvent(event);
-         break;
-      
-      default:
-         scrollview->ProcessEvent(event);
-         break;
+      guiiter i;
+      for (i = scrollview->children.begin(); i != scrollview->children.end(); ++i)
+         ((TableItem*)(*i))->selected = false;
    }
+   
+   scrollview->ProcessEvent(event);
+}
+
+
+void Table::LeftDown(SDL_Event* event)
+{
+   
 }
 
 

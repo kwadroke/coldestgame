@@ -47,7 +47,8 @@ long ProceduralTree::GenTree(list<WorldObjects>::iterator currobj)
 {
    object = currobj;
    totalprims = 0;
-   srand(time(0));  // Seed random number generator
+   srand(time(0) + rand());  // Seed random number generator - the rand() is to make sure that
+                             // when we create two trees in the same ms they're not identical
    
    GraphicMatrix m;
    Vector3 temp;

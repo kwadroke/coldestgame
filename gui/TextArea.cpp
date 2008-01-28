@@ -64,20 +64,9 @@ void TextArea::Render()
 }
 
 
-void TextArea::ProcessEvent(SDL_Event* event)
+void TextArea::CustomProcessEvent(SDL_Event* event)
 {
-   if (!visible) return;
-   switch (event->type)
-   {
-      case SDL_MOUSEBUTTONDOWN:
-         if (InWidget(event->motion.x, event->motion.y))
-            table->ProcessEvent(event);
-         break;
-      
-      default:
-         table->ProcessEvent(event);
-         break;
-   }
+   table->ProcessEvent(event);
 }
 
 

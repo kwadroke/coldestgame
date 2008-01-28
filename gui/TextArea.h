@@ -17,12 +17,12 @@ class TextArea : public GUI
       TextArea(GUI*, TextureManager*);
       ~TextArea();
       void Render();
-      void ProcessEvent(SDL_Event*);
       void Append(string);
       void Refresh();
       
    protected:
       void ReadNode(DOMNode*, GUI*);
+      void CustomProcessEvent(SDL_Event*);
       
       Table *table;
       int maxlines;

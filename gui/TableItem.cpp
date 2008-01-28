@@ -89,23 +89,9 @@ void TableItem::Render()
 }
 
 
-void TableItem::ProcessEvent(SDL_Event* event)
+void TableItem::LeftDown(SDL_Event* event)
 {
-   Table* tp = (Table*)tablep;
-   switch (event->type)
-   {
-      case SDL_MOUSEBUTTONDOWN:
-         if (event->button.button == SDL_BUTTON_LEFT)
-         {
-            if (InWidget(event->motion.x, event->motion.y))
-            {
-               selected = true;
-               //cout << (y / tp->rowheight) << endl;
-            }
-            else selected = false;
-         }
-         break;
-   }
+   selected = true;
 }
 
 

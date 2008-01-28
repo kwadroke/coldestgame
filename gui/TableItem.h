@@ -12,12 +12,12 @@ class TableItem : public GUI
       TableItem(GUI*, TextureManager*);
       ~TableItem();
       void Render();
-      void ProcessEvent(SDL_Event*);
       void Build(string, GUI*);
       string Text(int);
       
    protected:
       void ReadNode(DOMNode*, GUI*);
+      void LeftDown(SDL_Event*);
       
       GUI* tablep;
       bool selected;

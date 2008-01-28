@@ -13,12 +13,15 @@ class LineEdit : public GUI
       
    protected:
       void ReadNode(DOMNode*, GUI*);
-      void ProcessEvent(SDL_Event*);
       int CalculateMousePos(int, int);
       void InsertChar(char);
       void BSChar();
       void DeleteChar();
       string GetVisible();
+      virtual void MouseMotion(SDL_Event*);
+      virtual void LeftClick(SDL_Event*);
+      virtual void LeftDown(SDL_Event*);
+      virtual void KeyDown(SDL_Event*);
       
       int cursorpos;
       int offset;

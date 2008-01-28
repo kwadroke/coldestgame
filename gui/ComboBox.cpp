@@ -48,34 +48,33 @@ void ComboBox::Render()
 }
 
 
-void ComboBox::ProcessEvent(SDL_Event* event)
+void ComboBox::LeftDown(SDL_Event* event)
 {
-   if (!visible) return;
-   
-   table->ProcessEvent(event);
-   button->ProcessEvent(event);
-   
-   switch (event->type)
+   if (button->EventInWidget(event) && !table->visible)
    {
-      case SDL_MOUSEBUTTONDOWN:
-         if (event->button.button == SDL_BUTTON_LEFT)
-         {
-            if (button->InWidget(event->motion.x, event->motion.y) && !table->visible)
-            {
-               table->visible = true;
-            }
-            else if (!table->InScrollbar(event->motion.x, event->motion.y))
-            {
-               if (table->InWidget(event->motion.x, event->motion.y) && table->visible)
-               {
-                  button->text = table->GetSelectedString(0);
-                  DoAction(valuechanged);
-               }
-               table->visible = false;
-            }
-         }
-         break;
+      table->visible = true;
    }
+}
+
+
+void ComboBox::LeftClick(SDL_Event* event)
+{
+   if (table->EventInWidget(event) && table->visible && !table->InScrollbar(event->motion.x, event->motion.y))
+   {
+      button->text = table->GetSelectedString(0);
+      DoAction(valuechanged);
+      table->visible = false;
+   }
+}
+
+
+void ComboBox::CustomProcessEvent(SDL_Event* event)
+{
+   button->ProcessEvent(event);
+   table->ProcessEvent(event);
+   
+   if (!EventInWidget(event) && event->type == SDL_MOUSEBUTTONDOWN)
+      table->visible = false;
 }
 
 
@@ -118,4 +117,16 @@ void ComboBox::ReadNode(DOMNode* current, GUI* parentw)
 int ComboBox::Selected()
 {
    return table->Selected();
+}
+
+
+bool ComboBox::InWidget(float xcoord, float ycoord)
+{
+   float extraheight = table->visible ? table->height : 0;
+   if (xcoord > ((x + xoff) * wratio) &&
+       xcoord < ((x + xoff + width) * wratio) &&
+       ycoord > ((y + yoff) * hratio) &&
+       ycoord < ((y + yoff + height + extraheight) * hratio))
+      return true;
+   return false;
 }
