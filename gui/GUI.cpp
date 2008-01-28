@@ -117,14 +117,42 @@ void GUI::RenderBase()
 }
 
 
+/* Although this function is still virtual, you probably want to override the LeftClick, RightClick, etc.
+   functions instead.  Unique requirements can be implemented in CustomProcessEvent.  The only reason it
+   should be necessary to override this function itself is if you for some reason didn't want these standard
+   actions to happen, but that seems highly unlikely. */
 void GUI::ProcessEvent(SDL_Event* event)
 {
    if (!visible) return;
+   
+   CustomProcessEvent(event);
+   
    switch (event->type)
    {
       case SDL_MOUSEBUTTONDOWN:
-         if (InWidget(event->motion.x, event->motion.y))
+         if (EventInWidget(event))
+         {
             state = Clicked;
+            active = true;
+            if (event->button.button == SDL_BUTTON_LEFT)
+            {
+               DoAction(leftdownaction);
+               LeftDown(event);
+            }
+            else if (event->button.button == SDL_BUTTON_RIGHT)
+            {
+               DoAction(rightdownaction);
+               RightDown(event);
+            }
+            else if (event->button.button == SDL_BUTTON_WHEELUP)
+            {
+               WheelUp(event);
+            }
+            else if (event->button.button == SDL_BUTTON_WHEELDOWN)
+            {
+               WheelDown(event);
+            }
+         }
          else 
          {
             state = Normal;
@@ -132,24 +160,45 @@ void GUI::ProcessEvent(SDL_Event* event)
          break;
          
       case SDL_MOUSEBUTTONUP:
-         if (InWidget(event->motion.x, event->motion.y))
+         if (EventInWidget(event))
+         {
             state = Hover;
+            if (event->button.button == SDL_BUTTON_LEFT)
+            {
+               DoAction(leftclickaction);
+               LeftClick(event);
+            }
+            else if (event->button.button == SDL_BUTTON_RIGHT)
+            {
+               DoAction(rightclickaction);
+               RightClick(event);
+            }
+         }
          else
          {
             state = Normal;
             break;
          }
-         if (event->button.button == SDL_BUTTON_LEFT)
-            DoAction(leftclickaction);
          break;
       
       case SDL_MOUSEMOTION:
-         if (InWidget(event->motion.x, event->motion.y))
+         if (EventInWidget(event))
          {
             if (state != Clicked)
                state = Hover;
          }
          else state = Normal;
+         MouseMotion(event);
+         break;
+         
+      case SDL_KEYDOWN:
+         if (active)
+            KeyDown(event);
+         break;
+         
+      case SDL_KEYUP:
+         if (active)
+            KeyUp(event);
          break;
    }
    
@@ -589,6 +638,14 @@ bool GUI::InWidget(float xcoord, float ycoord)
 }
 
 
+// Convenience function because we do this a lot.
+// Note that it does honor custom InWidget functions, which is why it's not virtual
+bool GUI::EventInWidget(SDL_Event* event)
+{
+   return InWidget(event->motion.x, event->motion.y);
+}
+
+
 // Returns the height and width in pixels of the text in the height and width params
 void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
 {
@@ -750,3 +807,16 @@ void GUI::DoAction(string action)
    else if (action == "submitcommand")
       SubmitCommand();
 }
+
+
+// The following functions are all no-ops in the base class, but may be overriden in derived classes
+void GUI::CustomProcessEvent(SDL_Event* event){}
+void GUI::MouseMotion(SDL_Event* event){}
+void GUI::LeftClick(SDL_Event* event){}
+void GUI::LeftDown(SDL_Event* event){}
+void GUI::RightClick(SDL_Event* event){}
+void GUI::RightDown(SDL_Event* event){}
+void GUI::WheelDown(SDL_Event* event){}
+void GUI::WheelUp(SDL_Event* event){}
+void GUI::KeyDown(SDL_Event* event){}
+void GUI::KeyUp(SDL_Event* event){}

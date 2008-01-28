@@ -49,6 +49,7 @@ void LineEdit::Render()
       string textlen = text.substr(offset, cursorpos);
       StringDim(font, textlen, w, h);
       float fw = (float)w / wratio * fontscale;
+      texman->BindTexture(textures[Hover]);
       glBegin(GL_TRIANGLE_STRIP);
       glTexCoord2i(0, 0);
       glVertex2f((x + xoff + fw) * wratio, (y + yoff) * hratio);
@@ -61,17 +62,20 @@ void LineEdit::Render()
       glEnd();
    }
    
-   StringDim(font, text, w, h);
-   float fh = (float)h / hratio;
-   float fw = (float)w / wratio;
-   
-   float scale = (height - ymargin * 2.f) / fh;
-   fh *= scale;
-   
-   float centery = height / 2.f - fh / 2.f;
-   RenderText(text, oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, scale);
-   oldtext = text;
-   fontscale = scale;
+   if (text != "") // Empty text messes up our scale calculations, and there's no need to do them if we're not rendering any
+   {
+      StringDim(font, text, w, h);
+      float fh = (float)h / hratio;
+      float fw = (float)w / wratio;
+      
+      float scale = (height - ymargin * 2.f) / fh;
+      fh *= scale;
+      
+      float centery = height / 2.f - fh / 2.f;
+      RenderText(text, oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, scale);
+      oldtext = text;
+      fontscale = scale;
+   }
    
    /*StringDim(font, GetVisible(), w, h);
    float centery = height / 2.f - h * fontscale / hratio / 2.f;
@@ -79,7 +83,68 @@ void LineEdit::Render()
 }
 
 
-void LineEdit::ProcessEvent(SDL_Event* event)
+void LineEdit::LeftDown(SDL_Event* event)
+{
+   dragstart = CalculateMousePos(event->motion.x, event->motion.y);
+   cursorpos = dragstart;
+}
+
+
+void LineEdit::LeftClick(SDL_Event* event)
+{
+   dragend = CalculateMousePos(event->motion.x, event->motion.y);
+}
+
+
+void LineEdit::MouseMotion(SDL_Event* event)
+{
+   if (state == Clicked)
+   {
+      dragend = CalculateMousePos(event->motion.x, event->motion.y);
+      //Drag
+   }
+}
+
+
+void LineEdit::KeyDown(SDL_Event* event)
+{
+   if (readonly) return;
+   switch (event->key.keysym.sym) 
+   {
+      case SDLK_BACKSPACE:
+         BSChar();
+         break;
+      case SDLK_DELETE:
+         DeleteChar();
+         break;
+      case SDLK_LEFT:
+         --cursorpos;
+         if (cursorpos < 0)
+         {
+            if (offset > 0) --offset;
+            
+            cursorpos = 0;
+         }
+         break;
+      case SDLK_RIGHT:
+         if (cursorpos + offset < text.length())
+            ++cursorpos;
+         if (cursorpos > GetVisible().length())
+         {
+            ++offset;
+            --cursorpos;
+         }
+         break;
+      default:
+         char c = event->key.keysym.sym;
+         InsertChar(c);
+         break;
+   }
+}
+
+
+
+/*void LineEdit::ProcessEvent(SDL_Event* event)
 {
    if (!visible) return;
    switch (event->type)
@@ -159,7 +224,7 @@ void LineEdit::ProcessEvent(SDL_Event* event)
                break;
          }
    }
-}
+}*/
 
 
 // Determine where the mouse is relative to the characters currently visible
@@ -191,6 +256,9 @@ void LineEdit::InsertChar(char c)
    ++cursorpos;
    if (cursorpos > GetVisible().length())
    {
+      cout << "Visible" << GetVisible().length() << endl;
+      cout << "text" << text << endl;
+      cout << offset << endl;
       ++offset;
       --cursorpos;
    }
@@ -230,6 +298,10 @@ string LineEdit::GetVisible()
       ++counter;
       StringDim(font, available.substr(0, counter), strw, strh);
    }
+   cout << counter << endl;
+   cout << available.length() << endl;
+   cout << strw << "  " << wratio << "  " << fontscale << endl;
+   cout << (strw / wratio * fontscale) << "  " << (width - 2.f) << endl;
    if (counter < available.length() || strw / wratio * fontscale >= width - 2.f) --counter;
    return available.substr(0, counter);
 }

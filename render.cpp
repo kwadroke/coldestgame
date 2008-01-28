@@ -787,13 +787,9 @@ void UpdateFBO()
          primptr->transparent = true;
          // Have to flip texture coordinates vertically because FBO's in X are upside down
          // This may have to be ifdef'd for a Windows port because it's platform-specific
-         primptr->texcoords[0][0][0] = 1;
          primptr->texcoords[0][0][1] = 1;
-         primptr->texcoords[0][1][0] = 1;
          primptr->texcoords[0][1][1] = 0;
-         primptr->texcoords[0][2][0] = 0;
          primptr->texcoords[0][2][1] = 1;
-         primptr->texcoords[0][3][0] = 0;
          primptr->texcoords[0][3][1] = 0;
       }
       (*(i->dynobj->prims[0].begin()))->texnums[0] = currfbo->GetTexture();

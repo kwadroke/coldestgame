@@ -105,6 +105,7 @@ class GUI
       string ReadStringTag(DOMNode*, XMLCh*);
       void SetTextureManager(TextureManager*);
       void SetActualSize(int, int);
+      bool EventInWidget(SDL_Event*);
       virtual bool InWidget(float, float);
       void RenderText(string, string, int, int, int, TTF_Font*, GLuint, float scale = 1.f, bool shadow = true);
       
@@ -127,6 +128,18 @@ class GUI
       void StringDim(TTF_Font*, string, int&, int&);
       void RenderBase();
       
+      // Event handlers
+      virtual void CustomProcessEvent(SDL_Event*);
+      virtual void MouseMotion(SDL_Event*);
+      virtual void LeftClick(SDL_Event*);
+      virtual void LeftDown(SDL_Event*);
+      virtual void RightClick(SDL_Event*);
+      virtual void RightDown(SDL_Event*);
+      virtual void WheelDown(SDL_Event*);
+      virtual void WheelUp(SDL_Event*);
+      virtual void KeyDown(SDL_Event*);
+      virtual void KeyUp(SDL_Event*);
+      
       // Copying of this object is not allowed, just use InitFromFile again
       // with the same file on a new object
       GUI(const GUI&);
@@ -143,7 +156,8 @@ class GUI
       int state;
       bool active;
       string name;
-      string leftclickaction, valuechanged;
+      string leftclickaction, rightclickaction, valuechanged;
+      string leftdownaction, rightdownaction;
       string oldtext;
       GLuint texttexture;
       vector<string> textures;

@@ -74,96 +74,99 @@ void ScrollView::ReadNodeLocal(DOMNode* current, GUI* parent)
 }
 
 
-void ScrollView::ProcessEvent(SDL_Event* event)
+void ScrollView::CustomProcessEvent(SDL_Event* event)
 {
-   if (!visible) return;
    RecalculateSize();
-   switch (event->type)
-   {
-      case SDL_MOUSEBUTTONDOWN:
-         if (InWidget(event->motion.x, event->motion.y))
-         {
-            active = true;
-            if (event->motion.x / wratio >= x + xoff + width - scrollbarwidth &&
-                event->motion.x / wratio <= x + xoff + width &&
-               canvasy > height && event->button.button == SDL_BUTTON_LEFT)
-               drag = true;
-            else if (event->button.button == SDL_BUTTON_WHEELUP)
-            {
-               vpoffsety -= 10.f;
-               yoff += 10.f;
-               if (vpoffsety < 0)
-               {
-                  yoff += vpoffsety;
-                  vpoffsety = 0;
-               }
-            }
-            else if (event->button.button == SDL_BUTTON_WHEELDOWN)
-            {
-               vpoffsety += 10.f;
-               yoff -= 10.f;
-               if (vpoffsety + height > canvasy)
-               {
-                  yoff += (vpoffsety + height - canvasy);
-                  vpoffsety = canvasy - height;
-               }
-            }
-         }
-         else active = false;
-         break;
-         
-      case SDL_MOUSEBUTTONUP:
-         drag = false;
-         break;
-      
-      case SDL_MOUSEMOTION:
-         if (drag)
-         {
-            vpoffsety += event->motion.yrel * scrollamount;
-            yoff -= event->motion.yrel * scrollamount;
-            if (vpoffsety < 0)
-            {
-               yoff += vpoffsety;
-               vpoffsety = 0;
-            }
-            else if (vpoffsety + height > canvasy)
-            {
-               yoff += (vpoffsety + height - canvasy);
-               vpoffsety = canvasy - height;
-            }
-         }
-         break;
-         
-      case SDL_KEYDOWN:
-         if (!active) break;
-         switch (event->key.keysym.sym) 
-         {
-            case SDLK_UP:
-               vpoffsety -= 5.f;
-               yoff += 5.f;
-               if (vpoffsety < 0)
-               {
-                  yoff += vpoffsety;
-                  vpoffsety = 0;
-               }
-               break;
-            case SDLK_DOWN:
-               vpoffsety += 5.f;
-               yoff -= 5.f;
-               if (vpoffsety + height > canvasy)
-               {
-                  yoff += (vpoffsety + height - canvasy);
-                  vpoffsety = canvasy - height;
-               }
-               break;
-            default:
-               break;
-         }
-   }
    
-   guiiter i;
-   for (i = children.begin(); i != children.end(); ++i)
-      (*i)->ProcessEvent(event);
+   if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
+      drag = false;
+}
+
+
+void ScrollView::MouseMotion(SDL_Event* event)
+{
+   if (drag)
+   {
+      vpoffsety += event->motion.yrel * scrollamount;
+      yoff -= event->motion.yrel * scrollamount;
+      if (vpoffsety < 0)
+      {
+         yoff += vpoffsety;
+         vpoffsety = 0;
+      }
+      else if (vpoffsety + height > canvasy)
+      {
+         yoff += (vpoffsety + height - canvasy);
+         vpoffsety = canvasy - height;
+      }
+   }
+}
+
+
+void ScrollView::LeftDown(SDL_Event* event)
+{
+   if (event->motion.x / wratio >= x + xoff + width - scrollbarwidth &&
+       event->motion.x / wratio <= x + xoff + width &&
+       canvasy > height && event->button.button == SDL_BUTTON_LEFT)
+      drag = true;
+}
+
+
+void ScrollView::LeftClick(SDL_Event* event)
+{
+   drag = false;
+}
+
+
+void ScrollView::WheelDown(SDL_Event* event)
+{
+   vpoffsety += 10.f;
+   yoff -= 10.f;
+   if (vpoffsety + height > canvasy)
+   {
+      yoff += (vpoffsety + height - canvasy);
+      vpoffsety = canvasy - height;
+   }
+}
+
+
+void ScrollView::WheelUp(SDL_Event* event)
+{
+   vpoffsety -= 10.f;
+   yoff += 10.f;
+   if (vpoffsety < 0)
+   {
+      yoff += vpoffsety;
+      vpoffsety = 0;
+   }
+}
+
+
+void ScrollView::KeyDown(SDL_Event* event)
+{
+   switch (event->key.keysym.sym)
+   {
+      case SDLK_UP:
+         vpoffsety -= 5.f;
+         yoff += 5.f;
+         if (vpoffsety < 0)
+         {
+            yoff += vpoffsety;
+            vpoffsety = 0;
+         }
+         break;
+      case SDLK_DOWN:
+         vpoffsety += 5.f;
+         yoff -= 5.f;
+         if (vpoffsety + height > canvasy)
+         {
+            yoff += (vpoffsety + height - canvasy);
+            vpoffsety = canvasy - height;
+         }
+         break;
+      default:
+         break;
+   }
 }
 
 

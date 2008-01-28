@@ -13,11 +13,15 @@ class ComboBox : public GUI
       ComboBox(GUI*, TextureManager*);
       ~ComboBox();
       void Render();
-      void ProcessEvent(SDL_Event*);
       void ReadNode(DOMNode* current, GUI* parentw);
       int Selected();
+      virtual bool InWidget(float, float);
       
    protected:
+      void CustomProcessEvent(SDL_Event*);
+      void LeftDown(SDL_Event*);
+      void LeftClick(SDL_Event*);
+      
       Table* table;
       Button* button;
       float menuheight;

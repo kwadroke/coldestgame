@@ -15,7 +15,6 @@ class Table : public GUI
       Table(GUI*, TextureManager*);
       ~Table();
       void Render();
-      void ProcessEvent(SDL_Event*);
       void clear();
       void Add(string);
       int Selected();
@@ -24,6 +23,8 @@ class Table : public GUI
       
    protected:
       void ReadNode(DOMNode*, GUI*);
+      void LeftDown(SDL_Event*);
+      void CustomProcessEvent(SDL_Event*);
       
       //vector<TableItem*> rows;
       ScrollView* scrollview;

@@ -22,8 +22,14 @@ class ScrollView : public GUI
       bool drag;
       
       void ReadNodeLocal(DOMNode*, GUI*);
-      void ProcessEvent(SDL_Event*);
       void RecalculateSize();
+      virtual void CustomProcessEvent(SDL_Event*);
+      virtual void MouseMotion(SDL_Event*);
+      virtual void LeftClick(SDL_Event*);
+      virtual void LeftDown(SDL_Event*);
+      virtual void WheelDown(SDL_Event*);
+      virtual void WheelUp(SDL_Event*);
+      virtual void KeyDown(SDL_Event*);
 };
 
 #endif
