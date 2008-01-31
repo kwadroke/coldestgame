@@ -47,7 +47,6 @@ int main(int argc, char* argv[])
    //SetupOpenGL();
    LoadShaders();
    InitNoise();
-   LoadDOTextures("models/testex");
    
    // Start network threads
    netin = SDL_CreateThread(NetListen, NULL);
@@ -1346,6 +1345,10 @@ void LoadDOTextures(string filename)
       cout << "Object file version mismatch for file: " << filename << endl << flush;
       return;
    }
+   
+   if (dotextures.size())
+      glDeleteTextures(dotextures.size(), &dotextures[0]);
+   
    lf >> numtex;
    GLuint temptex[numtex];
    glGenTextures(numtex, temptex);

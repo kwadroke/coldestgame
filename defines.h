@@ -83,7 +83,6 @@ void GenShadows(Vector3, float, FBO&);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void Animate();
 void ReadConfig();
-void LoadDOTextures(string);
 int NetListen(void*);
 int NetSend(void*);
 string FillUpdatePacket();

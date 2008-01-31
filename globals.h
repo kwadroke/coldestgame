@@ -64,6 +64,7 @@ string ToString(const T &input)
 
 void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
 float GetTerrainHeight(const float x, const float y);
+void LoadDOTextures(string);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
