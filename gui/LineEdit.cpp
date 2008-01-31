@@ -256,9 +256,6 @@ void LineEdit::InsertChar(char c)
    ++cursorpos;
    if (cursorpos > GetVisible().length())
    {
-      cout << "Visible" << GetVisible().length() << endl;
-      cout << "text" << text << endl;
-      cout << offset << endl;
       ++offset;
       --cursorpos;
    }
@@ -298,10 +295,6 @@ string LineEdit::GetVisible()
       ++counter;
       StringDim(font, available.substr(0, counter), strw, strh);
    }
-   cout << counter << endl;
-   cout << available.length() << endl;
-   cout << strw << "  " << wratio << "  " << fontscale << endl;
-   cout << (strw / wratio * fontscale) << "  " << (width - 2.f) << endl;
    if (counter < available.length() || strw / wratio * fontscale >= width - 2.f) --counter;
    return available.substr(0, counter);
 }

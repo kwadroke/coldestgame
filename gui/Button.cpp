@@ -41,7 +41,7 @@ void Button::Render()
    xoff = parent->xoff + parent->x;
    yoff = parent->yoff + parent->y;
    RenderBase();
-   int h, w;
+   int w, h;
    StringDim(font, text, w, h);
    float fh = (float)h / hratio;
    float fw = (float)w / wratio;

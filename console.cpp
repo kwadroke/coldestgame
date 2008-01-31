@@ -461,6 +461,11 @@ void ConsoleHandler(string command)
       LoadShaders();
       return;
    }
+   else if (Token(newcommand, 0) == "reloadres")
+   {
+      mapname = "";
+      return;
+   }
    WriteToConsole(string("Unrecognized command"));
 }
 

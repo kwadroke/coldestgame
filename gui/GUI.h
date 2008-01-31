@@ -47,6 +47,7 @@ struct Tags
    XMLCh* combobox;
    XMLCh* comboboxitem;
    XMLCh* textarea;
+   XMLCh* slider;
    
    // General tags
    XMLCh* normal;
@@ -93,6 +94,7 @@ class GUI
    friend class TableItem;
    friend class ComboBox;
    friend class TextArea;
+   friend class Slider;
    public:
       GUI(float aw = 480.f, float ah = 640.f, TextureManager* texm = NULL);
       virtual ~GUI();

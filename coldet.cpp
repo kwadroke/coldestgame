@@ -187,7 +187,7 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = 0;//.3f;
+   dummy.velocity = 0.f;//.3f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
@@ -502,20 +502,6 @@ while(1)
 // process pending events
 while( SDL_PollEvent( &event ) ) 
 {
-   // If a menu is visible it eats all events
-   if (mainmenu.visible) 
-   {
-      SDL_ShowCursor(1);
-      mainmenu.ProcessEvent(&event);
-      continue;
-   }
-   else if (loadoutmenu.visible)
-   {
-      SDL_ShowCursor(1);
-      loadoutmenu.ProcessEvent(&event);
-      continue;
-   }
-   
    // Mini keyboard handler to deal with the console
    switch (event.type)
    {
@@ -549,6 +535,20 @@ while( SDL_PollEvent( &event ) )
          }
       
    };
+   
+   // If a menu is visible it eats all events
+   if (mainmenu.visible) 
+   {
+      SDL_ShowCursor(1);
+      mainmenu.ProcessEvent(&event);
+      continue;
+   }
+   else if (loadoutmenu.visible)
+   {
+      SDL_ShowCursor(1);
+      loadoutmenu.ProcessEvent(&event);
+      continue;
+   }
    
    if (console.visible)
    {

@@ -18,6 +18,7 @@ WorldObjects::WorldObjects()
    x = y = z = 0;
    rotation = pitch = roll = 0;
    render = true;
+   impostorfbo = 0;
 }
 
 

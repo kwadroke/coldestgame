@@ -20,9 +20,9 @@ void main()
    
    //shadow(ambient, diffuse, dist, color);
    
-   //fog(dist, color);
+   //fog(dist, color);s
    
-   vec3 bump = normalize(texture2D(bumptex, gl_TexCoord[0].st).xyz) * 2 - 1;
+   vec3 bump = texture2D(bumptex, gl_TexCoord[0].st).xyz * 2 - 1;
    
    float ndotl = max(0.0, dot(normalize(bump), normalize(lightdir)));
    //float ndotl = dot(normalize(bump), normalize(lightdir));
@@ -37,6 +37,10 @@ void main()
    //gl_FragColor.rgb = lightdir * .5 + .5;
    //gl_FragColor.rgb = lightdir;
    //gl_FragColor.rgb = bump * .5 + .5;
+   //gl_FragColor.rgb = cross(bump, lightdir);
+   //vec3 templ = lightdir;
+   //templ.x *= -1;
+   //gl_FragColor.rgb = templ * .5 + lightdir * .5;
    
    gl_FragColor.a = 1.;
 }

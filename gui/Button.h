@@ -14,6 +14,7 @@ class Button : public GUI
 {
    friend class GUI;
    friend class ComboBox;
+   friend class Slider;
    public:
       Button(GUI*, TextureManager*);
       ~Button();
