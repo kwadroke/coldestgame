@@ -91,11 +91,13 @@ void GetMap(string fn)
    lights.SetAmbient(0, amb);
    
    // Load the textures themselves
-   // Note: first texture must always be the skybox
+   // Note: first texture must always be the skybox  TODO: This req is bad and should be removed
    progress->SetRange(0, 6);
    progress->value = 0;
    progtext->text = "Loading textures";
    Repaint();
+   
+   LoadDOTextures("models/testex");
    
    // Pretty sure this call is irrelevant now that we're using shaders
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -161,6 +163,7 @@ void GetMap(string fn)
    list<WorldObjects>::iterator currobj;
    objects.clear();
    impfbolist.clear();
+   dynobjects.clear();
    progtext->text = "Loading objects";
    progress->value = 1;
    Repaint();
