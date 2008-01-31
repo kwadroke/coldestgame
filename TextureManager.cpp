@@ -34,3 +34,15 @@ void TextureManager::BindTexture(string filename)
 {
    texhand->BindTexture(texnames[filename]);
 }
+
+
+void TextureManager::DeleteTexture(string filename, bool gldelete)
+{
+   if (loaded.find(filename) != loaded.end())
+   {
+      if (gldelete)
+         glDeleteTextures(1, &texnames[filename]);
+      texnames.erase(filename);
+      loaded.erase(filename);
+   }
+}

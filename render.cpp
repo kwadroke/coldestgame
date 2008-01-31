@@ -561,7 +561,7 @@ void RenderDOTree(DynamicPrimitive* root)
       norm = (root->v[2] - root->v[0]).cross(
                root->v[1] - root->v[0]);
       norm.normalize();
-      Vector3 tangent = root->v[0] - root->v[2];
+      Vector3 tangent = root->v[2] - root->v[0];
       tangent.normalize();
       
       GLint loc = shaderhand.GetAttribLocation(bumpshader, "tangent");
@@ -643,7 +643,7 @@ void UpdateFBO()
    WorldObjects* i;
    FBO* currfbo = &(impfbolist[0]);
    int counter = 0;
-   int desireddim = 32;
+   int desireddim = fbostarts[2];
    Vector3 playerpos = localplayer.pos;
    
    sortedbyimpdim = impobjs;

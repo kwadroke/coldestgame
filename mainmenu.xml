@@ -66,4 +66,10 @@
       <Normal>textures/buttonnormsquare.png</Normal>
 Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
    </TextArea>
+   
+   <Slider x="100" y="300" width="180" height="30" name="testslider">
+      <Normal>textures/buttonnorm.png</Normal>
+      <Pressed>textures/buttonpressed.png</Pressed>
+      <Hover>textures/buttonhover.png</Hover>
+   </Slider>
 </GUI>

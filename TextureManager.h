@@ -17,6 +17,8 @@ class TextureManager
       ~TextureManager();
       GLuint LoadTexture(string);
       void BindTexture(string);
+      void DeleteTexture(string, bool gldelete = true);
+      
       TextureHandler* texhand;
       
    private:

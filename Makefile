@@ -36,7 +36,7 @@ GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		IniReader.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o\
-		actions.o Table.o TableItem.o ComboBox.o TextArea.o
+		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
 
 OBJS = $(GENERAL) $(GUI)
 
@@ -1842,10 +1842,11 @@ gui/ComboBox.o: gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
 gui/ComboBox.o: gui/LineEdit.h gui/Button.h
 gui/GUI.o: gui/GUI.h gui/Button.h gui/LineEdit.h gui/ScrollView.h
 gui/GUI.o: gui/ProgressBar.h gui/Table.h gui/ComboBox.h gui/TableItem.h
-gui/GUI.o: gui/TextArea.h
+gui/GUI.o: gui/TextArea.h gui/Slider.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
 gui/ProgressBar.o: gui/ProgressBar.h gui/GUI.h
 gui/ScrollView.o: gui/ScrollView.h gui/GUI.h
+gui/Slider.o: gui/Slider.h gui/GUI.h gui/Button.h
 gui/Table.o: gui/Table.h
 gui/TableItem.o: gui/TableItem.h gui/GUI.h gui/LineEdit.h gui/Table.h
 gui/TextArea.o: gui/TextArea.h gui/GUI.h gui/Table.h

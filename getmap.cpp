@@ -113,6 +113,7 @@ void GetMap(string fn)
    for (int i = 0; i < numtextures; i++)
    {
       mapdata.Read(texpath, ToString(i));
+      texman->DeleteTexture(texpath, false); // Make sure if we previously loaded it we reload it again
       textures[i] = texman->LoadTexture(texpath);
    }
    
@@ -942,6 +943,7 @@ void GetMap(string fn)
    int fbodim = 32;
    int counter = 0;
    FBO dummyfbo;
+   impobjs.clear();
    for (list<WorldObjects>::iterator i = objects.begin(); i != objects.end(); ++i)
    {
       if (i->type != "dynobj")
