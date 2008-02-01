@@ -19,6 +19,7 @@ GUI loadprogress;       // Shows loading progress
 GUI loadoutmenu;        // The loadout screen
 GUI statsdisp;          // Display FPS etc.
 GUI console;            // The in-game console
+GUI* ingamestatus;      // In game status pane triggered by tab key
 int partupdateinterval; // Update particles every this many frames
 TextureManager *texman;  // Handles string versions of texture identifiers
 vector<PlayerData> player;

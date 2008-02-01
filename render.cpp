@@ -410,7 +410,7 @@ void InitGLState(WorldObjects *i)
       glBlendFunc(GL_ONE, GL_ZERO);
       glEnable(GL_BLEND);
       
-      /* Not really happy with the way this looks*/
+      /* Not entirely happy with the way this looks, but it could be worse*/
       glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
       glSampleCoverage(1.f, GL_FALSE);
       glDisable(GL_BLEND);
@@ -1226,6 +1226,7 @@ void RenderHud()
    if (showfps)
       statsdisp.Render();
    console.Render();
+   ingamestatus->Render();
    
    SDL_GL_Exit2dMode();
 }

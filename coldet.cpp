@@ -158,6 +158,9 @@ void InitGUI()
    console.SetTextureManager(texman);
    console.SetActualSize(screenwidth, screenheight);
    console.InitFromFile("console.xml");
+   // There's no particular reason not to new these, and it allows better RAII semantics
+   ingamestatus = new GUI(screenwidth, screenheight, texman);
+   ingamestatus->InitFromFile("ingamestatus.xml");
    ConsoleBufferToGUI();
 }
 
@@ -476,6 +479,7 @@ static void MainLoop()
 {
 SDL_Event event;
 Uint32 servupdatecounter = SDL_GetTicks();
+Uint32 statupdatecounter = SDL_GetTicks();
 Uint32 currtick;
 while(1) 
 {
@@ -496,6 +500,15 @@ while(1)
       {
          UpdateServerList();
          servupdatecounter = currtick;
+      }
+   }
+   if (ingamestatus->visible)
+   {
+      currtick = SDL_GetTicks();
+      if (currtick - statupdatecounter > 100)
+      {
+         UpdatePlayerList();
+         statupdatecounter = currtick;
       }
    }
 // process pending events
@@ -599,6 +612,9 @@ while( SDL_PollEvent( &event ) )
                   player[0].pos.y = 200;
                   player[0].pos.z = 200;
                   break;
+               case SDLK_TAB:
+                  ingamestatus->visible = true;
+                  break;
             }
          }
          break;
@@ -628,6 +644,9 @@ while( SDL_PollEvent( &event ) )
             case SDLK_RSHIFT:
                player[0].run = false;
                break;
+            case SDLK_TAB:
+                  ingamestatus->visible = false;
+                  break;
          }
          break;
          
@@ -1438,6 +1457,29 @@ float GetTerrainHeight(const float x, const float y)
    float intermediate1 = lerp(h2, h3, xweight);
    
    return lerp(intermediate, intermediate1, yweight);
+}
+
+
+void UpdatePlayerList()
+{
+   SDL_mutexP(clientmutex);
+   
+   Table* playerlist = (Table*)ingamestatus->GetWidget("playerlist");
+   
+   playerlist->clear();
+   playerlist->Add("Name|Kills|Deaths|Ping");
+   
+   string add;
+   for (int i = 1; i < player.size(); ++i)
+   {
+      add = "Player " + ToString(i) + "|";
+      add += ToString(player[i].kills) + "|";
+      add += ToString(player[i].deaths) + "|";
+      add += ToString(player[i].ping);
+      playerlist->Add(add);
+   }
+   
+   SDL_mutexV(clientmutex);
 }
 
 

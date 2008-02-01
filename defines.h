@@ -96,5 +96,6 @@ void UpdateServerList();
 void GLError();
 string AddressToDD(Uint32);
 void SynchronizePosition();
+void UpdatePlayerList();
 
 #endif

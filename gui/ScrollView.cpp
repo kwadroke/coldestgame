@@ -1,10 +1,8 @@
 #include "ScrollView.h"
 
-ScrollView::ScrollView(GUI* p, TextureManager* tm)
+ScrollView::ScrollView(GUI* p, TextureManager* tm): vpoffsetx(0), vpoffsety(0),
+                       scrollbarwidth(10.f), scrollbarsize(10.f), drag(false)
 {
-   vpoffsetx = vpoffsety = 0;
-   scrollbarwidth = 10.f;
-   drag = false;
    Init(p, tm);
 }
 
@@ -181,8 +179,8 @@ void ScrollView::RecalculateSize()
       if (iptr->x + iptr->width > canvasx) canvasx = iptr->x + iptr->width;
       if (iptr->y + iptr->height > canvasy) canvasy = iptr->y + iptr->height;
    }
-   scrollbarsize = height * (height / canvasy);
-   if (scrollbarsize < 10.f) scrollbarsize = 10.f;
+   scrollbarsize = canvasy < .00001f ? 0 : height * (height / canvasy);
+   //if (scrollbarsize < 10.f) scrollbarsize = 10.f;
    float availablebar = height - scrollbarsize;
    if (availablebar < .00001) 
    {
@@ -193,7 +191,7 @@ void ScrollView::RecalculateSize()
 }
 
 
-bool ScrollView::InWidget(float xcoord, float ycoord)
+bool ScrollView::FloatsInWidget(float xcoord, float ycoord)
 {
    if (xcoord > ((x + xoff + vpoffsetx) * wratio) &&
        xcoord < ((x + xoff + width + vpoffsetx) * wratio) &&

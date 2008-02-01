@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
    <TextArea x="10" y="10" width="980" height="600" name="consoleoutput">
-      <Normal>textures/skyold.png</Normal>
+      <Normal>textures/buttonnormsquare.png</Normal>
    </TextArea>
    <LineEdit x="10" y="610" width="980" height="30" text="" name="consoleinput">
       <Normal>textures/buttonnormsquare.png</Normal>
