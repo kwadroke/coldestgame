@@ -50,7 +50,7 @@ void ComboBox::Render()
 
 void ComboBox::LeftDown(SDL_Event* event)
 {
-   if (button->EventInWidget(event) && !table->visible)
+   if (button->InWidget(event) && !table->visible)
    {
       table->visible = true;
    }
@@ -59,7 +59,7 @@ void ComboBox::LeftDown(SDL_Event* event)
 
 void ComboBox::LeftClick(SDL_Event* event)
 {
-   if (table->EventInWidget(event) && table->visible && !table->InScrollbar(event->motion.x, event->motion.y))
+   if (table->InWidget(event) && table->visible && !table->InScrollbar(event->motion.x, event->motion.y))
    {
       button->text = table->GetSelectedString(0);
       DoAction(valuechanged);
@@ -73,7 +73,7 @@ void ComboBox::CustomProcessEvent(SDL_Event* event)
    button->ProcessEvent(event);
    table->ProcessEvent(event);
    
-   if (!EventInWidget(event) && event->type == SDL_MOUSEBUTTONDOWN)
+   if (!InWidget(event) && event->type == SDL_MOUSEBUTTONDOWN)
       table->visible = false;
 }
 
@@ -120,7 +120,7 @@ int ComboBox::Selected()
 }
 
 
-bool ComboBox::InWidget(float xcoord, float ycoord)
+bool ComboBox::FloatsInWidget(float xcoord, float ycoord)
 {
    float extraheight = table->visible ? table->height : 0;
    if (xcoord > ((x + xoff) * wratio) &&

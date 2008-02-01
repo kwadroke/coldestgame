@@ -38,6 +38,7 @@ extern GUI loadprogress;       // Shows loading progress
 extern GUI loadoutmenu;        // The loadout screen
 extern GUI statsdisp;          // Display FPS etc.
 extern GUI console;            // The in-game console
+extern GUI* ingamestatus;
 extern int partupdateinterval; // Update particles every this many frames
 extern TextureManager *texman;  // Handles string versions of texture identifiers
 extern vector<PlayerData> player;

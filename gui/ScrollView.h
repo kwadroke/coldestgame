@@ -11,7 +11,7 @@ class ScrollView : public GUI
       ScrollView(GUI*, TextureManager*);
       ~ScrollView();
       void Render();
-      bool InWidget(float, float);
+      bool FloatsInWidget(float, float);
       float scrollbarwidth;
       
    protected:

@@ -131,7 +131,7 @@ void GUI::ProcessEvent(SDL_Event* event)
    switch (event->type)
    {
       case SDL_MOUSEBUTTONDOWN:
-         if (EventInWidget(event))
+         if (InWidget(event))
          {
             state = Clicked;
             active = true;
@@ -161,7 +161,7 @@ void GUI::ProcessEvent(SDL_Event* event)
          break;
          
       case SDL_MOUSEBUTTONUP:
-         if (EventInWidget(event))
+         if (InWidget(event))
          {
             state = Hover;
             if (event->button.button == SDL_BUTTON_LEFT)
@@ -183,7 +183,7 @@ void GUI::ProcessEvent(SDL_Event* event)
          break;
       
       case SDL_MOUSEMOTION:
-         if (EventInWidget(event))
+         if (InWidget(event))
          {
             if (state != Clicked)
                state = Hover;
@@ -496,14 +496,14 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             {
                newwidget->ReadNode(buttonchildren->item(i), newwidget);
             }
-            children.push_back((Button*)newwidget);
+            children.push_back(newwidget);
          }
          else if (XMLString::equals(current->getNodeName(), tag.lineedit))
          {
             DOMNodeList* lechildren = current->getChildNodes();
             for (int i = 0; i < lechildren->getLength(); ++i)
                newwidget->ReadNode(lechildren->item(i), newwidget);
-            children.push_back((LineEdit*)newwidget);
+            children.push_back(newwidget);
          }
          else if (XMLString::equals(current->getNodeName(), tag.scrollview))
          {
@@ -516,7 +516,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
                newwidget->ReadNode(svchildren->item(i), newwidget);
                newwidget->DestroyTags();
             }
-            children.push_back((ScrollView*)newwidget);
+            children.push_back(newwidget);
             return;
          }
          else if (XMLString::equals(current->getNodeName(), tag.progressbar))
@@ -526,7 +526,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             {
                newwidget->ReadNode(pbchildren->item(i), newwidget);
             }
-            children.push_back((ProgressBar*)newwidget);
+            children.push_back(newwidget);
          }
          else if (XMLString::equals(current->getNodeName(), tag.table))
          {
@@ -537,7 +537,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             {
                newwidget->ReadNode(tabchildren->item(i), newwidget);
             }
-            children.push_back((Table*)newwidget);
+            children.push_back(newwidget);
          }
          else if (XMLString::equals(current->getNodeName(), tag.combobox))
          {
@@ -546,7 +546,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             {
                newwidget->ReadNode(cbchildren->item(i), newwidget);
             }
-            children.push_back((ComboBox*)newwidget);
+            children.push_back(newwidget);
          }
          else if (XMLString::equals(current->getNodeName(), tag.textarea))
          {
@@ -555,7 +555,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             {
                newwidget->ReadNode(tachildren->item(i), newwidget);
             }
-            children.push_back((TextArea*)newwidget);
+            children.push_back(newwidget);
          }
          else if (XMLString::equals(current->getNodeName(), tag.slider))
          {
@@ -564,7 +564,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             {
                newwidget->ReadNode(schildren->item(i), newwidget);
             }
-            children.push_back((Slider*)newwidget);
+            children.push_back(newwidget);
          }
       }
    }
@@ -641,7 +641,7 @@ void GUI::ReadTextures(DOMNode* current)
 }
 
 
-bool GUI::InWidget(float xcoord, float ycoord)
+bool GUI::FloatsInWidget(float xcoord, float ycoord)
 {
    if (xcoord > ((x + xoff) * wratio) &&
        xcoord < ((x + xoff + width) * wratio) &&
@@ -652,11 +652,17 @@ bool GUI::InWidget(float xcoord, float ycoord)
 }
 
 
+bool GUI::InWidget(float xcoord, float ycoord)
+{
+   return FloatsInWidget(xcoord, ycoord);
+}
+
+
 // Convenience function because we do this a lot.
 // Note that it does honor custom InWidget functions, which is why it's not virtual
-bool GUI::EventInWidget(SDL_Event* event)
+bool GUI::InWidget(const SDL_Event* event)
 {
-   return InWidget(event->motion.x, event->motion.y);
+   return FloatsInWidget(event->motion.x, event->motion.y);
 }
 
 

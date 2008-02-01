@@ -107,8 +107,9 @@ class GUI
       string ReadStringTag(DOMNode*, XMLCh*);
       void SetTextureManager(TextureManager*);
       void SetActualSize(int, int);
-      bool EventInWidget(SDL_Event*);
-      virtual bool InWidget(float, float);
+      virtual bool FloatsInWidget(float, float);
+      bool InWidget(float, float);
+      bool InWidget(const SDL_Event*);
       void RenderText(string, string, int, int, int, TTF_Font*, GLuint, float scale = 1.f, bool shadow = true);
       
       bool visible;

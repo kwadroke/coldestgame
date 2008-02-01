@@ -86,7 +86,7 @@ void Slider::LeftClick(SDL_Event* event)
 
 void Slider::LeftDown(SDL_Event* event)
 {
-   if (button->EventInWidget(event))
+   if (button->InWidget(event))
    {
       drag = true;
       dragoffset = event->motion.x / wratio - (float(value - minvalue) / float(maxvalue - minvalue) * (width - xmargin * 2.f - sliderwidth) + xmargin + sliderwidth / 2.f + x + xoff);
@@ -109,7 +109,7 @@ void Slider::WheelUp(SDL_Event* event)
 int Slider::GetMousePos(const SDL_Event* event)
 {
    // const_cast is a kludge because EventInWidget is not const correct
-   if (!EventInWidget(const_cast<SDL_Event*>(event))) return value - minvalue;
+   if (!InWidget(const_cast<SDL_Event*>(event))) return value - minvalue;
    
    float fx = event->motion.x / wratio;
    float clampedx = fx - dragoffset - x - xoff;

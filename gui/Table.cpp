@@ -62,7 +62,7 @@ void Table::Render()
 
 void Table::CustomProcessEvent(SDL_Event* event)
 {
-   if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
+   if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT && InWidget(event))
    {
       guiiter i;
       for (i = scrollview->children.begin(); i != scrollview->children.end(); ++i)
