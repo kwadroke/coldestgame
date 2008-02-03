@@ -47,7 +47,7 @@ class WorldObjects
       GLuint imptex;
       
       GLuint vbo;
-      int normstart, colorstart, attstart, att1start, tcstart[6]; // VBO offsets
+      int normstart, colorstart, attstart, att1start, tanstart, tcstart[6]; // VBO offsets
       vector<int> vbocount;
       
       list<DynamicObject>::iterator dynobj;

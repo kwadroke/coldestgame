@@ -32,6 +32,7 @@ class Material
       Shader& shaderhand;
       int id;
       static int nummats;
+      bool cullface;
 };
 
 #endif

@@ -3,3 +3,4 @@ Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/leaves4.png
 Shader shaders/standard
+CullFace 0

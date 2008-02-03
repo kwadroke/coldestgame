@@ -4,7 +4,10 @@ basiclighting.glsl
 Pixel:
 bumpfrag.glsl
 fogfrag.glsl
+shadowfrag.glsl
 Uniforms:
 int tex 0
 int bumptex 1
+int shadowtex 6
+int worldshadowtex 7
 float reflectval 0

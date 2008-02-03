@@ -702,7 +702,7 @@ void GetMap(string fn)
    
    float slopecutoff = .75;
    float heightcutoff = 4;
-   vector<float> texweights(6); // Can be increased, but will require a number of other changes
+   vector<float> texweights(6, 0.f); // Can be increased, but will require a number of other changes
    int textouse[2];
    float currweights[2];
    

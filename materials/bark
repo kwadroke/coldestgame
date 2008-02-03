@@ -1,5 +1,7 @@
 Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
-Texture0 textures/treebarkbase.png
-Shader shaders/standard
+Texture0 textures/treebark.png
+Texture1 textures/barknorm.png
+Shader shaders/bump
+CullFace 1

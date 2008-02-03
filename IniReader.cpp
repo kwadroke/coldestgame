@@ -137,7 +137,7 @@ bool IniReader::Read(bool& ret, const string name, const int num)
       ret = ReadVal(values[name], num) != "0";
       return ret;
    }
-   return 0;
+   return false;
 }
 
 
