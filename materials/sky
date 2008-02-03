@@ -1,0 +1,5 @@
+Diffuse 1 1 1 1
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Texture0 textures/sky.png
+Shader none
