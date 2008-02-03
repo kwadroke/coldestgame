@@ -56,18 +56,20 @@ WorldPrimitives::WorldPrimitives(bool needshader)
 */
 bool WorldPrimitives::operator<(const WorldPrimitives &c) const
 {
-   if (shader < c.shader) return true;
+   /*if (shader < c.shader) return true;
    else if (shader > c.shader) return false;
    else if (texnums[0] < c.texnums[0]) return true;
    else if (texnums[0] > c.texnums[0]) return false;
-   return dist < c.dist;
+   return dist < c.dist;*/
+   return material < c.material;
 }
 
 bool WorldPrimitives::operator>(const WorldPrimitives &c) const
 {
-   if (shader > c.shader) return true;
+   /*if (shader > c.shader) return true;
    else if (shader < c.shader) return false;
    else if (texnums[0] > c.texnums[0]) return true;
    else if (texnums[0] < c.texnums[0]) return false;
-   return dist > c.dist;
+   return dist > c.dist;*/
+   return material < c.material;
 }

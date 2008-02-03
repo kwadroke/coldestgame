@@ -46,3 +46,15 @@ void TextureManager::DeleteTexture(string filename, bool gldelete)
       loaded.erase(filename);
    }
 }
+
+
+void TextureManager::Clear()
+{
+   loaded.clear();
+   
+   for (map<string, GLuint>::iterator i = texnames.begin(); i != texnames.end(); ++i)
+   {
+      glDeleteTextures(1, &(i->second));
+   }
+   texnames.clear();
+}

@@ -3,10 +3,8 @@
 
 // Odds are that a lot of these includes are no longer needed since globals were
 // moved to different files
-#define NO_SDL_GLEXT
-#include <GL/glew.h>  // Take that, OpenGL Extensions;-)
+#include "glinc.h"
 #include "SDL.h"
-#include "SDL_opengl.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "SDL_net.h"
@@ -61,7 +59,8 @@ using namespace std;
 // Function definitions
 void SetupSDL();
 void SetupOpenGL();
-void LoadShaders();
+void LoadMaterials();
+void InitShaders();
 void InitNoise();
 static void MainLoop();
 void GetMap(string);

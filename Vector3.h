@@ -1,10 +1,9 @@
 #ifndef __Vector3__
 #define __Vector3__
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <iostream>
 #include <math.h>
-#include "SDL_opengl.h"
 
 class Vector3
 {

@@ -107,9 +107,9 @@ void Repaint()
          // This is really buggy for some reason and seems to be unnecessary
          //glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
          
-         texhand.ActiveTexture(6);
+         resman.texhand.ActiveTexture(6);
          
-         texhand.BindTexture(shadowmapfbo.GetTexture());
+         resman.texhand.BindTexture(shadowmapfbo.GetTexture());
          
          GraphicMatrix biasmat;
          GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
@@ -126,10 +126,7 @@ void Repaint()
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
          glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
          
-         texhand.ActiveTexture(0);
-#ifdef NOPSM
-         shaderhand.UseShader(standardshader);
-#endif
+         resman.texhand.ActiveTexture(0);
       }
       
       if (updateclouds)
@@ -144,7 +141,7 @@ void Repaint()
       
       RenderObjects();
       
-      shaderhand.UseShader(standardshader);
+      resman.shaderman.UseShader(standardshader);
       RenderDynamicObjects();
       
       if (localplayer.pos.y > 0)
@@ -159,7 +156,7 @@ void Repaint()
    else
    {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      shaderhand.UseShader("none");
+      resman.shaderman.UseShader("none");
    }
    
    RenderHud();
@@ -308,6 +305,9 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
       if (prims[i].depthtest == false)
          glDisable(GL_DEPTH_TEST);
       else glEnable(GL_DEPTH_TEST);*/
+      i->material->Use();
+      if (shadowrender)
+         resman.shaderman.UseShader(shadowshader);
       if (i->type == "cylinder")
       {
          glPushMatrix();
@@ -315,9 +315,6 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
          glRotatef(o->rotation, 0, 1, 0);
          glRotatef(o->pitch, 1, 0, 0);
          glRotatef(o->roll, 0, 0, 1);
-         if (!shadowrender)
-            shaderhand.UseShader(i->shader);
-         texhand.BindTexture(textures[i->texnums[0]]);
          GLUquadricObj *c = gluNewQuadric();
          gluQuadricTexture(c, GL_TRUE);
          gluCylinder(c, i->rad, i->rad1, i->height, i->slices, i->stacks);
@@ -330,47 +327,27 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
       {
          if (1)
          {
-            texhand.BindTextureDebug(i->texnums[0]);
-            if (i->type == "terrain" && !shadowrender)
-            {
-               texhand.ActiveTexture(1);
-               texhand.BindTextureDebug(i->texnums[1]);
-               texhand.ActiveTexture(2);
-               texhand.BindTextureDebug(i->texnums[2]);
-               texhand.ActiveTexture(3);
-               texhand.BindTextureDebug(i->texnums[3]);
-               texhand.ActiveTexture(4);
-               texhand.BindTextureDebug(i->texnums[4]);
-               texhand.ActiveTexture(5);
-               texhand.BindTextureDebug(i->texnums[5]);
-               texhand.ActiveTexture(0);
-            }
-            if (!shadowrender)
-               shaderhand.UseShader(i->shader);
-            else// if (shadowrender && i->type == "terrain")
-               shaderhand.UseShader(shadowshader);
-            //else if (shadowrender)
-            //   shaderhand.UseShader("none");
             o->RenderVbo(i->vboindex, o->vbocount[currindex]);
             i += o->vbocount[currindex] - 1;
             ++currindex;
          }
+#if 0
          else // This probably doesn't work (right) anymore
          {
-            texhand.BindTextureDebug(i->texnums[0]);
+            resman.texhand.BindTextureDebug(i->texnums[0]);
             if (i->type == "terrain" && !shadowrender)
             {
-               texhand.ActiveTexture(1);
-               texhand.BindTextureDebug(i->texnums[1]);
-               texhand.ActiveTexture(2);
-               texhand.BindTextureDebug(i->texnums[2]);
-               texhand.ActiveTexture(3);
-               texhand.BindTextureDebug(i->texnums[3]);
-               texhand.ActiveTexture(4);
-               texhand.BindTextureDebug(i->texnums[4]);
-               texhand.ActiveTexture(5);
-               texhand.BindTextureDebug(i->texnums[5]);
-               texhand.ActiveTexture(0);
+               resman.texhand.ActiveTexture(1);
+               resman.texhand.BindTextureDebug(i->texnums[1]);
+               resman.texhand.ActiveTexture(2);
+               resman.texhand.BindTextureDebug(i->texnums[2]);
+               resman.texhand.ActiveTexture(3);
+               resman.texhand.BindTextureDebug(i->texnums[3]);
+               resman.texhand.ActiveTexture(4);
+               resman.texhand.BindTextureDebug(i->texnums[4]);
+               resman.texhand.ActiveTexture(5);
+               resman.texhand.BindTextureDebug(i->texnums[5]);
+               resman.texhand.ActiveTexture(0);
             }
             if (!shadowrender)
                shaderhand.UseShader(i->shader);
@@ -389,6 +366,7 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
             glVertex3f(i->v[3].x, i->v[3].y, i->v[3].z);
             glEnd();
          }
+#endif
          
          trislastframe += 2 * o->vbocount[currindex - 1];
       }
@@ -495,12 +473,12 @@ void RenderDOTree(DynamicPrimitive* root)
       root->m *= root->parent->m;
    }
    
-   texhand.ActiveTexture(0);
-   texhand.BindTextureDebug(root->texnums[0]);
-   texhand.ActiveTexture(1);
-   texhand.BindTextureDebug(root->texnums[1]);
-   texhand.ActiveTexture(0);
-   shaderhand.UseShader(root->shader);
+   resman.texhand.ActiveTexture(0);
+   resman.texhand.BindTextureDebug(root->texnums[0]);
+   resman.texhand.ActiveTexture(1);
+   resman.texhand.BindTextureDebug(root->texnums[1]);
+   resman.texhand.ActiveTexture(0);
+   resman.shaderman.UseShader(root->shader);
    //glGenerateMipmapEXT(GL_TEXTURE_2D);
    
    if (root->transparent)
@@ -564,7 +542,7 @@ void RenderDOTree(DynamicPrimitive* root)
       Vector3 tangent = root->v[2] - root->v[0];
       tangent.normalize();
       
-      GLint loc = shaderhand.GetAttribLocation(bumpshader, "tangent");
+      GLint loc = resman.shaderman.GetAttribLocation(bumpshader, "tangent");
       
       glColor4f(1, 1, 1, 1);
       glBegin(GL_TRIANGLE_STRIP);
@@ -877,8 +855,8 @@ void UpdateClouds()
    UpdateNoise();
    
    cloudfbo.Bind();
-   texhand.BindTexture(noisefbo.GetTexture());
-   shaderhand.UseShader(cloudgenshader);
+   resman.texhand.BindTexture(noisefbo.GetTexture());
+   resman.shaderman.UseShader(cloudgenshader);
    
    glViewport(0, 0, cloudres, cloudres);
    
@@ -916,7 +894,7 @@ void UpdateClouds()
    glMatrixMode(GL_MODELVIEW);
    
    glViewport(0, 0, screenwidth, screenheight);
-   shaderhand.UseShader("none");
+   resman.shaderman.UseShader("none");
    cloudfbo.Unbind();
 }
 
@@ -924,10 +902,10 @@ void UpdateClouds()
 void UpdateNoise()
 {
    noisefbo.Bind();
-   shaderhand.UseShader(noiseshader);
+   resman.shaderman.UseShader(noiseshader);
    // Don't remove this, it's not the texture we're trying to render to, it's used in the noise shader
-   texhand.BindTexture(noisetex);
-   shaderhand.SetUniform1f(noiseshader, "time", (float)SDL_GetTicks() / 700.f);
+   resman.texhand.BindTexture(noisetex);
+   resman.shaderman.SetUniform1f(noiseshader, "time", (float)SDL_GetTicks() / 700.f);
    
    glViewport(0, 0, noiseres, noiseres);
    
@@ -967,14 +945,14 @@ void UpdateNoise()
    glMatrixMode(GL_MODELVIEW);
    
    glViewport(0, 0, screenwidth, screenheight);
-   shaderhand.UseShader("none");
+   resman.shaderman.UseShader("none");
    noisefbo.Unbind();
 }
 
 
 void RenderClouds()
 {
-   shaderhand.UseShader(cloudshader);
+   resman.shaderman.UseShader(cloudshader);
    glFogf(GL_FOG_START, 5000);
    glFogf(GL_FOG_END, 10000);
    glDisable(GL_DEPTH_TEST);
@@ -988,7 +966,7 @@ void RenderClouds()
    float height = 1000;
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   texhand.BindTexture(cloudfbo.GetTexture());
+   resman.texhand.BindTexture(cloudfbo.GetTexture());
    glColor4f(1, 1, 1, 1);
    
    glBegin(GL_TRIANGLE_STRIP);
@@ -1009,7 +987,7 @@ void RenderClouds()
    glFogf(GL_FOG_START, viewdist * .8);
    glFogf(GL_FOG_END, viewdist);
    glEnable(GL_DEPTH_TEST);
-   shaderhand.UseShader("none");
+   resman.shaderman.UseShader("none");
 }
 
 
@@ -1017,14 +995,15 @@ void RenderClouds()
 // Or maybe this works pretty well
 void RenderSkybox()
 {
-   shaderhand.UseShader("none");
+   //resman.shaderman.UseShader("none");
+   skyboxmat->Use();
    // Render ourselves a gigantic sphere to serve as the skybox
    glDisable(GL_FOG);
    glDisable(GL_LIGHTING);
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_BLEND);
    
-   texhand.BindTexture(textures[0]);
+   //resman.texhand.BindTexture(textures[0]);
    glTexCoord3f(0, 0, 0);
    GLUquadricObj *s = gluNewQuadric();
    gluQuadricTexture(s, GL_TRUE);
@@ -1079,7 +1058,7 @@ void RenderWater()
          
          glFrontFace(GL_CW);
          RenderObjects();
-         shaderhand.UseShader(standardshader);
+         resman.shaderman.UseShader(standardshader);
          RenderDynamicObjects();
          glFrontFace(GL_CCW);
          
@@ -1116,9 +1095,9 @@ void RenderWater()
    Vector3 norm = lights.GetPos(0);
    norm.normalize();
    
-   texhand.ActiveTexture(1);
-   texhand.BindTexture(noisefbo.GetTexture());
-   texhand.ActiveTexture(0);
+   resman.texhand.ActiveTexture(1);
+   resman.texhand.BindTexture(noisefbo.GetTexture());
+   resman.texhand.ActiveTexture(0);
    
    waterobj->BindVbo();
    RenderPrimitives(waterobj->prims);
@@ -1128,7 +1107,7 @@ void RenderWater()
    glPopMatrix();
    
    glMatrixMode(GL_MODELVIEW);
-   shaderhand.UseShader("none");
+   resman.shaderman.UseShader("none");
 }
 
 
@@ -1200,7 +1179,7 @@ void RenderHud()
    
 #ifdef DEBUGSMT
    // Debug the shadowmap texture
-   texhand.BindTexture(shadowmapfbo.GetTexture());
+   resman.texhand.BindTexture(shadowmapfbo.GetTexture());
    
    glColor4f(1, 1, 1, 1);//.9);
    glBegin(GL_TRIANGLE_STRIP);
@@ -1217,7 +1196,7 @@ void RenderHud()
 #endif
    
    // Render all of the GUI objects, they know whether they're visible or not
-   shaderhand.UseShader("none");
+   resman.shaderman.UseShader("none");
    glColor4f(1, 1, 1, 1);
    mainmenu.Render();
    hud.Render();
@@ -1239,12 +1218,12 @@ void SetReflection(bool on)
    reflectionrender = on;
    if (on)
    {
-      shaderhand.SetUniform1f(standardshader, "reflectval", 1.f);
-      shaderhand.SetUniform1f(terrainshader, "reflectval", 1.f);
+      resman.shaderman.SetUniform1f(standardshader, "reflectval", 1.f);
+      resman.shaderman.SetUniform1f(terrainshader, "reflectval", 1.f);
    }
    else
    {
-      shaderhand.SetUniform1f(standardshader, "reflectval", 0.f);
-      shaderhand.SetUniform1f(terrainshader, "reflectval", 0.f);
+      resman.shaderman.SetUniform1f(standardshader, "reflectval", 0.f);
+      resman.shaderman.SetUniform1f(terrainshader, "reflectval", 0.f);
    }
 }

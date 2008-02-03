@@ -345,11 +345,17 @@ void WorldObjects::BindVbo()
    
    int location;
    location = shaderhand->GetAttribLocation(terrainshader, "terrainwt");
-   glEnableVertexAttribArrayARB(location);
-   glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
+   if (location > 0)
+   {
+      glEnableVertexAttribArrayARB(location);
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
+   }
    location = shaderhand->GetAttribLocation(terrainshader, "terrainwt1");
-   glEnableVertexAttribArrayARB(location);
-   glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);
+   if (location > 0)
+   {
+      glEnableVertexAttribArrayARB(location);
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);
+   }
    
    /*location = shaderhand->GetAttribLocation("shaders/reflection", "terrainwt");
    glEnableVertexAttribArrayARB(location);

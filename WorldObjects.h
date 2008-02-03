@@ -1,14 +1,12 @@
 #ifndef __WORLDOBJECTS
 #define __WORLDOBJECTS
 
-#define NO_SDL_GLEXT
-#include <GL/glew.h>
+#include "glinc.h"
 #include "WorldPrimitives.h"
 #include "DynamicObject.h"
 #include "FBO.h"
 #include "Shader.h"
 #include "TextureHandler.h"
-#include "SDL_opengl.h"
 #include "SDL.h"
 
 #define FBODIM 512

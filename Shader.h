@@ -1,9 +1,7 @@
 #ifndef __SHADER_H
 #define __SHADER_H
 
-#define NO_SDL_GLEXT
-#include <GL/glew.h>
-#include "SDL_opengl.h"
+#include "glinc.h"
 #include <fstream>
 #include <string>
 #include <vector>

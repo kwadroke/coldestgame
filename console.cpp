@@ -1,6 +1,6 @@
 // Console related functions
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <string>
 #include <deque>
 #include <set>
@@ -9,26 +9,12 @@
 #include "PlayerData.h"
 #include "Packet.h"
 #include "gui/TextArea.h"
-#include "SDL_opengl.h"
 #include "SDL_net.h"
 #include "renderdefs.h"
 #include "netdefs.h"
 #include "globals.h"
 
 using namespace std;
-// Necessary declarations - these appear in defines.h
-/*extern bool quiet, showfps, ghost, fly, thirdperson, server;
-extern bool showkdtree, doconnect, shadows, reflection, fullscreen, serversync;
-extern int camdist, screenwidth, screenheight, consoletop, consolebottom;
-extern int consoleright, consoleleft, consoletrans, movestep, fov;
-extern int viewdist, tickrate, aalevel, partupdateinterval;
-extern float farclip, nearclip, aspect;
-extern string serveraddr;
-extern CollisionDetection coldet;
-extern vector<PlayerData> player;
-extern TextureHandler texhand;
-extern string currentmap;
-extern GUI console;*/
 
 void SetupSDL();
 void SetupOpenGL();
@@ -313,7 +299,7 @@ void ConsoleHandler(string command)
             shadows = false;
          }
          if (initialized)
-            LoadShaders();
+            InitShaders();
          return;
       }
       else if (Token(newcommand, 1) == "reflection")
@@ -348,7 +334,7 @@ void ConsoleHandler(string command)
       {
          float value = atof(Token(newcommand, 2).c_str());
          if (value >= .999f && value <= 16.001f)
-            texhand.af = value;
+            resman.texhand.af = value;
          else WriteToConsole(string("Invalid value"));
          return;
       }
@@ -392,9 +378,9 @@ void ConsoleHandler(string command)
          {
             shadowmapsize = value;
 #ifndef DEBUGSMT
-            shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+            shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
 #else
-            shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+            shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
 #endif
          }
          else WriteToConsole(string("Invalid value"));
@@ -406,7 +392,7 @@ void ConsoleHandler(string command)
          if (value >= 8  && value <= 8192)
          {
             reflectionres = value;
-            reflectionfbo = FBO(reflectionres, reflectionres, false, &texhand);
+            reflectionfbo = FBO(reflectionres, reflectionres, false, &resman.texhand);
             if (initialized)
             {
                for (vector<WorldPrimitives>::iterator i = waterobj->prims.begin(); i != waterobj->prims.end(); ++i)
@@ -422,7 +408,7 @@ void ConsoleHandler(string command)
          if (value >= 8  && value <= 8192)
          {
             cloudres = value;
-            cloudfbo = FBO(cloudres, cloudres, false, &texhand);
+            cloudfbo = FBO(cloudres, cloudres, false, &resman.texhand);
          }
          else WriteToConsole(string("Invalid value"));
          return;
@@ -458,7 +444,7 @@ void ConsoleHandler(string command)
    }
    else if (Token(newcommand, 0) == "reloadshaders")
    {
-      LoadShaders();
+      InitShaders();
       return;
    }
    else if (Token(newcommand, 0) == "reloadres")

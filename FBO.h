@@ -1,11 +1,9 @@
 #ifndef __FBO_H
 #define __FBO_H
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <iostream>
 #include "TextureHandler.h"
-#include <GL/glew.h>
-#include "SDL_opengl.h"
 
 class FBO
 {

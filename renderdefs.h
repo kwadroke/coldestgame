@@ -1,14 +1,13 @@
 #ifndef __RENDERDEFS_H
 #define __RENDERDEFS_H
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <list>
 #include <vector>
 #include <stack>
 #include <deque>
 #include <sstream>
 #include <algorithm>
-#include <GL/glew.h>
 #include "WorldObjects.h"
 #include "PlayerData.h"
 #include "DynamicObject.h"
@@ -22,7 +21,6 @@
 #include "gui/GUI.h"
 #include "gui/ProgressBar.h"
 #include "Timer.h"
-#include "SDL_opengl.h"
 #include "SDL_ttf.h"
 
 using std::vector;
@@ -54,7 +52,7 @@ void UpdateNoise();
 void SynchronizePosition();
 void InitGLState(WorldObjects*);
 void RestoreGLState(WorldObjects*);
-void LoadShaders();
+void InitShaders();
 
 extern list<WorldObjects> objects;
 extern vector<GLuint> dotextures;
@@ -68,17 +66,16 @@ extern float fps;
 extern bool consolevisible, showfps, quiet, thirdperson, showkdtree, shadows, reflection;
 extern bool serversync;
 extern float nearclip, farclip, aspect;
-extern TextureHandler texhand;
 extern GLuint noisetex;
 extern vector<GLuint> textures;
 extern FBO shadowmapfbo, worldshadowmapfbo, cloudfbo, reflectionfbo, noisefbo;
 extern GLuint texnum[], shadowmaptex[], worldshadowmaptex[];
 extern Light lights;
-extern Shader shaderhand;
 extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;
 extern string terrainshader, cloudgenshader, bumpshader;
 extern vector<FBO> impfbolist;
 extern vector<WorldObjects*> impobjs;
 extern list<WorldObjects>::iterator waterobj;
+extern Material* skyboxmat;
 
 #endif
