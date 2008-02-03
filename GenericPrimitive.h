@@ -1,6 +1,7 @@
 #ifndef __GENERIC_PRIMITIVE_H
 #define __GENERIC_PRIMITIVE_H
 
+#include "Material.h"
 #include "Vector3.h"
 #include <string>
 #include <list>
@@ -26,5 +27,6 @@ class GenericPrimitive
       string shader;
       float color[4][4];
       float dist;
+      Material* material;
 };
 #endif

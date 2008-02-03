@@ -1,11 +1,9 @@
 #ifndef __TEXTUREHANDLER
 #define __TEXTUREHANDLER
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <string>
 #include <iostream>
-#include <GL/glew.h>
-#include "SDL_opengl.h"
 #include "SDL.h"
 #include "SDL_image.h"
 

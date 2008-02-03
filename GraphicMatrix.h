@@ -1,10 +1,9 @@
 #ifndef __GRAPHIC_MATRIX
 #define __GRAPHIC_MATRIX
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <math.h>
 #include <iostream>
-#include "SDL_opengl.h"
 #include "Vector3.h"
 
 using std::cout;

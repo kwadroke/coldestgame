@@ -11,62 +11,58 @@ Diffuse 1 1 1 1
 Specular 1 1 1 1
 Ambient .4 .4 .4 1
 
-SkyBox textures/sky.png
+SkyBox materials/sky
 
-0 textures/sky.png
-1 textures/test.png
-2 textures/Grass1.png
-3 textures/Grass1.png
-4 textures/Rockt.png
-5 textures/test.png
-6 textures/dirt.png
-7 textures/stone.png
-8 textures/highcontrastgrass.png
-9 textures/treebark.png
-10 textures/treebarkbase.png
-11 textures/leaves2.png
-12 textures/water.png
-13 textures/metal.png
-14 textures/leaves6.png
-15 textures/leaves3.png
-16 textures/leaves4.png
-17 textures/leaves6.png
-9999 dummy
+DummyNode
+   0 textures/sky.png
+   1 textures/test.png
+   2 textures/Grass1.png
+   3 textures/Grass1.png
+   4 textures/Rockt.png
+   5 textures/test.png
+   6 textures/dirt.png
+   7 textures/stone.png
+   8 textures/highcontrastgrass.png
+   9 textures/treebark.png
+   10 textures/treebarkbase.png
+   11 textures/leaves2.png
+   12 textures/water.png
+   13 textures/metal.png
+   14 textures/leaves6.png
+   15 textures/leaves3.png
+   16 textures/leaves4.png
+   17 textures/leaves6.png
+   9999 dummy
 
 TerrainTextures <-- This should probably contain the Texture Nodes
+TerrainMaterial materials/terrain
 Node
    Texture0
-   Num 2
    HeightRange -10000 10000
    SlopeRange 0 0
    RandRange 0 10
 Node
    Texture1
-   Num 3
    HeightRange -10000 10000
    SlopeRange 0 0
    RandRange 0 10
 Node
    Texture2
-   Num 4
    HeightRange -10000 -10000
    SlopeRange 0 .75
    RandRange 500 500
 Node
    Texture3
-   Num 6
    HeightRange -10000 5
    SlopeRange 0 0
    RandRange 500 500
 Node
    Texture4
-   Num 2
    HeightRange -10000 -10000
    SlopeRange 0 0
    RandRange 0 10
 Node
    Texture5
-   Num 2
    HeightRange -10000 -10000
    SlopeRange 0 0
    RandRange 0 10
@@ -86,28 +82,28 @@ Node
       Rotations -45 25 0
    Node   
       Type bush
-      Texture 15
+      Materials materials/leaves1
       Size 10
       Position 555 -1 525
       Rotations 0 0 0
       NumLeaves 10
    Node
       Type bush
-      Texture 16
+      Materials materials/leaves1
       Size 14
       Position 655 -1 205
       Rotations 0 0 0
       NumLeaves 8
    Node
       Type bush
-      Texture 11
+      Materials materials/leaves1
       Size 14
       Position 500 500 500
       Rotations 0 0 0
       NumLeaves 8
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -144,7 +140,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 2
       numbranches0 8
@@ -180,7 +176,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 7
@@ -218,7 +214,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 1
       numslices 3
       numsegs 5
@@ -253,7 +249,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 7
@@ -289,7 +285,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 7
@@ -325,7 +321,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -361,7 +357,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -397,7 +393,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -433,7 +429,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -469,7 +465,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -505,7 +501,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -541,7 +537,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -577,7 +573,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -613,7 +609,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -649,7 +645,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -685,7 +681,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -721,7 +717,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -757,7 +753,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -793,7 +789,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -829,7 +825,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -865,7 +861,7 @@ Node
       Rotations 0 0 0
    Node
       Type proctree
-      Textures 10 10 14
+      Materials materials/bark materials/leaves
       numlevels 2
       numslices 3
       numbranches0 12
@@ -902,6 +898,7 @@ Node
 
 Pseudo End of File, anything after this will not be read
    
+Note that the rest of these entries are from way, way back and won't work with the current map format
    tree
    9 10 16
    5 3 50 25 10

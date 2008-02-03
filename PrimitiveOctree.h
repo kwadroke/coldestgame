@@ -1,11 +1,10 @@
 #ifndef __PRIMITIVEOCTREE
 #define __PRIMITIVEOCTREE
 
-#define NO_SDL_GLEXT
+#include "glinc.h"
 #include <vector>
 #include "GenericPrimitive.h"
 #include "Vector3.h"
-#include "SDL_opengl.h"
 
 using namespace std;
 

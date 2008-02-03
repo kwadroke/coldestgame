@@ -8,6 +8,10 @@
 #include "gui/GUI.h"
 #include "PlayerData.h"
 #include "types.h"
+#include "ResourceManager.h"
+#include "CollisionDetection.h"
+#include "Particle.h"
+#include "ObjectKDTree.h"
 
 #define PI 3.14159265
 
@@ -40,7 +44,8 @@ extern GUI statsdisp;          // Display FPS etc.
 extern GUI console;            // The in-game console
 extern GUI* ingamestatus;
 extern int partupdateinterval; // Update particles every this many frames
-extern TextureManager *texman;  // Handles string versions of texture identifiers
+//extern TextureManager *texman;  // Handles string versions of texture identifiers
+extern ResourceManager resman; // Handles loading and organizing different resources
 extern vector<PlayerData> player;
 extern vector<UnitData> units;
 extern vector<WeaponData> weapons;

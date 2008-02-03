@@ -21,7 +21,8 @@ GUI statsdisp;          // Display FPS etc.
 GUI console;            // The in-game console
 GUI* ingamestatus;      // In game status pane triggered by tab key
 int partupdateinterval; // Update particles every this many frames
-TextureManager *texman;  // Handles string versions of texture identifiers
+//TextureManager *texman;  // Handles string versions of texture identifiers
+ResourceManager resman; // Handles loading and organizing different resources
 vector<PlayerData> player;
 vector<UnitData> units;
 vector<WeaponData> weapons;

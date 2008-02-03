@@ -43,9 +43,11 @@ ProceduralTree::ProceduralTree()
 
 
 // Returns the number of primitives generated
-long ProceduralTree::GenTree(list<WorldObjects>::iterator currobj)
+long ProceduralTree::GenTree(list<WorldObjects>::iterator currobj, Material* barkmat, Material* leavesmat)
 {
    object = currobj;
+   bark = barkmat;
+   leaves = leavesmat;
    totalprims = 0;
    srand(time(0) + rand());  // Seed random number generator - the rand() is to make sure that
                              // when we create two trees in the same ms they're not identical
@@ -197,7 +199,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          WorldPrimitives temp;
          temp.object = object;
          temp.type = "tristrip";
-         temp.texnums[0] = object->texnum;
+         temp.material = bark;
          temp.collide = (lev == 0);
          newind = (int)(j * ((float)numslices / (float)oldpts.size()));
          newind1 = (int)((j + 1) * ((float)numslices / (float)oldpts.size()));
@@ -271,7 +273,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          WorldPrimitives temp;
          temp.object = object;
          temp.type = "tristrip";
-         temp.texnums[0] = object->texnum2;
+         temp.material = leaves;
          temp.collide = false;
          
          for (int j = 0; j < 4; ++j)

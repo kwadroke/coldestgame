@@ -7,6 +7,7 @@
 #include "CollisionDetection.h"
 #include "Vector3.h"
 #include "Timer.h"
+#include "DynamicObject.h"
 #include "SDL.h"
 #include "SDL_thread.h"
 

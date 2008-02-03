@@ -9,6 +9,8 @@ Shader::Shader()
 
 void Shader::LoadShader(string file)
 {
+   if (programs.find(file) != programs.end()) return;
+   
    cout << "Loading " << file << endl;
    ifstream in(file.c_str());
    string buffer;

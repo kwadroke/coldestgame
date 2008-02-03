@@ -2,7 +2,7 @@
 #define __TEXTURE_MANAGER_H
 
 #include "TextureHandler.h"
-#include <SDL_opengl.h>
+#include "glinc.h"
 #include <map>
 #include <set>
 
@@ -18,6 +18,7 @@ class TextureManager
       GLuint LoadTexture(string);
       void BindTexture(string);
       void DeleteTexture(string, bool gldelete = true);
+      void Clear();
       
       TextureHandler* texhand;
       

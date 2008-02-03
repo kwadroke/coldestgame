@@ -4,7 +4,7 @@
 #include <vector>
 #include "Vector3.h"
 #include "GraphicMatrix.h"
-#include "SDL_opengl.h"
+#include "glinc.h"
 
 using namespace std;
 

@@ -18,7 +18,7 @@ class ProceduralTree
 {
    public:
       ProceduralTree();
-      long GenTree(list<WorldObjects>::iterator);
+      long GenTree(list<WorldObjects>::iterator, Material*, Material*);
       void ReadParams(IniReader&);
       
       int numlevels;
@@ -58,6 +58,7 @@ class ProceduralTree
    private:
       void GenBranch(GraphicMatrix, int, int, vector<Vector3>, bool, int);
       float Random(float, float);
+      Material *bark, *leaves;
       
       
 };

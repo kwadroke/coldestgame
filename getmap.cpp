@@ -34,7 +34,7 @@ WorldPrimitives worldbounds[6];
 void Repaint();
 float Max(float, float);
 Vector3 GetTerrainNormal(int, int, int, int);
-float GetSmoothedTerrain(int, int, int, int, vector< vector<float> >&);
+float GetSmoothedTerrain(int, int, int, int, vector< floatvec >&);
 float Random(float, float);
 void GenShadows(Vector3, float, FBO&);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
@@ -91,45 +91,34 @@ void GetMap(string fn)
    lights.SetAmbient(0, amb);
    
    // Load the textures themselves
-   // Note: first texture must always be the skybox  TODO: This req is bad and should be removed
+   // Actually, the textures get loaded as Materials get loaded now, so this is really a bogus step
    progress->SetRange(0, 6);
    progress->value = 0;
    progtext->text = "Loading textures";
    Repaint();
    
-   LoadDOTextures("models/testex");
-   
    // Pretty sure this call is irrelevant now that we're using shaders
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
    cout << "Loading textures(" << numtextures << ")" << endl;
-   int currtex;
-   string texpath;
-   bool alpha;
    
-   if (textures.size() > 0)
-      glDeleteTextures(textures.size(), &textures[0]);
-   textures.clear();
-   for (int i = 0; i < numtextures; ++i)
-      textures.push_back(0);
+   //resman.ReleaseAll();
    
-   for (int i = 0; i < numtextures; i++)
-   {
-      mapdata.Read(texpath, ToString(i));
-      texman->DeleteTexture(texpath, false); // Make sure if we previously loaded it we reload it again
-      textures[i] = texman->LoadTexture(texpath);
-   }
-   
+   LoadDOTextures("models/testex");
+   string readskybox;
+   mapdata.Read(readskybox, "SkyBox");
+   skyboxmat = &resman.LoadMaterial(readskybox);
    
    // Read terrain parameters
    TerrainParams dummytp;
    string nodename;
+   string terrainmaterial;
+   mapdata.Read(terrainmaterial, "TerrainMaterial");
    for (int i = 0; i < maxterrainparams; ++i)
    {
       terrparams.push_back(dummytp);
       nodename = "Texture" + ToString(i);
       
       IniReader currtex = mapdata.GetItemByName(nodename);
-      currtex.Read(terrparams[i].texture, "Num");
       currtex.Read(terrparams[i].minheight, "HeightRange", 0);
       currtex.Read(terrparams[i].maxheight, "HeightRange", 1);
       currtex.Read(terrparams[i].minslope, "SlopeRange", 0);
@@ -169,6 +158,7 @@ void GetMap(string fn)
    Repaint();
    
    IniReader objectlist = mapdata.GetItemByName("Objects");
+   string currmaterial;
    for (int i = 0; i < objectlist.NumChildren(); ++i)
    {
       tempobj = WorldObjects();
@@ -197,8 +187,6 @@ void GetMap(string fn)
       else if (currobj->type == "bush")
       {
          int numleaves;  // Don't need to store this value
-         currnode.Read(currtex, "Texture");
-         currobj->texnum = textures[currtex];
          currnode.Read(tempprim.height, "Size");
          currnode.Read(currobj->x, "Position", 0);
          currnode.Read(currobj->y, "Position", 1);
@@ -213,7 +201,8 @@ void GetMap(string fn)
          float height = currobj->size;
          for (int j = 0; j < numleaves; j++)
          {
-            tempprim.texnums[0] = currobj->texnum;
+            currnode.Read(currmaterial, "Materials");
+            tempprim.material = &resman.LoadMaterial(currmaterial);
             tempprim.object = currobj;
             tempprim.type = "tristrip";
             tempprim.transparent = false;
@@ -255,13 +244,8 @@ void GetMap(string fn)
       else if (currobj->type == "proctree")
       {
          ProceduralTree t;
+         string barkmat, leafmat;
          
-         currnode.Read(currtex, "Textures", 0);
-         currobj->texnum = textures[currtex];
-         currnode.Read(currtex, "Textures", 1);
-         currobj->texnum1 = textures[currtex];
-         currnode.Read(currtex, "Textures", 2);
-         currobj->texnum2 = textures[currtex];
          currobj->size = 0; // Size is required
          t.ReadParams(currnode);
          currnode.Read(currobj->impdist, "impdist");
@@ -272,9 +256,11 @@ void GetMap(string fn)
          currnode.Read(currobj->rotation, "Rotations", 0);
          currnode.Read(currobj->pitch, "Rotations", 1);
          currnode.Read(currobj->roll, "Rotations", 2);
+         currnode.Read(barkmat, "Materials", 0);
+         currnode.Read(leafmat, "Materials", 1);
          
          currobj->dynobj = dynobjects.end();
-         int save = t.GenTree(currobj);
+         int save = t.GenTree(currobj, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
          cout << "Tree primitives: " << save << endl;
       }
    }
@@ -817,9 +803,7 @@ void GetMap(string fn)
          tempprim.n[1] = normals[x][y + 1];
          tempprim.n[2] = normals[x + 1][y];
          tempprim.n[3] = normals[x + 1][y + 1];
-         for (int i = 0; i < maxterrainparams; ++i)
-            tempprim.texnums[i] = textures[terrparams[i].texture];
-         tempprim.shader = terrainshader;
+         tempprim.material = &resman.LoadMaterial(terrainmaterial);
          
          for (int i = 0; i < 6; ++i)
          {
@@ -932,9 +916,9 @@ void GetMap(string fn)
          
          for (int k = 0; k < 4; ++k)
             tempprim.n[k] = Vector3(0, 1, 0);
-         tempprim.shader = "shaders/water";
-         tempprim.texnums[0] = reflectionfbo.GetTexture();
-         tempprim.texnums[1] = noisefbo.GetTexture();
+         tempprim.material = &resman.LoadMaterial("materials/water");
+         tempprim.material->SetTexture(0, reflectionfbo.GetTexture());
+         tempprim.material->SetTexture(1, noisefbo.GetTexture());
          currobj->prims.push_back(tempprim);
          tempprim = WorldPrimitives();
       }
@@ -958,13 +942,13 @@ void GetMap(string fn)
             else if (counter >= fbostarts[1])
                fbodim = fbodims[1];
             else fbodim = fbodims[0];
-            dummyfbo = FBO(fbodim, fbodim, false, &texhand);
+            dummyfbo = FBO(fbodim, fbodim, false, &resman.texhand);
             impfbolist.push_back(dummyfbo);
             i->impostorfbo = counter;
             impobjs.push_back(&(*i));
             ++counter;
          }
-         i->GenVbo(&shaderhand);
+         i->GenVbo(&resman.shaderman);
       }
       i->SetHeightAndWidth();
    }
@@ -996,23 +980,23 @@ void GetMap(string fn)
    // Generate FBO to render to the shadow map texture
 #ifndef DEBUGSMT
    if (!shadowmapfbo.IsValid())
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
    if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &texhand);
+      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
 #else
    if (!shadowmapfbo.IsValid())
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
    if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &texhand);
+      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
 #endif
    int shadowsize = mapw > maph ? mapw : maph;
    shadowsize *= tilesize;
    Vector3 center(mapw / 2.f, 0, maph / 2.f);
    center *= tilesize;
    GenShadows(center, shadowsize / 1.4, worldshadowmapfbo);
-   texhand.ActiveTexture(7);
+   resman.texhand.ActiveTexture(7);
    
-   texhand.BindTexture(worldshadowmapfbo.GetTexture());
+   resman.texhand.BindTexture(worldshadowmapfbo.GetTexture());
    
    GraphicMatrix biasmat, proj, view;
    GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
@@ -1031,7 +1015,7 @@ void GetMap(string fn)
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
    
-   texhand.ActiveTexture(0);
+   resman.texhand.ActiveTexture(0);
    
    mapname = fn; // Must do this last as it signals the server thread that the map has been loaded
 }

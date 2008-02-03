@@ -45,7 +45,8 @@ int main(int argc, char* argv[])
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
    //SetupSDL();
    //SetupOpenGL();
-   LoadShaders();
+   LoadMaterials();
+   InitShaders();
    InitNoise();
    
    // Start network threads
@@ -109,7 +110,6 @@ void InitGlobals()
    noiseres = 128;
    nextmap = mapname = "";
    clientmutex = SDL_CreateMutex();
-   texman = new TextureManager(&texhand);
    
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
@@ -140,26 +140,26 @@ void InitGUI()
       cout << "Failed to initialize font system: " << TTF_GetError() << endl;
       exit(1);
    }
-   mainmenu.SetTextureManager(texman);
+   mainmenu.SetTextureManager(&resman.texman);
    mainmenu.SetActualSize(screenwidth, screenheight);
    mainmenu.InitFromFile("mainmenu.xml");
-   hud.SetTextureManager(texman);
+   hud.SetTextureManager(&resman.texman);
    hud.SetActualSize(screenwidth, screenheight);
    hud.InitFromFile("hud.xml");
-   loadprogress.SetTextureManager(texman);
+   loadprogress.SetTextureManager(&resman.texman);
    loadprogress.SetActualSize(screenwidth, screenheight);
    loadprogress.InitFromFile("loadprogress.xml");
-   loadoutmenu.SetTextureManager(texman);
+   loadoutmenu.SetTextureManager(&resman.texman);
    loadoutmenu.SetActualSize(screenwidth, screenheight);
    loadoutmenu.InitFromFile("loadout.xml");
-   statsdisp.SetTextureManager(texman);
+   statsdisp.SetTextureManager(&resman.texman);
    statsdisp.SetActualSize(screenwidth, screenheight);
    statsdisp.InitFromFile("stats.xml");
-   console.SetTextureManager(texman);
+   console.SetTextureManager(&resman.texman);
    console.SetActualSize(screenwidth, screenheight);
    console.InitFromFile("console.xml");
    // There's no particular reason not to new these, and it allows better RAII semantics
-   ingamestatus = new GUI(screenwidth, screenheight, texman);
+   ingamestatus = new GUI(screenwidth, screenheight, &resman.texman);
    ingamestatus->InitFromFile("ingamestatus.xml");
    ConsoleBufferToGUI();
 }
@@ -385,38 +385,44 @@ void SetupOpenGL()
    }
    
    if (!cloudfbo.IsValid())
-      cloudfbo = FBO(cloudres, cloudres, false, &texhand);
+      cloudfbo = FBO(cloudres, cloudres, false, &resman.texhand);
    if (!reflectionfbo.IsValid())
-      reflectionfbo = FBO(reflectionres, reflectionres, false, &texhand);
-   noisefbo = FBO(noiseres, noiseres, false, &texhand);
-   texhand.BindTexture(noisefbo.GetTexture());
+      reflectionfbo = FBO(reflectionres, reflectionres, false, &resman.texhand);
+   noisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
+   resman.texhand.BindTexture(noisefbo.GetTexture());
    // Need different tex params for this texture
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 
-void LoadShaders()
+void LoadMaterials()
 {
-   shaderhand.LoadShader(standardshader);
+   resman.LoadMaterial("materials/water");
+}
+
+
+void InitShaders()
+{
+   resman.shaderman.LoadShader(standardshader);
    
-   shaderhand.LoadShader(noiseshader);
-   shaderhand.SetUniform1f(noiseshader, "time", SDL_GetTicks());
+   resman.shaderman.LoadShader(noiseshader);
+   resman.shaderman.SetUniform1f(noiseshader, "time", SDL_GetTicks());
    
-   shaderhand.LoadShader(terrainshader);
+   resman.shaderman.LoadShader(terrainshader);
    
-   shaderhand.LoadShader(cloudshader);
+   resman.shaderman.LoadShader(cloudshader);
    
-   shaderhand.LoadShader(cloudgenshader);
-   shaderhand.SetUniform1f(cloudgenshader, "noiseres", noiseres);
+   resman.shaderman.LoadShader(cloudgenshader);
+   resman.shaderman.SetUniform1f(cloudgenshader, "noiseres", noiseres);
    
-   shaderhand.LoadShader(shadowshader);
+   resman.shaderman.LoadShader(shadowshader);
    
-   shaderhand.LoadShader(watershader);
+   resman.shaderman.LoadShader(watershader);
    
-   shaderhand.LoadShader(bumpshader);
+   resman.shaderman.LoadShader(bumpshader);
    
-   shaderhand.UseShader("none");
+   resman.shaderman.UseShader("none");
 }
 
 
@@ -450,7 +456,7 @@ void InitNoise()
    int i,j;
    
    glGenTextures(1, &noisetex); // Generate a unique texture ID
-   texhand.BindTexture(noisetex); // Bind the texture to texture unit 0
+   resman.texhand.BindTexture(noisetex); // Bind the texture to texture unit 0
    
    GLubyte pixels[256 * 256 * 4];
    for (i = 0; i<256; i++)
@@ -1376,7 +1382,7 @@ void LoadDOTextures(string filename)
       lf >> buffer;
       dotextures.push_back(temptex[j]);
       bool alpha;  // Don't really care
-      texhand.LoadTexture(buffer, temptex[j], true, &alpha);
+      resman.texhand.LoadTexture(buffer, temptex[j], true, &alpha);
    }
    lf.close();
 }
