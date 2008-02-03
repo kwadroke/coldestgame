@@ -15,7 +15,7 @@ void Repaint()
 {
    static Timer t, ts;
    t.start();
-   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
    // The accum buffer is no longer used (atm anyway), and the color buffer
    // should be overwritten by the skybox because we shut off the depth
    // test (nothing else should be rendered at that time anyway)
@@ -301,10 +301,6 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
    {
       o = i->object;
       
-      /* Never actually disable the depth test now anyway
-      if (prims[i].depthtest == false)
-         glDisable(GL_DEPTH_TEST);
-      else glEnable(GL_DEPTH_TEST);*/
       i->material->Use();
       if (shadowrender)
          resman.shaderman.UseShader(shadowshader);
@@ -331,43 +327,6 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
             i += o->vbocount[currindex] - 1;
             ++currindex;
          }
-#if 0
-         else // This probably doesn't work (right) anymore
-         {
-            resman.texhand.BindTextureDebug(i->texnums[0]);
-            if (i->type == "terrain" && !shadowrender)
-            {
-               resman.texhand.ActiveTexture(1);
-               resman.texhand.BindTextureDebug(i->texnums[1]);
-               resman.texhand.ActiveTexture(2);
-               resman.texhand.BindTextureDebug(i->texnums[2]);
-               resman.texhand.ActiveTexture(3);
-               resman.texhand.BindTextureDebug(i->texnums[3]);
-               resman.texhand.ActiveTexture(4);
-               resman.texhand.BindTextureDebug(i->texnums[4]);
-               resman.texhand.ActiveTexture(5);
-               resman.texhand.BindTextureDebug(i->texnums[5]);
-               resman.texhand.ActiveTexture(0);
-            }
-            if (!shadowrender)
-               shaderhand.UseShader(i->shader);
-            glBegin(GL_TRIANGLE_STRIP);
-            glTexCoord2f(0, 0);
-            glNormal3f(i->n[0].x, i->n[0].y, i->n[0].z);
-            glVertex3f(i->v[0].x, i->v[0].y, i->v[0].z);
-            glTexCoord2f(0, 1);
-            glNormal3f(i->n[1].x, i->n[1].y, i->n[1].z);
-            glVertex3f(i->v[1].x, i->v[1].y, i->v[1].z);
-            glTexCoord2f(1, 0);
-            glNormal3f(i->n[2].x, i->n[2].y, i->n[2].z);
-            glVertex3f(i->v[2].x, i->v[2].y, i->v[2].z);
-            glTexCoord2f(1, 1);
-            glNormal3f(i->n[3].x, i->n[3].y, i->n[3].z);
-            glVertex3f(i->v[3].x, i->v[3].y, i->v[3].z);
-            glEnd();
-         }
-#endif
-         
          trislastframe += 2 * o->vbocount[currindex - 1];
       }
    }
@@ -539,7 +498,7 @@ void RenderDOTree(DynamicPrimitive* root)
       norm = (root->v[2] - root->v[0]).cross(
                root->v[1] - root->v[0]);
       norm.normalize();
-      Vector3 tangent = root->v[2] - root->v[0];
+      Vector3 tangent = root->v[1] - root->v[0];
       tangent.normalize();
       
       GLint loc = resman.shaderman.GetAttribLocation(bumpshader, "tangent");

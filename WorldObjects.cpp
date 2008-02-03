@@ -148,6 +148,7 @@ void WorldObjects::GenVbo(Shader* s)
    vector<glfvec> texcoords;
    vector<GLfloat> attribs;
    vector<GLfloat> attribs1;
+   vector<GLfloat> tans;
    vector<WorldPrimitives>::iterator i;
    vector<WorldPrimitives>::iterator last;
    int counter = 0;
@@ -173,19 +174,19 @@ void WorldObjects::GenVbo(Shader* s)
             switch (k)
             {
                case 1:
-                  j = 2;
+                  j = 1;
                   break;
                case 2:
-                  j = 1;
+                  j = 2;
                   break;
                case 3:
                   j = 1;
                   break;
                case 4:
-                  j = 2;
+                  j = 3;
                   break;
                case 5:
-                  j = 3;
+                  j = 2;
                   break;
             };
             verts.push_back(i->v[j].x);
@@ -194,6 +195,10 @@ void WorldObjects::GenVbo(Shader* s)
             norms.push_back(i->n[j].x);
             norms.push_back(i->n[j].y);
             norms.push_back(i->n[j].z);
+            Vector3 tangent = i->v[1] - i->v[0];
+            tans.push_back(tangent.x);
+            tans.push_back(tangent.y);
+            tans.push_back(tangent.z);
             color.push_back(i->color[j][0]);
             color.push_back(i->color[j][1]);
             color.push_back(i->color[j][2]);
@@ -269,19 +274,22 @@ void WorldObjects::GenVbo(Shader* s)
                    color.size() * sizeof(float) + 
                    attribs.size() * sizeof(GLfloat) + 
                    attribs1.size() * sizeof(GLfloat) + 
+                   tans.size() * sizeof(GLfloat) +
                    texcoords[0].size() * sizeof(float) * 6, 
                    0, GL_STATIC_DRAW_ARB);
    normstart = verts.size() * sizeof(float);
    colorstart = normstart + norms.size() * sizeof(float);
    attstart = colorstart + color.size() * sizeof(float);
    att1start = attstart + attribs.size() * sizeof(GLfloat);
-   tcstart[0] = att1start + attribs1.size() * sizeof(GLfloat);
+   tanstart = att1start + attribs1.size() * sizeof(GLfloat);
+   tcstart[0] = tanstart + tans.size() * sizeof(GLfloat);
 
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, verts.size() * sizeof(float), &verts[0]);
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, normstart, norms.size() * sizeof(float), &norms[0]);
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, colorstart, color.size() * sizeof(float), &color[0]);
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, attstart, attribs.size() * sizeof(GLfloat), &attribs[0]);
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, att1start, attribs1.size() * sizeof(GLfloat), &attribs1[0]);
+   glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, tanstart, tans.size() * sizeof(GLfloat), &tans[0]);
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, tcstart[0], texcoords[0].size() * sizeof(float), &texcoords[0][0]);
    for (int i = 1; i < 6; ++i)
    {
@@ -344,25 +352,24 @@ void WorldObjects::BindVbo()
    glTexCoordPointer(2, GL_FLOAT, 0, (void*)tcstart[5]);
    
    int location;
-   location = shaderhand->GetAttribLocation(terrainshader, "terrainwt");
-   if (location > 0)
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt");
+   if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
    }
-   location = shaderhand->GetAttribLocation(terrainshader, "terrainwt1");
-   if (location > 0)
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt1");
+   if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);
    }
-   
-   /*location = shaderhand->GetAttribLocation("shaders/reflection", "terrainwt");
-   glEnableVertexAttribArrayARB(location);
-   glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
-   location = shaderhand->GetAttribLocation("shaders/reflection", "terrainwt1");
-   glEnableVertexAttribArrayARB(location);
-   glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);*/
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "tangent");
+   if (location >= 0)
+   {
+      glEnableVertexAttribArrayARB(location);
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)tanstart);
+   }
    
    glVertexPointer(3, GL_FLOAT, 0, 0); // Apparently putting this last helps performance somewhat
    
@@ -387,10 +394,6 @@ void WorldObjects::UnbindVbo()
    glClientActiveTextureARB(GL_TEXTURE5_ARB);
    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
    glClientActiveTextureARB(GL_TEXTURE0_ARB);
-   
-   /*int location;
-   location = shaderhand->GetAttribLocation("shaders/terrain", "terraintex");
-   glDisableVertexAttribArrayARB(location);*/
    
    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 }

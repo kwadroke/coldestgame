@@ -1,11 +1,11 @@
-void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
+void shadow(vec3 amb, vec3 diff, float d, inout vec4 color);
 void fog(float dist, inout vec4 color);
 
 uniform sampler2D tex;
 uniform float reflectval;
 
 varying float dist;
-varying vec4 ambient, diffuse;
+varying vec3 ambient, diffuse;
 varying vec3 worldcoords;
 
 void main()

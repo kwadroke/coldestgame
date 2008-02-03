@@ -4,7 +4,7 @@
 int Material::nummats = 0;
 
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f),
-                   texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats)
+                   texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true)
 {
    IniReader reader(filename);
    
@@ -29,13 +29,15 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
    reader.Read(shader, "Shader");
    shaderhand.LoadShader(shader);
    
+   reader.Read(cullface, "CullFace");
+   
    ++nummats;
 }
 
 
 void Material::Use() const
 {
-   for (int i = 0; i < 8; ++i)
+   for (int i = 0; i < 6; ++i) // At this time, textures 7 and 8 are reserved for shadowmaps
    {
       texman.texhand->ActiveTexture(i);
       if (texfilename[i] != "")
@@ -46,6 +48,14 @@ void Material::Use() const
    texman.texhand->ActiveTexture(0);
    
    shaderhand.UseShader(shader);
+   
+   if (cullface)
+      glEnable(GL_CULL_FACE);
+   else glDisable(GL_CULL_FACE);
+   
+   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &ambient[0]);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &diffuse[0]);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, &specular[0]);
 }
 
 

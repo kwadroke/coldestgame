@@ -1,12 +1,12 @@
 #version 110
 
-void basiclighting(out vec4 amb, out vec4 diff);
+void basiclighting(out vec3 amb, out vec3 diff);
 
 varying vec4 shadowmappos, worldshadowmappos;
-//varying vec3 texweight, texweight1;
+varying vec3 texweight, texweight1;
 varying vec4 worldcoords;
-varying vec4 diffuse;
-varying vec4 ambient;
+varying vec3 diffuse;
+varying vec3 ambient;
 
 attribute vec3 terrainwt, terrainwt1;
 
@@ -17,8 +17,8 @@ void main()
    
    basiclighting(ambient, diffuse);
    // Debugging
-   ambient = vec4(.2, .2, .2, .2);
-   diffuse = vec4(.7, .7, .7, .7);
+   //ambient = vec3(.2, .2, .2);
+   //diffuse = vec3(.7, .7, .7);
    
    /* Shadow calculations, the grunt work is done on the CPU and passed in
       using the texture matrix. */
@@ -32,13 +32,10 @@ void main()
    worldcoords.xyz = gl_Vertex.xyz;
    
    /* Terrain */
-   //texweight = terrainwt;
-   //texweight1 = terrainwt1;
+   texweight = terrainwt;
+   texweight1 = terrainwt1;
    
    gl_Position = ftransform();
-   
-   /* ATI OpenGL stupidity
-   depth = gl_Position.zw;*/
    
    /* For fogging - method above is better, probably a little slower though*/
    /*dist = gl_Position.z;*/

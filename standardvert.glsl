@@ -1,18 +1,15 @@
 #version 110
 
-void basiclighting(out vec4 amb, out vec4 diff);
+void basiclighting(out vec3 amb, out vec3 diff);
 
 varying vec4 shadowmappos, worldshadowmappos;
 varying float dist;
-varying vec4 ambient, diffuse;
+varying vec3 ambient, diffuse;
 varying vec3 worldcoords;
 
 void main()
 {
    gl_TexCoord[0] = gl_MultiTexCoord0;
-   /*gl_TexCoord[1] = gl_MultiTexCoord1;
-   gl_TexCoord[2] = gl_MultiTexCoord2;
-   gl_TexCoord[3] = gl_MultiTexCoord3;*/
    
    basiclighting(ambient, diffuse);
    gl_BackColor = gl_FrontColor;
