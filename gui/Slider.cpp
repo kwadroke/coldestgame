@@ -1,7 +1,7 @@
 #include "Slider.h"
 
 Slider::Slider(GUI* p, TextureManager* tm) : value(5), minvalue(0),
-               maxvalue(100), drag(false), sliderheight(30), sliderwidth(100), dragoffset(0.f)
+               maxvalue(100), drag(false), sliderheight(30), sliderwidth(30), dragoffset(0.f)
 {
    Init(p, tm);
    button = new Button(this, tm);
