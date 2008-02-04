@@ -308,7 +308,43 @@ void WorldObjects::GenVbo(Shader* s)
 // IMPORTANT: Must call BindVbo before calling this function
 void WorldObjects::RenderVbo(int prim, int count)
 {
+   int location;
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt");
+   if (location >= 0)
+   {
+      glEnableVertexAttribArrayARB(location);
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
+   }
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt1");
+   if (location >= 0)
+   {
+      glEnableVertexAttribArrayARB(location);
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);
+   }
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "tangent");
+   if (location >= 0)
+   {
+      glEnableVertexAttribArrayARB(location);
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)tanstart);
+   }
+   
    glDrawArrays(GL_TRIANGLES, prim * 6, 3 * count * 2);
+   
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt");
+   if (location >= 0)
+   {
+      glDisableVertexAttribArrayARB(location);
+   }
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt1");
+   if (location >= 0)
+   {
+      glDisableVertexAttribArrayARB(location);
+   }
+   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "tangent");
+   if (location >= 0)
+   {
+      glDisableVertexAttribArrayARB(location);
+   }
 }
 
 
@@ -350,26 +386,6 @@ void WorldObjects::BindVbo()
    glClientActiveTextureARB(GL_TEXTURE5_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
    glTexCoordPointer(2, GL_FLOAT, 0, (void*)tcstart[5]);
-   
-   int location;
-   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt");
-   if (location >= 0)
-   {
-      glEnableVertexAttribArrayARB(location);
-      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)attstart);
-   }
-   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "terrainwt1");
-   if (location >= 0)
-   {
-      glEnableVertexAttribArrayARB(location);
-      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)att1start);
-   }
-   location = shaderhand->GetAttribLocation(shaderhand->CurrentShader(), "tangent");
-   if (location >= 0)
-   {
-      glEnableVertexAttribArrayARB(location);
-      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, 0, (void*)tanstart);
-   }
    
    glVertexPointer(3, GL_FLOAT, 0, 0); // Apparently putting this last helps performance somewhat
    

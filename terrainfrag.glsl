@@ -36,7 +36,6 @@ void main()
    color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
    
    color *= base;
-   color.rgb = texweight;
    
    shadow(ambient, diffuse, dist, color);
    
