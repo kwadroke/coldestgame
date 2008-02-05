@@ -12,7 +12,7 @@ varying vec3 worldcoords;
 void main()
 {
    /* Reflection */
-   if (worldcoords.y < 0 && reflectval > .5) discard;
+   if (worldcoords.y < 0. && reflectval > .5) discard;
    
    /* Texturing */
    vec4 color;
