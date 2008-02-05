@@ -1,18 +1,17 @@
 #version 110
 
-void basiclighting(out vec3 amb, out vec3 diff);
-
 varying vec4 shadowmappos, worldshadowmappos;
 varying float dist;
-varying vec3 ambient, diffuse;
+varying vec3 normal;
 varying vec3 worldcoords;
 
 void main()
 {
    gl_TexCoord[0] = gl_MultiTexCoord0;
    
-   basiclighting(ambient, diffuse);
-   gl_BackColor = gl_FrontColor;
+   normal = normalize(gl_NormalMatrix * gl_Normal);
+   gl_FrontColor = vec4(1, 1, 1, 1);
+   //gl_BackColor = gl_FrontColor;
    
    /* Shadow calculations, the grunt work is done on the CPU and passed in
       using the texture matrix. */

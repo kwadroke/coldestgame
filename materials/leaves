@@ -1,5 +1,5 @@
 Diffuse 1 1 1 1
-Ambient 0 0 0 1
+Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/leaves6.png
 Shader shaders/standard

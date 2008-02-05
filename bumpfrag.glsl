@@ -1,12 +1,12 @@
-void shadow(vec3 amb, vec3 diff, float d, inout vec4 color);
+void basiclighting(in vec3 norm, in vec3 lightdir, out vec4 col, out vec4 amb, out vec4 diff);
+void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
 void fog(float dist, inout vec4 color);
 
 uniform sampler2D tex, bumptex;
 uniform float reflectval;
 
-//varying vec4 shadowmappos, worldshadowmappos;
+//varying vec4 shadowmappos, worldshadowmappos; // Just a reminder
 varying float dist;
-//varying vec4 ambient;//, diffuse;
 varying vec3 worldcoords;
 varying vec3 view, lightdir;
 
@@ -16,22 +16,17 @@ void main()
    if (worldcoords.y < 0 && reflectval > .5) discard;
    
    /* Texturing */
-   vec4 color = texture2D(tex, gl_TexCoord[0].st);
+   vec4 color = gl_Color;
    
    vec3 bump = texture2D(bumptex, gl_TexCoord[0].st).xyz * 2 - 1;
    
-   float ndotl = max(0.0, dot(normalize(bump), normalize(lightdir)));
-   
-   //vec3 diffuse = gl_LightSource[0].diffuse.rgb * ndotl;
-   vec3 diffuse = vec3(1, 1, 1) * ndotl;
-   
-   vec3 ambient = vec3(.4, .4, .4);
+   vec4 ambient, diffuse;
+   basiclighting(bump, lightdir, color, ambient, diffuse);
    shadow(ambient, diffuse, dist, color);
    
    fog(dist, color);
    
-   gl_FragColor.rgb = ambient + diffuse;
-   gl_FragColor.rgb *= color.rgb;
+   gl_FragColor.rgb = color * texture2D(tex, gl_TexCoord[0].st).rgb;
    //gl_FragColor.rgb = -view;
    //gl_FragColor.rgb = vec3(ndotl, ndotl, ndotl);
    //gl_FragColor.rgb = lightdir * .5 + .5;
