@@ -1,10 +1,7 @@
 #version 110
 
-void basiclighting(out vec4 amb, out vec4 diff);
-
 varying vec4 shadowmappos, worldshadowmappos;
 varying float dist;
-//varying vec4 ambient;//, diffuse;
 varying vec3 worldcoords;
 varying vec3 view, lightdir;
 
@@ -13,14 +10,7 @@ attribute vec3 tangent;
 void main()
 {
    gl_TexCoord[0] = gl_MultiTexCoord0;
-   
-   //vec4 diffuse;
-   
-   //basiclighting(ambient, diffuse);
-   //ambient = vec4(.4, .4, .4, 1);
-   //gl_FrontColor = gl_Color * vec4(.4, .4, .4, 1);//gl_LightSource[0].ambient;
-   //gl_FrontColor = vec4(.4, .4, .4, 1);
-   //gl_BackColor = gl_FrontColor;
+   gl_FrontColor = vec4(1, 1, 1, 1);
    
    /* Shadow calculations, the grunt work is done on the CPU and passed in
    using the texture matrix. */
@@ -40,9 +30,9 @@ void main()
    
    vec3 location = gl_ModelViewMatrixInverse[3].xyz;
    worldcoords = gl_Vertex.xyz;
-   //lightdir = normalize(gl_ModelViewMatrixInverse * gl_LightSource[0].position).xyz;
-   lightdir = vec3(-1, 1, -1);
-   lightdir = normalize(lightdir);
+   lightdir = normalize(gl_ModelViewMatrixInverse * gl_LightSource[0].position).xyz;
+   //lightdir = vec3(-1, 1, -1);
+   //lightdir = normalize(lightdir);
    //lightdir = normalize(gl_LightSource[0].position.xyz);
    //lightdir.x *= -1.; // Not entirely clear on why this is necessary, but it is
    //lightdir.z *= -1.;

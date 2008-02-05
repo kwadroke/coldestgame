@@ -1,4 +1,5 @@
-void shadow(vec3 amb, vec3 diff, float d, inout vec4 color);
+void basiclighting(in vec3 norm, in vec3 lightdir, out vec4 col, out vec4 amb, out vec4 diff);
+void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
 void fog(float dist, inout vec4 color);
 
 uniform sampler2D tex, tex1, tex2, tex3;
@@ -6,8 +7,7 @@ uniform float reflectval;
 
 varying vec3 texweight, texweight1;
 varying vec4 worldcoords;
-varying vec3 diffuse;
-varying vec3 ambient;
+varying vec3 normal;
 
 void main()
 {
@@ -16,8 +16,13 @@ void main()
    
    float dist = worldcoords.w;
    // Texturing
-   vec4 base = gl_Color;
+   vec4 base;
+   vec4 ambient, diffuse;
+   basiclighting(normal, normalize(vec3(gl_LightSource[0].position)), base, ambient, diffuse);
    base.a = 1.;
+   
+   shadow(ambient, diffuse, dist, base);
+   
    vec4 color = vec4(0, 0, 0, 0);
    
    float normweight = smoothstep(-300., 600., dist) * .7;
@@ -36,8 +41,6 @@ void main()
    color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
    
    color *= base;
-   
-   shadow(ambient, diffuse, dist, color);
    
    fog(dist, color);
    
