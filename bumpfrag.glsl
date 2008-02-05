@@ -13,12 +13,12 @@ varying vec3 view, lightdir;
 void main()
 {
    /* Reflection */
-   if (worldcoords.y < 0 && reflectval > .5) discard;
+   if (worldcoords.y < 0. && reflectval > .5) discard;
    
    /* Texturing */
    vec4 color = gl_Color;
    
-   vec3 bump = texture2D(bumptex, gl_TexCoord[0].st).xyz * 2 - 1;
+   vec3 bump = texture2D(bumptex, gl_TexCoord[0].st).xyz * 2. - 1.;
    
    vec4 ambient, diffuse;
    basiclighting(bump, lightdir, color, ambient, diffuse);
@@ -26,7 +26,7 @@ void main()
    
    fog(dist, color);
    
-   gl_FragColor.rgb = color * texture2D(tex, gl_TexCoord[0].st).rgb;
+   gl_FragColor = color * texture2D(tex, gl_TexCoord[0].st);
    //gl_FragColor.rgb = -view;
    //gl_FragColor.rgb = vec3(ndotl, ndotl, ndotl);
    //gl_FragColor.rgb = lightdir * .5 + .5;

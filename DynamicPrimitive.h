@@ -16,7 +16,7 @@ class DynamicPrimitive : public GenericPrimitive
       string parentid;
       string name;
       DynamicPrimitive *parent;
-      list<DynamicPrimitive*> child; // These need to be deleted in a destructor at some point
+      list<DynamicPrimitive*> child; // TODO: These need to be deleted in a destructor at some point
       list<DynamicObject>::iterator parentobj;
       //Vector3 point[4];
       //int texnum;
