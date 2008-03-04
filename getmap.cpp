@@ -14,6 +14,8 @@
 #include "globals.h"
 #include "renderdefs.h"
 #include "IniReader.h"
+#include "Quad.h"
+#include "Mesh.h"
 
 using namespace std;
 
@@ -29,7 +31,7 @@ struct TerrainParams
 
 vector<TerrainParams> terrparams;
 int terrainstretch;
-WorldPrimitives worldbounds[6];
+Quadvec worldbounds(6, Quad());
 
 void Repaint();
 float Max(float, float);
@@ -37,7 +39,6 @@ Vector3 GetTerrainNormal(int, int, int, int);
 float GetSmoothedTerrain(int, int, int, int, vector< floatvec >&);
 float Random(float, float);
 void GenShadows(Vector3, float, FBO&);
-list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -60,7 +61,7 @@ void GetMap(string fn)
    IniReader mapdata(dataname);
    
    mapdata.Read(tilesize, "TileSize");
-   coldet.tilesize = tilesize;
+//   coldet.tilesize = tilesize;
    mapdata.Read(heightscale, "HeightScale");
    mapdata.Read(zeroheight, "ZeroHeight");
    mapdata.Read(numtextures, "NumTextures");
@@ -96,14 +97,9 @@ void GetMap(string fn)
    progress->value = 0;
    progtext->text = "Loading textures";
    Repaint();
+
+   //resman.ReleaseAll();  This or something like it will be necessary at some point or we leak memory
    
-   // Pretty sure this call is irrelevant now that we're using shaders
-   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-   cout << "Loading textures(" << numtextures << ")" << endl;
-   
-   //resman.ReleaseAll();
-   
-   LoadDOTextures("models/testex");
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
    skyboxmat = &resman.LoadMaterial(readskybox);
@@ -113,18 +109,19 @@ void GetMap(string fn)
    string nodename;
    string terrainmaterial;
    mapdata.Read(terrainmaterial, "TerrainMaterial");
-   for (int i = 0; i < maxterrainparams; ++i)
+   IniReader texnode = mapdata.GetItemByName("TerrainParams");
+   IniReader currnode;
+   for (int i = 0; i < texnode.NumChildren(); ++i)
    {
       terrparams.push_back(dummytp);
-      nodename = "Texture" + ToString(i);
+      currnode = texnode.GetItem(i);
       
-      IniReader currtex = mapdata.GetItemByName(nodename);
-      currtex.Read(terrparams[i].minheight, "HeightRange", 0);
-      currtex.Read(terrparams[i].maxheight, "HeightRange", 1);
-      currtex.Read(terrparams[i].minslope, "SlopeRange", 0);
-      currtex.Read(terrparams[i].maxslope, "SlopeRange", 1);
-      currtex.Read(terrparams[i].minrand, "RandRange", 0);
-      currtex.Read(terrparams[i].maxrand, "RandRange", 1);
+      currnode.Read(terrparams[i].minheight, "HeightRange", 0);
+      currnode.Read(terrparams[i].maxheight, "HeightRange", 1);
+      currnode.Read(terrparams[i].minslope, "SlopeRange", 0);
+      currnode.Read(terrparams[i].maxslope, "SlopeRange", 1);
+      currnode.Read(terrparams[i].minrand, "RandRange", 0);
+      currnode.Read(terrparams[i].maxrand, "RandRange", 1);
    }
    
    
@@ -132,7 +129,6 @@ void GetMap(string fn)
    spawnpoints.clear();
    SpawnPointData spawntemp;
    IniReader spawnnode = mapdata.GetItemByName("SpawnPoints");
-   IniReader currnode("");
    
    for (int i = 0; i < spawnnode.NumChildren(); ++i)
    {
@@ -147,12 +143,7 @@ void GetMap(string fn)
    
    
    // Load objects
-   WorldObjects tempobj;
-   WorldPrimitives tempprim;
-   list<WorldObjects>::iterator currobj;
-   objects.clear();
-   impfbolist.clear();
-   dynobjects.clear();
+   meshes.clear();
    progtext->text = "Loading objects";
    progress->value = 1;
    Repaint();
@@ -161,390 +152,10 @@ void GetMap(string fn)
    string currmaterial;
    for (int i = 0; i < objectlist.NumChildren(); ++i)
    {
-      tempobj = WorldObjects();
-      tempobj.dynobj = dynobjects.end();
-      objects.push_front(tempobj);
-      currobj = objects.begin();
-      
       currnode = objectlist(i);
-      currnode.Read(currobj->type, "Type");
-      if (currobj->type == "dynobj")
-      {
-         /* Note that this will result in pushing a dummy object into the objects list, but
-            since we may need something like that eventually for spatial partitioning I'm
-            going to let it slide for now.*/
-         string fname;
-         currnode.Read(fname, "File");
-         list<DynamicObject>::iterator dyn;
-         dyn = LoadObject(fname, dynobjects);
-         currnode.Read(dyn->position.x, "Position", 0);
-         currnode.Read(dyn->position.y, "Position", 1);
-         currnode.Read(dyn->position.z, "Position", 2);
-         currnode.Read(dyn->rotation, "Rotations", 0);
-         currnode.Read(dyn->pitch, "Rotations", 1);
-         currnode.Read(dyn->roll, "Rotations", 2);
-      }
-      else if (currobj->type == "bush")
-      {
-         int numleaves;  // Don't need to store this value
-         currnode.Read(tempprim.height, "Size");
-         currnode.Read(currobj->x, "Position", 0);
-         currnode.Read(currobj->y, "Position", 1);
-         currnode.Read(currobj->z, "Position", 2);
-         currnode.Read(currobj->rotation, "Rotations", 0);
-         currnode.Read(currobj->pitch, "Rotations", 1);
-         currnode.Read(currobj->roll, "Rotations", 2);
-         currnode.Read(numleaves, "NumLeaves");
-         currobj->size = tempprim.height;
-         
-         // Generate leaves
-         float height = currobj->size;
-         for (int j = 0; j < numleaves; j++)
-         {
-            currnode.Read(currmaterial, "Materials");
-            tempprim.material = &resman.LoadMaterial(currmaterial);
-            tempprim.object = currobj;
-            tempprim.type = "tristrip";
-            tempprim.transparent = false;
-            tempprim.collide = false;
-            float leafratio = .5;
-            tempprim.v[0].x = height / leafratio;
-            tempprim.v[0].y = 0;
-            tempprim.v[0].z = height / leafratio;
-            tempprim.v[1].x = height / leafratio;
-            tempprim.v[1].y = 0;
-            tempprim.v[1].z = -height / leafratio;
-            tempprim.v[2].x = -height / leafratio;
-            tempprim.v[2].y = 0;
-            tempprim.v[2].z = height / leafratio;
-            tempprim.v[3].x = -height / leafratio;
-            tempprim.v[3].y = 0;
-            tempprim.v[3].z = -height / leafratio;
-            float amount = j * 360 / numleaves;
-            for (int v = 0; v < 4; v++)
-            {
-               tempprim.v[v].rotate(amount * 2.5, amount * 3.3, amount);
-               tempprim.v[v].translate(0, height / 2, 0);// / 3 * 2);
-               tempprim.v[v].rotate(currobj->pitch, currobj->rotation, currobj->roll);
-               tempprim.v[v].translate(currobj->x, currobj->y, currobj->z);
-            }
-            /* Right now we shut off lighting for tree leaves because
-               it doesn't really look very good, so this step is not necessary
-            for (int n = 0; n < 4; n++)
-            {
-               Vector3 temp1 = prims[nextprim].v[1] - prims[nextprim].v[0];
-               Vector3 temp2 = prims[nextprim].v[2] - prims[nextprim].v[0];
-               prims[nextprim].n[n] = temp1.cross(temp2);
-               prims[nextprim].n[n].normalize();
-            }*/
-            currobj->prims.push_back(tempprim);
-            tempprim = WorldPrimitives();
-         }
-      }
-      else if (currobj->type == "proctree")
-      {
-         ProceduralTree t;
-         string barkmat, leafmat;
-         
-         currobj->size = 0; // Size is required
-         t.ReadParams(currnode);
-         currnode.Read(currobj->impdist, "impdist");
-         currnode.Read(currobj->size, "size");
-         currnode.Read(currobj->x, "Position", 0);
-         currnode.Read(currobj->y, "Position", 1);
-         currnode.Read(currobj->z, "Position", 2);
-         currnode.Read(currobj->rotation, "Rotations", 0);
-         currnode.Read(currobj->pitch, "Rotations", 1);
-         currnode.Read(currobj->roll, "Rotations", 2);
-         currnode.Read(barkmat, "Materials", 0);
-         currnode.Read(leafmat, "Materials", 1);
-         
-         currobj->dynobj = dynobjects.end();
-         int save = t.GenTree(currobj, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
-         cout << "Tree primitives: " << save << endl;
-      }
+      Mesh currmesh(currnode, resman);
+      meshes.push_back(currmesh);
    }
-#if 0
-   for (int i = 0; i < numobjects; i++)
-   {
-      tempobj = WorldObjects();
-      tempobj.dynobj = dynobjects.end();
-      objects.push_front(tempobj);
-      currobj = objects.begin();
-      gm >> currobj->type;
-      if (currobj->type == "cylinder")
-      {
-         gm >> currtex;
-         currobj->texnum = textures[currtex];
-         gm >> tempprim.rad;
-         gm >> tempprim.rad1;
-         gm >> tempprim.height;
-         gm >> tempprim.slices;
-         gm >> tempprim.stacks;
-         gm >> currobj->x;
-         gm >> currobj->y;
-         gm >> currobj->z;
-         gm >> currobj->rotation;
-         gm >> currobj->pitch;
-         gm >> currobj->roll;
-         currobj->size = max(tempprim.height, max(tempprim.rad, tempprim.rad1));
-         tempprim.type = "cylinder";
-         tempprim.object = currobj;
-         tempprim.texnums[0] = currobj->texnum;
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
-         
-         // For collision detection
-         tempprim.object = currobj;
-         tempprim.type = "tristrip";
-         tempprim.texnums[0] = currobj->texnum;
-         tempprim.v[0].x = tempprim.v[1].x = tempprim.v[2].x = tempprim.v[3].x = 0;
-         tempprim.v[0].z = tempprim.v[1].z = currobj->prims.front().height;
-         tempprim.v[0].y = tempprim.v[1].y = tempprim.v[2].y = tempprim.v[3].y = 0;
-         tempprim.v[2].z = tempprim.v[3].z = 0;
-         tempprim.v[0].x -= .01;
-         tempprim.v[2].x -= .01;
-         tempprim.rad = currobj->prims.front().rad;
-         tempprim.rad1 = currobj->prims.front().rad1;
-         for (int vec = 0; vec < 4; ++vec)
-         {
-            tempprim.v[vec].rotate(currobj->pitch, currobj->rotation, currobj->roll);
-            tempprim.v[vec].translate(currobj->x, currobj->y, currobj->z);
-         }
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
-      }
-      else if (currobj->type == "tree")
-      {
-         int numleaves;  // Don't need to store this value
-         gm >> currtex;
-         currobj->texnum = textures[currtex];
-         gm >> currtex;
-         currobj->texnum1 = textures[currtex];
-         gm >> currtex;
-         currobj->texnum2 = textures[currtex];
-         gm >> tempprim.rad;
-         gm >> tempprim.rad1;
-         gm >> tempprim.height;
-         gm >> tempprim.slices;
-         gm >> tempprim.stacks;
-         gm >> currobj->x;
-         gm >> currobj->y;
-         gm >> currobj->z;
-         gm >> currobj->rotation;
-         gm >> currobj->pitch;
-         gm >> currobj->roll;
-         gm >> numleaves;
-         tempprim.type = "cylinder";
-         tempprim.object = currobj;
-         tempprim.texnums[0] = currobj->texnum;
-         currobj->pitch -= 90; // Make our trees stand up by default
-         currobj->size = tempprim.height * 1.5;
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
-         
-         // For collision detection
-         tempprim.object = currobj;
-         tempprim.type = "tristrip";
-         tempprim.texnums[0] = currobj->texnum;
-         tempprim.v[0].x = tempprim.v[1].x = tempprim.v[2].x = tempprim.v[3].x = 0;
-         tempprim.v[0].z = tempprim.v[1].z = currobj->prims.front().height;
-         tempprim.v[0].y = tempprim.v[1].y = tempprim.v[2].y = tempprim.v[3].y = 0;
-         tempprim.v[2].z = tempprim.v[3].z = 0;
-         tempprim.v[0].x -= .01;
-         tempprim.v[2].x -= .01;
-         tempprim.rad = currobj->prims.front().rad;
-         tempprim.rad1 = currobj->prims.front().rad1;
-         for (int vec = 0; vec < 4; ++vec)
-         {
-            tempprim.v[vec].rotate(currobj->pitch, currobj->rotation, currobj->roll);
-            tempprim.v[vec].translate(currobj->x, currobj->y, currobj->z);
-         }
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
-         
-         // Generate leaves
-         float height = currobj->prims.front().height;
-         for (int j = 0; j < numleaves; j++)
-         {
-            tempprim.texnums[0] = currobj->texnum2;
-            tempprim.object = currobj;
-            tempprim.type = "tristrip";
-            tempprim.transparent = false;
-            tempprim.collide = false;
-            float leafratio = 1.5;
-            tempprim.v[0].x = height / leafratio;
-            tempprim.v[0].y = 0;
-            tempprim.v[0].z = height / leafratio;
-            tempprim.v[1].x = height / leafratio;
-            tempprim.v[1].y = 0;
-            tempprim.v[1].z = -height / leafratio;
-            tempprim.v[2].x = -height / leafratio;
-            tempprim.v[2].y = 0;
-            tempprim.v[2].z = height / leafratio;
-            tempprim.v[3].x = -height / leafratio;
-            tempprim.v[3].y = 0;
-            tempprim.v[3].z = -height / leafratio;
-            float amount = j * 360 / numleaves;
-            for (int v = 0; v < 4; v++)
-            {
-               tempprim.v[v].rotate(amount * 2.5, amount * 3.3, amount);
-               tempprim.v[v].translate(0, 0, height / 3 * 2);
-               tempprim.v[v].rotate(currobj->pitch, currobj->rotation, currobj->roll);
-               tempprim.v[v].translate(currobj->x, currobj->y, currobj->z);
-            }
-            for (int n = 0; n < 4; n++)
-            {
-               Vector3 temp1 = tempprim.v[1] - tempprim.v[0];
-               Vector3 temp2 = tempprim.v[2] - tempprim.v[0];
-               tempprim.n[n] = temp1.cross(temp2);
-               tempprim.n[n].normalize();
-            }
-            currobj->prims.push_back(tempprim);
-            tempprim = WorldPrimitives();
-         }
-      }
-      else if (currobj->type == "proctree")
-      {
-         string dummy;
-         ProceduralTree t;
-         gm >> currtex;
-         currobj->texnum = textures[currtex];
-         gm >> currtex;
-         currobj->texnum1 = textures[currtex];
-         gm >> currtex;
-         currobj->texnum2 = textures[currtex];
-         currobj->size = 0; // Size is required
-         t.ReadParams(gm);
-         gm >> dummy >> currobj->impdist;
-         gm >> dummy >> currobj->size;
-         gm >> currobj->x;
-         gm >> currobj->y;
-         gm >> currobj->z;
-         gm >> currobj->rotation;
-         gm >> currobj->pitch;
-         gm >> currobj->roll;
-         currobj->dynobj = dynobjects.end();
-         int save = t.GenTree(currobj);
-         cout << "Tree primitives: " << save << endl;
-      }
-      else if (currobj->type == "bush")
-      {
-         int numleaves;  // Don't need to store this value
-         gm >> currtex;
-         currobj->texnum = textures[currtex];
-         gm >> tempprim.height;
-         gm >> currobj->x;
-         gm >> currobj->y;
-         gm >> currobj->z;
-         gm >> currobj->rotation;
-         gm >> currobj->pitch;
-         gm >> currobj->roll;
-         gm >> numleaves;
-         currobj->size = tempprim.height;
-         /*prims[nextprim].type = "cylinder";
-         prims[nextprim].object = i;
-         prims[nextprim].texnum = objects[i].texnum;*/
-         
-         // Generate leaves
-         float height = currobj->size;
-         for (int j = 0; j < numleaves; j++)
-         {
-            tempprim.texnums[0] = currobj->texnum;
-            tempprim.object = currobj;
-            tempprim.type = "tristrip";
-            tempprim.transparent = false;
-            tempprim.collide = false;
-            float leafratio = .5;
-            tempprim.v[0].x = height / leafratio;
-            tempprim.v[0].y = 0;
-            tempprim.v[0].z = height / leafratio;
-            tempprim.v[1].x = height / leafratio;
-            tempprim.v[1].y = 0;
-            tempprim.v[1].z = -height / leafratio;
-            tempprim.v[2].x = -height / leafratio;
-            tempprim.v[2].y = 0;
-            tempprim.v[2].z = height / leafratio;
-            tempprim.v[3].x = -height / leafratio;
-            tempprim.v[3].y = 0;
-            tempprim.v[3].z = -height / leafratio;
-            float amount = j * 360 / numleaves;
-            for (int v = 0; v < 4; v++)
-            {
-               tempprim.v[v].rotate(amount * 2.5, amount * 3.3, amount);
-               tempprim.v[v].translate(0, height / 2, 0);// / 3 * 2);
-               tempprim.v[v].rotate(currobj->pitch, currobj->rotation, currobj->roll);
-               tempprim.v[v].translate(currobj->x, currobj->y, currobj->z);
-            }
-            /* Right now we shut off lighting for tree leaves because
-               it doesn't really look very good, so this step is not necessary
-            for (int n = 0; n < 4; n++)
-            {
-               Vector3 temp1 = prims[nextprim].v[1] - prims[nextprim].v[0];
-               Vector3 temp2 = prims[nextprim].v[2] - prims[nextprim].v[0];
-               prims[nextprim].n[n] = temp1.cross(temp2);
-               prims[nextprim].n[n].normalize();
-            }*/
-            currobj->prims.push_back(tempprim);
-            tempprim = WorldPrimitives();
-         }
-      }
-      else if (currobj->type == "tristrip")
-      {
-         gm >> currtex;
-         currobj->texnum = textures[currtex];
-         gm >> currobj->x;
-         gm >> currobj->y;
-         gm >> currobj->z;
-         gm >> tempprim.v[0].x;
-         gm >> tempprim.v[0].y;
-         gm >> tempprim.v[0].z;
-         gm >> tempprim.v[1].x;
-         gm >> tempprim.v[1].y;
-         gm >> tempprim.v[1].z;
-         gm >> tempprim.v[2].x;
-         gm >> tempprim.v[2].y;
-         gm >> tempprim.v[2].z;
-         gm >> tempprim.v[3].x;
-         gm >> tempprim.v[3].y;
-         gm >> tempprim.v[3].z;
-         gm >> currobj->rotation;
-         gm >> currobj->pitch;
-         gm >> currobj->roll;
-         currobj->size = max(tempprim.v[0].distance(tempprim.v[3]),
-                             tempprim.v[1].distance(tempprim.v[2]));
-         tempprim.type = "tristrip";
-         tempprim.object = currobj;
-         tempprim.texnums[0] = currobj->texnum;
-         for (int v = 0; v < 4; v++)
-         {
-            tempprim.v[v].rotate(currobj->pitch, currobj->rotation, currobj->roll);
-            tempprim.v[v].translate(currobj->x, currobj->y, currobj->z);
-         }
-         for (int n = 0; n < 4; n++)
-         {
-            Vector3 temp1 = tempprim.v[1] - tempprim.v[0];
-            Vector3 temp2 = tempprim.v[2] - tempprim.v[0];
-            tempprim.n[n] = temp1.cross(temp2);
-            tempprim.n[n].normalize();
-         }
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
-      }
-      else if (currobj->type == "dynobj")
-      {
-         /* Note that this will result in pushing a dummy object into the objects list, but
-            since we may need something like that eventually for spatial partitioning I'm
-            going to let it slide for now.*/
-         string fname;
-         list<DynamicObject>::iterator dyn;
-         gm >> fname;
-         dyn = LoadObject(fname, dynobjects);
-         gm >> dyn->position.x >> dyn->position.y >> dyn->position.z;
-         gm >> dyn->rotation >> dyn->pitch >> dyn->roll;
-      }
-   }
-#endif
    
    progress->value = 2;
    progtext->text = "Loading map data";
@@ -594,12 +205,12 @@ void GetMap(string fn)
    // Done loading heightmap
    
    // Data structures for storing relevant values
-   typedef vector<WorldPrimitives> terrvec;
+   typedef vector<Quad> terrvec;
    vector<terrvec> terrprims;
    terrvec temp;
-   WorldPrimitives prim; // Make sure all terrain gets defaults
+   Quad quad;
    for (int i = 0; i < maph - 1; ++i)
-      temp.push_back(prim);
+      temp.push_back(quad);
    for (int i = 0; i < mapw - 1; ++i)
       terrprims.push_back(temp);
    
@@ -658,51 +269,41 @@ void GetMap(string fn)
          lightmap[x][y].z = data[offset + 2] / 255.f;
       }
    }
-   
+
    // Top
-   worldbounds[0].v[0] = Vector3(0, maxworldheight, 0);
-   worldbounds[0].v[1] = Vector3((mapw - 1) * tilesize, maxworldheight, 0);
-   worldbounds[0].v[2] = Vector3(0, maxworldheight, (maph - 1) * tilesize);
-   worldbounds[0].v[3] = Vector3((mapw - 1) * tilesize, maxworldheight, (maph - 1) * tilesize);
+   coldet.worldbounds[0].SetVertex(0, Vector3(0, maxworldheight, 0));
+   coldet.worldbounds[0].SetVertex(3, Vector3((mapw - 1) * tilesize, maxworldheight, 0));
+   coldet.worldbounds[0].SetVertex(1, Vector3(0, maxworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[0].SetVertex(2, Vector3((mapw - 1) * tilesize, maxworldheight, (maph - 1) * tilesize));
    // Sides
-   worldbounds[1].v[0] = Vector3(0, maxworldheight, 0);
-   worldbounds[1].v[1] = Vector3(0, maxworldheight, (maph - 1) * tilesize);
-   worldbounds[1].v[2] = Vector3(0, minworldheight, 0);
-   worldbounds[1].v[3] = Vector3(0, minworldheight, (maph - 1) * tilesize);
+   coldet.worldbounds[1].SetVertex(0, Vector3(0, maxworldheight, 0));
+   coldet.worldbounds[1].SetVertex(3, Vector3(0, maxworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[1].SetVertex(1, Vector3(0, minworldheight, 0));
+   coldet.worldbounds[1].SetVertex(2, Vector3(0, minworldheight, (maph - 1) * tilesize));
    
-   worldbounds[2].v[0] = Vector3(0, maxworldheight, (maph - 1)* tilesize);
-   worldbounds[2].v[1] = Vector3((mapw - 1) * tilesize, maxworldheight, (maph - 1) * tilesize);
-   worldbounds[2].v[2] = Vector3(0, minworldheight, (maph - 1) * tilesize);
-   worldbounds[2].v[3] = Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize);
+   coldet.worldbounds[2].SetVertex(0, Vector3(0, maxworldheight, (maph - 1)* tilesize));
+   coldet.worldbounds[2].SetVertex(3, Vector3((mapw - 1) * tilesize, maxworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[2].SetVertex(1, Vector3(0, minworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[2].SetVertex(2, Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize));
    
-   worldbounds[3].v[0] = Vector3((mapw - 1) * tilesize, maxworldheight, (maph - 1) * tilesize);
-   worldbounds[3].v[1] = Vector3((mapw - 1) * tilesize, maxworldheight, 0);
-   worldbounds[3].v[2] = Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize);
-   worldbounds[3].v[3] = Vector3((mapw - 1) * tilesize, minworldheight, 0);
+   coldet.worldbounds[3].SetVertex(0, Vector3((mapw - 1) * tilesize, maxworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[3].SetVertex(3, Vector3((mapw - 1) * tilesize, maxworldheight, 0));
+   coldet.worldbounds[3].SetVertex(1, Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[3].SetVertex(2, Vector3((mapw - 1) * tilesize, minworldheight, 0));
    
-   worldbounds[4].v[0] = Vector3((mapw - 1) * tilesize, maxworldheight, 0);
-   worldbounds[4].v[1] = Vector3(0, maxworldheight, 0);
-   worldbounds[4].v[2] = Vector3((mapw - 1) * tilesize, minworldheight, 0);
-   worldbounds[4].v[3] = Vector3(0, minworldheight, 0);
+   coldet.worldbounds[4].SetVertex(0, Vector3((mapw - 1) * tilesize, maxworldheight, 0));
+   coldet.worldbounds[4].SetVertex(3, Vector3(0, maxworldheight, 0));
+   coldet.worldbounds[4].SetVertex(1, Vector3((mapw - 1) * tilesize, minworldheight, 0));
+   coldet.worldbounds[4].SetVertex(2, Vector3(0, minworldheight, 0));
    // Bottom
-   worldbounds[5].v[0] = Vector3(0, minworldheight, 0);
-   worldbounds[5].v[1] = Vector3(0, minworldheight, (maph - 1) * tilesize);
-   worldbounds[5].v[2] = Vector3((mapw - 1) * tilesize, minworldheight, 0);
-   worldbounds[5].v[3] = Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize);
-   
-   for (int i = 0; i < 6; ++i)
-   {
-      worldbounds[i].object = objects.end();
-      for (int j = 0; j < 4; ++j)
-      {
-         coldet.worldbounds[i].v[j] = worldbounds[i].v[j];
-         coldet.worldbounds[i].object = objects.end();
-      }
-   }
+   coldet.worldbounds[5].SetVertex(0, Vector3(0, minworldheight, 0));
+   coldet.worldbounds[5].SetVertex(3, Vector3(0, minworldheight, (maph - 1) * tilesize));
+   coldet.worldbounds[5].SetVertex(1, Vector3((mapw - 1) * tilesize, minworldheight, 0));
+   coldet.worldbounds[5].SetVertex(2, Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize));
    
    float slopecutoff = .75;
    float heightcutoff = 4;
-   vector<float> texweights(6, 0.f); // Can be increased, but will require a number of other changes
+   floatvec texweights(6, 0.f); // Can be increased, but will require a number of other changes
    int textouse[2];
    float currweights[2];
    
@@ -760,110 +361,102 @@ void GetMap(string fn)
    // Build terrain objects
    int numobjsx = mapw / terrobjsize;
    int numobjsy = maph / terrobjsize;
-   vector<list<WorldObjects>::iterator> objits;
-   tempobj = WorldObjects();
-   tempobj.type = "terrain";
-   tempobj.size = tilesize * terrobjsize * sqrt(2);
-   tempobj.dynobj = dynobjects.end();
+   vector<Meshlist::iterator> meshits;
+   IniReader tempini("models/terrain/base");
+   
    for (int y = 0; y < numobjsy; ++y)
    {
       for (int x = 0; x < numobjsx; ++x)
       {
-         objects.push_front(tempobj);
-         objits.push_back(objects.begin());
-         currobj = objects.begin();
-         currobj->x = x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f);
-         currobj->y = 0;
-         currobj->z = y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f);
+         Mesh tempmesh(tempini, resman);
+         tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
+                               0,
+                               y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
+         meshes.push_front(tempmesh);
+         meshits.push_back(meshes.begin());
       }
    }
    
-   // Now build terrain primitives
-   tempprim = WorldPrimitives();
+   // Now build terrain triangles
+   Meshlist::iterator currmesh;
    for (int x = 0; x < mapw - 1; ++x)
    {
       for (int y = 0; y < maph - 1; ++y)
       {
-         currobj = objits[(y / terrobjsize) * numobjsx + (x / terrobjsize)];
-         tempprim.type = "terrain";
-         tempprim.object = currobj;
-         tempprim.v[0].x = x * tilesize;
-         tempprim.v[0].y = heightmap[x][y];
-         tempprim.v[0].z = y * tilesize;
-         tempprim.v[1].x = x * tilesize;
-         tempprim.v[1].y = heightmap[x][y + 1];
-         tempprim.v[1].z = (y + 1) * tilesize;
-         tempprim.v[2].x = (x + 1) * tilesize;
-         tempprim.v[2].y = heightmap[x + 1][y];
-         tempprim.v[2].z = y * tilesize;
-         tempprim.v[3].x = (x + 1) * tilesize;
-         tempprim.v[3].y = heightmap[x + 1][y + 1];
-         tempprim.v[3].z = (y + 1) * tilesize;
-         tempprim.n[0] = normals[x][y];
-         tempprim.n[1] = normals[x][y + 1];
-         tempprim.n[2] = normals[x + 1][y];
-         tempprim.n[3] = normals[x + 1][y + 1];
-         tempprim.material = &resman.LoadMaterial(terrainmaterial);
+         currmesh = meshits[(y / terrobjsize) * numobjsx + (x / terrobjsize)];
+         Quad tempquad;
+         tempquad.SetVertex(0, Vector3(x * tilesize, heightmap[x][y], y * tilesize));
+         tempquad.SetVertex(1, Vector3(x * tilesize, heightmap[x][y + 1], (y + 1) * tilesize));
+         tempquad.SetVertex(2, Vector3((x + 1) * tilesize, heightmap[x + 1][y + 1], (y + 1) * tilesize));
+         tempquad.SetVertex(3, Vector3((x + 1) * tilesize, heightmap[x + 1][y], y * tilesize));
+         tempquad.SetNormal(0, normals[x][y]);
+         tempquad.SetNormal(1, normals[x][y + 1]);
+         tempquad.SetNormal(2, normals[x + 1][y + 1]);
+         tempquad.SetNormal(3, normals[x + 1][y]);
+         tempquad.SetMaterial(&resman.LoadMaterial(terrainmaterial));
+         tempquad.SetCollide(true);
          
+         // Terrain texturing needs to be handled at some point, but I haven't decided how yet
          for (int i = 0; i < 6; ++i)
          {
             if (tex1[x][y] == i)
-               tempprim.terraintex[0][i] = texpercent[x][y];
+               tempquad.SetTerrainWeight(0, i, texpercent[x][y]);
             else if (tex2[x][y] == i)
-               tempprim.terraintex[0][i] = 1.f - texpercent[x][y];
-            else tempprim.terraintex[0][i] = 0.f;
+               tempquad.SetTerrainWeight(0, i, 1.f - texpercent[x][y]);
+            else tempquad.SetTerrainWeight(0, i, 0.f);
             
             if (tex1[x][y + 1] == i)
-               tempprim.terraintex[1][i] = texpercent[x][y + 1];
+               tempquad.SetTerrainWeight(1, i, texpercent[x][y + 1]);
             else if (tex2[x][y + 1] == i)
-               tempprim.terraintex[1][i] = 1.f - texpercent[x][y + 1];
-            else tempprim.terraintex[1][i] = 0.f;
-            
-            if (tex1[x + 1][y] == i)
-               tempprim.terraintex[2][i] = texpercent[x + 1][y];
-            else if (tex2[x + 1][y] == i)
-               tempprim.terraintex[2][i] = 1.f - texpercent[x + 1][y];
-            else tempprim.terraintex[2][i] = 0.f;
+               tempquad.SetTerrainWeight(1, i, 1.f - texpercent[x][y + 1]);
+            else tempquad.SetTerrainWeight(1, i, 0.f);
             
             if (tex1[x + 1][y + 1] == i)
-               tempprim.terraintex[3][i] = texpercent[x + 1][y + 1];
+               tempquad.SetTerrainWeight(2, i, texpercent[x + 1][y + 1]);
             else if (tex2[x + 1][y + 1] == i)
-               tempprim.terraintex[3][i] = 1.f - texpercent[x + 1][y + 1];
-            else tempprim.terraintex[3][i] = 0.f;
+               tempquad.SetTerrainWeight(2, i, 1.f - texpercent[x + 1][y + 1]);
+            else tempquad.SetTerrainWeight(2, i, 0.f);
+            
+            if (tex1[x + 1][y] == i)
+               tempquad.SetTerrainWeight(3, i, texpercent[x + 1][y]);
+            else if (tex2[x + 1][y] == i)
+               tempquad.SetTerrainWeight(3, i, 1.f - texpercent[x + 1][y]);
+            else tempquad.SetTerrainWeight(3, i, 0.f);
          }
          
-         tempprim.color[0][0] = lightmap[x][y].x;
-         tempprim.color[0][1] = lightmap[x][y].y;
-         tempprim.color[0][2] = lightmap[x][y].z;
-         tempprim.color[1][0] = lightmap[x][y + 1].x;
-         tempprim.color[1][1] = lightmap[x][y + 1].y;
-         tempprim.color[1][2] = lightmap[x][y + 1].z;
-         tempprim.color[2][0] = lightmap[x + 1][y].x;
-         tempprim.color[2][1] = lightmap[x + 1][y].y;
-         tempprim.color[2][2] = lightmap[x + 1][y].z;
-         tempprim.color[3][0] = lightmap[x + 1][y + 1].x;
-         tempprim.color[3][1] = lightmap[x + 1][y + 1].y;
-         tempprim.color[3][2] = lightmap[x + 1][y + 1].z;
-         
-         // Leaving the alpha as the terrain blending factor, but it's no
-         // longer actually used in that capacity anymore
-         tempprim.color[0][3] = texpercent[x][y];
-         tempprim.color[1][3] = texpercent[x][y + 1];
-         tempprim.color[2][3] = texpercent[x + 1][y];
-         tempprim.color[3][3] = texpercent[x + 1][y + 1];
+         GLubytevec tempcol(4, 255);
+         tempcol[0] = (GLubyte)lightmap[x][y].x * 255;
+         tempcol[1] = (GLubyte)lightmap[x][y].y * 255;
+         tempcol[2] = (GLubyte)lightmap[x][y].z * 255;
+         tempquad.SetColor(0, tempcol);
+         tempcol[0] = (GLubyte)lightmap[x][y + 1].x * 255;
+         tempcol[1] = (GLubyte)lightmap[x][y + 1].y * 255;
+         tempcol[2] = (GLubyte)lightmap[x][y + 1].z * 255;
+         tempquad.SetColor(1, tempcol);
+         tempcol[0] = (GLubyte)lightmap[x + 1][y + 1].x * 255;
+         tempcol[1] = (GLubyte)lightmap[x + 1][y + 1].y * 255;
+         tempcol[2] = (GLubyte)lightmap[x + 1][y + 1].z * 255;
+         tempquad.SetColor(2, tempcol);
+         tempcol[0] = (GLubyte)lightmap[x + 1][y].x * 255;
+         tempcol[1] = (GLubyte)lightmap[x + 1][y].y * 255;
+         tempcol[2] = (GLubyte)lightmap[x + 1][y].z * 255;
+         tempquad.SetColor(3, tempcol);
          
          float texpiece = 1.f / (float)(terrainstretch);
-         tempprim.texcoords[1][0][0] = (x % terrainstretch) * texpiece;
-         tempprim.texcoords[1][0][1] = (y % terrainstretch) * texpiece;
-         tempprim.texcoords[1][1][0] = (x % terrainstretch) * texpiece;
-         tempprim.texcoords[1][1][1] = ((y % terrainstretch) + 1) * texpiece;
-         tempprim.texcoords[1][2][0] = ((x % terrainstretch) + 1) * texpiece;
-         tempprim.texcoords[1][2][1] = (y % terrainstretch) * texpiece;
-         tempprim.texcoords[1][3][0] = ((x % terrainstretch) + 1) * texpiece;
-         tempprim.texcoords[1][3][1] = ((y % terrainstretch) + 1) * texpiece;
-         
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
+         floatvec temptc(2, 0.f);
+         temptc[0] = (x % terrainstretch) * texpiece;
+         temptc[1] = (y % terrainstretch) * texpiece;
+         tempquad.SetTexCoords(0, 1, temptc);
+         temptc[0] = (x % terrainstretch) * texpiece;
+         temptc[1] = ((y % terrainstretch) + 1) * texpiece;
+         tempquad.SetTexCoords(1, 1, temptc);
+         temptc[0] = ((x % terrainstretch) + 1) * texpiece;
+         temptc[1] = ((y % terrainstretch) + 1) * texpiece;
+         tempquad.SetTexCoords(2, 1, temptc);
+         temptc[0] = ((x % terrainstretch) + 1) * texpiece;
+         temptc[1] = (y % terrainstretch) * texpiece;
+         tempquad.SetTexCoords(3, 1, temptc);
+         currmesh->Add(tempquad);
       }
    }
    
@@ -878,100 +471,106 @@ void GetMap(string fn)
    int numwaterx = (int)(watermaxx - waterminx) / (int)waterchunksize;
    int numwatery = (int)(watermaxy - waterminy) / (int)waterchunksize;
    
-   tempobj = WorldObjects();
-   tempobj.type = "water";
-   tempobj.size = (watermaxx - waterminx) + (watermaxy - waterminy);
-   tempobj.dynobj = dynobjects.end();
-   objects.push_front(tempobj);
-   currobj = objects.begin();
-   waterobj = currobj;
+   if (watermesh) delete watermesh;
+   
+   watermesh = new Mesh(tempini, resman);
    
    for (int i = 0; i < numwaterx; ++i)
    {
       for (int j = 0; j < numwatery; ++j)
       {
-         tempprim.type = "tristrip";
-         tempprim.object = currobj;
-         tempprim.v[0].x = i * waterchunksize + waterminx;
-         tempprim.v[0].y = 0;
-         tempprim.v[0].z = j * waterchunksize + waterminy;
-         tempprim.v[1].x = i * waterchunksize + waterminx;
-         tempprim.v[1].y = 0;
-         tempprim.v[1].z = (j + 1) * waterchunksize + waterminy;
-         tempprim.v[2].x = (i + 1) * waterchunksize + waterminx;
-         tempprim.v[2].y = 0;
-         tempprim.v[2].z = j * waterchunksize + waterminy;
-         tempprim.v[3].x = (i + 1) * waterchunksize + waterminx;
-         tempprim.v[3].y = 0;
-         tempprim.v[3].z = (j + 1) * waterchunksize + waterminy;
+         Quad tempquad;
+         tempquad.SetVertex(0, Vector3(i * waterchunksize + waterminx, 0, j * waterchunksize + waterminy));
+         tempquad.SetVertex(1, Vector3(i * waterchunksize + waterminx, 0, (j + 1) * waterchunksize + waterminy));
+         tempquad.SetVertex(2, Vector3((i + 1) * waterchunksize + waterminx, 0, (j + 1) * waterchunksize + waterminy));
+         tempquad.SetVertex(3, Vector3((i + 1) * waterchunksize + waterminx, 0, j * waterchunksize + waterminy));
          
-         tempprim.texcoords[1][0][0] = (watermaxx - i * waterchunksize) / (watermaxx - waterminx);
-         tempprim.texcoords[1][0][1] = (watermaxy - j * waterchunksize) / (watermaxy - waterminy);
-         tempprim.texcoords[1][1][0] = (watermaxx - i * waterchunksize) / (watermaxx - waterminx);
-         tempprim.texcoords[1][1][1] = (watermaxy - (j + 1) * waterchunksize) / (watermaxy - waterminy);
-         tempprim.texcoords[1][2][0] = (watermaxx - (i + 1) * waterchunksize) / (watermaxx - waterminx);
-         tempprim.texcoords[1][2][1] = (watermaxy - j * waterchunksize) / (watermaxy - waterminy);
-         tempprim.texcoords[1][3][0] = (watermaxx - (i + 1) * waterchunksize) / (watermaxx - waterminx);
-         tempprim.texcoords[1][3][1] = (watermaxy - (j + 1) * waterchunksize) / (watermaxy - waterminy);
+         
+         floatvec temptc(2, 0.f);
+         temptc[0] = (watermaxx - i * waterchunksize) / (watermaxx - waterminx);
+         temptc[1] = (watermaxy - j * waterchunksize) / (watermaxy - waterminy);
+         tempquad.SetTexCoords(0, 1, temptc);
+         temptc[0] = (watermaxx - i * waterchunksize) / (watermaxx - waterminx);
+         temptc[1] = (watermaxy - (j + 1) * waterchunksize) / (watermaxy - waterminy);
+         tempquad.SetTexCoords(1, 1, temptc);
+         temptc[0] = (watermaxx - (i + 1) * waterchunksize) / (watermaxx - waterminx);
+         temptc[1] = (watermaxy - (j + 1) * waterchunksize) / (watermaxy - waterminy);
+         tempquad.SetTexCoords(2, 1, temptc);
+         temptc[0] = (watermaxx - (i + 1) * waterchunksize) / (watermaxx - waterminx);
+         temptc[1] = (watermaxy - j * waterchunksize) / (watermaxy - waterminy);
+         tempquad.SetTexCoords(3, 1, temptc);
          
          for (int k = 0; k < 4; ++k)
-            tempprim.n[k] = Vector3(0, 1, 0);
-         tempprim.material = &resman.LoadMaterial("materials/water");
-         tempprim.material->SetTexture(0, reflectionfbo.GetTexture());
-         tempprim.material->SetTexture(1, noisefbo.GetTexture());
-         currobj->prims.push_back(tempprim);
-         tempprim = WorldPrimitives();
+            tempquad.SetNormal(k, Vector3(0, 1, 0));
+         Material* watermat = &resman.LoadMaterial("materials/water");
+         watermat->SetTexture(0, reflectionfbo.GetTexture());
+         watermat->SetTexture(1, noisefbo.GetTexture());
+         tempquad.SetMaterial(watermat);
+         watermesh->Add(tempquad);
       }
    }
+   watermesh->GenVbo();
    
+   // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
+   // copies the meshes they cannot have had GenVbo run on them yet
    progress->value = 4;
-   progtext->text = "Generating buffers";
-   Repaint();
-   int fbodim = 32;
-   int counter = 0;
-   FBO dummyfbo;
-   impobjs.clear();
-   for (list<WorldObjects>::iterator i = objects.begin(); i != objects.end(); ++i)
-   {
-      if (i->type != "dynobj")
-      {
-         if (i->impdist)
-         {
-            if (counter >= fbostarts[2])
-               fbodim = fbodims[2];
-            else if (counter >= fbostarts[1])
-               fbodim = fbodims[1];
-            else fbodim = fbodims[0];
-            dummyfbo = FBO(fbodim, fbodim, false, &resman.texhand);
-            impfbolist.push_back(dummyfbo);
-            i->impostorfbo = counter;
-            impobjs.push_back(&(*i));
-            ++counter;
-         }
-         i->GenVbo(&resman.shaderman);
-      }
-      i->SetHeightAndWidth();
-   }
-   
-   progress->value = 5;
    progtext->text = "Generating spatial tree";
    Repaint();
    // Add objects to kd-tree
-   Vector3 points[8];
+   Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {
-      points[i] = worldbounds[0].v[i];// + Vector3(0, 10, 0);
+      points[i] = coldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
    }
    for (int i = 0; i < 4; ++i)
    {
-      points[i + 4] = worldbounds[5].v[i];
+      points[i + 4] = coldet.worldbounds[5].GetVertex(i);
    }
-   kdtree = ObjectKDTree(&objects, points);
+   mapname = fn; // Signal server that the map data is available
+   if (server)   // Then wait for the server to copy the data before generating buffers
+      while (!serverhasmap) SDL_Delay(1);
+   kdtree = ObjectKDTree(&meshes, points);
    //kdtree.setvertices(points);
    cout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
    cout << "Done\n" << flush;
    coldet.kdtree = &kdtree;
+   
+   progress->value = 5;
+   progtext->text = "Generating buffers";
+   Repaint();
+   int fbodim = fbodims[2];
+   int counter = 0;
+   FBO dummyfbo;
+   impmesh.clear();
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      if (i->impdist)
+      {
+         if (counter >= fbostarts[2])
+            fbodim = fbodims[2];
+         else if (counter >= fbostarts[1])
+            fbodim = fbodims[1];
+         else fbodim = fbodims[0];
+         dummyfbo = FBO(fbodim, fbodim, false, &resman.texhand);
+         impfbolist.push_back(dummyfbo);
+         i->impostorfbo = counter;
+         impmesh.push_back(&(*i));
+         ++counter;
+      }
+      // These two things need to happen eventually, but I'm not sure that will be here
+      i->GenVbo();
+      //i->SetHeightAndWidth();
+      /* Debugging to verify things about triangles
+      i->Begin();
+      while (i->HasNext())
+      {
+         const Triangle& curr = i->Next();
+         if (!curr.collide)
+            cout << "Err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+      }*/
+   }
+   
    progress->value = 6;
    progtext->text = "Entering game";
    Repaint();
@@ -1016,8 +615,6 @@ void GetMap(string fn)
    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
    
    resman.texhand.ActiveTexture(0);
-   
-   mapname = fn; // Must do this last as it signals the server thread that the map has been loaded
 }
 
 

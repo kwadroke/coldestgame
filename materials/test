@@ -4,3 +4,4 @@ Specular 1 1 1 1
 Texture0 textures/diffuse.png
 Texture1 textures/normal.png
 Shader shaders/bump
+CullFace 0

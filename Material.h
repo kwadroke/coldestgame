@@ -17,6 +17,7 @@ class Material
    public:
       Material(string, TextureManager&, Shader&);
       void Use() const;
+      void UseTextureOnly() const;
       void SetTexture(int, GLuint);
       bool operator<(const Material&) const;
       
@@ -32,7 +33,8 @@ class Material
       Shader& shaderhand;
       int id;
       static int nummats;
-      bool cullface;
+      bool cullface, doalphatest;
+      float alphatest;
 };
 
 #endif

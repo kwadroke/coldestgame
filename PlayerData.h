@@ -6,13 +6,14 @@
 #include <set>
 #include "SDL_net.h"
 #include "DynamicObject.h"
+#include "Mesh.h"
 #include "Hit.h"
 #include "types.h"
 
 class PlayerData
 {
    public:
-      PlayerData(list<DynamicObject>&);
+      PlayerData(Meshlist&);
       void Disconnect();
       
       Vector3 pos;
@@ -22,10 +23,7 @@ class PlayerData
       bool leftclick, rightclick;
       bool run;
       bool spawned;
-      list<DynamicObject>::iterator torso;
-      list<DynamicObject>::iterator legs;
-      list<DynamicObject>::iterator larm;
-      list<DynamicObject>::iterator rarm;
+      Meshlist::iterator torso, legs, larm, rarm;
       set<unsigned long> partids;
       set<unsigned long> hitids;
       set<unsigned long> acked;
@@ -50,6 +48,6 @@ class PlayerData
       float temperature;
       
    private:
-      list<DynamicObject>* dynobj;
+      Meshlist* meshes;
 };
 #endif

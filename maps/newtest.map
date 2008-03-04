@@ -13,73 +13,58 @@ Ambient .2 .2 .2 1
 
 SkyBox materials/sky
 
-DummyNode
-   0 textures/sky.png
-   1 textures/test.png
-   2 textures/Grass1.png
-   3 textures/Grass1.png
-   4 textures/Rockt.png
-   5 textures/test.png
-   6 textures/dirt.png
-   7 textures/stone.png
-   8 textures/highcontrastgrass.png
-   9 textures/treebark.png
-   10 textures/treebarkbase.png
-   11 textures/leaves2.png
-   12 textures/water.png
-   13 textures/metal.png
-   14 textures/leaves6.png
-   15 textures/leaves3.png
-   16 textures/leaves4.png
-   17 textures/leaves6.png
-   9999 dummy
-
-TerrainTextures <-- This should probably contain the Texture Nodes
 TerrainMaterial materials/terrain
 Node
-   Texture0
-   HeightRange -10000 10000
-   SlopeRange 0 0
-   RandRange 0 10
-Node
-   Texture1
-   HeightRange -10000 10000
-   SlopeRange 0 0
-   RandRange 0 10
-Node
-   Texture2
-   HeightRange -10000 -10000
-   SlopeRange 0 .75
-   RandRange 500 500
-Node
-   Texture3
-   HeightRange -10000 5
-   SlopeRange 0 0
-   RandRange 500 500
-Node
-   Texture4
-   HeightRange -10000 -10000
-   SlopeRange 0 0
-   RandRange 0 10
-Node
-   Texture5
-   HeightRange -10000 -10000
-   SlopeRange 0 0
-   RandRange 0 10
+   TerrainParams
+   Node
+      Texture0
+      HeightRange -10000 10000
+      SlopeRange 0 0
+      RandRange 0 10
+   Node
+      Texture1
+      HeightRange -10000 10000
+      SlopeRange 0 0
+      RandRange 0 10
+   Node
+      Texture2
+      HeightRange -10000 -10000
+      SlopeRange 0 .80
+      RandRange 500 500
+   Node
+      Texture3
+      HeightRange -10000 5
+      SlopeRange 0 0
+      RandRange 500 500
+   Node
+      Texture4
+      HeightRange -10000 -10000
+      SlopeRange 0 0
+      RandRange 0 10
+   Node
+      Texture5
+      HeightRange -10000 -10000
+      SlopeRange 0 0
+      RandRange 0 10
 
 Node
    SpawnPoints
    Node
       Team 0
       Location 150 150 150
+   Node
+      Team 1
+      Location 250 250 250
 
 Node
    Objects
    Node
-      Type dynobj
+      Type External
       File unittest/torso
       Position 400 200 400
       Rotations -45 25 0
+      NumFrames 3 // It's probably bad that we have to specify this here...
+      Scale .01
    Node   
       Type bush
       Materials materials/leaves1
@@ -123,8 +108,8 @@ Node
       leafsize 30
       trunkrad 10
       trunknumslices 10
-      trunktaper .7
-      trunknumsegs 2
+      trunktaper .8
+      trunknumsegs 5
       branchevery 999
       sidebranches 999
       maxsidebranchangle 10

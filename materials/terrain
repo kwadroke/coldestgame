@@ -5,4 +5,9 @@ Texture0 textures/Grass1.png
 Texture1 textures/Grass1.png
 Texture2 textures/Rockt.png
 Texture3 textures/dirt.png
+   Texture0 textures/test.png
+   Texture1 textures/test.png
+   Texture2 textures/test.png
+   Texture3 textures/test.png
 Shader shaders/terrain
+CullFace 1

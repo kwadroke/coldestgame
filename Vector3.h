@@ -26,11 +26,12 @@ class Vector3
       void translate(float, float, float);
       void transform(const GLfloat[16]);
       void transform4(const GLfloat[16]);
-      float distance(const Vector3&) const;
+      float distance(const Vector3& v = Vector3()) const;
       float distance2(const Vector3& v = Vector3()) const;
       float magnitude() const;
-      float x, y, z;
       float *array(float*);
+      
+      float x, y, z;
 };
 
 

@@ -275,7 +275,7 @@ int NetListen(void* dummy)
                {
                   while (oppnum >= player.size())  // Add new player(s)
                   {
-                     PlayerData dummy(dynobjects);
+                     PlayerData dummy(meshes);
                      player.push_back(dummy);
                      cout << "Adding player " << (player.size() - 1) << endl;
                   }
@@ -315,6 +315,7 @@ int NetListen(void* dummy)
                   
                   player[oppnum].connected = true;
                   
+#if 0 // I don't think this needs to go back in
                   if (oppnum != servplayernum)// && player[oppnum].unit != 0)
                   {
                      if (oldunit != player[oppnum].unit)
@@ -334,6 +335,7 @@ int NetListen(void* dummy)
                      }
                      UpdatePlayerModel(player[oppnum], dynobjects);
                   }
+#endif
                   
                   get >> oppnum;
                }
@@ -359,12 +361,12 @@ int NetListen(void* dummy)
                   // Only add the particle if we don't already have it
                   if ((partids.find(partnum) == partids.end()))
                   {
-                     temppart.cd = &coldet;
+                     //temppart.cd = &coldet;
                      temppart.lasttick = SDL_GetTicks();
                      temppart.id = partnum;
                      temppart.playerid = partnum;
                      temppart.playernum = playernum;
-                     temppart.obj = LoadObject("projectile", dynobjects);
+                     //temppart.obj = LoadObject("projectile", dynobjects);
                      temppart.obj->position = temppart.pos;
                      temppart.unsent = false;  // Actually meaningless on client
                            
@@ -395,6 +397,7 @@ int NetListen(void* dummy)
                // Remove models for disconnected players
                vector<PlayerData>::iterator i = player.begin();
                ++i;  // Skip first element because that's local player
+#if 0
                for (; i != player.end(); ++i)
                {
                   if (!i->spawned)
@@ -406,6 +409,7 @@ int NetListen(void* dummy)
                      }
                   }
                }
+#endif
                SDL_mutexV(clientmutex);
             }
          }

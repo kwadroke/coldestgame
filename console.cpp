@@ -271,11 +271,13 @@ void ConsoleHandler(string command)
       }
       else if (Token(newcommand, 1) == "intmethod")
       {
+#if 0
          int value = atoi(Token(newcommand, 2).c_str());
          if (value >= 0 && value < 2)
             coldet.intmethod = value;
          else WriteToConsole(string("Invalid value"));
          return;
+#endif
       }
       else if (Token(newcommand, 1) == "showkdtree")
       {
@@ -395,8 +397,8 @@ void ConsoleHandler(string command)
             reflectionfbo = FBO(reflectionres, reflectionres, false, &resman.texhand);
             if (initialized)
             {
-               for (vector<WorldPrimitives>::iterator i = waterobj->prims.begin(); i != waterobj->prims.end(); ++i)
-                  i->texnums[0] = reflectionfbo.GetTexture();
+               //for (vector<WorldPrimitives>::iterator i = waterobj->prims.begin(); i != waterobj->prims.end(); ++i)
+               //   i->texnums[0] = reflectionfbo.GetTexture();
             }
          }
          else WriteToConsole(string("Invalid value"));

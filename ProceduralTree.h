@@ -8,9 +8,10 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include "WorldObjects.h"
 #include "GraphicMatrix.h"
 #include "IniReader.h"
+#include "Mesh.h"
+#include "Quad.h"
 
 using namespace std;
 
@@ -18,8 +19,8 @@ class ProceduralTree
 {
    public:
       ProceduralTree();
-      long GenTree(list<WorldObjects>::iterator, Material*, Material*);
-      void ReadParams(IniReader&);
+      long GenTree(Mesh*, Material*, Material*);
+      void ReadParams(const IniReader&);
       
       int numlevels;
       int firstleaflevel;
@@ -53,7 +54,7 @@ class ProceduralTree
       bool multitrunk;
       bool split;
       bool branchwithleaves;
-      list<WorldObjects>::iterator object;
+      Mesh* mesh;
       
    private:
       void GenBranch(GraphicMatrix, int, int, vector<Vector3>, bool, int);

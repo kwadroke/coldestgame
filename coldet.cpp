@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 
 void InitGlobals()
 {
-   PlayerData dummy = PlayerData(dynobjects); // Local player is always index 0
+   PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    // Variables that can be set by the console
    screenwidth = 640;
    screenheight = 480;
@@ -79,7 +79,7 @@ void InitGlobals()
    ghost = false;
    fov = 60;
    viewdist = 1000;
-   coldet.intmethod = 0;
+//   coldet.intmethod = 0;
    showkdtree = 0;
    tickrate = 30;
    serveraddr = "localhost";
@@ -399,6 +399,7 @@ void SetupOpenGL()
 void LoadMaterials()
 {
    resman.LoadMaterial("materials/water");
+   shadowmat = &resman.LoadMaterial("materials/shadowgen");
 }
 
 
@@ -727,7 +728,7 @@ void Cleanup()
 }
 
 
-void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& cd)
+void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
 {
    // In case we hit something
    Vector3 old = mplayer.pos;
@@ -735,14 +736,9 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    // Calculate how far to move based on time since last frame
    int numticks = SDL_GetTicks() - mplayer.lastmovetick;
    mplayer.lastmovetick = SDL_GetTicks();
+   if (numticks > 30) numticks = 30; // Yes this is a hack, it should be removed eventually
    float step = (float)numticks * (movestep / 1000.);
    if (mplayer.run) step *= 2.f;
-   
-   /* Had some problems that I think stemmed from step being negative, possibly due to the
-      cast of numticks above.  In any case, we never want step to be negative anyway so this
-      check isn't hurting anything.*/
-   // I think this was actually from an unitialized value, so I don't think we need this anymore
-   //if (step < 0.f) step == 0.f;
    
    bool onground = false;
    bool moving = false;
@@ -791,11 +787,16 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    mplayer.pos.z -= d.z * step;
    
    // Build list of objects to ignore for collision detection (a player can't hit themself)
-   vector<list<DynamicObject>::iterator> ignoreobjs;
-   ignoreobjs.push_back(mplayer.legs);
-   ignoreobjs.push_back(mplayer.torso);
-   ignoreobjs.push_back(mplayer.larm);
-   ignoreobjs.push_back(mplayer.rarm);
+   vector<Meshlist::iterator> ignoreobjs;
+   if (mplayer.legs != ml.end())
+      ignoreobjs.push_back(mplayer.legs);
+   if (mplayer.torso != ml.end())
+      ignoreobjs.push_back(mplayer.torso);
+   if (mplayer.larm != ml.end())
+      ignoreobjs.push_back(mplayer.larm);
+   if (mplayer.rarm != ml.end())
+      ignoreobjs.push_back(mplayer.rarm);
+   Meshlist dummy;
    
    static const float threshold = .35f;
    static float gravity = .1f;
@@ -807,7 +808,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
       Vector3 groundcheck = old;
       groundcheck.y -= mplayer.size + mplayer.size * threshold;
       cd.listvalid = false;
-      groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
+      groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dummy, ignoreobjs, NULL);
       if (groundcheck.magnitude() > .00001f) // They were on the ground
       {
          if (mplayer.fallvelocity > .00001f)
@@ -823,7 +824,7 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
          groundcheck.y += .01f;
          cd.listvalid = false;
          Vector3 debug = groundcheck;
-         groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dynobj, ignoreobjs, NULL);
+         groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dummy, ignoreobjs, NULL);
          /* If this vector comes back zero then it means they're on a downslope and might need a little help
             staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
          if (moving && groundcheck.magnitude() < .00001f)
@@ -842,22 +843,28 @@ void Move(PlayerData& mplayer, list<DynamicObject>& dynobj, CollisionDetection& 
    if (!ghost)
    {
       cd.listvalid = false;
-      Vector3 adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dynobj, ignoreobjs, NULL);
+      Vector3 adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
       int count = 0;
-      //Vector3 normadj;
       
-      while (adjust.distance2() > .001) // Not zero vector
+      while (adjust.distance() > 1e-4f) // Not zero vector
       {
-         mplayer.pos += adjust * 1.1f;
-         adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dynobj, ignoreobjs, NULL);
+         mplayer.pos += adjust;
+         adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
-            cout << "Collision Detection Error " << adjust.distance2() << endl;
+            cout << "Collision Detection Error " << adjust.distance() << endl;
             // Simply don't allow the movement at all
             mplayer.pos = old;
             break;
          }
+      }
+      if (0)//mplayer.pos.y < GetTerrainHeight(mplayer.pos.x, mplayer.pos.z) + 10)
+      {
+         cout << "Impossible.........................................................................";
+         cout << GetTerrainHeight(mplayer.pos.x, mplayer.pos.z) << endl;
+         mplayer.pos.print();
+         adjust.print();
       }
    }
 }
@@ -1012,6 +1019,11 @@ void SynchronizePosition()
 
 void Animate()
 {
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      i->AdvanceAnimation();
+   }
+#if 0
    static int partupd = 100;
    SDL_mutexP(clientmutex);
    if (partupd >= partupdateinterval)
@@ -1035,30 +1047,13 @@ void Animate()
       partupd = 0;
    }
    else ++partupd;
-   
-   // Update dynamic objects
-   list<DynamicObject>::iterator i;
-   for (i = dynobjects.begin(); i != dynobjects.end(); i++)
-   {
-      Uint32 ticks = SDL_GetTicks();
-      if (ticks - i->lasttick >= i->animdelay)
-      {
-         if (i->animframe == i->prims.size() - 1)
-         {
-            i->animframe = 0;
-         }
-         else i->animframe++;
-         // So if we don't land on exactly the right tick the animation speeds 
-         // remain the same
-         i->lasttick = ticks - (ticks - i->lasttick - i->animdelay);
-      }
-   }
+#endif
    
    // Also need to update player models because they need to change each animation frame
    for (int k = 1; k < player.size(); ++k)
    {
       if (k != servplayernum)
-         UpdatePlayerModel(player[k], dynobjects);
+         UpdatePlayerModel(player[k], meshes);
    }
    SDL_mutexV(clientmutex);
 }
@@ -1089,358 +1084,46 @@ void UpdateServerList()
 }
 
 
-/* Returns an iterator to the object that was loaded, or dynobj.end() if 
-   loading failed.
-*/
-list<DynamicObject>::iterator LoadObject(string filename, list<DynamicObject>& dynobj)
+void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
-   string currfile = "models/" + filename + "/base";
-   ifstream lo(currfile.c_str(), ios_base::in);
-   IniReader reader(currfile);
-   string ver;
-   string dummy;
-   string buffer;
-   int numframes;
-   int collide;
-   int adelay;
-   float scale;
-   float size;
-   Vector3 initpos;
-   
-   // Make sure it's a compatible object file
-   lo >> ver;
-   if (ver != objectfilever)
+   /*if (p.legs == ml.end())
    {
-      cout << "Object file version mismatch for file: " << currfile << endl << flush;
-      return dynobj.end();
-   }
-   //cout << "Loading models/" + filename << endl << flush;
-   lo >> dummy;
-   lo >> numframes;
-   lo >> dummy;
-   lo >> collide;
-   lo >> dummy;
-   lo >> adelay;
-   
-   lo >> dummy;
-   lo >> initpos.x;
-   lo >> initpos.y;
-   lo >> initpos.z;
-   
-   lo >> dummy;
-   lo >> scale;
-   
-   lo >> dummy >> size;
-   
-   DynamicObject tempobj = DynamicObject();
-   dynobj.push_front(tempobj);
-   list<DynamicObject>::iterator temp = dynobj.begin();
-   temp->complete = 1337;
-   temp->pitch = temp->rotation = temp->roll = 0;
-      
-   temp->position.x = initpos.x;
-   temp->position.y = initpos.y;
-   temp->position.z = initpos.z;
-      
-   temp->animframe = 0;
-   temp->animdelay = adelay;
-   temp->lasttick = SDL_GetTicks();
-   temp->collide = false;
-   temp->size = size * scale;
-   temp->billboard = false;
-   temp->visible = true;
-   
-   for (int i = 0; i < numframes; ++i)
+      IniReader load(units[p.unit].file + "/legs/base");
+      Mesh newmesh(load, resman);
+      ml.push_front(newmesh);
+      p.legs = ml.begin();
+   }*/
+   if (p.torso == ml.end())
    {
-      temp->prims.push_back(DPList());
-      
-      currfile = "models/" + filename + "/frame" + PadNum(i, 4);
-      ifstream lf(currfile.c_str(), ios_base::in); // For loading frames
-      
-      lf >> ver;
-      if (ver != objectfilever)
-      {
-         cout << "Object file version mismatch for file: " << currfile << endl << flush;
-         return dynobj.end();
-      }
-      
-      lf >> dummy; // nextid is irrelevant here
-      
-      
-      getline(lf, buffer);
-      getline(lf, buffer);
-      while (!lf.eof())
-      {
-         DynamicPrimitive *pbuffer = new DynamicPrimitive();
-         
-         // Set default texture coordinates
-         vector<float> tc(2);
-         tc[0] = 0;
-         tc[1] = 0;
-         vector< vector<float> > tcv;
-         for (int c = 0; c < 4; ++c)
-            tcv.push_back(tc);
-         
-         for (int m = 0; m < 16; ++m)
-         {
-            pbuffer->texcoords.push_back(tcv);
-            pbuffer->texcoords[m][1][1] = 1;
-            pbuffer->texcoords[m][2][0] = 1;
-            pbuffer->texcoords[m][3][0] = 1;
-            pbuffer->texcoords[m][3][1] = 1;
-         }
-         
-         while (buffer != "EOP")
-         {
-            string optname, value;
-            string separator = " = ";
-            int index = buffer.find(separator);
-            optname = buffer.substr(0, index);
-            value = buffer.substr(index + separator.length());
-            
-            if (optname == "Type")
-               pbuffer->type = value;
-            else if (optname == "ID")
-               pbuffer->id = value;
-            else if (optname == "Parent ID")
-               pbuffer->parentid = value;
-            else if (optname == "Name")
-               pbuffer->name = value;
-            else if (optname.substr(0, 7) == "Texture")
-            {
-               int i = atoi(optname.substr(7).c_str());
-               pbuffer->texnums[i] = dotextures[atoi(value.c_str())];
-            }
-            else if (optname == "Shader")
-               pbuffer->shader = value;
-            else if (optname == "X Rot 1")
-               pbuffer->rot1.x = atoi(value.c_str());
-            else if (optname == "Y Rot 1")
-               pbuffer->rot1.y = atoi(value.c_str());
-            else if (optname == "Z Rot 1")
-               pbuffer->rot1.z = atoi(value.c_str());
-            else if (optname == "X Rot 2")
-               pbuffer->rot2.x = atoi(value.c_str());
-            else if (optname == "Y Rot 2")
-               pbuffer->rot2.y = atoi(value.c_str());
-            else if (optname == "Z Rot 2")
-               pbuffer->rot2.z = atoi(value.c_str());
-            else if (optname == "X Trans")
-               pbuffer->trans.x = atoi(value.c_str());
-            else if (optname == "Y Trans")
-               pbuffer->trans.y = atoi(value.c_str());
-            else if (optname == "Z Trans")
-               pbuffer->trans.z = atoi(value.c_str());
-            else if (optname == "p0x")
-               pbuffer->v[0].x = atoi(value.c_str());
-            else if (optname == "p0y")
-               pbuffer->v[0].y = atoi(value.c_str());
-            else if (optname == "p0z")
-               pbuffer->v[0].z = atoi(value.c_str());
-            else if (optname == "p1x")
-               pbuffer->v[1].x = atoi(value.c_str());
-            else if (optname == "p1y")
-               pbuffer->v[1].y = atoi(value.c_str());
-            else if (optname == "p1z")
-               pbuffer->v[1].z = atoi(value.c_str());
-            else if (optname == "p2x")
-               pbuffer->v[2].x = atoi(value.c_str());
-            else if (optname == "p2y")
-               pbuffer->v[2].y = atoi(value.c_str());
-            else if (optname == "p2z")
-               pbuffer->v[2].z = atoi(value.c_str());
-            else if (optname == "p3x")
-               pbuffer->v[3].x = atoi(value.c_str());
-            else if (optname == "p3y")
-               pbuffer->v[3].y = atoi(value.c_str());
-            else if (optname == "p3z")
-               pbuffer->v[3].z = atoi(value.c_str());
-            else if (optname.substr(0, 2) == "tc")
-            {
-               int i = atoi(optname.substr(2, 2).c_str());
-               optname = optname.substr(4, 2);
-               if (optname == "0x")
-                  pbuffer->texcoords[i][0][0] = atof(value.c_str());
-               else if (optname == "0y")
-                  pbuffer->texcoords[i][0][1] = atof(value.c_str());
-               else if (optname == "1x")
-                  pbuffer->texcoords[i][1][0] = atof(value.c_str());
-               else if (optname == "1y")
-                  pbuffer->texcoords[i][1][1] = atof(value.c_str());
-               else if (optname == "2x")
-                  pbuffer->texcoords[i][2][0] = atof(value.c_str());
-               else if (optname == "2y")
-                  pbuffer->texcoords[i][2][1] = atof(value.c_str());
-               else if (optname == "3x")
-                  pbuffer->texcoords[i][3][0] = atof(value.c_str());
-               else if (optname == "3y")
-                  pbuffer->texcoords[i][3][1] = atof(value.c_str());
-            }
-            else if (optname == "Radius 1")
-               pbuffer->rad = atoi(value.c_str());
-            else if (optname == "Radius 2")
-               pbuffer->rad1 = atoi(value.c_str());
-            else if (optname == "Height")
-               pbuffer->height = atoi(value.c_str());
-            else if (optname == "Slices")
-               pbuffer->slices = atoi(value.c_str());
-            else if (optname == "Stacks")
-               pbuffer->stacks = atoi(value.c_str());
-            else if (optname == "Transparent")
-            {
-               pbuffer->transparent = true;
-               if (value == "0")
-                  pbuffer->transparent = false;
-            }
-            else if (optname == "Translucent")
-            {
-               pbuffer->translucent = true;
-               if (value == "0")
-                  pbuffer->translucent = false;
-            }
-            else if (optname == "Collide")
-            {
-               pbuffer->collide = true;
-               if (value == "0")
-                  pbuffer->collide = false;
-            }
-            else if (optname == "Facing")
-            {
-               pbuffer->facing = true;
-               if (value == "0")
-                  pbuffer->facing = false;
-            }
-            getline(lf, buffer);
-         }
-         pbuffer->parentobj = temp;
-         pbuffer->dynamic = true;
-         pbuffer->tangent = Vector3();
-         for (int k = 0; k < 4; ++k)
-         {
-            pbuffer->v[k] *= scale;
-            pbuffer->orig[k] = pbuffer->v[k];
-         }
-         // Apply scaling
-         pbuffer->trans *= scale;
-         
-         temp->prims[i].push_back(pbuffer);
-         getline(lf, buffer);
-      }
-      
-      /* Now that the primitives are loaded into a vector, we need to rebuild
-         the tree that is used to render them properly
-      */
-      list<DynamicPrimitive*>::iterator it;
-      for (it = temp->prims[i].begin(); it != temp->prims[i].end(); it++)
-      {
-         if ((*it)->parentid != "-1")
-         {
-            DynamicPrimitive *p = temp->GetDynPrimById((*it)->parentid, i);
-            if (p)
-            {
-               (*it)->parent = p;
-               p->child.push_back(*it);
-            }
-            else
-            {
-               cout << "Error building object tree: " << currfile << endl << flush;
-            }
-         }
-      }
-      lf.close();
-      
-   }
-   lo.close();
-   temp->complete = 164264;  // This was for debugging
-   return temp;
-}
-
-
-void LoadDOTextures(string filename)
-{
-   ifstream lf(filename.c_str(), ios_base::in);
-   string ver;
-   string buffer;
-   int numtex;
-   
-   // Make sure it's a compatible object file
-   lf >> ver;
-   if (ver != objectfilever + "Textures")
-   {
-      cout << "Object file version mismatch for file: " << filename << endl << flush;
-      return;
+      IniReader load("models/" + units[p.unit].file + "/torso/base");
+      Mesh newmesh(load, resman, gl);
+      ml.push_front(newmesh);
+      p.torso = ml.begin();
    }
    
-   if (dotextures.size())
-      glDeleteTextures(dotextures.size(), &dotextures[0]);
+   /*p.legs->Rotate(Vector3(0.f, p.facing, 0.f));
+   p.legs->Move(p.pos);*/
    
-   lf >> numtex;
-   GLuint temptex[numtex];
-   glGenTextures(numtex, temptex);
-   for (int j = 0; j < numtex; ++j)
-   {
-      lf >> buffer;
-      dotextures.push_back(temptex[j]);
-      bool alpha;  // Don't really care
-      resman.texhand.LoadTexture(buffer, temptex[j], true, &alpha);
-   }
-   lf.close();
-}
-
-
-void UpdatePlayerModel(PlayerData& p, list<DynamicObject>& dynobj)
-{
-   if (p.legs == dynobj.end())
-   {
-      p.legs = LoadObject(units[p.unit].file + "/legs", dynobj);
-   }
-   if (p.torso == dynobj.end())
-   {
-      p.torso = LoadObject(units[p.unit].file + "/torso", dynobj);
-   }
-   if (p.larm == dynobj.end())
-   {
-      p.larm = LoadObject(units[p.unit].file + "/larm", dynobj);
-   }
-   if (p.rarm == dynobj.end())
-   {
-      p.rarm = LoadObject(units[p.unit].file + "/rarm", dynobj);
-   }
-   p.legs->position = p.pos;
-   p.legs->rotation = p.facing;
-   p.legs->pitch = 0.f;
-   p.legs->roll = 0.f;
+   p.torso->Rotate(Vector3(p.pitch, p.facing + p.rotation, p.roll));
+   p.torso->Move(p.pos);
    
-   p.torso->position = p.pos;
-   p.torso->rotation = p.facing + p.rotation;
-   p.torso->pitch = p.pitch;
-   p.torso->roll = p.roll;
-   
-   p.larm->rotation = 0;
-   p.larm->pitch = 0;
-   p.larm->roll = 0;
-   DynamicPrimitive* firstprim = *(p.larm->prims[p.larm->animframe].begin());
-   if (firstprim->type != "container")
-      cout << "Warning: Left Arm not in container\n";
-   firstprim->parent = p.torso->GetContainerByName("Left Arm Connector", p.torso->animframe);
-   firstprim->parentid = "-2";
-   
-   p.rarm->rotation = 0;
-   p.rarm->pitch = 0;
-   p.rarm->roll = 0;
-   firstprim = *(p.rarm->prims[p.rarm->animframe].begin());
-   if (firstprim->type != "container")
-      cout << "Warning: Right Arm not in container\n";
-   firstprim->parent = p.torso->GetContainerByName("Right Arm Connector", p.torso->animframe);
-   firstprim->parentid = "-2";
-   
+   /*if (p.larm == ml.end())
+   {
+      IniReader load(units[p.unit].file + "/larm/base");
+      Mesh newmesh(load, resman);
+      p.torso->InsertIntoContainer("LeftArmConnector", newmesh);
+      ml.push_front(newmesh);
+      p.larm = ml.begin();
+   }
+   if (p.rarm == ml.end())
+   {
+      IniReader load(units[p.unit].file + "/rarm/base");
+      Mesh newmesh(load, resman);
+      p.torso->InsertIntoContainer("RightArmConnector", newmesh);
+      ml.push_front(newmesh);
+      p.rarm = ml.begin();
+   }*/
    p.size = units[p.unit].size;
-}
-
-
-float lerp(float x, float y, float a)
-{
-   return (x * a + y * (1 - a));
 }
 
 

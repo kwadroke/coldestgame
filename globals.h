@@ -22,7 +22,7 @@ using std::vector;
 using std::set;
 
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
-const string objectfilever = "Version2";
+const string objectfilever = "Version3";
 
 extern bool fly;               // Allow flying
 extern bool ghost;             // Walk through walls
@@ -50,7 +50,7 @@ extern vector<PlayerData> player;
 extern vector<UnitData> units;
 extern vector<WeaponData> weapons;
 extern bool server;
-extern list<DynamicObject> dynobjects;
+//extern list<DynamicObject> dynobjects;
 extern int servplayernum;
 extern SDL_Thread* serverthread;
 extern ObjectKDTree kdtree;
@@ -59,6 +59,8 @@ extern int tilesize;
 extern vector<SpawnPointData> spawnpoints;
 extern SpawnPointData selectedspawn;
 extern bool initialized;
+extern Meshlist meshes;
+extern bool serverhasmap;
 
 template <typename T>
 string ToString(const T &input)
@@ -68,11 +70,18 @@ string ToString(const T &input)
    return temp.str();
 }
 
-void UpdatePlayerModel(PlayerData&, list<DynamicObject>&);
+
+template <typename T>
+T lerp(T x, T y, float a)
+{
+   return (x * a + y * (1 - a));
+}
+
+void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
-void LoadDOTextures(string);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
+string PadNum(int, int);
 
 #endif

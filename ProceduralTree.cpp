@@ -43,9 +43,9 @@ ProceduralTree::ProceduralTree()
 
 
 // Returns the number of primitives generated
-long ProceduralTree::GenTree(list<WorldObjects>::iterator currobj, Material* barkmat, Material* leavesmat)
+long ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leavesmat)
 {
-   object = currobj;
+   mesh = currmesh;
    bark = barkmat;
    leaves = leavesmat;
    totalprims = 0;
@@ -63,12 +63,12 @@ long ProceduralTree::GenTree(list<WorldObjects>::iterator currobj, Material* bar
       temp = Vector3();
       m.translate(trunkrad, 0, 0);
       m.rotatey(-sliceangle * j);
-      m.translate(object->x, object->y, object->z);
+      m.translate(mesh->position);
       temp.transform(m.members);
       pts.push_back(temp);
    }
    m = GraphicMatrix();
-   m.translate(object->x, object->y, object->z);
+   m.translate(mesh->position);
    int i = 0;
    if (!multitrunk)
       i = numbranches[0] - 1;
@@ -170,7 +170,9 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatez(anglez);
          m *= trans;
          norm.transform(m);
-         normals.push_back(temp - norm);
+         Vector3 tempn = temp - norm;
+         tempn.normalize();
+         normals.push_back(tempn);
       }
       
       if (side == 1) // Then we don't care about oldpts
@@ -196,34 +198,23 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       int newind, newind1;
       for (int j = 0; j < oldpts.size(); ++j)
       {
-         WorldPrimitives temp;
-         temp.object = object;
-         temp.type = "tristrip";
-         temp.material = bark;
-         temp.collide = (lev == 0);
+         Quad temp;
+         temp.SetMaterial(bark);
+         temp.SetCollide(lev == 0);
          newind = (int)(j * ((float)numslices / (float)oldpts.size()));
          newind1 = (int)((j + 1) * ((float)numslices / (float)oldpts.size()));
-         temp.v[0] = newpts[newind];
-         temp.v[1] = oldpts[j];
-         temp.v[2] = newpts[newind1 % numslices];
-         temp.v[3] = oldpts[(j + 1) % oldpts.size()];
-         // Generate normals
-         temp.n[0] = normals[newind];
-         temp.n[1] = normals[newind];
-         temp.n[2] = normals[newind1 % numslices];
-         temp.n[3] = normals[newind1 % numslices];
-         for (int n = 0; n < 4; n++)
-         {
-            /*
-            Vector3 temp1 = temp.v[1] - temp.v[0];
-            Vector3 temp2 = temp.v[2] - temp.v[0];
-            temp.n[n] = temp1.cross(temp2);
-            temp.n[n].normalize();
-            */
-            temp.n[n].normalize();
-         }
+         temp.SetVertex(0, newpts[newind]);
+         temp.SetVertex(1, oldpts[j]);
+         temp.SetVertex(2, oldpts[(j + 1) % oldpts.size()]);
+         temp.SetVertex(3, newpts[newind1 % numslices]);
          
-         object->prims.push_back(temp);
+         temp.SetNormal(0, normals[newind]);
+         temp.SetNormal(1, normals[newind]);
+         temp.SetNormal(2, normals[newind1 % numslices]);
+         temp.SetNormal(3, normals[newind1 % numslices]);
+         
+         mesh->tris.push_back(temp.First());
+         mesh->tris.push_back(temp.Second());
          ++totalprims;
       }
    }
@@ -254,10 +245,10 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
                   m.translate(-leafsize, -overlap, radius);
                   break;
                case 2:
-                  m.translate(leafsize, height * (locnumsegs - seg) * leafscale, radius);
+                  m.translate(leafsize, -overlap, radius);
                   break;
                case 3:
-                  m.translate(leafsize, -overlap, radius);
+                  m.translate(leafsize, height * (locnumsegs - seg) * leafscale, radius);
                   break;
             };
                
@@ -266,27 +257,27 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
             m.rotatey(angley);
             m.rotatez(anglez);
             m *= trans;
-            temp.transform(m.members);
+            temp.transform(m);
             verts.push_back(temp);
          }
          
-         WorldPrimitives temp;
-         temp.object = object;
-         temp.type = "tristrip";
-         temp.material = leaves;
-         temp.collide = false;
+         Quad temp;
+         temp.SetMaterial(leaves);
+         temp.SetCollide(false);
          
          for (int j = 0; j < 4; ++j)
-            temp.v[j] = verts[j];
+            temp.SetVertex(j, verts[j]);
          // Generate normals
          for (int n = 0; n < 4; n++)
          {
-            Vector3 temp1 = temp.v[1] - temp.v[0];
-            Vector3 temp2 = temp.v[2] - temp.v[0];
-            temp.n[n] = temp1.cross(temp2);
-            temp.n[n].normalize();
+            Vector3 temp1 = verts[1] - verts[0];
+            Vector3 temp2 = verts[2] - verts[0];
+            Vector3 tempn = temp1.cross(temp2);
+            tempn.normalize();
+            temp.SetNormal(n, tempn);
          }
-         object->prims.push_back(temp);
+         mesh->tris.push_back(temp.First());
+         mesh->tris.push_back(temp.Second());
          ++totalprims;
          
       }
@@ -334,7 +325,7 @@ float ProceduralTree::Random(float min, float max)
 
 
 // Reads tree parameters from the designated stringstream
-void ProceduralTree::ReadParams(IniReader &get)
+void ProceduralTree::ReadParams(const IniReader &get)
 {
    get.Read(numlevels, "numlevels");
    get.Read(numslices, "numslices");

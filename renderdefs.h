@@ -22,6 +22,7 @@
 #include "gui/ProgressBar.h"
 #include "Timer.h"
 #include "SDL_ttf.h"
+#include "Mesh.h"
 
 using std::vector;
 using std::list;
@@ -44,7 +45,7 @@ void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
 int PowerOf2(int);
 void Animate();
-void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
+void Move(PlayerData&, Meshlist&, CollisionDetection&);
 void GLError();
 void UpdateClouds();
 void SetReflection(bool);
@@ -54,8 +55,11 @@ void InitGLState(WorldObjects*);
 void RestoreGLState(WorldObjects*);
 void InitShaders();
 
-extern list<WorldObjects> objects;
-extern vector<GLuint> dotextures;
+typedef list<Mesh> Meshlist;
+extern Meshlist meshes;
+
+//extern list<WorldObjects> objects;
+//extern vector<GLuint> dotextures;
 extern int viewdist, screenwidth, screenheight, fov, consoletrans, consoleleft;
 extern int consoleright, consoletop, consolebottom, consolebottomline;
 extern int lasttick, frames, camdist, shadowmapsize, trislastframe;
@@ -74,8 +78,9 @@ extern Light lights;
 extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;
 extern string terrainshader, cloudgenshader, bumpshader;
 extern vector<FBO> impfbolist;
-extern vector<WorldObjects*> impobjs;
-extern list<WorldObjects>::iterator waterobj;
+extern vector<Mesh*> impmesh;
+extern Mesh* watermesh;
 extern Material* skyboxmat;
+extern Material* shadowmat;
 
 #endif

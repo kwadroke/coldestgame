@@ -1,17 +1,16 @@
 #include "CollisionDetection.h"
+#include "globals.h" // for floatzero
 
 #define PI 3.14159265
 
 
-CollisionDetection::CollisionDetection()
+CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
 {
    //octree = NULL;
    //dynobj = NULL;
    intmethod = 0;
    listvalid = false;
    quiet = true;
-   for (int i = 0; i < 6; ++i)
-      worldbounds.push_back(WorldPrimitives(false));
 }
 
 
@@ -23,31 +22,22 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
    tilesize = o.tilesize;
    kdtree = o.kdtree;
    worldbounds = o.worldbounds;
-   //for (int i = 0; i < 6; ++i)
-   //   worldbounds.push_back(o.worldbounds[i]);
 }
 
 
-Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
-                                           vector<list<DynamicObject>::iterator>& ignoreobjs,
-                                           stack<list<DynamicObject>::iterator>* retobjs)
+Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, Meshlist* dynobj,
+                                           vector<Meshlist::iterator>& ignoreobjs,
+                                           stack<Mesh*>* retobjs)
 {
-   cout << "Detecting " << radius << endl;
-   Vector3 retval = CheckSphereHit(oldpos, newpos, radius, dynobj, ignoreobjs, retobjs, false);
-   if (oldpos.y > -100)
-   {
-      oldpos.print();
-      newpos.print();
-      retval.print();
-   }
+   Vector3 retval = CheckSphereHit(oldpos, newpos, radius, dynobj, ignoreobjs, retobjs, true);
    return retval;
 }
 
 
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
-                                           stack<list<DynamicObject>::iterator>* retobjs)
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, Meshlist* dynobj,
+                                           stack<Mesh*>* retobjs)
 {
-   vector<list<DynamicObject>::iterator> dummy;
+   vector<Meshlist::iterator> dummy;
    return CheckSphereHit(oldpos, newpos, radius, dynobj, dummy, retobjs);
 }
 
@@ -58,148 +48,51 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, list<DynamicObject>* dynobj,
-                                           vector<list<DynamicObject>::iterator>& ignoreobjs,
-                                           stack<list<DynamicObject>::iterator>* retobjs, bool debug)
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, Meshlist* dynobj,
+                                           vector<Meshlist::iterator>& ignoreobjs,
+                                           stack<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
    Vector3 temp;
-   Vector3 dist;  // Used to eliminate prims from detection
+   Vector3 dist;
    int adjusted = 0;
    
-   // Get both world primitives and dynamic primitives that need to be checked
    if (!listvalid)
    {
-      //p = octree->getprims(newpos, radius);
-      p = kdtree->getprims(newpos, radius);
-      //cout << "Objects to collision detect " << p.size() << endl;
-   
-      list<DynamicObject>::iterator i;
-      vector<DynamicPrimitive> dyntemp; // Hold actual dummy objects so we can point to them.
-      DynamicPrimitive dummy;
-      for (i = dynobj->begin(); i != dynobj->end(); i++)
+      p = kdtree->getmeshes(oldpos, radius);
+      
+      // Eliminate objects in the ignore list
+      for (vector<Mesh*>::iterator i = p.begin(); i != p.end(); ++i)
       {
-         if (!InVector(i, ignoreobjs))//ignoreobjs.find(i) == ignoreobjs.end())
-         {
-            list<DynamicPrimitive*>::iterator j;
-            float temp1 = i->size;
-            int temp2 = i->animframe;
-            GLuint temp3 = i->prims.size();
-            DynamicObject* iptr = &(*i);
-            for (j = i->prims[i->animframe].begin(); j != i->prims[i->animframe].end(); j++)
-            {
-               DynamicPrimitive *jptr = *j;
-               if (jptr->collide)
-               {
-                  /*if (jptr->type == "tristrip")
-                  {
-                     for (int k = 0; k < 4; ++k)
-                        dummy.v[k] = jptr->point[k];
-                     dummy.collide = true;
-                     dummy.type = "tristrip";
-                     dummy.rad = -1;
-                     p.push_back(dummy);
-                  }*/
-                  if (jptr->type == "cylinder")
-                  {
-                     dummy.collide = true;
-                     dummy.type = "tristrip";
-                     dummy.rad = jptr->rad;
-                     dummy.rad1 = jptr->rad1;
-                     dummy.parentobj = jptr->parentobj;
-                     dummy.dynamic = jptr->dynamic;
-                     for (int k = 0; k < 4; ++k)
-                        dummy.v[k] = (jptr->v[k]);
-                     dyntemp.push_back(dummy);
-                  }
-                  else p.push_back(*j);
-               }
-            }
-         }
+         if (InVector(*i, ignoreobjs))
+            p.erase(i);
       }
       
-      for (vector<DynamicPrimitive>::iterator j = dyntemp.begin(); j != dyntemp.end(); ++j)
-      {
-         p.push_back(&(*j));
-      }
+      //cout << p.size() << endl;
    }
-
-   if (!quiet)
-      cout << "Primitives to collision detect: " << p.size() << endl;
    
-   int psize = p.size();
-   
-   GenericPrimitive *current;
-   for (int i = 0; i < psize; i++)
+   Mesh* current;
+   for (int i = 0; i < p.size(); i++)
    {
       current = p[i];
-      if (current->collide)  // Can't hit it?  Don't check.
+      current->Begin();
+      while (current->HasNext())
       {
-         if (current->type == "terrain")
+         const Triangle& currtri = current->Next();
+         if (currtri.collide)
          {
-            // Is the tile nearby?
-            dist = current->v[0];
-            if (newpos.x > dist.x - radius &&
-                newpos.x < dist.x + radius + tilesize &&
-                newpos.z > dist.z - radius &&
-                newpos.z < dist.z + radius + tilesize)
+            //dist = currtri.vert[0] + currtri.vert[1] + currtri.vert[2];
+            //dist /= 3;
+            //if (dist.distance2(newpos) < 
+            //      currtri.vert[0].distance2(currtri.vert[3]) + radius * radius)
             {
-               for (int flip = 0; flip < 2; flip++)
+               temp = adjust;
+               adjust += PlaneSphereCollision(currtri.vert, oldpos, newpos, radius);
+               if (adjust.distance2(temp) > .00001)
                {
-                  Vector3 points[3];
-                  if (flip)
-                  {
-                     points[0] = current->v[0];
-                     points[1] = current->v[1];
-                     points[2] = current->v[2];
-                  }
-                  else
-                  {
-                     points[0] = current->v[1];
-                     points[1] = current->v[3];  // Should be this order
-                     points[2] = current->v[2];
-                  }
-                  temp = adjust;
-                  adjust += PlaneSphereCollision(points, oldpos, newpos, radius, debug);
-                  if (adjust.distance2(temp) > .00001)
-                  {
-                     adjusted++;
-                     if (current->dynamic && retobjs)
-                        retobjs->push(((DynamicPrimitive*)current)->parentobj);
-                  }
-               }
-            }
-         }
-         else if (current->type == "tristrip")
-         {
-            dist = current->v[0] + current->v[1] + current->v[2] + current->v[3];
-            dist /= 4;
-            if (dist.distance2(newpos) < 
-                current->v[0].distance2(current->v[3]) + radius * radius)
-            {
-               for (int flip = 0; flip < 2; flip++)
-               {
-                  Vector3 points[3];
-                  if (flip)
-                  {
-                     points[0] = current->v[0];
-                     points[1] = current->v[1];
-                     points[2] = current->v[2];
-                  }
-                  else
-                  {
-                     points[0] = current->v[1];
-                     points[1] = current->v[3];  // Should be this order
-                     points[2] = current->v[2];
-                  }
-                  temp = adjust;
-                  adjust += PlaneSphereCollision(points, oldpos, newpos, radius);
-                  if (adjust.distance2(temp) > .00001)
-                  {
-                     adjusted++;
-                     if (current->dynamic && retobjs)
-                        retobjs->push(((DynamicPrimitive*)current)->parentobj);
-                  }
+                  adjusted++;
+                  if (retobjs)
+                     retobjs->push(current);
                }
             }
          }
@@ -209,121 +102,55 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    Vector3 v, s, t, u;
    for (int i = 0; i < 6; i++)  // Check the world bounding box
    {
-      v = worldbounds[i].v[0];
-      s = worldbounds[i].v[1];
-      t = worldbounds[i].v[2];
-      u = worldbounds[i].v[3];
+      v = worldbounds[i].GetVertex(0);
+      s = worldbounds[i].GetVertex(1);
+      t = worldbounds[i].GetVertex(2);
+      u = worldbounds[i].GetVertex(3);
             
       Vector3 norm;
-      norm = (s - v).cross(t - v);
+      norm = (t - v).cross(s - v);
       norm.normalize();
+      v += norm * radius;
+      s += norm * radius;
+      t += norm * radius;
+      u += norm * radius;
       
       float d = -norm.dot(s);
       
-      if (CrossesPlane(oldpos, newpos, norm, d))  // Crossed the plane
+      float denominator;
+      Vector3 move;
+      if (CrossesPlane(oldpos, newpos, norm, d, denominator, move))  // Crossed the plane
       {
-         adjust += norm * radius;
+         float endside = norm.dot(newpos) + d;
+         adjust += norm * -endside * 1.05f;
          adjusted++;
-      }
-      else  // Check player bounding sphere
-      {
-         Vector3 start = newpos;
-         Vector3 end = newpos - norm * radius;
-         
-         if (CrossesPlane(start, end, norm, d))
-         {
-            // We're talking infinite planes here, so if we crossed we hit
-            // However, we need to know how far to adjust the player's
-            // position so we find the int point anyway
-            Vector3 move = end - start;
-            float denominator = norm.dot(move);
-            
-            if (denominator != 0)  // Parallel with the plane?
-            {
-               float x = -(norm.dot(start) + d) / denominator;
-               adjust += move * (x - 1);
-               adjusted++;
-            }
-         }
       }
    }
    
    // Check edges of polys as well.
-   if (!adjust.distance2(Vector3()))
+   if (adjust.distance2(Vector3()) < .00001)
    {
-      for (int i = 0; i < psize; i++)
+      for (int i = 0; i < p.size(); i++)
       {
          current = p[i];
-         if (current->collide)
+         current->Begin();
+         while (current->HasNext())
          {
-            if (current->type == "terrain")
+            const Triangle& currtri = current->Next();
+            if (currtri.collide)
             {
-               // Is the tile nearby?
-               dist = current->v[0];
-               if (newpos.x > dist.x - radius &&
-                  newpos.x < dist.x + radius + tilesize &&
-                  newpos.z > dist.z - radius &&
-                  newpos.z < dist.z + radius + tilesize)
+               //dist = currtri.vert[0] + currtri.vert[1] + currtri.vert[2];
+               //dist /= 3;
+               //if (dist.distance2(newpos) < 
+               //      currtri.vert[0].distance2(currtri.vert[3]) + radius * radius)
                {
-                  Vector3 points[3];
-                  for (int flip = 0; flip < 2; flip++)
+                  temp = adjust;
+                  adjust += PlaneEdgeSphereCollision(currtri.vert, newpos, radius);
+                  if (adjust.distance2(temp) > .00001)
                   {
-                     if (flip)
-                     {
-                        points[0] = current->v[0];
-                        points[1] = current->v[1];
-                        points[2] = current->v[2];
-                     }
-                     else
-                     {
-                        points[0] = current->v[1];
-                        points[1] = current->v[2];
-                        points[2] = current->v[3];
-                     }
-                     temp = adjust;
-                     adjust += PlaneEdgeSphereCollision(points, newpos, radius);
-                     if (adjust.distance2(temp) > .00001)
-                     {
-                        adjusted++;
-                        if (current->dynamic && retobjs)
-                           retobjs->push(((DynamicPrimitive*)current)->parentobj);
-                     }
-                  }
-               }
-            }
-            else if (current->type == "tristrip")
-            {
-               dist = current->v[0] + current->v[1] + current->v[2] + current->v[3];
-               dist /= 4;
-               if (dist.distance2(newpos) < current->v[0].distance2(current->v[3]))
-               {
-                  for (int flip = 0; flip < 2; flip++)
-                  {
-                     Vector3 points[3];
-                     if (flip)
-                     {
-                        points[0] = current->v[0];
-                        points[1] = current->v[1];
-                        points[2] = current->v[2];
-                     }
-                     else
-                     {
-                        points[0] = current->v[1];
-                        points[1] = current->v[2];
-                        points[2] = current->v[3];
-                     }
-                     temp = adjust;
-                     if (current->rad == 0)
-                        adjust += PlaneEdgeSphereCollision(points, newpos, radius);
-                     else 
-                        adjust += PlaneEdgeSphereCollision(points, newpos, radius + float(current->rad));
-                     
-                     if (adjust.distance2(temp) > .00001)
-                     {
-                        adjusted++;
-                        if (current->dynamic && retobjs)
-                           retobjs->push(((DynamicPrimitive*)current)->parentobj);
-                     }
+                     adjusted++;
+                     if (retobjs)
+                        retobjs->push(current);
                   }
                }
             }
@@ -337,139 +164,110 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 }
 
 
-// May want to precalculate normals to speed things up - keep in mind that
-// dynamic primitives don't have precalculated normals, so if this is implemented
-// that will have to be done before calling this function
-Vector3 CollisionDetection::PlaneSphereCollision(Vector3 v[3], const Vector3& pos, const Vector3& pos1, const float& radius, bool debug)
+// May want to precalculate normals where we can to speed things up
+Vector3 CollisionDetection::PlaneSphereCollision(Vector3vec v, const Vector3& pos, const Vector3& pos1, const float& radius, bool debug)
 {
    Vector3 adjust;
    Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
    norm.normalize();
-   float d = -norm.dot(v[0]);
    
-   // First check whether the sphere center completely crossed the plane
+   float d = -norm.dot(v[0]);
    float startside = norm.dot(pos) + d;
    
-   /* Allows for checking both sides of polygons - not sure we need this 
-   though since almost all collidable polys are going to be facing out*/
-   if (startside < 0)
+   // Flip the normal if we start out on the back side
+   // or not...
+   //if (startside < -1e-3) return Vector3();
+   /*if (startside < 0)
    {
       norm = (v[2] - v[0]).cross(v[1] - v[0]);
       norm.normalize();
-      d = -norm.dot(v[0]);
-   }
+   }*/
+   for (int i = 0; i < 3; ++i)
+      v[i] += norm * radius * .9999;
+   /*if (startside < 0)
+      norm = (v[2] - v[0]).cross(v[1] - v[0]);
+   else
+      norm = (v[1] - v[0]).cross(v[2] - v[0]);
+   norm.normalize();*/
+   d = -norm.dot(v[0]);
    
-   // If the signs don't match then we crossed the infinite plane
-   if (CrossesPlane(pos, pos1, norm, d))
+   startside = norm.dot(pos) + d;
+   if (startside < -1e-1) return Vector3();
+   
+   float denominator;
+   Vector3 move;
+   float x = -1.f;
+   Vector3 intpoint;
+#if 0
+   if (floatzero(v[0].x - norm.x * radius * .98) && floatzero(v[0].z - norm.z * radius * .98))
    {
-      Vector3 move = pos1 - pos;
-      float denominator = norm.dot(move);
-      float x = 0;
-      
-      if (denominator != 0)  // Parallel with the plane?
+      float endside = norm.dot(pos1) + d;
+      move = pos1 - pos;
+      denominator = norm.dot(move);
+      norm.print();
+      move.print();
+      x = -(norm.dot(pos) + d) / denominator;
+      intpoint = pos + move * x;
+      if (endside < -.0000001)
+         cout << "Endside Okay" << endl;
+      if (denominator != 0)
+         cout << "Den Okay" << endl;
+      if (x > -1e-4)
+         cout << "X > Okay" << endl;
+      else cout << x << endl;
+      if (x < move.magnitude() + radius)
+         cout << "X < Okay" << endl;
+      else
       {
-         x = -(norm.dot(pos) + d) / denominator;
-         Vector3 intpoint = pos + move * x;
-                     
-         // Determine whether we're on the poly
-         float angle = 0;
-         bool forcehit = false;
-         for (int i = 0; i < 3; i++)
-         {
-            // When intpoint == v[i], we have problems because the dot product below ends up zero, which is wrong
-            if (intpoint.distance2(v[i]) < .001)
-            {
-               forcehit = true;
-               break;
-            }
-            Vector3 p = intpoint - v[i];
-            Vector3 p1 = intpoint - v[(i + 1) % 3];
-            p.normalize();
-            p1.normalize();
-            angle += acos(p.dot(p1));
-         }
-         if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
-         {
-            if (startside > 0)
-               adjust = norm * radius;
-            else adjust = norm * -radius;
-            
-            /* This was spamming KDevelop too much, and if the radius is smaller than the distance moved
-               then it's most likely a particle and they will frequently cross (and that's okay).
-            */
-            if (pos.distance2(pos1) < radius * radius)
-               cout << "Crossed the plane\n";
-            
-            return adjust;
-         }
+         cout << x << endl;
+         cout << (move.magnitude() + radius) << endl;
       }
+      /*cout << "Startside: " << startside << endl;
+      cout << "Endside: " << endside << endl;
+      cout << "Den: " << denominator << endl;
+      cout << "X: " << x << endl;*/
+      if (x < -1e-4)
+         cout << "A big WTF to that....................\n";
+      //intpoint.print();
    }
-   
-   // Then, if not check whether the sphere intercepts the poly
-   Vector3 start = pos1;
-   Vector3 end = pos1 - norm * radius;
-   
-   if (CrossesPlane(start, end, norm, d))
+#endif
+   if (CrossesPlane(pos, pos1, norm, d, denominator, move, x, intpoint))
    {
-      Vector3 move = end - start;
-      float denominator = norm.dot(move);
-      float x = 0;
-      if (denominator != 0)  // Parallel with the plane?
+      // The following line has to be here because CrossesPlane does not have access to
+      // radius, nor should it IMHO
+      if (x > move.magnitude() + radius || x < -radius) return Vector3();
+      // Determine whether we're on the poly
+      float angle = 0.f;
+      bool forcehit = false;
+      
+      for (int i = 0; i < 3; ++i)
       {
-         x = -(norm.dot(start) + d) / denominator;
-         Vector3 intpoint = start + move * x;
-                  
-         // Determine whether we're on the poly
-         float angle = 0;  // Apparently can't be in the switch
-         switch (intmethod)
+         // When intpoint == v[i], we have problems because the dot product below ends up zero, which is wrong
+         if (intpoint.distance2(v[i]) < .000001)
          {
-            case 0:  // Angle = 2PI method
-               for (int i = 0; i < 3; i++)
-               {
-                  Vector3 p = intpoint - v[i];
-                  Vector3 p1 = intpoint - v[(i + 1) % 3];
-                  p.normalize();
-                  p1.normalize();
-                  angle += acos(p.dot(p1));
-               }
-               if (angle > 2 * PI - .01 && angle < 2 * PI + .01)   
-               {    
-                  if (x > .9999 && x < 1.0001) // Handle some rounding error
-                     x = .9999;
-                  adjust = move * (x - 1);
-                  return adjust;
-               }
-               break;
-            case 1:  // Barycentric coordinates
-               Vector3 r = intpoint - v[0];
-               Vector3 q1 = v[1] - v[0];
-               Vector3 q2 = v[2] - v[0];
-               
-               float multiplier = 1 /
-               (q1.dot(q1) * q2.dot(q2) - q1.dot(q2) * q1.dot(q2));
-               float w1 = q2.dot(q2) * r.dot(q1) - q1.dot(q2) * r.dot(q2);
-               float w2 = -q1.dot(q2) * r.dot(q1) + q1.dot(q1) * r.dot(q2);
-               w1 *= multiplier;
-               w2 *= multiplier;
-               float w0 = 1 - w1 - w2;
-               if (w0 >= 0 && w1 >= 0 && w2 >= 0)
-               {
-                  if (x > .9999) // Handle some rounding error
-                     x = .9999;
-                  adjust = move * (x - 1);
-                  return adjust;
-               }
-               break;
+            forcehit = true;
+            break;
          }
-         
-         
+         Vector3 p = intpoint - v[i];
+         Vector3 p1 = intpoint - v[(i + 1) % 3];
+         p.normalize();
+         p1.normalize();
+         angle += acos(p.dot(p1));
+      }
+      
+      if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
+      {
+         float endside = norm.dot(pos1) + d;
+         adjust = norm * -endside * 1.01f;
+         return adjust;
       }
    }
    return Vector3();
 }
 
 
-Vector3 CollisionDetection::PlaneEdgeSphereCollision(Vector3 v[3], const Vector3& pos, const float& radius)
+// Essentially does a ray-sphere collision test on each edge of the triangle specified by v
+Vector3 CollisionDetection::PlaneEdgeSphereCollision(Vector3vec v, const Vector3& pos, const float& radius)
 {
    Vector3 adjust;
    int numhits = 0;
@@ -483,10 +281,9 @@ Vector3 CollisionDetection::PlaneEdgeSphereCollision(Vector3 v[3], const Vector3
       float maxt = raystart.distance(rayend);
       //float a = 1; // Just a reminder
       float b = 2 * ray.dot(raystart - pos);
-      float c = (raystart - pos).dot(raystart - pos) -
-            radius * radius;
+      float c = (raystart - pos).dot(raystart - pos) - radius * radius;
       
-      if (b * b - 4 * c > 0)
+      if ((b * b - 4 * c) > 0)
       {
          float t = (-b + sqrt(b * b - 4 * c)) * .5;
          float t1 = (-b - sqrt(b * b - 4 * c)) * .5;
@@ -518,28 +315,46 @@ Vector3 CollisionDetection::PlaneEdgeSphereCollision(Vector3 v[3], const Vector3
 }
 
 
-bool CollisionDetection::InVector(list<DynamicObject>::iterator& iter, vector<list<DynamicObject>::iterator>& vec)
+bool CollisionDetection::InVector(Mesh* ptr, vector<Meshlist::iterator>& vec)
 {
    for (int i = 0; i < vec.size(); ++i)
-      if (vec[i] == iter) return true;
+      if (&(*vec[i]) == ptr) return true;
    return false;
 }
 
 
 // I don't think this one is ever used because in most cases we want to reuse d, so it doesn't make sense to 
 // calculate it each time
-bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm, const Vector3& polypoint)
+bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
+                                      const Vector3& polypoint, float &denominator, Vector3& move)
 {
    float d = -norm.dot(polypoint);
    
-   return CrossesPlane(start, end, norm, d);
+   return CrossesPlane(start, end, norm, d, denominator, move);
 }
 
 
-bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm, const float& d)
+// Also calculates the intersection point if we're interested.  
+bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
+                                      const float& d, float &denominator, Vector3& move, float& x, Vector3& intpoint)
+{
+   if (CrossesPlane(start, end, norm, d, denominator, move))
+   {
+      x = -(norm.dot(start) + d) / denominator;
+      intpoint = start + move * x;
+      return true;
+   }
+   return false;
+}
+
+
+// NOTE: This does not actually take the location of start into consideration, so if start is not
+// on the positive side of the plane then it may return true when the plane was not actually crossed.
+// See the overloaded version above if you don't want that to happen.
+bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
+                                      const float& d, float &denominator, Vector3& move)
 {
    
-   float startside = norm.dot(start) + d;
    float endside = norm.dot(end) + d;
    
    /* Because if the signs are the same, this will end up positive
@@ -548,8 +363,23 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
       opposite sign from the other variable, which means if we just
       check the signs it appears we hit when we didn't.  Including
       values very close to 0 as non-hits fixes this.
+   
+      Okay, from now on we have to assume that startside is positive.
+      Multiplying them together when they could both be extremely small
+      was resulting in numbers so close to 0 that we couldn't accurately
+      distinguish them, so from now on this function requires that start
+      be on the positive side of the plane.
    */
-   return (startside * endside < -.0001);
+   if (endside < .00001)
+   {
+      move = end - start;
+      denominator = norm.dot(move);
+      if (denominator != 0)
+      {
+         return true;
+      }
+   }
+   return false;
 }
 
 
