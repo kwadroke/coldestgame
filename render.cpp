@@ -7,7 +7,7 @@ bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
 bool billboardrender;   // Indicates whether object is being rendered to billboard
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
-PlayerData localplayer(dynobjects);
+PlayerData localplayer(meshes);
 set<WorldObjects*> implist;
 set<WorldObjects*> visibleobjs;
 
@@ -30,16 +30,17 @@ void Repaint()
    SDL_mutexV(clientmutex);
    if (!mainmenu.visible && !loadprogress.visible && !loadoutmenu.visible)
    {
+      // Update any animated objects
+      Animate();
+      
       // Update player position
       SDL_mutexP(clientmutex);
-      Move(player[0], dynobjects, coldet);
+      
+      Move(player[0], meshes, coldet);
       if (serversync)
          SynchronizePosition();
       localplayer = player[0];
       SDL_mutexV(clientmutex);
-      
-      // Update any animated objects
-      Animate();
       
       if (shadows)
       {
@@ -141,8 +142,8 @@ void Repaint()
       
       RenderObjects();
       
-      resman.shaderman.UseShader(standardshader);
-      RenderDynamicObjects();
+      //resman.shaderman.UseShader(standardshader);
+      //RenderDynamicObjects();
       
       if (localplayer.pos.y > 0)
       {
@@ -199,7 +200,7 @@ void RenderObjects()
    bool debug = false; // Turns off impostoring if true
    //debug = true;
    
-   list<WorldObjects*> objs = kdtree.getobjs();
+   /*list<WorldObjects*> objs = kdtree.getobjs();
    Vector3 playerpos = localplayer.pos;
    implist.clear();
    visibleobjs.clear();
@@ -213,9 +214,22 @@ void RenderObjects()
       visibleobjs.insert(i);
    }
    
-   objs.sort(objcomp);
+   objs.sort(objcomp);*/
+   list<Mesh*> m = kdtree.getmeshes();
    
-   for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
+   list<Mesh*>::iterator iptr;
+   
+   Material* override = NULL;
+   if (shadowrender) override = shadowmat;
+   for (iptr = m.begin(); iptr != m.end(); ++iptr)
+   {
+      Mesh* i = *iptr;
+      i->Render(override);
+      glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+      trislastframe += i->Size();
+   }
+   
+   /*for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
    {
       WorldObjects *i = *iptr;
       if (i->type == "water" || i->type == "dynobj") continue;
@@ -258,7 +272,7 @@ void RenderObjects()
    if (!shadowrender && !reflectionrender && !debug)
       UpdateFBO();
    
-   WorldObjects::UnbindVbo();
+   WorldObjects::UnbindVbo();*/
 }
 
 
@@ -268,6 +282,7 @@ void RenderObjects()
    */
 void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
 {
+#if 0
    if (!prims.size()) return;
    
    list<WorldObjects>::iterator o;
@@ -330,6 +345,7 @@ void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
          trislastframe += 2 * o->vbocount[currindex - 1];
       }
    }
+#endif
 }
 
 
@@ -379,6 +395,7 @@ void RestoreGLState(WorldObjects *i)
 
 void RenderDynamicObjects()
 {
+#if 0
    list<DynamicObject>::iterator i;
    SDL_mutexP(clientmutex);
    for (i = dynobjects.begin(); i != dynobjects.end(); ++i)
@@ -397,13 +414,15 @@ void RenderDynamicObjects()
          }
       }
    }
-   SDL_mutexV(clientmutex);
+   SDL_mutexV(clientmutex)
+#endif
 }
 
 
 // Recursively traverse the tree under *root and render the primitives
 void RenderDOTree(DynamicPrimitive* root)
 {
+#if 0
    list<DynamicObject>::iterator parent = root->parentobj;
    
    for (int i = 0; i < 4; ++i)
@@ -562,6 +581,7 @@ void RenderDOTree(DynamicPrimitive* root)
       RenderDOTree(*i);
    }
    //glPopMatrix();
+#endif
 }
 
 
@@ -574,6 +594,7 @@ bool sortbyimpdim(const WorldObjects* l, const WorldObjects* r)
 
 void UpdateFBO()
 {
+#if 0
    vector<WorldObjects*>::iterator iptr;
    vector<WorldObjects*> sortedbyimpdim;
    vector<WorldObjects*> needsupdate;
@@ -736,6 +757,7 @@ void UpdateFBO()
       // Should really do this last so time to update isn't included
       i->lastimpupdate = SDL_GetTicks();
    }
+#endif
 }
 
 
@@ -1017,8 +1039,8 @@ void RenderWater()
          
          glFrontFace(GL_CW);
          RenderObjects();
-         resman.shaderman.UseShader(standardshader);
-         RenderDynamicObjects();
+         //resman.shaderman.UseShader(standardshader);
+         //RenderDynamicObjects();
          glFrontFace(GL_CCW);
          
          SetReflection(false);
@@ -1058,9 +1080,7 @@ void RenderWater()
    resman.texhand.BindTexture(noisefbo.GetTexture());
    resman.texhand.ActiveTexture(0);
    
-   waterobj->BindVbo();
-   RenderPrimitives(waterobj->prims);
-   WorldObjects::UnbindVbo();
+   watermesh->Render();
    
    glMatrixMode(GL_TEXTURE);
    glPopMatrix();

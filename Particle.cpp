@@ -44,6 +44,7 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w, float ra
 
 bool Particle::Update(list<DynamicObject>* dynobj)
 {
+#if 0
    if (cd == NULL)
    {
       cout << "Particle: Some moron forgot to set Particle::cd.  This is a bug.\n";
@@ -70,5 +71,6 @@ bool Particle::Update(list<DynamicObject>* dynobj)
       cout << "Particle:  Warning, explode == 0, this is not yet supported.\n";
    }
    return false;
+#endif
 }
 

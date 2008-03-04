@@ -26,7 +26,7 @@ void main()
    vec3 t, b, n;
    n = normalize(gl_Normal);
    t = normalize(tangent);
-   b = normalize(cross(n, t));
+   b = normalize(cross(t, n));
    
    vec3 location = gl_ModelViewMatrixInverse[3].xyz;
    worldcoords = gl_Vertex.xyz;

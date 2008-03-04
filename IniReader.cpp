@@ -97,9 +97,9 @@ int IniReader::GetItemIndex(const string name) const
 }
 
 
-string IniReader::Read(string& ret, const string name, const int num)
+string IniReader::Read(string& ret, const string name, const int num) const
 {
-   if (HaveValue(name))
+   if (HaveValue(name, num))
    {
       ret = ReadVal(values[name], num);
       return ret;
@@ -108,9 +108,9 @@ string IniReader::Read(string& ret, const string name, const int num)
 }
 
 
-int IniReader::Read(int& ret, const string name, const int num)
+int IniReader::Read(int& ret, const string name, const int num) const
 {
-   if (HaveValue(name))
+   if (HaveValue(name, num))
    {
       ret = atoi(ReadVal(values[name], num).c_str());
       return ret;
@@ -119,9 +119,9 @@ int IniReader::Read(int& ret, const string name, const int num)
 }
 
 
-float IniReader::Read(float& ret, const string name, const int num)
+float IniReader::Read(float& ret, const string name, const int num) const 
 {
-   if (HaveValue(name))
+   if (HaveValue(name, num))
    {
       ret = atof(ReadVal(values[name], num).c_str());
       return ret;
@@ -130,9 +130,9 @@ float IniReader::Read(float& ret, const string name, const int num)
 }
 
 
-bool IniReader::Read(bool& ret, const string name, const int num)
+bool IniReader::Read(bool& ret, const string name, const int num) const
 {
-   if (HaveValue(name))
+   if (HaveValue(name, num))
    {
       ret = ReadVal(values[name], num) != "0";
       return ret;
@@ -141,7 +141,7 @@ bool IniReader::Read(bool& ret, const string name, const int num)
 }
 
 
-string IniReader::ReadVal(const string line, const int num)
+string IniReader::ReadVal(const string line, const int num) const
 {
    stringstream readval(line);
    int i = -1; // Always need to read at least two values even if they pass in 0
@@ -152,9 +152,18 @@ string IniReader::ReadVal(const string line, const int num)
 }
 
 
-bool IniReader::HaveValue(const string name) const
+bool IniReader::HaveValue(const string name, const int num) const
 {
    bool retval = values.find(name) != values.end();
+   if (retval)
+   {
+      stringstream readval(values[name]);
+      int i = -1;
+      string dummy;
+      while (readval >> dummy && i < num)
+         ++i;
+      if (i != num) retval = false; // This may not work as intended, testing is needed
+   }
    //if (!retval)
    //   cout << "Warning: Attempt to read non-existent value " << name << endl;
    return retval;

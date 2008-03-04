@@ -36,6 +36,5 @@ void main()
    //vec3 templ = lightdir;
    //templ.x *= -1;
    //gl_FragColor.rgb = templ * .5 + lightdir * .5;
-   
    gl_FragColor.a = 1.;
 }

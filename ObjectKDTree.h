@@ -1,6 +1,7 @@
 #ifndef OBJECTKDTREE_H
 #define OBJECTKDTREE_H
 
+#include "Mesh.h"
 #include "WorldObjects.h"
 #include "Vector3.h"
 #include "GenericPrimitive.h"
@@ -18,33 +19,34 @@ using namespace std;
 
 struct eqptr
 {
-   bool operator()(WorldObjects* p1, WorldObjects* p2) const
+   bool operator()(Mesh* p1, Mesh* p2) const
    {
       return (p1 == p2);
    }
-   bool operator()(WorldObjects* hashme) const
+   bool operator()(Mesh* hashme) const
    {
       return (unsigned long)hashme; // Umm, probably not ideal, but we can fix it later
    }
 };
 
-typedef __gnu_cxx::hash_set<WorldObjects*, eqptr, eqptr> ObjectSet;
+typedef __gnu_cxx::hash_set<Mesh*, eqptr, eqptr> MeshSet;
 
 class ObjectKDTree
 {
    public:
       ObjectKDTree();
-      ObjectKDTree(list<WorldObjects>*, Vector3[]);
+      ObjectKDTree(Meshlist*, Vector3vec);
       ObjectKDTree(const ObjectKDTree&);
       ObjectKDTree& operator=(const ObjectKDTree&);
       ~ObjectKDTree();
       void refine(int);
-      bool insert(WorldObjects*);
-      void setvertices(Vector3[]);
+      bool insert(Mesh*);
+      void setvertices(Vector3vec);
       void setfrustum(Vector3, Vector3, float, float, float, float);
-      void setfrustum(vector<WorldPrimitives>*);
-      vector<GenericPrimitive*> getprims(Vector3, float);
-      list<WorldObjects*> getobjs();//Vector3, Vector3, float, float, float, float);
+      void setfrustum(Quadvec*);
+      //vector<Triangle*> gettris(Vector3, float);
+      vector<Mesh*> getmeshes(const Vector3&, const float);
+      list<Mesh*> getmeshes();//Vector3, Vector3, float, float, float, float);
       void visualize();
       
    private:
@@ -52,21 +54,29 @@ class ObjectKDTree
       bool innode(Vector3, float);
       bool innode2d(Vector3, float);
       bool infrustum();//Vector3, Vector3, float, float, float, float);
-      bool infrustum(WorldObjects*);
-      void setretobjs(ObjectSet*);
-      void getprims(Vector3, float, vector<GenericPrimitive*>&);
-      void getobjs(list<WorldObjects*>&);
+      bool infrustum(Mesh*);
+      void setretobjs(MeshSet*);
+      void getmeshes(const Vector3&, const float, vector<Mesh*>&);
+      void getmeshes(list<Mesh*>&);
       
       
       vector<ObjectKDTree> children;
-      list<WorldObjects*> members;
+      list<Mesh*> members;
       bool haschildren;
-      Vector3 vertices[8];
+      Vector3vec vertices;
       //set<WorldObjects*>* retobjs;
-      ObjectSet* retobjs;
+      MeshSet* retobjs;
       bool root;
-      vector<WorldPrimitives> p; // Only set in root node
-      vector<WorldPrimitives>* frustum; // Pointer to root's p
+      /* Note that these quads are not going to be defined using anything resembling
+         proper winding, but because they are only used for storing values that's
+         not a big deal.  They're actually defined as tristrips as a holover from
+         long, long ago in a galaxy...err, maybe not.
+      
+         On second thought that may need to be changed for other reasons, so we'll see
+         if this remains true.
+      */
+      Quadvec p; // Only set in root node
+      Quadvec* frustum; // Pointer to root's p
       static int maxlevels;
 };
 

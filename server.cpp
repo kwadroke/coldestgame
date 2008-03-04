@@ -28,7 +28,7 @@ using namespace std;
 // Necessary declarations
 int ServerSend(void*);
 int ServerListen();
-void Move(PlayerData&, list<DynamicObject>&, CollisionDetection&);
+void Move(PlayerData&, Meshlist&, CollisionDetection&);
 void ServerLoadMap();
 void HandleHit(Particle& p);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
@@ -47,7 +47,8 @@ string servername;
 list<Packet> servqueue;
 UDPsocket servoutsock;
 UDPpacket *servoutpack;
-list<DynamicObject> serverdynobjects;
+//list<DynamicObject> serverdynobjects;
+Meshlist servermeshes;
 CollisionDetection servercoldet;
 ObjectKDTree serverkdtree;
 short maxplayers;
@@ -115,7 +116,7 @@ int Server(void* dummy)
    if (currentmap == "")
       currentmap = "newtest";
    ServerLoadMap();
-   PlayerData local(serverdynobjects); // Dummy placeholder for the local player
+   PlayerData local(servermeshes); // Dummy placeholder for the local player
    serverplayers.push_back(local);
    servermutex = SDL_CreateMutex();
    serversend = SDL_CreateThread(ServerSend, NULL);
@@ -161,7 +162,6 @@ int ServerListen()
    {
       ++runtimes;
       SDL_Delay(1); // Prevent CPU hogging
-      //t.start();
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
@@ -181,23 +181,14 @@ int ServerListen()
             ServerUpdatePlayer(i);
          }
       }
-      //t.stop();
       
-      // Update server dynamic objects
-      list<DynamicObject>::iterator k;
-      for (k = serverdynobjects.begin(); k != serverdynobjects.end(); ++k)
+      // Update server meshes
+      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
       {
-         list<DynamicPrimitive*>::iterator j;
-         for (j = k->prims[k->animframe].begin(); j != k->prims[k->animframe].end(); ++j)
-         {
-            if ((*j)->parentid == "-1" || (*j)->parentid == "-2")
-            {
-               UpdateDOTree(*j);
-            }
-         }
+         i->AdvanceAnimation();
       }
-      
       // Update particles
+#if 0
       list<Particle>::iterator j = servparticles.begin();
       while (j != servparticles.end())
       {
@@ -210,6 +201,7 @@ int ServerListen()
          }
          else ++j;
       }
+#endif
       SDL_mutexV(servermutex);
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
@@ -296,14 +288,14 @@ int ServerListen()
             }
             if (add)
             {
-               PlayerData temp(serverdynobjects);
+               PlayerData temp(servermeshes);
                temp.recpacketnum = packetnum;
                temp.addr = inpack->address;
                temp.connected = true;
                temp.lastupdate = SDL_GetTicks();
                temp.unit = unit;
                temp.acked.insert(packetnum);
-               UpdatePlayerModel(temp, serverdynobjects);
+               UpdatePlayerModel(temp, servermeshes, false);
                
                SDLNet_Write16(1336, &(temp.addr.port)); // NBO bites me for the first time...
                serverplayers.push_back(temp);
@@ -617,23 +609,40 @@ int ServerSend(void* dummy)  // Thread for sending updates
 // Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
 void ServerLoadMap()
 {
+   SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
+   serverhasmap = false;
    nextmap = "maps/" + currentmap;
    while (mapname != nextmap)
    {
       SDL_Delay(1); // Wait for main thread to load map
    }
    
-   serverkdtree = kdtree;
-   
    servercoldet = coldet;
+   
+   servermeshes = meshes;
+   Vector3vec points(8, Vector3());
+   for (int i = 0; i < 4; ++i)
+   {
+      points[i] = servercoldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
+   }
+   for (int i = 0; i < 4; ++i)
+   {
+      points[i + 4] = servercoldet.worldbounds[5].GetVertex(i);
+   }
+   serverkdtree = ObjectKDTree(&servermeshes, points);
+   serverkdtree.refine(0);
+   
    servercoldet.kdtree = &serverkdtree;
    cout << "Map loaded" << endl;
+   serverhasmap = true;
+   SDL_mutexV(servermutex);
 }
 
 
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
 void HandleHit(Particle& p)
 {
+#if 0
    list<DynamicObject>::iterator curr;
    while (!p.hitobjs.empty())
    {
@@ -698,47 +707,7 @@ void HandleHit(Particle& p)
       cout << flush;
       p.hitobjs.pop();
    }
-}
-
-
-void UpdateDOTree(DynamicPrimitive* root)
-{
-   list<DynamicObject>::iterator parent = root->parentobj;
-      
-   for (int i = 0; i < 4; ++i)
-      root->v[i] = root->orig[i];
-   
-   root->m = GraphicMatrix();
-   
-   root->m.rotatex(root->rot2.x);
-   root->m.rotatey(root->rot2.y);
-   root->m.rotatez(root->rot2.z);
-   
-   root->m.translate(root->trans.x, root->trans.y, root->trans.z);
-   root->m.rotatex(root->rot1.x);
-   root->m.rotatey(root->rot1.y);
-   root->m.rotatez(root->rot1.z);
-   
-   if (root->parentid == "-1")  // Move to object position only for root nodes
-   {
-      root->m.rotatex(-parent->pitch);
-      root->m.rotatey(parent->rotation);
-      root->m.rotatez(parent->roll);
-      root->m.translate(parent->position.x, parent->position.y, parent->position.z);
-   }
-   else
-   {
-      root->m *= root->parent->m;
-   }
-   
-   for (int i = 0; i < 4; ++i)
-      root->v[i].transform(root->m);
-   
-   list<DynamicPrimitive*>::iterator i;
-   for (i = root->child.begin(); i != root->child.end(); i++)
-   {
-      UpdateDOTree(*i);
-   }
+#endif
 }
 
 
@@ -746,8 +715,8 @@ void UpdateDOTree(DynamicPrimitive* root)
 void ServerUpdatePlayer(int i)
 {
    // Movement and necessary model updates
-   Move(serverplayers[i], serverdynobjects, servercoldet);
-   UpdatePlayerModel(serverplayers[i], serverdynobjects);
+   UpdatePlayerModel(serverplayers[i], servermeshes, false);
+   Move(serverplayers[i], servermeshes, servercoldet);
    
    // Cooling
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
@@ -757,6 +726,7 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Shots fired!
+#if 0
    short currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
    if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= weapons[currplayerweapon].reloadtime))
    {
@@ -769,7 +739,7 @@ void ServerUpdatePlayer(int i)
       //m.rotatez(player[0].roll);
       dir.transform(m.members);
                
-      list<DynamicObject>::iterator temp = LoadObject(weapons[currplayerweapon].file, serverdynobjects);
+      list<DynamicObject>::iterator temp = LoadObject(weapons[currplayerweapon].file, servermeshes);
       float vel = weapons[currplayerweapon].velocity;
       float acc = weapons[currplayerweapon].acceleration;
       float w = weapons[currplayerweapon].weight;
@@ -791,4 +761,5 @@ void ServerUpdatePlayer(int i)
                
       servparticles.push_back(part);
    }
+#endif
 }
