@@ -140,6 +140,8 @@ void Repaint()
       
       RenderClouds();
       
+      lights.Place();
+      
       RenderObjects();
       
       //resman.shaderman.UseShader(standardshader);
@@ -227,6 +229,14 @@ void RenderObjects()
       i->Render(override);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       trislastframe += i->Size();
+   }
+   
+   if (particlemesh)
+   {
+      particlemesh->GenVbo();
+      particlemesh->Render();
+      glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+      trislastframe += particlemesh->Size();
    }
    
    /*for (iptr = objs.begin(); iptr != objs.end(); ++iptr)

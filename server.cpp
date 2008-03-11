@@ -726,7 +726,6 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Shots fired!
-#if 0
    short currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
    if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= weapons[currplayerweapon].reloadtime))
    {
@@ -739,7 +738,6 @@ void ServerUpdatePlayer(int i)
       //m.rotatez(player[0].roll);
       dir.transform(m.members);
                
-      list<DynamicObject>::iterator temp = LoadObject(weapons[currplayerweapon].file, servermeshes);
       float vel = weapons[currplayerweapon].velocity;
       float acc = weapons[currplayerweapon].acceleration;
       float w = weapons[currplayerweapon].weight;
@@ -751,7 +749,9 @@ void ServerUpdatePlayer(int i)
       they expect, even if the positions don't match exactly (and they rarely will:-).*/
       if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
          startpos = serverplayers[i].clientpos;
-      Particle part(startpos, dir, vel, acc, w, rad, exp, temp, SDL_GetTicks());
+      IniReader readweapon("models/" + weapons[currplayerweapon].file + "/base");
+      Mesh weaponmesh(readweapon, resman);
+      Particle part(startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.pos += part.dir * 50;
       part.cd = &servercoldet;
       part.playernum = i;
@@ -761,5 +761,4 @@ void ServerUpdatePlayer(int i)
                
       servparticles.push_back(part);
    }
-#endif
 }

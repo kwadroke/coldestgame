@@ -1019,12 +1019,16 @@ void SynchronizePosition()
 
 void Animate()
 {
+   // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       i->AdvanceAnimation();
    }
-#if 0
+   
+   // Particles
    static int partupd = 100;
+   IniReader dummy("models/empty/base");
+   particlemesh = MeshPtr(new Mesh(dummy, resman));
    SDL_mutexP(clientmutex);
    if (partupd >= partupdateinterval)
    {
@@ -1033,10 +1037,8 @@ void Animate()
       list<Particle>::iterator j = particles.begin();
       while (j != particles.end())
       {
-         DynamicObject* dummy = &(*(j->obj));
-         if (j->Update(&dynobjects))
+         if (j->Update(*particlemesh))
          {
-            dynobjects.erase(j->obj);
             j = particles.erase(j);
          }
          else
@@ -1045,9 +1047,9 @@ void Animate()
          }
       }
       partupd = 0;
+      particlemesh->GenVbo();
    }
    else ++partupd;
-#endif
    
    // Also need to update player models because they need to change each animation frame
    for (int k = 1; k < player.size(); ++k)

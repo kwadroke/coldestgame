@@ -1,7 +1,6 @@
 #ifndef __PARTICLE
 #define __PARTICLE
 
-#define SDL_NO_GLEXT
 #include <list>
 #include <stack>
 #include "CollisionDetection.h"
@@ -16,17 +15,15 @@ using namespace std;
 class Particle
 {
    public:
-      Particle();
-      Particle(Vector3, Vector3, float, float, float, float, bool, list<DynamicObject>::iterator, Uint32);
-      bool Update(list<DynamicObject>*);
+      Particle(Mesh&);
+      Particle(Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
+      bool Update(Mesh&);
       CollisionDetection *cd;
-      list<DynamicObject>::iterator obj;
       bool unsent;
       unsigned short senttimes;
       short playernum;
       unsigned long id;
       unsigned long playerid;
-      
       
       Vector3 dir;
       Vector3 pos;
@@ -36,9 +33,10 @@ class Particle
       float radius;
       bool explode;
       Uint32 lasttick;
-      stack<list<DynamicObject>::iterator> hitobjs;
+      stack<Mesh*> hitobjs;
       int damage;
       float dmgrad;
+      Mesh mesh;
       
    private:
       static unsigned long nextid;

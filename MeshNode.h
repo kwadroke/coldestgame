@@ -6,6 +6,7 @@
 #include "types.h"
 #include "Material.h"
 #include "GraphicMatrix.h"
+#include "ResourceManager.h"
 #include <boost/shared_ptr.hpp>
 
 /**
@@ -21,10 +22,12 @@ class MeshNode
       void GenTris(const shared_ptr<MeshNode>&, const float, const GraphicMatrix&, Trianglevec&);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
+      void LoadMaterials(ResourceManager&);
       
       int id, parentid;
       bool facing, collide, render;
       Material* material;
+      string matname;
       Vector3 rot1, rot2;
       Vector3 trans;
       Vector3vec vert;

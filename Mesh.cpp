@@ -66,7 +66,7 @@ void Mesh::Load(const IniReader& reader)
       string currfile;
       int numkeyframes = 0;
       
-      reader.Read(basepath, "File");
+      reader.Read(basepath, "Files");
       reader.Read(numkeyframes, "NumFrames");
       
       for (int i = 0; i < numkeyframes; ++i)
@@ -106,10 +106,9 @@ void Mesh::Load(const IniReader& reader)
                newnode->render = false;
             currprim.Read(newnode->id, "ID");
             currprim.Read(newnode->parentid, "ParentID");
-            string matname = "";
-            currprim.Read(matname, "Material");
-            if (matname != "")
-               newnode->material = &resman.LoadMaterial(matname);
+            currprim.Read(newnode->matname, "Material");
+            if (newnode->matname != "" && glops)
+               newnode->material = &resman.LoadMaterial(newnode->matname);
             
             currprim.Read(newnode->rot1.x, "Rot1", 0);
             currprim.Read(newnode->rot1.y, "Rot1", 1);
@@ -233,10 +232,10 @@ void Mesh::Load(const IniReader& reader)
       int save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
       cout << "Tree primitives: " << save << endl;
    }
-   else if (type == "Terrain"){} // No-op to avoid bogus warnings
+   else if (type == "Terrain" || type == "Empty"){} // No-op to avoid bogus warnings
    else
    {
-      cout << "Warning: Attempted to load unknown object type" << endl;
+      cout << "Warning: Attempted to load unknown object type " << type << endl;
    }
 }
 
@@ -286,11 +285,27 @@ void Mesh::GenVbo()
       ++counter;
    }
    vbosteps.push_back(counter);
-   glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+   if (frameroot.size() <= 1)
+   {
+      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                    vbodata.size() * sizeof(VBOData), 
                    0, GL_STATIC_DRAW_ARB);
+   }
+   else
+   {
+      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+                     vbodata.size() * sizeof(VBOData), 
+                     0, GL_DYNAMIC_DRAW_ARB);
+   }
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+   
+   if (!glops)
+   {
+      for (int i = 0; i < frameroot.size(); ++i)
+         frameroot[i]->LoadMaterials(resman);
+   }
+   
    hasvbo = true;
    glops = true;
 }
@@ -342,6 +357,7 @@ void Mesh::BindVbo()
 // we don't care about anything but the right shape so we use a very basic material
 void Mesh::Render(Material* overridemat)
 {
+   if (!tris.size()) return;
    BindVbo();
    int currindex = 0;
    if (overridemat)
@@ -454,7 +470,8 @@ void Mesh::UpdateTris(int index)
    
    if (frameroot.size() == 1) // Implies index has to be 0
    {
-      frameroot[0]->GenTris(frameroot[0], interpval, m, tris);
+      //if (tris.size() <= 0)
+         frameroot[0]->GenTris(frameroot[0], interpval, m, tris);
    }
    else if (index == frameroot.size() - 1) // Could happen if we land exactly on the last keyframe
    {
@@ -479,16 +496,23 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 }
 
 
-void Mesh::Add(Triangle tri, int frame)
+void Mesh::Add(Triangle& tri)
 {
    tris.push_back(tri);
 }
 
 
-void Mesh::Add(Quad quad, int frame)
+void Mesh::Add(Quad& quad)
 {
    tris.push_back(quad.First());
    tris.push_back(quad.Second());
+}
+
+
+void Mesh::Add(Mesh &mesh)
+{
+   for (int i = 0; i < mesh.tris.size(); ++i)
+      tris.push_back(mesh.tris[i]);
 }
 
 
