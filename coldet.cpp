@@ -189,7 +189,8 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = 0.f;//.3f;
+   dummy.velocity = .3f;
+   //dummy.velocity = 0.f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
@@ -1163,7 +1164,7 @@ void UpdatePlayerList()
    string add;
    for (int i = 1; i < player.size(); ++i)
    {
-      add = "Player " + ToString(i) + "|";
+      add = player[i].name + "|";
       add += ToString(player[i].kills) + "|";
       add += ToString(player[i].deaths) + "|";
       add += ToString(player[i].ping);

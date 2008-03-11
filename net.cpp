@@ -113,6 +113,7 @@ int NetSend(void* dummy)
          p << "C\n";
          p << sendpacketnum << eol;
          p << player[0].unit << eol;
+         p << player[0].name << eol;
          p.ack = true;
          p.num = sendpacketnum;
          SDL_mutexP(sendmutex);
@@ -430,6 +431,7 @@ int NetListen(void* dummy)
                      get >> player[oppnum].hp[i];
                   get >> player[oppnum].ping;
                   get >> player[oppnum].spawned;
+                  get >> player[oppnum].name;
                   get >> oppnum;
                }
                player[0].kills = player[servplayernum].kills;

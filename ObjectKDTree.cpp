@@ -412,7 +412,7 @@ bool ObjectKDTree::infrustum(Mesh* obj)
    Vector3 v, s, t, u, norm;
    float d, startside;
    
-   for (int i = 0; i < 2; ++i)
+   for (int i = 0; i < 6; ++i)
    {
       v = (*frustum)[i].GetVertex(0);
       s = (*frustum)[i].GetVertex(1);

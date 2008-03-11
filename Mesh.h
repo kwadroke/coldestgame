@@ -41,6 +41,7 @@ class Mesh
       void Add(Quad&);
       void Add(Mesh&);
       void InsertIntoContainer(const string&, Mesh&);
+      void LoadMaterials();
       
       void Begin();
       bool HasNext() const;
@@ -84,6 +85,7 @@ class Mesh
 
       int next;
       bool glops; // Whether to do things like GenVbo
+      bool havemats;
 };
 
 typedef list<Mesh> Meshlist;

@@ -46,6 +46,7 @@ class PlayerData
       short hp[numbodyparts];
       short kills, deaths;
       float temperature;
+      string name;
       
    private:
       Meshlist* meshes;

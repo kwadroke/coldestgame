@@ -234,7 +234,7 @@ void RenderObjects()
    if (particlemesh)
    {
       particlemesh->GenVbo();
-      particlemesh->Render();
+      particlemesh->Render(override);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       trislastframe += particlemesh->Size();
    }
