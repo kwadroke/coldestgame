@@ -37,8 +37,9 @@ class Mesh
       void UnbindAttribs();
       void Render(Material* overridemat = NULL);
       void RenderImpostor();
-      void Add(Triangle, int frame = 0);
-      void Add(Quad, int frame = 0);
+      void Add(Triangle&);
+      void Add(Quad&);
+      void Add(Mesh&);
       void InsertIntoContainer(const string&, Mesh&);
       
       void Begin();
@@ -87,5 +88,6 @@ class Mesh
 
 typedef list<Mesh> Meshlist;
 typedef map<int, MeshNodePtr> MeshNodeMap;
+typedef shared_ptr<Mesh> MeshPtr;
 
 #endif

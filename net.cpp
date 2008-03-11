@@ -343,7 +343,9 @@ int NetListen(void* dummy)
                // Get particles from server
                unsigned long partnum, playernum;
                get >> partnum;
-               Particle temppart;
+               IniReader tempreader("models/projectile/base");
+               Mesh tempmesh(tempreader, resman);
+               Particle temppart(tempmesh);
                while (partnum != 0)
                {
                   get >> playernum;
@@ -361,13 +363,11 @@ int NetListen(void* dummy)
                   // Only add the particle if we don't already have it
                   if ((partids.find(partnum) == partids.end()))
                   {
-                     //temppart.cd = &coldet;
+                     temppart.cd = &coldet;
                      temppart.lasttick = SDL_GetTicks();
                      temppart.id = partnum;
                      temppart.playerid = partnum;
                      temppart.playernum = playernum;
-                     //temppart.obj = LoadObject("projectile", dynobjects);
-                     temppart.obj->position = temppart.pos;
                      temppart.unsent = false;  // Actually meaningless on client
                            
                      partids.insert(partnum);

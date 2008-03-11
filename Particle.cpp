@@ -4,7 +4,7 @@
 unsigned long Particle::nextid = 1;
 
 
-Particle::Particle()
+Particle::Particle(Mesh& meshin) : mesh(meshin)
 {
    cd = NULL;
    unsent = true;
@@ -17,7 +17,8 @@ Particle::Particle()
 }
 
 
-Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w, float rad, bool exp, list<DynamicObject>::iterator o, Uint32 tick)
+Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
+                   float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin)
 {
    pos = p;
    dir = v;
@@ -27,7 +28,6 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w, float ra
    weight = w;
    radius = rad;
    explode = exp;
-   obj = o;
    lasttick = tick;
    cd = NULL;
    unsent = true;
@@ -42,9 +42,8 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w, float ra
 }
 
 
-bool Particle::Update(list<DynamicObject>* dynobj)
+bool Particle::Update(Mesh& rendermesh)
 {
-#if 0
    if (cd == NULL)
    {
       cout << "Particle: Some moron forgot to set Particle::cd.  This is a bug.\n";
@@ -60,9 +59,9 @@ bool Particle::Update(list<DynamicObject>* dynobj)
    cd->listvalid = false;
    if (explode)
    {
-      Vector3 adjust = cd->CheckSphereHit(oldpos, pos, radius, dynobj, &hitobjs);
+      Vector3 adjust = cd->CheckSphereHit(oldpos, pos, radius, NULL, &hitobjs);
       // Update object position either way
-      obj->position = pos;
+      mesh.Move(pos);
       if (adjust.distance2(Vector3()) > .00001)
          return true;
    }
@@ -70,7 +69,8 @@ bool Particle::Update(list<DynamicObject>* dynobj)
    {
       cout << "Particle:  Warning, explode == 0, this is not yet supported.\n";
    }
+   mesh.AdvanceAnimation();
+   rendermesh.Add(mesh);
    return false;
-#endif
 }
 

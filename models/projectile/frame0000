@@ -1,50 +1,116 @@
-Version2
-1
-Type = tristrip
-ID = 0
-Parent ID = -1
-Texture0 = 8
-Texture1 = 9
-Shader = shaders/bump
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 0
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-tc010x = 0
-tc010y = 0
-p1x = -1000
-p1y = -1000
-p1z = 0
-tc001x = 0
-tc001y = 1
-tc011x = 0
-tc011y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-tc012x = 1
-tc012y = 0
-p3x = 1000
-p3y = -1000
-p3z = 0
-tc003x = 1
-tc003y = 1
-tc013x = 1
-tc013y = 1
-Transparent = 0
-Translucent = 1
-Collide = 0
-Facing = 1
-EOP
+Version Version3
+NextID 10
+TimeToNextFrame 3500
+Primitive
+   Type container
+   ID 0
+   ParentID -1
+   Name Torso
+   Material materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 3000 0
+Primitive
+   Type Quad
+   ID 1
+   ParentID 0
+   Material materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 3000
+   p0 -3000 3000 0
+   tc0x 0 0
+   tc0y 0 0
+   p1 -3000 -3000 0
+   tc1x 0 0
+   tc1y 1 1
+   p3 3000 3000 0
+   tc3x 1 1
+   tc3y 0 0
+   p2 3000 -3000 0
+   tc2x 1 1
+   tc2y 1 1
+   Collide 1
+   Facing 0
+Primitive
+   Type Quad
+   ID 2
+   ParentID 0
+   Material materials/test
+   Rot1 0 90 0
+   Rot2 0 0 0
+   Trans 0 0 3000
+   p0 -3000 3000 0
+   tc0x 0 0
+   tc0y 0 0
+   p1 -3000 -3000 0
+   tc1x 0 0
+   tc1y 1 1
+   p3 3000 3000 0
+   tc3x 1 1
+   tc3y 0 0
+   p2 3000 -3000 0
+   tc2x 1 1
+   tc2y 1 1
+   Collide 1
+   Facing 0
+Primitive
+   Type Quad
+   ID 3
+   ParentID 0
+   Material materials/test
+   Rot1 0 -90 0
+   Rot2 0 0 0
+   Trans 0 0 3000
+   p0 -3000 3000 0
+   tc0x 0 0
+   tc0y 0 0
+   p1 -3000 -3000 0
+   tc1x 0 0
+   tc1y 1 1
+   p3 3000 3000 0
+   tc3x 1 1
+   tc3y 0 0
+   p2 3000 -3000 0
+   tc2x 1 1
+   tc2y 1 1
+   Collide 1
+   Facing 0
+Primitive
+   Type Quad
+   ID 4
+   ParentID 0
+   Material materials/test
+   Rot1 0 180 0
+   Rot2 0 0 0
+   Trans 0 0 3000
+   p0 -3000 3000 0
+   tc0x 0 0
+   tc0y 0 0
+   p1 -3000 -3000 0
+   tc1x 0 0
+   tc1y 1 1
+   p3 3000 3000 0
+   tc3x 1 1
+   tc3y 0 0
+   p2 3000 -3000 0
+   tc2x 1 1
+   tc2y 1 1
+   Collide 1
+   Facing 0
+Primitive
+   Type container
+   ID 7
+   ParentID 0
+   Name LeftArmConnector
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans -4000 0 0
+Primitive
+   Type container
+   ID 8
+   ParentID 0
+   Name RightArmConnector
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 4000 0 0

@@ -55,7 +55,6 @@ void InitGLState(WorldObjects*);
 void RestoreGLState(WorldObjects*);
 void InitShaders();
 
-typedef list<Mesh> Meshlist;
 extern Meshlist meshes;
 
 //extern list<WorldObjects> objects;
@@ -82,5 +81,6 @@ extern vector<Mesh*> impmesh;
 extern Mesh* watermesh;
 extern Material* skyboxmat;
 extern Material* shadowmat;
+extern MeshPtr particlemesh;
 
 #endif

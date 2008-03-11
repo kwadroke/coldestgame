@@ -3,7 +3,8 @@
 
 MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
                   trans(Vector3()), vert(Vector3vec(3, Vector3())), facing(false),
-                  collide(false), render(true), material(NULL), name(""), parent(NULL)
+                  collide(false), render(true), material(NULL), name(""), parent(NULL),
+                  matname("")
 {
    floatvec tc(2, 0.f);
    vector<floatvec> tcv(3, tc);
@@ -11,7 +12,7 @@ MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
 }
 
 
-// Returned triangle go directly into tris
+// Returned triangles go directly into tris
 void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, Trianglevec& tris)
 {
    Vector3 interprot1 = lerp(interpnode->rot1, rot1, interpval);
@@ -114,6 +115,17 @@ void MeshNode::GetContainers(map<string, MeshNodePtr>& cont, MeshNodePtr& thispt
    }
    for (int i = 0; i < children.size(); ++i)
       children[i]->GetContainers(cont, children[i]);
+}
+
+
+void MeshNode::LoadMaterials(ResourceManager& resman)
+{
+   material = &resman.LoadMaterial(matname);
+   for (int i = 0; i < children.size(); ++i)
+   {
+      if (children[i]->matname != "")
+         children[i]->LoadMaterials(resman);
+   }
 }
 
 

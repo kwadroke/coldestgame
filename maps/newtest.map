@@ -60,12 +60,12 @@ Node
    Objects
    Node
       Type External
-      File unittest/torso
+      Files unittest/torso
       Position 400 200 400
       Rotations -45 25 0
       NumFrames 3 // It's probably bad that we have to specify this here...
       Scale .01
-   Node   
+   Node
       Type bush
       Materials materials/leaves1
       Size 10
@@ -86,6 +86,7 @@ Node
       Position 500 500 500
       Rotations 0 0 0
       NumLeaves 8
+EOF
    Node
       Type proctree
       Materials materials/bark materials/leaves
