@@ -70,6 +70,7 @@ bool Particle::Update(Mesh& rendermesh)
       cout << "Particle:  Warning, explode == 0, this is not yet supported.\n";
    }
    mesh.AdvanceAnimation();
+   mesh.LoadMaterials();
    rendermesh.Add(mesh);
    return false;
 }

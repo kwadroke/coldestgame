@@ -6,7 +6,7 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), width(0.f), height(0.f), resman(rm), tris(Trianglevec()), trantris(Trianglevec()),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
-            frametime(), glops(gl)
+            frametime(), glops(gl), havemats(false)
 {
    Load(reader);
 }
@@ -24,7 +24,7 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
          size(m.size), width(m.width), height(m.height), tris(m.tris), trantris(m.trantris),
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
-         currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops)
+         currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats)
 {
    // Copy frameroot and framecontainer - these contain smart ptrs so the actual objects are shared
    // otherwise, which is a bad thing here
@@ -302,8 +302,7 @@ void Mesh::GenVbo()
    
    if (!glops)
    {
-      for (int i = 0; i < frameroot.size(); ++i)
-         frameroot[i]->LoadMaterials(resman);
+      LoadMaterials();
    }
    
    hasvbo = true;
@@ -486,6 +485,15 @@ void Mesh::UpdateTris(int index)
 }
 
 
+void Mesh::LoadMaterials()
+{
+   if (havemats) return;
+   for (int i = 0; i < frameroot.size(); ++i)
+      frameroot[i]->LoadMaterials(resman);
+   havemats = true;
+}
+
+
 // The insertion happens conceptually, but m remains a separate Mesh
 void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {
@@ -539,6 +547,7 @@ int Mesh::Size() const
 {
    return tris.size();
 }
+
 
 
 

@@ -25,7 +25,7 @@ struct eqptr
    }
    bool operator()(Mesh* hashme) const
    {
-      return (unsigned long)hashme; // Umm, probably not ideal, but we can fix it later
+      return (unsigned long)hashme % 100000; // Umm, probably not ideal, but we can fix it later
    }
 };
 

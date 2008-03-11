@@ -274,7 +274,9 @@ int ServerListen()
          else if (packettype == "C")
          {
             short unit;
+            string name;
             get >> unit;
+            get >> name;
             bool add = true;
             int respondto = 0;
             SDL_mutexP(servermutex);
@@ -309,6 +311,7 @@ int ServerListen()
                serverplayers[respondto].recpacketnum = packetnum;
             }
             serverplayers[respondto].connected = true;
+            serverplayers[respondto].name = name;
             
             Packet fill(servoutpack, &servoutsock);
             fill << "c\n";
@@ -560,6 +563,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                      occup << serverplayers[i].hp[i] << eol;
                   occup << serverplayers[i].ping << eol;
                   occup << serverplayers[i].spawned << eol;
+                  occup << serverplayers[i].name << eol;
                }
             }
             occup << 0 << eol;
