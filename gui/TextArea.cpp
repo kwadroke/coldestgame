@@ -74,6 +74,7 @@ void TextArea::Append(string s)
 {
    text += s;
    Refresh();
+   ScrollToBottom();
 }
 
 
@@ -120,4 +121,11 @@ void TextArea::Refresh()
          i = 1;
       }
    }
+}
+
+
+void TextArea::ScrollToBottom()
+{
+   table->height = height;
+   table->ScrollToBottom();
 }

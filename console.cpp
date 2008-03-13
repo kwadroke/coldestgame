@@ -415,6 +415,13 @@ void ConsoleHandler(string command)
          else WriteToConsole(string("Invalid value"));
          return;
       }
+      else if (Token(newcommand, 1) == "name")
+      {
+         SDL_mutexP(clientmutex);
+         player[0].name = Token(newcommand, 2);
+         SDL_mutexV(clientmutex);
+         return;
+      }
       
       // If we get to here then we matched nothing
       WriteToConsole(string("Unrecognized variable name"));
