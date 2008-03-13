@@ -19,6 +19,7 @@ class TextArea : public GUI
       void Render();
       void Append(string);
       void Refresh();
+      void ScrollToBottom();
       
    protected:
       void ReadNode(DOMNode*, GUI*);

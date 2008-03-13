@@ -20,6 +20,7 @@ class Table : public GUI
       int Selected();
       string GetSelectedString(int);
       bool InScrollbar(float, float);
+      void ScrollToBottom();
       
    protected:
       void ReadNode(DOMNode*, GUI*);

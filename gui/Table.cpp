@@ -139,3 +139,10 @@ bool Table::InScrollbar(float xcoord, float ycoord)
    return false;
 }
 
+
+void Table::ScrollToBottom()
+{
+   scrollview->height = height - 10; // This must be done first, or in some cases we get strange behavior
+   scrollview->ScrollToBottom();
+}
+

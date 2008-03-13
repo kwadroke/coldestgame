@@ -1,6 +1,6 @@
 #include "ScrollView.h"
 
-ScrollView::ScrollView(GUI* p, TextureManager* tm): vpoffsetx(0), vpoffsety(0),
+ScrollView::ScrollView(GUI* p, TextureManager* tm) : vpoffsetx(0), vpoffsety(0),
                        scrollbarwidth(10.f), scrollbarsize(10.f), drag(false)
 {
    Init(p, tm);
@@ -199,4 +199,12 @@ bool ScrollView::FloatsInWidget(float xcoord, float ycoord)
        ycoord < ((y + yoff + height + vpoffsety) * hratio))
       return true;
    return false;
+}
+
+
+void ScrollView::ScrollToBottom()
+{
+   RecalculateSize();
+   vpoffsety = canvasy - height;
+   cout << vpoffsety << "  " << canvasy << "  " << height << endl;
 }
