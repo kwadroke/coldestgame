@@ -187,21 +187,21 @@ int ServerListen()
       {
          i->AdvanceAnimation();
       }
+      
       // Update particles
-#if 0
+      IniReader empty("models/empty/base");
+      Mesh servparticlemesh(empty, resman);
       list<Particle>::iterator j = servparticles.begin();
       while (j != servparticles.end())
       {
-         if (j->Update(&serverdynobjects))
+         if (j->Update(servparticlemesh))
          {
             if (j->damage != 0)
                HandleHit(*j);
-            serverdynobjects.erase(j->obj);
             j = servparticles.erase(j);
          }
          else ++j;
       }
-#endif
       SDL_mutexV(servermutex);
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
@@ -646,15 +646,14 @@ void ServerLoadMap()
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
 void HandleHit(Particle& p)
 {
-#if 0
-   list<DynamicObject>::iterator curr;
+   Mesh* curr;
    while (!p.hitobjs.empty())
    {
       curr = p.hitobjs.top();
       for (int i = 1; i < serverplayers.size(); ++i)
       {
          // Note that some of this code is placeholder until I get a proper spawn system implemented
-         if (curr == serverplayers[i].legs)  // Or other parts of player unit
+         if (curr == &(*serverplayers[i].legs))  // Or other parts of player unit
          {
             cout << "Hit legs\n";
             serverplayers[i].hp[Legs] -= p.damage;
@@ -668,7 +667,7 @@ void HandleHit(Particle& p)
             }
             break;
          }
-         if (curr == serverplayers[i].torso)
+         if (curr == &(*serverplayers[i].torso))
          {
             cout << "Hit torso\n";
             serverplayers[i].hp[Torso] -= p.damage;
@@ -681,7 +680,7 @@ void HandleHit(Particle& p)
             }
             break;
          }
-         if (curr == serverplayers[i].larm)
+         if (curr == &(*serverplayers[i].larm))
          {
             cout << "Hit left\n";
             serverplayers[i].hp[LArm] -= p.damage;
@@ -694,7 +693,7 @@ void HandleHit(Particle& p)
             }
             break;
          }
-         if (curr == serverplayers[i].rarm)
+         if (curr == &(*serverplayers[i].rarm))
          {
             cout << "Hit right\n";
             serverplayers[i].hp[RArm] -= p.damage;
@@ -708,10 +707,8 @@ void HandleHit(Particle& p)
             break;
          }
       }
-      cout << flush;
       p.hitobjs.pop();
    }
-#endif
 }
 
 
