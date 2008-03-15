@@ -342,28 +342,43 @@ int NetListen(void* dummy)
                }
                
                // Get particles from server
-               unsigned long partnum, playernum;
+               unsigned long partnum;
                get >> partnum;
-               IniReader tempreader("models/projectile/base");
-               Mesh tempmesh(tempreader, resman);
-               Particle temppart(tempmesh);
+               
                while (partnum != 0)
                {
+                  unsigned long playerid, playernum;
+                  Vector3 getdir, getpos;
+                  float getvel, getacc, getweight, getrad;
+                  bool getexp;
+                  
                   get >> playernum;
-                  get >> temppart.playerid;
-                  get >> temppart.dir.x >> temppart.dir.y >> temppart.dir.z;
-                  get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
-                  get >> temppart.velocity;
-                  get >> temppart.accel;
-                  get >> temppart.weight;
-                  get >> temppart.radius;
-                  get >> temppart.explode;
+                  get >> playerid;
+                  get >> getdir.x >> getdir.y >> getdir.z;
+                  get >> getpos.x >> getpos.y >> getpos.z;
+                  get >> getvel;
+                  get >> getacc;
+                  get >> getweight;
+                  get >> getrad;
+                  get >> getexp;
                   
                   //cout << "Received particle " << partnum << " from ";
                   //cout << playernum << endl;
                   // Only add the particle if we don't already have it
                   if ((partids.find(partnum) == partids.end()))
                   {
+                     IniReader tempreader("models/projectile/base");
+                     Mesh tempmesh(tempreader, resman);
+                     Particle temppart(tempmesh);
+                     temppart.playerid = playerid;
+                     temppart.dir = getdir;
+                     temppart.pos = getpos;
+                     temppart.velocity = getvel;
+                     temppart.accel = getacc;
+                     temppart.weight = getweight;
+                     temppart.radius = getrad;
+                     temppart.explode = getexp;
+                     
                      temppart.cd = &coldet;
                      temppart.lasttick = SDL_GetTicks();
                      temppart.id = partnum;

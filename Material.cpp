@@ -25,10 +25,10 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
       if (texfilename[i] != "")
          texid[i] = texman.LoadTexture(texfilename[i]);
    }
-   
+#ifndef NOEXT  // Hold the phone, I think if the modeller does glewInit we don't need these...must try sometime
    reader.Read(shader, "Shader");
    shaderhand.LoadShader(shader);
-   
+#endif
    reader.Read(cullface, "CullFace");
    
    reader.Read(alphatest, "AlphaTest");
@@ -41,6 +41,7 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
 
 void Material::Use() const
 {
+#ifndef NOEXT
    for (int i = 0; i < 6; ++i) // At this time, textures 7 and 8 are reserved for shadowmaps
    {
       texman.texhand->ActiveTexture(i);
@@ -49,9 +50,10 @@ void Material::Use() const
       else
          texman.texhand->BindTexture(texid[i]);
    }
-   texman.texhand->ActiveTexture(0);
    
+   texman.texhand->ActiveTexture(0);
    shaderhand.UseShader(shader);
+#endif
    
    if (cullface)
    {
@@ -69,11 +71,12 @@ void Material::Use() const
       glEnable(GL_ALPHA_TEST);
       glBlendFunc(GL_ONE, GL_ZERO);
       glEnable(GL_BLEND);
-      
+#ifndef NOEXT
       /* Not entirely happy with the way this looks, but it could be worse*/
       glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
       glSampleCoverage(1.f, GL_FALSE);
       glDisable(GL_BLEND);
+#endif
       //glAlphaFunc(GL_GREATER, 0.5);
       
       //glDisable(GL_LIGHTING);
@@ -86,9 +89,10 @@ void Material::Use() const
       glDisable(GL_ALPHA_TEST);
       
       //glDisable(GL_BLEND);
-      
+#ifndef NOEXT
       glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
       glEnable(GL_BLEND);
+#endif
    }
    
    glDisable(GL_COLOR_MATERIAL); // TODO: This should probably be removed at some point

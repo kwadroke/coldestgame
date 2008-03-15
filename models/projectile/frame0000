@@ -1,116 +1,25 @@
 Version Version3
-NextID 10
-TimeToNextFrame 3500
+NextID 1
+TimeToNextFrame 1000
 Primitive
-   Type container
+   Type Quad
    ID 0
    ParentID -1
-   Name Torso
    Material materials/test
    Rot1 0 0 0
    Rot2 0 0 0
-   Trans 0 3000 0
-Primitive
-   Type Quad
-   ID 1
-   ParentID 0
-   Material materials/test
-   Rot1 0 0 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
-   p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
-   p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
-   Collide 1
+   Trans 0 0 0
+   p0 -1000 1000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -1000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -1000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 1000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
    Facing 0
-Primitive
-   Type Quad
-   ID 2
-   ParentID 0
-   Material materials/test
-   Rot1 0 90 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
-   p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
-   p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 3
-   ParentID 0
-   Material materials/test
-   Rot1 0 -90 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
-   p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
-   p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 4
-   ParentID 0
-   Material materials/test
-   Rot1 0 180 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
-   p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
-   p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
-   Collide 1
-   Facing 0
-Primitive
-   Type container
-   ID 7
-   ParentID 0
-   Name LeftArmConnector
-   Rot1 0 0 0
-   Rot2 0 0 0
-   Trans -4000 0 0
-Primitive
-   Type container
-   ID 8
-   ParentID 0
-   Name RightArmConnector
-   Rot1 0 0 0
-   Rot2 0 0 0
-   Trans 4000 0 0
