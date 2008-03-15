@@ -44,6 +44,8 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
 
 bool Particle::Update(Mesh& rendermesh)
 {
+   // TODO: It's probably stupid that we even need this check - cd should be passed
+   // to the constructor as a reference.
    if (cd == NULL)
    {
       cout << "Particle: Some moron forgot to set Particle::cd.  This is a bug.\n";
@@ -70,6 +72,10 @@ bool Particle::Update(Mesh& rendermesh)
       cout << "Particle:  Warning, explode == 0, this is not yet supported.\n";
    }
    mesh.AdvanceAnimation();
+   // By default materials are not loaded until GenVbo is called (so that the server doesn't
+   // make GL calls, but that causes issues here because Mesh::Add(Mesh&) copies tris
+   // directly, so if the materials haven't been loaded those materials will still be NULL
+   // and when we try to render rendermesh it will not show up
    mesh.LoadMaterials();
    rendermesh.Add(mesh);
    return false;
