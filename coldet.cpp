@@ -540,7 +540,6 @@ while( SDL_PollEvent( &event ) )
                   GUI* consolein = console.GetWidget("consoleinput");
                   ConsoleHandler(consolein->text);
                   consolein->text = "";
-                  //continue;
                }
                continue;
                

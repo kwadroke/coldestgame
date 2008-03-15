@@ -69,6 +69,8 @@ void Mesh::Load(const IniReader& reader)
       reader.Read(basepath, "Files");
       reader.Read(numkeyframes, "NumFrames");
       
+      cout << "Loading " << basepath << endl;
+      
       for (int i = 0; i < numkeyframes; ++i)
       {
          currfile = "models/" + basepath + "/frame" + PadNum(i, 4);

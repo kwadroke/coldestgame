@@ -206,5 +206,4 @@ void ScrollView::ScrollToBottom()
 {
    RecalculateSize();
    vpoffsety = canvasy - height;
-   cout << vpoffsety << "  " << canvasy << "  " << height << endl;
 }
