@@ -189,12 +189,10 @@ int ServerListen()
       }
       
       // Update particles
-      IniReader empty("models/empty/base");
-      Mesh servparticlemesh(empty, resman);
       list<Particle>::iterator j = servparticles.begin();
       while (j != servparticles.end())
       {
-         if (j->Update(servparticlemesh))
+         if (j->Update())
          {
             if (j->damage != 0)
                HandleHit(*j);

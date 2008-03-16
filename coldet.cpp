@@ -1037,7 +1037,7 @@ void Animate()
       list<Particle>::iterator j = particles.begin();
       while (j != particles.end())
       {
-         if (j->Update(*particlemesh))
+         if (j->Update(particlemesh.get()))
          {
             j = particles.erase(j);
          }

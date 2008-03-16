@@ -17,7 +17,7 @@ class Particle
    public:
       Particle(Mesh&);
       Particle(Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
-      bool Update(Mesh&);
+      bool Update(Mesh *rendermesh = NULL);
       CollisionDetection *cd;
       bool unsent;
       unsigned short senttimes;
