@@ -316,7 +316,9 @@ int NetListen(void* dummy)
                   
                   player[oppnum].connected = true;
                   
-#if 0 // I don't think this needs to go back in
+                  UpdatePlayerModel(player[oppnum], meshes, false);
+                  
+#if 0 // This probably doesn't need to go back in, but we'll see
                   if (oppnum != servplayernum)// && player[oppnum].unit != 0)
                   {
                      if (oldunit != player[oppnum].unit)
