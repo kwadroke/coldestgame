@@ -231,6 +231,16 @@ void RenderObjects()
       trislastframe += i->Size();
    }
    
+   // Render all dynamic meshes (since they won't show up in the KDTree at this time
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      if (i->dynamic)
+         i->Render(override);
+      trislastframe += i->Size();
+   }
+   
+   // Particles are all coalesced into a single mesh (could be a problem at some point?) so we don't
+   // have to madly switch VBO's while rendering them
    if (particlemesh)
    {
       particlemesh->GenVbo();

@@ -1051,7 +1051,8 @@ void Animate()
    }
    else ++partupd;
    
-   // Also need to update player models because they need to change each animation frame
+   // Also need to update player models because they can be changed by the net thread
+   // Note that they are inserted into meshes so they should be automatically animated
    for (int k = 1; k < player.size(); ++k)
    {
       if (k != servplayernum)
@@ -1099,6 +1100,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       IniReader load("models/" + units[p.unit].file + "/torso/base");
       Mesh newmesh(load, resman, gl);
+      newmesh.dynamic = true;
       ml.push_front(newmesh);
       p.torso = ml.begin();
    }
@@ -1108,6 +1110,10 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    p.torso->Rotate(Vector3(p.pitch, p.facing + p.rotation, p.roll));
    p.torso->Move(p.pos);
+   if (gl)
+   {
+      p.torso->GenVbo();
+   }
    
    /*if (p.larm == ml.end())
    {
@@ -1239,7 +1245,7 @@ string PadNum(int n, int digits)
 }
 
 
-// This is likely not portable as written
+// TODO: This is almost certainly not portable as written
 string AddressToDD(Uint32 ahost)
 {
    int parts[4];
