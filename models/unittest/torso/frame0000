@@ -2,7 +2,7 @@ Version Version3
 NextID 10
 TimeToNextFrame 3500
 Primitive
-   Type container
+   Type Container
    ID 0
    ParentID -1
    Name Torso
@@ -99,7 +99,7 @@ Primitive
    Collide 1
    Facing 0
 Primitive
-   Type container
+   Type Container
    ID 7
    ParentID 0
    Name LeftArmConnector
@@ -107,7 +107,7 @@ Primitive
    Rot2 0 0 0
    Trans -4000 0 0
 Primitive
-   Type container
+   Type Container
    ID 8
    ParentID 0
    Name RightArmConnector
