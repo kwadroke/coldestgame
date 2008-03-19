@@ -581,6 +581,9 @@ int NetListen(void* dummy)
             get >> oppnum;
             if (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end())
             {
+               cout << packetnum << endl;
+               cout << (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end()) << endl;
+               player[oppnum].acked.insert(packetnum);
                getline(get, line);
                getline(get, line);
                newchatlines.push_back(line);

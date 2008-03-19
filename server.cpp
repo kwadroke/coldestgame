@@ -386,6 +386,24 @@ int ServerListen()
                serverplayers[oppnum].acked.insert(packetnum);
                cout << "Server received text: " << line << endl;
                cout << "In packet: " << packetnum << endl;
+               
+               // Propogate that chat text to all other connected players
+               for (int i = 1; i < serverplayers.size(); ++i)
+               {
+                  if (serverplayers[i].connected && i != oppnum)
+                  {
+                     ++servsendpacketnum;
+                     Packet temp(servoutpack, &servoutsock);
+                     temp.ack = servsendpacketnum;
+                     temp << "T\n";
+                     temp << servsendpacketnum << eol;
+                     temp << oppnum << eol;
+                     temp << line << eol;
+                     temp.addr = serverplayers[i].addr;
+                     servqueue.push_back(temp);
+                  }
+               }
+               ++servsendpacketnum; // Make sure we can't end up with dup packet ids
             }
             Packet response(servoutpack, &servoutsock, &inpack->address);
             SDLNet_Write16(1336, &(response.addr.port));
@@ -394,23 +412,6 @@ int ServerListen()
             response << packetnum << eol;
             servqueue.push_back(response);
             
-            // Propogate that chat text to all other connected players
-            for (int i = 1; i < serverplayers.size(); ++i)
-            {
-               if (serverplayers[i].connected && i != oppnum)
-               {
-                  ++servsendpacketnum;
-                  Packet temp(servoutpack, &servoutsock);
-                  temp.ack = servsendpacketnum;
-                  temp << "T\n";
-                  temp << servsendpacketnum << eol;
-                  temp << oppnum << eol;
-                  temp << line << eol;
-                  temp.addr = serverplayers[i].addr;
-                  servqueue.push_back(temp);
-               }
-            }
-            ++servsendpacketnum; // Make sure we can't end up with dup packet ids
             SDL_mutexV(servermutex);
          }
          else if (packettype == "A")
