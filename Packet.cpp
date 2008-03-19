@@ -2,16 +2,12 @@
 
 int Packet::laghax = 0;
 
-Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string s)
+Packet::Packet(UDPpacket* outpack, UDPsocket* outsock, IPaddress* inaddr, string s) : ack(0), data(s),
+               attempts(0), packet(outpack), socket(outsock)
 {
-   packet = outpack;
-   socket = outsock;
    if (inaddr)
       addr = *inaddr;
    else addr.host = INADDR_NONE;
-   data = s;
-   ack = false;
-   attempts = 0;
    sendtick = SDL_GetTicks() + laghax;
 }
 
@@ -28,5 +24,6 @@ void Packet::Send()
    packet->len = data.length() + 1;
    
    SDLNet_UDP_Send(*socket, -1, packet);
+   ++attempts;
 }
 

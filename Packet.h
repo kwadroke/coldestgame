@@ -17,9 +17,8 @@ class Packet
       void Send();
       IPaddress addr;
       string data;
-      bool ack;
+      unsigned long ack;
       int attempts;
-      unsigned long num;
       Uint32 sendtick;
       static int laghax;
    

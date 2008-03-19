@@ -114,8 +114,8 @@ int NetSend(void* dummy)
          p << sendpacketnum << eol;
          p << player[0].unit << eol;
          p << player[0].name << eol;
-         p.ack = true;
-         p.num = sendpacketnum;
+         p.ack = sendpacketnum;
+         ++sendpacketnum;
          SDL_mutexP(sendmutex);
          sendqueue.push_back(p);
          SDL_mutexV(sendmutex);
@@ -124,9 +124,10 @@ int NetSend(void* dummy)
       if (spawnrequest)
       {
          Packet p(outpack, &outsock, &addr);
-         //p.ack = true;  No ack method in place yet
+         p.ack = sendpacketnum;
          p << "S\n";
          p << sendpacketnum << eol;
+         ++sendpacketnum;
          p << servplayernum << eol;
          SDL_mutexP(clientmutex);
          p << player[0].unit << eol;
@@ -143,6 +144,23 @@ int NetSend(void* dummy)
          SDL_mutexV(sendmutex);
          spawnrequest = false;
       }
+      SDL_mutexP(clientmutex);
+      if (chatstring != "")
+      {
+         Packet p(outpack, &outsock, &addr);
+         p.ack = sendpacketnum;
+         p << "T\n";
+         p << sendpacketnum << eol;
+         ++sendpacketnum;
+         p << servplayernum << eol;
+         p << chatstring << eol;
+         chatstring = "";
+         SDL_mutexV(clientmutex); // Just to be safe, don't hold both mutexes at once
+         SDL_mutexP(sendmutex);
+         sendqueue.push_back(p);
+         SDL_mutexV(sendmutex);
+      }
+      SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see
       SDL_mutexP(sendmutex);
       list<Packet>::iterator i = sendqueue.begin();
       while (i != sendqueue.end())
@@ -150,7 +168,7 @@ int NetSend(void* dummy)
          if (i->sendtick <= currnettick)
          {
             i->Send();
-            if (!i->ack) // Non-ack packets get sent once and then are on their own
+            if (!i->ack || i->attempts > 1000) // Non-ack packets get sent once and then are on their own
             {
                i = sendqueue.erase(i);
                continue;
@@ -470,7 +488,7 @@ int NetListen(void* dummy)
             SDL_mutexP(sendmutex);
             for (i = sendqueue.begin(); i != sendqueue.end(); ++i)
             {
-               if (i->num == packetnum)
+               if (i->ack == packetnum)
                {
                   sendqueue.erase(i);
                   break;
@@ -540,6 +558,44 @@ int NetListen(void* dummy)
             {
                cout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
             }
+         }
+         else if (packettype == "A") // Ack packet
+         {
+            unsigned long acknum;
+            get >> acknum;
+            SDL_mutexP(sendmutex);
+            for (list<Packet>::iterator i = sendqueue.begin(); i != sendqueue.end(); ++i)
+            {
+               if (i->ack == acknum)
+               {
+                  sendqueue.erase(i);
+                  break;
+               }
+            }
+            SDL_mutexV(sendmutex);
+         }
+         else if (packettype == "T") // Text packet
+         {
+            SDL_mutexP(clientmutex);
+            string line;
+            get >> oppnum;
+            if (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end())
+            {
+               getline(get, line);
+               getline(get, line);
+               newchatlines.push_back(line);
+               newchatplayers.push_back(oppnum);
+            }
+            SDL_mutexV(clientmutex);
+            
+            // Ack it
+            Packet response(outpack, &outsock, &addr);
+            response << "A\n";
+            response << 0 << eol;
+            response << packetnum << eol;
+            SDL_mutexP(sendmutex);
+            sendqueue.push_back(response);
+            SDL_mutexV(sendmutex);
          }
       }
       //t.stop();

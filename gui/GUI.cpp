@@ -86,6 +86,12 @@ void GUI::SetActualSize(int w, int h)
 }
 
 
+void GUI::SetActive(bool act)
+{
+   active = act;
+}
+
+
 void GUI::Render()
 {
    if (visible)

@@ -1205,6 +1205,7 @@ void RenderHud()
       statsdisp.Render();
    console.Render();
    ingamestatus->Render();
+   chat->Render();
    
    SDL_GL_Exit2dMode();
 }

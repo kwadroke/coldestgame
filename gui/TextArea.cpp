@@ -81,7 +81,7 @@ void TextArea::Append(string s)
 void TextArea::Refresh()
 {
    string currstring = "";
-   string working = text;
+   string working = text + "\n"; // \n because otherwise the last line is not read properly
    int swidth, sheight;
    int lastbreak = 0;
    bool foundbreak = false;

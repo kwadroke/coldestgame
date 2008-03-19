@@ -159,8 +159,10 @@ void InitGUI()
    console.SetActualSize(screenwidth, screenheight);
    console.InitFromFile("console.xml");
    // There's no particular reason not to new these, and it allows better RAII semantics
-   ingamestatus = new GUI(screenwidth, screenheight, &resman.texman);
+   ingamestatus = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
    ingamestatus->InitFromFile("ingamestatus.xml");
+   chat = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
+   chat->InitFromFile("chat.xml");
    ConsoleBufferToGUI();
 }
 
@@ -429,6 +431,7 @@ void InitShaders()
 
 
 // Sets up textures for noise shader
+// Credit to: TODO: Need to look this up again
 void InitNoise()
 {
    int perm[256] = {151,160,137,91,90,15,
@@ -478,11 +481,8 @@ void InitNoise()
 }
 
 
-// Ordinarily I would consider this atrocious indentation, but because
-// this function by necessity has so many nested statements it actually
-// makes it easier to read
-// Note: Eventually a lot of this will just be moved to separate functions
-// and then it won't be a problem
+// This function needs a LOT of cleanup, but as it's still working ATM and I haven't had to make any
+// major changes, that hasn't happened yet.
 static void MainLoop() 
 {
 SDL_Event event;
@@ -519,10 +519,17 @@ while(1)
          statupdatecounter = currtick;
       }
    }
+   SDL_mutexP(clientmutex);
+   for (int i = 0; i < newchatlines.size(); ++i)
+      AppendToChat(newchatplayers[i], newchatlines[i]);
+   newchatlines.clear();
+   SDL_mutexV(clientmutex);
 // process pending events
 while( SDL_PollEvent( &event ) ) 
 {
    // Mini keyboard handler to deal with the console
+   bool chatateevent = false;
+   bool consoleateevent = false;
    switch (event.type)
    {
       case SDL_KEYDOWN:
@@ -530,9 +537,23 @@ while( SDL_PollEvent( &event ) )
          {
             case SDLK_BACKQUOTE:
                console.visible = !console.visible;
+               if (console.visible)
+               {
+                  GUI* consolein = console.GetWidget("consoleinput");
+                  consolein->SetActive();
+               }
                continue;
             case SDLK_ESCAPE:
-               console.visible = false;
+               if (console.visible)
+               {
+                  console.visible = false;
+                  consoleateevent = true;
+               }
+               if (chat->visible)
+               {
+                  chat->visible = false;
+                  chatateevent = true;
+               }
                break;
             case SDLK_RETURN:
                if (console.visible)
@@ -540,6 +561,31 @@ while( SDL_PollEvent( &event ) )
                   GUI* consolein = console.GetWidget("consoleinput");
                   ConsoleHandler(consolein->text);
                   consolein->text = "";
+               }
+               else if (!chat->visible)
+               {
+                  chat->visible = true;
+                  GUI* chatin = chat->GetWidget("chatinput");
+                  if (!chatin)
+                  {
+                     cout << "Error getting chat input widget" << endl;
+                     break;
+                  }
+                  chatin->SetActive();
+               }
+               else
+               {
+                  GUI *chatin = chat->GetWidget("chatinput");
+                  if (!chatin)
+                  {
+                     cout << "Error getting chat input widget" << endl;
+                     break;
+                  }
+                  SDL_mutexP(clientmutex);
+                  chatstring = chatin->text;
+                  AppendToChat(0, chatin->text);
+                  SDL_mutexV(clientmutex);
+                  chatin->text = "";
                }
                continue;
                
@@ -569,10 +615,15 @@ while( SDL_PollEvent( &event ) )
       continue;
    }
    
-   if (console.visible)
+   if (console.visible || consoleateevent)
    {
       SDL_ShowCursor(1);
       console.ProcessEvent(&event);
+      continue;
+   }
+   if (chat->visible || chatateevent)
+   {
+      chat->ProcessEvent(&event);
       continue;
    }
    
@@ -1177,6 +1228,20 @@ void UpdatePlayerList()
    }
    
    SDL_mutexV(clientmutex);
+}
+
+
+// Must grab clientmutex before calling this function
+void AppendToChat(int playernum, string line)
+{
+   TextArea *chatout = (TextArea*)chat->GetWidget("chatoutput");
+   if (!chatout)
+   {
+      cout << "Error getting chat output widget" << endl;
+      return;
+   }
+   chatout->Append(player[playernum].name + ": " + line + "\n");
+   chatout->ScrollToBottom();
 }
 
 
