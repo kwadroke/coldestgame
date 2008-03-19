@@ -9,4 +9,7 @@ set<ServerInfo> knownservers;
 SDL_Thread* netout;
 SDL_Thread* netin;
 string serveraddr;
+string chatstring;
+vector<string> newchatlines;
+vector<unsigned short> newchatplayers;
 

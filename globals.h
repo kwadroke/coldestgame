@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <boost/shared_ptr.hpp>
 #include "Particle.h"
 #include "ServerInfo.h"
 #include "gui/GUI.h"
@@ -20,6 +21,7 @@ using std::stringstream;
 using std::list;
 using std::vector;
 using std::set;
+using boost::shared_ptr;
 
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 const string objectfilever = "Version3";
@@ -37,12 +39,15 @@ extern GUI mainmenu;           // Object that handles the main menu
 extern bool mainmenuvisible;   // Whether the main menu is shown
 extern string nextmap;         // Used to signal the main thread to load a new map
 extern string mapname;         // The name of the current map
+
+typedef shared_ptr<GUI> GUIPtr;
 extern GUI hud;                // Handles drawing the HUD
 extern GUI loadprogress;       // Shows loading progress
 extern GUI loadoutmenu;        // The loadout screen
 extern GUI statsdisp;          // Display FPS etc.
 extern GUI console;            // The in-game console
-extern GUI* ingamestatus;
+extern GUIPtr ingamestatus;
+extern GUIPtr chat;
 extern int partupdateinterval; // Update particles every this many frames
 //extern TextureManager *texman;  // Handles string versions of texture identifiers
 extern ResourceManager resman; // Handles loading and organizing different resources
@@ -79,6 +84,7 @@ T lerp(T x, T y, float a)
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
+void AppendToChat(int, string);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);

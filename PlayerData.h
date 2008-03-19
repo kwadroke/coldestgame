@@ -25,9 +25,9 @@ class PlayerData
       bool spawned;
       Meshlist::iterator torso, legs, larm, rarm;
       set<unsigned long> partids;
-      set<unsigned long> hitids;
+      //set<unsigned long> hitids;
       set<unsigned long> acked;
-      list<Hit> servhits;  // Used by server only
+      //list<Hit> servhits;  // Used by server only
       vector<short> weapons;
       Uint32 lastupdate;  // How long since last player update?
       Uint32 lastmovetick;

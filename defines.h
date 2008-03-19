@@ -49,6 +49,7 @@
 #include "gui/Table.h"
 #include "types.h"
 #include "IniReader.h"
+#include "gui/TextArea.h"
 
 /* Sorry bwkaz, the hassle just isn't worth it :-)
 using std::cout;

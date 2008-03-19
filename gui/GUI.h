@@ -111,6 +111,7 @@ class GUI
       bool InWidget(float, float);
       bool InWidget(const SDL_Event*);
       void RenderText(string, string, int, int, int, TTF_Font*, GLuint, float scale = 1.f, bool shadow = true);
+      void SetActive(bool act = true);
       
       bool visible;
       bool readonly;

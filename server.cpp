@@ -362,7 +362,6 @@ int ServerListen()
             serverplayers[oppnum].spawned = true;
             serverplayers[oppnum].lastmovetick = SDL_GetTicks();
             
-            // TODO: At this point we just hope this packet doesn't get lost, need better acking
             Packet response(servoutpack, &servoutsock, &inpack->address);
             SDLNet_Write16(1336, &(response.addr.port));
             response << "S\n";
@@ -370,12 +369,64 @@ int ServerListen()
             if (accepted)
                response << 1 << eol;
             else response << 0 << eol;
+            response << packetnum << eol;
             
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
+         }
+         else if (packettype == "T")
+         {
+            string line;
+            get >> oppnum;
+            getline(get, line); // \n is still in buffer
+            getline(get, line);
+            SDL_mutexP(servermutex);
+            if (serverplayers[oppnum].acked.find(packetnum) == serverplayers[oppnum].acked.end())
+            {
+               serverplayers[oppnum].acked.insert(packetnum);
+               cout << "Server received text: " << line << endl;
+               cout << "In packet: " << packetnum << endl;
+            }
+            Packet response(servoutpack, &servoutsock, &inpack->address);
+            SDLNet_Write16(1336, &(response.addr.port));
+            response << "A\n";
+            response << 0 << eol; // Or this for that matter (see duplicate line above)
+            response << packetnum << eol;
+            servqueue.push_back(response);
             
-            // Need to ack this, but no method in place as yet
-            // Also need to validate their configuration
+            // Propogate that chat text to all other connected players
+            for (int i = 1; i < serverplayers.size(); ++i)
+            {
+               if (serverplayers[i].connected && i != oppnum)
+               {
+                  ++servsendpacketnum;
+                  Packet temp(servoutpack, &servoutsock);
+                  temp.ack = servsendpacketnum;
+                  temp << "T\n";
+                  temp << servsendpacketnum << eol;
+                  temp << oppnum << eol;
+                  temp << line << eol;
+                  temp.addr = serverplayers[i].addr;
+                  servqueue.push_back(temp);
+               }
+            }
+            ++servsendpacketnum; // Make sure we can't end up with dup packet ids
+            SDL_mutexV(servermutex);
+         }
+         else if (packettype == "A")
+         {
+            unsigned long acknum;
+            get >> acknum;
+            SDL_mutexP(servermutex);
+            for (list<Packet>::iterator i = servqueue.begin(); i != servqueue.end(); ++i)
+            {
+               if (i->ack == acknum)
+               {
+                  servqueue.erase(i);
+                  break;
+               }
+            }
+            SDL_mutexV(servermutex);
          }
          
       }
@@ -592,7 +643,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          if (i->sendtick <= currnettick)
          {
             i->Send();
-            if (!i->ack) // Non-ack packets get sent once and then are on their own
+            if (!i->ack || i->attempts > 1000) // Non-ack packets get sent once and then are on their own
             {
                i = servqueue.erase(i);
                continue;

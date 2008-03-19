@@ -22,5 +22,8 @@ extern SDL_Thread* netin;
 extern vector<ServerInfo> servers;
 extern set<ServerInfo> knownservers;
 extern string serveraddr;
+extern string chatstring;
+extern vector<string> newchatlines;
+extern vector<unsigned short> newchatplayers;
 
 #endif

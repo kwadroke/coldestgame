@@ -19,7 +19,9 @@ GUI loadprogress;       // Shows loading progress
 GUI loadoutmenu;        // The loadout screen
 GUI statsdisp;          // Display FPS etc.
 GUI console;            // The in-game console
-GUI* ingamestatus;      // In game status pane triggered by tab key
+GUIPtr ingamestatus;    // In game status pane triggered by tab key
+GUIPtr chat;            // Display and input for chat box
+
 int partupdateinterval; // Update particles every this many frames
 //TextureManager *texman;  // Handles string versions of texture identifiers
 ResourceManager resman; // Handles loading and organizing different resources
