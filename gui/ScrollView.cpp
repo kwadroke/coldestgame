@@ -118,8 +118,8 @@ void ScrollView::LeftClick(SDL_Event* event)
 
 void ScrollView::WheelDown(SDL_Event* event)
 {
-   vpoffsety += 10.f;
-   yoff -= 10.f;
+   vpoffsety += 50.f;
+   yoff -= 50.f;
    if (vpoffsety + height > canvasy)
    {
       yoff += (vpoffsety + height - canvasy);
@@ -130,8 +130,8 @@ void ScrollView::WheelDown(SDL_Event* event)
 
 void ScrollView::WheelUp(SDL_Event* event)
 {
-   vpoffsety -= 10.f;
-   yoff += 10.f;
+   vpoffsety -= 50.f;
+   yoff += 50.f;
    if (vpoffsety < 0)
    {
       yoff += vpoffsety;
