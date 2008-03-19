@@ -384,8 +384,6 @@ int ServerListen()
             if (serverplayers[oppnum].acked.find(packetnum) == serverplayers[oppnum].acked.end())
             {
                serverplayers[oppnum].acked.insert(packetnum);
-               cout << "Server received text: " << line << endl;
-               cout << "In packet: " << packetnum << endl;
                
                // Propogate that chat text to all other connected players
                for (int i = 1; i < serverplayers.size(); ++i)
