@@ -285,6 +285,7 @@ int NetListen(void* dummy)
                /* Any player that the server does not send an update for must
                   not be connected anymore, so assume all players are not
                   connected, and as we find otherwise update that. */
+               // At some point this probably won't work, but for the moment it does
                for (vector<PlayerData>::iterator i = player.begin(); i != player.end(); i++)
                   i->connected = false;
                
@@ -581,8 +582,6 @@ int NetListen(void* dummy)
             get >> oppnum;
             if (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end())
             {
-               cout << packetnum << endl;
-               cout << (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end()) << endl;
                player[oppnum].acked.insert(packetnum);
                getline(get, line);
                getline(get, line);
