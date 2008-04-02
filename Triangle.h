@@ -9,6 +9,7 @@
 
 using std::vector;
 
+// We pass this structure directly to OpenGL, so it needs to be aligned on single bytes
 #pragma pack(push, 1)
 struct VBOData
 {

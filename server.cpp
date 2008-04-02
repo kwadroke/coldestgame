@@ -427,6 +427,25 @@ int ServerListen()
             }
             SDL_mutexV(servermutex);
          }
+         else if (packettype == "M")
+         {
+            // For the moment just ack it, we probably want to ensure even teams at some point
+            short newteam;
+            get >> oppnum;
+            get >> newteam;
+            
+            Packet response(servoutpack, &servoutsock, &inpack->address);
+            SDLNet_Write16(1336, &(response.addr.port));
+            response << "M\n";
+            response << servsendpacketnum << eol;
+            ++servsendpacketnum;
+            response << packetnum << eol;
+            response << 1 << eol;
+            response << newteam << eol;
+            SDL_mutexP(servermutex);
+            servqueue.push_back(response);
+            SDL_mutexV(servermutex);
+         }
          
       }
       //t.stop();

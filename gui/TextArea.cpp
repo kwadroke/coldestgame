@@ -86,7 +86,7 @@ void TextArea::Refresh()
    int lastbreak = 0;
    bool foundbreak = false;
    bool newline = false;
-   table->clear();
+   table->Clear();
    for (int i = 1; i < working.length(); ++i)
    {
       if (working[i] == ' ' || working[i] == '\n')

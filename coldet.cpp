@@ -110,6 +110,7 @@ void InitGlobals()
    noiseres = 128;
    nextmap = mapname = "";
    clientmutex = SDL_CreateMutex();
+   spawnschanged = true;
    
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
@@ -431,7 +432,7 @@ void InitShaders()
 
 
 // Sets up textures for noise shader
-// Credit to: TODO: Need to look this up again
+// Credit to: TODO: Need to look this up again, same source as the noise shader
 void InitNoise()
 {
    int perm[256] = {151,160,137,91,90,15,
@@ -481,26 +482,44 @@ void InitNoise()
 }
 
 
-// This function needs a LOT of cleanup, but as it's still working ATM and I haven't had to make any
-// major changes, that hasn't happened yet.
 static void MainLoop() 
 {
-SDL_Event event;
-Uint32 servupdatecounter = SDL_GetTicks();
-Uint32 statupdatecounter = SDL_GetTicks();
-Uint32 currtick;
-while(1) 
-{
-   if (nextmap != mapname)
+   SDL_Event event;
+   while(1) 
    {
-      GUI* progress = loadprogress.GetWidget("loadingprogress");
-      mainmenu.visible = false;
-      loadprogress.visible = true;
+      if (nextmap != mapname)
+      {
+         GUI* progress = loadprogress.GetWidget("loadingprogress");
+         mainmenu.visible = false;
+         loadprogress.visible = true;
+         Repaint();
+         GetMap(nextmap);
+         loadprogress.visible = false;
+         mainmenu.visible = true;
+      }
+      
+      GUIUpdate();
+      
+      // process pending events
+      while(SDL_PollEvent(&event)) 
+      {
+         if (!GUIEventHandler(event))
+         {
+            GameEventHandler(event);
+         }
+      }
+      // update the screen
       Repaint();
-      GetMap(nextmap);
-      loadprogress.visible = false;
-      mainmenu.visible = true;
-   }
+   } // End of while(1)
+}  // End of MainLoop function
+
+
+void GUIUpdate()
+{
+   static Uint32 servupdatecounter = SDL_GetTicks();
+   static Uint32 statupdatecounter = SDL_GetTicks();
+   static GUI* teamdisplay = loadoutmenu.GetWidget("TeamDisplay");
+   Uint32 currtick;
    if (mainmenu.visible)
    {
       currtick = SDL_GetTicks();
@@ -523,13 +542,37 @@ while(1)
    for (int i = 0; i < newchatlines.size(); ++i)
       AppendToChat(newchatplayers[i], newchatlines[i]);
    newchatlines.clear();
+   
+   if (loadoutmenu.visible)
+   {
+      if (player[0].team == 1)
+         teamdisplay->text = "Spectator";
+      else
+         teamdisplay->text = "Team " + ToString(player[0].team - 1);
+      
+      if (spawnschanged)
+      {
+         ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
+         spawnpointsbox->Clear();
+         for (int i = 0; i < spawnpoints.size(); ++i)
+         {
+            string name = ToString(i) + ": ";
+            name += ToString(spawnpoints[i].position.x) + ", ";
+            name += ToString(spawnpoints[i].position.y) + ", ";
+            name += ToString(spawnpoints[i].position.z);
+            spawnpointsbox->Add(name);
+         }
+         spawnschanged = false;
+      }
+   }
    SDL_mutexV(clientmutex);
-// process pending events
-while( SDL_PollEvent( &event ) ) 
+}
+
+
+bool GUIEventHandler(SDL_Event &event)
 {
    // Mini keyboard handler to deal with the console
-   bool chatateevent = false;
-   bool consoleateevent = false;
+   bool eatevent = false;
    switch (event.type)
    {
       case SDL_KEYDOWN:
@@ -542,17 +585,18 @@ while( SDL_PollEvent( &event ) )
                   GUI* consolein = console.GetWidget("consoleinput");
                   consolein->SetActive();
                }
-               continue;
+               eatevent = true;
+               break;
             case SDLK_ESCAPE:
                if (console.visible)
                {
                   console.visible = false;
-                  consoleateevent = true;
+                  eatevent = true;
                }
                if (chat->visible)
                {
                   chat->visible = false;
-                  chatateevent = true;
+                  eatevent = true;
                }
                break;
             case SDLK_RETURN:
@@ -587,15 +631,15 @@ while( SDL_PollEvent( &event ) )
                   SDL_mutexV(clientmutex);
                   chatin->text = "";
                }
-               continue;
+               eatevent = true;
                
             /*case SDLK_PAGEUP:
                if (consolebottomline < consolebuffer.size())
-                  consolebottomline++;
+               consolebottomline++;
                break;
             case SDLK_PAGEDOWN:
                if (consolebottomline > 0)
-                  consolebottomline--;
+               consolebottomline--;
                break;*/
          }
       
@@ -606,27 +650,34 @@ while( SDL_PollEvent( &event ) )
    {
       SDL_ShowCursor(1);
       mainmenu.ProcessEvent(&event);
-      continue;
+      eatevent = true;
    }
    else if (loadoutmenu.visible)
    {
       SDL_ShowCursor(1);
       loadoutmenu.ProcessEvent(&event);
-      continue;
+      eatevent = true;
    }
    
-   if (console.visible || consoleateevent)
+   if (!eatevent)
    {
-      SDL_ShowCursor(1);
-      console.ProcessEvent(&event);
-      continue;
-   }
-   if (chat->visible || chatateevent)
-   {
-      chat->ProcessEvent(&event);
-      continue;
+      if (console.visible)
+      {
+         SDL_ShowCursor(1);
+         console.ProcessEvent(&event);
+      }
+      if (chat->visible)
+      {
+         chat->ProcessEvent(&event);
+      }
    }
    
+   return eatevent;
+}
+
+
+void GameEventHandler(SDL_Event &event)
+{
    SDL_ShowCursor(0);
    SDL_mutexP(clientmutex);
    switch(event.type) 
@@ -703,14 +754,14 @@ while( SDL_PollEvent( &event ) )
                player[0].run = false;
                break;
             case SDLK_TAB:
-                  ingamestatus->visible = false;
-                  break;
+               ingamestatus->visible = false;
+               break;
          }
          break;
          
       case SDL_MOUSEMOTION:
          if ((event.motion.x != screenwidth / 2 || 
-             event.motion.y != screenheight / 2) && !console.visible)
+              event.motion.y != screenheight / 2) && !console.visible)
          {
             player[0].pitch += event.motion.yrel / 4.;
             if (player[0].pitch < -90) player[0].pitch = -90;
@@ -750,10 +801,6 @@ while( SDL_PollEvent( &event ) )
    }
    SDL_mutexV(clientmutex);
 }
-// update the screen
-Repaint();
-} // End of while(1)
-}  // End of MainLoop function
 
 
 void Quit()
@@ -787,7 +834,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
    // Calculate how far to move based on time since last frame
    int numticks = SDL_GetTicks() - mplayer.lastmovetick;
    mplayer.lastmovetick = SDL_GetTicks();
-   if (numticks > 30) numticks = 30; // Yes this is a hack, it should be removed eventually
+   if (numticks > 60) numticks = 60; // Yes this is a hack, it should be removed eventually
    float step = (float)numticks * (movestep / 1000.);
    if (mplayer.run) step *= 2.f;
    
@@ -1214,7 +1261,7 @@ void UpdatePlayerList()
    
    Table* playerlist = (Table*)ingamestatus->GetWidget("playerlist");
    
-   playerlist->clear();
+   playerlist->Clear();
    playerlist->Add("Name|Kills|Deaths|Ping");
    
    string add;

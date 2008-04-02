@@ -48,11 +48,29 @@
       <Pressed>textures/buttonpressed.png</Pressed>
       <LeftClickAction>spawn</LeftClickAction>
    </Button>
-   <Button x="100" y="900" width="200" height="50" text="Back" align="center">
+   <Button x="100" y="900" width="200" height="50" text="Main Menu" align="center">
       <Normal>textures/buttonnorm.png</Normal>
       <Hover>textures/buttonhover.png</Hover>
       <Pressed>textures/buttonpressed.png</Pressed>
       <LeftClickAction>loadouttomain</LeftClickAction>
    </Button>
-   <Label x="200" y="100" width="400" height="400" text="Unit Preview" readonly="true" xmargin="100" ymargin="100" align="center"/>
+   <Label x="100" y="100" width="500" height="600" text="Unit Preview" readonly="true" xmargin="100" ymargin="100" align="center">
+      <Normal>textures/buttonnormsquare.png</Normal>
+   </Label>
+   
+   <!-- Team display and selection -->
+   <ComboBox x="700" y="400" width="150" height="40" name="TeamSelect" text="Select Team">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ComboBoxItem>Spectate</ComboBoxItem>
+      <ComboBoxItem>Team 1</ComboBoxItem>
+      <ComboBoxItem>Team 2</ComboBoxItem>
+      <ValueChangedAction>requestnewteam</ValueChangedAction>
+   </ComboBox>
+   <Label x="700" y="450" width="150" height="20" name="TeamDisplay" text="Team"/>
+   
+   <!-- Spawn points -->
+   <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints">
+      <Normal>textures/buttonnorm.png</Normal>
+      <ValueChangedAction>selectspawnpoint</ValueChangedAction>
+   </ComboBox>
 </GUI>

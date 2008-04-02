@@ -103,6 +103,7 @@ void ComboBox::ReadNode(DOMNode* current, GUI* parentw)
       string val = ReadAttribute(current, attrib.readonly);
       if (val == "true") newwidget->readonly = true; // Defaults to false
       
+      // It would probably be better to read the string and pass it to table->Add, but this works too
       DOMNodeList* cichildren = current->getChildNodes();
       for (int i = 0; i < cichildren->getLength(); ++i)
          ((TableItem*)newwidget)->ReadNode(cichildren->item(i), table);
@@ -117,6 +118,18 @@ void ComboBox::ReadNode(DOMNode* current, GUI* parentw)
 int ComboBox::Selected()
 {
    return table->Selected();
+}
+
+
+void ComboBox::Add(const string& str)
+{
+   table->Add(str);
+}
+
+
+void ComboBox::Clear()
+{
+   table->Clear();
 }
 
 

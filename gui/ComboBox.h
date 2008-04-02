@@ -16,6 +16,8 @@ class ComboBox : public GUI
       void ReadNode(DOMNode* current, GUI* parentw);
       int Selected();
       virtual bool FloatsInWidget(float, float);
+      void Add(const string&);
+      void Clear();
       
    protected:
       void CustomProcessEvent(SDL_Event*);

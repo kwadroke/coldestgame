@@ -68,6 +68,7 @@ struct SpawnPointData
 {
    Vector3 position;
    int team;
+   string name;
 };
 
 #endif

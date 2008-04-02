@@ -50,6 +50,7 @@
 #include "types.h"
 #include "IniReader.h"
 #include "gui/TextArea.h"
+#include "gui/ComboBox.h"
 
 /* Sorry bwkaz, the hassle just isn't worth it :-)
 using std::cout;
@@ -96,5 +97,8 @@ void GLError();
 string AddressToDD(Uint32);
 void SynchronizePosition();
 void UpdatePlayerList();
+void GUIUpdate();
+bool GUIEventHandler(SDL_Event&);
+void GameEventHandler(SDL_Event&);
 
 #endif

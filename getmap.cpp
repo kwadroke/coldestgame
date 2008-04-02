@@ -139,8 +139,6 @@ void GetMap(string fn)
       currnode.Read(spawntemp.position.z, "Location", 2);
       spawnpoints.push_back(spawntemp);
    }
-   selectedspawn = spawnpoints[0];
-   
    
    // Load objects
    meshes.clear();

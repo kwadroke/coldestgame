@@ -27,7 +27,7 @@ class Mesh
       Mesh& operator=(const Mesh&);
       bool operator<(const Mesh&) const;
       bool operator>(const Mesh&) const;
-      void CalcBB();
+      void CalcBounds();
       void Load(const IniReader&);
       void Move(const Vector3&);
       const Vector3& GetPosition() const;
@@ -79,6 +79,7 @@ class Mesh
       Vector3 position;
       Vector3 rots;
       float height, width;
+      Vector3 max, min;
       
       ResourceManager& resman;
       

@@ -15,7 +15,7 @@ class Table : public GUI
       Table(GUI*, TextureManager*);
       ~Table();
       void Render();
-      void clear();
+      void Clear();
       void Add(string);
       int Selected();
       string GetSelectedString(int);

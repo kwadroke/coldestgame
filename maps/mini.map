@@ -71,8 +71,13 @@ Node
 Node
    SpawnPoints
    Node
-      Team 0
+      Team 1
       Location 150 150 150
+      Name Base1
+   Node
+      Team 1
+      Location 250 150 250
+      Name Base2
       
 Node
    Objects
