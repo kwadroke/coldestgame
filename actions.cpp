@@ -12,6 +12,7 @@
 #include "renderdefs.h"
 
 void ConsoleHandler(string);
+void Quit();
 
 void Connect()
 {
@@ -107,4 +108,37 @@ void SubmitCommand()
    consoleout->Append(currcommand->text + '\n');
    currcommand->text = "";
    console.visible = false;
+}
+
+
+void RequestNewTeam()
+{
+   ComboBox *teamselect = (ComboBox*)loadoutmenu.GetWidget("TeamSelect");
+   changeteam = teamselect->Selected() + 1;
+}
+
+
+// Stick this outside of GUI so we don't have to update the class every time we add an action
+void Action(const string& action)
+{
+   if (action == "exit")
+      Quit();
+   else if (action == "connect")
+      Connect();
+   else if (action == "connectip")
+      ConnectToIp();
+   else if (action == "showprogress")
+      TestAction();
+   else if (action == "resume")
+      Resume();
+   else if (action == "spawn")
+      Spawn();
+   else if (action == "loadouttomain")
+      LoadoutToMain();
+   else if (action == "updateunitselection")
+      UpdateUnitSelection();
+   else if (action == "submitcommand")
+      SubmitCommand();
+   else if (action == "requestnewteam")
+      RequestNewTeam();
 }

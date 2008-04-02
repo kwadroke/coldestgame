@@ -814,24 +814,7 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
 // Translates string values into the appropriate function call
 void GUI::DoAction(string action)
 {
-   if (action == "exit")
-      Quit();
-   else if (action == "connect")
-      Connect();
-   else if (action == "connectip")
-      ConnectToIp();
-   else if (action == "showprogress")
-      TestAction();
-   else if (action == "resume")
-      Resume();
-   else if (action == "spawn")
-      Spawn();
-   else if (action == "loadouttomain")
-      LoadoutToMain();
-   else if (action == "updateunitselection")
-      UpdateUnitSelection();
-   else if (action == "submitcommand")
-      SubmitCommand();
+   Action(action);
 }
 
 

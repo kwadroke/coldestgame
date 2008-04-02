@@ -485,8 +485,45 @@ void Mesh::UpdateTris(int index)
    {
       frameroot[index]->GenTris(frameroot[index + 1], interpval, m, tris);
    }
+   
+   CalcBounds();
+   
    if (glops)
       GenVbo();
+}
+
+
+void Mesh::CalcBounds()
+{
+   float size2 = 0.f;
+   Vector3 min2;
+   Vector3 max2;
+   float dist2 = 0.f;
+   float temp;
+   for (int i = 0; i < tris.size(); ++i)
+   {
+      for (int j = 0; j < 3; ++j)
+      {
+         dist2 = tris[i].vert[j].distance2(position);
+         if (dist2 > size2) size2 = dist2;
+         temp = tris[i].vert[j].x - position.x;
+         if (temp > max2.x) max2.x = temp;
+         if (temp < min2.x) min2.x = temp;
+         temp = tris[i].vert[j].y - position.y;
+         if (temp > max2.y) max2.y = temp;
+         if (temp < min2.y) min2.y = temp;
+         temp = tris[i].vert[j].z - position.z;
+         if (temp > max2.z) max2.z = temp;
+         if (temp < min2.z) min2.z = temp;
+      }
+   }
+   size = sqrt(size2);
+   max.x = sqrt(max2.x);
+   max.y = sqrt(max2.y);
+   max.z = sqrt(max2.z);
+   min.x = sqrt(min2.x);
+   min.y = sqrt(min2.y);
+   min.z = sqrt(min2.z);
 }
 
 

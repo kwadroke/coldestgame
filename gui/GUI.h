@@ -178,15 +178,7 @@ typedef list<GUI*>::iterator guiiter;
 // Necessary externs, mostly for action functions
 //void RenderText(string, int, int, int, TTF_Font*, float scale = 1.f, bool shadow = true);
 int PowerOf2(int);
-void Connect();
-void ConnectToIp();
-void Quit();
-void TestAction();
-void Resume();
-void Spawn();
-void LoadoutToMain();
-void UpdateUnitSelection();
-void SubmitCommand();
+void Action(const string&);
 
 template <typename T>
 string ToString(const T &input);

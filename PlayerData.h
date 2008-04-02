@@ -45,6 +45,7 @@ class PlayerData
       short ping;
       short hp[numbodyparts];
       short kills, deaths;
+      short team;
       float temperature;
       string name;
       

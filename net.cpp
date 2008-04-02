@@ -13,6 +13,7 @@
 #include "Packet.h"
 #include "ServerInfo.h"
 #include "types.h"
+#include "gui/ComboBox.h"
 #include "netdefs.h"
 #include "globals.h"
 
@@ -42,6 +43,7 @@ int NetSend(void* dummy)
    Uint32 currnettick = 0;
    Uint32 occpacketcounter = 0;
    sendmutex = SDL_CreateMutex();
+   changeteam = 0;
    
    // Debugging
    Timer t;
@@ -135,9 +137,11 @@ int NetSend(void* dummy)
          {
             p << player[0].weapons[i] << eol;
          }
-         p << selectedspawn.position.x << eol;
-         p << selectedspawn.position.y << eol;
-         p << selectedspawn.position.z << eol;
+         ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
+         int sel = spawnpointsbox->Selected();
+         p << spawnpoints[sel].position.x << eol;
+         p << spawnpoints[sel].position.y << eol;
+         p << spawnpoints[sel].position.z << eol;
          SDL_mutexV(clientmutex);
          SDL_mutexP(sendmutex);
          sendqueue.push_back(p);
@@ -161,6 +165,21 @@ int NetSend(void* dummy)
          SDL_mutexV(sendmutex);
       }
       SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see
+      
+      if (changeteam)
+      {
+         Packet p(outpack, &outsock, &addr);
+         p.ack = sendpacketnum;
+         p << "M\n";
+         p << sendpacketnum << eol;
+         ++sendpacketnum;
+         p << servplayernum << eol;
+         p << changeteam << eol;
+         SDL_mutexP(sendmutex);
+         sendqueue.push_back(p);
+         SDL_mutexV(sendmutex);
+         changeteam = 0;
+      }
       SDL_mutexP(sendmutex);
       list<Packet>::iterator i = sendqueue.begin();
       while (i != sendqueue.end())
@@ -547,11 +566,13 @@ int NetListen(void* dummy)
          {
             bool accepted;
             get >> accepted;
+            
             if (accepted)
             {
+               ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
                loadoutmenu.visible = false;
                hud.visible = true;
-               player[0].pos = selectedspawn.position;
+               player[0].pos = spawnpoints[spawnpointsbox->Selected()].position;
                player[0].size = units[player[0].unit].size;
                player[0].lastmovetick = SDL_GetTicks();
             }
@@ -564,16 +585,7 @@ int NetListen(void* dummy)
          {
             unsigned long acknum;
             get >> acknum;
-            SDL_mutexP(sendmutex);
-            for (list<Packet>::iterator i = sendqueue.begin(); i != sendqueue.end(); ++i)
-            {
-               if (i->ack == acknum)
-               {
-                  sendqueue.erase(i);
-                  break;
-               }
-            }
-            SDL_mutexV(sendmutex);
+            HandleAck(acknum);
          }
          else if (packettype == "T") // Text packet
          {
@@ -599,6 +611,24 @@ int NetListen(void* dummy)
             sendqueue.push_back(response);
             SDL_mutexV(sendmutex);
          }
+         else if (packettype == "M")
+         {
+            unsigned long acknum;
+            bool accepted;
+            short newteam;
+            get >> acknum;
+            HandleAck(acknum);
+            get >> accepted;
+            if (accepted)
+            {
+               get >> newteam;
+               SDL_mutexP(clientmutex);
+               player[0].team = newteam;
+               SDL_mutexV(clientmutex);
+               cout << "Joined team " << newteam << endl;
+               spawnschanged = true;
+            }
+         }
       }
       //t.stop();
    }
@@ -607,4 +637,19 @@ int NetListen(void* dummy)
    SDLNet_FreePacket(inpack);
    SDLNet_UDP_Close(insock);
    return 0;
+}
+
+
+void HandleAck(unsigned long acknum)
+{
+   SDL_mutexP(sendmutex);
+   for (list<Packet>::iterator i = sendqueue.begin(); i != sendqueue.end(); ++i)
+   {
+      if (i->ack == acknum)
+      {
+         sendqueue.erase(i);
+         break;
+      }
+   }
+   SDL_mutexV(sendmutex);
 }

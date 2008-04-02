@@ -79,9 +79,8 @@ void Table::LeftDown(SDL_Event* event)
 }
 
 
-void Table::clear()
+void Table::Clear()
 {
-   
    delete scrollview;  // Leaking memory like a sieve is fun for the whole family!!!
                        // Ah, learned something about virtual destructors from this...
                        // (i.e. it no longer leaks, but I'm leaving the comment because it amuses me:-)

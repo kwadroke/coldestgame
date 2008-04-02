@@ -59,7 +59,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    if (!listvalid)
    {
-      p = kdtree->getmeshes(oldpos, radius);
+      Vector3 midpoint = (oldpos + newpos) / 2.f;
+      float findrad = radius + oldpos.distance(newpos);
+      
+      p = kdtree->getmeshes(midpoint, findrad);
       
       // Eliminate objects in the ignore list
       for (vector<Mesh*>::iterator i = p.begin(); i != p.end(); ++i)
@@ -175,7 +178,7 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3vec v, const Vector3& po
    float startside = norm.dot(pos) + d;
    
    // Flip the normal if we start out on the back side
-   // or not...
+   // or not...it's possible to get bogus hits if we do this
    //if (startside < -1e-3) return Vector3();
    /*if (startside < 0)
    {

@@ -227,7 +227,7 @@ void RenderObjects()
    {
       Mesh* i = *iptr;
       i->Render(override);
-      glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+      //glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       trislastframe += i->Size();
    }
    

@@ -13,7 +13,7 @@
 
 const char eol = '\n';
 
-extern bool running, connected, doconnect, pingresponse, spawnrequest;
+extern bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
 extern int tickrate;
 extern unsigned long sendpacketnum, recpacketnum, ackpack;
 extern set<unsigned long> partids;
@@ -25,5 +25,8 @@ extern string serveraddr;
 extern string chatstring;
 extern vector<string> newchatlines;
 extern vector<unsigned short> newchatplayers;
+extern short changeteam;
+
+void HandleAck(unsigned long);
 
 #endif

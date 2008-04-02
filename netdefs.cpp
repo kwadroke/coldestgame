@@ -1,6 +1,6 @@
 #include "netdefs.h"
 
-bool running, connected, doconnect, pingresponse, spawnrequest;
+bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
 int tickrate;
 unsigned long sendpacketnum, recpacketnum, ackpack;
 set<unsigned long> partids;
@@ -12,4 +12,5 @@ string serveraddr;
 string chatstring;
 vector<string> newchatlines;
 vector<unsigned short> newchatplayers;
+short changeteam;
 
