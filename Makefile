@@ -16,7 +16,9 @@ ifeq ($(WARN),1)
 endif
 DEFINES = -DLINUX
 #DEFINES += -DDEBUGSMT
-DEFINES += -DNOPSM
+#DEFINES += -DNOPSM
+DEFINES += -DIS64
+#DEFINES += -DNOCLIENTPREDICTION
 
 #DEFINES += -D_REENTRANT  This one is already added by sdl-config
 

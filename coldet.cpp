@@ -940,14 +940,16 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
    // Did we hit something?  If so, deal with it
    if (!ghost)
    {
+      Vector3 offsetold = old;
+      offsetold += (old - mplayer.pos) * mplayer.size; // Not sure mplayer.size is the appropriate value here
       cd.listvalid = false;
-      Vector3 adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
+      Vector3 adjust = cd.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
       int count = 0;
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
          mplayer.pos += adjust;
-         adjust = cd.CheckSphereHit(old, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
+         adjust = cd.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
@@ -970,12 +972,15 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
 
 // No mutex needed, only called from mutex'd code
 
-/* This is a mess and needs to be cleaned up, but I've been staring at it so long trying to get
-   it to work in a semi-acceptable fashion that I just don't want to deal with it right now.*/
+// TODO: Currently this code leaks memory because it never removes anything from oldpos
 void SynchronizePosition()
 {
+#ifdef NOCLIENTPREDICTION
+   player[0].pos = player[servplayernum].pos;
+   return;
+#endif
    static deque<OldPosition> oldpos;
-   static int smoothfactor = 1;
+   static int smoothfactor = 3;
    OldPosition temp;
    Uint32 currtick = SDL_GetTicks();
    Vector3 smoothserverpos;
@@ -1039,16 +1044,6 @@ void SynchronizePosition()
       }
    }
    
-   /*if (oldpos[currindex].tick < currtick - ping)
-   {
-      float perc = (float)(currtick - ping - oldpos[currindex].tick) / (float)(oldpos[currindex + 1].tick - oldpos[currindex].tick);
-      smootholdpos = oldpos[currindex].pos * (1.f - perc) + oldpos[currindex + 1].pos * perc;
-   }
-   else
-   {
-      smootholdpos = oldpos[currindex].pos;
-   }*/
-   
    recentoldpos.push_back(currindex);
    while (recentoldpos.size() > smoothfactor)
       recentoldpos.pop_front();
@@ -1059,48 +1054,26 @@ void SynchronizePosition()
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
    float pingslop = .01f;
-   float posthresh = 1.f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
    
+   // vecdiff is not necessary, everything can probably be put directly into posadj now
    Vector3 vecdiff = smoothserverpos - smootholdpos;
    vecdiff.normalize();
    vecdiff *= difference;
-   Vector3 posadj = vecdiff;//difference / posthresh > 1 ? vecdiff : vecdiff * difference / posthresh;
-   
-#if 0
-   vecdiff.print();
-   posadj.print();
-   //player[servplayernum].pos.print();
-   //oldpos[currindex].pos.print();
-   smoothserverpos.print();
-   smootholdpos.print();
-   cout << "currindex: " << currindex << endl;
-   cout << "old tick: " << oldpos[currindex].tick << endl;
-   cout << "currtick - ping: " << (currtick - ping) << endl;
-   cout << "difference: " << difference << endl;
-   cout << "moving: " << player[0].moveforward << endl;
-   cout << "tickdiff: " << tickdiff << endl << endl;
-   if (currindex - 1 > 0 && oldpos[currindex].pos.distance(oldpos[currindex - 1].pos) > 3)
-   {
-      cout << "Hitch detected\n";
-      oldpos[currindex].pos.print();
-      oldpos[currindex - 1].pos.print();
-      cout << (oldpos[currindex].pos.distance(oldpos[currindex - 1].pos)) << endl;
-      cout << tickdiff << endl;
-      cout << endl;
-   }
-#endif
+   Vector3 posadj = vecdiff;
    
    /* If we're way off, snap quite a bit because things are hopelessly out of sync and need
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
-   if (difference > 10.f)
+   /*if (difference > 10.f)
       posadj *= .5f;
    else if (!player[0].moveforward && !player[0].moveback)
       posadj *= 0.f;
    else if (difference > .3f)
-      posadj *= .2f;
+      posadj *= .2f;*/
+   // Note: If difference < .3f then we snap to the server location, but it's not noticeable
+   // because the error is so small
    
    player[0].pos += posadj;
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
@@ -1112,6 +1085,13 @@ void SynchronizePosition()
    temp.pos = player[0].pos;
    
    oldpos.push_back(temp);
+   
+   posadj.print();
+   player[0].pos.print();
+   player[servplayernum].pos.print();
+   smoothserverpos.print();
+   smootholdpos.print();
+   cout << endl;
 }
 
 
@@ -1382,6 +1362,18 @@ float Random(float min, float max)
    if (max < min) return 0;
    float size = max - min;
    return (size * ((float)rand() / (float)RAND_MAX) + min);
+}
+
+
+int gettid()
+{
+#ifdef LINUX
+#ifndef IS64
+   return syscall(224);
+#else
+   return syscall(186);
+#endif
+#endif
 }
 
 

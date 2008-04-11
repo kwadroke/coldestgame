@@ -61,7 +61,7 @@ int NetSend(void* dummy)
       return -1;
    }
    
-   cout << "NetSend " << syscall(224) << endl;
+   cout << "NetSend " << gettid() << endl;
    
    while (running)
    {
@@ -142,6 +142,7 @@ int NetSend(void* dummy)
          p << spawnpoints[sel].position.x << eol;
          p << spawnpoints[sel].position.y << eol;
          p << spawnpoints[sel].position.z << eol;
+         
          SDL_mutexV(clientmutex);
          SDL_mutexP(sendmutex);
          sendqueue.push_back(p);
@@ -273,7 +274,7 @@ int NetListen(void* dummy)
    }
    
    netout = SDL_CreateThread(NetSend, NULL); // Start send thread
-   cout << "NetListen " << syscall(224) << endl;
+   cout << "NetListen " << gettid() << endl;
    
    while (running)
    {
@@ -567,18 +568,21 @@ int NetListen(void* dummy)
             bool accepted;
             get >> accepted;
             
-            if (accepted)
+            if (loadoutmenu.visible)
             {
-               ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
-               loadoutmenu.visible = false;
-               hud.visible = true;
-               player[0].pos = spawnpoints[spawnpointsbox->Selected()].position;
-               player[0].size = units[player[0].unit].size;
-               player[0].lastmovetick = SDL_GetTicks();
-            }
-            else
-            {
-               cout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
+               if (accepted)
+               {
+                  ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
+                  loadoutmenu.visible = false;
+                  hud.visible = true;
+                  player[0].pos = spawnpoints[spawnpointsbox->Selected()].position;
+                  player[0].size = units[player[0].unit].size;
+                  player[0].lastmovetick = SDL_GetTicks();
+               }
+               else
+               {
+                  cout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
+               }
             }
          }
          else if (packettype == "A") // Ack packet

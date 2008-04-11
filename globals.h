@@ -89,5 +89,6 @@ void AppendToChat(int, string);
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
 string PadNum(int, int);
+int gettid();
 
 #endif

@@ -156,7 +156,7 @@ int ServerListen()
       return -1;
    }
    
-   cout << "ServerListen " << syscall(224) << endl;
+   cout << "ServerListen " << gettid() << endl;
    
    while (running)
    {
@@ -488,7 +488,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
       return -1;
    }
    
-   cout << "ServerSend " << syscall(224) << endl;
+   cout << "ServerSend " << gettid() << endl;
    
    while (running)
    {
