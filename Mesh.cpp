@@ -331,24 +331,24 @@ void Mesh::BindVbo()
    glEnableClientState(GL_COLOR_ARRAY);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
    
-   glNormalPointer(GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.nx) - (unsigned int)&dummy));
-   glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VBOData), (void*)((unsigned int)&(dummy.r) - (unsigned int)&dummy));
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.tc[0]) - (unsigned int)&dummy));
+   glNormalPointer(GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.nx) - (ptrdiff_t)&dummy));
+   glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.r) - (ptrdiff_t)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[0]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE1_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.tc[1]) - (unsigned int)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[1]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE2_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.tc[2]) - (unsigned int)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[2]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE3_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.tc[3]) - (unsigned int)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[3]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE4_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.tc[4]) - (unsigned int)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[4]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE5_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((unsigned int)&(dummy.tc[5]) - (unsigned int)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[5]) - (ptrdiff_t)&dummy));
    
    glVertexPointer(3, GL_FLOAT, sizeof(VBOData), 0); // Apparently putting this last helps performance somewhat
    
@@ -390,19 +390,19 @@ void Mesh::BindAttribs()
    if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
-      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((unsigned int)&(dummy.terrainwt[0]) - (unsigned int)&dummy));
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.terrainwt[0]) - (ptrdiff_t)&dummy));
    }
    location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt1");
    if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
-      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((unsigned int)&(dummy.terrainwt1[0]) - (unsigned int)&dummy));
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.terrainwt1[0]) - (ptrdiff_t)&dummy));
    }
    location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "tangent");
    if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
-      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((unsigned int)&(dummy.tx) - (unsigned int)&dummy));
+      glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tx) - (ptrdiff_t)&dummy));
    }
 }
 
