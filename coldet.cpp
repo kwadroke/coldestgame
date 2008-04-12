@@ -1162,8 +1162,9 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
    if (p.legs == ml.end())
    {
-      IniReader load(units[p.unit].file + "/legs/base");
-      Mesh newmesh(load, resman);
+      IniReader load("models/" + units[p.unit].file + "/legs/base");
+      Mesh newmesh(load, resman, gl);
+      newmesh.dynamic = true;
       ml.push_front(newmesh);
       p.legs = ml.begin();
    }
