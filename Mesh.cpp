@@ -547,6 +547,7 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
    for (int i = 0; i < frameroot.size(); ++i)
    {
       m.frameroot[i]->parent = &(*framecontainer[i][name]);
+      cout << m.frameroot[i]->parent << endl;
    }
 }
 

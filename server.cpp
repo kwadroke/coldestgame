@@ -316,7 +316,7 @@ int ServerListen()
             fill << packetnum << eol;
             fill << respondto << eol;
             fill << currentmap << eol;
-            cout << "Server Sent ACK" << packetnum << " to player " << respondto << endl;
+            //cout << "Server Sent ACK" << packetnum << " to player " << respondto << endl;
             
             fill.addr = serverplayers[respondto].addr;
             servqueue.push_back(fill);

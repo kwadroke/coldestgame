@@ -144,9 +144,6 @@ void Repaint()
       
       RenderObjects();
       
-      //resman.shaderman.UseShader(standardshader);
-      //RenderDynamicObjects();
-      
       if (localplayer.pos.y > 0)
       {
          UpdateNoise();

@@ -443,7 +443,6 @@ int NetListen(void* dummy)
                get >> dummy;
                int checksum;
                get >> checksum;
-               //cout << endl << value << endl << checksum << endl;
                if (checksum != value)
                {
                   cout << "Client freaking out on packet " << packetnum << endl;
@@ -498,24 +497,27 @@ int NetListen(void* dummy)
          }
          else if (packettype == "c") // Connect packet
          {
-            get >> servplayernum;
-            get >> nextmap;
-            nextmap = "maps/" + nextmap;
-            cout << nextmap << endl;
-            doconnect = false;
-            connected = true;
-            cout << "We are server player " << servplayernum << endl;
-            list<Packet>::iterator i;
-            SDL_mutexP(sendmutex);
-            for (i = sendqueue.begin(); i != sendqueue.end(); ++i)
+            if (!connected)
             {
-               if (i->ack == packetnum)
+               get >> servplayernum;
+               get >> nextmap;
+               nextmap = "maps/" + nextmap;
+               doconnect = false;
+               connected = true;
+               cout << "We are server player " << servplayernum << endl;
+               cout << "Map is: " << nextmap << endl;
+               list<Packet>::iterator i;
+               SDL_mutexP(sendmutex);
+               for (i = sendqueue.begin(); i != sendqueue.end(); ++i)
                {
-                  sendqueue.erase(i);
-                  break;
+                  if (i->ack == packetnum)
+                  {
+                     sendqueue.erase(i);
+                     break;
+                  }
                }
+               SDL_mutexV(sendmutex);
             }
-            SDL_mutexV(sendmutex);
          }
          else if (packettype == "P") // Ping
          {

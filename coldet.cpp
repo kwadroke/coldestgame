@@ -1182,10 +1182,6 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    p.torso->Rotate(Vector3(p.pitch, p.facing + p.rotation, p.roll));
    p.torso->Move(p.pos);
-   if (gl)
-   {
-      p.torso->GenVbo();
-   }
    
    if (p.larm == ml.end())
    {
