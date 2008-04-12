@@ -1,359 +1,205 @@
-Version2
-12
-Type = container
-ID = 0
-Parent ID = -1
-Name = Legs
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 0
-EOP
-Type = container
-ID = 1
-Parent ID = 0
-Name = Left Leg
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 2000
-Y Trans = -500
-Z Trans = 0
-EOP
-Type = tristrip
-ID = 3
-Parent ID = 1
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 4
-Parent ID = 1
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 90
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 5
-Parent ID = 1
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 180
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 6
-Parent ID = 1
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = -90
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = container
-ID = 7
-Parent ID = 0
-Name = Right Leg
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = -2000
-Y Trans = -500
-Z Trans = 0
-EOP
-Type = tristrip
-ID = 8
-Parent ID = 7
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 9
-Parent ID = 7
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 90
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 10
-Parent ID = 7
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 180
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 11
-Parent ID = 7
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = -90
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
+Version Version3
+NextID 24
+TimeToNextFrame 1000
+Primitive
+   Type Container
+   ID 13
+   ParentID -1
+   Material 
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+Primitive
+   Type Container
+   ID 14
+   ParentID 13
+   Name LeftLeg
+   Material 
+   Rot1 20 0 0
+   Rot2 0 0 0
+   Trans 1500 0 0
+Primitive
+   Type Quad
+   ID 15
+   ParentID 14
+   Material ../coldet/materials/test
+   Rot1 0 90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 16
+   ParentID 14
+   Material ../coldet/materials/test
+   Rot1 0 -90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 17
+   ParentID 14
+   Material ../coldet/materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 18
+   ParentID 14
+   Material ../coldet/materials/test
+   Rot1 0 180 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Container
+   ID 19
+   ParentID 13
+   Name RightLeg
+   Material 
+   Rot1 -20 0 0
+   Rot2 0 0 0
+   Trans -1500 0 0
+Primitive
+   Type Quad
+   ID 20
+   ParentID 19
+   Material ../coldet/materials/test
+   Rot1 0 90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 21
+   ParentID 19
+   Material ../coldet/materials/test
+   Rot1 0 -90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 22
+   ParentID 19
+   Material ../coldet/materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 23
+   ParentID 19
+   Material ../coldet/materials/test
+   Rot1 0 180 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0

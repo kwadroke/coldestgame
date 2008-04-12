@@ -39,6 +39,7 @@ class PlayerData
       IPaddress addr;
       bool connected;
       unsigned long recpacketnum;
+      unsigned long spawnpacketnum;
       short unit;
       short currweapon;
       short pingtick;

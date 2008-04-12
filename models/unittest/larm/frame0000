@@ -1,173 +1,100 @@
-Version2
-17
-Type = container
-ID = 12
-Parent ID = -1
-Name = Left Arm
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = -500
-Z Trans = 0
-EOP
-Type = tristrip
-ID = 13
-Parent ID = 12
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 14
-Parent ID = 12
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 90
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 15
-Parent ID = 12
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = 180
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
-Type = tristrip
-ID = 16
-Parent ID = 12
-Texture0 = 1
-Shader = 
-X Rot 1 = 0
-Y Rot 1 = -90
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 1000
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -3000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -3000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 1
-Facing = 0
-EOP
+Version Version3
+NextID 13
+TimeToNextFrame 1000
+Primitive
+   Type Container
+   ID 0
+   ParentID -1
+   Name Arm
+   Material 
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+Primitive
+   Type Quad
+   ID 5
+   ParentID 0
+   Material ../coldet/materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 9
+   ParentID 0
+   Material ../coldet/materials/test
+   Rot1 0 180 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 10
+   ParentID 0
+   Material ../coldet/materials/test
+   Rot1 0 90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 11
+   ParentID 0
+   Material ../coldet/materials/test
+   Rot1 0 -90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
