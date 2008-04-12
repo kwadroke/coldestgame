@@ -1187,22 +1187,24 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.torso->GenVbo();
    }
    
-   /*if (p.larm == ml.end())
+   if (p.larm == ml.end())
    {
-      IniReader load(units[p.unit].file + "/larm/base");
-      Mesh newmesh(load, resman);
+      IniReader load("models/" + units[p.unit].file + "/larm/base");
+      Mesh newmesh(load, resman, gl);
+      newmesh.dynamic = true;
       p.torso->InsertIntoContainer("LeftArmConnector", newmesh);
       ml.push_front(newmesh);
       p.larm = ml.begin();
    }
    if (p.rarm == ml.end())
    {
-      IniReader load(units[p.unit].file + "/rarm/base");
-      Mesh newmesh(load, resman);
+      IniReader load("models/" + units[p.unit].file + "/rarm/base");
+      Mesh newmesh(load, resman, gl);
+      newmesh.dynamic = true;
       p.torso->InsertIntoContainer("RightArmConnector", newmesh);
       ml.push_front(newmesh);
       p.rarm = ml.begin();
-   }*/
+   }
    p.size = units[p.unit].size;
 }
 

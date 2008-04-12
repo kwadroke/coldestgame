@@ -2,7 +2,7 @@ Version Version3
 Type External
 Position 0 0 0
 Rotations 0 0 0
-NumFrames 3
+NumFrames 1
 Scale .01 
 Size 15000
 Files unittest/torso
