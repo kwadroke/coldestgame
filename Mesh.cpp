@@ -539,6 +539,11 @@ void Mesh::LoadMaterials()
 // The insertion happens conceptually, but m remains a separate Mesh
 void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {
+   if (frameroot.size() != m.frameroot.size())
+   {
+      cout << "Warning: Not inserting mesh.  Keyframe mismatch." << endl;
+   }
+   
    for (int i = 0; i < frameroot.size(); ++i)
    {
       m.frameroot[i]->parent = &(*framecontainer[i][name]);
