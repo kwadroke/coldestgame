@@ -32,7 +32,9 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    m.rotatez(interprot1.z);
    
    if (parent) // If we are the virtual child of a Node in another Mesh
+   {
       m *= parent->m;
+   }
    m *= parentm;
    
    // Save vertices for next time...
@@ -88,13 +90,15 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
 }
 
 
-// Note that this does not properly update parent - that's a pointer to an external object
-// so we have no idea where it should actually be pointing now
+// Currently this function keeps parent the same, even though that may not always be
+// what is wanted.  It causes problems if we don't do this, however, because this gets
+// called when inserting a mesh into an STL container, which is a fairly common
+// operation and expected to insert an exact copy, not a copy with this pointer null'd
 MeshNodePtr MeshNode::Clone()
 {
    MeshNodePtr newmn(new MeshNode(*this));
    newmn->children.clear();
-   newmn->parent = NULL;
+   newmn->parent = parent;
    
    for (int i = 0; i < children.size(); ++i)
    {
