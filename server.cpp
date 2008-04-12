@@ -348,19 +348,23 @@ int ServerListen()
          {
             bool accepted = true;
             get >> oppnum;
-            SDL_mutexP(servermutex);
-            get >> serverplayers[oppnum].unit;
-            for (int i = 0; i < numbodyparts; ++i)
+            if (packetnum > serverplayers[oppnum].spawnpacketnum)
             {
-               get >> serverplayers[oppnum].weapons[i];
+               SDL_mutexP(servermutex);
+               get >> serverplayers[oppnum].unit;
+               for (int i = 0; i < numbodyparts; ++i)
+               {
+                  get >> serverplayers[oppnum].weapons[i];
+               }
+               Vector3 spawnpointreq;
+               get >> spawnpointreq.x;
+               get >> spawnpointreq.y;
+               get >> spawnpointreq.z;
+               serverplayers[oppnum].pos = spawnpointreq;
+               serverplayers[oppnum].spawned = true;
+               serverplayers[oppnum].lastmovetick = SDL_GetTicks();
+               serverplayers[oppnum].spawnpacketnum = packetnum;
             }
-            Vector3 spawnpointreq;
-            get >> spawnpointreq.x;
-            get >> spawnpointreq.y;
-            get >> spawnpointreq.z;
-            serverplayers[oppnum].pos = spawnpointreq;
-            serverplayers[oppnum].spawned = true;
-            serverplayers[oppnum].lastmovetick = SDL_GetTicks();
             
             Packet response(servoutpack, &servoutsock, &inpack->address);
             SDLNet_Write16(1336, &(response.addr.port));

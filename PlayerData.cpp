@@ -1,6 +1,6 @@
 #include "PlayerData.h"
 
-PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1)
+PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(0)
 {
    Uint32 ticks = 0;
    if (SDL_WasInit(SDL_INIT_TIMER))

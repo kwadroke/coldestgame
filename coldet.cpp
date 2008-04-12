@@ -1066,12 +1066,12 @@ void SynchronizePosition()
    /* If we're way off, snap quite a bit because things are hopelessly out of sync and need
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
-   /*if (difference > 10.f)
+   if (difference > 10.f)
       posadj *= .5f;
    else if (!player[0].moveforward && !player[0].moveback)
       posadj *= 0.f;
    else if (difference > .3f)
-      posadj *= .2f;*/
+      posadj *= .2f;
    // Note: If difference < .3f then we snap to the server location, but it's not noticeable
    // because the error is so small
    
@@ -1085,13 +1085,6 @@ void SynchronizePosition()
    temp.pos = player[0].pos;
    
    oldpos.push_back(temp);
-   
-   posadj.print();
-   player[0].pos.print();
-   player[servplayernum].pos.print();
-   smoothserverpos.print();
-   smootholdpos.print();
-   cout << endl;
 }
 
 
@@ -1167,13 +1160,13 @@ void UpdateServerList()
 
 void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
-   /*if (p.legs == ml.end())
+   if (p.legs == ml.end())
    {
       IniReader load(units[p.unit].file + "/legs/base");
       Mesh newmesh(load, resman);
       ml.push_front(newmesh);
       p.legs = ml.begin();
-   }*/
+   }
    if (p.torso == ml.end())
    {
       IniReader load("models/" + units[p.unit].file + "/torso/base");
@@ -1183,8 +1176,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.torso = ml.begin();
    }
    
-   /*p.legs->Rotate(Vector3(0.f, p.facing, 0.f));
-   p.legs->Move(p.pos);*/
+   p.legs->Rotate(Vector3(0.f, p.facing, 0.f));
+   p.legs->Move(p.pos);
    
    p.torso->Rotate(Vector3(p.pitch, p.facing + p.rotation, p.roll));
    p.torso->Move(p.pos);
