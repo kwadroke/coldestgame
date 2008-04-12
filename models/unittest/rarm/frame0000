@@ -1,64 +1,28 @@
 Version Version3
-NextID 13
+NextID 24
 TimeToNextFrame 1000
 Primitive
    Type Container
-   ID 0
+   ID 13
    ParentID -1
-   Name Arm
    Material 
    Rot1 0 0 0
    Rot2 0 0 0
    Trans 0 0 0
 Primitive
-   Type Quad
-   ID 5
-   ParentID 0
-   Material ../coldet/materials/test
-   Rot1 0 0 0
+   Type Container
+   ID 14
+   ParentID 13
+   Name LeftLeg
+   Material 
+   Rot1 20 0 0
    Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 0
-   Facing 0
+   Trans 1500 0 0
 Primitive
    Type Quad
-   ID 9
-   ParentID 0
-   Material ../coldet/materials/test
-   Rot1 0 180 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 0
-   Facing 0
-Primitive
-   Type Quad
-   ID 10
-   ParentID 0
-   Material ../coldet/materials/test
+   ID 15
+   ParentID 14
+   Material ../coldest/materials/test
    Rot1 0 90 0
    Rot2 0 0 0
    Trans 0 -2500 1000
@@ -78,10 +42,151 @@ Primitive
    Facing 0
 Primitive
    Type Quad
-   ID 11
-   ParentID 0
-   Material ../coldet/materials/test
+   ID 16
+   ParentID 14
+   Material ../coldest/materials/test
    Rot1 0 -90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 17
+   ParentID 14
+   Material ../coldest/materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 18
+   ParentID 14
+   Material ../coldest/materials/test
+   Rot1 0 180 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Container
+   ID 19
+   ParentID 13
+   Name RightLeg
+   Material 
+   Rot1 -20 0 0
+   Rot2 0 0 0
+   Trans -1500 0 0
+Primitive
+   Type Quad
+   ID 20
+   ParentID 19
+   Material ../coldest/materials/test
+   Rot1 0 90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 21
+   ParentID 19
+   Material ../coldest/materials/test
+   Rot1 0 -90 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 22
+   ParentID 19
+   Material ../coldest/materials/test
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 -2500 1000
+   p0 -1000 3000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -3000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -3000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 3000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 23
+   ParentID 19
+   Material ../coldest/materials/test
+   Rot1 0 180 0
    Rot2 0 0 0
    Trans 0 -2500 1000
    p0 -1000 3000 0

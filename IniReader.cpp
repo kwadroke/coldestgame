@@ -146,8 +146,12 @@ string IniReader::ReadVal(const string line, const int num) const
    stringstream readval(line);
    int i = -1; // Always need to read at least two values even if they pass in 0
    string retval;
-   while (readval >> retval && i < num)
+   while (i <= num)
+   {
+      if (!(readval >> retval))
+         return "";
       ++i;
+   }
    return retval;
 }
 
