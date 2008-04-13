@@ -45,7 +45,6 @@ void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
 int PowerOf2(int);
 void Animate();
-void Move(PlayerData&, Meshlist&, CollisionDetection&);
 void GLError();
 void UpdateClouds();
 void SetReflection(bool);
@@ -57,8 +56,6 @@ void InitShaders();
 
 extern Meshlist meshes;
 
-//extern list<WorldObjects> objects;
-//extern vector<GLuint> dotextures;
 extern int viewdist, screenwidth, screenheight, fov, consoletrans, consoleleft;
 extern int consoleright, consoletop, consolebottom, consolebottomline;
 extern int lasttick, frames, camdist, shadowmapsize, trislastframe;

@@ -20,20 +20,13 @@ class CollisionDetection
    public:
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, Meshlist*,
-                             stack<Mesh*>* = NULL);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, Meshlist*,
-                             vector<Meshlist::iterator>&,
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
                              stack<Mesh*>* = NULL, const bool debug = false);
-      Vector3 CheckSphereHitDebug(const Vector3&, const Vector3&, const float&, Meshlist*,
-                             vector<Meshlist::iterator>&,
+      Vector3 CheckSphereHitDebug(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
                              stack<Mesh*>* = NULL);
       Vector3 PlaneSphereCollision(Vector3vec, const Vector3&, const Vector3&, const float&, const bool debug = false);
       Vector3 PlaneEdgeSphereCollision(Vector3vec, const Vector3&, const float&);
-      //PrimitiveOctree *octree;
-      ObjectKDTree *kdtree;
       int intmethod;
-      bool listvalid;
       bool quiet;
       int tilesize;
       vector<Quad> worldbounds;
@@ -43,8 +36,5 @@ class CollisionDetection
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const Vector3&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&, float&, Vector3&);
-      
-      vector<Mesh*> p;
-      SDL_mutex* mutex;
 };
 #endif

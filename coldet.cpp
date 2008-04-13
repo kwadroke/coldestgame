@@ -826,7 +826,7 @@ void Cleanup()
 }
 
 
-void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
+void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
 {
    // In case we hit something
    Vector3 old = mplayer.pos;
@@ -884,18 +884,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
    mplayer.pos.x += d.x * step;
    mplayer.pos.z -= d.z * step;
    
-   // Build list of objects to ignore for collision detection (a player can't hit themself)
-   vector<Meshlist::iterator> ignoreobjs;
-   if (mplayer.legs != ml.end())
-      ignoreobjs.push_back(mplayer.legs);
-   if (mplayer.torso != ml.end())
-      ignoreobjs.push_back(mplayer.torso);
-   if (mplayer.larm != ml.end())
-      ignoreobjs.push_back(mplayer.larm);
-   if (mplayer.rarm != ml.end())
-      ignoreobjs.push_back(mplayer.rarm);
-   Meshlist dummy;
-   
    static const float threshold = .35f;
    static float gravity = .1f;
    
@@ -905,8 +893,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
    {
       Vector3 groundcheck = old;
       groundcheck.y -= mplayer.size + mplayer.size * threshold;
-      cd.listvalid = false;
-      groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dummy, ignoreobjs, NULL);
+      
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
+      groundcheck = coldet.CheckSphereHit(old, groundcheck, .01, check, NULL);
+      
       if (groundcheck.magnitude() > .00001f) // They were on the ground
       {
          if (mplayer.fallvelocity > .00001f)
@@ -920,9 +910,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
             height, so calculate the exact height so we know whether we're on a downslope.*/
          groundcheck.y = GetTerrainHeight(old.x, old.z);
          groundcheck.y += .01f;
-         cd.listvalid = false;
-         Vector3 debug = groundcheck;
-         groundcheck = cd.CheckSphereHit(old, groundcheck, .01, &dummy, ignoreobjs, NULL);
+         check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
+         groundcheck = coldet.CheckSphereHit(old, groundcheck, .01, check, NULL);
          /* If this vector comes back zero then it means they're on a downslope and might need a little help
             staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
          if (moving && groundcheck.magnitude() < .00001f)
@@ -942,14 +931,15 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
    {
       Vector3 offsetold = old;
       offsetold += (old - mplayer.pos) * mplayer.size; // Not sure mplayer.size is the appropriate value here
-      cd.listvalid = false;
-      Vector3 adjust = cd.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
+      
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
+      Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
       int count = 0;
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
          mplayer.pos += adjust;
-         adjust = cd.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, &dummy, ignoreobjs, NULL);
+         adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
@@ -965,6 +955,38 @@ void Move(PlayerData& mplayer, Meshlist& ml, CollisionDetection& cd)
          cout << GetTerrainHeight(mplayer.pos.x, mplayer.pos.z) << endl;
          mplayer.pos.print();
          adjust.print();
+      }
+   }
+}
+
+
+vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, ObjectKDTree& kt,
+                                     const Vector3& oldpos, const Vector3& newpos, const float size)
+{
+   vector<Mesh*> check = kt.getmeshes(oldpos, newpos, size);
+   AppendDynamicMeshes(check, ml);
+   if (mplayer)
+   {
+      if (mplayer->legs != ml.end())
+         check.erase(remove(check.begin(), check.end(), &(*mplayer->legs)), check.end());
+      if (mplayer->torso != ml.end())
+         check.erase(remove(check.begin(), check.end(), &(*mplayer->torso)), check.end());
+      if (mplayer->larm != ml.end())
+         check.erase(remove(check.begin(), check.end(), &(*mplayer->larm)), check.end());
+      if (mplayer->rarm != ml.end())
+         check.erase(remove(check.begin(), check.end(), &(*mplayer->rarm)), check.end());
+   }
+   return check;
+}
+
+
+void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
+{
+   for (Meshlist::iterator i = ml.begin(); i != ml.end(); ++i)
+   {
+      if (i->dynamic)
+      {
+         appto.push_back(&(*i));
       }
    }
 }
@@ -1098,29 +1120,8 @@ void Animate()
    
    // Particles
    static int partupd = 100;
-   IniReader dummy("models/empty/base");
-   particlemesh = MeshPtr(new Mesh(dummy, resman));
    SDL_mutexP(clientmutex);
-   if (partupd >= partupdateinterval)
-   {
-      // Update particles
-      //cout << particles.size() << endl;
-      list<Particle>::iterator j = particles.begin();
-      while (j != particles.end())
-      {
-         if (j->Update(particlemesh.get()))
-         {
-            j = particles.erase(j);
-         }
-         else
-         {
-            ++j;
-         }
-      }
-      partupd = 0;
-      particlemesh->GenVbo();
-   }
-   else ++partupd;
+   UpdateParticles(particles, partupd, kdtree, meshes);
    
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
@@ -1202,6 +1203,48 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.rarm = ml.begin();
    }
    p.size = units[p.unit].size;
+}
+
+
+// Note: Only the server passes in HitHandler, the client should always pass in NULL
+// This is important because this function decides whether to do GL stuff based on that
+// and if the server thread tries to do GL it will crash
+void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, void (*HitHandler)(Particle&, stack<Mesh*>&))
+{
+   IniReader empty("models/empty/base");
+   if (!HitHandler)
+      particlemesh = MeshPtr(new Mesh(empty, resman));
+   Vector3 oldpos, partcheck;
+   stack<Mesh*> hitmeshes;
+   if (partupd >= partupdateinterval)
+   {
+      // Update particles
+      list<Particle>::iterator j = parts.begin();
+      while (j != parts.end())
+      {
+         oldpos = j->Update();
+         vector<Mesh*> check = kt.getmeshes(oldpos, j->pos, j->radius);
+         AppendDynamicMeshes(check, ml);
+         partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, &hitmeshes);
+         
+         if (partcheck.distance2() < 1e-5) // Didn't hit anything
+         {
+            if (!HitHandler)
+               j->Render(particlemesh.get());
+            ++j;
+         }
+         else
+         {
+            if (HitHandler)
+               HitHandler(*j, hitmeshes);
+            j = parts.erase(j);
+         }
+      }
+      partupd = 0;
+      if (!HitHandler)
+         particlemesh->GenVbo();
+   }
+   else ++partupd;
 }
 
 

@@ -29,7 +29,7 @@ Primitive
    p3 1000 3000 0
    tc3x 1 1 1 1 1 1 1 1 
    tc3y 0 0 0 0 0 0 0 0 
-   Collide 0
+   Collide 1
    Facing 0
 Primitive
    Type Quad
@@ -51,7 +51,7 @@ Primitive
    p3 1000 3000 0
    tc3x 1 1 1 1 1 1 1 1 
    tc3y 0 0 0 0 0 0 0 0 
-   Collide 0
+   Collide 1
    Facing 0
 Primitive
    Type Quad
@@ -73,7 +73,7 @@ Primitive
    p3 1000 3000 0
    tc3x 1 1 1 1 1 1 1 1 
    tc3y 0 0 0 0 0 0 0 0 
-   Collide 0
+   Collide 1
    Facing 0
 Primitive
    Type Quad
@@ -95,5 +95,5 @@ Primitive
    p3 1000 3000 0
    tc3x 1 1 1 1 1 1 1 1 
    tc3y 0 0 0 0 0 0 0 0 
-   Collide 0
+   Collide 1
    Facing 0

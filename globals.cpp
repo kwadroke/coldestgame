@@ -29,7 +29,6 @@ vector<PlayerData> player;
 vector<UnitData> units;
 vector<WeaponData> weapons;
 bool server;            // Determines whether to start a server
-//list<DynamicObject> dynobjects;
 int servplayernum;
 SDL_Thread* serverthread;
 ObjectKDTree kdtree;

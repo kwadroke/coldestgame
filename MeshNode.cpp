@@ -77,6 +77,7 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
          {
             newtris[i].norm[j] = norm;
          }
+         newtris[i].collide = collide;
          tris.push_back(newtris[i]);
       }
    }

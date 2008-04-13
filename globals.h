@@ -55,7 +55,6 @@ extern vector<PlayerData> player;
 extern vector<UnitData> units;
 extern vector<WeaponData> weapons;
 extern bool server;
-//extern list<DynamicObject> dynobjects;
 extern int servplayernum;
 extern SDL_Thread* serverthread;
 extern ObjectKDTree kdtree;
@@ -85,6 +84,9 @@ T lerp(T x, T y, float a)
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
 void AppendToChat(int, string);
+void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, void (*HitHandler)(Particle&, stack<Mesh*>&) = NULL);
+void Move(PlayerData&, Meshlist&, ObjectKDTree&);
+void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);

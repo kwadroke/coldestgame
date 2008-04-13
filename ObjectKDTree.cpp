@@ -276,6 +276,7 @@ bool ObjectKDTree::innode(Vector3 v, float size)
 
 
 // Just for terrain because we only care about x and z coords
+// Don't think we're actually using this function anymore...
 bool ObjectKDTree::innode2d(Vector3 v, float size)
 {
    float size2 = size / 2.f;
@@ -291,6 +292,14 @@ vector<Mesh*> ObjectKDTree::getmeshes(const Vector3& pos, const float size)
    vector<Mesh*> ret;
    getmeshes(pos, size, ret);
    return ret;
+}
+
+
+vector<Mesh*> ObjectKDTree::getmeshes(const Vector3& oldpos, const Vector3& newpos, const float size)
+{
+   Vector3 midpoint = (oldpos + newpos) / 2.f;
+   float newsize = size + oldpos.distance(newpos);
+   return getmeshes(midpoint, newsize);
 }
 
 

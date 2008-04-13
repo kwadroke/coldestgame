@@ -36,7 +36,7 @@ void Repaint()
       // Update player position
       SDL_mutexP(clientmutex);
       
-      Move(player[0], meshes, coldet);
+      Move(player[0], meshes, kdtree);
       if (serversync)
          SynchronizePosition();
       localplayer = player[0];
@@ -214,6 +214,7 @@ void RenderObjects()
    }
    
    objs.sort(objcomp);*/
+   
    list<Mesh*> m = kdtree.getmeshes();
    
    list<Mesh*>::iterator iptr;
@@ -224,7 +225,6 @@ void RenderObjects()
    {
       Mesh* i = *iptr;
       i->Render(override);
-      //glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       trislastframe += i->Size();
    }
    

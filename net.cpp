@@ -418,7 +418,6 @@ int NetListen(void* dummy)
                      temppart.radius = getrad;
                      temppart.explode = getexp;
                      
-                     temppart.cd = &coldet;
                      temppart.lasttick = SDL_GetTicks();
                      temppart.id = partnum;
                      temppart.playerid = partnum;
@@ -629,10 +628,13 @@ int NetListen(void* dummy)
             {
                get >> newteam;
                SDL_mutexP(clientmutex);
-               player[0].team = newteam;
+               if (player[0].team != newteam)
+               {
+                  cout << "Joined team " << newteam << endl;
+                  player[0].team = newteam;
+                  spawnschanged = true;
+               }
                SDL_mutexV(clientmutex);
-               cout << "Joined team " << newteam << endl;
-               spawnschanged = true;
             }
          }
       }

@@ -6,10 +6,7 @@
 
 CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
 {
-   //octree = NULL;
-   //dynobj = NULL;
    intmethod = 0;
-   listvalid = false;
    quiet = true;
 }
 
@@ -17,28 +14,17 @@ CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
 CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 {
    intmethod = o.intmethod;
-   listvalid = o.listvalid;
    quiet = o.quiet;
    tilesize = o.tilesize;
-   kdtree = o.kdtree;
    worldbounds = o.worldbounds;
 }
 
 
-Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, Meshlist* dynobj,
-                                           vector<Meshlist::iterator>& ignoreobjs,
+Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
                                            stack<Mesh*>* retobjs)
 {
-   Vector3 retval = CheckSphereHit(oldpos, newpos, radius, dynobj, ignoreobjs, retobjs, true);
+   Vector3 retval = CheckSphereHit(oldpos, newpos, radius, objs, retobjs, true);
    return retval;
-}
-
-
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, Meshlist* dynobj,
-                                           stack<Mesh*>* retobjs)
-{
-   vector<Meshlist::iterator> dummy;
-   return CheckSphereHit(oldpos, newpos, radius, dynobj, dummy, retobjs);
 }
 
 
@@ -48,8 +34,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, Meshlist* dynobj,
-                                           vector<Meshlist::iterator>& ignoreobjs,
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
                                            stack<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
@@ -57,6 +42,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    Vector3 dist;
    int adjusted = 0;
    
+#if 0
+   // Leaving this here for now because we'll need to copy pieces of it elsewhere
    if (!listvalid)
    {
       Vector3 midpoint = (oldpos + newpos) / 2.f;
@@ -73,11 +60,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       
       //cout << p.size() << endl;
    }
+#endif
    
    Mesh* current;
-   for (int i = 0; i < p.size(); i++)
+   for (int i = 0; i < objs.size(); i++)
    {
-      current = p[i];
+      current = objs[i];
       current->Begin();
       while (current->HasNext())
       {
@@ -133,9 +121,9 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // Check edges of polys as well.
    if (adjust.distance2(Vector3()) < .00001)
    {
-      for (int i = 0; i < p.size(); i++)
+      for (int i = 0; i < objs.size(); i++)
       {
-         current = p[i];
+         current = objs[i];
          current->Begin();
          while (current->HasNext())
          {
@@ -353,7 +341,6 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
 
 // NOTE: This does not actually take the location of start into consideration, so if start is not
 // on the positive side of the plane then it may return true when the plane was not actually crossed.
-// See the overloaded version above if you don't want that to happen.
 bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
                                       const float& d, float &denominator, Vector3& move)
 {
@@ -366,6 +353,8 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
       opposite sign from the other variable, which means if we just
       check the signs it appears we hit when we didn't.  Including
       values very close to 0 as non-hits fixes this.
+   
+      Err, cancel the above.
    
       Okay, from now on we have to assume that startside is positive.
       Multiplying them together when they could both be extremely small

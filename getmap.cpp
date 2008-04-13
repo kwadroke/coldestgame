@@ -532,7 +532,6 @@ void GetMap(string fn)
    cout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
    cout << "Done\n" << flush;
-   coldet.kdtree = &kdtree;
    
    progress->value = 5;
    progtext->text = "Generating buffers";
