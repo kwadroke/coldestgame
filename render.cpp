@@ -1119,8 +1119,6 @@ void RenderHud()
    static GUI* legshplabel = hud.GetWidget("legshp");
    static GUI* leftarmhplabel = hud.GetWidget("leftarmhp");
    static GUI* rightarmhplabel = hud.GetWidget("rightarmhp");
-   static GUI* killslabel = hud.GetWidget("kills");
-   static GUI* deathslabel = hud.GetWidget("deaths");
    static GUI* torsoweaponlabel = hud.GetWidget("torsoweapon");
    static GUI* larmweaponlabel = hud.GetWidget("larmweapon");
    static GUI* rarmweaponlabel = hud.GetWidget("rarmweapon");
@@ -1151,8 +1149,6 @@ void RenderHud()
    legshplabel->text = "Legs: " + ToString(localplayer.hp[Legs]);
    leftarmhplabel->text = "Left Arm: " + ToString(localplayer.hp[LArm]);
    rightarmhplabel->text = "Right Arm: " + ToString(localplayer.hp[RArm]);
-   killslabel->text = "Kills: " + ToString(localplayer.kills);
-   deathslabel->text = "Deaths: " + ToString(localplayer.deaths);
    
    torsoweaponlabel->text = weapons[localplayer.weapons[Torso]].name;
    larmweaponlabel->text = weapons[localplayer.weapons[LArm]].name;
