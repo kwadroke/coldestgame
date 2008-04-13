@@ -25,11 +25,12 @@ struct eqptr
    }
    bool operator()(Mesh* hashme) const
    {
-      return (unsigned long)hashme % 100000; // Umm, probably not ideal, but we can fix it later
+      return (intptr_t)hashme % 100000; // Umm, probably not ideal, but we can fix it later
    }
 };
 
 typedef __gnu_cxx::hash_set<Mesh*, eqptr, eqptr> MeshSet;
+//typedef set<Mesh*> MeshSet;
 
 class ObjectKDTree
 {
@@ -46,6 +47,7 @@ class ObjectKDTree
       void setfrustum(Quadvec*);
       //vector<Triangle*> gettris(Vector3, float);
       vector<Mesh*> getmeshes(const Vector3&, const float);
+      vector<Mesh*> getmeshes(const Vector3&, const Vector3&, const float);
       list<Mesh*> getmeshes();//Vector3, Vector3, float, float, float, float);
       void visualize();
       
@@ -67,14 +69,6 @@ class ObjectKDTree
       //set<WorldObjects*>* retobjs;
       MeshSet* retobjs;
       bool root;
-      /* Note that these quads are not going to be defined using anything resembling
-         proper winding, but because they are only used for storing values that's
-         not a big deal.  They're actually defined as tristrips as a holover from
-         long, long ago in a galaxy...err, maybe not.
-      
-         On second thought that may need to be changed for other reasons, so we'll see
-         if this remains true.
-      */
       Quadvec p; // Only set in root node
       Quadvec* frustum; // Pointer to root's p
       static int maxlevels;

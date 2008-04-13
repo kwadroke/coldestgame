@@ -6,7 +6,6 @@ unsigned long Particle::nextid = 1;
 
 Particle::Particle(Mesh& meshin) : mesh(meshin)
 {
-   cd = NULL;
    unsent = true;
    senttimes = 0;
    /*id = nextid;
@@ -29,28 +28,20 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
    radius = rad;
    explode = exp;
    lasttick = tick;
-   cd = NULL;
    unsent = true;
    senttimes = 0;
    damage = 0;
    dmgrad = 0;
    id = nextid;
-   // Prevent overflow, not that I expect this to ever happen
+   // Prevent overflow, not sure what the implications of this happening would be
    if (nextid > 4294967294ul)
-      nextid = 0;
+      nextid = 1;
    ++nextid;
 }
 
 
-bool Particle::Update(Mesh* rendermesh)
+Vector3 Particle::Update()
 {
-   // TODO: It's probably stupid that we even need this check - cd should be passed
-   // to the constructor as a reference.
-   if (cd == NULL)
-   {
-      cout << "Particle: Some moron forgot to set Particle::cd.  This is a bug.\n";
-      return true;
-   }
    Vector3 oldpos = pos;
    Uint32 currtick = SDL_GetTicks();
    Uint32 interval = currtick - lasttick;
@@ -58,19 +49,16 @@ bool Particle::Update(Mesh* rendermesh)
    velocity *= accel;
    dir.y -= weight * interval / 1000.f;
    pos += dir * (velocity * interval);
-   cd->listvalid = false;
-   if (explode)
-   {
-      Vector3 adjust = cd->CheckSphereHit(oldpos, pos, radius, NULL, &hitobjs);
-      // Update object position either way
-      mesh.Move(pos);
-      if (adjust.distance2(Vector3()) > .00001)
-         return true;
-   }
-   else
-   {
-      cout << "Particle:  Warning, explode == 0, this is not yet supported.\n";
-   }
+   mesh.Move(pos);
+   
+   return oldpos;
+}
+
+
+// Note: This function does not actually render the particle, it adds it to a collective
+// mesh of all particles which is then rendered
+void Particle::Render(Mesh* rendermesh)
+{
    mesh.AdvanceAnimation();
    // By default materials are not loaded until GenVbo is called (so that the server doesn't
    // make GL calls, but that causes issues here because Mesh::Add(Mesh&) copies tris
@@ -81,6 +69,5 @@ bool Particle::Update(Mesh* rendermesh)
       mesh.LoadMaterials();
       rendermesh->Add(mesh);
    }
-   return false;
 }
 

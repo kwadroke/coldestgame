@@ -9,8 +9,6 @@ int fbodims[3] = {128, 64, 32};
 
 Meshlist meshes;
 
-//list<WorldObjects> objects;
-//list<DynamicObject> dynobjects;
 vector<GLuint> dotextures;
 int viewdist, screenwidth, screenheight, fov, consoletrans, consoleleft;
 int consoleright, consoletop, consolebottom, consolebottomline;

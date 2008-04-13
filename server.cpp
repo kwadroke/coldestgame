@@ -28,9 +28,8 @@ using namespace std;
 // Necessary declarations
 int ServerSend(void*);
 int ServerListen();
-void Move(PlayerData&, Meshlist&, CollisionDetection&);
 void ServerLoadMap();
-void HandleHit(Particle& p);
+void HandleHit(Particle& p, stack<Mesh*>& hitobjs);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void UpdateDOTree(DynamicPrimitive*);
 void ServerUpdatePlayer(int);
@@ -189,17 +188,8 @@ int ServerListen()
       }
       
       // Update particles
-      list<Particle>::iterator j = servparticles.begin();
-      while (j != servparticles.end())
-      {
-         if (j->Update())
-         {
-            if (j->damage != 0)
-               HandleHit(*j);
-            j = servparticles.erase(j);
-         }
-         else ++j;
-      }
+      int updinterval = 100;
+      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, &HandleHit);
       SDL_mutexV(servermutex);
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
@@ -631,7 +621,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                   occup << serverplayers[i].kills << eol;
                   occup << serverplayers[i].deaths << eol;
                   for (int j = 0; j < numbodyparts; ++j)
-                     occup << serverplayers[i].hp[i] << eol;
+                     occup << serverplayers[i].hp[j] << eol;
                   occup << serverplayers[i].ping << eol;
                   occup << serverplayers[i].spawned << eol;
                   occup << serverplayers[i].name << eol;
@@ -707,7 +697,6 @@ void ServerLoadMap()
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
    
-   servercoldet.kdtree = &serverkdtree;
    cout << "Map loaded" << endl;
    serverhasmap = true;
    SDL_mutexV(servermutex);
@@ -715,16 +704,16 @@ void ServerLoadMap()
 
 
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
-void HandleHit(Particle& p)
+void HandleHit(Particle& p, stack<Mesh*>& hitobjs)
 {
    Mesh* curr;
-   while (!p.hitobjs.empty())
+   while (!hitobjs.empty())
    {
-      curr = p.hitobjs.top();
+      curr = hitobjs.top();
       for (int i = 1; i < serverplayers.size(); ++i)
       {
          // Note that some of this code is placeholder until I get a proper spawn system implemented
-         if (curr == &(*serverplayers[i].legs))  // Or other parts of player unit
+         if (curr == &(*serverplayers[i].legs))
          {
             cout << "Hit legs\n";
             serverplayers[i].hp[Legs] -= p.damage;
@@ -778,7 +767,7 @@ void HandleHit(Particle& p)
             break;
          }
       }
-      p.hitobjs.pop();
+      hitobjs.pop();
    }
 }
 
@@ -788,7 +777,7 @@ void ServerUpdatePlayer(int i)
 {
    // Movement and necessary model updates
    UpdatePlayerModel(serverplayers[i], servermeshes, false);
-   Move(serverplayers[i], servermeshes, servercoldet);
+   Move(serverplayers[i], servermeshes, serverkdtree);
    
    // Cooling
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
@@ -825,7 +814,6 @@ void ServerUpdatePlayer(int i)
       Mesh weaponmesh(readweapon, resman);
       Particle part(startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.pos += part.dir * 50;
-      part.cd = &servercoldet;
       part.playernum = i;
       part.damage = weapons[currplayerweapon].damage;
       part.dmgrad = weapons[currplayerweapon].splashradius;
