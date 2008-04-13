@@ -1181,7 +1181,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    p.legs->Rotate(Vector3(0.f, p.facing, 0.f));
    p.legs->Move(p.pos);
    
-   p.torso->Rotate(Vector3(p.pitch, p.facing + p.rotation, p.roll));
+   p.torso->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
    p.torso->Move(p.pos);
    
    if (p.larm == ml.end())
