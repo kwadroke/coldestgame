@@ -354,6 +354,8 @@ int ServerListen()
                serverplayers[oppnum].spawned = true;
                serverplayers[oppnum].lastmovetick = SDL_GetTicks();
                serverplayers[oppnum].spawnpacketnum = packetnum;
+               for (int i = 0; i < numbodyparts; ++i)
+                  serverplayers[oppnum].hp[i] = 100;
             }
             
             Packet response(servoutpack, &servoutsock, &inpack->address);
@@ -707,64 +709,39 @@ void ServerLoadMap()
 void HandleHit(Particle& p, stack<Mesh*>& hitobjs)
 {
    Mesh* curr;
+   bool dead;
    while (!hitobjs.empty())
    {
       curr = hitobjs.top();
       for (int i = 1; i < serverplayers.size(); ++i)
       {
+         dead = false;
          // Note that some of this code is placeholder until I get a proper spawn system implemented
-         if (curr == &(*serverplayers[i].legs))
+         for (int part = 0; part < numbodyparts; ++part)
          {
-            cout << "Hit legs\n";
-            serverplayers[i].hp[Legs] -= p.damage;
-            if (serverplayers[i].hp[Legs] <= 0)
+            if (curr == &(*serverplayers[i].mesh[part]))
             {
-               serverplayers[i].deaths++;
-               serverplayers[i].hp[Legs] = 100;
-               serverplayers[p.playernum].kills++;
-               cout << "Player " << i << " was killed by Player "
-                     << p.playernum << endl;
+               cout << "Hit " << curr << endl;
+               serverplayers[i].hp[part] -= p.damage;
+               if (serverplayers[i].hp[part] <= 0)
+                  dead = true;
             }
-            break;
          }
-         if (curr == &(*serverplayers[i].torso))
+         if (dead)
          {
-            cout << "Hit torso\n";
-            serverplayers[i].hp[Torso] -= p.damage;
-            if (serverplayers[i].hp[Torso] <= 0)
-            {
-               serverplayers[i].deaths++;
-               serverplayers[i].hp[Torso] = 100;
-               serverplayers[p.playernum].kills++;
-               cout << "Player " << i << " was killed by Player " << p.playernum << endl;
-            }
-            break;
-         }
-         if (curr == &(*serverplayers[i].larm))
-         {
-            cout << "Hit left\n";
-            serverplayers[i].hp[LArm] -= p.damage;
-            if (serverplayers[i].hp[LArm] <= 0)
-            {
-               serverplayers[i].deaths++;
-               serverplayers[i].hp[LArm] = 100;
-               serverplayers[p.playernum].kills++;
-               cout << "Player " << i << " was killed by Player " << p.playernum << endl;
-            }
-            break;
-         }
-         if (curr == &(*serverplayers[i].rarm))
-         {
-            cout << "Hit right\n";
-            serverplayers[i].hp[RArm] -= p.damage;
-            if (serverplayers[i].hp[RArm] <= 0)
-            {
-               serverplayers[i].deaths++;
-               serverplayers[i].hp[RArm] = 100;
-               serverplayers[p.playernum].kills++;
-               cout << "Player " << i << " was killed by Player " << p.playernum << endl;
-            }
-            break;
+            serverplayers[i].deaths++;
+            serverplayers[p.playernum].kills++;
+            cout << "Player " << i << " was killed by Player " << p.playernum << endl;
+            serverplayers[i].Kill();
+            
+            Packet deadpacket(servoutpack, &servoutsock);
+            deadpacket.ack = servsendpacketnum;
+            deadpacket.addr = serverplayers[i].addr;
+            SDLNet_Write16(1336, &(deadpacket.addr.port));
+            
+            deadpacket << "d\n";
+            deadpacket << servsendpacketnum << eol;
+            servqueue.push_back(deadpacket);
          }
       }
       hitobjs.pop();

@@ -15,6 +15,7 @@ class PlayerData
    public:
       PlayerData(Meshlist&);
       void Disconnect();
+      void Kill();
       
       Vector3 pos;
       Vector3 clientpos; // So server can keep track of both
@@ -23,7 +24,8 @@ class PlayerData
       bool leftclick, rightclick;
       bool run;
       bool spawned;
-      Meshlist::iterator torso, legs, larm, rarm;
+      //Meshlist::iterator torso, legs, larm, rarm;
+      vector<Meshlist::iterator> mesh;
       set<unsigned long> partids;
       //set<unsigned long> hitids;
       set<unsigned long> acked;

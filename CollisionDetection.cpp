@@ -113,7 +113,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       if (CrossesPlane(oldpos, newpos, norm, d, denominator, move))  // Crossed the plane
       {
          float endside = norm.dot(newpos) + d;
-         adjust += norm * -endside * 1.05f;
+         adjust += norm * -endside;// * 1.05f;
          adjusted++;
       }
    }
@@ -249,7 +249,7 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3vec v, const Vector3& po
       if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
       {
          float endside = norm.dot(pos1) + d;
-         adjust = norm * -endside * 1.01f;
+         adjust = norm * -endside;// * 1.01f;
          return adjust;
       }
    }
