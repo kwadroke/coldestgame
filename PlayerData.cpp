@@ -1,6 +1,6 @@
 #include "PlayerData.h"
 
-PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(0)
+PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(0), mesh(numbodyparts, ml.end())
 {
    Uint32 ticks = 0;
    if (SDL_WasInit(SDL_INIT_TIMER))
@@ -24,7 +24,7 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(
    lastfiretick = 0;
    leftclick = rightclick = run = false;
    meshes = &ml;
-   legs = torso = larm = rarm = ml.end();
+   //legs = torso = larm = rarm = ml.end();
    currweapon = Torso;
    ping = 0;
    temperature = 0.f;
@@ -40,10 +40,17 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(
 void PlayerData::Disconnect()
 {
    connected = false;
+   Kill();
+}
+
+
+void PlayerData::Kill()
+{
    spawned = false;
-   meshes->erase(legs);
-   meshes->erase(torso);
-   meshes->erase(larm);
-   meshes->erase(rarm);
-   legs = torso = larm = rarm = meshes->end();
+   leftclick = false;
+   for (int part = 0; part < numbodyparts; ++part)
+   {
+      meshes->erase(mesh[part]);
+      mesh[part] = meshes->end();
+   }
 }

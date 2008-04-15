@@ -967,14 +967,11 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, Ob
    AppendDynamicMeshes(check, ml);
    if (mplayer)
    {
-      if (mplayer->legs != ml.end())
-         check.erase(remove(check.begin(), check.end(), &(*mplayer->legs)), check.end());
-      if (mplayer->torso != ml.end())
-         check.erase(remove(check.begin(), check.end(), &(*mplayer->torso)), check.end());
-      if (mplayer->larm != ml.end())
-         check.erase(remove(check.begin(), check.end(), &(*mplayer->larm)), check.end());
-      if (mplayer->rarm != ml.end())
-         check.erase(remove(check.begin(), check.end(), &(*mplayer->rarm)), check.end());
+      for (int part = 0; part < numbodyparts; ++part)
+      {
+         if (mplayer->mesh[part] != ml.end())
+            check.erase(remove(check.begin(), check.end(), &(*mplayer->mesh[part])), check.end());
+      }
    }
    return check;
 }
@@ -1161,46 +1158,46 @@ void UpdateServerList()
 
 void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
-   if (p.legs == ml.end())
+   if (p.mesh[Legs] == ml.end())
    {
       IniReader load("models/" + units[p.unit].file + "/legs/base");
       Mesh newmesh(load, resman, gl);
       newmesh.dynamic = true;
       ml.push_front(newmesh);
-      p.legs = ml.begin();
+      p.mesh[Legs] = ml.begin();
    }
-   if (p.torso == ml.end())
+   if (p.mesh[Torso] == ml.end())
    {
       IniReader load("models/" + units[p.unit].file + "/torso/base");
       Mesh newmesh(load, resman, gl);
       newmesh.dynamic = true;
       ml.push_front(newmesh);
-      p.torso = ml.begin();
+      p.mesh[Torso] = ml.begin();
    }
    
-   p.legs->Rotate(Vector3(0.f, p.facing, 0.f));
-   p.legs->Move(p.pos);
+   p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
+   p.mesh[Legs]->Move(p.pos);
    
-   p.torso->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
-   p.torso->Move(p.pos);
+   p.mesh[Torso]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
+   p.mesh[Torso]->Move(p.pos);
    
-   if (p.larm == ml.end())
+   if (p.mesh[LArm] == ml.end())
    {
       IniReader load("models/" + units[p.unit].file + "/larm/base");
       Mesh newmesh(load, resman, gl);
       newmesh.dynamic = true;
-      p.torso->InsertIntoContainer("LeftArmConnector", newmesh);
+      p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", newmesh);
       ml.push_front(newmesh);
-      p.larm = ml.begin();
+      p.mesh[LArm] = ml.begin();
    }
-   if (p.rarm == ml.end())
+   if (p.mesh[RArm] == ml.end())
    {
       IniReader load("models/" + units[p.unit].file + "/rarm/base");
       Mesh newmesh(load, resman, gl);
       newmesh.dynamic = true;
-      p.torso->InsertIntoContainer("RightArmConnector", newmesh);
+      p.mesh[Torso]->InsertIntoContainer("RightArmConnector", newmesh);
       ml.push_front(newmesh);
-      p.rarm = ml.begin();
+      p.mesh[RArm] = ml.begin();
    }
    p.size = units[p.unit].size;
 }

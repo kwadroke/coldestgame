@@ -25,10 +25,10 @@ using namespace std;
 
 int NetSend(void*);
 int NetListen(void*);
-//void SendPacket(UDPpacket*, string, IPaddress, UDPsocket);
 string FillUpdatePacket();
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 string AddressToDD(Uint32);
+void Ack(unsigned long);
 
 list<Packet> sendqueue;
 UDPsocket outsock;
@@ -450,19 +450,21 @@ int NetListen(void* dummy)
                // Remove models for disconnected players
                vector<PlayerData>::iterator i = player.begin();
                ++i;  // Skip first element because that's local player
-#if 0
                for (; i != player.end(); ++i)
                {
                   if (!i->spawned)
                   {
-                     if (i->legs != dynobjects.end())
+                     for (int part = 0; part < numbodyparts; ++part)
                      {
-                        dynobjects.erase(i->legs);
-                        i->legs = dynobjects.end();
+                        if (i->mesh[part] != meshes.end())
+                        {
+                           meshes.erase(i->mesh[part]);
+                           i->mesh[part] = meshes.end();
+                        }
+                           
                      }
                   }
                }
-#endif
                SDL_mutexV(clientmutex);
             }
          }
@@ -608,13 +610,7 @@ int NetListen(void* dummy)
             SDL_mutexV(clientmutex);
             
             // Ack it
-            Packet response(outpack, &outsock, &addr);
-            response << "A\n";
-            response << 0 << eol;
-            response << packetnum << eol;
-            SDL_mutexP(sendmutex);
-            sendqueue.push_back(response);
-            SDL_mutexV(sendmutex);
+            Ack(packetnum);
          }
          else if (packettype == "M")
          {
@@ -636,6 +632,16 @@ int NetListen(void* dummy)
                }
                SDL_mutexV(clientmutex);
             }
+         }
+         else if (packettype == "d") // We died:-(
+         {
+            loadoutmenu.visible = true;
+            hud.visible = false;
+            SDL_mutexP(clientmutex); // Otherwise we can end up firing after we respawn
+            player[0].leftclick = false;
+            SDL_mutexV(clientmutex);
+            // Ack it
+            Ack(packetnum);
          }
       }
       //t.stop();
@@ -659,5 +665,18 @@ void HandleAck(unsigned long acknum)
          break;
       }
    }
+   SDL_mutexV(sendmutex);
+}
+
+
+// This grabs the send mutex, it should probably not be called while holding the client mutex
+void Ack(unsigned long acknum)
+{
+   Packet response(outpack, &outsock, &addr);
+   response << "A\n";
+   response << 0 << eol;
+   response << acknum << eol;
+   SDL_mutexP(sendmutex);
+   sendqueue.push_back(response);
    SDL_mutexV(sendmutex);
 }
