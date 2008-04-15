@@ -263,51 +263,54 @@ void Mesh::Rotate(const Vector3& v)
 
 void Mesh::GenVbo()
 {
-   vbosteps.clear();
-   vbodata.clear();
-   /*if (hasvbo)
-      glDeleteBuffersARB(1, &vbo);
-   glGenBuffersARB(1, &vbo);*/
-   if (!hasvbo)
-      glGenBuffersARB(1, &vbo);
-   glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
-   
-   sort(tris.begin(), tris.end());
-   int counter = 0;
-   Trianglevec::iterator last = tris.begin();
-   for (Trianglevec::iterator i = tris.begin(); i != tris.end(); ++i)
+   if (tris.size())
    {
-      if (*last < *i)
+      vbosteps.clear();
+      vbodata.clear();
+      /*if (hasvbo)
+         glDeleteBuffersARB(1, &vbo);
+      glGenBuffersARB(1, &vbo);*/
+      if (!hasvbo)
+         glGenBuffersARB(1, &vbo);
+      glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
+      
+      sort(tris.begin(), tris.end());
+      int counter = 0;
+      Trianglevec::iterator last = tris.begin();
+      for (Trianglevec::iterator i = tris.begin(); i != tris.end(); ++i)
       {
-         vbosteps.push_back(counter);
-         counter = 0;
+         if (*last < *i)
+         {
+            vbosteps.push_back(counter);
+            counter = 0;
+         }
+         for (int j = 0; j < 3; ++j)
+         {
+            vbodata.push_back(i->GetVboData(j));
+         }
+         last = i;
+         ++counter;
       }
-      for (int j = 0; j < 3; ++j)
+      vbosteps.push_back(counter);
+      if (frameroot.size() <= 1)
       {
-         vbodata.push_back(i->GetVboData(j));
-      }
-      last = i;
-      ++counter;
-   }
-   vbosteps.push_back(counter);
-   if (frameroot.size() <= 1)
-   {
-      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
-                   vbodata.size() * sizeof(VBOData), 
-                   0, GL_STATIC_DRAW_ARB);
-   }
-   else
-   {
-      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+         glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                      vbodata.size() * sizeof(VBOData), 
-                     0, GL_DYNAMIC_DRAW_ARB);
-   }
-   glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
-   glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-   
-   if (!glops)
-   {
-      LoadMaterials();
+                     0, GL_STATIC_DRAW_ARB);
+      }
+      else
+      {
+         glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+                        vbodata.size() * sizeof(VBOData), 
+                        0, GL_DYNAMIC_DRAW_ARB);
+      }
+      glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
+      glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+      
+      if (!glops)
+      {
+         LoadMaterials();
+      }
    }
    
    hasvbo = true;

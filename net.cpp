@@ -307,7 +307,10 @@ int NetListen(void* dummy)
                   connected, and as we find otherwise update that. */
                // At some point this probably won't work, but for the moment it does
                for (vector<PlayerData>::iterator i = player.begin(); i != player.end(); i++)
+               {
                   i->connected = false;
+                  i->spawned = false;
+               }
                
                get >> oppnum;
                short oldunit;
@@ -354,6 +357,7 @@ int NetListen(void* dummy)
                   player[oppnum].pos.z = oppz;
                   
                   player[oppnum].connected = true;
+                  player[oppnum].spawned = true;
                   
 #if 0 // This probably doesn't need to go back in, but we'll see
                   if (oppnum != servplayernum)// && player[oppnum].unit != 0)
@@ -478,21 +482,27 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                while (oppnum != 0)
                {
-                  get >> player[oppnum].unit;
-                  get >> player[oppnum].kills;
-                  get >> player[oppnum].deaths;
-                  for (int i = 0; i < numbodyparts; ++i)
-                     get >> player[oppnum].hp[i];
-                  get >> player[oppnum].ping;
-                  get >> player[oppnum].spawned;
-                  get >> player[oppnum].name;
+                  if (oppnum < player.size())
+                  {
+                     get >> player[oppnum].unit;
+                     get >> player[oppnum].kills;
+                     get >> player[oppnum].deaths;
+                     for (int i = 0; i < numbodyparts; ++i)
+                        get >> player[oppnum].hp[i];
+                     get >> player[oppnum].ping;
+                     get >> player[oppnum].spawned;
+                     get >> player[oppnum].name;
+                  }
                   get >> oppnum;
                }
-               player[0].kills = player[servplayernum].kills;
-               player[0].deaths = player[servplayernum].deaths;
-               for (int i = 0; i < numbodyparts; ++i)
-                  player[0].hp[i] = player[servplayernum].hp[i];
-               player[0].ping = player[servplayernum].ping;
+               if (servplayernum < player.size())
+               {
+                  player[0].kills = player[servplayernum].kills;
+                  player[0].deaths = player[servplayernum].deaths;
+                  for (int i = 0; i < numbodyparts; ++i)
+                     player[0].hp[i] = player[servplayernum].hp[i];
+                  player[0].ping = player[servplayernum].ping;
+               }
                SDL_mutexV(clientmutex);
             }
          }

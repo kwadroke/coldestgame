@@ -504,7 +504,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          SDL_mutexP(servermutex);
          for (int i = 1; i < serverplayers.size(); ++i)
          {
-            if (serverplayers[i].connected)
+            if (serverplayers[i].spawned)
             {
                temp << i << eol;
                temp << serverplayers[i].pos.x << eol;
