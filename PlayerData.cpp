@@ -24,7 +24,6 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(
    lastfiretick = 0;
    leftclick = rightclick = run = false;
    meshes = &ml;
-   //legs = torso = larm = rarm = ml.end();
    currweapon = Torso;
    ping = 0;
    temperature = 0.f;
@@ -50,7 +49,10 @@ void PlayerData::Kill()
    leftclick = false;
    for (int part = 0; part < numbodyparts; ++part)
    {
-      meshes->erase(mesh[part]);
-      mesh[part] = meshes->end();
+      if (mesh[part] != meshes->end())
+      {
+         meshes->erase(mesh[part]);
+         mesh[part] = meshes->end();
+      }
    }
 }

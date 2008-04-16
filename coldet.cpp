@@ -554,12 +554,13 @@ void GUIUpdate()
       {
          ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
          spawnpointsbox->Clear();
-         for (int i = 0; i < spawnpoints.size(); ++i)
+         for (int i = 0; i < availablespawns.size(); ++i)
          {
             string name = ToString(i) + ": ";
-            name += ToString(spawnpoints[i].position.x) + ", ";
-            name += ToString(spawnpoints[i].position.y) + ", ";
-            name += ToString(spawnpoints[i].position.z);
+            name += availablespawns[i].name;
+            /*name += ToString(availablespawns[i].position.x) + ", ";
+            name += ToString(availablespawns[i].position.y) + ", ";
+            name += ToString(availablespawns[i].position.z);*/
             spawnpointsbox->Add(name);
          }
          spawnschanged = false;
@@ -1109,6 +1110,7 @@ void SynchronizePosition()
 
 void Animate()
 {
+   SDL_mutexP(clientmutex);
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
@@ -1117,7 +1119,6 @@ void Animate()
    
    // Particles
    static int partupd = 100;
-   SDL_mutexP(clientmutex);
    UpdateParticles(particles, partupd, kdtree, meshes);
    
    // Also need to update player models because they can be changed by the net thread

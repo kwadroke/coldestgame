@@ -139,9 +139,9 @@ int NetSend(void* dummy)
          }
          ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
          int sel = spawnpointsbox->Selected();
-         p << spawnpoints[sel].position.x << eol;
-         p << spawnpoints[sel].position.y << eol;
-         p << spawnpoints[sel].position.z << eol;
+         p << availablespawns[sel].position.x << eol;
+         p << availablespawns[sel].position.y << eol;
+         p << availablespawns[sel].position.z << eol;
          
          SDL_mutexV(clientmutex);
          SDL_mutexP(sendmutex);
@@ -165,7 +165,7 @@ int NetSend(void* dummy)
          sendqueue.push_back(p);
          SDL_mutexV(sendmutex);
       }
-      SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see
+      SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see (so far so good)
       
       if (changeteam)
       {
@@ -452,6 +452,10 @@ int NetListen(void* dummy)
                }
                
                // Remove models for disconnected players
+               // TODO: This is a problem.  We can't be removing meshes without locking the meshes object,
+               // but we don't really want to do that or every thread has to wait for the renderer to finish
+               // The solution will probably be a mutex on meshes alone (in most cases that won't affect
+               // render performance, and we won't lock it very often here so it won't be a big deal)
                vector<PlayerData>::iterator i = player.begin();
                ++i;  // Skip first element because that's local player
                for (; i != player.end(); ++i)
@@ -588,7 +592,7 @@ int NetListen(void* dummy)
                   ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
                   loadoutmenu.visible = false;
                   hud.visible = true;
-                  player[0].pos = spawnpoints[spawnpointsbox->Selected()].position;
+                  player[0].pos = availablespawns[spawnpointsbox->Selected()].position;
                   player[0].size = units[player[0].unit].size;
                   player[0].lastmovetick = SDL_GetTicks();
                }
@@ -609,20 +613,22 @@ int NetListen(void* dummy)
             SDL_mutexP(clientmutex);
             string line;
             get >> oppnum;
-            if (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end())
+            if (oppnum < player.size())
             {
-               player[oppnum].acked.insert(packetnum);
-               getline(get, line);
-               getline(get, line);
-               newchatlines.push_back(line);
-               newchatplayers.push_back(oppnum);
+               if (player[oppnum].acked.find(packetnum) == player[oppnum].acked.end())
+               {
+                  player[oppnum].acked.insert(packetnum);
+                  getline(get, line);
+                  getline(get, line);
+                  newchatlines.push_back(line);
+                  newchatplayers.push_back(oppnum);
+               }
+               // Ack it
+               Ack(packetnum);
             }
             SDL_mutexV(clientmutex);
-            
-            // Ack it
-            Ack(packetnum);
          }
-         else if (packettype == "M")
+         else if (packettype == "M") // Team change request
          {
             unsigned long acknum;
             bool accepted;
@@ -636,8 +642,19 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                if (player[0].team != newteam)
                {
-                  cout << "Joined team " << newteam << endl;
+                  cout << "Joined team " << (newteam - 1) << endl;
                   player[0].team = newteam;
+                  
+                  availablespawns.clear();
+                  bool morespawns;
+                  SpawnPointData read;
+                  while (get >> morespawns && morespawns)
+                  {
+                     get >> read.position.x >> read.position.y >> read.position.z;
+                     get.ignore(); // Throw out \n
+                     getline(get, read.name);
+                     availablespawns.push_back(read);
+                  }
                   spawnschanged = true;
                }
                SDL_mutexV(clientmutex);
