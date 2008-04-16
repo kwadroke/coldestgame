@@ -29,7 +29,7 @@ using namespace std;
 int ServerSend(void*);
 int ServerListen();
 void ServerLoadMap();
-void HandleHit(Particle& p, stack<Mesh*>& hitobjs);
+void HandleHit(Particle& p, vector<Mesh*>& hitobjs);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void UpdateDOTree(DynamicPrimitive*);
 void ServerUpdatePlayer(int);
@@ -721,24 +721,26 @@ void ServerLoadMap()
 
 
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
-void HandleHit(Particle& p, stack<Mesh*>& hitobjs)
+void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
 {
    Mesh* curr;
    bool dead;
-   while (!hitobjs.empty())
+   // Should only hit each body part once per projectile
+   sort(hitobjs.begin(), hitobjs.end());
+   hitobjs.erase(unique(hitobjs.begin(), hitobjs.end()), hitobjs.end());
+   for (int j = 0; j < hitobjs.size(); ++j)
    {
-      curr = hitobjs.top();
+      curr = hitobjs[j];
       for (int i = 1; i < serverplayers.size(); ++i)
       {
          dead = false;
-         // Note that some of this code is placeholder until I get a proper spawn system implemented
          for (int part = 0; part < numbodyparts; ++part)
          {
             if (serverplayers[i].mesh[part] != servermeshes.end())
             {
                if (curr == &(*serverplayers[i].mesh[part]))
                {
-                  cout << "Hit " << curr << endl;
+                  cout << "Hit " << part << endl;
                   serverplayers[i].hp[part] -= p.damage;
                   if (serverplayers[i].hp[part] <= 0)
                      dead = true;
@@ -762,7 +764,6 @@ void HandleHit(Particle& p, stack<Mesh*>& hitobjs)
             servqueue.push_back(deadpacket);
          }
       }
-      hitobjs.pop();
    }
 }
 
