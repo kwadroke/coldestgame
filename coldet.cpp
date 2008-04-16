@@ -1210,13 +1210,13 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // Note: Only the server passes in HitHandler, the client should always pass in NULL
 // This is important because this function decides whether to do GL stuff based on that
 // and if the server thread tries to do GL it will crash
-void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, void (*HitHandler)(Particle&, stack<Mesh*>&))
+void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, void (*HitHandler)(Particle&, vector<Mesh*>&))
 {
    IniReader empty("models/empty/base");
    if (!HitHandler)
       particlemesh = MeshPtr(new Mesh(empty, resman));
    Vector3 oldpos, partcheck;
-   stack<Mesh*> hitmeshes;
+   vector<Mesh*> hitmeshes;
    if (partupd >= partupdateinterval)
    {
       // Update particles

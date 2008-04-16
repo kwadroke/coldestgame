@@ -21,7 +21,7 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 
 
 Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
-                                           stack<Mesh*>* retobjs)
+                                           vector<Mesh*>* retobjs)
 {
    Vector3 retval = CheckSphereHit(oldpos, newpos, radius, objs, retobjs, true);
    return retval;
@@ -35,7 +35,7 @@ Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vec
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
-                                           stack<Mesh*>* retobjs, bool debug)
+                                           vector<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
    Vector3 temp;
@@ -83,7 +83,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                {
                   adjusted++;
                   if (retobjs)
-                     retobjs->push(current);
+                     retobjs->push_back(current);
                }
             }
          }
@@ -141,7 +141,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   {
                      adjusted++;
                      if (retobjs)
-                        retobjs->push(current);
+                        retobjs->push_back(current);
                   }
                }
             }

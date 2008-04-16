@@ -1,7 +1,7 @@
 #ifndef __COLLISION_DETECTION
 #define __COLLISION_DETECTION
 
-#include <stack>
+#include <vector>
 #include <list>
 #include "ObjectKDTree.h"
 #include "DynamicObject.h"
@@ -21,9 +21,9 @@ class CollisionDetection
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
-                             stack<Mesh*>* = NULL, const bool debug = false);
+                             vector<Mesh*>* = NULL, const bool debug = false);
       Vector3 CheckSphereHitDebug(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
-                             stack<Mesh*>* = NULL);
+                             vector<Mesh*>* = NULL);
       Vector3 PlaneSphereCollision(Vector3vec, const Vector3&, const Vector3&, const float&, const bool debug = false);
       Vector3 PlaneEdgeSphereCollision(Vector3vec, const Vector3&, const float&);
       int intmethod;
