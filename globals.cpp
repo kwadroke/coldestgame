@@ -35,6 +35,6 @@ ObjectKDTree kdtree;
 vector<floatvec> heightmap;  // Smoothed heightmap data
 int tilesize;
 vector<SpawnPointData> spawnpoints;
-SpawnPointData selectedspawn;
+vector<SpawnPointData> availablespawns;
 bool initialized;
 bool serverhasmap;

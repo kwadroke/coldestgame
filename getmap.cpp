@@ -137,6 +137,7 @@ void GetMap(string fn)
       currnode.Read(spawntemp.position.x, "Location", 0);
       currnode.Read(spawntemp.position.y, "Location", 1);
       currnode.Read(spawntemp.position.z, "Location", 2);
+      currnode.Read(spawntemp.name, "Name");
       spawnpoints.push_back(spawntemp);
    }
    

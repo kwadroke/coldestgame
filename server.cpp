@@ -214,7 +214,7 @@ int ServerListen()
          {
             get >> oppnum;
             SDL_mutexP(servermutex);
-            if (packetnum > serverplayers[oppnum].recpacketnum) // Ignore out of order packets
+            if (oppnum < serverplayers.size() && (packetnum > serverplayers[oppnum].recpacketnum)) // Ignore out of order packets
             {
                serverplayers[oppnum].recpacketnum = packetnum;
                get >> oppx >> oppy >> oppz;
@@ -297,6 +297,7 @@ int ServerListen()
             {
                serverplayers[respondto].lastupdate = SDL_GetTicks();
                serverplayers[respondto].recpacketnum = packetnum;
+               serverplayers[respondto].spawnpacketnum = 0;
             }
             serverplayers[respondto].connected = true;
             serverplayers[respondto].name = name;
@@ -340,6 +341,7 @@ int ServerListen()
             get >> oppnum;
             if (packetnum > serverplayers[oppnum].spawnpacketnum)
             {
+               cout << "Player " << oppnum << " is spawning" << endl;
                SDL_mutexP(servermutex);
                get >> serverplayers[oppnum].unit;
                for (int i = 0; i < numbodyparts; ++i)
@@ -370,7 +372,7 @@ int ServerListen()
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
          }
-         else if (packettype == "T")
+         else if (packettype == "T")  // Chat packet
          {
             string line;
             get >> oppnum;
@@ -423,7 +425,7 @@ int ServerListen()
             }
             SDL_mutexV(servermutex);
          }
-         else if (packettype == "M")
+         else if (packettype == "M")  // Team switch request
          {
             // For the moment just ack it, we probably want to ensure even teams at some point
             short newteam;
@@ -438,6 +440,19 @@ int ServerListen()
             response << packetnum << eol;
             response << 1 << eol;
             response << newteam << eol;
+            serverplayers[oppnum].team = newteam;
+            for (int i = 0; i < spawnpoints.size(); ++i)
+            {
+               if ((spawnpoints[i].team == serverplayers[oppnum].team - 1) || serverplayers[oppnum].team == 1)
+               {
+                  response << "1\n"; // Indicate that there are more spawn points to be read
+                  response << spawnpoints[i].position.x << eol;
+                  response << spawnpoints[i].position.y << eol;
+                  response << spawnpoints[i].position.z << eol;
+                  response << spawnpoints[i].name << eol;
+               }
+            }
+            response << 0 << eol; // No more spawn points
             SDL_mutexP(servermutex);
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
@@ -719,12 +734,15 @@ void HandleHit(Particle& p, stack<Mesh*>& hitobjs)
          // Note that some of this code is placeholder until I get a proper spawn system implemented
          for (int part = 0; part < numbodyparts; ++part)
          {
-            if (curr == &(*serverplayers[i].mesh[part]))
+            if (serverplayers[i].mesh[part] != servermeshes.end())
             {
-               cout << "Hit " << curr << endl;
-               serverplayers[i].hp[part] -= p.damage;
-               if (serverplayers[i].hp[part] <= 0)
-                  dead = true;
+               if (curr == &(*serverplayers[i].mesh[part]))
+               {
+                  cout << "Hit " << curr << endl;
+                  serverplayers[i].hp[part] -= p.damage;
+                  if (serverplayers[i].hp[part] <= 0)
+                     dead = true;
+               }
             }
          }
          if (dead)

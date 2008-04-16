@@ -61,7 +61,7 @@ extern ObjectKDTree kdtree;
 extern vector<floatvec> heightmap;  // Smoothed heightmap data
 extern int tilesize;
 extern vector<SpawnPointData> spawnpoints;
-extern SpawnPointData selectedspawn;
+extern vector<SpawnPointData> availablespawns;
 extern bool initialized;
 extern Meshlist meshes;
 extern bool serverhasmap;
