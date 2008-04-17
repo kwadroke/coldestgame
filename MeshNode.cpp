@@ -13,7 +13,8 @@ MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
 
 
 // Returned triangles go directly into tris
-void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, Trianglevec& tris)
+void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, Trianglevec& tris,
+                       const Vector3& campos)
 {
    Vector3 interprot1 = lerp(interpnode->rot1, rot1, interpval);
    Vector3 interprot2 = lerp(interpnode->rot2, rot2, interpval);
@@ -21,15 +22,67 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    
    m = GraphicMatrix();
    
-   m.rotatex(interprot2.x);
-   m.rotatey(interprot2.y);
-   m.rotatez(interprot2.z);
-   
-   m.translate(interptrans);
-   
-   m.rotatex(interprot1.x);
-   m.rotatey(interprot1.y);
-   m.rotatez(interprot1.z);
+   if (!facing)
+   {
+      m.rotatex(interprot2.x);
+      m.rotatey(interprot2.y);
+      m.rotatez(interprot2.z);
+      
+      m.translate(interptrans);
+      
+      m.rotatex(interprot1.x);
+      m.rotatey(interprot1.y);
+      m.rotatez(interprot1.z);
+   }
+   else
+   {
+      if (collide)
+      {
+         cout << "Warning: Polygons with both facing and collide are not supported.\n";
+         cout << "This will most likely not work as you intend." << endl;
+      }
+      // Facing tris need norms before they are transformed, others need them after
+      // Note that it is assumed a facing quad will be coplanar so the normals of
+      // both triangles will be the same.
+      Vector3 norm = vert[1] - vert[0];
+      norm = norm.cross(vert[2] - vert[0]);
+      norm.normalize();
+      Vector3 dir;
+      Vector3 start = -norm; // Initial view direction
+      Vector3 facerot, currpos;
+      
+      // Find the current position - note that this duplicates code, but with facing polygons
+      // it is necessary to do this twice so there's not a good way around that
+      GraphicMatrix facem;
+      facem.translate(interptrans);
+      if (parent) facem *= parent->m;
+      facem *= parentm;
+      for (int i = 0; i < vert.size(); ++i)
+      {
+         currpos += vert[i];
+      }
+      currpos /= vert.size();
+      currpos.transform(facem);
+      dir = campos - currpos;
+      
+      dir.y = 0;
+      dir.normalize();
+      facerot.y = acos(start.dot(dir)) * 180.f / 3.14159265;
+      if (start.cross(dir).y >= 0)
+         facerot.y *= -1;
+      dir = campos - currpos;
+      dir.normalize();
+      GraphicMatrix rotm;
+      rotm.rotatey(facerot.y);
+      start.transform(rotm);
+      facerot.x = acos(start.dot(dir)) * 180.f / 3.14159265;
+      if (dir.y >= 0)
+         facerot.x *= -1;
+      
+      m.rotatex(facerot.x);
+      m.rotatey(facerot.y + 180.f);
+      m.translate(interptrans);
+   }
    
    if (parent) // If we are the virtual child of a Node in another Mesh
    {
@@ -86,7 +139,7 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    // Recursively call this on our children
    for (int i = 0; i < children.size(); ++i)
    {
-      children[i]->GenTris(interpnode->children[i], interpval, m, tris);
+      children[i]->GenTris(interpnode->children[i], interpval, m, tris, campos);
    }
 }
 

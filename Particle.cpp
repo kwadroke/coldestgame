@@ -57,9 +57,9 @@ Vector3 Particle::Update()
 
 // Note: This function does not actually render the particle, it adds it to a collective
 // mesh of all particles which is then rendered
-void Particle::Render(Mesh* rendermesh)
+void Particle::Render(Mesh* rendermesh, const Vector3& campos)
 {
-   mesh.AdvanceAnimation();
+   mesh.AdvanceAnimation(campos);
    // By default materials are not loaded until GenVbo is called (so that the server doesn't
    // make GL calls, but that causes issues here because Mesh::Add(Mesh&) copies tris
    // directly, so if the materials haven't been loaded those materials will still be NULL

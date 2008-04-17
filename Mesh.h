@@ -48,7 +48,7 @@ class Mesh
       const Triangle& Next();
       
       int Size() const; // Not related to size member
-      void AdvanceAnimation();
+      void AdvanceAnimation(const Vector3& campos = Vector3());
       
       bool render;
       bool dynamic;
@@ -59,7 +59,7 @@ class Mesh
       GLuint impostortex;
       
    private:
-      void UpdateTris(int);
+      void UpdateTris(int, const Vector3&);
       void BindVbo();
       
       Trianglevec tris;

@@ -30,6 +30,12 @@ void Vector3::operator*= (const float& i)
 }
 
 
+Vector3 operator*(const float i, const Vector3& v)
+{
+   return (v * i);
+}
+
+
 Vector3 Vector3::operator+ (const Vector3& v) const
 {
    return Vector3(x + v.x, y + v.y, z + v.z);
@@ -55,6 +61,12 @@ void Vector3::operator-= (const Vector3& v)
    x -= v.x;
    y -= v.y;
    z -= v.z;
+}
+
+
+Vector3 operator-(const Vector3& v)
+{
+   return -1 * v;
 }
 
 

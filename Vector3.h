@@ -17,7 +17,7 @@ class Vector3
       Vector3 operator- (const Vector3&) const;
       void operator-= (const Vector3&);
       Vector3 operator/ (const float&) const;
-      void operator /= (const float&);
+      void operator/= (const float&);
       Vector3 cross(const Vector3&) const;
       void normalize();
       void print() const;
@@ -33,6 +33,9 @@ class Vector3
       
       float x, y, z;
 };
+
+Vector3 operator*(const float, const Vector3&);
+Vector3 operator-(const Vector3&);
 
 
 inline float Vector3::dot(const Vector3& v) const

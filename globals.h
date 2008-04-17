@@ -84,7 +84,8 @@ T lerp(T x, T y, float a)
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
 void AppendToChat(int, string);
-void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, void (*HitHandler)(Particle&, vector<Mesh*>&) = NULL);
+void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&,
+                     void (*HitHandler)(Particle&, vector<Mesh*>&) = NULL, const Vector3& campos = Vector3());
 void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 
