@@ -169,7 +169,7 @@ void Mesh::Load(const IniReader& reader)
             }
          }
       }
-      UpdateTris(0);
+      UpdateTris(0, Vector3());
    }
    else if (type == "bush")
    {
@@ -435,7 +435,7 @@ void Mesh::RenderImpostor()
 }
 
 
-void Mesh::AdvanceAnimation()
+void Mesh::AdvanceAnimation(const Vector3& campos)
 {
    if (frameroot.size() < 1) return;
    
@@ -449,7 +449,7 @@ void Mesh::AdvanceAnimation()
       if (currkeyframe >= frameroot.size() - 1)
          currkeyframe = 0;
    }
-   UpdateTris(currkeyframe);
+   UpdateTris(currkeyframe, campos);
 }
 
 
@@ -459,7 +459,7 @@ void Mesh::AdvanceAnimation()
 // frameroot[index + 1] based on animtime
 
 // TODO: Doesn't currently update transparent tris (but then neither does anything else ATM)
-void Mesh::UpdateTris(int index)
+void Mesh::UpdateTris(int index, const Vector3& campos)
 {
    float interpval = (float)animtime / (float)frametime[currkeyframe];
    
@@ -478,15 +478,15 @@ void Mesh::UpdateTris(int index)
    if (frameroot.size() == 1) // Implies index has to be 0
    {
       //if (tris.size() <= 0)
-         frameroot[0]->GenTris(frameroot[0], interpval, m, tris);
+         frameroot[0]->GenTris(frameroot[0], interpval, m, tris, campos);
    }
    else if (index == frameroot.size() - 1) // Could happen if we land exactly on the last keyframe
    {
-      frameroot[index]->GenTris(frameroot[index], interpval, m, tris);
+      frameroot[index]->GenTris(frameroot[index], interpval, m, tris, campos);
    }
    else
    {
-      frameroot[index]->GenTris(frameroot[index + 1], interpval, m, tris);
+      frameroot[index]->GenTris(frameroot[index + 1], interpval, m, tris, campos);
    }
    
    CalcBounds();

@@ -22,6 +22,7 @@ VBOData Triangle::GetVboData(const int vertex)
    ret.ny = norm[vertex].y;
    ret.nz = norm[vertex].z;
    
+   // Compute tangent
    Vector3 one = vert[1] - vert[0];
    Vector3 two = vert[2] - vert[0];
    float tcone = texcoords[0][1][1] - texcoords[0][0][1];
@@ -30,6 +31,7 @@ VBOData Triangle::GetVboData(const int vertex)
    ret.tx = tangent.x;
    ret.ty = tangent.y;
    ret.tz = tangent.z;
+   
    for (int i = 0; i < 8; ++i)
    {
       ret.tc[i][0] = texcoords[i][vertex][0];

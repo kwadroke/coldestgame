@@ -1114,12 +1114,12 @@ void Animate()
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      i->AdvanceAnimation();
+      i->AdvanceAnimation(player[0].pos);
    }
    
    // Particles
    static int partupd = 100;
-   UpdateParticles(particles, partupd, kdtree, meshes);
+   UpdateParticles(particles, partupd, kdtree, meshes, NULL, player[0].pos);
    
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
@@ -1210,7 +1210,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // Note: Only the server passes in HitHandler, the client should always pass in NULL
 // This is important because this function decides whether to do GL stuff based on that
 // and if the server thread tries to do GL it will crash
-void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, void (*HitHandler)(Particle&, vector<Mesh*>&))
+void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, void (*HitHandler)(Particle&, vector<Mesh*>&),
+                     const Vector3& campos)
 {
    IniReader empty("models/empty/base");
    if (!HitHandler)
@@ -1231,7 +1232,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
          {
             if (!HitHandler)
-               j->Render(particlemesh.get());
+               j->Render(particlemesh.get(), player[0].pos);
             ++j;
          }
          else
