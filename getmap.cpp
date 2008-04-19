@@ -460,6 +460,13 @@ void GetMap(string fn)
    }
    
    
+   // Must be done here so it's available for KDTree creation
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      i->CalcBounds();
+   }
+   
+   
    // Build water object
    float waterminx, waterminy;
    float watermaxx, watermaxy;
@@ -529,7 +536,6 @@ void GetMap(string fn)
    if (server)   // Then wait for the server to copy the data before generating buffers
       while (!serverhasmap) SDL_Delay(1);
    kdtree = ObjectKDTree(&meshes, points);
-   //kdtree.setvertices(points);
    cout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
    cout << "Done\n" << flush;
@@ -557,7 +563,6 @@ void GetMap(string fn)
          ++counter;
       }
       i->GenVbo();
-      i->CalcBounds();
    }
    
    progress->value = 6;
@@ -577,11 +582,11 @@ void GetMap(string fn)
    if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
       worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
 #endif
-   int shadowsize = mapw > maph ? mapw : maph;
+   float shadowsize = (int)(mapw > maph ? mapw : maph);
    shadowsize *= tilesize;
-   Vector3 center(mapw / 2.f, 0, maph / 2.f);
+   Vector3 center((mapw - 1) / 2.f, 0, (maph - 1) / 2.f);
    center *= tilesize;
-   GenShadows(center, shadowsize / 1.4, worldshadowmapfbo);
+   GenShadows(center, shadowsize / 1.4f, worldshadowmapfbo);
    resman.texhand.ActiveTexture(7);
    
    resman.texhand.BindTexture(worldshadowmapfbo.GetTexture());
@@ -604,6 +609,49 @@ void GetMap(string fn)
    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
    
    resman.texhand.ActiveTexture(0);
+   
+   
+   // Render minimap
+   minimapfbo = FBO(512, 512, false, &resman.texhand);
+   minimapfbo.Bind();
+   float minimapheight = 10000.f;
+   
+   glMatrixMode(GL_PROJECTION);
+   glPushMatrix();
+   glLoadIdentity();
+   mapwidth = (mapw - 1) * tilesize;
+   mapheight = (maph - 1) * tilesize;
+   glOrtho(-mapwidth / 2.f, mapwidth / 2.f, -mapheight / 2.f, mapheight / 2.f, 10, minimapheight * 2.f);
+   
+   glMatrixMode(GL_MODELVIEW);
+   Vector3 cam = center;
+   cam.y = minimapheight;
+   kdtree.setfrustum(cam, Vector3(90, 0, 0), 10, minimapheight * 2.f, 90, 1);
+   gluLookAt(cam.x, cam.y, cam.z, center.x, 0, center.z, 0, 0, -1);
+   
+   glFogf(GL_FOG_START, minimapheight * 2.f);
+   glFogf(GL_FOG_END, minimapheight * 2.f);
+   
+   glViewport(0, 0, 512, 512);
+   
+   glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+   
+   impdistmulti *= 10000.f;
+   lights.Place();
+   RenderObjects();
+   RenderWater();
+   impdistmulti /= 10000.f;
+   
+   glMatrixMode(GL_PROJECTION);
+   glPopMatrix();
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   
+   glViewport(0, 0, screenwidth, screenheight);
+   minimapfbo.Unbind();
+   glFogf(GL_FOG_START, viewdist * .8f);
+   glFogf(GL_FOG_END, viewdist);
+   
 }
 
 

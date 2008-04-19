@@ -125,7 +125,6 @@ Node
       size 160
       Position 150 -1 250
       Rotations 0 0 0
-EOF
    Node
       Type proctree
       Materials materials/bark materials/leaves

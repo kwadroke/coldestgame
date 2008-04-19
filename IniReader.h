@@ -30,6 +30,7 @@ class IniReader
       float Read(float&, const string, const int num = 0) const;
       bool Read(bool&, const string, const int num = 0) const;
       int NumChildren() const;
+      string GetPath() const;
       
    private:
       string Parse(string);
@@ -47,6 +48,7 @@ class IniReader
       mutable map<string, string, std::less<string> > values;
       int level;
       string name;
+      string path;
 };
 
 #endif

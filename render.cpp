@@ -258,326 +258,6 @@ void RenderObjects()
 }
 
 
-
-
-// Are the next five functions really obsolete?  I think so...
-
-
-
-
-
-
-
-
-/* distsort indicates whether the primitives should be sorted before rendering
-   This is intended for vectors of transparent primitives that need to be
-   rendered in the proper order for blending to work.
-   */
-void RenderPrimitives(vector<WorldPrimitives> &prims, bool distsort)
-{
-#if 0
-   if (!prims.size()) return;
-   
-   list<WorldObjects>::iterator o;
-   Vector3 playerpos = localplayer.pos;
-   int currindex = 0;
-   
-   if (distsort)
-   {
-      for (vector<WorldPrimitives>::iterator i = prims.begin(); i != prims.end(); ++i)
-      {
-         // At the moment, cylinders won't sort right anyway, so don't bother
-         if (i->type == "cylinder")
-            i->dist = 0;
-         else
-         {
-            float x = (i->v[0].x + i->v[1].x + i->v[2].x + i->v[3].x) / 4;
-            float y = (i->v[0].y + i->v[1].y + i->v[2].y + i->v[3].y) / 4;
-            float z = (i->v[0].z + i->v[1].z + i->v[2].z + i->v[3].z) / 4;
-            i->dist = (x - playerpos.x) * (x - playerpos.x) +
-                  (y - playerpos.y) * (y - playerpos.y) +
-                  (z - playerpos.z) * (z - playerpos.z);
-         }
-      }
-      
-      if (distsort)
-         sort(prims.begin(), prims.end());
-      else sort(prims.begin(), prims.end(), greater<WorldPrimitives>());
-   }
-   
-   for (vector<WorldPrimitives>::iterator i = prims.begin(); i != prims.end(); ++i)
-   {
-      o = i->object;
-      
-      i->material->Use();
-      if (shadowrender)
-         resman.shaderman.UseShader(shadowshader);
-      if (i->type == "cylinder")
-      {
-         glPushMatrix();
-         glTranslatef(o->x, o->y, o->z);
-         glRotatef(o->rotation, 0, 1, 0);
-         glRotatef(o->pitch, 1, 0, 0);
-         glRotatef(o->roll, 0, 0, 1);
-         GLUquadricObj *c = gluNewQuadric();
-         gluQuadricTexture(c, GL_TRUE);
-         gluCylinder(c, i->rad, i->rad1, i->height, i->slices, i->stacks);
-         gluDeleteQuadric(c);
-         glPopMatrix();
-         trislastframe += i->slices * i->stacks * 2;
-         
-      }
-      else if (i->type == "tristrip" || i->type == "terrain")
-      {
-         if (1)
-         {
-            o->RenderVbo(i->vboindex, o->vbocount[currindex]);
-            i += o->vbocount[currindex] - 1;
-            ++currindex;
-         }
-         trislastframe += 2 * o->vbocount[currindex - 1];
-      }
-   }
-#endif
-}
-
-
-void InitGLState(WorldObjects *i)
-{
-   if (i->type == "tree" ||
-      i->type == "bush" ||
-      i->type == "proctree")
-   {
-      //glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
-      // Nice alpha textured tree leaves
-      //glAlphaFunc(GL_GREATER, 0.5);
-      
-      glEnable(GL_ALPHA_TEST);
-      glBlendFunc(GL_ONE, GL_ZERO);
-      glEnable(GL_BLEND);
-      
-      /* Not entirely happy with the way this looks, but it could be worse*/
-      glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-      glSampleCoverage(1.f, GL_FALSE);
-      glDisable(GL_BLEND);
-      //glAlphaFunc(GL_GREATER, 0.5);
-      
-      //glDisable(GL_LIGHTING);
-   }
-}
-
-
-void RestoreGLState(WorldObjects *i)
-{
-   if (i->type == "tree" ||
-      i->type == "bush" ||
-      i->type == "proctree")
-   {
-      //glAlphaFunc(GL_GREATER, 0.5);
-      
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glDisable(GL_ALPHA_TEST);
-      
-      //glDisable(GL_BLEND);
-      
-      glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-      glEnable(GL_BLEND);
-   }
-}
-
-
-void RenderDynamicObjects()
-{
-#if 0
-   list<DynamicObject>::iterator i;
-   SDL_mutexP(clientmutex);
-   for (i = dynobjects.begin(); i != dynobjects.end(); ++i)
-   {
-      if (i->visible && (!shadowrender || !i->billboard))
-      {
-         list<DynamicPrimitive*>::iterator j;
-         for (j = i->prims[i->animframe].begin(); j != i->prims[i->animframe].end(); ++j)
-         {
-            if ((*j)->parentid == "-1" || (*j)->parentid == "-2")
-            {
-               glPushMatrix();
-               RenderDOTree(*j);
-               glPopMatrix();
-            }
-         }
-      }
-   }
-   SDL_mutexV(clientmutex)
-#endif
-}
-
-
-// Recursively traverse the tree under *root and render the primitives
-void RenderDOTree(DynamicPrimitive* root)
-{
-#if 0
-   list<DynamicObject>::iterator parent = root->parentobj;
-   
-   for (int i = 0; i < 4; ++i)
-      root->v[i] = root->orig[i];
-   
-   root->m = GraphicMatrix();
-   
-   root->m.rotatex(root->rot2.x);
-   root->m.rotatey(root->rot2.y);
-   root->m.rotatez(root->rot2.z);
-   
-   root->m.translate(root->trans.x, root->trans.y, root->trans.z);
-   root->m.rotatex(root->rot1.x);
-   root->m.rotatey(root->rot1.y);
-   root->m.rotatez(root->rot1.z);
-   
-   if (root->parentid == "-1")  // Move to object position only for root nodes
-   {
-      root->m.rotatex(-parent->pitch);
-      root->m.rotatey(parent->rotation);
-      root->m.rotatez(parent->roll);
-      root->m.translate(parent->position.x, parent->position.y, parent->position.z);
-   }
-   else
-   {
-      root->m *= root->parent->m;
-   }
-   
-   resman.texhand.ActiveTexture(0);
-   resman.texhand.BindTextureDebug(root->texnums[0]);
-   resman.texhand.ActiveTexture(1);
-   resman.texhand.BindTextureDebug(root->texnums[1]);
-   resman.texhand.ActiveTexture(0);
-   resman.shaderman.UseShader(root->shader);
-   //glGenerateMipmapEXT(GL_TEXTURE_2D);
-   
-   if (root->transparent)
-   {
-      //glAlphaFunc(GL_GREATER, 0.5);
-      glEnable(GL_ALPHA_TEST);
-      glBlendFunc(GL_ONE, GL_ZERO);
-      glEnable(GL_BLEND);
-   }
-   if (root->translucent)
-   {
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glEnable(GL_ALPHA_TEST);
-      glAlphaFunc(GL_GREATER, .01);
-      //glDepthMask(GL_FALSE);
-   }
-   
-   if (root->type == "tristrip")
-   {
-      float temp[3];
-      Vector3 norm;
-      
-      norm = (root->v[2] - root->v[0]).cross(
-         root->v[1] - root->v[0]);
-      norm.normalize();
-      
-      if (root->facing)
-      {
-         Vector3 dir = localplayer.pos - parent->position;
-         Vector3 start = norm * -1; // Initial view direction
-         
-         dir.y = 0;
-         dir.normalize();
-         root->rot2.y = acos(start.dot(dir)) * 180.f / 3.14159265;
-         if (start.cross(dir).y >= 0)
-            root->rot2.y *= -1;
-         dir = localplayer.pos - parent->position;
-         dir.normalize();
-         GraphicMatrix rotm;
-         rotm.rotatey(root->rot2.y);
-         start.transform(rotm);
-         root->rot2.x = acos(start.dot(dir)) * 180.f / 3.14159265;
-         if (dir.y >= 0)
-            root->rot2.x *= -1;
-      }
-      if (parent->billboard)
-      {
-         Vector3 lightn = lights.GetPos(0);
-         lightn.normalize();
-         norm = lightn;
-      }
-      
-      // Apply the matrix of transforms
-      for (int i = 0; i < 4; ++i)
-         root->v[i].transform(root->m);
-      
-      // Just for testing bumpmapping
-      norm = (root->v[2] - root->v[0]).cross(
-               root->v[1] - root->v[0]);
-      norm.normalize();
-      Vector3 tangent = root->v[1] - root->v[0];
-      tangent.normalize();
-      
-      GLint loc = resman.shaderman.GetAttribLocation(bumpshader, "tangent");
-      
-      glColor4f(1, 1, 1, 1);
-      glBegin(GL_TRIANGLE_STRIP);
-      glTexCoord2fv(&root->texcoords[0][0][0]);
-      glNormal3fv(norm.array(temp));
-      glVertexAttrib3fv(loc, tangent.array(temp));
-      glVertex3fv(root->v[0].array(temp));
-      glTexCoord2fv(&root->texcoords[0][1][0]);
-      glVertex3fv(root->v[1].array(temp));
-      glTexCoord2fv(&root->texcoords[0][2][0]);
-      glVertex3fv(root->v[2].array(temp));
-      glTexCoord2fv(&root->texcoords[0][3][0]);
-      glVertex3fv(root->v[3].array(temp));
-      glEnd();
-   }
-   else if (root->type == "cylinder")
-   {
-      glPushMatrix();
-      glMultMatrixf(root->m.members);
-      
-      GLUquadricObj *c = gluNewQuadric();
-      gluQuadricTexture(c, GL_TRUE);
-      gluCylinder(c, root->rad, root->rad1,
-                  root->height, root->slices,
-                  root->stacks);
-      gluDeleteQuadric(c);
-      glPopMatrix();
-      
-      // For collision detection
-      root->v[0].x = root->v[1].x = root->v[2].x = root->v[3].x = 0;
-      root->v[0].z = root->v[1].z = root->height;
-      root->v[0].y = root->v[1].y = root->v[2].y = root->v[3].y = 0;
-      root->v[2].z = root->v[3].z = 0;
-      root->v[0].x -= .01;
-      root->v[2].x -= .01;
-      
-      for (int i = 0; i < 4; ++i)
-         root->v[i].transform(root->m.members);
-   }
-   
-   if (root->transparent)
-   {
-      glDisable(GL_ALPHA_TEST);
-      //glDisable(GL_BLEND);
-   }
-   
-   if (root->translucent)
-   {
-      glDisable(GL_ALPHA_TEST);
-      glAlphaFunc(GL_GREATER, .5);
-      glDepthMask(GL_TRUE);
-   }
-   
-   // Render children, siblings should be taken care of by the parent
-   list<DynamicPrimitive*>::iterator i;
-   for (i = root->child.begin(); i != root->child.end(); i++)
-   {
-      RenderDOTree(*i);
-   }
-   //glPopMatrix();
-#endif
-}
-
-
 // This needs to sort descending, hence the >
 bool sortbyimpdim(const Mesh* l, const Mesh* r)
 {
@@ -746,7 +426,6 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
 #endif
    
    // Need to reset kdtree frustum...
-   //Vector3 dir = lights.GetDir(num);
    Vector3 p = lights.GetPos(0);
    Vector3 rots = lights.GetRots(0);
    
@@ -760,7 +439,6 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    shadowrender = true;
    RenderObjects();
-   RenderDynamicObjects();
    shadowrender = false;
    glDisable(GL_POLYGON_OFFSET_FILL);
    
@@ -1064,6 +742,9 @@ void RenderHud()
    static GUI* rarmselectedlabel = hud.GetWidget("rarmselected");
    static ProgressBar* tempbar = (ProgressBar*)hud.GetWidget("temperature");
    static ProgressBar* rotbar = (ProgressBar*)hud.GetWidget("facing");
+   static GUI* minimaplabel = hud.GetWidget("minimap");
+   static GUI* playerposlabel = hud.GetWidget("playerpos");
+   static GUI* loadoutmaplabel = loadoutmenu.GetWidget("map");
    
    if (frames >= 30) // Update FPS
    {
@@ -1105,6 +786,16 @@ void RenderHud()
    rotbar->SetRange(-90, 90);
    rotbar->value = (int)localplayer.rotation;
    
+   minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
+   playerposlabel->x = localplayer.pos.x / mapwidth;
+   playerposlabel->x *= minimaplabel->width;
+   playerposlabel->x += minimaplabel->x;
+   //playerposlabel->x = minimaplabel->x + minimaplabel->width - playerposlabel->x;
+   playerposlabel->y = localplayer.pos.z / mapheight;
+   playerposlabel->y *= minimaplabel->height;
+   playerposlabel->y += minimaplabel->y;
+   //playerposlabel->y = minimaplabel->y + minimaplabel->height - playerposlabel->y;
+   loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    
 #ifdef DEBUGSMT
    // Debug the shadowmap texture
@@ -1141,7 +832,6 @@ void RenderHud()
 }
 
 
-// Still need this, even though we don't mess with the shaders anymore
 void SetReflection(bool on)
 {
    if (!reflection) on = false;

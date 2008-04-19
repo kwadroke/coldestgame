@@ -54,7 +54,7 @@
       <Pressed>textures/buttonpressed.png</Pressed>
       <LeftClickAction>loadouttomain</LeftClickAction>
    </Button>
-   <Label x="100" y="100" width="500" height="600" text="Unit Preview" readonly="true" xmargin="100" ymargin="100" align="center">
+   <Label x="100" y="100" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map">
       <Normal>textures/buttonnormsquare.png</Normal>
    </Label>
    

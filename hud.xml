@@ -30,4 +30,10 @@
    <Label x="490" y="484" width="20" height="32" text="" name="reticle">
       <Normal>textures/reticle.png</Normal>
    </Label>
+   
+   <Label x="800" y="700" width="190" height="290" text="" name="minimap"/>
+   
+   <Label x="0" y="0" width="10" height="16" text="" name="playerpos">
+      <Normal>textures/projectile.png</Normal>
+   </Label>
 </GUI>

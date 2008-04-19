@@ -529,9 +529,9 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
 void Mesh::CalcBounds()
 {
    float size2 = 0.f;
+   float dist2 = 0.f;
    Vector3 min;
    Vector3 max;
-   float dist2 = 0.f;
    float temp;
    for (int i = 0; i < tris.size(); ++i)
    {
@@ -550,7 +550,7 @@ void Mesh::CalcBounds()
          if (temp < min.z) min.z = temp;
       }
    }
-   size = sqrt(size2);
+   size = sqrt(size2) * 2.f;
    height = max.y - min.y;
    width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
 }
