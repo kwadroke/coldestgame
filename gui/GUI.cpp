@@ -56,7 +56,10 @@ void GUI::Init(GUI* p, TextureManager* tm)
    fontscale = 12.f / basefontsize; // Default font size is 12
    text = oldtext = "";
    for (int i = 0; i < 3; ++i)
+   {
       textures.push_back("");
+      texids.push_back(0);
+   }
    glGenTextures(1, &texttexture);
 }
 
@@ -97,6 +100,7 @@ void GUI::Render()
    if (visible)
    {
       glEnable(GL_DEPTH_TEST);
+      glDisable(GL_CULL_FACE);
       list<GUI*>::iterator i;
       for (i = children.begin(); i != children.end(); ++i)
       {
@@ -110,17 +114,37 @@ void GUI::Render()
 void GUI::RenderBase()
 {
    if (textures[state] == "") return;
-   texman->BindTexture(textures[state]);
-   glBegin(GL_TRIANGLE_STRIP);
-   glTexCoord2i(0, 0);
-   glVertex2f((x + xoff) * wratio, (y + yoff) * hratio);
-   glTexCoord2i(0, 1);
-   glVertex2f((x + xoff) * wratio, (y + yoff + height) * hratio);
-   glTexCoord2i(1, 0);
-   glVertex2f((x + xoff + width) * wratio, (y + yoff) * hratio);
-   glTexCoord2i(1, 1);
-   glVertex2f((x + xoff + width) * wratio, (y + yoff + height) * hratio);
-   glEnd();
+   if (textures[state] != "USEID")
+   {
+      texman->BindTexture(textures[state]);
+      glBegin(GL_TRIANGLE_STRIP);
+      glTexCoord2i(0, 0);
+      glVertex2f((x + xoff) * wratio, (y + yoff) * hratio);
+      glTexCoord2i(0, 1);
+      glVertex2f((x + xoff) * wratio, (y + yoff + height) * hratio);
+      glTexCoord2i(1, 0);
+      glVertex2f((x + xoff + width) * wratio, (y + yoff) * hratio);
+      glTexCoord2i(1, 1);
+      glVertex2f((x + xoff + width) * wratio, (y + yoff + height) * hratio);
+      glEnd();
+   }
+   else
+   {
+      texman->texhand->BindTexture(texids[state]);
+#ifdef LINUX
+      // Linux requires flipped texcoords for FBO textures, which is what this is used for
+      glBegin(GL_QUADS);
+      glTexCoord2i(0, 1);
+      glVertex2f((x + xoff) * wratio, (y + yoff) * hratio);
+      glTexCoord2i(0, 0);
+      glVertex2f((x + xoff) * wratio, (y + yoff + height) * hratio);
+      glTexCoord2i(1, 0);
+      glVertex2f((x + xoff + width) * wratio, (y + yoff + height) * hratio);
+      glTexCoord2i(1, 1);
+      glVertex2f((x + xoff + width) * wratio, (y + yoff) * hratio);
+      glEnd();
+#endif
+   }
 }
 
 
@@ -815,6 +839,13 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
 void GUI::DoAction(string action)
 {
    Action(action);
+}
+
+
+void GUI::SetTextureID(int state, GLuint id)
+{
+   texids[state] = id;
+   textures[state] = "USEID";
 }
 
 

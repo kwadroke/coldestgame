@@ -1,6 +1,6 @@
 #include "IniReader.h"
 
-IniReader::IniReader(string filename, int lev) : level(lev), name("")
+IniReader::IniReader(string filename, int lev) : level(lev), name(""), path(filename)
 {
    if (filename == "") return;
    
@@ -177,4 +177,10 @@ bool IniReader::HaveValue(const string name, const int num) const
 int IniReader::NumChildren() const
 {
    return children.size();
+}
+
+
+string IniReader::GetPath() const
+{
+   return path;
 }
