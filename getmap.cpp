@@ -540,10 +540,10 @@ void GetMap(string fn)
    int fbodim = fbodims[2];
    int counter = 0;
    FBO dummyfbo;
-   impmesh.clear();
+   impmeshes.clear();
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      if (i->impdist)
+      if (!floatzero(i->impdist))
       {
          if (counter >= fbostarts[2])
             fbodim = fbodims[2];
@@ -553,20 +553,11 @@ void GetMap(string fn)
          dummyfbo = FBO(fbodim, fbodim, false, &resman.texhand);
          impfbolist.push_back(dummyfbo);
          i->impostorfbo = counter;
-         impmesh.push_back(&(*i));
+         impmeshes.push_back(&(*i));
          ++counter;
       }
-      // These two things need to happen eventually, but I'm not sure that will be here
       i->GenVbo();
-      //i->SetHeightAndWidth();
-      /* Debugging to verify things about triangles
-      i->Begin();
-      while (i->HasNext())
-      {
-         const Triangle& curr = i->Next();
-         if (!curr.collide)
-            cout << "Err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-      }*/
+      i->CalcBounds();
    }
    
    progress->value = 6;

@@ -1,41 +1,25 @@
-Version2
-1
-Type = tristrip
-ID = 0
-Parent ID = -1
-Texture0 = 0
-Shader = ../coldest/shaders/standard
-X Rot 1 = 0
-Y Rot 1 = 0
-Z Rot 1 = 0
-X Rot 2 = 0
-Y Rot 2 = 0
-Z Rot 2 = 0
-X Trans = 0
-Y Trans = 0
-Z Trans = 0
-p0x = -1000
-p0y = 1000
-p0z = 0
-tc000x = 0
-tc000y = 0
-p1x = -1000
-p1y = -1000
-p1z = 0
-tc001x = 0
-tc001y = 1
-p2x = 1000
-p2y = 1000
-p2z = 0
-tc002x = 1
-tc002y = 0
-p3x = 1000
-p3y = -1000
-p3z = 0
-tc003x = 1
-tc003y = 1
-Transparent = 0
-Translucent = 0
-Collide = 0
-Facing = 1
-EOP
+Version Version3
+NextID 1
+TimeToNextFrame 1000
+Primitive
+   Type Quad
+   ID 0
+   ParentID -1
+   Material materials/impostor
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   p0 -1000 1000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -1000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -1000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 1000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 1

@@ -1,7 +1,8 @@
-Version2
+Version Version3
+Type External
+Position 0 0 0
+Rotations 0 0 0
 NumFrames 1
-Collide 0 
-AnimationDelay 100
-InitialLocation 660 45 600
-Scale .05
-Size 10000
+Scale .01 
+Size 30
+Files projectile

@@ -5,11 +5,10 @@
 
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
-bool billboardrender;   // Indicates whether object is being rendered to billboard
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
-PlayerData localplayer(meshes);
-set<WorldObjects*> implist;
-set<WorldObjects*> visibleobjs;
+PlayerData localplayer(meshes); // TODO: Static initialization order fiasco brewing?
+set<Mesh*> implist;
+set<Mesh*> visiblemeshes;
 
 void Repaint()
 {
@@ -187,7 +186,7 @@ void Repaint()
 }
 
 
-bool objcomp(const WorldObjects* l, const WorldObjects* r)
+bool meshptrcomp(const Mesh* l, const Mesh* r)
 {
    return l->dist < r->dist;
 }
@@ -199,36 +198,47 @@ void RenderObjects()
    bool debug = false; // Turns off impostoring if true
    //debug = true;
    
-   /*list<WorldObjects*> objs = kdtree.getobjs();
-   Vector3 playerpos = localplayer.pos;
-   implist.clear();
-   visibleobjs.clear();
-   //cout << "Rendering " << objs.size() << " objects     \r\n" << flush;
-   
-   list<WorldObjects*>::iterator iptr;
-   for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
-   {
-      WorldObjects *i = *iptr;
-      i->dist = playerpos.distance2(Vector3(i->x, i->y, i->z));
-      visibleobjs.insert(i);
-   }
-   
-   objs.sort(objcomp);*/
-   
    list<Mesh*> m = kdtree.getmeshes();
    
    list<Mesh*>::iterator iptr;
+   implist.clear();
+   visiblemeshes.clear();
+   for (iptr = m.begin(); iptr != m.end(); ++iptr)
+   {
+      Mesh* i = *iptr;
+      i->dist = localplayer.pos.distance2(i->GetPosition());
+      visiblemeshes.insert(i);
+   }
+   
+   m.sort(meshptrcomp);
    
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
    for (iptr = m.begin(); iptr != m.end(); ++iptr)
    {
       Mesh* i = *iptr;
-      i->Render(override);
-      trislastframe += i->Size();
+      float adjustedimpdist = i->impdist * impdistmulti;
+      adjustedimpdist *= adjustedimpdist;
+      if (floatzero(i->impdist) || i->dist < adjustedimpdist || shadowrender || debug)
+      {
+         i->Render(override);
+         trislastframe += i->Size();
+      }
+      else
+      {
+         Uint32 ticks = SDL_GetTicks() - i->lastimpupdate;
+         dist = i->dist;
+         i->RenderImpostor(*particlemesh, impfbolist[i->impostorfbo], localplayer.pos);
+         if ((ticks * ticks) > dist / (1000 * 1000 / dist) && !reflectionrender)
+         {
+            implist.insert(i);
+         }
+      }
    }
    
-   // Render all dynamic meshes (since they won't show up in the KDTree at this time
+   UpdateFBO();
+   
+   // Render all dynamic meshes (since they won't show up in the KDTree
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (i->dynamic)
@@ -245,52 +255,18 @@ void RenderObjects()
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       trislastframe += particlemesh->Size();
    }
-   
-   /*for (iptr = objs.begin(); iptr != objs.end(); ++iptr)
-   {
-      WorldObjects *i = *iptr;
-      if (i->type == "water" || i->type == "dynobj") continue;
-      i->BindVbo();
-      Vector3 currpos(i->x, i->y, i->z);
-      Vector3 center = currpos;
-      center.y += i->height / 2.f;
-      dist = playerpos.distance(center);
-      if (dist > viewdist + i->size) continue;
-      
-      SDL_mutexP(clientmutex);
-      
-      InitGLState(i);
-      
-      if (floatzero(i->impdist) || dist < i->impdist || shadowrender || debug)
-      {
-         if (!floatzero(i->impdist) && i->dynobj != dynobjects.end() && !shadowrender)
-            i->dynobj->visible = false;
-         RenderPrimitives(i->prims);
-      }
-      else 
-      {
-         if (SDL_GetTicks() - i->lastimpupdate > dist / (1000 / dist) && !reflectionrender)
-         {
-            implist.insert(i);
-            
-         }
-         else if (!floatzero(i->impdist) && i->dynobj != dynobjects.end() && !reflectionrender)
-         {
-            DynamicPrimitive* primptr = *(i->dynobj->prims[0].begin());
-            primptr->facing = false;
-         }
-      }
-      
-      RestoreGLState(i);
-      
-      SDL_mutexV(clientmutex);
-   }
-   
-   if (!shadowrender && !reflectionrender && !debug)
-      UpdateFBO();
-   
-   WorldObjects::UnbindVbo();*/
 }
+
+
+
+
+// Are the next five functions really obsolete?  I think so...
+
+
+
+
+
+
 
 
 /* distsort indicates whether the primitives should be sorted before rendering
@@ -603,7 +579,7 @@ void RenderDOTree(DynamicPrimitive* root)
 
 
 // This needs to sort descending, hence the >
-bool sortbyimpdim(const WorldObjects* l, const WorldObjects* r)
+bool sortbyimpdim(const Mesh* l, const Mesh* r)
 {
    return impfbolist[l->impostorfbo].GetWidth() > impfbolist[r->impostorfbo].GetWidth();
 }
@@ -611,22 +587,21 @@ bool sortbyimpdim(const WorldObjects* l, const WorldObjects* r)
 
 void UpdateFBO()
 {
-#if 0
-   vector<WorldObjects*>::iterator iptr;
-   vector<WorldObjects*> sortedbyimpdim;
-   vector<WorldObjects*> needsupdate;
-   WorldObjects* i;
+   vector<Mesh*>::iterator iptr;
+   vector<Mesh*> sortedbyimpdim;
+   vector<Mesh*> needsupdate;
+   Mesh* i;
    FBO* currfbo = &(impfbolist[0]);
    int counter = 0;
    int desireddim = fbostarts[2];
    Vector3 playerpos = localplayer.pos;
    
-   sortedbyimpdim = impobjs;
+   sortedbyimpdim = impmeshes;
    
    sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
-   sort(impobjs.begin(), impobjs.end(), objcomp);
+   sort(impmeshes.begin(), impmeshes.end(), meshptrcomp);
    
-   for (iptr = impobjs.begin(); iptr != impobjs.end(); ++iptr)
+   for (iptr = impmeshes.begin(); iptr != impmeshes.end(); ++iptr)
    {
       i = *iptr;
       if (implist.find(i) != implist.end())
@@ -643,7 +618,7 @@ void UpdateFBO()
          
          int current = 0;
          int count = 0;
-         WorldObjects* toswap;
+         Mesh* toswap;
          while (desireddim > currfbo->GetWidth())
          {
             if (desireddim == fbodims[1] ||
@@ -682,7 +657,7 @@ void UpdateFBO()
             int tempfbo = i->impostorfbo;
             i->impostorfbo = toswap->impostorfbo;
             toswap->impostorfbo = tempfbo;
-            if (visibleobjs.find(toswap) != visibleobjs.end())
+            if (visiblemeshes.find(toswap) != visiblemeshes.end())
                needsupdate.push_back(toswap);
             currfbo = &(impfbolist[i->impostorfbo]);
             sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
@@ -698,9 +673,9 @@ void UpdateFBO()
       currfbo = &(impfbolist[i->impostorfbo]);
       currfbo->Bind();
       
-      Vector3 currpos(i->x, i->y, i->z);
+      Vector3 currpos = i->GetPosition();
       Vector3 center = currpos;
-      center.y += i->height / 2.f;
+      center.y += i->GetHeight() / 2.f;
       float dist = playerpos.distance(center);
          
       glPushAttrib(GL_VIEWPORT_BIT);
@@ -708,16 +683,13 @@ void UpdateFBO()
       
       glPushMatrix();
       glLoadIdentity();
-      // Why is the up vector pointing down?  In X at least, framebuffers are y-inverted from
-      // normal OpenGL, so everything is upside down.  Need a better fix than this hack since it
-      // screws up lighting.  Fixed temporarily by hardcoding inverted texcoords.
       gluLookAt(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z, center.x, center.y, center.z, 0, 1, 0);
       
       glMatrixMode(GL_PROJECTION);
       glPushMatrix();
       glLoadIdentity();
-      float tempfov = atan(i->height / 2.f / dist) * 360. / PI;
-      float tempaspect = i->width / i->height;
+      float tempfov = atan(i->GetHeight() / 2.f / dist) * 360. / PI;
+      float tempaspect = i->GetWidth() / i->GetHeight();
       gluPerspective(tempfov, tempaspect, 10, 10000.0);
       
       glMatrixMode(GL_MODELVIEW);
@@ -725,13 +697,8 @@ void UpdateFBO()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       lights.Place();
       
-      i->BindVbo();
-      InitGLState(i);
-      
-      RenderPrimitives(i->prims);
-      RenderPrimitives(i->tprims, true);
-      
-      RestoreGLState(i);
+      i->Render();
+      trislastframe += i->Size();
       
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
@@ -742,39 +709,9 @@ void UpdateFBO()
       currfbo->Unbind();
       lights.Place();
       
-      DynamicPrimitive* primptr;
-      if (i->dynobj == dynobjects.end())
-      {
-         i->dynobj = LoadObject("impostor", dynobjects);
-         i->dynobj->position = center;
-         i->dynobj->billboard = true;
-         primptr = *(i->dynobj->prims[0].begin());
-         float width2 = i->width / 2.f;
-         float height2 = i->height / 2.f;
-         primptr->orig[0].x = -width2;
-         primptr->orig[0].y = height2;
-         primptr->orig[1].x = -width2;
-         primptr->orig[1].y = -height2;
-         primptr->orig[2].x = width2;
-         primptr->orig[2].y = height2;
-         primptr->orig[3].x = width2;
-         primptr->orig[3].y = -height2;
-         primptr->transparent = true;
-         // Have to flip texture coordinates vertically because FBO's in X are upside down
-         // This may have to be ifdef'd for a Windows port because it's platform-specific
-         primptr->texcoords[0][0][1] = 1;
-         primptr->texcoords[0][1][1] = 0;
-         primptr->texcoords[0][2][1] = 1;
-         primptr->texcoords[0][3][1] = 0;
-      }
-      (*(i->dynobj->prims[0].begin()))->texnums[0] = currfbo->GetTexture();
-      primptr = *(i->dynobj->prims[0].begin());
-      primptr->facing = true;
-      i->dynobj->visible = true;
       // Should really do this last so time to update isn't included
       i->lastimpupdate = SDL_GetTicks();
    }
-#endif
 }
 
 

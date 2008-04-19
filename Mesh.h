@@ -9,6 +9,7 @@
 #include "ResourceManager.h"
 #include "Quad.h"
 #include "MeshNode.h"
+#include "FBO.h"
 #include <map>
 
 using std::map;
@@ -36,12 +37,15 @@ class Mesh
       void BindAttribs();
       void UnbindAttribs();
       void Render(Material* overridemat = NULL);
-      void RenderImpostor();
+      void RenderImpostor(Mesh&, FBO&, const Vector3& campos);
       void Add(Triangle&);
       void Add(Quad&);
       void Add(Mesh&);
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
+      Vector3 GetPosition(){return position;}
+      float GetWidth(){return width;}
+      float GetHeight(){return height;}
       
       void Begin();
       bool HasNext() const;
@@ -55,8 +59,10 @@ class Mesh
       float size; // I'm not sure this should be public, but for the moment we'll go with it
       
       float impdist;
+      float dist;
       int impostorfbo;
       GLuint impostortex;
+      Uint32 lastimpupdate;
       
    private:
       void UpdateTris(int, const Vector3&);
@@ -83,7 +89,8 @@ class Mesh
       
       ResourceManager& resman;
       
-      Mesh* impostor;
+      shared_ptr<Mesh> impostor;
+      MaterialPtr impmat;
 
       int next;
       bool glops; // Whether to do things like GenVbo

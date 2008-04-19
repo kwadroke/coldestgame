@@ -8,9 +8,11 @@
 #include "types.h"
 #include "IniReader.h"
 #include "Shader.h"
+#include <boost/shared_ptr.hpp>
 
 using std::vector;
 using std::string;
+using boost::shared_ptr;
 
 class Material
 {
@@ -19,6 +21,7 @@ class Material
       void Use() const;
       void UseTextureOnly() const;
       void SetTexture(int, GLuint);
+      GLuint GetTexture(int);
       bool operator<(const Material&) const;
       
       floatvec diffuse;
@@ -36,6 +39,8 @@ class Material
       bool cullface, doalphatest;
       float alphatest;
 };
+
+typedef shared_ptr<Material> MaterialPtr;
 
 #endif
 

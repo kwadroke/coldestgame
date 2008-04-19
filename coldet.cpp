@@ -93,6 +93,7 @@ void InitGlobals()
    partupdateinterval = 0;
    serversync = true;
    aalevel = 2;
+   impdistmulti = 1.f;
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;

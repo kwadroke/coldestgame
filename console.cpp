@@ -422,6 +422,12 @@ void ConsoleHandler(string command)
          SDL_mutexV(clientmutex);
          return;
       }
+      else if (Token(newcommand, 1) == "impdistmulti")
+      {
+         float value = atof(Token(newcommand, 2).c_str());
+         impdistmulti = value;
+         return;
+      }
       
       // If we get to here then we matched nothing
       WriteToConsole(string("Unrecognized variable name"));

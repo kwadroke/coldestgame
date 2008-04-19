@@ -119,7 +119,13 @@ void Material::SetTexture(int texunit, GLuint tex)
 }
 
 
-// Define an ordering on materials so that WorldPrimitives can sort by material
+GLuint Material::GetTexture(int texunit)
+{
+   return texid[texunit];
+}
+
+
+// Define an ordering on materials so that Mesh can sort by material
 bool Material::operator<(const Material& m) const
 {
    return id < m.id;
