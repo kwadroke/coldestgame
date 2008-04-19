@@ -1,7 +1,7 @@
 Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
-Texture0 textures/leaves4.png
+Texture0 textures/projectile.png
 Shader shaders/standard
-CullFace 0
+CullFace 1
 AlphaTest .5

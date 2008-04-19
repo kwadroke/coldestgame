@@ -6,7 +6,8 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), width(0.f), height(0.f), resman(rm), tris(Trianglevec()), trantris(Trianglevec()),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
-            frametime(), glops(gl), havemats(false), dynamic(false)
+            frametime(), glops(gl), havemats(false), dynamic(false), dist(0.f), 
+            impmat(MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman)))
 {
    Load(reader);
 }
@@ -14,7 +15,7 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
 
 Mesh::~Mesh()
 {
-   // TODO: Need to properly free vbo here, also free impostor Mesh
+   // TODO: Need to properly free vbo here, also free impostor Mesh (maybe, smart pointers ftw)
    //cout << "Warning: Called unimplemented destructor" << endl;
 }
 
@@ -25,8 +26,10 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          size(m.size), width(m.width), height(m.height), tris(m.tris), trantris(m.trantris),
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
-         dynamic(m.dynamic)
+         dynamic(m.dynamic), dist(m.dist), impostor(m.impostor), 
+         impmat(MaterialPtr(new Material("materials/impostor", m.resman.texman, m.resman.shaderman)))
 {
+   impmat->SetTexture(0, m.impmat->GetTexture(0));
    // Copy frameroot and framecontainer - these contain smart ptrs so the actual objects are shared
    // otherwise, which is a bad thing here
    for (int i = 0; i < m.frameroot.size(); ++i)
@@ -240,6 +243,7 @@ void Mesh::Load(const IniReader& reader)
    {
       cout << "Warning: Attempted to load unknown object type " << type << endl;
    }
+   CalcBounds();
 }
 
 
@@ -271,7 +275,9 @@ void Mesh::GenVbo()
          glDeleteBuffersARB(1, &vbo);
       glGenBuffersARB(1, &vbo);*/
       if (!hasvbo)
+      {
          glGenBuffersARB(1, &vbo);
+      }
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
       
       sort(tris.begin(), tris.end());
@@ -311,9 +317,9 @@ void Mesh::GenVbo()
       {
          LoadMaterials();
       }
+      hasvbo = true;
    }
    
-   hasvbo = true;
    glops = true;
 }
 
@@ -430,8 +436,32 @@ void Mesh::UnbindAttribs()
 }
 
 
-void Mesh::RenderImpostor()
+void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 {
+   if (!impostor)
+   {
+      IniReader impread("models/impostor/base");
+      impostor = MeshPtr(new Mesh(impread, resman, false));
+      impostor->frameroot[0]->material = impmat.get();
+      impostor->frameroot[0]->texcoords[0][0][1] = 1.f;
+      impostor->frameroot[0]->texcoords[0][1][1] = 0.f;
+      impostor->frameroot[0]->texcoords[0][2][1] = 0.f;
+      impostor->frameroot[0]->texcoords[0][3][1] = 1.f;
+   }
+   
+   impmat->SetTexture(0, impfbo.GetTexture());
+   float width2 = width / 2.f;
+   float height2 = height / 2.f;
+   impostor->frameroot[0]->vert[0] = Vector3(-width2, height2, 0);
+   impostor->frameroot[0]->vert[1] = Vector3(-width2, -height2, 0);
+   impostor->frameroot[0]->vert[2] = Vector3(width2, -height2, 0);
+   impostor->frameroot[0]->vert[3] = Vector3(width2, height2, 0);
+   
+   Vector3 moveto = position;
+   moveto.y += height2;
+   impostor->Move(moveto);
+   impostor->AdvanceAnimation(campos);
+   rendermesh.Add(*impostor);
 }
 
 
@@ -499,8 +529,8 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
 void Mesh::CalcBounds()
 {
    float size2 = 0.f;
-   Vector3 min2;
-   Vector3 max2;
+   Vector3 min;
+   Vector3 max;
    float dist2 = 0.f;
    float temp;
    for (int i = 0; i < tris.size(); ++i)
@@ -510,23 +540,19 @@ void Mesh::CalcBounds()
          dist2 = tris[i].vert[j].distance2(position);
          if (dist2 > size2) size2 = dist2;
          temp = tris[i].vert[j].x - position.x;
-         if (temp > max2.x) max2.x = temp;
-         if (temp < min2.x) min2.x = temp;
+         if (temp > max.x) max.x = temp;
+         if (temp < min.x) min.x = temp;
          temp = tris[i].vert[j].y - position.y;
-         if (temp > max2.y) max2.y = temp;
-         if (temp < min2.y) min2.y = temp;
+         if (temp > max.y) max.y = temp;
+         if (temp < min.y) min.y = temp;
          temp = tris[i].vert[j].z - position.z;
-         if (temp > max2.z) max2.z = temp;
-         if (temp < min2.z) min2.z = temp;
+         if (temp > max.z) max.z = temp;
+         if (temp < min.z) min.z = temp;
       }
    }
    size = sqrt(size2);
-   max.x = sqrt(max2.x);
-   max.y = sqrt(max2.y);
-   max.z = sqrt(max2.z);
-   min.x = sqrt(min2.x);
-   min.y = sqrt(min2.y);
-   min.z = sqrt(min2.z);
+   height = max.y - min.y;
+   width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
 }
 
 
@@ -597,6 +623,8 @@ int Mesh::Size() const
 {
    return tris.size();
 }
+
+
 
 
 

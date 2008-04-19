@@ -113,7 +113,7 @@ int Server(void* dummy)
    servertickrate = 30;
    maxplayers = 32;
    if (currentmap == "")
-      currentmap = "mini";
+      currentmap = "newtest";
    ServerLoadMap();
    PlayerData local(servermeshes); // Dummy placeholder for the local player
    serverplayers.push_back(local);

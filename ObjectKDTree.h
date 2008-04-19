@@ -25,7 +25,7 @@ struct eqptr
    }
    bool operator()(Mesh* hashme) const
    {
-      return (intptr_t)hashme % 100000; // Umm, probably not ideal, but we can fix it later
+      return (intptr_t)hashme % 10000; // Umm, probably not ideal, but we can fix it later
    }
 };
 
@@ -45,17 +45,16 @@ class ObjectKDTree
       void setvertices(Vector3vec);
       void setfrustum(Vector3, Vector3, float, float, float, float);
       void setfrustum(Quadvec*);
-      //vector<Triangle*> gettris(Vector3, float);
       vector<Mesh*> getmeshes(const Vector3&, const float);
       vector<Mesh*> getmeshes(const Vector3&, const Vector3&, const float);
-      list<Mesh*> getmeshes();//Vector3, Vector3, float, float, float, float);
+      list<Mesh*> getmeshes();
       void visualize();
       
    private:
       int size();
       bool innode(Vector3, float);
       bool innode2d(Vector3, float);
-      bool infrustum();//Vector3, Vector3, float, float, float, float);
+      bool infrustum();
       bool infrustum(Mesh*);
       void setretobjs(MeshSet*);
       void getmeshes(const Vector3&, const float, vector<Mesh*>&);
@@ -66,7 +65,6 @@ class ObjectKDTree
       list<Mesh*> members;
       bool haschildren;
       Vector3vec vertices;
-      //set<WorldObjects*>* retobjs;
       MeshSet* retobjs;
       bool root;
       Quadvec p; // Only set in root node

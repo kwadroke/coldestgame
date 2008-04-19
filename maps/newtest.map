@@ -50,11 +50,13 @@ Node
 Node
    SpawnPoints
    Node
-      Team 0
-      Location 150 150 150
-   Node
       Team 1
+      Location 150 150 150
+      Name Team1Spawn
+   Node
+      Team 2
       Location 250 250 250
+      Name Team2Spawn
 
 Node
    Objects
@@ -86,7 +88,6 @@ Node
       Position 500 500 500
       Rotations 0 0 0
       NumLeaves 8
-EOF
    Node
       Type proctree
       Materials materials/bark materials/leaves
@@ -120,10 +121,11 @@ EOF
       branchwithleaves 0
       curvecoeff .02
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 150 -1 250
       Rotations 0 0 0
+EOF
    Node
       Type proctree
       Materials materials/bark materials/leaves
@@ -156,7 +158,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 120
       Position 250 -1 250
       Rotations 0 0 0
@@ -194,7 +196,7 @@ EOF
       branchwithleaves 1
       curvecoeff .02
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 150 -1 350
       Rotations 0 0 0
@@ -229,7 +231,7 @@ EOF
       sidetaper .8
       curvecoeff .02
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 150 -1 450
       Rotations 0 0 0
@@ -265,7 +267,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 250 -1 400
       Rotations 0 0 0
@@ -301,7 +303,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 300 -1 550
       Rotations 0 0 0
@@ -337,7 +339,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 250 -1 500
       Rotations 0 0 0
@@ -373,7 +375,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 150 -1 550
       Rotations 0 0 0
@@ -409,7 +411,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 250 -1 150
       Rotations 0 0 0
@@ -445,7 +447,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 200 -1 550
       Rotations 0 0 0
@@ -481,7 +483,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 300 -1 450
       Rotations 0 0 0
@@ -517,7 +519,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 450 -1 650
       Rotations 0 0 0
@@ -553,7 +555,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 550 -1 650
       Rotations 0 0 0
@@ -589,7 +591,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 550 -1 550
       Rotations 0 0 0
@@ -625,7 +627,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 500 -1 150
       Rotations 0 0 0
@@ -661,7 +663,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 650 -1 350
       Rotations 0 0 0
@@ -697,7 +699,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 450 -1 450
       Rotations 0 0 0
@@ -733,7 +735,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 550 -1 350
       Rotations 0 0 0
@@ -769,7 +771,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 450 -1 300
       Rotations 0 0 0
@@ -805,7 +807,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 350 -1 350
       Rotations 0 0 0
@@ -841,7 +843,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 250 -1 750
       Rotations 0 0 0
@@ -877,7 +879,7 @@ EOF
       multitrunk 0
       branchwithleaves 1
       endopts
-      impdist 150
+      ImpostorDistance 150
       size 160
       Position 350 -1 650
       Rotations 0 0 0
