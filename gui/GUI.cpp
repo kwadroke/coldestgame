@@ -10,6 +10,13 @@
 #include "TextArea.h"
 #include "Slider.h"
 
+/* TODO:
+   -Move textures into nodes instead of being subnodes
+   -Click events even if mouse not in widget (separate event for when it is)
+   -Allow all widgets to have children (somewhat related to first item)
+   -Tab widget
+*/
+
 GUI::GUI(float aw, float ah, TextureManager* texm)
 {
    actualw = aw;
@@ -66,9 +73,10 @@ void GUI::Init(GUI* p, TextureManager* tm)
 
 void GUI::Cleanup()
 {
-   guiiter i;
-   for (i = children.begin(); i != children.end(); ++i)
-      delete *i;
+   // Smart pointers should make this unnecessary
+   //guiiter i;
+   //for (i = children.begin(); i != children.end(); ++i)
+   //   delete *i;
    glDeleteTextures(1, &texttexture);
 }
 
@@ -101,11 +109,21 @@ void GUI::Render()
    {
       glEnable(GL_DEPTH_TEST);
       glDisable(GL_CULL_FACE);
-      list<GUI*>::iterator i;
+      
+      xoff = parent->xoff + parent->x;
+      yoff = parent->yoff + parent->y;
+      RenderWidget();
+      
+      guiiter i;
       for (i = children.begin(); i != children.end(); ++i)
       {
          (*i)->Render();
       }
+      // Some widgets, such as ScrollView, want to render their children using the scissor test
+      // This virtual function allows them to enable it in RenderWidget and disable it again
+      // after all the children have been rendered.  It could be used for other things in the
+      // future too.
+      PostRender();
       glDisable(GL_DEPTH_TEST);
    }
 }
@@ -151,7 +169,7 @@ void GUI::RenderBase()
 /* Although this function is still virtual, you probably want to override the LeftClick, RightClick, etc.
    functions instead.  Unique requirements can be implemented in CustomProcessEvent.  The only reason it
    should be necessary to override this function itself is if you for some reason didn't want these standard
-   actions to happen, but that seems highly unlikely. */
+   actions to happen, but that seems highly unlikely (they're all no-ops by default anyway). */
 void GUI::ProcessEvent(SDL_Event* event)
 {
    if (!visible) return;
@@ -187,6 +205,10 @@ void GUI::ProcessEvent(SDL_Event* event)
          else 
          {
             state = Normal;
+            if (event->button.button == SDL_BUTTON_LEFT)
+               GlobalLeftDown(event);
+            else if (event->button.button == SDL_BUTTON_RIGHT)
+               GlobalRightDown(event);
          }
          break;
          
@@ -208,7 +230,14 @@ void GUI::ProcessEvent(SDL_Event* event)
          else
          {
             state = Normal;
-            break;
+            if (event->button.button == SDL_BUTTON_LEFT)
+            {
+               GlobalLeftClick(event);
+            }
+            else if (event->button.button == SDL_BUTTON_RIGHT)
+            {
+               GlobalRightClick(event);
+            }
          }
          break;
       
@@ -240,7 +269,7 @@ void GUI::ProcessEvent(SDL_Event* event)
 
 
 // I'm not sure this works, since I've never had occasion to use it
-void GUI::Add(GUI* widget, string parentname)
+void GUI::Add(GUIPtr widget, string parentname)
 {
    if (parentname == name)
    {
@@ -286,8 +315,6 @@ void GUI::InitFromFile(string filename)
       return;
    }
    
-   InitTags();
-   
    parser = new XercesDOMParser;
    parser->setValidationScheme(XercesDOMParser::Val_Never);
    try
@@ -328,104 +355,6 @@ void GUI::InitFromFile(string filename)
       cerr << "XML toolkit termination error: " << message << endl;
       XMLString::release(&message);
    }
-   DestroyTags();
-}
-
-
-void GUI::InitTags()
-{
-   tag.gui = XMLString::transcode("GUI");
-   tag.button = XMLString::transcode("Button");
-   tag.lineedit = XMLString::transcode("LineEdit");
-   tag.scrollview = XMLString::transcode("ScrollView");
-   tag.progressbar = XMLString::transcode("ProgressBar");
-   tag.label = XMLString::transcode("Label");
-   tag.table = XMLString::transcode("Table");
-   tag.tableitem = XMLString::transcode("TableItem");
-   tag.combobox = XMLString::transcode("ComboBox");
-   tag.comboboxitem = XMLString::transcode("ComboBoxItem");
-   tag.textarea = XMLString::transcode("TextArea");
-   tag.slider = XMLString::transcode("Slider");
-   
-   attrib.x = XMLString::transcode("x");
-   attrib.y = XMLString::transcode("y");
-   attrib.width = XMLString::transcode("width");
-   attrib.height = XMLString::transcode("height");
-   attrib.virtualw = XMLString::transcode("virtualw");
-   attrib.virtualh = XMLString::transcode("virtualh");
-   attrib.name = XMLString::transcode("name");
-   attrib.text = XMLString::transcode("text");
-   attrib.font = XMLString::transcode("font");
-   attrib.fontsize = XMLString::transcode("fontsize");
-   attrib.visible = XMLString::transcode("visible");
-   attrib.readonly = XMLString::transcode("readonly");
-   attrib.xmargin = XMLString::transcode("xmargin");
-   attrib.ymargin = XMLString::transcode("ymargin");
-   attrib.columns = XMLString::transcode("columns");
-   attrib.colwidths = XMLString::transcode("colwidths");
-   attrib.rowheight = XMLString::transcode("rowheight");
-   attrib.align = XMLString::transcode("align");
-   attrib.headerheight = XMLString::transcode("headerheight");
-   attrib.menuheight = XMLString::transcode("menuheight");
-   
-   tag.normal = XMLString::transcode("Normal");
-   tag.hover = XMLString::transcode("Hover");
-   tag.pressed = XMLString::transcode("Pressed");
-   tag.scrollbar = XMLString::transcode("Scrollbar");
-   tag.leftclickaction = XMLString::transcode("LeftClickAction");
-   tag.valuechanged = XMLString::transcode("ValueChangedAction");
-}
-
-
-void GUI::DestroyTags()
-{
-   try
-   {
-      XMLString::release(&tag.gui);
-      XMLString::release(&tag.button);
-      XMLString::release(&tag.lineedit);
-      XMLString::release(&tag.scrollview);
-      XMLString::release(&tag.progressbar);
-      XMLString::release(&tag.label);
-      XMLString::release(&tag.table);
-      XMLString::release(&tag.tableitem);
-      XMLString::release(&tag.combobox);
-      XMLString::release(&tag.comboboxitem);
-      XMLString::release(&tag.textarea);
-      XMLString::release(&tag.slider);
-      
-      XMLString::release(&attrib.x);
-      XMLString::release(&attrib.y);
-      XMLString::release(&attrib.width);
-      XMLString::release(&attrib.height);
-      XMLString::release(&attrib.virtualw);
-      XMLString::release(&attrib.virtualh);
-      XMLString::release(&attrib.name);
-      XMLString::release(&attrib.text);
-      XMLString::release(&attrib.font);
-      XMLString::release(&attrib.fontsize);
-      XMLString::release(&attrib.visible);
-      XMLString::release(&attrib.readonly);
-      XMLString::release(&attrib.xmargin);
-      XMLString::release(&attrib.ymargin);
-      XMLString::release(&attrib.columns);
-      XMLString::release(&attrib.colwidths);
-      XMLString::release(&attrib.rowheight);
-      XMLString::release(&attrib.align);
-      XMLString::release(&attrib.headerheight);
-      XMLString::release(&attrib.menuheight);
-      
-      XMLString::release(&tag.normal);
-      XMLString::release(&tag.hover);
-      XMLString::release(&tag.pressed);
-      XMLString::release(&tag.scrollbar);
-      XMLString::release(&tag.leftclickaction);
-      XMLString::release(&tag.valuechanged);
-   }
-   catch(...)
-   {
-      cerr << "Unknown exception releasing XML resources." << endl;
-   }
 }
 
 
@@ -436,9 +365,14 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
    if (current->getNodeType() &&
        current->getNodeType() == DOMNode::ELEMENT_NODE)
    {
-      if (XMLString::equals(current->getNodeName(), tag.gui))
+      // GUI elements have to be handled differently because in this case there was no parent to call ReadNode on,
+      // so GUI has to construct itself first and then call ReadNode on itself, but pass in the child nodes
+      // Other widgets are constructed by their parent's ReadNode call, which then also calls ReadNode on them
+      // passing in their child nodes.  
+      if (XMLString::equals(current->getNodeName(), XSWrapper("GUI")))
       {
-         if (parent != this) // Hmm, this may not work.  Wait to see how the parent situation ends up being handled
+         // Pretty sure this if is bogus...the parent is always this (do we even need to pass parent then?)
+         if (parent != this)
          {
             cout << "Warning, GUI element detected that is not the root node.\n";
          }
@@ -448,11 +382,11 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             DOMNamedNodeMap* attribs = current->getAttributes();
             
             // Read the attributes
-            virtualw = atof(ReadAttribute(current, attrib.virtualw).c_str());
-            virtualh = atof(ReadAttribute(current, attrib.virtualh).c_str());
+            virtualw = atof(ReadAttribute(current, XSWrapper("virtualw")).c_str());
+            virtualh = atof(ReadAttribute(current, XSWrapper("virtualh")).c_str());
             wratio = actualw / virtualw;
             hratio = actualh / virtualh;
-            string fontname = ReadAttribute(current, attrib.font);
+            string fontname = ReadAttribute(current, XSWrapper("font"));
             if (!TTF_WasInit())
                cout << "Warning: GUI detected that SDL_ttf was not initialized" << endl;
             else
@@ -464,147 +398,103 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
                   exit(1);
                }
             }
-            string val = ReadAttribute(current, attrib.visible);
-               if (val == "false") visible = false; // Defaults to true
+            string val = ReadAttribute(current, XSWrapper("visible"));
+            if (val == "false") visible = false; // Defaults to true
             
             rootnode = true;
+         }
+         DOMNodeList* children = current->getChildNodes();
+         for (int i = 0; i < children->getLength(); ++i)
+         {
+            currnode = children->item(i);
+            ReadNode(currnode, this);
          }
       }
       else
       {
-         GUI* newwidget;
+         GUIPtr newwidget;
          
-         if (XMLString::equals(current->getNodeName(), tag.button) || 
-             XMLString::equals(current->getNodeName(), tag.label))
-            newwidget = new Button(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.lineedit))
-            newwidget = new LineEdit(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.scrollview))
-            newwidget = new ScrollView(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.progressbar))
-            newwidget = new ProgressBar(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.table))
-            newwidget = new Table(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.combobox))
-            newwidget = new ComboBox(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.textarea))
-            newwidget = new TextArea(parent, texman);
-         else if (XMLString::equals(current->getNodeName(), tag.slider))
-            newwidget = new Slider(parent, texman);
-         else return; // Not a node we recognize
+         const XMLCh* name = current->getNodeName();
+         if (name == XSWrapper("Button") || name == XSWrapper("Label"))
+            newwidget = GUIPtr(new Button(parent, texman));
+         else if (name == XSWrapper("LineEdit"))
+            newwidget = GUIPtr(new LineEdit(parent, texman));
+         else if (name == XSWrapper("ScrollView"))
+            newwidget = GUIPtr(new ScrollView(parent, texman));
+         else if (name == XSWrapper("ProgressBar"))
+            newwidget = GUIPtr(new ProgressBar(parent, texman));
+         else if (name == XSWrapper("Table"))
+            newwidget = GUIPtr(new Table(parent, texman));
+         else if (name == XSWrapper("ComboBox"))
+            newwidget = GUIPtr(new ComboBox(parent, texman));
+         else if (name == XSWrapper("TextArea"))
+            newwidget = GUIPtr(new TextArea(parent, texman));
+         else if (name == XSWrapper("Slider"))
+            newwidget = GUIPtr(new Slider(parent, texman));
+         else // Not a node we recognize
+         {
+            ReadSpecialNodes(current, this);
+            return;
+         }
          
          // Read basic attributes
-         newwidget->x = atof(ReadAttribute(current, attrib.x).c_str());
-         newwidget->y = atof(ReadAttribute(current, attrib.y).c_str());
-         newwidget->width = atof(ReadAttribute(current, attrib.width).c_str());
-         newwidget->height = atof(ReadAttribute(current, attrib.height).c_str());
-         newwidget->text = ReadAttribute(current, attrib.text);
-         newwidget->name = ReadAttribute(current, attrib.name);
-         newwidget->fontscale = atof(ReadAttribute(current, attrib.fontsize).c_str()) / basefontsize;
-         newwidget->xmargin = atof(ReadAttribute(current, attrib.xmargin).c_str());
-         newwidget->ymargin = atof(ReadAttribute(current, attrib.ymargin).c_str());
+         newwidget->x = atof(ReadAttribute(current, XSWrapper("x")).c_str());
+         newwidget->y = atof(ReadAttribute(current, XSWrapper("y")).c_str());
+         newwidget->width = atof(ReadAttribute(current, XSWrapper("width")).c_str());
+         newwidget->height = atof(ReadAttribute(current, XSWrapper("height")).c_str());
+         newwidget->text = ReadAttribute(current, XSWrapper("text"));
+         newwidget->name = ReadAttribute(current, XSWrapper("name"));
+         newwidget->fontscale = atof(ReadAttribute(current, XSWrapper("fontsize")).c_str()) / basefontsize;
+         newwidget->xmargin = atof(ReadAttribute(current, XSWrapper("xmargin")).c_str());
+         newwidget->ymargin = atof(ReadAttribute(current, XSWrapper("ymargin")).c_str());
+         newwidget->leftclickaction = ReadAttribute(current, XSWrapper("leftclick"));
+         newwidget->valuechanged = ReadAttribute(current, XSWrapper("valuechanged"));
          
-         string val = ReadAttribute(current, attrib.visible);
+         string val = ReadAttribute(current, XSWrapper("visible"));
          if (val == "false") newwidget->visible = false; // Defaults to true
          
-         val = ReadAttribute(current, attrib.readonly);
+         val = ReadAttribute(current, XSWrapper("readonly"));
          if (val == "true") newwidget->readonly = true; // Defaults to false
          
-         val = ReadAttribute(current, attrib.align); // Defaults to Left
+         val = ReadAttribute(current, XSWrapper("align")); // Defaults to Left
          if (val == "center")
             newwidget->align = Center;
          else if (val == "right")
             newwidget->align = Right;
-         // Done with basic attributes, now do widget-specific init
          
-         if (XMLString::equals(current->getNodeName(), tag.button) ||
-             XMLString::equals(current->getNodeName(), tag.label))
+         // Load textures
+         val = ReadAttribute(current, XSWrapper("normal"));
+         if (val != "")
          {
-            // Now read any children of the button
-            DOMNodeList* buttonchildren = current->getChildNodes();
-            for (int i = 0; i < buttonchildren->getLength(); ++i)
-            {
-               newwidget->ReadNode(buttonchildren->item(i), newwidget);
-            }
-            children.push_back(newwidget);
+            newwidget->textures[Normal] = val;
+            if (newwidget->textures[Hover] == "")
+               newwidget->textures[Hover] = newwidget->textures[Normal];
+            if (newwidget->textures[Clicked] == "")
+               newwidget->textures[Clicked] = newwidget->textures[Normal];
+            texman->LoadTexture(newwidget->textures[Normal]);
          }
-         else if (XMLString::equals(current->getNodeName(), tag.lineedit))
+         val = ReadAttribute(current, XSWrapper("hover"));
+         if (val != "")
          {
-            DOMNodeList* lechildren = current->getChildNodes();
-            for (int i = 0; i < lechildren->getLength(); ++i)
-               newwidget->ReadNode(lechildren->item(i), newwidget);
-            children.push_back(newwidget);
+            newwidget->textures[Hover] = val;
+            texman->LoadTexture(newwidget->textures[Hover]);
          }
-         else if (XMLString::equals(current->getNodeName(), tag.scrollview))
+         val = ReadAttribute(current, XSWrapper("pressed"));
+         if (val != "")
          {
-            DOMNodeList* svchildren = current->getChildNodes();
-            for (int i = 0; i < svchildren->getLength(); ++i)
-            {
-               ((ScrollView*)newwidget)->ReadNodeLocal(svchildren->item(i), newwidget);
-               // ReadNodeLocal does an Init/DestroyTags, so we have to do it every iteration as well
-               newwidget->InitTags();
-               newwidget->ReadNode(svchildren->item(i), newwidget);
-               newwidget->DestroyTags();
-            }
-            children.push_back(newwidget);
-            return;
+            newwidget->textures[Clicked] = val;
+            texman->LoadTexture(newwidget->textures[Clicked]);
          }
-         else if (XMLString::equals(current->getNodeName(), tag.progressbar))
+         newwidget->ReadNodeExtra(current, parent);
+         children.push_back(newwidget);
+         
+         DOMNodeList* children = current->getChildNodes();
+         for (int i = 0; i < children->getLength(); ++i)
          {
-            DOMNodeList* pbchildren = current->getChildNodes();
-            for (int i = 0; i < pbchildren->getLength(); ++i)
-            {
-               newwidget->ReadNode(pbchildren->item(i), newwidget);
-            }
-            children.push_back(newwidget);
-         }
-         else if (XMLString::equals(current->getNodeName(), tag.table))
-         {
-            ((Table*)newwidget)->colwidths = ReadAttribute(current, attrib.colwidths);
-            ((Table*)newwidget)->rowheight = atof(ReadAttribute(current, attrib.rowheight).c_str());
-            DOMNodeList* tabchildren = current->getChildNodes();
-            for (int i = 0; i < tabchildren->getLength(); ++i)
-            {
-               newwidget->ReadNode(tabchildren->item(i), newwidget);
-            }
-            children.push_back(newwidget);
-         }
-         else if (XMLString::equals(current->getNodeName(), tag.combobox))
-         {
-            DOMNodeList* cbchildren = current->getChildNodes();
-            for (int i = 0; i < cbchildren->getLength(); ++i)
-            {
-               newwidget->ReadNode(cbchildren->item(i), newwidget);
-            }
-            children.push_back(newwidget);
-         }
-         else if (XMLString::equals(current->getNodeName(), tag.textarea))
-         {
-            DOMNodeList* tachildren = current->getChildNodes();
-            for (int i = 0; i < tachildren->getLength(); ++i)
-            {
-               newwidget->ReadNode(tachildren->item(i), newwidget);
-            }
-            children.push_back(newwidget);
-         }
-         else if (XMLString::equals(current->getNodeName(), tag.slider))
-         {
-            DOMNodeList* schildren = current->getChildNodes();
-            for (int i = 0; i < schildren->getLength(); ++i)
-            {
-               newwidget->ReadNode(schildren->item(i), newwidget);
-            }
-            children.push_back(newwidget);
+            currnode = children->item(i);
+            newwidget->ReadNode(currnode, newwidget.get());
          }
       }
-   }
-   
-   if (!current->hasChildNodes() || !rootnode) return;
-   DOMNodeList* children = current->getChildNodes();
-   for (int i = 0; i < children->getLength(); ++i)
-   {
-      currnode = children->item(i);
-      ReadNode(currnode, this);
    }
 }
 
@@ -642,35 +532,6 @@ string GUI::ReadStringTag(DOMNode* node, XMLCh* tagname)
 }
 
 
-// Essentially all widgets will have to read some subset of these textures
-void GUI::ReadTextures(DOMNode* current)
-{
-   string curr;
-   curr = ReadStringTag(current, tag.normal);
-   if (curr != "")
-   {
-      textures[0] = curr;
-      if (textures[1] == "")
-         textures[1] = textures[0];
-      if (textures[2] == "")
-         textures[2] = textures[0];
-      texman->LoadTexture(textures[0]);
-   }
-   curr = ReadStringTag(current, tag.hover);
-   if (curr != "")
-   {
-      textures[1] = curr;
-      texman->LoadTexture(textures[1]);
-   }
-   curr = ReadStringTag(current, tag.pressed);
-   if (curr != "")
-   {
-      textures[2] = curr;
-      texman->LoadTexture(textures[2]);
-   }
-}
-
-
 bool GUI::FloatsInWidget(float xcoord, float ycoord)
 {
    if (xcoord > ((x + xoff) * wratio) &&
@@ -689,7 +550,7 @@ bool GUI::InWidget(float xcoord, float ycoord)
 
 
 // Convenience function because we do this a lot.
-// Note that it does honor custom InWidget functions, which is why it's not virtual
+// Note that it does honor custom FloatsInWidget functions, which is why it's not virtual
 bool GUI::InWidget(const SDL_Event* event)
 {
    return FloatsInWidget(event->motion.x, event->motion.y);
@@ -848,15 +709,3 @@ void GUI::SetTextureID(int state, GLuint id)
    textures[state] = "USEID";
 }
 
-
-// The following functions are all no-ops in the base class, but may be overriden in derived classes
-void GUI::CustomProcessEvent(SDL_Event* event){}
-void GUI::MouseMotion(SDL_Event* event){}
-void GUI::LeftClick(SDL_Event* event){}
-void GUI::LeftDown(SDL_Event* event){}
-void GUI::RightClick(SDL_Event* event){}
-void GUI::RightDown(SDL_Event* event){}
-void GUI::WheelDown(SDL_Event* event){}
-void GUI::WheelUp(SDL_Event* event){}
-void GUI::KeyDown(SDL_Event* event){}
-void GUI::KeyUp(SDL_Event* event){}

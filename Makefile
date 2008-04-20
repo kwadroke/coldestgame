@@ -27,7 +27,6 @@ DEPEND = makedepend $(CXXFLAGS)
 
 VPATH = .:gui
 
-# Don't forget to add CollisionDetection.o back in here
 GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Particle.o ProceduralTree.o TextureHandler.o Hit.o\
 		console.o server.o render.o\
@@ -35,7 +34,7 @@ GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o GenericPrimitive.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o
+		MeshNode.o XSWrapper.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
@@ -242,9 +241,9 @@ actions.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 actions.o: /usr/include/bits/mathcalls.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 actions.o: DynamicObject.h Mesh.h Triangle.h types.h GraphicMatrix.h
-actions.o: Material.h TextureManager.h IniReader.h Shader.h ResourceManager.h
-actions.o: Quad.h MeshNode.h /usr/include/boost/shared_ptr.hpp
-actions.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+actions.o: Material.h TextureManager.h IniReader.h Shader.h
+actions.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+actions.o: /usr/include/boost/config/user.hpp
 actions.o: /usr/include/boost/config/select_compiler_config.hpp
 actions.o: /usr/include/boost/config/compiler/gcc.hpp
 actions.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -266,11 +265,11 @@ actions.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 actions.o: /usr/include/boost/detail/sp_counted_base.hpp
 actions.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 actions.o: /usr/include/boost/detail/sp_counted_impl.hpp
-actions.o: /usr/include/boost/detail/workaround.hpp Hit.h globals.h
-actions.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
-actions.o: WorldPrimitives.h GenericPrimitive.h FBO.h Timer.h
-actions.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h netdefs.h
-actions.o: renderdefs.h Light.h
+actions.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+actions.o: MeshNode.h FBO.h Hit.h globals.h Particle.h CollisionDetection.h
+actions.o: ObjectKDTree.h WorldObjects.h WorldPrimitives.h GenericPrimitive.h
+actions.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
+actions.o: netdefs.h renderdefs.h Light.h
 coldet.o: defines.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 coldet.o: /usr/include/GL/gl.h /usr/include/stdio.h
 coldet.o: /usr/include/gentoo-multilib/amd64/stdio.h /usr/include/features.h
@@ -326,10 +325,7 @@ coldet.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 coldet.o: /usr/include/bits/mathcalls.h
 coldet.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 coldet.o: GenericPrimitive.h Material.h TextureManager.h types.h Vector3.h
-coldet.o: IniReader.h Shader.h TextureHandler.h GraphicMatrix.h
-coldet.o: DynamicObject.h WorldPrimitives.h WorldObjects.h FBO.h
-coldet.o: ObjectKDTree.h Mesh.h Triangle.h ResourceManager.h Quad.h
-coldet.o: MeshNode.h /usr/include/boost/shared_ptr.hpp
+coldet.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
 coldet.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 coldet.o: /usr/include/boost/config/select_compiler_config.hpp
 coldet.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -353,10 +349,13 @@ coldet.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 coldet.o: /usr/include/boost/detail/sp_counted_base.hpp
 coldet.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 coldet.o: /usr/include/boost/detail/sp_counted_impl.hpp
-coldet.o: /usr/include/boost/detail/workaround.hpp Timer.h
-coldet.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h
-coldet.o: PrimitiveOctree.h ProceduralTree.h Particle.h Hit.h PlayerData.h
-coldet.o: Light.h gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+coldet.o: /usr/include/boost/detail/workaround.hpp TextureHandler.h
+coldet.o: GraphicMatrix.h DynamicObject.h WorldPrimitives.h WorldObjects.h
+coldet.o: FBO.h ObjectKDTree.h Mesh.h Triangle.h ResourceManager.h Quad.h
+coldet.o: MeshNode.h Timer.h CollisionDetection.h DynamicPrimitive.h
+coldet.o: Quaternion.h PrimitiveOctree.h ProceduralTree.h Particle.h Hit.h
+coldet.o: PlayerData.h Light.h gui/GUI.h
+coldet.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldet.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldet.o: /usr/include/xercesc/dom/DOMDocument.hpp
 coldet.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -513,8 +512,8 @@ CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 CollisionDetection.o: /usr/include/bits/mathcalls.h
 CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 CollisionDetection.o: Triangle.h types.h GraphicMatrix.h Material.h
-CollisionDetection.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
-CollisionDetection.o: Quad.h MeshNode.h /usr/include/boost/shared_ptr.hpp
+CollisionDetection.o: TextureManager.h IniReader.h Shader.h
+CollisionDetection.o: /usr/include/boost/shared_ptr.hpp
 CollisionDetection.o: /usr/include/boost/config.hpp
 CollisionDetection.o: /usr/include/boost/config/user.hpp
 CollisionDetection.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -546,11 +545,12 @@ CollisionDetection.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_base.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_impl.hpp
-CollisionDetection.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-CollisionDetection.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h
-CollisionDetection.o: FBO.h TextureHandler.h Timer.h DynamicPrimitive.h
-CollisionDetection.o: Quaternion.h PrimitiveOctree.h globals.h Particle.h
-CollisionDetection.o: ServerInfo.h gui/GUI.h
+CollisionDetection.o: /usr/include/boost/detail/workaround.hpp
+CollisionDetection.o: ResourceManager.h Quad.h MeshNode.h FBO.h
+CollisionDetection.o: TextureHandler.h WorldObjects.h WorldPrimitives.h
+CollisionDetection.o: GenericPrimitive.h DynamicObject.h Timer.h
+CollisionDetection.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
+CollisionDetection.o: globals.h Particle.h ServerInfo.h gui/GUI.h
 CollisionDetection.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 CollisionDetection.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 CollisionDetection.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -729,9 +729,8 @@ console.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 console.o: /usr/include/bits/mathcalls.h
 console.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 console.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-console.o: Shader.h ResourceManager.h Quad.h MeshNode.h
-console.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-console.o: /usr/include/boost/config/user.hpp
+console.o: Shader.h /usr/include/boost/shared_ptr.hpp
+console.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 console.o: /usr/include/boost/config/select_compiler_config.hpp
 console.o: /usr/include/boost/config/compiler/gcc.hpp
 console.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -758,12 +757,12 @@ console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 console.o: /usr/include/boost/detail/sp_counted_base.hpp
 console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 console.o: /usr/include/boost/detail/sp_counted_impl.hpp
-console.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-console.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-console.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-console.o: PrimitiveOctree.h Hit.h PlayerData.h Packet.h gui/TextArea.h
-console.o: gui/GUI.h gui/Table.h renderdefs.h Light.h gui/GUI.h
-console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+console.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+console.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
+console.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+console.o: Quaternion.h PrimitiveOctree.h Hit.h PlayerData.h Packet.h
+console.o: gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h Light.h
+console.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 console.o: /usr/include/xercesc/dom/DOMDocument.hpp
 console.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -938,7 +937,40 @@ DynamicObject.o: /usr/include/bits/mathcalls.h
 DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 DynamicObject.o: DynamicPrimitive.h GenericPrimitive.h Material.h
 DynamicObject.o: TextureManager.h types.h IniReader.h Shader.h
-DynamicObject.o: GraphicMatrix.h Quaternion.h
+DynamicObject.o: /usr/include/boost/shared_ptr.hpp
+DynamicObject.o: /usr/include/boost/config.hpp
+DynamicObject.o: /usr/include/boost/config/user.hpp
+DynamicObject.o: /usr/include/boost/config/select_compiler_config.hpp
+DynamicObject.o: /usr/include/boost/config/compiler/gcc.hpp
+DynamicObject.o: /usr/include/boost/config/select_stdlib_config.hpp
+DynamicObject.o: /usr/include/boost/config/no_tr1/utility.hpp
+DynamicObject.o: /usr/include/boost/config/select_platform_config.hpp
+DynamicObject.o: /usr/include/boost/config/posix_features.hpp
+DynamicObject.o: /usr/include/unistd.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/unistd.h
+DynamicObject.o: /usr/include/bits/posix_opt.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+DynamicObject.o: /usr/include/bits/types.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+DynamicObject.o: /usr/include/bits/typesizes.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+DynamicObject.o: /usr/include/bits/confname.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+DynamicObject.o: /usr/include/getopt.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/getopt.h
+DynamicObject.o: /usr/include/boost/config/suffix.hpp
+DynamicObject.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+DynamicObject.o: /usr/include/gentoo-multilib/amd64/assert.h
+DynamicObject.o: /usr/include/boost/checked_delete.hpp
+DynamicObject.o: /usr/include/boost/throw_exception.hpp
+DynamicObject.o: /usr/include/boost/config.hpp
+DynamicObject.o: /usr/include/boost/detail/shared_count.hpp
+DynamicObject.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+DynamicObject.o: /usr/include/boost/detail/sp_counted_base.hpp
+DynamicObject.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+DynamicObject.o: /usr/include/boost/detail/sp_counted_impl.hpp
+DynamicObject.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+DynamicObject.o: Quaternion.h
 DynamicPrimitive.o: DynamicPrimitive.h GenericPrimitive.h Material.h glinc.h
 DynamicPrimitive.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 DynamicPrimitive.o: /usr/include/GL/gl.h TextureManager.h types.h Vector3.h
@@ -960,8 +992,40 @@ DynamicPrimitive.o: /usr/include/bits/mathdef.h
 DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 DynamicPrimitive.o: /usr/include/bits/mathcalls.h
 DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-DynamicPrimitive.o: IniReader.h Shader.h GraphicMatrix.h Quaternion.h
-DynamicPrimitive.o: DynamicObject.h
+DynamicPrimitive.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
+DynamicPrimitive.o: /usr/include/boost/config.hpp
+DynamicPrimitive.o: /usr/include/boost/config/user.hpp
+DynamicPrimitive.o: /usr/include/boost/config/select_compiler_config.hpp
+DynamicPrimitive.o: /usr/include/boost/config/compiler/gcc.hpp
+DynamicPrimitive.o: /usr/include/boost/config/select_stdlib_config.hpp
+DynamicPrimitive.o: /usr/include/boost/config/no_tr1/utility.hpp
+DynamicPrimitive.o: /usr/include/boost/config/select_platform_config.hpp
+DynamicPrimitive.o: /usr/include/boost/config/posix_features.hpp
+DynamicPrimitive.o: /usr/include/unistd.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/unistd.h
+DynamicPrimitive.o: /usr/include/bits/posix_opt.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+DynamicPrimitive.o: /usr/include/bits/types.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+DynamicPrimitive.o: /usr/include/bits/typesizes.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+DynamicPrimitive.o: /usr/include/bits/confname.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+DynamicPrimitive.o: /usr/include/getopt.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/getopt.h
+DynamicPrimitive.o: /usr/include/boost/config/suffix.hpp
+DynamicPrimitive.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/assert.h
+DynamicPrimitive.o: /usr/include/boost/checked_delete.hpp
+DynamicPrimitive.o: /usr/include/boost/throw_exception.hpp
+DynamicPrimitive.o: /usr/include/boost/config.hpp
+DynamicPrimitive.o: /usr/include/boost/detail/shared_count.hpp
+DynamicPrimitive.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+DynamicPrimitive.o: /usr/include/boost/detail/sp_counted_base.hpp
+DynamicPrimitive.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+DynamicPrimitive.o: /usr/include/boost/detail/sp_counted_impl.hpp
+DynamicPrimitive.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+DynamicPrimitive.o: Quaternion.h DynamicObject.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h TextureHandler.h
 GenericPrimitive.o: DynamicObject.h Vector3.h glinc.h /usr/include/GL/glew.h
@@ -985,7 +1049,39 @@ GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 GenericPrimitive.o: /usr/include/bits/mathcalls.h
 GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 GenericPrimitive.o: GenericPrimitive.h Material.h TextureManager.h types.h
-GenericPrimitive.o: IniReader.h Shader.h
+GenericPrimitive.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
+GenericPrimitive.o: /usr/include/boost/config.hpp
+GenericPrimitive.o: /usr/include/boost/config/user.hpp
+GenericPrimitive.o: /usr/include/boost/config/select_compiler_config.hpp
+GenericPrimitive.o: /usr/include/boost/config/compiler/gcc.hpp
+GenericPrimitive.o: /usr/include/boost/config/select_stdlib_config.hpp
+GenericPrimitive.o: /usr/include/boost/config/no_tr1/utility.hpp
+GenericPrimitive.o: /usr/include/boost/config/select_platform_config.hpp
+GenericPrimitive.o: /usr/include/boost/config/posix_features.hpp
+GenericPrimitive.o: /usr/include/unistd.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/unistd.h
+GenericPrimitive.o: /usr/include/bits/posix_opt.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+GenericPrimitive.o: /usr/include/bits/types.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+GenericPrimitive.o: /usr/include/bits/typesizes.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+GenericPrimitive.o: /usr/include/bits/confname.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+GenericPrimitive.o: /usr/include/getopt.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/getopt.h
+GenericPrimitive.o: /usr/include/boost/config/suffix.hpp
+GenericPrimitive.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/assert.h
+GenericPrimitive.o: /usr/include/boost/checked_delete.hpp
+GenericPrimitive.o: /usr/include/boost/throw_exception.hpp
+GenericPrimitive.o: /usr/include/boost/config.hpp
+GenericPrimitive.o: /usr/include/boost/detail/shared_count.hpp
+GenericPrimitive.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+GenericPrimitive.o: /usr/include/boost/detail/sp_counted_base.hpp
+GenericPrimitive.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+GenericPrimitive.o: /usr/include/boost/detail/sp_counted_impl.hpp
+GenericPrimitive.o: /usr/include/boost/detail/workaround.hpp
 getmap.o: gui/ProgressBar.h gui/GUI.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -1164,9 +1260,8 @@ getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 getmap.o: /usr/include/bits/mathcalls.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 getmap.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-getmap.o: Shader.h ResourceManager.h Quad.h MeshNode.h
-getmap.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-getmap.o: /usr/include/boost/config/user.hpp
+getmap.o: Shader.h /usr/include/boost/shared_ptr.hpp
+getmap.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 getmap.o: /usr/include/boost/config/select_compiler_config.hpp
 getmap.o: /usr/include/boost/config/compiler/gcc.hpp
 getmap.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -1188,11 +1283,11 @@ getmap.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 getmap.o: /usr/include/boost/detail/sp_counted_base.hpp
 getmap.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 getmap.o: /usr/include/boost/detail/sp_counted_impl.hpp
-getmap.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-getmap.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h Timer.h
-getmap.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ProceduralTree.h
-getmap.o: Light.h globals.h Particle.h ServerInfo.h PlayerData.h Hit.h
-getmap.o: renderdefs.h
+getmap.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+getmap.o: MeshNode.h FBO.h WorldObjects.h WorldPrimitives.h
+getmap.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+getmap.o: Quaternion.h PrimitiveOctree.h ProceduralTree.h Light.h globals.h
+getmap.o: Particle.h ServerInfo.h PlayerData.h Hit.h renderdefs.h
 globals.o: globals.h /usr/include/boost/shared_ptr.hpp
 globals.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 globals.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -1242,10 +1337,10 @@ globals.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 globals.o: /usr/include/bits/mathcalls.h
 globals.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 globals.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-globals.o: Shader.h ResourceManager.h Quad.h MeshNode.h WorldObjects.h
-globals.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-globals.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-globals.o: PrimitiveOctree.h ServerInfo.h gui/GUI.h
+globals.o: Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
+globals.o: TextureHandler.h WorldObjects.h WorldPrimitives.h
+globals.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+globals.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
 globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -1460,7 +1555,7 @@ Material.o: /usr/include/bits/mathdef.h
 Material.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Material.o: /usr/include/bits/mathcalls.h
 Material.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h IniReader.h
-Material.o: Shader.h globals.h /usr/include/boost/shared_ptr.hpp
+Material.o: Shader.h /usr/include/boost/shared_ptr.hpp
 Material.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Material.o: /usr/include/boost/config/select_compiler_config.hpp
 Material.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -1489,11 +1584,11 @@ Material.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Material.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Material.o: /usr/include/boost/detail/workaround.hpp Particle.h
+Material.o: /usr/include/boost/detail/workaround.hpp globals.h Particle.h
 Material.o: CollisionDetection.h ObjectKDTree.h Mesh.h Triangle.h
-Material.o: GraphicMatrix.h ResourceManager.h Quad.h MeshNode.h
-Material.o: WorldObjects.h WorldPrimitives.h GenericPrimitive.h
-Material.o: DynamicObject.h FBO.h TextureHandler.h Timer.h DynamicPrimitive.h
+Material.o: GraphicMatrix.h ResourceManager.h Quad.h MeshNode.h FBO.h
+Material.o: TextureHandler.h WorldObjects.h WorldPrimitives.h
+Material.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
 Material.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
 Material.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Material.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -1667,9 +1762,8 @@ Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Mesh.o: /usr/include/bits/mathcalls.h
 Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 Mesh.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-Mesh.o: Shader.h ResourceManager.h Quad.h MeshNode.h
-Mesh.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-Mesh.o: /usr/include/boost/config/user.hpp
+Mesh.o: Shader.h /usr/include/boost/shared_ptr.hpp
+Mesh.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Mesh.o: /usr/include/boost/config/select_compiler_config.hpp
 Mesh.o: /usr/include/boost/config/compiler/gcc.hpp
 Mesh.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -1695,12 +1789,12 @@ Mesh.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_base.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Mesh.o: /usr/include/boost/detail/workaround.hpp ProceduralTree.h globals.h
+Mesh.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+Mesh.o: MeshNode.h FBO.h TextureHandler.h ProceduralTree.h globals.h
 Mesh.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
-Mesh.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-Mesh.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-Mesh.o: PrimitiveOctree.h ServerInfo.h gui/GUI.h
-Mesh.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Mesh.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
+Mesh.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ServerInfo.h
+Mesh.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Mesh.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Mesh.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Mesh.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1870,8 +1964,8 @@ MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 MeshNode.o: /usr/include/bits/mathcalls.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
 MeshNode.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
-MeshNode.o: ResourceManager.h /usr/include/boost/shared_ptr.hpp
-MeshNode.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+MeshNode.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+MeshNode.o: /usr/include/boost/config/user.hpp
 MeshNode.o: /usr/include/boost/config/select_compiler_config.hpp
 MeshNode.o: /usr/include/boost/config/compiler/gcc.hpp
 MeshNode.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -1899,11 +1993,11 @@ MeshNode.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_base.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_impl.hpp
-MeshNode.o: /usr/include/boost/detail/workaround.hpp globals.h Particle.h
-MeshNode.o: CollisionDetection.h ObjectKDTree.h Mesh.h Quad.h WorldObjects.h
-MeshNode.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-MeshNode.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-MeshNode.o: PrimitiveOctree.h ServerInfo.h gui/GUI.h
+MeshNode.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
+MeshNode.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h
+MeshNode.o: Quad.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
+MeshNode.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+MeshNode.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
 MeshNode.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2076,8 +2170,8 @@ net.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 net.o: /usr/include/bits/mathcalls.h
 net.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h types.h
 net.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
-net.o: ResourceManager.h Quad.h MeshNode.h /usr/include/boost/shared_ptr.hpp
-net.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+net.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+net.o: /usr/include/boost/config/user.hpp
 net.o: /usr/include/boost/config/select_compiler_config.hpp
 net.o: /usr/include/boost/config/compiler/gcc.hpp
 net.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -2103,12 +2197,12 @@ net.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 net.o: /usr/include/boost/detail/sp_counted_base.hpp
 net.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 net.o: /usr/include/boost/detail/sp_counted_impl.hpp
-net.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-net.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-net.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-net.o: PrimitiveOctree.h PlayerData.h Hit.h Packet.h ServerInfo.h
-net.o: gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-net.o: gui/Button.h netdefs.h globals.h gui/GUI.h
+net.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+net.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
+net.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+net.o: Quaternion.h PrimitiveOctree.h PlayerData.h Hit.h Packet.h
+net.o: ServerInfo.h gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
+net.o: gui/LineEdit.h gui/Button.h netdefs.h globals.h gui/GUI.h
 net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2285,9 +2379,8 @@ netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 netdefs.o: /usr/include/bits/mathcalls.h
 netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 netdefs.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-netdefs.o: Shader.h ResourceManager.h Quad.h MeshNode.h
-netdefs.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-netdefs.o: /usr/include/boost/config/user.hpp
+netdefs.o: Shader.h /usr/include/boost/shared_ptr.hpp
+netdefs.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 netdefs.o: /usr/include/boost/config/select_compiler_config.hpp
 netdefs.o: /usr/include/boost/config/compiler/gcc.hpp
 netdefs.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -2314,10 +2407,10 @@ netdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
-netdefs.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-netdefs.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-netdefs.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-netdefs.o: PrimitiveOctree.h PlayerData.h Hit.h Particle.h
+netdefs.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+netdefs.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
+netdefs.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+netdefs.o: Quaternion.h PrimitiveOctree.h PlayerData.h Hit.h Particle.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/math.h
@@ -2339,8 +2432,8 @@ ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ObjectKDTree.o: /usr/include/bits/mathcalls.h
 ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 ObjectKDTree.o: Triangle.h types.h GraphicMatrix.h Material.h
-ObjectKDTree.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
-ObjectKDTree.o: Quad.h MeshNode.h /usr/include/boost/shared_ptr.hpp
+ObjectKDTree.o: TextureManager.h IniReader.h Shader.h
+ObjectKDTree.o: /usr/include/boost/shared_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/config.hpp
 ObjectKDTree.o: /usr/include/boost/config/user.hpp
 ObjectKDTree.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2372,9 +2465,9 @@ ObjectKDTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-ObjectKDTree.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-ObjectKDTree.o: TextureHandler.h Timer.h
+ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
+ObjectKDTree.o: Quad.h MeshNode.h FBO.h TextureHandler.h WorldObjects.h
+ObjectKDTree.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
 Packet.o: Packet.h
 Particle.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 Particle.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
@@ -2396,9 +2489,8 @@ Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Particle.o: /usr/include/bits/mathcalls.h
 Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 Particle.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-Particle.o: Shader.h ResourceManager.h Quad.h MeshNode.h
-Particle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-Particle.o: /usr/include/boost/config/user.hpp
+Particle.o: Shader.h /usr/include/boost/shared_ptr.hpp
+Particle.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Particle.o: /usr/include/boost/config/select_compiler_config.hpp
 Particle.o: /usr/include/boost/config/compiler/gcc.hpp
 Particle.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -2426,10 +2518,10 @@ Particle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_base.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Particle.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-Particle.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-Particle.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-Particle.o: PrimitiveOctree.h
+Particle.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+Particle.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h
+Particle.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
+Particle.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
 PlayerData.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
 PlayerData.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/math.h
@@ -2451,7 +2543,6 @@ PlayerData.o: /usr/include/bits/mathcalls.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 PlayerData.o: DynamicObject.h Mesh.h Triangle.h types.h GraphicMatrix.h
 PlayerData.o: Material.h TextureManager.h IniReader.h Shader.h
-PlayerData.o: ResourceManager.h Quad.h MeshNode.h
 PlayerData.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 PlayerData.o: /usr/include/boost/config/user.hpp
 PlayerData.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2483,7 +2574,8 @@ PlayerData.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_base.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_impl.hpp
-PlayerData.o: /usr/include/boost/detail/workaround.hpp Hit.h
+PlayerData.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
+PlayerData.o: Quad.h MeshNode.h FBO.h TextureHandler.h Hit.h
 PrimitiveOctree.o: PrimitiveOctree.h glinc.h /usr/include/GL/glew.h
 PrimitiveOctree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PrimitiveOctree.o: GenericPrimitive.h Material.h TextureManager.h types.h
@@ -2505,7 +2597,39 @@ PrimitiveOctree.o: /usr/include/bits/mathdef.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 PrimitiveOctree.o: /usr/include/bits/mathcalls.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-PrimitiveOctree.o: IniReader.h Shader.h
+PrimitiveOctree.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
+PrimitiveOctree.o: /usr/include/boost/config.hpp
+PrimitiveOctree.o: /usr/include/boost/config/user.hpp
+PrimitiveOctree.o: /usr/include/boost/config/select_compiler_config.hpp
+PrimitiveOctree.o: /usr/include/boost/config/compiler/gcc.hpp
+PrimitiveOctree.o: /usr/include/boost/config/select_stdlib_config.hpp
+PrimitiveOctree.o: /usr/include/boost/config/no_tr1/utility.hpp
+PrimitiveOctree.o: /usr/include/boost/config/select_platform_config.hpp
+PrimitiveOctree.o: /usr/include/boost/config/posix_features.hpp
+PrimitiveOctree.o: /usr/include/unistd.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/unistd.h
+PrimitiveOctree.o: /usr/include/bits/posix_opt.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+PrimitiveOctree.o: /usr/include/bits/types.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+PrimitiveOctree.o: /usr/include/bits/typesizes.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+PrimitiveOctree.o: /usr/include/bits/confname.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+PrimitiveOctree.o: /usr/include/getopt.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/getopt.h
+PrimitiveOctree.o: /usr/include/boost/config/suffix.hpp
+PrimitiveOctree.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/assert.h
+PrimitiveOctree.o: /usr/include/boost/checked_delete.hpp
+PrimitiveOctree.o: /usr/include/boost/throw_exception.hpp
+PrimitiveOctree.o: /usr/include/boost/config.hpp
+PrimitiveOctree.o: /usr/include/boost/detail/shared_count.hpp
+PrimitiveOctree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+PrimitiveOctree.o: /usr/include/boost/detail/sp_counted_base.hpp
+PrimitiveOctree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+PrimitiveOctree.o: /usr/include/boost/detail/sp_counted_impl.hpp
+PrimitiveOctree.o: /usr/include/boost/detail/workaround.hpp
 ProceduralTree.o: ProceduralTree.h /usr/include/math.h
 ProceduralTree.o: /usr/include/gentoo-multilib/amd64/math.h
 ProceduralTree.o: /usr/include/features.h
@@ -2527,8 +2651,7 @@ ProceduralTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 ProceduralTree.o: GraphicMatrix.h glinc.h /usr/include/GL/glew.h
 ProceduralTree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h Vector3.h
 ProceduralTree.o: IniReader.h Mesh.h Triangle.h types.h Material.h
-ProceduralTree.o: TextureManager.h Shader.h ResourceManager.h Quad.h
-ProceduralTree.o: MeshNode.h /usr/include/boost/shared_ptr.hpp
+ProceduralTree.o: TextureManager.h Shader.h /usr/include/boost/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
 ProceduralTree.o: /usr/include/boost/config/user.hpp
 ProceduralTree.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2560,7 +2683,8 @@ ProceduralTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ProceduralTree.o: /usr/include/boost/detail/workaround.hpp
+ProceduralTree.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
+ProceduralTree.o: Quad.h MeshNode.h FBO.h TextureHandler.h
 Quad.o: Quad.h Triangle.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quad.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 Quad.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
@@ -2580,6 +2704,34 @@ Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Quad.o: /usr/include/bits/mathcalls.h
 Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
 Quad.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
+Quad.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Quad.o: /usr/include/boost/config/user.hpp
+Quad.o: /usr/include/boost/config/select_compiler_config.hpp
+Quad.o: /usr/include/boost/config/compiler/gcc.hpp
+Quad.o: /usr/include/boost/config/select_stdlib_config.hpp
+Quad.o: /usr/include/boost/config/no_tr1/utility.hpp
+Quad.o: /usr/include/boost/config/select_platform_config.hpp
+Quad.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Quad.o: /usr/include/gentoo-multilib/amd64/unistd.h
+Quad.o: /usr/include/bits/posix_opt.h
+Quad.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Quad.o: /usr/include/bits/types.h
+Quad.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Quad.o: /usr/include/bits/typesizes.h
+Quad.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Quad.o: /usr/include/bits/confname.h
+Quad.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Quad.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Quad.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Quad.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Quad.o: /usr/include/boost/checked_delete.hpp
+Quad.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Quad.o: /usr/include/boost/detail/shared_count.hpp
+Quad.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Quad.o: /usr/include/boost/detail/sp_counted_base.hpp
+Quad.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Quad.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Quad.o: /usr/include/boost/detail/workaround.hpp
 Quaternion.o: Quaternion.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quaternion.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 Quaternion.o: /usr/include/gentoo-multilib/amd64/math.h
@@ -2648,10 +2800,10 @@ render.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 render.o: /usr/include/bits/mathcalls.h
 render.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 render.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-render.o: Shader.h ResourceManager.h Quad.h MeshNode.h WorldObjects.h
-render.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-render.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-render.o: PrimitiveOctree.h ServerInfo.h gui/GUI.h
+render.o: Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h
+render.o: WorldObjects.h WorldPrimitives.h GenericPrimitive.h DynamicObject.h
+render.o: Timer.h DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
+render.o: ServerInfo.h gui/GUI.h
 render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2826,9 +2978,7 @@ renderdefs.o: /usr/include/bits/mathdef.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 renderdefs.o: /usr/include/bits/mathcalls.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h IniReader.h
-renderdefs.o: Shader.h DynamicObject.h FBO.h TextureHandler.h PlayerData.h
-renderdefs.o: Mesh.h Triangle.h GraphicMatrix.h ResourceManager.h Quad.h
-renderdefs.o: MeshNode.h /usr/include/boost/shared_ptr.hpp
+renderdefs.o: Shader.h /usr/include/boost/shared_ptr.hpp
 renderdefs.o: /usr/include/boost/config.hpp
 renderdefs.o: /usr/include/boost/config/user.hpp
 renderdefs.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2860,9 +3010,11 @@ renderdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
-renderdefs.o: /usr/include/boost/detail/workaround.hpp Hit.h
-renderdefs.o: PrimitiveOctree.h ObjectKDTree.h Timer.h CollisionDetection.h
-renderdefs.o: DynamicPrimitive.h Quaternion.h Light.h gui/GUI.h
+renderdefs.o: /usr/include/boost/detail/workaround.hpp DynamicObject.h FBO.h
+renderdefs.o: TextureHandler.h PlayerData.h Mesh.h Triangle.h GraphicMatrix.h
+renderdefs.o: ResourceManager.h Quad.h MeshNode.h Hit.h PrimitiveOctree.h
+renderdefs.o: ObjectKDTree.h Timer.h CollisionDetection.h DynamicPrimitive.h
+renderdefs.o: Quaternion.h Light.h gui/GUI.h
 renderdefs.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -3040,7 +3192,39 @@ ResourceManager.o: /usr/include/bits/mathdef.h
 ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ResourceManager.o: /usr/include/bits/mathcalls.h
 ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ResourceManager.o: IniReader.h Shader.h
+ResourceManager.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
+ResourceManager.o: /usr/include/boost/config.hpp
+ResourceManager.o: /usr/include/boost/config/user.hpp
+ResourceManager.o: /usr/include/boost/config/select_compiler_config.hpp
+ResourceManager.o: /usr/include/boost/config/compiler/gcc.hpp
+ResourceManager.o: /usr/include/boost/config/select_stdlib_config.hpp
+ResourceManager.o: /usr/include/boost/config/no_tr1/utility.hpp
+ResourceManager.o: /usr/include/boost/config/select_platform_config.hpp
+ResourceManager.o: /usr/include/boost/config/posix_features.hpp
+ResourceManager.o: /usr/include/unistd.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/unistd.h
+ResourceManager.o: /usr/include/bits/posix_opt.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+ResourceManager.o: /usr/include/bits/types.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+ResourceManager.o: /usr/include/bits/typesizes.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+ResourceManager.o: /usr/include/bits/confname.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+ResourceManager.o: /usr/include/getopt.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/getopt.h
+ResourceManager.o: /usr/include/boost/config/suffix.hpp
+ResourceManager.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+ResourceManager.o: /usr/include/gentoo-multilib/amd64/assert.h
+ResourceManager.o: /usr/include/boost/checked_delete.hpp
+ResourceManager.o: /usr/include/boost/throw_exception.hpp
+ResourceManager.o: /usr/include/boost/config.hpp
+ResourceManager.o: /usr/include/boost/detail/shared_count.hpp
+ResourceManager.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ResourceManager.o: /usr/include/boost/detail/sp_counted_base.hpp
+ResourceManager.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+ResourceManager.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ResourceManager.o: /usr/include/boost/detail/workaround.hpp
 server.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 server.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 server.o: /usr/include/GL/gl.h /usr/include/math.h
@@ -3061,9 +3245,8 @@ server.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 server.o: /usr/include/bits/mathcalls.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
 server.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-server.o: Shader.h ResourceManager.h Quad.h MeshNode.h
-server.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-server.o: /usr/include/boost/config/user.hpp
+server.o: Shader.h /usr/include/boost/shared_ptr.hpp
+server.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 server.o: /usr/include/boost/config/select_compiler_config.hpp
 server.o: /usr/include/boost/config/compiler/gcc.hpp
 server.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -3090,11 +3273,11 @@ server.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 server.o: /usr/include/boost/detail/sp_counted_base.hpp
 server.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 server.o: /usr/include/boost/detail/sp_counted_impl.hpp
-server.o: /usr/include/boost/detail/workaround.hpp WorldObjects.h
-server.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h FBO.h
-server.o: TextureHandler.h Timer.h DynamicPrimitive.h Quaternion.h
-server.o: PrimitiveOctree.h PlayerData.h Hit.h Packet.h ProceduralTree.h
-server.o: globals.h ServerInfo.h gui/GUI.h
+server.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
+server.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
+server.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
+server.o: Quaternion.h PrimitiveOctree.h PlayerData.h Hit.h Packet.h
+server.o: ProceduralTree.h globals.h ServerInfo.h gui/GUI.h
 server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 server.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 server.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -3281,6 +3464,36 @@ Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Triangle.o: /usr/include/bits/mathcalls.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
 Triangle.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
+Triangle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Triangle.o: /usr/include/boost/config/user.hpp
+Triangle.o: /usr/include/boost/config/select_compiler_config.hpp
+Triangle.o: /usr/include/boost/config/compiler/gcc.hpp
+Triangle.o: /usr/include/boost/config/select_stdlib_config.hpp
+Triangle.o: /usr/include/boost/config/no_tr1/utility.hpp
+Triangle.o: /usr/include/boost/config/select_platform_config.hpp
+Triangle.o: /usr/include/boost/config/posix_features.hpp
+Triangle.o: /usr/include/unistd.h /usr/include/gentoo-multilib/amd64/unistd.h
+Triangle.o: /usr/include/bits/posix_opt.h
+Triangle.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Triangle.o: /usr/include/bits/types.h
+Triangle.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Triangle.o: /usr/include/bits/typesizes.h
+Triangle.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Triangle.o: /usr/include/bits/confname.h
+Triangle.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Triangle.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Triangle.o: /usr/include/boost/config/suffix.hpp
+Triangle.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+Triangle.o: /usr/include/gentoo-multilib/amd64/assert.h
+Triangle.o: /usr/include/boost/checked_delete.hpp
+Triangle.o: /usr/include/boost/throw_exception.hpp
+Triangle.o: /usr/include/boost/config.hpp
+Triangle.o: /usr/include/boost/detail/shared_count.hpp
+Triangle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Triangle.o: /usr/include/boost/detail/sp_counted_base.hpp
+Triangle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Triangle.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Triangle.o: /usr/include/boost/detail/workaround.hpp
 Vector3.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Vector3.o: /usr/include/GL/gl.h /usr/include/math.h
 Vector3.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
@@ -3320,10 +3533,7 @@ WorldObjects.o: /usr/include/bits/mathdef.h
 WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 WorldObjects.o: /usr/include/bits/mathcalls.h
 WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-WorldObjects.o: IniReader.h Shader.h DynamicObject.h FBO.h TextureHandler.h
-WorldObjects.o: renderdefs.h PlayerData.h Mesh.h Triangle.h GraphicMatrix.h
-WorldObjects.o: ResourceManager.h Quad.h MeshNode.h
-WorldObjects.o: /usr/include/boost/shared_ptr.hpp
+WorldObjects.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
 WorldObjects.o: /usr/include/boost/config.hpp
 WorldObjects.o: /usr/include/boost/config/user.hpp
 WorldObjects.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3355,10 +3565,12 @@ WorldObjects.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 WorldObjects.o: /usr/include/boost/detail/sp_counted_base.hpp
 WorldObjects.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 WorldObjects.o: /usr/include/boost/detail/sp_counted_impl.hpp
-WorldObjects.o: /usr/include/boost/detail/workaround.hpp Hit.h
-WorldObjects.o: PrimitiveOctree.h ObjectKDTree.h Timer.h CollisionDetection.h
-WorldObjects.o: DynamicPrimitive.h Quaternion.h Light.h gui/GUI.h
-WorldObjects.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+WorldObjects.o: /usr/include/boost/detail/workaround.hpp DynamicObject.h
+WorldObjects.o: FBO.h TextureHandler.h renderdefs.h PlayerData.h Mesh.h
+WorldObjects.o: Triangle.h GraphicMatrix.h ResourceManager.h Quad.h
+WorldObjects.o: MeshNode.h Hit.h PrimitiveOctree.h ObjectKDTree.h Timer.h
+WorldObjects.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h Light.h
+WorldObjects.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 WorldObjects.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 WorldObjects.o: /usr/include/xercesc/dom/DOMDocument.hpp
 WorldObjects.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -3535,10 +3747,7 @@ WorldPrimitives.o: /usr/include/bits/mathdef.h
 WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 WorldPrimitives.o: /usr/include/bits/mathcalls.h
 WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-WorldPrimitives.o: IniReader.h Shader.h DynamicObject.h FBO.h
-WorldPrimitives.o: TextureHandler.h renderdefs.h PlayerData.h Mesh.h
-WorldPrimitives.o: Triangle.h GraphicMatrix.h ResourceManager.h Quad.h
-WorldPrimitives.o: MeshNode.h /usr/include/boost/shared_ptr.hpp
+WorldPrimitives.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
 WorldPrimitives.o: /usr/include/boost/config.hpp
 WorldPrimitives.o: /usr/include/boost/config/user.hpp
 WorldPrimitives.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3570,8 +3779,10 @@ WorldPrimitives.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 WorldPrimitives.o: /usr/include/boost/detail/sp_counted_base.hpp
 WorldPrimitives.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 WorldPrimitives.o: /usr/include/boost/detail/sp_counted_impl.hpp
-WorldPrimitives.o: /usr/include/boost/detail/workaround.hpp Hit.h
-WorldPrimitives.o: PrimitiveOctree.h ObjectKDTree.h Timer.h
+WorldPrimitives.o: /usr/include/boost/detail/workaround.hpp DynamicObject.h
+WorldPrimitives.o: FBO.h TextureHandler.h renderdefs.h PlayerData.h Mesh.h
+WorldPrimitives.o: Triangle.h GraphicMatrix.h ResourceManager.h Quad.h
+WorldPrimitives.o: MeshNode.h Hit.h PrimitiveOctree.h ObjectKDTree.h Timer.h
 WorldPrimitives.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h
 WorldPrimitives.o: Light.h gui/GUI.h
 WorldPrimitives.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -3732,6 +3943,64 @@ WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 WorldPrimitives.o: TextureManager.h gui/ProgressBar.h gui/GUI.h
+XSWrapper.o: XSWrapper.h /usr/include/xercesc/util/XMLString.hpp
+XSWrapper.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+XSWrapper.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+XSWrapper.o: /usr/include/xercesc/util/XMLException.hpp
+XSWrapper.o: /usr/include/xercesc/util/XMemory.hpp
+XSWrapper.o: /usr/include/xercesc/util/XercesDefs.hpp
+XSWrapper.o: /usr/include/xercesc/util/XercesVersion.hpp
+XSWrapper.o: /usr/include/xercesc/util/AutoSense.hpp /usr/include/stdlib.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+XSWrapper.o: /usr/include/features.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/features.h
+XSWrapper.o: /usr/include/sys/cdefs.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+XSWrapper.o: /usr/include/bits/wordsize.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+XSWrapper.o: /usr/include/gnu/stubs.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+XSWrapper.o: /usr/include/gnu/stubs-64.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+XSWrapper.o: /usr/include/sys/types.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+XSWrapper.o: /usr/include/bits/types.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+XSWrapper.o: /usr/include/bits/typesizes.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+XSWrapper.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+XSWrapper.o: /usr/include/endian.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/endian.h
+XSWrapper.o: /usr/include/bits/endian.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+XSWrapper.o: /usr/include/sys/select.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+XSWrapper.o: /usr/include/bits/select.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+XSWrapper.o: /usr/include/bits/sigset.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+XSWrapper.o: /usr/include/bits/time.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+XSWrapper.o: /usr/include/sys/sysmacros.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+XSWrapper.o: /usr/include/bits/pthreadtypes.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+XSWrapper.o: /usr/include/alloca.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/alloca.h
+XSWrapper.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+XSWrapper.o: /usr/include/xercesc/dom/DOMError.hpp
+XSWrapper.o: /usr/include/xercesc/util/XMLUni.hpp
+XSWrapper.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+XSWrapper.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+XSWrapper.o: /usr/include/xercesc/util/PlatformUtils.hpp
+XSWrapper.o: /usr/include/xercesc/util/PanicHandler.hpp
+XSWrapper.o: /usr/include/xercesc/framework/MemoryManager.hpp
+XSWrapper.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+XSWrapper.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+XSWrapper.o: /usr/include/string.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/string.h
+XSWrapper.o: /usr/include/assert.h
+XSWrapper.o: /usr/include/gentoo-multilib/amd64/assert.h
 gui/Button.o: gui/Button.h gui/GUI.h
 gui/ComboBox.o: gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
 gui/ComboBox.o: gui/LineEdit.h gui/Button.h

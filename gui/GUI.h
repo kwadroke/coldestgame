@@ -12,6 +12,7 @@
 #include <xercesc/dom/DOMText.hpp>
 #include <xercesc/dom/DOMNamedNodeMap.hpp>
 #include <stdexcept>
+#include <boost/shared_ptr.hpp>
 
 #include <iostream>
 #include <list>
@@ -21,6 +22,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "../TextureManager.h"
+#include "XSWrapper.h"
 
 using namespace std;
 using xercesc::DOMElement;
@@ -32,55 +34,7 @@ using xercesc::DOMNode;
 using xercesc::DOMNodeList;
 using xercesc::DOMNamedNodeMap;
 using xercesc::XMLString;
-
-struct Tags
-{
-   // Base tags
-   XMLCh* gui;
-   XMLCh* button;
-   XMLCh* lineedit;
-   XMLCh* scrollview;
-   XMLCh* progressbar;
-   XMLCh* label;
-   XMLCh* table;
-   XMLCh* tableitem;
-   XMLCh* combobox;
-   XMLCh* comboboxitem;
-   XMLCh* textarea;
-   XMLCh* slider;
-   
-   // General tags
-   XMLCh* normal;
-   XMLCh* hover;
-   XMLCh* pressed;
-   XMLCh* scrollbar;
-   XMLCh* leftclickaction;
-   XMLCh* valuechanged;
-};
-
-struct Attribs
-{
-   XMLCh* x;
-   XMLCh* y;
-   XMLCh* width;
-   XMLCh* height;
-   XMLCh* virtualw;
-   XMLCh* virtualh;
-   XMLCh* name;
-   XMLCh* text;
-   XMLCh* font;
-   XMLCh* fontsize;
-   XMLCh* visible;
-   XMLCh* readonly;
-   XMLCh* xmargin;
-   XMLCh* ymargin;
-   XMLCh* columns;
-   XMLCh* colwidths;
-   XMLCh* rowheight;
-   XMLCh* align;
-   XMLCh* headerheight;
-   XMLCh* menuheight;
-};
+using boost::shared_ptr;
 
 enum {Normal, Hover, Clicked};
 enum Alignment {Left, Center, Right};
@@ -96,11 +50,11 @@ class GUI
    friend class TextArea;
    friend class Slider;
    public:
-      GUI(float aw = 480.f, float ah = 640.f, TextureManager* texm = NULL);
+      GUI(float aw = 640.f, float ah = 480.f, TextureManager* texm = NULL);
       virtual ~GUI();
-      virtual void Render();
+      void Render();
       virtual void ProcessEvent(SDL_Event*);
-      void Add(GUI*, string);
+      void Add(shared_ptr<GUI>, string);
       GUI* GetWidget(string);
       void InitFromFile(string);
       string ReadAttribute(DOMNode*, XMLCh*);
@@ -124,33 +78,38 @@ class GUI
    
    protected:
       void DoAction(string);
-      virtual void ReadNode(DOMNode*, GUI*);
-      void ReadTextures(DOMNode*);
-      virtual void InitTags();
-      virtual void DestroyTags();
+      void ReadNode(DOMNode*, GUI*);
+      virtual void ReadNodeExtra(DOMNode*, GUI*){}
+      virtual void ReadSpecialNodes(DOMNode*, GUI*){}
       virtual void Cleanup();
+      virtual void RenderWidget(){}
+      virtual void PostRender(){}
       void Init(GUI*, TextureManager*);
       void StringDim(TTF_Font*, string, int&, int&);
       void RenderBase();
       
       // Event handlers
-      virtual void CustomProcessEvent(SDL_Event*);
-      virtual void MouseMotion(SDL_Event*);
-      virtual void LeftClick(SDL_Event*);
-      virtual void LeftDown(SDL_Event*);
-      virtual void RightClick(SDL_Event*);
-      virtual void RightDown(SDL_Event*);
-      virtual void WheelDown(SDL_Event*);
-      virtual void WheelUp(SDL_Event*);
-      virtual void KeyDown(SDL_Event*);
-      virtual void KeyUp(SDL_Event*);
+      virtual void CustomProcessEvent(SDL_Event*){}
+      virtual void MouseMotion(SDL_Event*){}
+      virtual void LeftClick(SDL_Event*){}
+      virtual void LeftDown(SDL_Event*){}
+      virtual void RightClick(SDL_Event*){}
+      virtual void RightDown(SDL_Event*){}
+      virtual void WheelDown(SDL_Event*){}
+      virtual void WheelUp(SDL_Event*){}
+      virtual void KeyDown(SDL_Event*){}
+      virtual void KeyUp(SDL_Event*){}
+      virtual void GlobalLeftClick(SDL_Event*){}
+      virtual void GlobalLeftDown(SDL_Event*){}
+      virtual void GlobalRightClick(SDL_Event*){}
+      virtual void GlobalRightDown(SDL_Event*){}
       
       // Copying of this object is not allowed, just use InitFromFile again
       // with the same file on a new object
       GUI(const GUI&);
       GUI& operator=(const GUI&);
       
-      list<GUI*> children;
+      list<shared_ptr<GUI> > children;
       GUI* parent;
       float virtualw, virtualh;
       float actualw, actualh;
@@ -167,17 +126,16 @@ class GUI
       GLuint texttexture;
       vector<string> textures;
       vector<GLuint> texids;
-      Tags tag;
-      Attribs attrib;
       TextureManager *texman;
       TTF_Font* font;
       
 };
 
-// Used frequently, and only one change if we change containers for some reason
-typedef list<GUI*>::iterator guiiter;
+typedef shared_ptr<GUI> GUIPtr;
+// Used frequently, and only one change if we change containers (which we already have)
+typedef list<GUIPtr>::iterator guiiter;
 
-// Necessary externs, mostly for action functions
+// Necessary externs
 //void RenderText(string, int, int, int, TTF_Font*, float scale = 1.f, bool shadow = true);
 int PowerOf2(int);
 void Action(const string&);

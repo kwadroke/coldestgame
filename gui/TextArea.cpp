@@ -18,44 +18,16 @@ TextArea::~TextArea()
 }
 
 
-void TextArea::ReadNode(DOMNode *current, GUI* parentw)
+void TextArea::ReadNodeExtra(DOMNode *current, GUI* parentw)
 {
-   short type = current->getNodeType();
-   if (type)
-   {
-      if (type == DOMNode::ELEMENT_NODE)
-      {
-         InitTags();
-         
-         ReadTextures(current);
-         
-         string curr;
-         curr = ReadStringTag(current, tag.leftclickaction);
-         if (curr != "")
-         {
-            leftclickaction = curr;
-         }
-         
-         DestroyTags();
-      }
-      else if (type == DOMNode::TEXT_NODE)
-      {
-         char *currstr;
-         currstr = XMLString::transcode(current->getNodeValue());
-         if (string(currstr).find_first_not_of(" \n") != string::npos)
-            Append(currstr);
-         XMLString::release(&currstr);
-      }
-   }
+   string newval = ReadStringTag(current, XSWrapper("TextArea"));
+   if (newval.find_first_not_of(" \n\t") != string::npos)
+      Append(newval);
 }
 
 
-void TextArea::Render()
+void TextArea::RenderWidget()
 {
-   if (!visible) return;
-   xoff = parent->xoff + parent->x;
-   yoff = parent->yoff + parent->y;
-   
    RenderBase();
    
    table->width = width;

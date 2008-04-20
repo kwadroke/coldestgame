@@ -13,33 +13,8 @@ LineEdit::~LineEdit()
 }
 
 
-void LineEdit::ReadNode(DOMNode* current, GUI* parent)
+void LineEdit::RenderWidget()
 {
-   InitTags();
-   short type = current->getNodeType();
-   if (type)
-   {
-      if (type == DOMNode::ELEMENT_NODE)
-      {
-         ReadTextures(current);
-         
-         string curr;
-         curr = ReadStringTag(current, tag.leftclickaction);
-         if (curr != "")
-         {
-            leftclickaction = curr;
-         }
-      }
-   }
-   DestroyTags();
-}
-
-
-void LineEdit::Render()
-{
-   if (!visible) return;
-   xoff = parent->xoff + parent->x;
-   yoff = parent->yoff + parent->y;
    RenderBase();
    int w, h;
    if (active)
@@ -141,90 +116,6 @@ void LineEdit::KeyDown(SDL_Event* event)
          break;
    }
 }
-
-
-
-/*void LineEdit::ProcessEvent(SDL_Event* event)
-{
-   if (!visible) return;
-   switch (event->type)
-   {
-      case SDL_MOUSEBUTTONDOWN:
-         if (InWidget(event->motion.x, event->motion.y))
-         {
-            dragstart = CalculateMousePos(event->motion.x, event->motion.y);
-            cursorpos = dragstart;
-            state = Clicked;
-            active = true;
-         }
-         else 
-         {
-            state = Normal;
-            active = false;
-            //break;
-         }
-         break;
-         
-      case SDL_MOUSEBUTTONUP:
-         if (InWidget(event->motion.x, event->motion.y))
-            state = Hover;
-         else
-         {
-            state = Normal;
-            break;
-         }
-         if (event->button.button == 1)
-            DoAction(leftclickaction);
-         break;
-      
-      case SDL_MOUSEMOTION:
-         if (state == Clicked)
-         {
-            dragend = CalculateMousePos(event->motion.x, event->motion.y);
-            //Drag
-         }
-         if (InWidget(event->motion.x, event->motion.y))
-         {
-            if (state != Clicked)
-               state = Hover;
-         }
-         else state = Normal;
-         break;
-         
-      case SDL_KEYDOWN:
-         if (!active || readonly) break;
-         switch (event->key.keysym.sym) 
-         {
-            case SDLK_BACKSPACE:
-               BSChar();
-               break;
-            case SDLK_DELETE:
-               DeleteChar();
-               break;
-            case SDLK_LEFT:
-               --cursorpos;
-               if (cursorpos < 0)
-               {
-                  if (offset > 0) --offset;
-                  cursorpos = 0;
-               }
-               break;
-            case SDLK_RIGHT:
-               if (cursorpos + offset < text.length())
-                  ++cursorpos;
-               if (cursorpos > GetVisible().length())
-               {
-                  ++offset;
-                  --cursorpos;
-               }
-               break;
-            default:
-               char c = event->key.keysym.sym;
-               InsertChar(c);
-               break;
-         }
-   }
-}*/
 
 
 // Determine where the mouse is relative to the characters currently visible

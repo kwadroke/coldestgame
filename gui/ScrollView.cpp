@@ -13,11 +13,8 @@ ScrollView::~ScrollView()
 }
 
 
-void ScrollView::Render()
+void ScrollView::RenderWidget()
 {
-   if (!visible) return;
-   xoff = parent->x + parent->xoff;
-   yoff = parent->y + parent->yoff;
    RenderBase();
    // xoff and yoff are slightly different for scrollviews, the rest of the class expects
    // xoff - vpoffsetx as the value for xoff (same for yoff)
@@ -38,7 +35,7 @@ void ScrollView::Render()
    glVertex2f((x + xoff + vpoffsetx + width) * wratio, (y + yoff + scrollbarsize + vpoffsety + scrollbarpos) * hratio);
    glEnd();
    
-   // Render children, clipped to the scrollview using the scissor test
+   // Children are now rendered by the base Render function, we just need to turn on scissoring
    glEnable(GL_SCISSOR_TEST);
    int scissorcoords[4];
    scissorcoords[0] = (int)((x + xoff + vpoffsetx) * wratio);
@@ -46,38 +43,19 @@ void ScrollView::Render()
    scissorcoords[2] = (int)((width - scrollbarwidth) * wratio);
    scissorcoords[3] = (int)(height * hratio);
    glScissor(scissorcoords[0], scissorcoords[1], scissorcoords[2], scissorcoords[3]);
-   
-   guiiter i;
-   for (i = children.begin(); i != children.end(); ++i)
-   {
-      (*i)->Render();
-   }
-   glDisable(GL_SCISSOR_TEST);
 }
 
 
-// ScrollView needs to use the base ReadNode, so don't override it
-void ScrollView::ReadNodeLocal(DOMNode* current, GUI* parent)
+void ScrollView::PostRender()
 {
-   InitTags();
-   short type = current->getNodeType();
-   if (type)
-   {
-      if (type == DOMNode::ELEMENT_NODE)
-      {
-         ReadTextures(current);
-      }
-   }
-   DestroyTags();
+   // And then turn it off again here
+   glDisable(GL_SCISSOR_TEST);
 }
 
 
 void ScrollView::CustomProcessEvent(SDL_Event* event)
 {
    RecalculateSize();
-   
-   if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
-      drag = false;
 }
 
 
@@ -110,7 +88,7 @@ void ScrollView::LeftDown(SDL_Event* event)
 }
 
 
-void ScrollView::LeftClick(SDL_Event* event)
+void ScrollView::GlobalLeftClick(SDL_Event* event)
 {
    drag = false;
 }
@@ -175,7 +153,7 @@ void ScrollView::RecalculateSize()
    guiiter i;
    for (i = children.begin(); i != children.end(); ++i)
    {
-      GUI* iptr = *i;
+      GUIPtr iptr = *i;
       if (iptr->x + iptr->width > canvasx) canvasx = iptr->x + iptr->width;
       if (iptr->y + iptr->height > canvasy) canvasy = iptr->y + iptr->height;
    }

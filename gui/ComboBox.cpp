@@ -19,12 +19,8 @@ ComboBox::~ComboBox()
 }
 
 
-void ComboBox::Render()
+void ComboBox::RenderWidget()
 {
-   if (!visible) return;
-   xoff = parent->xoff + parent->x;
-   yoff = parent->yoff + parent->y;
-   
    table->textures[Normal] = textures[Normal];
    table->textures[Hover] = textures[Hover];
    table->textures[Clicked] = textures[Clicked];
@@ -78,39 +74,19 @@ void ComboBox::CustomProcessEvent(SDL_Event* event)
 }
 
 
-void ComboBox::ReadNode(DOMNode* current, GUI* parentw)
+void ComboBox::ReadNodeExtra(DOMNode* current, GUI* parentw)
 {
    table->colwidths = ToString(width);
    button->text = text;
-   if (current->getNodeType() &&
-       current->getNodeType() == DOMNode::ELEMENT_NODE)
+}
+
+
+void ComboBox::ReadSpecialNodes(DOMNode* current, GUI* parentw)
+{
+   if (current->getNodeName() == XSWrapper("ComboBoxItem"))
    {
-      InitTags();
-      ReadTextures(current);
-      string curr;
-      curr = ReadStringTag(current, tag.valuechanged);
-      if (curr != "")
-      {
-         valuechanged = curr;
-      }
-      
-      GUI* newwidget;
-      
-      if (XMLString::equals(current->getNodeName(), tag.comboboxitem))
-         newwidget = new TableItem(table, texman);
-      else return; // Not a node we recognize
-      
-      string val = ReadAttribute(current, attrib.readonly);
-      if (val == "true") newwidget->readonly = true; // Defaults to false
-      
-      // It would probably be better to read the string and pass it to table->Add, but this works too
-      DOMNodeList* cichildren = current->getChildNodes();
-      for (int i = 0; i < cichildren->getLength(); ++i)
-         ((TableItem*)newwidget)->ReadNode(cichildren->item(i), table);
-      newwidget->parent = table->scrollview;
-      table->scrollview->children.push_back((TableItem*)newwidget);
-      
-      DestroyTags();
+      string newline = ReadStringTag(current, XSWrapper("ComboBoxItem"));
+      table->Add(newline);
    }
 }
 

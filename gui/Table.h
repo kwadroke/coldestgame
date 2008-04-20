@@ -14,7 +14,6 @@ class Table : public GUI
    public:
       Table(GUI*, TextureManager*);
       ~Table();
-      void Render();
       void Clear();
       void Add(string);
       int Selected();
@@ -23,13 +22,12 @@ class Table : public GUI
       void ScrollToBottom();
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
-      void LeftDown(SDL_Event*);
-      void CustomProcessEvent(SDL_Event*);
+      virtual void RenderWidget();
+      virtual void ReadNodeExtra(DOMNode*, GUI*);
+      virtual void ReadSpecialNodes(DOMNode*, GUI*);
+      virtual void CustomProcessEvent(SDL_Event*);
       
-      //vector<TableItem*> rows;
       ScrollView* scrollview;
-      //int columns;
       string colwidths;
       float rowheight;
 };

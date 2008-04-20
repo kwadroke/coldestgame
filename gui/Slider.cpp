@@ -23,11 +23,8 @@ void Slider::SetRange(int min, int max)
 }
 
 
-void Slider::Render()
+void Slider::RenderWidget()
 {
-   if (!visible) return;
-   xoff = parent->x + parent->xoff;
-   yoff = parent->y + parent->yoff;
    state = Normal;
    RenderBase();
    
@@ -45,28 +42,15 @@ void Slider::Render()
 }
 
 
-void Slider::ReadNode(DOMNode* current, GUI* parent)
-{
-   /* This is not the most efficient way to handle tags, but it's the least troublesome and
-      I somehow doubt that XML parsing performance is going to be a gating factor for us.*/
-   InitTags();
-   short type = current->getNodeType();
-   if (type)
-   {
-      if (type == DOMNode::ELEMENT_NODE)
-      {
-         ReadTextures(current);
-      }
-   }
-   DestroyTags();
-}
-
-
 void Slider::CustomProcessEvent(SDL_Event* event)
 {
    button->ProcessEvent(event);
-   if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
-      drag = false;
+}
+
+
+void Slider::GlobalLeftClick(SDL_Event* event)
+{
+   drag = false;
 }
 
 
@@ -76,11 +60,6 @@ void Slider::MouseMotion(SDL_Event* event)
    {
       value = minvalue + GetMousePos(event);
    }
-}
-
-
-void Slider::LeftClick(SDL_Event* event)
-{
 }
 
 

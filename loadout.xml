@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
    <Label x="400" y="50" width="200" height="50" text="Loadout" readonly="true" xmargin="0" ymargin="0" align="center"/>
-   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit">
-      <Normal>textures/buttonnorm.png</Normal>
+   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit"
+             normal="textures/buttonnorm.png"
+             valuechanged="updateunitselection">
       <ComboBoxItem>UnitTest</ComboBoxItem>
       <ComboBoxItem>Ultra</ComboBoxItem>
       <ComboBoxItem>Omega</ComboBoxItem>
-      <ValueChangedAction>updateunitselection</ValueChangedAction>
    </ComboBox>
-   <ComboBox x="700"  y="150" width="200" height="40" name="Left Arm" text="Left Arm">
-      <Normal>textures/buttonnorm.png</Normal>
+   <ComboBox x="700"  y="150" width="200" height="40" name="Left Arm" text="Left Arm"
+             normal="textures/buttonnorm.png"
+             valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
       <ComboBoxItem>Machine Gun</ComboBoxItem>
       <ComboBoxItem>Laser</ComboBoxItem>
       <ComboBoxItem>Autocannon</ComboBoxItem>
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
-      <ValueChangedAction>updateunitselection</ValueChangedAction>
    </ComboBox>
-   <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" text="Right Arm">
-      <Normal>textures/buttonnorm.png</Normal>
+   <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" text="Right Arm"
+             normal="textures/buttonnorm.png"
+             valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
       <ComboBoxItem>Machine Gun</ComboBoxItem>
       <ComboBoxItem>Laser</ComboBoxItem>
       <ComboBoxItem>Autocannon</ComboBoxItem>
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
-      <ValueChangedAction>updateunitselection</ValueChangedAction>
    </ComboBox>
-   <ComboBox x="700"  y="250" width="200" height="40" name="Torso" text="Torso">
-      <Normal>textures/buttonnorm.png</Normal>
+   <ComboBox x="700"  y="250" width="200" height="40" name="Torso" text="Torso"
+             normal="textures/buttonnorm.png"
+             valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
       <ComboBoxItem>Machine Gun</ComboBoxItem>
       <ComboBoxItem>Laser</ComboBoxItem>
       <ComboBoxItem>Autocannon</ComboBoxItem>
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
-      <ValueChangedAction>updateunitselection</ValueChangedAction>
    </ComboBox>
-   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item">
-      <Normal>textures/buttonnorm.png</Normal>
-      <ValueChangedAction>updateunitselection</ValueChangedAction>
+   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item"
+             normal="textures/buttonnorm.png"
+             valuechanged="updateunitselection">
    </ComboBox>
-   <Button x="700" y="900" width="200" height="50" text="Spawn" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Hover>textures/buttonhover.png</Hover>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <LeftClickAction>spawn</LeftClickAction>
+   <Button x="700" y="900" width="200" height="50" text="Spawn" align="center"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="spawn">
    </Button>
-   <Button x="100" y="900" width="200" height="50" text="Main Menu" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Hover>textures/buttonhover.png</Hover>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <LeftClickAction>loadouttomain</LeftClickAction>
+   <Button x="100" y="900" width="200" height="50" text="Main Menu" align="center"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="loadouttomain">
    </Button>
-   <Label x="100" y="100" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map">
-      <Normal>textures/buttonnormsquare.png</Normal>
+   <Label x="100" y="100" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map"
+          normal="textures/buttonnormsquare.png">
    </Label>
    
    <!-- Team display and selection -->
-   <ComboBox x="700" y="400" width="150" height="40" name="TeamSelect" text="Select Team">
-      <Normal>textures/buttonnorm.png</Normal>
+   <ComboBox x="700" y="400" width="150" height="40" name="TeamSelect" text="Select Team"
+             normal="textures/buttonnorm.png"
+             valuechanged="requestnewteam">
       <ComboBoxItem>Spectate</ComboBoxItem>
       <ComboBoxItem>Team 1</ComboBoxItem>
       <ComboBoxItem>Team 2</ComboBoxItem>
-      <ValueChangedAction>requestnewteam</ValueChangedAction>
    </ComboBox>
    <Label x="700" y="450" width="150" height="20" name="TeamDisplay" text="Team"/>
    
    <!-- Spawn points -->
-   <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints">
+   <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints"
+             normal="textures/buttonnorm.png"
+             valuechanged="selectspawnpoint">
       <Normal>textures/buttonnorm.png</Normal>
       <ValueChangedAction>selectspawnpoint</ValueChangedAction>
    </ComboBox>

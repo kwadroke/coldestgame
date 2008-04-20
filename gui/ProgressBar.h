@@ -9,12 +9,12 @@ class ProgressBar : public GUI
    public:
       ProgressBar(GUI*, TextureManager*);
       ~ProgressBar();
-      void Render();
       void SetRange(int, int);
       int value;
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
+      void RenderWidget();
+      
       int minvalue, maxvalue;
       
 };

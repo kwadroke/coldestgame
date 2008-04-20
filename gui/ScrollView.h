@@ -10,7 +10,6 @@ class ScrollView : public GUI
    public:
       ScrollView(GUI*, TextureManager*);
       ~ScrollView();
-      void Render();
       bool FloatsInWidget(float, float);
       float scrollbarwidth;
       void ScrollToBottom();
@@ -22,15 +21,16 @@ class ScrollView : public GUI
       float scrollamount;
       bool drag;
       
-      void ReadNodeLocal(DOMNode*, GUI*);
       void RecalculateSize();
+      void RenderWidget();
+      void PostRender();
       virtual void CustomProcessEvent(SDL_Event*);
       virtual void MouseMotion(SDL_Event*);
-      virtual void LeftClick(SDL_Event*);
       virtual void LeftDown(SDL_Event*);
       virtual void WheelDown(SDL_Event*);
       virtual void WheelUp(SDL_Event*);
       virtual void KeyDown(SDL_Event*);
+      virtual void GlobalLeftClick(SDL_Event*);
 };
 
 #endif

@@ -30,6 +30,11 @@ void Debug()
    cout << ir.ReadInt(t, "Lines") << endl;
    //cout << test.ReadInt(t, "Lines") << endl;*/
    
+   /*TextureHandler th;
+   TextureManager tm(&th);
+   GUI test(1000, 1000, &tm);
+   test.InitFromFile("mainmenu.xml");*/
+   
    exit(0);
 }
 

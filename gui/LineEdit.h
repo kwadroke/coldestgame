@@ -9,15 +9,14 @@ class LineEdit : public GUI
    public:
       LineEdit(GUI*, TextureManager*);
       ~LineEdit();
-      void Render();
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
       int CalculateMousePos(int, int);
       void InsertChar(char);
       void BSChar();
       void DeleteChar();
       string GetVisible();
+      void RenderWidget();
       virtual void MouseMotion(SDL_Event*);
       virtual void LeftClick(SDL_Event*);
       virtual void LeftDown(SDL_Event*);

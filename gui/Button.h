@@ -6,10 +6,6 @@
 
 using namespace std;
 
-/**********************************************************************************
-** When you make changes to this file make sure they are duplicated in the forward
-** declaration in GUI.cpp as well - UPDATE: Fwd dec should no longer be needed
-**********************************************************************************/
 class Button : public GUI
 {
    friend class GUI;
@@ -18,10 +14,9 @@ class Button : public GUI
    public:
       Button(GUI*, TextureManager*);
       ~Button();
-      void Render();
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
+      void RenderWidget();
       
       // Copying not allowed
       Button(const Button&);
