@@ -1,5 +1,9 @@
 #include "Table.h"
 
+// TODO (maybe): There's an awful lot of downcasting going on in this class.  Can we get rid of it?
+// It's relatively safe right now because it's all with scrollview's children, which is a private
+// member so we know what gets put into it, but it still seems like a kludge
+
 Table::Table(GUI* p, TextureManager* tm)
 {
    Init(p, tm);
@@ -16,39 +20,25 @@ Table::~Table()
 }
 
 
-void Table::ReadNode(DOMNode *current, GUI* parentw)
+void Table::ReadNodeExtra(DOMNode *current, GUI* parentw)
 {
-   if (current->getNodeType() &&
-       current->getNodeType() == DOMNode::ELEMENT_NODE)
+   colwidths = ReadAttribute(current, XSWrapper("colwidths"));
+   rowheight = atof(ReadAttribute(current, XSWrapper("rowheight")).c_str());
+}
+      
+      
+void Table::ReadSpecialNodes(DOMNode *current, GUI* parentw)
+{
+   if (current->getNodeName() == XSWrapper("TableItem"))
    {
-      InitTags();
-      ReadTextures(current);
-      
-      GUI* newwidget;
-      
-      if (XMLString::equals(current->getNodeName(), tag.tableitem))
-         newwidget = new TableItem(parentw, texman);
-      else return; // Not a node we recognize
-      
-      string val = ReadAttribute(current, attrib.readonly);
-      if (val == "true") newwidget->readonly = true; // Defaults to false
-      
-      DOMNodeList* tichildren = current->getChildNodes();
-      for (int i = 0; i < tichildren->getLength(); ++i)
-         ((TableItem*)newwidget)->ReadNode(tichildren->item(i), this);
-      newwidget->parent = scrollview;
-      scrollview->children.push_back((TableItem*)newwidget);
-      
-      DestroyTags();
+      string newitem = ReadStringTag(current, XSWrapper("TableItem"));
+      Add(newitem);
    }
 }
 
 
-void Table::Render()
+void Table::RenderWidget()
 {
-   if (!visible) return;
-   xoff = parent->xoff + parent->x;
-   yoff = parent->yoff + parent->y;
    RenderBase();
    
    // Can't be done in the constructor because these values haven't been set yet
@@ -62,20 +52,15 @@ void Table::Render()
 
 void Table::CustomProcessEvent(SDL_Event* event)
 {
+   // This has to stay here (not in LeftDown) because it has to happen before scrollview processes the event
    if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT && InWidget(event))
    {
       guiiter i;
       for (i = scrollview->children.begin(); i != scrollview->children.end(); ++i)
-         ((TableItem*)(*i))->selected = false;
+         ((TableItem*)(*i).get())->selected = false;
    }
    
    scrollview->ProcessEvent(event);
-}
-
-
-void Table::LeftDown(SDL_Event* event)
-{
-   
 }
 
 
@@ -90,10 +75,11 @@ void Table::Clear()
 
 void Table::Add(string vals)
 {
-   TableItem* newitem = new TableItem(this, texman);
+   GUIPtr newitemptr = GUIPtr(new TableItem(this, texman));
+   TableItem* newitem = (TableItem*)newitemptr.get();
    newitem->Build(vals, this);
    newitem->parent = scrollview;
-   scrollview->children.push_back(newitem);
+   scrollview->children.push_back(newitemptr);
 }
 
 
@@ -103,7 +89,7 @@ int Table::Selected()
    guiiter i;
    for (i = scrollview->children.begin(); i != scrollview->children.end(); ++i)
    {
-      if ( (dynamic_cast<TableItem*>(*i))->selected )
+      if ( (dynamic_cast<TableItem*>((*i).get()))->selected )
       {
          return selected;
       }
@@ -118,7 +104,7 @@ string Table::GetSelectedString(int num)
    guiiter i;
    for (i = scrollview->children.begin(); i != scrollview->children.end(); ++i)
    {
-      TableItem* item = dynamic_cast<TableItem*>(*i);
+      TableItem* item = dynamic_cast<TableItem*>((*i).get());
       if ( item->selected )
       {
          return item->Text(num);

@@ -10,19 +10,18 @@ class Slider : public GUI
    public:
       Slider(GUI*, TextureManager*);
       ~Slider();
-      void Render();
       void SetRange(int, int);
       int value;
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
       int GetMousePos(const SDL_Event*);
       virtual void CustomProcessEvent(SDL_Event*);
       virtual void MouseMotion(SDL_Event*);
-      virtual void LeftClick(SDL_Event*);
       virtual void LeftDown(SDL_Event*);
       virtual void WheelDown(SDL_Event*);
       virtual void WheelUp(SDL_Event*);
+      virtual void GlobalLeftClick(SDL_Event*);
+      void RenderWidget();
       
       Button *button;
       int minvalue, maxvalue;

@@ -12,9 +12,8 @@ class ComboBox : public GUI
    public:
       ComboBox(GUI*, TextureManager*);
       ~ComboBox();
-      void Render();
-      void ReadNode(DOMNode* current, GUI* parentw);
       int Selected();
+      void ReadNodeExtra(DOMNode* current, GUI* parentw);
       virtual bool FloatsInWidget(float, float);
       void Add(const string&);
       void Clear();
@@ -23,6 +22,8 @@ class ComboBox : public GUI
       void CustomProcessEvent(SDL_Event*);
       void LeftDown(SDL_Event*);
       void LeftClick(SDL_Event*);
+      void ReadSpecialNodes(DOMNode* current, GUI* parentw);
+      void RenderWidget();
       
       Table* table;
       Button* button;

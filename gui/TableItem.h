@@ -11,12 +11,11 @@ class TableItem : public GUI
    public:
       TableItem(GUI*, TextureManager*);
       ~TableItem();
-      void Render();
       void Build(string, GUI*);
       string Text(int);
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
+      void RenderWidget();
       void LeftDown(SDL_Event*);
       
       GUI* tablep;

@@ -15,16 +15,6 @@ TableItem::~TableItem()
 }
 
 
-void TableItem::ReadNode(DOMNode *current, GUI* parentw)
-{
-   char* currstr;
-   currstr = XMLString::transcode(current->getNodeValue());
-   string vals = currstr;
-   XMLString::release(&currstr);
-   Build(vals, parentw);
-}
-
-
 void TableItem::Build(string vals, GUI* parentw)
 {
    Table* p = (Table*)parentw;
@@ -57,7 +47,7 @@ void TableItem::Build(string vals, GUI* parentw)
    float pos = 0;
    for (int i = 0; i < len; ++i)
    {
-      LineEdit* newle = new LineEdit(this, texman);
+      GUIPtr newle = GUIPtr(new LineEdit(this, texman));
       newle->x = pos;
       newle->y = 0;
       newle->width = widths[i];
@@ -72,20 +62,11 @@ void TableItem::Build(string vals, GUI* parentw)
 }
 
 
-void TableItem::Render()
+void TableItem::RenderWidget()
 {
-   if (!visible) return;
-   xoff = parent->xoff + parent->x;
-   yoff = parent->yoff + parent->y;
-   
    if (selected) state = Clicked;
    else state = Normal;
    RenderBase();
-   guiiter i;
-   for (i = children.begin(); i != children.end(); ++i)
-   {
-      (*i)->Render();
-   }
 }
 
 

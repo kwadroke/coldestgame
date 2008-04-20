@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
-   <TextArea x="250" y="700" width="500" height="200" name="chatoutput">
-      <Normal>textures/buttonnormsquare.png</Normal>
+   <TextArea x="250" y="700" width="500" height="200" name="chatoutput"
+             normal="textures/buttonnormsquare.png">
    </TextArea>
-   <LineEdit x="250" y="910" width="500" height="30" text="" name="chatinput">
-      <Normal>textures/buttonnormsquare.png</Normal>
-      <Hover>textures/buttonhover.png</Hover>
-      <Pressed>textures/buttonpressed.png</Pressed>
+   <LineEdit x="250" y="910" width="500" height="30" text="" name="chatinput"
+             normal="textures/buttonnormsquare.png"
+             hover="textures/buttonhover.png"
+             pressed="textures/buttonpressed.png">
    </LineEdit>
 </GUI>

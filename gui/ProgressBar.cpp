@@ -22,9 +22,8 @@ void ProgressBar::SetRange(int min, int max)
 }
 
 
-void ProgressBar::Render()
+void ProgressBar::RenderWidget()
 {
-   if (!visible) return;
    RenderBase();
    
    float position = (float)(value - minvalue) / (float)(maxvalue - minvalue) * width;
@@ -41,19 +40,3 @@ void ProgressBar::Render()
    glEnd();
 }
 
-
-void ProgressBar::ReadNode(DOMNode* current, GUI* parent)
-{
-   /* This is not the most efficient way to handle tags, but it's the least troublesome and
-      I somehow doubt that XML parsing performance is going to be a gating factor for us.*/
-   InitTags();
-   short type = current->getNodeType();
-   if (type)
-   {
-      if (type == DOMNode::ELEMENT_NODE)
-      {
-         ReadTextures(current);
-      }
-   }
-   DestroyTags();
-}

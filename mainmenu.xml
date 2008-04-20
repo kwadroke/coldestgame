@@ -1,43 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf">
    <Label x="400" y="50" width="200" height="50" text="Coldest" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"/>
-   <Button x="400" y="300" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <Hover>textures/buttonhover.png</Hover>
-      <LeftClickAction>connect</LeftClickAction>
-   </Button>
-   <Button x="400" y="350" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <Hover>textures/buttonhover.png</Hover>
-      <LeftClickAction>connectip</LeftClickAction>
-   </Button>
-   <LineEdit x="400" y="400" width="200" height="24" text="localhost" name="servername">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Hover>textures/buttonhover.png</Hover>
-   </LineEdit>
-   <Button x="400" y="450" width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="6" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <Hover>textures/buttonhover.png</Hover>
-      <LeftClickAction>resume</LeftClickAction>
-   </Button>
-   <Button x="400" y="500" width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="6" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <Hover>textures/buttonhover.png</Hover>
-      <LeftClickAction>exit</LeftClickAction>
-   </Button>
-   <Button x="400" y="550" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <Hover>textures/buttonhover.png</Hover>
-      <LeftClickAction>exit</LeftClickAction>
-   </Button>
+   <Button x="400" y="300" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"
+           leftclick="connect"/>
+   <Button x="400" y="350" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"
+           leftclick="connectip"/>
+   <LineEdit x="400" y="400" width="200" height="24" text="localhost" name="servername"
+             normal="textures/buttonnorm.png"
+             hover="textures/buttonhover.png"/>
+   <Button x="400" y="450" width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="6" align="center"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"
+           leftclick="resume"/>
+   <Button x="400" y="500" width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="6" align="center"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"
+           leftclick="exit"/>
+   <Button x="400" y="550" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"
+           leftclick="exit"/>
    
-   <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="525|225|25" rowheight="25">
-      <Normal>textures/buttonnormsquare.png</Normal>
+   <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="525|225|25" rowheight="25"
+          normal="textures/buttonnormsquare.png">
       <!--<TableItem>test|10</TableItem>
       <TableItem>another|20</TableItem>
       <TableItem>Moar|30</TableItem>
@@ -46,8 +40,8 @@
       <TableItem>Cheezburger|60</TableItem>
       <TableItem>kthxbai|70</TableItem>-->
    </Table>
-   <ComboBox x="140" y="500" width="120" height="20" name="testcb" text="Test">
-      <Normal>textures/buttonnorm.png</Normal>
+   <ComboBox x="140" y="500" width="120" height="20" name="testcb" text="Test"
+             normal="textures/buttonnorm.png">
       <ComboBoxItem>Test</ComboBoxItem>
       <ComboBoxItem>They have weapons</ComboBoxItem>
       <ComboBoxItem>So what?</ComboBoxItem>
@@ -62,14 +56,13 @@
       <ComboBoxItem>Fuck!</ComboBoxItem>
    </ComboBox>
    
-   <TextArea x="100" y="100" width="200" height="100" name="testta">
-      <Normal>textures/buttonnormsquare.png</Normal>
+   <TextArea x="100" y="100" width="200" height="100" name="testta"
+             normal="textures/buttonnormsquare.png">
 Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
    </TextArea>
    
-   <Slider x="100" y="300" width="180" height="30" name="testslider">
-      <Normal>textures/buttonnorm.png</Normal>
-      <Pressed>textures/buttonpressed.png</Pressed>
-      <Hover>textures/buttonhover.png</Hover>
-   </Slider>
+   <Slider x="100" y="300" width="180" height="30" name="testslider"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"/>
 </GUI>

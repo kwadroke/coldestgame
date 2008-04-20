@@ -16,14 +16,14 @@ class TextArea : public GUI
    public:
       TextArea(GUI*, TextureManager*);
       ~TextArea();
-      void Render();
       void Append(string);
       void Refresh();
       void ScrollToBottom();
       
    protected:
-      void ReadNode(DOMNode*, GUI*);
+      void ReadNodeExtra(DOMNode*, GUI*);
       void CustomProcessEvent(SDL_Event*);
+      void RenderWidget();
       
       Table *table;
       int maxlines;

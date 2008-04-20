@@ -3,7 +3,6 @@
 
 #include <string>
 #include <sstream>
-#include <boost/shared_ptr.hpp>
 #include "Particle.h"
 #include "ServerInfo.h"
 #include "gui/GUI.h"
@@ -21,7 +20,6 @@ using std::stringstream;
 using std::list;
 using std::vector;
 using std::set;
-using boost::shared_ptr;
 
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 const string objectfilever = "Version3";
@@ -40,7 +38,6 @@ extern bool mainmenuvisible;   // Whether the main menu is shown
 extern string nextmap;         // Used to signal the main thread to load a new map
 extern string mapname;         // The name of the current map
 
-typedef shared_ptr<GUI> GUIPtr;
 extern GUI hud;                // Handles drawing the HUD
 extern GUI loadprogress;       // Shows loading progress
 extern GUI loadoutmenu;        // The loadout screen

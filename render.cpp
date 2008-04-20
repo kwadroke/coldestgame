@@ -789,12 +789,10 @@ void RenderHud()
    minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    playerposlabel->x = localplayer.pos.x / mapwidth;
    playerposlabel->x *= minimaplabel->width;
-   playerposlabel->x += minimaplabel->x;
-   //playerposlabel->x = minimaplabel->x + minimaplabel->width - playerposlabel->x;
+   playerposlabel->x -= playerposlabel->width / 2.f;
    playerposlabel->y = localplayer.pos.z / mapheight;
    playerposlabel->y *= minimaplabel->height;
-   playerposlabel->y += minimaplabel->y;
-   //playerposlabel->y = minimaplabel->y + minimaplabel->height - playerposlabel->y;
+   playerposlabel->y -= playerposlabel->height / 2.f;
    loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    
 #ifdef DEBUGSMT
