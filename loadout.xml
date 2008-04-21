@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
    <Label x="400" y="50" width="200" height="50" text="Loadout" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   
+   <TabWidget x="100" y="110" width="500" height="700" text="">
+      <Tab text="Map" buttonwidth="80"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+         <Label x="0" y="0" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map"
+               normal="textures/buttonnormsquare.png">
+         </Label>
+      </Tab>
+      <Tab text="Players" buttonwidth="120"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+      </Tab>
+   </TabWidget>
+   
    <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
@@ -54,9 +71,6 @@
            pressed="textures/buttonpressed.png"
            leftclick="loadouttomain">
    </Button>
-   <Label x="100" y="100" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map"
-          normal="textures/buttonnormsquare.png">
-   </Label>
    
    <!-- Team display and selection -->
    <ComboBox x="700" y="400" width="150" height="40" name="TeamSelect" text="Select Team"

@@ -710,6 +710,16 @@ void GUI::DoAction(string action)
 
 void GUI::SetTextureID(int state, GLuint id)
 {
+   if (state == Normal && textures[Hover] == textures[Normal])
+   {
+      texids[Hover] = id;
+      textures[Hover] = "USEID";
+   }
+   if (state == Normal && textures[Clicked] == textures[Normal])
+   {
+      texids[Clicked] = id;
+      textures[Clicked] = "USEID";
+   }
    texids[state] = id;
    textures[state] = "USEID";
 }

@@ -14,6 +14,7 @@ class TabWidget : public GUI
    public:
       TabWidget(GUI*, TextureManager*);
       ~TabWidget();
+      virtual GUI* GetWidget(string);
       
    protected:
       virtual void RenderWidget();
