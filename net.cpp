@@ -169,6 +169,7 @@ int NetSend(void* dummy)
       
       if (changeteam)
       {
+         cout << "Changing team " << endl;
          Packet p(outpack, &outsock, &addr);
          p.ack = sendpacketnum;
          p << "M\n";

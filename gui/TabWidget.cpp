@@ -140,3 +140,19 @@ void TabWidget::LeftClick(SDL_Event* event)
    }
 }
 
+
+// Essentially the same as in GUI, except we iterate over scrollviews instead of children
+GUI* TabWidget::GetWidget(string findname)
+{
+   if (name == findname)
+      return this;
+   
+   GUI* ret;
+   for (int i = 0; i < scrollviews.size(); ++i)
+   {
+      ret = scrollviews[i]->GetWidget(findname);
+      if (ret) return ret;
+   }
+   return NULL;
+}
+

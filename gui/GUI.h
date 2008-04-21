@@ -55,7 +55,7 @@ class GUI
       void Render();
       virtual void ProcessEvent(SDL_Event*);
       void Add(shared_ptr<GUI>, string);
-      GUI* GetWidget(string);
+      virtual GUI* GetWidget(string);
       void InitFromFile(string);
       string ReadAttribute(DOMNode*, XMLCh*);
       string ReadStringTag(DOMNode*, XMLCh*);
