@@ -46,10 +46,10 @@
       <ComboBoxItem>They have weapons</ComboBoxItem>
       <ComboBoxItem>So what?</ComboBoxItem>
       <ComboBoxItem>Fuck!</ComboBoxItem>
-      <ComboBoxItem>Mutated</ComboBoxItem>
-      <ComboBoxItem>Sheep</ComboBoxItem>
       <ComboBoxItem>28 Days</ComboBoxItem>
       <ComboBoxItem>Later</ComboBoxItem>
+      <ComboBoxItem>Mutated</ComboBoxItem>
+      <ComboBoxItem>Sheep</ComboBoxItem>
       <ComboBoxItem>Test</ComboBoxItem>
       <ComboBoxItem>They have weapons</ComboBoxItem>
       <ComboBoxItem>So what?</ComboBoxItem>
@@ -65,4 +65,34 @@ Some test textarea text.  Don't even need \n characters because it picks them up
            normal="textures/buttonnorm.png"
            pressed="textures/buttonpressed.png"
            hover="textures/buttonhover.png"/>
+   
+   <Button x="100" y="400" width="200" height="40" text="Toggle" name="testtogglebutton" xmargin="3" ymargin="6" align="center" toggle="true"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"/>
+   
+   <TabWidget x="700" y="300" width="250" height="300" name="testtw" text="">
+      <Tab buttonwidth="100" text="Test Tab"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+         <TextArea x="0" y="0" width="200" height="100" name="testta1"
+                   normal="textures/buttonnormsquare.png">
+            Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
+         </TextArea>
+      </Tab>
+      <Tab buttonwidth="110" text="Test Tab 1"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+         <TextArea x="0" y="0" width="200" height="100" name="testta2"
+                   normal="textures/buttonnormsquare.png">
+            Another text area
+         </TextArea>
+      </Tab>
+      <Tab buttonwidth="110" text="Test Tab 2"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"/>
+   </TabWidget>
 </GUI>

@@ -11,16 +11,24 @@ class Button : public GUI
    friend class GUI;
    friend class ComboBox;
    friend class Slider;
+   friend class TabWidget;
    public:
       Button(GUI*, TextureManager*);
       ~Button();
       
+      bool toggle;
+      int togglestate;
+      
    protected:
-      void RenderWidget();
+      virtual void RenderWidget();
+      virtual void ReadNodeExtra(DOMNode*, GUI*);
+      virtual void LeftClick(SDL_Event*);
       
       // Copying not allowed
       Button(const Button&);
       Button& operator=(const Button&);
 };
+
+typedef shared_ptr<Button> ButtonPtr;
 
 #endif

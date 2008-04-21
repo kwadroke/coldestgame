@@ -9,11 +9,12 @@
 #include "ComboBox.h"
 #include "TextArea.h"
 #include "Slider.h"
+#include "TabWidget.h"
 
 /* TODO:
-   -Move textures into nodes instead of being subnodes
-   -Click events even if mouse not in widget (separate event for when it is)
-   -Allow all widgets to have children (somewhat related to first item)
+   *-Move textures into nodes instead of being subnodes
+   *-Click events even if mouse not in widget (separate event for when it is)
+   *-Allow all widgets to have children (somewhat related to first item)
    -Tab widget
 */
 
@@ -220,11 +221,13 @@ void GUI::ProcessEvent(SDL_Event* event)
             {
                DoAction(leftclickaction);
                LeftClick(event);
+               GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
             }
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
                DoAction(rightclickaction);
                RightClick(event);
+               GlobalRightClick(event);
             }
          }
          else
@@ -431,6 +434,8 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             newwidget = GUIPtr(new TextArea(parent, texman));
          else if (name == XSWrapper("Slider"))
             newwidget = GUIPtr(new Slider(parent, texman));
+         else if (name == XSWrapper("TabWidget"))
+            newwidget = GUIPtr(new TabWidget(parent, texman));
          else // Not a node we recognize
          {
             ReadSpecialNodes(current, this);
