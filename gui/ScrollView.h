@@ -7,6 +7,7 @@ class ScrollView : public GUI
 {
    friend class GUI;
    friend class Table; // Allow table to add children
+   friend class TabWidget;
    public:
       ScrollView(GUI*, TextureManager*);
       ~ScrollView();
@@ -32,5 +33,7 @@ class ScrollView : public GUI
       virtual void KeyDown(SDL_Event*);
       virtual void GlobalLeftClick(SDL_Event*);
 };
+
+typedef shared_ptr<ScrollView> ScrollViewPtr;
 
 #endif
