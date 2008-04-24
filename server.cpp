@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <deque>
 #include "Particle.h"
 #include "SDL_net.h"
 #include "PlayerData.h"
@@ -18,6 +19,7 @@
 #include "Timer.h"
 #include "globals.h"
 #include "netdefs.h"
+#include "ServerState.h"
 
 #include <sys/types.h>
 #include <linux/unistd.h>
@@ -33,6 +35,8 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs);
 list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void UpdateDOTree(DynamicPrimitive*);
 void ServerUpdatePlayer(int);
+void Rewind(int);
+void SaveState();
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -46,11 +50,11 @@ string servername;
 list<Packet> servqueue;
 UDPsocket servoutsock;
 UDPpacket *servoutpack;
-//list<DynamicObject> serverdynobjects;
 Meshlist servermeshes;
 CollisionDetection servercoldet;
 ObjectKDTree serverkdtree;
 short maxplayers;
+deque<ServerState> oldstate;
 
 int Server(void* dummy)
 {
@@ -189,8 +193,11 @@ int ServerListen()
       
       // Update particles
       int updinterval = 100;
-      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, &HandleHit);
+      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, Vector3(), &HandleHit, &Rewind);
       SDL_mutexV(servermutex);
+      
+      // Save state so we can recall it for collision detection
+      SaveState();
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
          packet per outer loop, which meant it did the entire ~20 ms particle/player update
@@ -772,8 +779,10 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
 void ServerUpdatePlayer(int i)
 {
    // Movement and necessary model updates
-   UpdatePlayerModel(serverplayers[i], servermeshes, false);
+   Rewind(serverplayers[i].ping);
    Move(serverplayers[i], servermeshes, serverkdtree);
+   Rewind(0);
+   UpdatePlayerModel(serverplayers[i], servermeshes, false);
    
    // Cooling
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
@@ -814,7 +823,53 @@ void ServerUpdatePlayer(int i)
       part.damage = weapons[currplayerweapon].damage;
       part.dmgrad = weapons[currplayerweapon].splashradius;
       part.unsent = true;
+      part.rewind = serverplayers[i].ping;
                
       servparticles.push_back(part);
    }
+}
+
+
+void Rewind(int ticks)
+{
+   Uint32 currtick = SDL_GetTicks();
+   size_t i;
+   
+   // Remove states older than 500 ms
+   while (oldstate.size() && currtick - oldstate[0].tick > 500)
+   {
+      oldstate.pop_front();
+   }
+   
+   // Search backwards through our old states.  Stop at 0 and use that if we don't have a state old enough
+   for (i = oldstate.size() - 1; i > 0; --i)
+   {
+      if (currtick - oldstate[i].tick >= ticks) break;
+   }
+   
+   for (size_t j = 0; j < oldstate[i].index.size(); ++j)
+   {
+      size_t p = oldstate[i].index[j];
+      for (size_t k = 0; k < numbodyparts; ++k)
+      {
+         serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
+                                          oldstate[i].frame[j][k], oldstate[i].animtime[j][k],
+                                          oldstate[i].animspeed[j][k]);
+      }
+   }
+}
+
+
+void SaveState()
+{
+   ServerState newstate(SDL_GetTicks());
+   
+   for (size_t i = 0; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].spawned)
+      {
+         newstate.Add(serverplayers[i], i);
+      }
+   }
+   oldstate.push_back(newstate);
 }

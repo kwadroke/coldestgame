@@ -36,6 +36,7 @@ class Particle
       int damage;
       float dmgrad;
       Mesh mesh;
+      int rewind;
       
    private:
       static unsigned long nextid;

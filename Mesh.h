@@ -37,12 +37,15 @@ class Mesh
       void BindAttribs();
       void UnbindAttribs();
       void Render(Material* overridemat = NULL);
-      void RenderImpostor(Mesh&, FBO&, const Vector3& campos);
+      void RenderImpostor(Mesh&, FBO&, const Vector3&);
       void Add(Triangle&);
       void Add(Quad&);
       void Add(Mesh&);
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
+      void SetAnimSpeed(const float);
+      void SetState(const Vector3&, const Vector3&, const int, const int, const float);
+      void ReadState(Vector3&, Vector3&, int&, int&, float&);
       Vector3 GetPosition(){return position;}
       float GetWidth(){return width;}
       float GetHeight(){return height;}
@@ -81,6 +84,7 @@ class Mesh
       int animtime;
       int currkeyframe;
       Uint32 lastanimtick;
+      float animspeed;
       
       Vector3 position;
       Vector3 rots;

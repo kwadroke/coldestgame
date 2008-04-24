@@ -10,30 +10,7 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   /*IniReader ir("maps/newtest.map");
-   //IniReader test = ir(0);
-   int t = 100;
-   float tf = 200.f;
-   string ts = "100";
-   
-   ir.ReadInt(t, "Stretch");
-   ir.ReadFloat(tf, "zzz");
-   ir.ReadString(ts, "zzz");
-   cout << t << tf << ts << endl;
-   
-   ir.ReadInt(t, "Lines");
-   ir.ReadFloat(tf, "Lines");
-   ir.ReadString(ts, "Line");
-   cout << t << tf << ts << endl;
-   
-   cout << "L:" << ir.ReadInt(t, "Line") << endl;
-   cout << ir.ReadInt(t, "Lines") << endl;
-   //cout << test.ReadInt(t, "Lines") << endl;*/
-   
-   /*TextureHandler th;
-   TextureManager tm(&th);
-   GUI test(1000, 1000, &tm);
-   test.InitFromFile("mainmenu.xml");*/
+
    
    exit(0);
 }
@@ -199,13 +176,12 @@ void InitWeapons()
    dummy.name = "None";
    dummy.acceleration = 1.f;
    dummy.velocity = .3f;
-   //dummy.velocity = 0.f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
    dummy.explode = true;
    dummy.damage = 10;
-   dummy.reloadtime = 500;
+   dummy.reloadtime = 50;
    dummy.heat = 0.f;
    for (short i = 0; i < numweapons; ++i)
       weapons.push_back(dummy);
@@ -1125,7 +1101,7 @@ void Animate()
    
    // Particles
    static int partupd = 100;
-   UpdateParticles(particles, partupd, kdtree, meshes, NULL, player[0].pos);
+   UpdateParticles(particles, partupd, kdtree, meshes, player[0].pos);
    
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
@@ -1216,8 +1192,9 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // Note: Only the server passes in HitHandler, the client should always pass in NULL
 // This is important because this function decides whether to do GL stuff based on that
 // and if the server thread tries to do GL it will crash
-void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, void (*HitHandler)(Particle&, vector<Mesh*>&),
-                     const Vector3& campos)
+// The server is also the only one to pass in Rewind
+void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, const Vector3& campos,
+                     void (*HitHandler)(Particle&, vector<Mesh*>&), void (*Rewind)(int))
 {
    IniReader empty("models/empty/base");
    if (!HitHandler)
@@ -1233,7 +1210,11 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          oldpos = j->Update();
          vector<Mesh*> check = kt.getmeshes(oldpos, j->pos, j->radius);
          AppendDynamicMeshes(check, ml);
+         if (Rewind)
+            Rewind(j->rewind);
          partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, &hitmeshes);
+         if (Rewind)
+            Rewind(0);
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
          {

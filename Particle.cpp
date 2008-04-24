@@ -4,7 +4,7 @@
 unsigned long Particle::nextid = 1;
 
 
-Particle::Particle(Mesh& meshin) : mesh(meshin)
+Particle::Particle(Mesh& meshin) : mesh(meshin), rewind(0)
 {
    unsent = true;
    senttimes = 0;
