@@ -7,7 +7,8 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
             size(100.f), width(0.f), height(0.f), resman(rm), tris(Trianglevec()), trantris(Trianglevec()),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), dist(0.f), 
-            impmat(MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman)))
+            impmat(MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman))),
+            animspeed(1.f)
 {
    Load(reader);
 }
@@ -27,7 +28,8 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), dist(m.dist), impostor(m.impostor), 
-         impmat(MaterialPtr(new Material("materials/impostor", m.resman.texman, m.resman.shaderman)))
+         impmat(MaterialPtr(new Material("materials/impostor", m.resman.texman, m.resman.shaderman))),
+         animspeed(m.animspeed)
 {
    impmat->SetTexture(0, m.impmat->GetTexture(0));
    // Copy frameroot and framecontainer - these contain smart ptrs so the actual objects are shared
@@ -63,6 +65,7 @@ void Mesh::Load(const IniReader& reader)
    reader.Read(size, "Size");
    reader.Read(impdist, "ImpostorDistance");
    reader.Read(scale, "Scale");
+   reader.Read(animspeed, "AnimSpeed");
    
    if (type == "External")
    {
@@ -470,7 +473,7 @@ void Mesh::AdvanceAnimation(const Vector3& campos)
    if (frameroot.size() < 1) return;
    
    Uint32 currtick = SDL_GetTicks();
-   animtime += currtick - lastanimtick;
+   animtime += static_cast<int>(animspeed * static_cast<float>(currtick - lastanimtick));
    lastanimtick = currtick;
    while (animtime > frametime[currkeyframe])
    {
@@ -556,6 +559,31 @@ void Mesh::CalcBounds()
 }
 
 
+// I am not at all certain that animspeed needs to be part of the state, we'll see
+void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, const int atime, const float aspeed)
+{
+   if (frameroot.size() <= 1) return;
+   
+   position = pos;
+   rots = rot;
+   currkeyframe = keyframe;
+   animtime = atime;
+   SetAnimSpeed(aspeed);
+   
+   // campos is not important because this is only called by the server (at this time)
+   UpdateTris(currkeyframe, Vector3());
+}
+
+
+void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, float& aspeed)
+{
+   pos = position;
+   keyframe = currkeyframe;
+   atime = animtime;
+   aspeed = animspeed;
+}
+
+
 void Mesh::LoadMaterials()
 {
    if (havemats) return;
@@ -577,6 +605,15 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
    {
       m.frameroot[i]->parent = &(*framecontainer[i][name]);
    }
+}
+
+
+void Mesh::SetAnimSpeed(const float newas)
+{
+   animspeed = newas;
+   /*float ratio = newas / animspeed;
+   animspeed = newas;
+   animtime = static_cast<int>(static_cast<float>(animtime) * ratio);*/
 }
 
 

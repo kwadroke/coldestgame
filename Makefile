@@ -34,7 +34,7 @@ GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o GenericPrimitive.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o XSWrapper.o
+		MeshNode.o XSWrapper.o ServerState.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
