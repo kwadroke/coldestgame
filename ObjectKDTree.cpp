@@ -1,6 +1,6 @@
 #include "ObjectKDTree.h"
 
-int ObjectKDTree::maxlevels = 10;
+int ObjectKDTree::maxlevels = 6;
 
 ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : p(6, Quad()), vertices(v),
                            haschildren(false), root(true), retobjs(new MeshSet())
@@ -435,7 +435,6 @@ bool ObjectKDTree::infrustum(Mesh* obj)
       startside = norm.dot(obj->GetPosition()) + d;
       startside = -startside;
       
-      //cout << obj->type << ": " << startside << " > " << obj->size << endl;
       if (startside > obj->size) return false;
       
    }

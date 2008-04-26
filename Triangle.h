@@ -57,5 +57,7 @@ class Triangle
 };
 
 typedef vector<Triangle> Trianglevec;
+typedef shared_ptr<Triangle> TrianglePtr;
+typedef vector<TrianglePtr> TrianglePtrvec;
 
 #endif

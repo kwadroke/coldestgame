@@ -5,3 +5,4 @@ Texture0 textures/leaves6.png
 Shader shaders/standard
 CullFace 0
 AlphaTest .5
+AlphaToCoverage 1

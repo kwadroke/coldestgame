@@ -38,7 +38,7 @@ class Mesh
       void UnbindAttribs();
       void Render(Material* overridemat = NULL);
       void RenderImpostor(Mesh&, FBO&, const Vector3&);
-      void Add(Triangle&);
+      void Add(TrianglePtr&);
       void Add(Quad&);
       void Add(Mesh&);
       void InsertIntoContainer(const string&, Mesh&);
@@ -71,8 +71,8 @@ class Mesh
       void UpdateTris(int, const Vector3&);
       void BindVbo();
       
-      Trianglevec tris;
-      Trianglevec trantris;
+      TrianglePtrvec tris;
+      TrianglePtrvec trantris;
       intvec vbosteps;
       GLuint vbo;
       vector<VBOData> vbodata;

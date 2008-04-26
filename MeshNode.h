@@ -19,7 +19,7 @@ class MeshNode
 {
    public:
       MeshNode();
-      void GenTris(const shared_ptr<MeshNode>&, const float, const GraphicMatrix&, Trianglevec&, const Vector3& campos);
+      void GenTris(const shared_ptr<MeshNode>&, const float, const GraphicMatrix&, TrianglePtrvec&, const Vector3& campos);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void LoadMaterials(ResourceManager&);

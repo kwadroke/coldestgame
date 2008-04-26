@@ -1198,7 +1198,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 {
    IniReader empty("models/empty/base");
    if (!HitHandler)
+   {
       particlemesh = MeshPtr(new Mesh(empty, resman));
+      particlemesh->dynamic = true;
+   }
    Vector3 oldpos, partcheck;
    vector<Mesh*> hitmeshes;
    if (partupd >= partupdateinterval)

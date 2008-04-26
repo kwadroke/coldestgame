@@ -23,6 +23,7 @@ void WriteToConsole(string);
 void ConsoleBufferToGUI();
 
 deque<string> consolebuffer;
+extern string currentmap;  // In server.cpp as of right now
 
 // Just counts spaces, make sure to run through simplifywhitespace first
 int NumTokens(string str)
@@ -342,8 +343,8 @@ void ConsoleHandler(string command)
       }
       else if (Token(newcommand, 1) == "map")
       {
-         //currentmap = Token(newcommand, 2);
-         WriteToConsole(string("Note: This command is non-functional at the moment"));
+         currentmap = Token(newcommand, 2);
+         WriteToConsole(string("Note: This command may misbehave if run from the console"));
          return;
       }
       else if (Token(newcommand, 1) == "fullscreen")

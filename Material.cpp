@@ -5,7 +5,7 @@ int Material::nummats = 0;
 
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f),
                    texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f),
-                   shader("")
+                   shader(""), alphatocoverage(false), additive(false)
 {
    IniReader reader(filename);
    
@@ -36,6 +36,12 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
    if (alphatest > 1e-6)
       doalphatest = true;
    
+   reader.Read(additive, "Additive");
+   
+   reader.Read(alphatocoverage, "AlphaToCoverage");
+   
+   reader.Read(depthtest, "DepthTest");
+   
    ++nummats;
 }
 
@@ -62,6 +68,9 @@ void Material::Use() const
       glCullFace(GL_BACK);
    }
    else glDisable(GL_CULL_FACE);
+   if (depthtest)
+      glEnable(GL_DEPTH_TEST);
+   else glDisable(GL_DEPTH_TEST);
    
    if (doalphatest)
    {
@@ -70,13 +79,16 @@ void Material::Use() const
       glAlphaFunc(GL_GREATER, alphatest);
       
       glEnable(GL_ALPHA_TEST);
-      glBlendFunc(GL_ONE, GL_ZERO);
       glEnable(GL_BLEND);
+      glBlendFunc(GL_ONE, GL_ZERO);
 #ifndef NOEXT
-      /* Not entirely happy with the way this looks, but it could be worse*/
-      glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-      glSampleCoverage(1.f, GL_FALSE);
-      glDisable(GL_BLEND);
+      if (alphatocoverage)
+      {
+         /* Not entirely happy with the way this looks, but it could be worse*/
+         glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+         glSampleCoverage(1.f, GL_FALSE);
+         glDisable(GL_BLEND);
+      }
 #endif
       //glAlphaFunc(GL_GREATER, 0.5);
       
@@ -86,13 +98,19 @@ void Material::Use() const
    {
       //glAlphaFunc(GL_GREATER, 0.5);
       
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      if (additive)
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+      else
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glDisable(GL_ALPHA_TEST);
       
       //glDisable(GL_BLEND);
 #ifndef NOEXT
-      glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-      glEnable(GL_BLEND);
+      if (alphatocoverage)
+      {
+         glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+         glEnable(GL_BLEND);
+      }
 #endif
    }
    

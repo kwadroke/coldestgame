@@ -5,4 +5,5 @@ Texture0 textures/projectile.png
 Texture1 textures/normal.png
 Shader shaders/standard
 CullFace 0
-AlphaTest .01
+Additive 1
+DepthTest 0

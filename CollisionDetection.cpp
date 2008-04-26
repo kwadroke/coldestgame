@@ -42,26 +42,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    Vector3 dist;
    int adjusted = 0;
    
-#if 0
-   // Leaving this here for now because we'll need to copy pieces of it elsewhere
-   if (!listvalid)
-   {
-      Vector3 midpoint = (oldpos + newpos) / 2.f;
-      float findrad = radius + oldpos.distance(newpos);
-      
-      p = kdtree->getmeshes(midpoint, findrad);
-      
-      // Eliminate objects in the ignore list
-      for (vector<Mesh*>::iterator i = p.begin(); i != p.end(); ++i)
-      {
-         if (InVector(*i, ignoreobjs))
-            p.erase(i);
-      }
-      
-      //cout << p.size() << endl;
-   }
-#endif
-   
    Mesh* current;
    for (int i = 0; i < objs.size(); i++)
    {
