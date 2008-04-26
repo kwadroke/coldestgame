@@ -214,6 +214,7 @@ void RenderObjects()
    
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
+   float impmod = 1000.f;
    for (iptr = m.begin(); iptr != m.end(); ++iptr)
    {
       Mesh* i = *iptr;
@@ -229,7 +230,7 @@ void RenderObjects()
          Uint32 ticks = SDL_GetTicks() - i->lastimpupdate;
          dist = i->dist;
          i->RenderImpostor(*particlemesh, impfbolist[i->impostorfbo], localplayer.pos);
-         if ((ticks * ticks) > dist / (1000 * 1000 / dist) && !reflectionrender)
+         if ((ticks * ticks) > dist / (impmod * impmod / dist) && !reflectionrender)
          {
             implist.insert(i);
          }
@@ -238,7 +239,7 @@ void RenderObjects()
    
    UpdateFBO();
    
-   // Render all dynamic meshes (since they won't show up in the KDTree
+   // Render all dynamic meshes (since they won't show up in the KDTree)
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (i->dynamic)
@@ -730,6 +731,7 @@ void RenderHud()
    static GUI* pinglabel = statsdisp.GetWidget("ping");
    static GUI* mpflabel = statsdisp.GetWidget("msperframe");
    static GUI* poslabel = statsdisp.GetWidget("position");
+   static GUI* partlabel = statsdisp.GetWidget("particles");
    static GUI* torsohplabel = hud.GetWidget("torsohp");
    static GUI* legshplabel = hud.GetWidget("legshp");
    static GUI* leftarmhplabel = hud.GetWidget("leftarmhp");
@@ -763,6 +765,8 @@ void RenderHud()
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
+   if (particlemesh)
+      partlabel->text = "Particles: " + ToString(particlemesh->Size());
    torsohplabel->text = "Torso: " + ToString(localplayer.hp[Torso]);
    legshplabel->text = "Legs: " + ToString(localplayer.hp[Legs]);
    leftarmhplabel->text = "Left Arm: " + ToString(localplayer.hp[LArm]);

@@ -13,7 +13,7 @@ MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
 
 
 // Returned triangles go directly into tris
-void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, Trianglevec& tris,
+void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, TrianglePtrvec& tris,
                        const Vector3& campos)
 {
    Vector3 interprot1 = lerp(interpnode->rot1, rot1, interpval);
@@ -97,12 +97,17 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    
    if (render)
    {
-      Trianglevec newtris(vert.size() - 2);
+      TrianglePtrvec newtris;
+      for (size_t i = 0; i < vert.size() - 2; ++i)
+      {
+         TrianglePtr p(new Triangle());
+         newtris.push_back(p);
+      }
       
       if (vert.size() == 3) // Generate one triangle
       {
-         newtris[0].vert = vert;
-         newtris[0].texcoords = texcoords;
+         newtris[0]->vert = vert;
+         newtris[0]->texcoords = texcoords;
       }
       else if (vert.size() == 4) // Generate quad
       {
@@ -122,15 +127,15 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
       // Set per-tri properties
       for (int i = 0; i < newtris.size(); ++i)
       {
-         newtris[i].material = material;
+         newtris[i]->material = material;
          
-         Vector3 norm = newtris[i].vert[1] - newtris[i].vert[0];
-         norm = norm.cross(newtris[i].vert[2] - newtris[i].vert[0]);
+         Vector3 norm = newtris[i]->vert[1] - newtris[i]->vert[0];
+         norm = norm.cross(newtris[i]->vert[2] - newtris[i]->vert[0]);
          for (int j = 0; j < 3; ++j)
          {
-            newtris[i].norm[j] = norm;
+            newtris[i]->norm[j] = norm;
          }
-         newtris[i].collide = collide;
+         newtris[i]->collide = collide;
          tris.push_back(newtris[i]);
       }
    }

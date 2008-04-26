@@ -4,7 +4,7 @@
 
 Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
-            size(100.f), width(0.f), height(0.f), resman(rm), tris(Trianglevec()), trantris(Trianglevec()),
+            size(100.f), width(0.f), height(0.f), resman(rm), tris(TrianglePtrvec()), trantris(TrianglePtrvec()),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), dist(0.f), 
             impmat(MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman))),
@@ -24,7 +24,7 @@ Mesh::~Mesh()
 // TODO: Need to properly copy vbo and impostor Mesh here
 Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
-         size(m.size), width(m.width), height(m.height), tris(m.tris), trantris(m.trantris),
+         size(m.size), width(m.width), height(m.height),
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), dist(m.dist), impostor(m.impostor), 
@@ -32,9 +32,15 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          animspeed(m.animspeed)
 {
    impmat->SetTexture(0, m.impmat->GetTexture(0));
-   // Copy frameroot and framecontainer - these contain smart ptrs so the actual objects are shared
-   // otherwise, which is a bad thing here
-   for (int i = 0; i < m.frameroot.size(); ++i)
+   // The following containers hold smart pointers, which means that when we copy them
+   // the objects are still shared.  That's a bad thing, so we manually copy every
+   // object to the new container
+   for (size_t i = 0; i < m.tris.size(); ++i)
+   {
+      TrianglePtr p(new Triangle(*m.tris[i]));
+      tris.push_back(p);
+   }
+   for (size_t i = 0; i < m.frameroot.size(); ++i)
    {
       frameroot.push_back(m.frameroot[i]->Clone());
       framecontainer.push_back(map<string, MeshNodePtr>());
@@ -285,23 +291,23 @@ void Mesh::GenVbo()
       
       sort(tris.begin(), tris.end());
       int counter = 0;
-      Trianglevec::iterator last = tris.begin();
-      for (Trianglevec::iterator i = tris.begin(); i != tris.end(); ++i)
+      TrianglePtrvec::iterator last = tris.begin();
+      for (TrianglePtrvec::iterator i = tris.begin(); i != tris.end(); ++i)
       {
-         if (*last < *i)
+         if (**last < **i)
          {
             vbosteps.push_back(counter);
             counter = 0;
          }
          for (int j = 0; j < 3; ++j)
          {
-            vbodata.push_back(i->GetVboData(j));
+            vbodata.push_back((*i)->GetVboData(j));
          }
          last = i;
          ++counter;
       }
       vbosteps.push_back(counter);
-      if (frameroot.size() <= 1)
+      if (frameroot.size() <= 1 && !dynamic)
       {
          glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                      vbodata.size() * sizeof(VBOData), 
@@ -375,16 +381,16 @@ void Mesh::Render(Material* overridemat)
 {
    if (!tris.size()) return;
    BindVbo();
-   int currindex = 0;
+   size_t currindex = 0;
    if (overridemat)
       overridemat->Use();
-   for (int i = 0; i < vbosteps.size(); ++i)
+   for (size_t i = 0; i < vbosteps.size(); ++i)
    {
-      if (tris[currindex].material)
+      if (tris[currindex]->material)
       {
          if (!overridemat)
-            tris[currindex].material->Use();
-         else tris[currindex].material->UseTextureOnly();
+            tris[currindex]->material->Use();
+         else tris[currindex]->material->UseTextureOnly();
       }
       BindAttribs();
       glDrawArrays(GL_TRIANGLES, currindex * 3, vbosteps[i] * 3);
@@ -499,7 +505,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    if (index < 0 || index >= frameroot.size()) return;
    
    tris.clear();
-   trantris.clear();
+   //trantris.clear();
    
    GraphicMatrix m;
    
@@ -540,15 +546,15 @@ void Mesh::CalcBounds()
    {
       for (int j = 0; j < 3; ++j)
       {
-         dist2 = tris[i].vert[j].distance2(position);
+         dist2 = tris[i]->vert[j].distance2(position);
          if (dist2 > size2) size2 = dist2;
-         temp = tris[i].vert[j].x - position.x;
+         temp = tris[i]->vert[j].x - position.x;
          if (temp > max.x) max.x = temp;
          if (temp < min.x) min.x = temp;
-         temp = tris[i].vert[j].y - position.y;
+         temp = tris[i]->vert[j].y - position.y;
          if (temp > max.y) max.y = temp;
          if (temp < min.y) min.y = temp;
-         temp = tris[i].vert[j].z - position.z;
+         temp = tris[i]->vert[j].z - position.z;
          if (temp > max.z) max.z = temp;
          if (temp < min.z) min.z = temp;
       }
@@ -617,7 +623,7 @@ void Mesh::SetAnimSpeed(const float newas)
 }
 
 
-void Mesh::Add(Triangle& tri)
+void Mesh::Add(TrianglePtr& tri)
 {
    tris.push_back(tri);
 }
@@ -632,7 +638,7 @@ void Mesh::Add(Quad& quad)
 
 void Mesh::Add(Mesh &mesh)
 {
-   for (int i = 0; i < mesh.tris.size(); ++i)
+   for (size_t i = 0; i < mesh.tris.size(); ++i)
       tris.push_back(mesh.tris[i]);
 }
 
@@ -652,7 +658,7 @@ bool Mesh::HasNext() const
 const Triangle& Mesh::Next()
 {
    ++next;
-   return tris[next - 1];
+   return *tris[next - 1];
 }
 
 

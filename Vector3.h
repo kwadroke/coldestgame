@@ -56,7 +56,7 @@ inline Vector3 Vector3::cross(const Vector3& v) const
 inline void Vector3::normalize()
 {
    float mag = sqrt(x * x + y * y + z * z);
-   if (mag > .000001)
+   if (mag > .000001f)
    {
       x /= mag;
       y /= mag;
