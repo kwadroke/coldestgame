@@ -37,9 +37,13 @@ class Particle
       float dmgrad;
       Mesh mesh;
       int rewind;
+      bool collide;
+      Uint32 ttl;
+      bool expired;
       
    private:
       static unsigned long nextid;
+      Timer t;
 };
 
 #endif

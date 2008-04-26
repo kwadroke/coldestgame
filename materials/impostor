@@ -2,6 +2,6 @@ Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/projectile.png
-Shader shaders/standard
+Shader shaders/flat
 CullFace 1
 AlphaTest .5

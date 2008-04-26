@@ -63,3 +63,9 @@ bool Triangle::operator>(const Triangle& t) const
 }
 
 
+bool Triangle::TriPtrComp(const TrianglePtr& l, const TrianglePtr& r)
+{
+   return *l < *r;
+}
+
+

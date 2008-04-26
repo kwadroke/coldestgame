@@ -244,7 +244,7 @@ void Mesh::Load(const IniReader& reader)
       reader.Read(barkmat, "Materials", 0);
       reader.Read(leafmat, "Materials", 1);
       
-      int save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
+      size_t save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
       cout << "Tree primitives: " << save << endl;
    }
    else if (type == "Terrain" || type == "Empty"){} // No-op to avoid bogus warnings
@@ -289,7 +289,7 @@ void Mesh::GenVbo()
       }
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
       
-      sort(tris.begin(), tris.end());
+      sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
       int counter = 0;
       TrianglePtrvec::iterator last = tris.begin();
       for (TrianglePtrvec::iterator i = tris.begin(); i != tris.end(); ++i)
@@ -317,7 +317,7 @@ void Mesh::GenVbo()
       {
          glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                         vbodata.size() * sizeof(VBOData), 
-                        0, GL_DYNAMIC_DRAW_ARB);
+                        0, GL_STREAM_DRAW_ARB);
       }
       glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);

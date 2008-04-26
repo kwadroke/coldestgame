@@ -428,6 +428,7 @@ int NetListen(void* dummy)
                      temppart.playerid = partnum;
                      temppart.playernum = playernum;
                      temppart.unsent = false;  // Actually meaningless on client
+                     temppart.collide = false; // Debugging only
                            
                      partids.insert(partnum);
                      particles.push_back(temppart);

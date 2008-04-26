@@ -32,6 +32,7 @@ void Repaint();
 void RenderSkybox();
 void RenderPrimitives(vector<WorldPrimitives>&, bool distsort = false);
 void RenderObjects();
+void RenderParticles();
 void RenderHud();
 void RenderClouds();
 void RenderDynamicObjects();

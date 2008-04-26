@@ -5,7 +5,7 @@ int Material::nummats = 0;
 
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f),
                    texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f),
-                   shader(""), alphatocoverage(false), additive(false)
+                   shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true)
 {
    IniReader reader(filename);
    
@@ -42,6 +42,8 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
    
    reader.Read(depthtest, "DepthTest");
    
+   reader.Read(depthwrite, "DepthWrite");
+   
    ++nummats;
 }
 
@@ -68,51 +70,46 @@ void Material::Use() const
       glCullFace(GL_BACK);
    }
    else glDisable(GL_CULL_FACE);
-   if (depthtest)
+   
+   /*if (depthtest)
       glEnable(GL_DEPTH_TEST);
-   else glDisable(GL_DEPTH_TEST);
+   else glDisable(GL_DEPTH_TEST);*/
+   
+   if (depthwrite)
+      glDepthMask(GL_TRUE);
+   else glDepthMask(GL_FALSE);
    
    if (doalphatest)
    {
-      //glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
-      // Nice alpha textured tree leaves
       glAlphaFunc(GL_GREATER, alphatest);
       
       glEnable(GL_ALPHA_TEST);
       glEnable(GL_BLEND);
       glBlendFunc(GL_ONE, GL_ZERO);
-#ifndef NOEXT
-      if (alphatocoverage)
-      {
-         /* Not entirely happy with the way this looks, but it could be worse*/
-         glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-         glSampleCoverage(1.f, GL_FALSE);
-         glDisable(GL_BLEND);
-      }
-#endif
-      //glAlphaFunc(GL_GREATER, 0.5);
-      
-      //glDisable(GL_LIGHTING);
    }
    else
    {
-      //glAlphaFunc(GL_GREATER, 0.5);
-      
       if (additive)
          glBlendFunc(GL_SRC_ALPHA, GL_ONE);
       else
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glDisable(GL_ALPHA_TEST);
-      
-      //glDisable(GL_BLEND);
-#ifndef NOEXT
-      if (alphatocoverage)
-      {
-         glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-         glEnable(GL_BLEND);
-      }
-#endif
    }
+   
+#ifndef NOEXT
+   if (alphatocoverage)
+   {
+      // Not entirely happy with the way this looks, but it could be worse
+      glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+      glSampleCoverage(1.f, GL_FALSE);
+      glDisable(GL_BLEND);
+   }
+   else
+   {
+      glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+      glEnable(GL_BLEND);
+   }
+#endif
    
    glDisable(GL_COLOR_MATERIAL); // TODO: This should probably be removed at some point
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &ambient[0]);

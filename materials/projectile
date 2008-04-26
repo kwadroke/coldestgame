@@ -3,7 +3,7 @@ Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/projectile.png
 Texture1 textures/normal.png
-Shader shaders/standard
+Shader shaders/flat
 CullFace 0
 Additive 1
-DepthTest 0
+DepthWrite 0

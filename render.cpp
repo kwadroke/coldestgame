@@ -13,13 +13,13 @@ set<Mesh*> visiblemeshes;
 void Repaint()
 {
    static Timer t, ts;
-   t.start();
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
-   // The accum buffer is no longer used (atm anyway), and the color buffer
-   // should be overwritten by the skybox because we shut off the depth
-   // test (nothing else should be rendered at that time anyway)
    static bool updateclouds = true;
-   glClear(GL_DEPTH_BUFFER_BIT);
+   t.start();
+   
+   // Apparently if this is turned off even glClear doesn't override it, so we end up never
+   // clearing the depth buffer (because particles are rendered last without depth writes)
+   glDepthMask(GL_TRUE);
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glShadeModel(GL_SMOOTH);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -149,6 +149,9 @@ void Repaint()
          RenderWater();
       }
       
+      // Must be rendered last to blend correctly
+      RenderParticles();
+      
       //if (shadows)
       //   glPopAttrib();
    } // if !mainmenu.visible
@@ -212,6 +215,8 @@ void RenderObjects()
    
    m.sort(meshptrcomp);
    
+   IniReader empty("models/empty/base");
+   Mesh impostormesh(empty, resman);
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
    float impmod = 1000.f;
@@ -229,7 +234,7 @@ void RenderObjects()
       {
          Uint32 ticks = SDL_GetTicks() - i->lastimpupdate;
          dist = i->dist;
-         i->RenderImpostor(*particlemesh, impfbolist[i->impostorfbo], localplayer.pos);
+         i->RenderImpostor(impostormesh, impfbolist[i->impostorfbo], localplayer.pos);
          if ((ticks * ticks) > dist / (impmod * impmod / dist) && !reflectionrender)
          {
             implist.insert(i);
@@ -247,10 +252,20 @@ void RenderObjects()
       trislastframe += i->Size();
    }
    
+   impostormesh.GenVbo();
+   impostormesh.Render(override);
+   glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+   trislastframe += impostormesh.Size();
+}
+
+void RenderParticles()
+{
    // Particles are all coalesced into a single mesh (could be a problem at some point?) so we don't
    // have to madly switch VBO's while rendering them
    if (particlemesh)
    {
+      Material* override = NULL;
+      if (shadowrender) override = shadowmat;
       particlemesh->GenVbo();
       particlemesh->Render(override);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
@@ -672,8 +687,7 @@ void RenderWater()
          
          glFrontFace(GL_CW);
          RenderObjects();
-         //resman.shaderman.UseShader(standardshader);
-         //RenderDynamicObjects();
+         RenderParticles();
          glFrontFace(GL_CCW);
          
          SetReflection(false);

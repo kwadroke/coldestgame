@@ -83,13 +83,11 @@ void InitGlobals()
    
    lasttick = SDL_GetTicks();
    frames = 0;
-   //terrainlistvalid = false;
    running = true;
    sendpacketnum = 1;  // 0 has special meaning
    recpacketnum = 0;
    ackpack = 0;
    connected = false;
-   //coldet.dynobj = &dynobjects;
    noiseres = 128;
    nextmap = mapname = "";
    clientmutex = SDL_CreateMutex();
@@ -105,10 +103,6 @@ void InitGlobals()
    bumpshader = "shaders/bump";
    
    ReadConfig();
-   
-   /*consoletop = consoleleft = 10;
-   consolebottom = screenheight - 300;
-   consoleright = screenwidth - 10;*/
    
    InitGUI();
    InitUnits();
@@ -175,7 +169,7 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = .3f;
+   dummy.velocity = 0;//.3f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
@@ -276,6 +270,7 @@ void SetupSDL()
    
    atexit(SDLNet_Quit);
 }
+
 
 void SetupOpenGL()
 {
@@ -1210,20 +1205,31 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       list<Particle>::iterator j = parts.begin();
       while (j != parts.end())
       {
+         partcheck = Vector3();
          oldpos = j->Update();
-         vector<Mesh*> check = kt.getmeshes(oldpos, j->pos, j->radius);
-         AppendDynamicMeshes(check, ml);
-         if (Rewind)
-            Rewind(j->rewind);
-         partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, &hitmeshes);
-         if (Rewind)
-            Rewind(0);
+         if (j->collide)
+         {
+            vector<Mesh*> check = kt.getmeshes(oldpos, j->pos, j->radius);
+            AppendDynamicMeshes(check, ml);
+            if (Rewind)
+               Rewind(j->rewind);
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, &hitmeshes);
+            if (Rewind)
+               Rewind(0);
+         }
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
          {
-            if (!HitHandler)
-               j->Render(particlemesh.get(), player[0].pos);
-            ++j;
+            if (j->expired)
+            {
+               j = parts.erase(j);
+            }
+            else
+            {
+               if (!HitHandler)
+                  j->Render(particlemesh.get(), player[0].pos);
+               ++j;
+            }
          }
          else
          {

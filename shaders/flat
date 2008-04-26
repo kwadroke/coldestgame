@@ -1,0 +1,8 @@
+Vertex:
+flatvert.glsl
+Pixel:
+flatfrag.glsl
+fogfrag.glsl
+Uniforms:
+int tex 0
+float reflectval 0
