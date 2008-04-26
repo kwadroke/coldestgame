@@ -4,7 +4,7 @@
 int Material::nummats = 0;
 
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f),
-                   texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f),
+                   texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
                    shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true)
 {
    IniReader reader(filename);
