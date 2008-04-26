@@ -1,10 +1,10 @@
 Vertex:
 standardvert.glsl
-basiclighting.glsl
 Pixel:
 standardfrag.glsl
 noshadowfrag.glsl
 fogfrag.glsl
+basiclighting.glsl
 Uniforms:
 int tex 0
 int shadowtex 6

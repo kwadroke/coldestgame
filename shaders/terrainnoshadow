@@ -1,10 +1,10 @@
 Vertex:
 terrainvert.glsl
-basiclighting.glsl
 Pixel:
 terrainfrag.glsl
 noshadowfrag.glsl
 fogfrag.glsl
+basiclighting.glsl
 Uniforms:
 int tex 0
 int tex1 1
