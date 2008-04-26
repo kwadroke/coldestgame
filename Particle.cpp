@@ -4,10 +4,11 @@
 unsigned long Particle::nextid = 1;
 
 
-Particle::Particle(Mesh& meshin) : mesh(meshin), rewind(0)
+Particle::Particle(Mesh& meshin) : mesh(meshin), rewind(0), collide(false), ttl(10000), expired(false)
 {
    unsent = true;
    senttimes = 0;
+   t.start();
    /*id = nextid;
    // Prevent overflow, not that I expect this to ever happen
    if (nextid > 4294967294ul)
@@ -17,7 +18,8 @@ Particle::Particle(Mesh& meshin) : mesh(meshin), rewind(0)
 
 
 Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
-                   float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin)
+                   float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin),
+                   rewind(0), collide(false), ttl(0), expired(false)
 {
    pos = p;
    dir = v;
@@ -37,6 +39,7 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
    if (nextid > 4294967294ul)
       nextid = 1;
    ++nextid;
+   t.start();
 }
 
 
@@ -50,6 +53,11 @@ Vector3 Particle::Update()
    dir.y -= weight * interval / 1000.f;
    pos += dir * (velocity * interval);
    mesh.Move(pos);
+   if (ttl > 0)
+   {
+      if (t.elapsed() > ttl)
+         expired = true;
+   }
    
    return oldpos;
 }

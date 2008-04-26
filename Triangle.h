@@ -10,6 +10,8 @@
 using std::vector;
 
 // We pass this structure directly to OpenGL, so it needs to be aligned on single bytes
+// Edit: Maybe.  It seems to work without doing that, but it may waste memory to align this
+// Performance subjectively appears to be the same either way
 #pragma pack(push, 1)
 struct VBOData
 {
@@ -42,6 +44,7 @@ class Triangle
       bool operator<(const Triangle&) const;
       bool operator>(const Triangle&) const;
       VBOData GetVboData(const int);
+      static bool TriPtrComp(const shared_ptr<Triangle>&, const shared_ptr<Triangle>&);
       
       Vector3vec vert;
       Vector3vec norm;

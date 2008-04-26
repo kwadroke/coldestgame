@@ -4,3 +4,4 @@ Specular 1 1 1 1
 Texture0 textures/sky1.png
 Shader none
 CullFace 0
+DepthTest 0

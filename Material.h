@@ -36,7 +36,7 @@ class Material
       Shader& shaderhand;
       int id;
       static int nummats;
-      bool cullface, doalphatest, alphatocoverage, additive, depthtest;
+      bool cullface, doalphatest, alphatocoverage, additive, depthtest, depthwrite;
       float alphatest;
 };
 
