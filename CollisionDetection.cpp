@@ -17,6 +17,7 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
    quiet = o.quiet;
    tilesize = o.tilesize;
    worldbounds = o.worldbounds;
+   return *this;
 }
 
 

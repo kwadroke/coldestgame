@@ -452,11 +452,11 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
    Vector3 currpoint;
    float nearx, neary, farx, fary;
    float radfov = fov * PI / 180.;
-   float near = -nearz;
-   float far = -farz;
-   neary = 2 * tan(radfov / 2) * near / 2;
+   nearz = -nearz;
+   farz = -farz;
+   neary = 2 * tan(radfov / 2) * nearz / 2;
    nearx = neary * aspect;
-   fary = 2 * tan(radfov / 2) * far / 2;
+   fary = 2 * tan(radfov / 2) * farz / 2;
    farx = fary * aspect;
    
 #ifdef OLDKD
@@ -512,7 +512,7 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
 #endif
    currpoint.x = nearx;
    currpoint.y = neary;
-   currpoint.z = near;
+   currpoint.z = nearz;
    p[0].SetVertex(0, currpoint);
    p[2].SetVertex(3, currpoint);
    p[3].SetVertex(2, currpoint);
@@ -537,7 +537,7 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
    
    currpoint.x = -farx;
    currpoint.y = fary;
-   currpoint.z = far;
+   currpoint.z = farz;
    p[1].SetVertex(0, currpoint);
    p[2].SetVertex(1, currpoint);
    p[5].SetVertex(0, currpoint);

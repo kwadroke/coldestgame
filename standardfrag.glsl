@@ -1,6 +1,6 @@
-void basiclighting(in vec3 norm, in vec3 lightdir, out vec4 col, out vec4 amb, out vec4 diff);
-void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
-void fog(float dist, inout vec4 color);
+void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4);
+void shadow(vec4, vec4, float, inout vec4);
+void fog(float, inout vec4);
 
 uniform sampler2D tex;
 uniform float reflectval;

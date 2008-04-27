@@ -6,6 +6,11 @@
 #include "renderdefs.h"
 #include "netdefs.h"
 
+#ifdef WINDOWS
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 /* Do anything function that can be handy for debugging various things
    in a more limited context than the entire engine.*/
 void Debug()
@@ -16,7 +21,15 @@ void Debug()
 }
 
 
+#ifndef WINDOWS
 int main(int argc, char* argv[])
+#else
+int APIENTRY WinMain(HINSTANCE hInstance,
+                     HINSTANCE hPrevInstance,
+                     LPSTR     lpCmdLine,
+                     int       nCmdShow)
+
+#endif
 {
 #ifdef LINUX
    //system("ulimit -c unlimited");
@@ -341,38 +354,38 @@ void SetupOpenGL()
    if (err != GLEW_OK)
    {
       cout << "Failed to init glew: " << glewGetErrorString(err) << endl << flush;
-      exit(-1);
+      exit(-2);
    }
    cout << "Glew init successful, using version: " << glewGetString(GLEW_VERSION) << endl << flush;
    if (!GLEW_EXT_framebuffer_object)
    {
       cout << "We don't have EXT_framebuffer_object.  This is fatal.\n" << flush;
-      exit(-1);
+      exit(-3);
    }
    if (!GLEW_ARB_vertex_buffer_object)
    {
       cout << "We don't have ARB_vertex_buffer_object.  This is fatal.\n" << flush;
-      exit(-1);
+      exit(-4);
    }
    if (!GLEW_ARB_depth_texture)
    {
       cout << "We don't have ARB_depth_texture.  This is fatal.\n" << flush;
-      exit(-1);
+      exit(-5);
    }
    if (!GLEW_ARB_shadow)
    {
       cout << "We don't have ARB_shadow.  This is fatal.\n" << flush;
-      exit(-1);
+      exit(-6);
    }
    if (!GLEW_ARB_fragment_shader)
    {
       cout << "We don't have ARB_fragment_shader.  This is fatal.\n" << flush;
-      exit(-1);
+      exit(-7);
    }
    if (!GLEW_ARB_multitexture)
    {
       cout << "We don't have ARB_multitexture.  This is fatal." << endl;
-      exit(-1);
+      exit(-8);
    }
    
    if (!cloudfbo.IsValid())
@@ -1127,7 +1140,7 @@ void UpdateServerList()
    if (!serverlist)
    {
       cout << "Failed to get pointer to serverlist" << endl;
-      exit(-1);
+      exit(-10);
    }
    SDL_mutexP(clientmutex);
    //serverlist->clear();
@@ -1419,6 +1432,8 @@ int gettid()
 #else
    return syscall(186);
 #endif
+#else
+return 0;
 #endif
 }
 

@@ -52,6 +52,7 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
 Mesh& Mesh::operator=(const Mesh& m)
 {
    cout <<  "Warning: Called undefined operator=" << endl;
+   return *this;
 }
 
 

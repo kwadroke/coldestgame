@@ -32,6 +32,7 @@ Quad& Quad::operator=(const Quad& q)
 {
    first = TrianglePtr(new Triangle(*q.first));
    second = TrianglePtr(new Triangle(*q.second));
+   return *this;
 }
 
 

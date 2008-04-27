@@ -581,7 +581,7 @@ void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
    if (!t)  // Had some problems with sdl-ttf at one point
    {        // At least this way it won't segfault
       cout << "Error rendering text: " << text << endl;
-      exit(-1);
+      exit(-10);
    }
    
    height = t->h;
@@ -613,7 +613,7 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
    if (!t)  // Had some problems with sdl-ttf at one point
    {        // At least this way it won't segfault
       cout << "Error rendering text: " << str << endl;
-      exit(-1);
+      exit(-11);
    }
    int neww = PowerOf2(t->w);
    int newh = PowerOf2(t->h);

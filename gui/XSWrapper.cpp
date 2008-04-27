@@ -24,12 +24,14 @@ XSWrapper::XSWrapper(const XSWrapper& x) : data(XMLString::replicate(x))
 XSWrapper& XSWrapper::operator=(const XSWrapper& x)
 {
    data = XMLString::replicate(x);
+   return *this;
 }
 
 
 XSWrapper& XSWrapper::operator=(const string& s)
 {
    data = XMLString::transcode(s.c_str());
+   return *this;
 }
 
 
