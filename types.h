@@ -14,7 +14,8 @@ using std::string;
 /* The last item in each of the enums is a value to indicate how many enums each type
    actually has.  Iterating from 0...lastitem - 1 (i.e. numweapons) should always hit
    each possible weapon.*/
-enum Weapons{Empty, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, numweapons};
+// Note: If you change the Weapon or Unit enums you need to alter the GUI as well to match
+enum Weapons{Empty, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, numweapons};
 enum Units{UnitTest, Ultra, Omega, numunits};
 enum BodyParts{Legs, Torso, LArm, RArm, numbodyparts};
 

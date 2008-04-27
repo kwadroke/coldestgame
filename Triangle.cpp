@@ -1,7 +1,7 @@
 #include "Triangle.h"
 
-Triangle::Triangle() : vert(Vector3vec(3, Vector3())), norm(Vector3vec(3, Vector3())), 
-                   material(NULL), tangent(Vector3()), collide(false), dist(0.f), matrix(GraphicMatrix())
+Triangle::Triangle() : vert(Vector3vec(3, Vector3())), norm(Vector3vec(3, Vector3())), maxdim(-1.f),
+                   material(NULL), tangent(Vector3()), collide(false), matrix(GraphicMatrix())
 {
    floatvec tc(2, 0.f);
    vector<floatvec> tcv(3, tc);
@@ -66,6 +66,17 @@ bool Triangle::operator>(const Triangle& t) const
 bool Triangle::TriPtrComp(const TrianglePtr& l, const TrianglePtr& r)
 {
    return *l < *r;
+}
+
+
+void Triangle::CalcMaxDim()
+{
+   maxdim = vert[0].distance2(vert[1]);
+   float tempdim = vert[0].distance2(vert[2]);
+   if (tempdim > maxdim) maxdim = tempdim;
+   tempdim = vert[1].distance2(vert[2]);
+   if (tempdim > maxdim) maxdim = tempdim;
+   midpoint = (vert[0] + vert[1] + vert[2]) / 3.f;
 }
 
 

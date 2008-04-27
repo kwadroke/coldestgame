@@ -37,7 +37,7 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
    id = nextid;
    // Prevent overflow, not sure what the implications of this happening would be
    if (nextid > 4294967294ul)
-      nextid = 1;
+      nextid = 0;
    ++nextid;
    t.start();
 }

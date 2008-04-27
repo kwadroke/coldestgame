@@ -169,7 +169,7 @@ void InitWeapons()
    dummy.file = "projectile";
    dummy.name = "None";
    dummy.acceleration = 1.f;
-   dummy.velocity = 0;//.3f;
+   dummy.velocity = .3f;
    dummy.weight = .5f;
    dummy.radius = 5.f;
    dummy.splashradius = 0.f;
@@ -186,11 +186,21 @@ void InitWeapons()
    weapons[MachineGun].weight = .1f;
    weapons[MachineGun].name = "Machine Gun";
    weapons[GaussRifle].reloadtime = 1000;
+   weapons[GaussRifle].velocity = 10.f;
+   weapons[GaussRifle].weight = .25f;
+   weapons[GaussRifle].radius = 2.f;
+   weapons[GaussRifle].damage = 50;
    weapons[GaussRifle].name = "Gauss Rifle";
+   weapons[GaussRifle].heat = 10.f;
    weapons[Laser].reloadtime = 300;
+   weapons[Laser].velocity = 20.f;
    weapons[Laser].weight = 0.f;
    weapons[Laser].name = "Laser";
    weapons[Laser].heat = 25.f;
+   weapons[Mortar].reloadtime = 1000;
+   weapons[Mortar].velocity = .5f;
+   weapons[Mortar].weight = 1.f;
+   weapons[Mortar].name = "Mortar";
 }
 
 
@@ -1050,7 +1060,7 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .01f;
+   float pingslop = .05f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
    
@@ -1068,7 +1078,7 @@ void SynchronizePosition()
    else if (!player[0].moveforward && !player[0].moveback)
       posadj *= 0.f;
    else if (difference > .3f)
-      posadj *= .2f;
+      posadj *= .3f;
    // Note: If difference < .3f then we snap to the server location, but it's not noticeable
    // because the error is so small
    
@@ -1227,7 +1237,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             else
             {
                if (!HitHandler)
+               {
+                  j->mesh.LoadMaterials();
                   j->Render(particlemesh.get(), player[0].pos);
+               }
                ++j;
             }
          }

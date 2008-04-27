@@ -39,7 +39,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 {
    Vector3 adjust;
    Vector3 temp;
-   Vector3 dist;
+   Vector3 midpoint = (oldpos + newpos) / 2.f;
+   float maxdim, tempdim;
    int adjusted = 0;
    
    Mesh* current;
@@ -49,13 +50,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       current->Begin();
       while (current->HasNext())
       {
-         const Triangle& currtri = current->Next();
+         Triangle& currtri = current->Next();
          if (currtri.collide)
          {
-            //dist = currtri.vert[0] + currtri.vert[1] + currtri.vert[2];
-            //dist /= 3;
-            //if (dist.distance2(newpos) < 
-            //      currtri.vert[0].distance2(currtri.vert[3]) + radius * radius)
+            if (currtri.maxdim < 0) currtri.CalcMaxDim();
+            
+            if (currtri.midpoint.distance2(midpoint) < currtri.maxdim + radius * radius)
             {
                temp = adjust;
                adjust += PlaneSphereCollision(currtri.vert, oldpos, newpos, radius);
@@ -107,13 +107,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          current->Begin();
          while (current->HasNext())
          {
-            const Triangle& currtri = current->Next();
+            Triangle& currtri = current->Next();
             if (currtri.collide)
             {
-               //dist = currtri.vert[0] + currtri.vert[1] + currtri.vert[2];
-               //dist /= 3;
-               //if (dist.distance2(newpos) < 
-               //      currtri.vert[0].distance2(currtri.vert[3]) + radius * radius)
+               if (currtri.maxdim < 0) currtri.CalcMaxDim();
+            
+               if (currtri.midpoint.distance2(midpoint) < currtri.maxdim + radius * radius)
                {
                   temp = adjust;
                   adjust += PlaneEdgeSphereCollision(currtri.vert, newpos, radius);
