@@ -655,7 +655,7 @@ bool Mesh::HasNext() const
 }
 
 
-const Triangle& Mesh::Next()
+Triangle& Mesh::Next()
 {
    ++next;
    return *tris[next - 1];

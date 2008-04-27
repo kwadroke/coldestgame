@@ -52,7 +52,7 @@ class Mesh
       
       void Begin();
       bool HasNext() const;
-      const Triangle& Next();
+      Triangle& Next();
       
       int Size() const; // Not related to size member
       void AdvanceAnimation(const Vector3& campos = Vector3());

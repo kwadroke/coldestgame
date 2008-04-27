@@ -428,7 +428,7 @@ int NetListen(void* dummy)
                      temppart.playerid = partnum;
                      temppart.playernum = playernum;
                      temppart.unsent = false;  // Actually meaningless on client
-                     temppart.collide = false; // Debugging only
+                     temppart.collide = true;
                            
                      partids.insert(partnum);
                      particles.push_back(temppart);
@@ -485,19 +485,33 @@ int NetListen(void* dummy)
                oppnum = 0;
                
                get >> oppnum;
+               short getunit;
+               int getkills, getdeaths;
+               vector<int> gethp(numbodyparts);
+               int getping;
+               bool getspawned;
+               string getname;
                SDL_mutexP(clientmutex);
                while (oppnum != 0)
                {
+                  get >> getunit;
+                  get >> getkills;
+                  get >> getdeaths;
+                  for (int i = 0; i < numbodyparts; ++i)
+                     get >> gethp[i];
+                  get >> getping;
+                  get >> getspawned;
+                  get >> getname;
                   if (oppnum < player.size())
                   {
-                     get >> player[oppnum].unit;
-                     get >> player[oppnum].kills;
-                     get >> player[oppnum].deaths;
-                     for (int i = 0; i < numbodyparts; ++i)
-                        get >> player[oppnum].hp[i];
-                     get >> player[oppnum].ping;
-                     get >> player[oppnum].spawned;
-                     get >> player[oppnum].name;
+                     player[oppnum].unit = getunit;
+                     player[oppnum].kills = getkills;
+                     player[oppnum].deaths = getdeaths;
+                     for (size_t i = 0; i < numbodyparts; ++i)
+                        player[oppnum].hp[i] = gethp[i];
+                     player[oppnum].ping = getping;
+                     player[oppnum].spawned = getspawned;
+                     player[oppnum].name = getname;
                   }
                   get >> oppnum;
                }

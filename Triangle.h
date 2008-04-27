@@ -45,6 +45,7 @@ class Triangle
       bool operator>(const Triangle&) const;
       VBOData GetVboData(const int);
       static bool TriPtrComp(const shared_ptr<Triangle>&, const shared_ptr<Triangle>&);
+      void CalcMaxDim();
       
       Vector3vec vert;
       Vector3vec norm;
@@ -54,8 +55,9 @@ class Triangle
       vector< vector< floatvec > > texcoords; // [Texture unit][vertex][x/y]
       vector<GLubytevec> color;
       vector<floatvec> terrainwt;
-      float dist;
       GraphicMatrix matrix;
+      float maxdim;
+      Vector3 midpoint;
 
 };
 

@@ -34,6 +34,7 @@
       <ComboBoxItem>Autocannon</ComboBoxItem>
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
+      <ComboBoxItem>Mortar</ComboBoxItem>
    </ComboBox>
    <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" text="Right Arm"
              normal="textures/buttonnorm.png"
@@ -44,6 +45,7 @@
       <ComboBoxItem>Autocannon</ComboBoxItem>
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
+      <ComboBoxItem>Mortar</ComboBoxItem>
    </ComboBox>
    <ComboBox x="700"  y="250" width="200" height="40" name="Torso" text="Torso"
              normal="textures/buttonnorm.png"
@@ -54,6 +56,7 @@
       <ComboBoxItem>Autocannon</ComboBoxItem>
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
+      <ComboBoxItem>Mortar</ComboBoxItem>
    </ComboBox>
    <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item"
              normal="textures/buttonnorm.png"
