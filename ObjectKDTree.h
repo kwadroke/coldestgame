@@ -11,7 +11,11 @@
 #include <set>
 #include "SDL_thread.h"
 #include "Timer.h"
+#ifdef LINUX
 #include <ext/hash_set>
+#else
+#include <hash_set>
+#endif
 
 #define PI 3.14159265
 
@@ -29,8 +33,13 @@ struct eqptr
    }
 };
 
+#ifdef LINUX
 typedef __gnu_cxx::hash_set<Mesh*, eqptr, eqptr> MeshSet;
 //typedef set<Mesh*> MeshSet;
+#else
+//typedef stdext::hash_set<Mesh*, eqptr> MeshSet;
+typedef set<Mesh*> MeshSet;
+#endif
 
 class ObjectKDTree
 {

@@ -20,6 +20,7 @@ int Light::Add()
    view.push_back(GraphicMatrix());
    proj.push_back(GraphicMatrix());
    type.push_back(0);
+   return 0; // Why does this function return a value?
 }
 
 

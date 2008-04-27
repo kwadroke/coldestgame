@@ -61,7 +61,7 @@ void Shader::LoadShader(string file)
          free(infoLog);
       }
       
-      exit(-1);
+      exit(-13);
    }
    
    UseProgram(0);

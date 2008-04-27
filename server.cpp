@@ -20,10 +20,12 @@
 #include "globals.h"
 #include "netdefs.h"
 #include "ServerState.h"
-
+// TODO: Does server even need to include these anymore?
+#ifdef LINUX
 #include <sys/types.h>
 #include <linux/unistd.h>
 #include <errno.h>
+#endif
 
 using namespace std;
 

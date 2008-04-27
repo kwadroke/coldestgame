@@ -1,10 +1,10 @@
 Vertex:
 bumpvert.glsl
 Pixel:
-bumpfrag.glsl
 fogfrag.glsl
 shadowfrag.glsl
 basiclighting.glsl
+bumpfrag.glsl
 Uniforms:
 int tex 0
 int bumptex 1
