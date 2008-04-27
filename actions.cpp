@@ -49,6 +49,18 @@ void ConnectToIp()
    loadoutmenu.visible = true;
 }
 
+
+void Host()
+{
+   server = true;
+   serverthread = SDL_CreateThread(Server, NULL);
+   ConsoleHandler("set serveraddr localhost");
+   ConsoleHandler("connect");
+   mainmenu.visible = false;
+   loadoutmenu.visible = true;
+}
+
+
 void TestAction()
 {
    GUI* temp = loadprogress.GetWidget("loadingprogress");
@@ -127,6 +139,8 @@ void Action(const string& action)
       Connect();
    else if (action == "connectip")
       ConnectToIp();
+   else if (action == "host")
+      Host();
    else if (action == "showprogress")
       TestAction();
    else if (action == "resume")

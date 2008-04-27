@@ -85,6 +85,7 @@ void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, const Vect
                      void (*HitHandler)(Particle&, vector<Mesh*>&) = NULL, void (*Rewind)(int) = NULL);
 void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
+int Server(void* dummy);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
