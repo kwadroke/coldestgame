@@ -836,8 +836,8 @@ void RenderHud()
    glColor4f(1, 1, 1, 1);
    mainmenu.Render();
    hud.Render();
-   loadprogress.Render();
    loadoutmenu.Render();
+   loadprogress.Render();
    if (showfps)
       statsdisp.Render();
    console.Render();

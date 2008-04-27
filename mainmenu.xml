@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf">
    <Label x="400" y="50" width="200" height="50" text="Coldest" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"/>
-   <Button x="400" y="300" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
+   <Button x="400" y="250" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
            normal="textures/buttonnorm.png"
            pressed="textures/buttonpressed.png"
            hover="textures/buttonhover.png"
            leftclick="connect"/>
+   <Button x="400" y="300" width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="6" align="center"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png"
+           leftclick="host"/>
    <Button x="400" y="350" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
            normal="textures/buttonnorm.png"
            pressed="textures/buttonpressed.png"

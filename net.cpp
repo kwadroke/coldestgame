@@ -119,6 +119,7 @@ int NetSend(void* dummy)
          p << player[0].unit << eol;
          p << player[0].name << eol;
          p.ack = sendpacketnum;
+         cout << sendpacketnum << endl;
          ++sendpacketnum;
          SDL_mutexP(sendmutex);
          sendqueue.push_back(p);
@@ -191,7 +192,7 @@ int NetSend(void* dummy)
          if (i->sendtick <= currnettick)
          {
             i->Send();
-            if (!i->ack || i->attempts > 1000) // Non-ack packets get sent once and then are on their own
+            if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
             {
                i = sendqueue.erase(i);
                continue;

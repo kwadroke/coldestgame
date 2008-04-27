@@ -90,7 +90,6 @@ string PadNum(int, int);
 void Cleanup();
 void Quit();
 void Fire();
-int Server(void* dummy);
 void UpdateServerList();
 void GLError();
 string AddressToDD(Uint32);

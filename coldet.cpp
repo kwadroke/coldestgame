@@ -47,9 +47,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    // Start network threads
    netin = SDL_CreateThread(NetListen, NULL);
    
-   if (server)
-      serverthread = SDL_CreateThread(Server, NULL);
-   
    initialized = true;
    MainLoop();
 
@@ -490,12 +487,12 @@ static void MainLoop()
       if (nextmap != mapname)
       {
          GUI* progress = loadprogress.GetWidget("loadingprogress");
-         mainmenu.visible = false;
+         //mainmenu.visible = false;
          loadprogress.visible = true;
          Repaint();
          GetMap(nextmap);
          loadprogress.visible = false;
-         mainmenu.visible = true;
+         loadoutmenu.visible = true;
       }
       
       GUIUpdate();
