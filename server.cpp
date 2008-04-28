@@ -296,7 +296,6 @@ int ServerListen()
                temp.acked.insert(packetnum);
                UpdatePlayerModel(temp, servermeshes, false);
                
-               SDLNet_Write16(1336, &(temp.addr.port)); // NBO bites me for the first time...
                serverplayers.push_back(temp);
                respondto = serverplayers.size() - 1;
                cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
@@ -340,7 +339,6 @@ int ServerListen()
             response << currentmap << eol;
             response << serverplayers.size() << eol;
             response << maxplayers << eol;
-            SDLNet_Write16(1336, &(response.addr.port));
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
          }
@@ -370,7 +368,6 @@ int ServerListen()
             }
             
             Packet response(servoutpack, &servoutsock, &inpack->address);
-            SDLNet_Write16(1336, &(response.addr.port));
             response << "S\n";
             response << 0 << eol;  // Not sure this is okay either...
             if (accepted)
@@ -411,7 +408,6 @@ int ServerListen()
                ++servsendpacketnum; // Make sure we can't end up with dup packet ids
             }
             Packet response(servoutpack, &servoutsock, &inpack->address);
-            SDLNet_Write16(1336, &(response.addr.port));
             response << "A\n";
             response << 0 << eol; // Or this for that matter (see duplicate line above)
             response << packetnum << eol;
@@ -442,7 +438,6 @@ int ServerListen()
             get >> newteam;
             
             Packet response(servoutpack, &servoutsock, &inpack->address);
-            SDLNet_Write16(1336, &(response.addr.port));
             response << "M\n";
             response << servsendpacketnum << eol;
             ++servsendpacketnum;
@@ -766,7 +761,6 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             Packet deadpacket(servoutpack, &servoutsock);
             deadpacket.ack = servsendpacketnum;
             deadpacket.addr = serverplayers[i].addr;
-            SDLNet_Write16(1336, &(deadpacket.addr.port));
             
             deadpacket << "d\n";
             deadpacket << servsendpacketnum << eol;
