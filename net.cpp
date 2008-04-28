@@ -33,10 +33,12 @@ string AddressToDD(Uint32);
 void Ack(unsigned long);
 
 list<Packet> sendqueue;
-UDPsocket outsock;
+UDPsocket socket;
 UDPpacket *outpack;
 IPaddress addr;
-SDL_mutex* sendmutex;
+// netmutex protects both the send queue and the socket shared by the send and receive threads
+SDL_mutex* netmutex;
+bool socketopen;
 
 // Gets split off as a separate thread to handle sending network packets
 int NetSend(void* dummy)
@@ -44,18 +46,11 @@ int NetSend(void* dummy)
    Uint32 lastnettick = SDL_GetTicks();
    Uint32 currnettick = 0;
    Uint32 occpacketcounter = 0;
-   sendmutex = SDL_CreateMutex();
    changeteam = 0;
    
    // Debugging
    Timer t;
    unsigned long runtimes = 0;
-   
-   if (!(outsock = SDLNet_UDP_Open(0)))  // Use any open port
-   {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
-      return -1;
-   }
    
    if (!(outpack = SDLNet_AllocPacket(5000))) // 65000 probably won't work
    {
@@ -81,11 +76,11 @@ int NetSend(void* dummy)
          if (connected)
          {
             lastnettick = currnettick;
-            Packet p(outpack, &outsock, &addr);
+            Packet p(outpack, &socket, &addr);
             p << FillUpdatePacket();
-            SDL_mutexP(sendmutex);
+            SDL_mutexP(netmutex);
             sendqueue.push_back(p);
-            SDL_mutexV(sendmutex);
+            SDL_mutexV(netmutex);
             
             sendpacketnum++;
          }
@@ -98,13 +93,13 @@ int NetSend(void* dummy)
          vector<ServerInfo>::iterator i;
          for (i = servers.begin(); i != servers.end(); ++i)
          {
-            Packet p(outpack, &outsock, &i->address);
+            Packet p(outpack, &socket, &i->address);
             SDLNet_Write16(1337, &(p.addr.port));
             p << "i\n";
             p << sendpacketnum;
-            SDL_mutexP(sendmutex);
+            SDL_mutexP(netmutex);
             sendqueue.push_back(p);
-            SDL_mutexV(sendmutex);
+            SDL_mutexV(netmutex);
             i->tick = SDL_GetTicks();
          }
          SDL_mutexV(clientmutex);
@@ -113,7 +108,7 @@ int NetSend(void* dummy)
       if (doconnect)
       {
          SDLNet_ResolveHost(&addr, serveraddr.c_str(), 1337);
-         Packet p(outpack, &outsock, &addr);
+         Packet p(outpack, &socket, &addr);
          p << "C\n";
          p << sendpacketnum << eol;
          p << player[0].unit << eol;
@@ -121,14 +116,14 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          cout << sendpacketnum << endl;
          ++sendpacketnum;
-         SDL_mutexP(sendmutex);
+         SDL_mutexP(netmutex);
          sendqueue.push_back(p);
-         SDL_mutexV(sendmutex);
+         SDL_mutexV(netmutex);
          doconnect = false;
       }
       if (spawnrequest)
       {
-         Packet p(outpack, &outsock, &addr);
+         Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "S\n";
          p << sendpacketnum << eol;
@@ -147,15 +142,15 @@ int NetSend(void* dummy)
          p << availablespawns[sel].position.z << eol;
          
          SDL_mutexV(clientmutex);
-         SDL_mutexP(sendmutex);
+         SDL_mutexP(netmutex);
          sendqueue.push_back(p);
-         SDL_mutexV(sendmutex);
+         SDL_mutexV(netmutex);
          spawnrequest = false;
       }
       SDL_mutexP(clientmutex);
       if (chatstring != "")
       {
-         Packet p(outpack, &outsock, &addr);
+         Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "T\n";
          p << sendpacketnum << eol;
@@ -164,28 +159,28 @@ int NetSend(void* dummy)
          p << chatstring << eol;
          chatstring = "";
          SDL_mutexV(clientmutex); // Just to be safe, don't hold both mutexes at once
-         SDL_mutexP(sendmutex);
+         SDL_mutexP(netmutex);
          sendqueue.push_back(p);
-         SDL_mutexV(sendmutex);
+         SDL_mutexV(netmutex);
       }
       SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see (so far so good)
       
       if (changeteam)
       {
          cout << "Changing team " << endl;
-         Packet p(outpack, &outsock, &addr);
+         Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "M\n";
          p << sendpacketnum << eol;
          ++sendpacketnum;
          p << servplayernum << eol;
          p << changeteam << eol;
-         SDL_mutexP(sendmutex);
+         SDL_mutexP(netmutex);
          sendqueue.push_back(p);
-         SDL_mutexV(sendmutex);
+         SDL_mutexV(netmutex);
          changeteam = 0;
       }
-      SDL_mutexP(sendmutex);
+      SDL_mutexP(netmutex);
       list<Packet>::iterator i = sendqueue.begin();
       while (i != sendqueue.end())
       {
@@ -200,13 +195,12 @@ int NetSend(void* dummy)
          }
          ++i;
       }
-      SDL_mutexV(sendmutex);
+      SDL_mutexV(netmutex);
       //t.stop();
    }
    
    cout << "NetSend " << runtimes << endl;
    SDLNet_FreePacket(outpack);
-   SDLNet_UDP_Close(outsock);
    return 0;
 }
 
@@ -252,7 +246,6 @@ string FillUpdatePacket()
 // Gets split off as a separate thread to handle receiving network packets
 int NetListen(void* dummy)
 {
-   UDPsocket insock;
    UDPpacket *inpack;
    unsigned int packetnum;
    float oppx, oppy, oppz;
@@ -261,11 +254,24 @@ int NetListen(void* dummy)
    string getdata;
    string packettype;
    
+   // Just for announcement packets
+   UDPsocket annsock;
+   
    // Debugging
    Timer t;
    unsigned long runtimes = 0;
    
-   if (!(insock = SDLNet_UDP_Open(1336)))
+   netmutex = SDL_CreateMutex();
+   
+   // Note: This socket should be opened before the other, on the off chance that it would choose
+   // this port.  No, I didn't learn that the hard way, but I did almost forget.
+   if (!(annsock = SDLNet_UDP_Open(1336)))
+   {
+      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      return -1;
+   }
+   
+   if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
    {
       cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
@@ -286,7 +292,9 @@ int NetListen(void* dummy)
       //t.start();
       SDL_Delay(1); // See comments for NetSend loop
       
-      while (SDLNet_UDP_Recv(insock, inpack))
+      while ((SDL_mutexP(netmutex) == 0) && 
+              SDLNet_UDP_Recv(socket, inpack) && 
+              (SDL_mutexV(netmutex) == 0))
       {
          getdata = (char*)inpack->data;
          stringstream get(getdata);
@@ -541,7 +549,7 @@ int NetListen(void* dummy)
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                list<Packet>::iterator i;
-               SDL_mutexP(sendmutex);
+               SDL_mutexP(netmutex);
                for (i = sendqueue.begin(); i != sendqueue.end(); ++i)
                {
                   if (i->ack == packetnum)
@@ -550,36 +558,20 @@ int NetListen(void* dummy)
                      break;
                   }
                }
-               SDL_mutexV(sendmutex);
+               SDL_mutexV(netmutex);
             }
          }
          else if (packettype == "P") // Ping
          {
-            Packet p(outpack, &outsock, &addr);
+            Packet p(outpack, &socket, &addr);
             p << "p\n";
             p << sendpacketnum << eol;
             p << servplayernum << eol;
-            SDL_mutexP(sendmutex);
+            SDL_mutexP(netmutex);
             sendqueue.push_back(p);
-            SDL_mutexV(sendmutex);
+            SDL_mutexV(netmutex);
          }
-         else if (packettype == "a") // Server broadcast announcement
-         {
-            ServerInfo addme;
-            addme.address = inpack->address;
-            if (knownservers.find(addme) == knownservers.end())
-            {
-               cout << "Received announcement packet from ";
-               string dotteddec = AddressToDD(inpack->address.host);
-               cout << dotteddec << endl;
-               addme.strip = dotteddec;
-               SDL_mutexP(clientmutex);
-               servers.push_back(addme);
-               SDL_mutexV(clientmutex);
-               knownservers.insert(addme); // No need to wrap this, only used here
-            }
-         }
-         else if (packettype == "i")
+         else if (packettype == "i")  // Server info
          {
             vector<ServerInfo>::iterator i;
             SDL_mutexP(clientmutex);
@@ -599,7 +591,7 @@ int NetListen(void* dummy)
             }
             SDL_mutexV(clientmutex);
          }
-         else if (packettype == "S")
+         else if (packettype == "S") // Spawn request ack
          {
             bool accepted;
             get >> accepted;
@@ -690,19 +682,48 @@ int NetListen(void* dummy)
             Ack(packetnum);
          }
       }
+      // After the while loop we have to unlock the mutex, since we didn't get to that stage before
+      SDL_mutexV(netmutex);
       //t.stop();
+      
+      // Have to listen on a specific port for server announcements.  Since this is only for LAN play
+      // it doesn't matter that this won't work with NAT
+      while (SDLNet_UDP_Recv(annsock, inpack))
+      {
+         getdata = (char*)inpack->data;
+         stringstream get(getdata);
+         
+         get >> packettype;
+         get >> packetnum;
+         if (packettype == "a")
+         {
+            ServerInfo addme;
+            addme.address = inpack->address;
+            if (knownservers.find(addme) == knownservers.end())
+            {
+               cout << "Received announcement packet from ";
+               string dotteddec = AddressToDD(inpack->address.host);
+               cout << dotteddec << endl;
+               addme.strip = dotteddec;
+               SDL_mutexP(clientmutex);
+               servers.push_back(addme);
+               SDL_mutexV(clientmutex);
+               knownservers.insert(addme); // No need to wrap this, only used here
+            }
+         }
+      }
    }
    
    cout << "NetListen " << runtimes << endl;
    SDLNet_FreePacket(inpack);
-   SDLNet_UDP_Close(insock);
+   SDLNet_UDP_Close(socket);
    return 0;
 }
 
 
 void HandleAck(unsigned long acknum)
 {
-   SDL_mutexP(sendmutex);
+   SDL_mutexP(netmutex);
    for (list<Packet>::iterator i = sendqueue.begin(); i != sendqueue.end(); ++i)
    {
       if (i->ack == acknum)
@@ -711,18 +732,18 @@ void HandleAck(unsigned long acknum)
          break;
       }
    }
-   SDL_mutexV(sendmutex);
+   SDL_mutexV(netmutex);
 }
 
 
 // This grabs the send mutex, it should probably not be called while holding the client mutex
 void Ack(unsigned long acknum)
 {
-   Packet response(outpack, &outsock, &addr);
+   Packet response(outpack, &socket, &addr);
    response << "A\n";
    response << 0 << eol;
    response << acknum << eol;
-   SDL_mutexP(sendmutex);
+   SDL_mutexP(netmutex);
    sendqueue.push_back(response);
-   SDL_mutexV(sendmutex);
+   SDL_mutexV(netmutex);
 }
