@@ -161,9 +161,10 @@ void ConsoleHandler(string command)
       }
       else if (Token(newcommand, 1) == "server")
       {
-         if (Token(newcommand, 2) == "1")
+         // Not sure this will ever go back in, probably not as it is now
+         /*if (Token(newcommand, 2) == "1")
             server = true;
-         else server = false;
+         else server = false;*/
          return;
       }
       else if (Token(newcommand, 1) == "camdist")
