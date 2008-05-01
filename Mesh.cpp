@@ -251,7 +251,8 @@ void Mesh::Load(const IniReader& reader)
    else if (type == "Terrain" || type == "Empty"){} // No-op to avoid bogus warnings
    else
    {
-      cout << "Warning: Attempted to load unknown object type " << type << endl;
+      cout << "Warning: Attempted to load unknown object type " << type;
+	  cout << " from file " << reader.GetPath() << endl;
    }
    CalcBounds();
 }
