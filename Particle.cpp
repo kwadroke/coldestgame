@@ -1,30 +1,20 @@
 #include "Particle.h"
 
-Particle::Particle(Mesh& meshin) : mesh(meshin), rewind(0), collide(false), ttl(10000), expired(false)
+
+Particle::Particle(Mesh& meshin) : mesh(meshin), unsent(true), senttimes(0), playernum(0), id(0),
+                   playerid(0), velocity(0.f), accel(1.f), weight(0.f), radius(0.f), explode(true),
+                   lasttick(0), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false)
 {
-   unsent = true;
-   senttimes = 0;
    t.start();
 }
 
 
 Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc, float w,
-                   float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin),
-                   rewind(0), collide(false), ttl(0), expired(false), id(nid)
+                   float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin), unsent(true), senttimes(0), playernum(0), id(nid),
+                   playerid(0), dir(v), pos(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
+                   lasttick(tick), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false)
 {
-   pos = p;
-   dir = v;
    dir.normalize();
-   velocity = vel;
-   accel = acc;
-   weight = w;
-   radius = rad;
-   explode = exp;
-   lasttick = tick;
-   unsent = true;
-   senttimes = 0;
-   damage = 0;
-   dmgrad = 0;
    t.start();
 }
 
