@@ -817,6 +817,7 @@ void ServerUpdatePlayer(int i)
       part.dmgrad = weapons[currplayerweapon].splashradius;
       part.unsent = true;
       part.rewind = serverplayers[i].ping;
+      part.collide = true;
                
       servparticles.push_back(part);
    }

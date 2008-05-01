@@ -11,7 +11,9 @@
 #include <windows.h>
 #endif
 
+// For debugging
 #include "IDGen.h"
+#include "Packet.h"
 
 /* Do anything function that can be handy for debugging various things
    in a more limited context than the entire engine.*/

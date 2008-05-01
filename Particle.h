@@ -19,6 +19,7 @@ class Particle
       Particle(unsigned long, Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
+      
       bool unsent;
       unsigned short senttimes;
       short playernum;

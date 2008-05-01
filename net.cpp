@@ -400,8 +400,6 @@ int NetListen(void* dummy)
                   float getvel, getacc, getweight, getrad;
                   bool getexp;
                   
-                  cout << partnum << endl;
-                  
                   get >> playernum;
                   get >> playerid;
                   get >> getdir.x >> getdir.y >> getdir.z;
@@ -457,6 +455,8 @@ int NetListen(void* dummy)
                if (checksum != value)
                {
                   cout << "Client freaking out on packet " << packetnum << endl;
+                  cout << checksum << endl << value << endl << dummy << endl;
+                  cout << debug << endl;
                }
                
                // Remove models for disconnected players
@@ -589,7 +589,9 @@ int NetListen(void* dummy)
          else if (packettype == "S") // Spawn request ack
          {
             bool accepted;
+            unsigned long acknum;
             get >> accepted;
+            get >> acknum;
             
             if (loadoutmenu.visible)
             {
@@ -607,6 +609,7 @@ int NetListen(void* dummy)
                   cout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
                }
             }
+            HandleAck(acknum);
          }
          else if (packettype == "A") // Ack packet
          {
