@@ -20,6 +20,7 @@
 #include "globals.h"
 #include "netdefs.h"
 #include "ServerState.h"
+#include "IDGen.h"
 // TODO: Does server even need to include these anymore?
 #ifdef LINUX
 #include <sys/types.h>
@@ -44,9 +45,9 @@ SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 SDL_mutex* servermutex;
-unsigned long servsendpacketnum;
+IDGen servsendpacketnum;
+IDGen nextservparticleid;
 unsigned short servertickrate;
-unsigned long nextservparticleid;
 string currentmap;
 string servername;
 list<Packet> servqueue;
@@ -114,8 +115,7 @@ int Server(void* dummy)
          break;
    }
    cout << "Chose name " << servername << " which is #" << choosename << endl;
-   servsendpacketnum = 0;
-   nextservparticleid = 1;  // 0 has special meaning
+   nextservparticleid.next(); // 0 has special meaning
    servertickrate = 30;
    maxplayers = 32;
    if (currentmap == "")
@@ -394,18 +394,17 @@ int ServerListen()
                {
                   if (serverplayers[i].connected && i != oppnum)
                   {
-                     ++servsendpacketnum;
+                     unsigned long packid = servsendpacketnum;
                      Packet temp(servoutpack, &servoutsock);
-                     temp.ack = servsendpacketnum;
+                     temp.ack = packid;
                      temp << "T\n";
-                     temp << servsendpacketnum << eol;
+                     temp << packid << eol;
                      temp << oppnum << eol;
                      temp << line << eol;
                      temp.addr = serverplayers[i].addr;
                      servqueue.push_back(temp);
                   }
                }
-               ++servsendpacketnum; // Make sure we can't end up with dup packet ids
             }
             Packet response(servoutpack, &servoutsock, &inpack->address);
             response << "A\n";
@@ -440,7 +439,6 @@ int ServerListen()
             Packet response(servoutpack, &servoutsock, &inpack->address);
             response << "M\n";
             response << servsendpacketnum << eol;
-            ++servsendpacketnum;
             response << packetnum << eol;
             response << 1 << eol;
             response << newteam << eol;
@@ -605,7 +603,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
                }
             }
             SDL_mutexV(servermutex);
-            servsendpacketnum++;
          }
          else cout << "Error: data too long\n" << flush;
          
@@ -625,7 +622,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
                servqueue.push_back(pingpack);
                serverplayers[i].pingtick = SDL_GetTicks();
             }
-            servsendpacketnum++;
             pingtick = 0;
             
             // Occasional update packet
@@ -664,7 +660,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
             bcpack << servsendpacketnum << eol;
             bcpack.Send();
             
-            servsendpacketnum++;
             SDL_mutexV(servermutex);
          }
       }
@@ -763,7 +758,7 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             deadpacket.addr = serverplayers[i].addr;
             
             deadpacket << "d\n";
-            deadpacket << servsendpacketnum << eol;
+            deadpacket << deadpacket.ack << eol; // This line is kind of strange looking, but it's okay
             servqueue.push_back(deadpacket);
          }
       }
@@ -774,11 +769,13 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
 // Note: must be called from within mutex'd code
 void ServerUpdatePlayer(int i)
 {
+   // TODO: Hmm, this doesn't really make sense.  We should move and then update the model, but we have to do
+   // this first to make sure the model has actually been loaded.  Slight refactoring is probably needed.
+   UpdatePlayerModel(serverplayers[i], servermeshes, false);
    // Movement and necessary model updates
    Rewind(serverplayers[i].ping);
    Move(serverplayers[i], servermeshes, serverkdtree);
    Rewind(0);
-   UpdatePlayerModel(serverplayers[i], servermeshes, false);
    
    // Cooling
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
@@ -813,7 +810,7 @@ void ServerUpdatePlayer(int i)
          startpos = serverplayers[i].clientpos;
       IniReader readweapon("models/" + weapons[currplayerweapon].file + "/base");
       Mesh weaponmesh(readweapon, resman);
-      Particle part(startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
+      Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.pos += part.dir * 50;
       part.playernum = i;
       part.damage = weapons[currplayerweapon].damage;
@@ -846,11 +843,14 @@ void Rewind(int ticks)
    for (size_t j = 0; j < oldstate[i].index.size(); ++j)
    {
       size_t p = oldstate[i].index[j];
-      for (size_t k = 0; k < numbodyparts; ++k)
+      if (serverplayers[p].spawned)
       {
-         serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
-                                          oldstate[i].frame[j][k], oldstate[i].animtime[j][k],
-                                          oldstate[i].animspeed[j][k]);
+         for (size_t k = 0; k < numbodyparts; ++k)
+         {
+            serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
+                                             oldstate[i].frame[j][k], oldstate[i].animtime[j][k],
+                                             oldstate[i].animspeed[j][k]);
+         }
       }
    }
 }

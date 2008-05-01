@@ -11,12 +11,12 @@
 #include <windows.h>
 #endif
 
+#include "IDGen.h"
+
 /* Do anything function that can be handy for debugging various things
    in a more limited context than the entire engine.*/
 void Debug()
 {
-
-   
    exit(0);
 }
 
@@ -94,7 +94,7 @@ void InitGlobals()
    lasttick = SDL_GetTicks();
    frames = 0;
    running = true;
-   sendpacketnum = 1;  // 0 has special meaning
+   sendpacketnum.next();  // 0 has special meaning
    recpacketnum = 0;
    ackpack = 0;
    connected = false;

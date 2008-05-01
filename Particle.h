@@ -16,7 +16,7 @@ class Particle
 {
    public:
       Particle(Mesh&);
-      Particle(Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
+      Particle(unsigned long, Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
       bool unsent;
@@ -42,7 +42,6 @@ class Particle
       bool expired;
       
    private:
-      static unsigned long nextid;
       Timer t;
 };
 

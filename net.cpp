@@ -81,8 +81,6 @@ int NetSend(void* dummy)
             SDL_mutexP(netmutex);
             sendqueue.push_back(p);
             SDL_mutexV(netmutex);
-            
-            sendpacketnum++;
          }
          occpacketcounter++;
       }
@@ -109,13 +107,11 @@ int NetSend(void* dummy)
       {
          SDLNet_ResolveHost(&addr, serveraddr.c_str(), 1337);
          Packet p(outpack, &socket, &addr);
+         p.ack = sendpacketnum;
          p << "C\n";
-         p << sendpacketnum << eol;
+         p << p.ack << eol;
          p << player[0].unit << eol;
          p << player[0].name << eol;
-         p.ack = sendpacketnum;
-         cout << sendpacketnum << endl;
-         ++sendpacketnum;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
@@ -126,8 +122,7 @@ int NetSend(void* dummy)
          Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "S\n";
-         p << sendpacketnum << eol;
-         ++sendpacketnum;
+         p << p.ack << eol;
          p << servplayernum << eol;
          SDL_mutexP(clientmutex);
          p << player[0].unit << eol;
@@ -153,8 +148,7 @@ int NetSend(void* dummy)
          Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "T\n";
-         p << sendpacketnum << eol;
-         ++sendpacketnum;
+         p << p.ack << eol;
          p << servplayernum << eol;
          p << chatstring << eol;
          chatstring = "";
@@ -171,8 +165,7 @@ int NetSend(void* dummy)
          Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "M\n";
-         p << sendpacketnum << eol;
-         ++sendpacketnum;
+         p << p.ack << eol;
          p << servplayernum << eol;
          p << changeteam << eol;
          SDL_mutexP(netmutex);
@@ -406,6 +399,8 @@ int NetListen(void* dummy)
                   Vector3 getdir, getpos;
                   float getvel, getacc, getweight, getrad;
                   bool getexp;
+                  
+                  cout << partnum << endl;
                   
                   get >> playernum;
                   get >> playerid;
