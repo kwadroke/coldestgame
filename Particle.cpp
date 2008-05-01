@@ -1,25 +1,16 @@
 #include "Particle.h"
 
-
-unsigned long Particle::nextid = 1;
-
-
 Particle::Particle(Mesh& meshin) : mesh(meshin), rewind(0), collide(false), ttl(10000), expired(false)
 {
    unsent = true;
    senttimes = 0;
    t.start();
-   /*id = nextid;
-   // Prevent overflow, not that I expect this to ever happen
-   if (nextid > 4294967294ul)
-      nextid = 0;
-   ++nextid;*/
 }
 
 
-Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
+Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc, float w,
                    float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin),
-                   rewind(0), collide(false), ttl(0), expired(false)
+                   rewind(0), collide(false), ttl(0), expired(false), id(nid)
 {
    pos = p;
    dir = v;
@@ -34,11 +25,6 @@ Particle::Particle(Vector3 p, Vector3 v, float vel, float acc, float w,
    senttimes = 0;
    damage = 0;
    dmgrad = 0;
-   id = nextid;
-   // Prevent overflow, not sure what the implications of this happening would be
-   if (nextid > 4294967294ul)
-      nextid = 0;
-   ++nextid;
    t.start();
 }
 

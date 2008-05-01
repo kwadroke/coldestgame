@@ -14,6 +14,9 @@ class Packet
       Packet(UDPpacket* outpack = NULL, UDPsocket* outsock = NULL, IPaddress* address = NULL, string s = "");
       template <typename T>
       Packet& operator<<(const T&);
+      
+      template <typename T>
+      Packet& operator<<(T&);
       void Send();
       IPaddress addr;
       string data;
@@ -27,8 +30,21 @@ class Packet
       UDPsocket* socket;
 };
 
+// Need both a const and non-const version of this function.
+// The full reasons are not clear to me, but I need to be able to pass in non-const objects
+// (IDGen is nonsensical as a const object) and const built-ins such as 0 seem to require
+// that there be a const version as well.
 template <typename T>
 Packet& Packet::operator<<(const T& s)
+{
+   stringstream write;
+   write << s;
+   data += write.str();
+   return *this;
+}
+
+template <typename T>
+Packet& Packet::operator<<(T& s)
 {
    stringstream write;
    write << s;

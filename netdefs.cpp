@@ -2,7 +2,8 @@
 
 bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
 int tickrate;
-unsigned long sendpacketnum, recpacketnum, ackpack;
+unsigned long recpacketnum, ackpack;
+IDGen sendpacketnum;
 set<unsigned long> partids;
 vector<ServerInfo> servers;
 set<ServerInfo> knownservers;

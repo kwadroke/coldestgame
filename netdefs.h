@@ -10,12 +10,14 @@
 #include "PlayerData.h"
 #include "Particle.h"
 #include "SDL.h"
+#include "IDGen.h"
 
 const char eol = '\n';
 
 extern bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
 extern int tickrate;
-extern unsigned long sendpacketnum, recpacketnum, ackpack;
+extern unsigned long recpacketnum, ackpack;
+extern IDGen sendpacketnum;
 extern set<unsigned long> partids;
 extern SDL_Thread* netout;
 extern SDL_Thread* netin;
