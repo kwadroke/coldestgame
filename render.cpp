@@ -21,6 +21,14 @@ void Repaint()
    glDepthMask(GL_TRUE);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glShadeModel(GL_SMOOTH);
+   glFogf(GL_FOG_START, viewdist * .8);
+   glFogf(GL_FOG_END, viewdist);
+   farclip = viewdist;
+   
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluPerspective(fov, aspect, nearclip, farclip);
+   
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    trislastframe = 0;

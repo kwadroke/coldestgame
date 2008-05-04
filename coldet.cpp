@@ -11,10 +11,6 @@
 #include <windows.h>
 #endif
 
-// For debugging
-#include "IDGen.h"
-#include "Packet.h"
-
 /* Do anything function that can be handy for debugging various things
    in a more limited context than the entire engine.*/
 void Debug()
@@ -145,15 +141,16 @@ void InitGUI()
    statsdisp.SetTextureManager(&resman.texman);
    statsdisp.SetActualSize(screenwidth, screenheight);
    statsdisp.InitFromFile("stats.xml");
-   console.SetTextureManager(&resman.texman);
-   console.SetActualSize(screenwidth, screenheight);
-   console.InitFromFile("console.xml");
+   consolegui.SetTextureManager(&resman.texman);
+   consolegui.SetActualSize(screenwidth, screenheight);
+   consolegui.InitFromFile("console.xml");
    // There's no particular reason not to new these, and it allows better RAII semantics
    ingamestatus = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
    ingamestatus->InitFromFile("ingamestatus.xml");
    chat = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
    chat->InitFromFile("chat.xml");
-   ConsoleBufferToGUI();
+   TextArea* consoleout = dynamic_cast<TextArea*>(consolegui.GetWidget("consoleout"));
+   console.InitWidget(*consoleout);
 }
 
 
