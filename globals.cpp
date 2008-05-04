@@ -18,7 +18,7 @@ GUI hud;                // Handles drawing the HUD
 GUI loadprogress;       // Shows loading progress
 GUI loadoutmenu;        // The loadout screen
 GUI statsdisp;          // Display FPS etc.
-GUI console;            // The in-game console
+GUI consolegui          // The in-game console
 GUIPtr ingamestatus;    // In game status pane triggered by tab key
 GUIPtr chat;            // Display and input for chat box
 
@@ -38,3 +38,4 @@ vector<SpawnPointData> spawnpoints;
 vector<SpawnPointData> availablespawns;
 bool initialized;
 bool serverhasmap;
+Console console;
