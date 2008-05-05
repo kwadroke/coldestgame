@@ -14,6 +14,8 @@ void Repaint()
 {
    static Timer t, ts;
    static bool updateclouds = true;
+   float fov = console.GetFloat("fov");
+   bool shadows = console.GetBool("shadows");
    t.start();
    
    // Apparently if this is turned off even glClear doesn't override it, so we end up never
@@ -21,6 +23,7 @@ void Repaint()
    glDepthMask(GL_TRUE);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glShadeModel(GL_SMOOTH);
+   float viewdist = console.GetFloat("viewdist");
    glFogf(GL_FOG_START, viewdist * .8);
    glFogf(GL_FOG_END, viewdist);
    farclip = viewdist;
@@ -44,7 +47,7 @@ void Repaint()
       SDL_mutexP(clientmutex);
       
       Move(player[0], meshes, kdtree);
-      if (serversync)
+      if (console.GetBool("serversync"))
          SynchronizePosition();
       localplayer = player[0];
       SDL_mutexV(clientmutex);
@@ -53,7 +56,7 @@ void Repaint()
       {
          Vector3 rots = lights.GetRots(0);
          float shadowmapsizeworld = 200 * 1.42;
-         float worldperoneshadow = shadowmapsizeworld / shadowmapsize;
+         float worldperoneshadow = shadowmapsizeworld / console.GetInt("shadowmapsize");
          
          // Find out where we're looking, a little rough ATM
          GraphicMatrix rot;
@@ -86,9 +89,9 @@ void Repaint()
       //gluLookAt(0, localplayer.size / 2.f, .01, 0, localplayer.size / 2.f, 0, 0, 1, 0);
          
       // For debugging third person view
-      if (thirdperson)
+      if (console.GetBool("thirdperson"))
       {
-         gluLookAt(0, 0, camdist, 0, 0, 0, 0, 1, 0);
+         gluLookAt(0, 0, console.GetFloat("camdist"), 0, 0, 0, 0, 1, 0);
          glPushMatrix();
       }
       
@@ -171,11 +174,11 @@ void Repaint()
    
    RenderHud();
    
-   if (showkdtree)
+   if (console.GetBool("showkdtree"))
       kdtree.visualize();
    
    // For debugging, third person view
-   if (thirdperson)
+   if (console.GetBool("thirdperson"))
    {
       glPopMatrix();
       glColor4f(1, 0, 0, .8);
@@ -231,7 +234,7 @@ void RenderObjects()
    for (iptr = m.begin(); iptr != m.end(); ++iptr)
    {
       Mesh* i = *iptr;
-      float adjustedimpdist = i->impdist * impdistmulti;
+      float adjustedimpdist = i->impdist * console.GetFloat("impdistmulti");
       adjustedimpdist *= adjustedimpdist;
       if (floatzero(i->impdist) || i->dist < adjustedimpdist || shadowrender || debug)
       {
@@ -425,11 +428,10 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    fbo.Bind();
    
    // Adjust a few global settings
-   int saveviewdist = viewdist;
-   viewdist = Light::infinity + 10000;
    glDisable(GL_FOG);
    glDisable(GL_LIGHTING);
    
+   int shadowmapsize = console.GetInt("shadowmapsize");
    glViewport(0, 0, shadowmapsize, shadowmapsize);
    
    // Set up light matrices
@@ -467,7 +469,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glDisable(GL_POLYGON_OFFSET_FILL);
    
    // Reset globals
-   glViewport(0, 0, screenwidth, screenheight);
+   glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    //glCullFace(GL_BACK);
    glShadeModel(GL_SMOOTH);
    //glDisable(GL_CULL_FACE);
@@ -475,11 +477,10 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    
    glEnable(GL_FOG);
    glEnable(GL_LIGHTING);
-   viewdist = saveviewdist;
    
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   gluPerspective(fov, aspect, nearclip, farclip);
+   gluPerspective(console.GetFloat("fov"), aspect, nearclip, farclip);
    
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -489,6 +490,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
 
 void UpdateClouds()
 {
+   int cloudres = console.GetInt("cloudres");
    UpdateNoise();
    
    cloudfbo.Bind();
@@ -530,7 +532,7 @@ void UpdateClouds()
    
    glMatrixMode(GL_MODELVIEW);
    
-   glViewport(0, 0, screenwidth, screenheight);
+   glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    resman.shaderman.UseShader("none");
    cloudfbo.Unbind();
 }
@@ -581,7 +583,7 @@ void UpdateNoise()
    
    glMatrixMode(GL_MODELVIEW);
    
-   glViewport(0, 0, screenwidth, screenheight);
+   glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    resman.shaderman.UseShader("none");
    noisefbo.Unbind();
 }
@@ -597,7 +599,7 @@ void RenderClouds()
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
-   gluPerspective(fov, aspect, 100, 10000);
+   gluPerspective(console.GetFloat("fov"), aspect, 100, 10000);
    glMatrixMode(GL_MODELVIEW);
    
    float height = 1000;
@@ -621,6 +623,7 @@ void RenderClouds()
    glPopMatrix();
    glMatrixMode(GL_MODELVIEW);
    
+   float viewdist = console.GetFloat("viewdist");
    glFogf(GL_FOG_START, viewdist * .8);
    glFogf(GL_FOG_END, viewdist);
    glEnable(GL_DEPTH_TEST);
@@ -647,7 +650,7 @@ void RenderSkybox()
    
    glPushMatrix();
    glRotatef(90, 1, 0, 0);
-   gluSphere(s, viewdist, 10, 10);
+   gluSphere(s, console.GetFloat("viewdist"), 10, 10);
    glPopMatrix();
    
    gluDeleteQuadric(s);
@@ -660,6 +663,7 @@ void RenderSkybox()
 
 void RenderWater()
 {
+   int reflectionres = console.GetInt("reflectionres");
    reflectionfbo.Bind();
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glPushMatrix();
@@ -682,13 +686,13 @@ void RenderWater()
       
       RenderClouds();
       
-      if (reflection)
+      if (console.GetBool("reflection"))
       {
          // Remember, rotations not vector
          Vector3 invlook(-localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
          Vector3 invpos = localplayer.pos;
          invpos.y *= -1;
-         kdtree.setfrustum(invpos, invlook, nearclip, viewdist, fov, aspect);
+         kdtree.setfrustum(invpos, invlook, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect);
          
          lights.Place();
          SetReflection(true);
@@ -718,7 +722,7 @@ void RenderWater()
       glMultMatrixf(camview);
       
       glMatrixMode(GL_MODELVIEW);
-      glViewport(0, 0, screenwidth, screenheight);
+      glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    }
    glPopMatrix();
    reflectionfbo.Unbind();
@@ -846,9 +850,9 @@ void RenderHud()
    hud.Render();
    loadoutmenu.Render();
    loadprogress.Render();
-   if (showfps)
+   if (console.GetBool("showfps"))
       statsdisp.Render();
-   console.Render();
+   consolegui.Render();
    ingamestatus->Render();
    chat->Render();
    
@@ -858,7 +862,7 @@ void RenderHud()
 
 void SetReflection(bool on)
 {
-   if (!reflection) on = false;
+   if (!console.GetBool("reflection")) on = false;
    reflectionrender = on;
    if (on)
    {

@@ -571,6 +571,7 @@ void GetMap(string fn)
    
    // Render static shadow map
    // Generate FBO to render to the shadow map texture
+   int shadowmapsize = console.GetInt("shadowmapsize");
 #ifndef DEBUGSMT
    if (!shadowmapfbo.IsValid())
       shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
@@ -636,19 +637,21 @@ void GetMap(string fn)
    
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    
-   impdistmulti *= 10000.f;
+   float saveidm = console.GetFloat("impdistmulti");
+   console.Parse("set impdistmulti 10000");
    lights.Place();
    RenderObjects();
    RenderWater();
-   impdistmulti /= 10000.f;
+   console.Parse("set impdistmulti " + ToString(saveidm));
    
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    
-   glViewport(0, 0, screenwidth, screenheight);
+   glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    minimapfbo.Unbind();
+   float viewdist = console.GetFloat("viewdist");
    glFogf(GL_FOG_START, viewdist * .8f);
    glFogf(GL_FOG_END, viewdist);
    

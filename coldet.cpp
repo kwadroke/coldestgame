@@ -56,34 +56,28 @@ void InitGlobals()
 {
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    // Variables that can be set by the console
-   screenwidth = 640;
-   screenheight = 480;
-   showfps = true;
-   quiet = true;
-   fly = true;
-   thirdperson = true;
-   camdist = 100;
-   consoletrans = 128;
-   movestep = 200;
-   //movestep = 100;
-   ghost = false;
-   fov = 60;
-   viewdist = 1000;
-//   coldet.intmethod = 0;
-   showkdtree = 0;
-   tickrate = 30;
-   serveraddr = "localhost";
-   doconnect = false;
-   server = false;
-   shadows = true;
-   reflection = true;
-   reflectionres = 512;
-   cloudres = 1024;
-   shadowmapsize = 1024;
-   partupdateinterval = 0;
-   serversync = true;
-   aalevel = 2;
-   impdistmulti = 1.f;
+   console.Parse("set screenwidth 640");
+   console.Parse("set screenheight 480");
+   console.Parse("set showfps 1");
+   console.Parse("set quiet 1");
+   console.Parse("set fly 0");
+   console.Parse("set thirdperson 0");
+   console.Parse("set camdist 100");
+   console.Parse("set consoletrans 128");
+   console.Parse("set movestep 200");
+   console.Parse("set ghost 0");
+   console.Parse("set fov 60");
+   console.Parse("set viewdist 1000");
+   console.Parse("set showkdtree 0");
+   console.Parse("set tickrate 30");
+   console.Parse("set serveraddr localhost");
+   console.Parse("set shadows 1");
+   console.Parse("set reflection 1");
+   console.Parse("set partupdateinterval 0");
+   console.Parse("set serversync 1");
+   console.Parse("set aa 0");
+   console.Parse("set af 1");
+   console.Parse("set impdistmulti 1");
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -95,6 +89,7 @@ void InitGlobals()
    sendpacketnum.next();  // 0 has special meaning
    recpacketnum = 0;
    ackpack = 0;
+   doconnect = false;
    connected = false;
    noiseres = 128;
    nextmap = mapname = "";
@@ -112,6 +107,14 @@ void InitGlobals()
    
    ReadConfig();
    
+   // These have to be done here because GL has to be initialized first
+   if (console.GetInt("reflectionres") < 1)
+      console.Parse("set reflectionres 512");
+   if (console.GetInt("cloudres") < 1)
+      console.Parse("set cloudres 1024");
+   if (console.GetInt("shadowmapsize") < 1)
+      console.Parse("set shadowmapsize 1024");
+   
    InitGUI();
    InitUnits();
    InitWeapons();
@@ -126,6 +129,8 @@ void InitGUI()
       cout << "Failed to initialize font system: " << TTF_GetError() << endl;
       exit(1);
    }
+   int screenwidth = console.GetInt("screenwidth");
+   int screenheight = console.GetInt("screenheight");
    mainmenu.SetTextureManager(&resman.texman);
    mainmenu.SetActualSize(screenwidth, screenheight);
    mainmenu.InitFromFile("mainmenu.xml");
@@ -149,7 +154,7 @@ void InitGUI()
    ingamestatus->InitFromFile("ingamestatus.xml");
    chat = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
    chat->InitFromFile("chat.xml");
-   TextArea* consoleout = dynamic_cast<TextArea*>(consolegui.GetWidget("consoleout"));
+   TextArea* consoleout = dynamic_cast<TextArea*>(consolegui.GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
 }
 
@@ -222,7 +227,7 @@ void ReadConfig()
    while (!getconf.eof())
    {
       getline(getconf, buffer);
-      ConsoleHandler(buffer);
+      console.Parse(buffer);
    }
 }
 
@@ -256,6 +261,7 @@ void SetupSDL()
    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
    
    // Add antialiasing support
+   int aalevel = console.GetInt("aa");
    if (aalevel)
    {
       SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -268,9 +274,9 @@ void SetupSDL()
    * SDL_GL_DOUBLEBUFFER attribute.
    */
    Uint32 flags = SDL_OPENGL;
-   if (fullscreen)
+   if (console.GetBool("fullscreen"))
       flags |= SDL_FULLSCREEN;
-   if( SDL_SetVideoMode(screenwidth, screenheight, video->vfmt->BitsPerPixel, flags) == 0 ) 
+   if( SDL_SetVideoMode(console.GetInt("screenwidth"), console.GetInt("screenheight"), video->vfmt->BitsPerPixel, flags) == 0 ) 
    {
       cout << "Couldn't set video mode: " << SDL_GetError() << endl;
       exit(1);
@@ -295,6 +301,8 @@ void SetupOpenGL()
 {
    static bool first = true;
    
+   int screenwidth = console.GetInt("screenwidth");
+   int screenheight = console.GetInt("screenheight");
    aspect = (float)screenwidth / (float)screenheight;
 
    // Make the viewport cover the whole window
@@ -303,7 +311,7 @@ void SetupOpenGL()
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    
-   gluPerspective(fov, aspect, nearclip, farclip);
+   gluPerspective(console.GetFloat("fov"), aspect, nearclip, farclip);
    //glFrustum(-1, 1, -1 / aspect, 1 / aspect, 1, 10000.);
    
    glMatrixMode(GL_MODELVIEW);
@@ -326,6 +334,7 @@ void SetupOpenGL()
    glDepthFunc(GL_LEQUAL);
    
    glDisable(GL_FOG); // Done by shader anyway
+   float viewdist = console.GetFloat("viewdist");
    glFogf(GL_FOG_START, viewdist * .8);
    glFogf(GL_FOG_END, viewdist);
    glFogf(GL_FOG_MODE, GL_LINEAR);
@@ -341,7 +350,7 @@ void SetupOpenGL()
    glAlphaFunc(GL_GREATER, 0.5);
    glDisable(GL_ALPHA_TEST);
    
-   if (aalevel)
+   if (console.GetInt("aa"))
       glEnable(GL_MULTISAMPLE);
    
    glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
@@ -384,6 +393,8 @@ void SetupOpenGL()
       exit(-8);
    }
    
+   int cloudres = console.GetInt("cloudres");
+   int reflectionres = console.GetInt("reflectionres");
    if (!cloudfbo.IsValid())
       cloudfbo = FBO(cloudres, cloudres, false, &resman.texhand);
    if (!reflectionfbo.IsValid())
@@ -576,18 +587,18 @@ bool GUIEventHandler(SDL_Event &event)
          switch(event.key.keysym.sym)
          {
             case SDLK_BACKQUOTE:
-               console.visible = !console.visible;
-               if (console.visible)
+               consolegui.visible = !consolegui.visible;
+               if (consolegui.visible)
                {
-                  GUI* consolein = console.GetWidget("consoleinput");
+                  GUI* consolein = consolegui.GetWidget("consoleinput");
                   consolein->SetActive();
                }
                eatevent = true;
                break;
             case SDLK_ESCAPE:
-               if (console.visible)
+               if (consolegui.visible)
                {
-                  console.visible = false;
+                  consolegui.visible = false;
                   eatevent = true;
                }
                if (chat->visible)
@@ -597,10 +608,10 @@ bool GUIEventHandler(SDL_Event &event)
                }
                break;
             case SDLK_RETURN:
-               if (console.visible)
+               if (consolegui.visible)
                {
-                  GUI* consolein = console.GetWidget("consoleinput");
-                  ConsoleHandler(consolein->text);
+                  GUI* consolein = consolegui.GetWidget("consoleinput");
+                  console.Parse(consolein->text);
                   consolein->text = "";
                }
                else if (!chat->visible)
@@ -658,10 +669,10 @@ bool GUIEventHandler(SDL_Event &event)
    
    if (!eatevent)
    {
-      if (console.visible)
+      if (consolegui.visible)
       {
          SDL_ShowCursor(1);
-         console.ProcessEvent(&event);
+         consolegui.ProcessEvent(&event);
       }
       if (chat->visible)
       {
@@ -676,11 +687,13 @@ bool GUIEventHandler(SDL_Event &event)
 void GameEventHandler(SDL_Event &event)
 {
    SDL_ShowCursor(0);
+   int screenwidth = console.GetInt("screenwidth");
+   int screenheight = console.GetInt("screenheight");
    SDL_mutexP(clientmutex);
    switch(event.type) 
    {
       case SDL_KEYDOWN:
-         if (!console.visible)
+         if (!consolegui.visible)
          {
             switch (event.key.keysym.sym) 
             {
@@ -758,7 +771,7 @@ void GameEventHandler(SDL_Event &event)
          
       case SDL_MOUSEMOTION:
          if ((event.motion.x != screenwidth / 2 || 
-              event.motion.y != screenheight / 2) && !console.visible)
+              event.motion.y != screenheight / 2) && !consolegui.visible)
          {
             player[0].pitch += event.motion.yrel / 4.;
             if (player[0].pitch < -90) player[0].pitch = -90;
@@ -768,7 +781,7 @@ void GameEventHandler(SDL_Event &event)
             if (player[0].rotation > 359) player[0].rotation -= 360;*/
             if (player[0].rotation < -90) player[0].rotation = -90;
             if (player[0].rotation > 90) player[0].rotation = 90;
-            if (!quiet)
+            if (!console.GetBool("quiet"))
                cout << "Pitch: " << player[0].pitch << "  Rotation: " << player[0].rotation << "\n";
             SDL_WarpMouse(screenwidth / 2, screenheight / 2);
          }
@@ -832,7 +845,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    int numticks = SDL_GetTicks() - mplayer.lastmovetick;
    mplayer.lastmovetick = SDL_GetTicks();
    if (numticks > 60) numticks = 60; // Yes this is a hack, it should be removed eventually
-   float step = (float)numticks * (movestep / 1000.);
+   float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
    if (mplayer.run) step *= 2.f;
    
    bool onground = false;
@@ -874,7 +887,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    else rot.rotatex(mplayer.pitch);
    rot.rotatey(-mplayer.facing);
    d.transform(rot);
-   if (!fly)
+   if (!console.GetBool("fly"))
       d.y = 0.f;
    d.normalize();
    
@@ -884,7 +897,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    static const float threshold = .35f;
    static float gravity = .1f;
    
-   if (fly)
+   if (console.GetBool("fly"))
       mplayer.pos.y += d.y * step;
    else
    {
@@ -924,7 +937,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    }
    
    // Did we hit something?  If so, deal with it
-   if (!ghost)
+   if (!console.GetBool("ghost"))
    {
       Vector3 offsetold = old;
       offsetold += (old - mplayer.pos) * mplayer.size; // Not sure mplayer.size is the appropriate value here
@@ -1069,7 +1082,7 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .05f;
+   float pingslop = .1f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
    
@@ -1083,11 +1096,11 @@ void SynchronizePosition()
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
    if (difference > 10.f)
-      posadj *= .5f;
+      posadj *= .7f;
    else if (!player[0].moveforward && !player[0].moveback)
       posadj *= 0.f;
    else if (difference > .3f)
-      posadj *= .3f;
+      posadj *= .5f;
    // Note: If difference < .3f then we snap to the server location, but it's not noticeable
    // because the error is so small
    
@@ -1218,7 +1231,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
    }
    Vector3 oldpos, partcheck;
    vector<Mesh*> hitmeshes;
-   if (partupd >= partupdateinterval)
+   if (partupd >= console.GetInt("partupdateinterval"))
    {
       // Update particles
       list<Particle>::iterator j = parts.begin();
@@ -1345,6 +1358,8 @@ int PowerOf2(int input)
 
 void SDL_GL_Enter2dMode()
 {
+   int screenwidth = console.GetInt("screenwidth");
+   int screenheight = console.GetInt("screenheight");
    // Make the viewport cover the whole window
    glViewport(0, 0, screenwidth, screenheight);
 

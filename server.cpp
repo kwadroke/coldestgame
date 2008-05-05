@@ -118,8 +118,8 @@ int Server(void* dummy)
    nextservparticleid.next(); // 0 has special meaning
    servertickrate = 30;
    maxplayers = 32;
-   if (currentmap == "")
-      currentmap = "newtest";
+   if (console.GetString("map") == "")
+      console.Parse("set map newtest");
    ServerLoadMap();
    PlayerData local(servermeshes); // Dummy placeholder for the local player
    serverplayers.push_back(local);
@@ -170,7 +170,7 @@ int ServerListen()
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
-      if ("maps/" + currentmap != mapname) // If the server changed maps load the new one
+      if ("maps/" + console.GetString("map") != mapname) // If the server changed maps load the new one
       {
          ServerLoadMap();
       }
@@ -314,7 +314,7 @@ int ServerListen()
             fill << "c\n";
             fill << packetnum << eol;
             fill << respondto << eol;
-            fill << currentmap << eol;
+            fill << console.GetString("map") << eol;
             //cout << "Server Sent ACK" << packetnum << " to player " << respondto << endl;
             
             fill.addr = serverplayers[respondto].addr;
@@ -336,7 +336,7 @@ int ServerListen()
             response << 0 << eol; // Don't care about the packet number
             SDL_mutexP(servermutex);
             response << servername << eol;
-            response << currentmap << eol;
+            response << console.GetString("map") << eol;
             response << serverplayers.size() << eol;
             response << maxplayers << eol;
             servqueue.push_back(response);
@@ -692,7 +692,7 @@ void ServerLoadMap()
 {
    SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
    serverhasmap = false;
-   nextmap = "maps/" + currentmap;
+   nextmap = "maps/" + console.GetString("map");
    while (mapname != nextmap)
    {
       SDL_Delay(1); // Wait for main thread to load map

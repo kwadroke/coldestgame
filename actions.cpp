@@ -33,8 +33,8 @@ void Connect()
       ++counter;
    }
    SDL_mutexV(clientmutex);
-   ConsoleHandler("set serveraddr " + serveraddress);
-   ConsoleHandler("connect");
+   console.Parse("set serveraddr " + serveraddress);
+   console.Parse("connect");
    mainmenu.visible = false;
    loadoutmenu.visible = true;
 }
@@ -43,8 +43,8 @@ void Connect()
 void ConnectToIp()
 {
    GUI* servname = mainmenu.GetWidget("servername");
-   ConsoleHandler("set serveraddr " + servname->text);
-   ConsoleHandler("connect");
+   console.Parse("set serveraddr " + servname->text);
+   console.Parse("connect");
    mainmenu.visible = false;
    loadoutmenu.visible = true;
 }
@@ -54,8 +54,8 @@ void Host()
 {
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
-   ConsoleHandler("set serveraddr localhost");
-   ConsoleHandler("connect");
+   console.Parse("set serveraddr localhost");
+   console.Parse("connect");
    mainmenu.visible = false;
    loadoutmenu.visible = true;
 }
@@ -114,12 +114,12 @@ void UpdateUnitSelection()
 void SubmitCommand()
 {
    cout << "Submitting command" << endl;
-   LineEdit* currcommand = (LineEdit*)console.GetWidget("consoleinput");
-   TextArea* consoleout = (TextArea*)console.GetWidget("consoleoutput");
-   ConsoleHandler(currcommand->text);
+   LineEdit* currcommand = (LineEdit*)consolegui.GetWidget("consoleinput");
+   TextArea* consoleout = (TextArea*)consolegui.GetWidget("consoleoutput");
+   console.Parse(currcommand->text);
    consoleout->Append(currcommand->text + '\n');
    currcommand->text = "";
-   console.visible = false;
+   consolegui.visible = false;
 }
 
 

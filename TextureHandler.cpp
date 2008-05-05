@@ -1,6 +1,6 @@
 #include "TextureHandler.h"
 
-TextureHandler::TextureHandler()
+TextureHandler::TextureHandler() : af(1.f)
 {
    for (int i = 0; i < 8; ++i)
    {
@@ -9,7 +9,6 @@ TextureHandler::TextureHandler()
    }
    curractive = 0;
    dummytex = 0;
-   af = 1.f;
 }
 
 /* Takes the name of the image, the OpenGL texture id to store it in, and a bool to
