@@ -7,14 +7,12 @@
 CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
 {
    intmethod = 0;
-   quiet = true;
 }
 
 
 CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 {
    intmethod = o.intmethod;
-   quiet = o.quiet;
    tilesize = o.tilesize;
    worldbounds = o.worldbounds;
    return *this;

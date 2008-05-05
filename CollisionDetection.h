@@ -27,7 +27,6 @@ class CollisionDetection
       Vector3 PlaneSphereCollision(Vector3vec, const Vector3&, const Vector3&, const float&, const bool debug = false);
       Vector3 PlaneEdgeSphereCollision(Vector3vec, const Vector3&, const float&);
       int intmethod;
-      bool quiet;
       int tilesize;
       vector<Quad> worldbounds;
       

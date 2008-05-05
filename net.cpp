@@ -71,7 +71,7 @@ int NetSend(void* dummy)
       SDL_Delay(1);
       
       currnettick = SDL_GetTicks();
-      if (currnettick - lastnettick >= 1000 / tickrate)
+      if (currnettick - lastnettick >= 1000 / console.GetInt("tickrate"))
       {
          if (connected)
          {
@@ -105,7 +105,7 @@ int NetSend(void* dummy)
       }
       if (doconnect)
       {
-         SDLNet_ResolveHost(&addr, serveraddr.c_str(), 1337);
+         SDLNet_ResolveHost(&addr, console.GetString("serveraddr").c_str(), 1337);
          Packet p(outpack, &socket, &addr);
          p.ack = sendpacketnum;
          p << "C\n";

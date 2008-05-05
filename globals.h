@@ -12,6 +12,7 @@
 #include "CollisionDetection.h"
 #include "Particle.h"
 #include "ObjectKDTree.h"
+#include "Console.h"
 
 #define PI 3.14159265
 
@@ -24,12 +25,6 @@ using std::set;
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 const string objectfilever = "Version3";
 
-extern bool fly;               // Allow flying
-extern bool ghost;             // Walk through walls
-extern bool quiet;             // Limit output to console (system, not in-game)
-extern bool fullscreen;        // Indicate whether to run in a window
-extern int movestep;           // Keep movement equal at all framerates
-extern int aalevel;            // How much antialiasing to apply
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
@@ -42,10 +37,9 @@ extern GUI hud;                // Handles drawing the HUD
 extern GUI loadprogress;       // Shows loading progress
 extern GUI loadoutmenu;        // The loadout screen
 extern GUI statsdisp;          // Display FPS etc.
-extern GUI console;            // The in-game console
+extern GUI consolegui;         // The in-game console
 extern GUIPtr ingamestatus;
 extern GUIPtr chat;
-extern int partupdateinterval; // Update particles every this many frames
 //extern TextureManager *texman;  // Handles string versions of texture identifiers
 extern ResourceManager resman; // Handles loading and organizing different resources
 extern vector<PlayerData> player;
@@ -62,6 +56,7 @@ extern vector<SpawnPointData> availablespawns;
 extern bool initialized;
 extern Meshlist meshes;
 extern bool serverhasmap;
+extern Console console;
 
 template <typename T>
 string ToString(const T &input)

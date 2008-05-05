@@ -1,4 +1,5 @@
 #include "Console.h"
+#include "globals.h"
 
 Console::Console() : consoleout(NULL)
 {
@@ -188,7 +189,7 @@ void Console::Action(const string& action)
       int value = GetInt("shadowmapsize");
       if (value >= 8  && value <= 8192)
       {
-         shadowmapsize = value;
+         int shadowmapsize = value;
 #ifndef DEBUGSMT
          shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
 #else
@@ -202,7 +203,7 @@ void Console::Action(const string& action)
       int value = GetInt("reflectionres");
       if (value >= 8  && value <= 8192)
       {
-         reflectionres = value;
+         int reflectionres = value;
          reflectionfbo = FBO(reflectionres, reflectionres, false, &resman.texhand);
          if (initialized)
          {
@@ -217,7 +218,7 @@ void Console::Action(const string& action)
       int value = GetInt("cloudres");
       if (value >= 8  && value <= 8192)
       {
-         cloudres = value;
+         int cloudres = value;
          cloudfbo = FBO(cloudres, cloudres, false, &resman.texhand);
       }
       else WriteToConsole(string("Invalid value"));
@@ -227,5 +228,9 @@ void Console::Action(const string& action)
       SDL_mutexP(clientmutex);
       player[0].name = GetString("name");
       SDL_mutexV(clientmutex);
+   }
+   else if (action == "af action")
+   {
+      resman.texhand.af = GetFloat("af");
    }
 }

@@ -15,7 +15,6 @@
 const char eol = '\n';
 
 extern bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
-extern int tickrate;
 extern unsigned long recpacketnum, ackpack;
 extern IDGen sendpacketnum;
 extern set<unsigned long> partids;
@@ -23,7 +22,6 @@ extern SDL_Thread* netout;
 extern SDL_Thread* netin;
 extern vector<ServerInfo> servers;
 extern set<ServerInfo> knownservers;
-extern string serveraddr;
 extern string chatstring;
 extern vector<string> newchatlines;
 extern vector<unsigned short> newchatplayers;

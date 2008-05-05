@@ -8,7 +8,6 @@
 #include "gui/TextArea.h"
 #include "renderdefs.h"
 #include "netdefs.h"
-#include "globals.h"
 #include "Packet.h"
 
 using std::map;
