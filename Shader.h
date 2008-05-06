@@ -10,6 +10,8 @@
 
 using namespace std;
 
+typedef map<string, GLhandleARB> progmap;
+
 class Shader
 {
    public:
@@ -23,6 +25,8 @@ class Shader
       void BindAttribLocation(string, GLuint, string);
       string CurrentShader();
       void ForgetCurrent();
+      void SetShadow(bool);
+      void ReloadAll();
    
    private:
       GLhandleARB CreatePixelShader();
@@ -34,6 +38,7 @@ class Shader
       
       string currshader;
       map<string, GLhandleARB> programs;
+      bool shadows;
 };
 
 #endif

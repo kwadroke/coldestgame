@@ -1,9 +1,9 @@
 Vertex:
 standardvert.glsl
 Pixel:
-shadowfrag.glsl
-fogfrag.glsl
-basiclighting.glsl
+$shadow
+$fog
+$basiclight
 standardfrag.glsl
 Uniforms:
 int tex 0
