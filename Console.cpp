@@ -84,7 +84,7 @@ string Console::Token(const string& str, int tokennum)
    bool found = false;
    int count = 0;
    string newstr = str;
-   while(!found)
+   while(!found && newstr.size())
    {
       for (int i = 0; i < newstr.size(); i++)
       {
