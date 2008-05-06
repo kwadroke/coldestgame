@@ -224,10 +224,11 @@ void ReadConfig()
    string buffer;
    
    ifstream getconf(conffile.c_str(), ios_base::in);
+   getline(getconf, buffer);
    while (!getconf.eof())
    {
-      getline(getconf, buffer);
       console.Parse(buffer);
+      getline(getconf, buffer);
    }
 }
 
