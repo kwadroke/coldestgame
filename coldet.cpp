@@ -35,6 +35,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    //Debug();
    initialized = false;
    InitGlobals();
+   initialized = true;
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
    //SetupSDL();
    //SetupOpenGL();
@@ -45,7 +46,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    // Start network threads
    netin = SDL_CreateThread(NetListen, NULL);
    
-   initialized = true;
    MainLoop();
 
    return 0;
@@ -393,12 +393,6 @@ void SetupOpenGL()
       exit(-8);
    }
    
-   int cloudres = console.GetInt("cloudres");
-   int reflectionres = console.GetInt("reflectionres");
-   if (!cloudfbo.IsValid())
-      cloudfbo = FBO(cloudres, cloudres, false, &resman.texhand);
-   if (!reflectionfbo.IsValid())
-      reflectionfbo = FBO(reflectionres, reflectionres, false, &resman.texhand);
    noisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
    resman.texhand.BindTexture(noisefbo.GetTexture());
    // Need different tex params for this texture
@@ -416,6 +410,9 @@ void LoadMaterials()
 
 void InitShaders()
 {
+   if (!initialized) return;
+   resman.shaderman.SetShadow(console.GetBool("shadows"));
+   resman.shaderman.ReloadAll();
    resman.shaderman.LoadShader(standardshader);
    
    resman.shaderman.LoadShader(noiseshader);

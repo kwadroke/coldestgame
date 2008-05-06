@@ -1,15 +1,14 @@
 #include "Shader.h"
 
-Shader::Shader()
+Shader::Shader() : currshader("none"), shadows(true)
 {
-   currshader = "none";
    programs.insert(make_pair("none", 0));
 }
 
 
 void Shader::LoadShader(string file)
 {
-   if (programs.find(file) != programs.end()) return;
+   if (programs.find(file) != programs.end() || file == "none") return;
    
    cout << "Loading " << file << endl;
    ifstream in(file.c_str());
@@ -20,19 +19,33 @@ void Shader::LoadShader(string file)
    
    getline(in, buffer);
    getline(in, buffer);
-   while (buffer != "Pixel:")
+   while (buffer != "Pixel:") // Read vertex shaders
    {
       shader = CreateVertexShader();
       InitShader(shader, buffer);
       AttachShader(program, shader);
+      // Okay, this requires some explanation...it seems to me that since the shader
+      // won't actually be deleted until it is detached from its program, I can call
+      // delete on it right away, and then when I later delete the program the shader
+      // will be automatically deleted too.  At least this is my hope, it seems like
+      // a slightly obscure usage of this function so whether it will work correctly
+      // or not is up for debate
+      glDeleteShader(shader);
       getline(in, buffer);
    }
    getline(in, buffer);
-   while (buffer != "Uniforms:" && !in.eof())
+   while (buffer != "Uniforms:" && !in.eof()) // Read pixel shaders
    {
+      if (buffer == "$shadow")
+         buffer = shadows ? "shadowfrag.glsl" : "noshadowfrag.glsl";
+      else if (buffer == "$fog")
+         buffer = "fogfrag.glsl"; // Currently no other available, may change though
+      else if (buffer == "$basiclight")
+         buffer = "basiclighting.glsl"; // Ditto
       shader = CreatePixelShader();
       InitShader(shader, buffer);
       AttachShader(program, shader);
+      glDeleteShader(shader);
       getline(in, buffer);
    }
    
@@ -61,14 +74,11 @@ void Shader::LoadShader(string file)
          free(infoLog);
       }
       
-      exit(-13);
+      //exit(-13);
    }
    
    UseProgram(0);
-   programs.insert(make_pair(file, program));
-   // If the entry already exists then the above will do nothing, but at least now we know for sure
-   // that the key exists, so we can set it and then even if it was already present it gets the new
-   // value.  Notes that this is currently a memory leak if that happens
+   
    programs[file] = program;
    
    // Set uniforms
@@ -93,7 +103,6 @@ void Shader::LoadShader(string file)
 
 void Shader::UseShader(string name)
 {
-   //return; // Nerf shaders for testing
    if (currshader != name)
    {
       currshader = name;
@@ -215,5 +224,32 @@ int Shader::GetAttribLocation(string shader, string name)
 void Shader::BindAttribLocation(string shader, GLuint location, string name)
 {
    glBindAttribLocationARB(programs[shader], location, name.c_str());
+}
+
+
+void Shader::SetShadow(bool useshadow)
+{
+   shadows = useshadow;
+   ReloadAll();
+}
+
+
+void Shader::ReloadAll()
+{
+   vector<string> shaderlist;
+   progmap::iterator i = programs.begin();
+   // First in map is always "none" so skip it
+   for (++i; i != programs.end(); ++i)
+   {
+      // See long explanation in LoadShader for why we don't delete shaders here
+      glDeleteProgram(i->second);
+      shaderlist.push_back(i->first);
+   }
+   programs.clear();
+   programs["none"] = 0;
+   for (size_t i = 0; i < shaderlist.size(); ++i)
+   {
+      LoadShader(shaderlist[i]);
+   }
 }
 

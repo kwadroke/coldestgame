@@ -1,9 +1,9 @@
 Vertex:
 terrainvert.glsl
 Pixel:
-shadowfrag.glsl
-fogfrag.glsl
-basiclighting.glsl
+$shadow
+$fog
+$basiclight
 terrainfrag.glsl
 Uniforms:
 int tex 0

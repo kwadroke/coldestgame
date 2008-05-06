@@ -1,9 +1,9 @@
 Vertex:
 bumpvert.glsl
 Pixel:
-fogfrag.glsl
-shadowfrag.glsl
-basiclighting.glsl
+$fog
+$shadow
+$basiclight
 bumpfrag.glsl
 Uniforms:
 int tex 0

@@ -1,7 +1,7 @@
 Vertex:
 flatvert.glsl
 Pixel:
-fogfrag.glsl
+$fog
 flatfrag.glsl
 Uniforms:
 int tex 0
