@@ -24,16 +24,22 @@ class CollisionDetection
                              vector<Mesh*>* = NULL, const bool debug = false);
       Vector3 CheckSphereHitDebug(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
                              vector<Mesh*>* = NULL);
-      Vector3 PlaneSphereCollision(Vector3vec, const Vector3&, const Vector3&, const float&, const bool debug = false);
-      Vector3 PlaneEdgeSphereCollision(Vector3vec, const Vector3&, const float&);
+      bool UnitTest();
+      
       int intmethod;
       int tilesize;
       vector<Quad> worldbounds;
       
    private:
+      Vector3 PlaneSphereCollision(Vector3vec, const Vector3&, const Vector3&, const float&, const bool debug = false);
+      Vector3 PlaneEdgeSphereCollision(const Vector3vec&, const Vector3&, const float&);
+      Vector3 VectorEdgeCheck(const Vector3vec&, const Vector3&, const Vector3&, const float&);
       bool InVector(Mesh*, vector<Meshlist::iterator>&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const Vector3&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&, float&, Vector3&);
+      float DistanceBetweenLines(const Vector3& start, const Vector3& dir, const Vector3& start1, const Vector3& dir1, float&, float&);
+      bool RaySphereCheck(const Vector3& raystart, const Vector3& rayend,
+                     const Vector3& spherepos, const float radius, Vector3& adjust);
 };
 #endif
