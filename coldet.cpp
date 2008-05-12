@@ -15,6 +15,8 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
+   CollisionDetection cd;
+   cd.UnitTest();
    exit(0);
 }
 
