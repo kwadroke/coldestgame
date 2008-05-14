@@ -351,9 +351,12 @@ int ServerListen()
                cout << "Player " << oppnum << " is spawning" << endl;
                SDL_mutexP(servermutex);
                get >> serverplayers[oppnum].unit;
+               int weapid;
                for (int i = 0; i < numbodyparts; ++i)
                {
-                  get >> serverplayers[oppnum].weapons[i];
+                  get >> weapid;
+                  if (serverplayers[oppnum].weapons[i].Id() != weapid)
+                     serverplayers[oppnum].weapons[i] = Weapon(weapid);
                }
                Vector3 spawnpointreq;
                get >> spawnpointreq.x;
@@ -778,6 +781,9 @@ void ServerUpdatePlayer(int i)
    Rewind(0);
    
    // Cooling
+   float coolrate = .01f;
+   if (serverplayers[i].item == HeatSink)
+      coolrate = .02f;
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
    serverplayers[i].lastcoolingtick += ticks;
    serverplayers[i].temperature -= ticks * .01;
@@ -785,11 +791,11 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Shots fired!
-   short currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
-   if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= weapons[currplayerweapon].reloadtime))
+   Weapon currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
+   if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= currplayerweapon.ReloadTime()))
    {
       serverplayers[i].lastfiretick = SDL_GetTicks();
-      serverplayers[i].temperature += weapons[currplayerweapon].heat;
+      serverplayers[i].temperature += currplayerweapon.Heat();
       Vector3 dir(0, 0, -1);
       GraphicMatrix m;
       m.rotatex(-serverplayers[i].pitch);
@@ -797,24 +803,24 @@ void ServerUpdatePlayer(int i)
       //m.rotatez(player[0].roll);
       dir.transform(m.members);
                
-      float vel = weapons[currplayerweapon].velocity;
-      float acc = weapons[currplayerweapon].acceleration;
-      float w = weapons[currplayerweapon].weight;
-      float rad = weapons[currplayerweapon].radius;
-      bool exp = weapons[currplayerweapon].explode;
+      float vel = currplayerweapon.Velocity();
+      float acc = currplayerweapon.Acceleration();
+      float w = currplayerweapon.Weight();
+      float rad = currplayerweapon.Radius();
+      bool exp = currplayerweapon.Explode();
       Vector3 startpos = serverplayers[i].pos;
       /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
       slide the player around as much because this way they see their shots going exactly where
       they expect, even if the positions don't match exactly (and they rarely will:-).*/
       if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
          startpos = serverplayers[i].clientpos;
-      IniReader readweapon("models/" + weapons[currplayerweapon].file + "/base");
+      IniReader readweapon("models/" + currplayerweapon.ModelFile() + "/base");
       Mesh weaponmesh(readweapon, resman);
       Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.pos += part.dir * 50;
       part.playernum = i;
-      part.damage = weapons[currplayerweapon].damage;
-      part.dmgrad = weapons[currplayerweapon].splashradius;
+      part.damage = currplayerweapon.Damage();
+      part.dmgrad = currplayerweapon.Splash();
       part.unsent = true;
       part.rewind = serverplayers[i].ping;
       part.collide = true;

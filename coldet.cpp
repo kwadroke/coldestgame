@@ -181,6 +181,7 @@ void InitUnits()
 
 void InitWeapons()
 {
+#if 0
    WeaponData dummy;
    dummy.file = "projectile";
    dummy.name = "None";
@@ -217,6 +218,7 @@ void InitWeapons()
    weapons[Mortar].velocity = .5f;
    weapons[Mortar].weight = 1.f;
    weapons[Mortar].name = "Mortar";
+#endif
 }
 
 

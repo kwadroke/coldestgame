@@ -26,6 +26,7 @@ class IniReader
       const IniReader& GetItemByName(const string) const;
       int GetItemIndex(const string) const;
       string Read(string&, const string, const int num = 0) const;
+      string ReadLine(string&, const string) const;
       int Read(int&, const string, const int num = 0) const;
       float Read(float&, const string, const int num = 0) const;
       bool Read(bool&, const string, const int num = 0) const;

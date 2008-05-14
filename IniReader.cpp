@@ -108,6 +108,19 @@ string IniReader::Read(string& ret, const string name, const int num) const
 }
 
 
+string IniReader::ReadLine(string& ret, const string name) const
+{
+   if (HaveValue(name, 0))
+   {
+      stringstream readval(values[name]);
+      readval >> ret;
+      readval.ignore();
+      getline(readval, ret);
+   }
+   return ret;
+}
+
+
 int IniReader::Read(int& ret, const string name, const int num) const
 {
    if (HaveValue(name, num))

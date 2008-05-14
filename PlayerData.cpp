@@ -28,9 +28,10 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(
    ping = 0;
    temperature = 0.f;
    fallvelocity = 0.f;
+   Weapon none(Weapon::NoWeapon);
    for (int i = 0; i < numbodyparts; ++i)
    {
-      weapons.push_back(Empty);
+      weapons.push_back(none);
       hp[i] = 100;
    }
 }

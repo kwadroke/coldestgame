@@ -44,7 +44,6 @@ extern GUIPtr chat;
 extern ResourceManager resman; // Handles loading and organizing different resources
 extern vector<PlayerData> player;
 extern vector<UnitData> units;
-extern vector<WeaponData> weapons;
 extern bool server;
 extern int servplayernum;
 extern SDL_Thread* serverthread;
