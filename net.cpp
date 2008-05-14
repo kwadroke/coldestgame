@@ -128,7 +128,7 @@ int NetSend(void* dummy)
          p << player[0].unit << eol;
          for (int i = 0; i < numbodyparts; ++i)
          {
-            p << player[0].weapons[i] << eol;
+            p << player[0].weapons[i].Id() << eol;
          }
          ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
          int sel = spawnpointsbox->Selected();

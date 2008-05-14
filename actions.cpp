@@ -99,15 +99,16 @@ void UpdateUnitSelection()
    ComboBox* itembox = (ComboBox*)loadoutmenu.GetWidget("Item");
    
    player[0].unit = unitbox->Selected();
-   player[0].weapons[Torso] = torsobox->Selected();
-   if (player[0].weapons[Torso] < 0 || player[0].weapons[Torso] > numweapons)
-      player[0].weapons[Torso] = 0;
-   player[0].weapons[LArm] = larmbox->Selected();
-   if (player[0].weapons[LArm] < 0 || player[0].weapons[LArm] > numweapons)
-      player[0].weapons[LArm] = 0;
-   player[0].weapons[RArm] = rarmbox->Selected();
-   if (player[0].weapons[RArm] < 0 || player[0].weapons[RArm] > numweapons)
-      player[0].weapons[RArm] = 0;
+   int weapid;
+   weapid = torsobox->Selected();
+   if (weapid >= 0 && weapid < Weapon::numweapons)
+      player[0].weapons[Torso] = Weapon(weapid);
+   weapid = larmbox->Selected();
+   if (weapid >= 0 && weapid < Weapon::numweapons)
+      player[0].weapons[LArm] = Weapon(weapid);
+   weapid = rarmbox->Selected();
+   if (weapid >= 0 && weapid < Weapon::numweapons)
+      player[0].weapons[RArm] = Weapon(weapid);
 }
 
 

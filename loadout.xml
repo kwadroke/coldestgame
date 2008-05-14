@@ -61,6 +61,11 @@
    <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
+      <ComboBoxItem>None</ComboBoxItem>
+      <ComboBoxItem>Spawn Point</ComboBoxItem>
+      <ComboBoxItem>Heat Sink</ComboBoxItem>
+      <ComboBoxItem>Ammo Carrier</ComboBoxItem>
+      <ComboBoxItem>Radar</ComboBoxItem>
    </ComboBox>
    <Button x="700" y="900" width="200" height="50" text="Spawn" align="center"
            normal="textures/buttonnorm.png"

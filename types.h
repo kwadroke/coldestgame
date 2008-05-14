@@ -15,9 +15,10 @@ using std::string;
    actually has.  Iterating from 0...lastitem - 1 (i.e. numweapons) should always hit
    each possible weapon.*/
 // Note: If you change the Weapon or Unit enums you need to alter the GUI as well to match
-enum Weapons{Empty, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, numweapons};
+
 enum Units{UnitTest, Ultra, Omega, numunits};
 enum BodyParts{Legs, Torso, LArm, RArm, numbodyparts};
+enum Items{NoItem, SpawnPoint, HeatSink, AmmoCarrier, Radar, numitems};
 
 typedef vector<float> floatvec;
 typedef vector<int> intvec;
@@ -32,28 +33,6 @@ struct UnitData
    float turnspeed;
    float maxspeed;
    float size;
-   Vector3 larmattach;
-   Vector3 rarmattach;
-   Vector3 legattach;
-   Vector3 lweapattach;
-   Vector3 rweapattach;
-   Vector3 torsoweapattach;
-};
-
-
-struct WeaponData
-{
-   float radius;
-   float velocity;
-   float acceleration;
-   float splashradius;
-   float weight;
-   float heat;
-   int damage;
-   int reloadtime;
-   bool explode;
-   string file;
-   string name;
 };
 
 

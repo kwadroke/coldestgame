@@ -798,9 +798,9 @@ void RenderHud()
    leftarmhplabel->text = "Left Arm: " + ToString(localplayer.hp[LArm]);
    rightarmhplabel->text = "Right Arm: " + ToString(localplayer.hp[RArm]);
    
-   torsoweaponlabel->text = weapons[localplayer.weapons[Torso]].name;
-   larmweaponlabel->text = weapons[localplayer.weapons[LArm]].name;
-   rarmweaponlabel->text = weapons[localplayer.weapons[RArm]].name;
+   torsoweaponlabel->text = localplayer.weapons[Torso].Name();
+   larmweaponlabel->text = localplayer.weapons[LArm].Name();
+   rarmweaponlabel->text = localplayer.weapons[RArm].Name();
    if (localplayer.currweapon == Torso)
       torsoselectedlabel->visible = true;
    else torsoselectedlabel->visible = false;

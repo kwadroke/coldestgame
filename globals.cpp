@@ -20,7 +20,6 @@ GUIPtr chat;            // Display and input for chat box
 ResourceManager resman; // Handles loading and organizing different resources
 vector<PlayerData> player;
 vector<UnitData> units;
-vector<WeaponData> weapons;
 bool server;            // Determines whether to start a server
 int servplayernum;
 SDL_Thread* serverthread;

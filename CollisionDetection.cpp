@@ -357,7 +357,6 @@ Vector3 CollisionDetection::VectorEdgeCheck(const Vector3vec& v, const Vector3& 
       {
          if (j < -1e-5 || k < -1e-5 || j > 1 || k > 1) // No hit
             continue;
-         cout << "Hit edge " << j << "  " << k << "  " << dist<< endl;
          return Vector3(1, 1, 1);
       }
    }

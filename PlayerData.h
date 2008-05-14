@@ -9,6 +9,7 @@
 #include "Mesh.h"
 #include "Hit.h"
 #include "types.h"
+#include "Weapon.h"
 
 class PlayerData
 {
@@ -24,13 +25,10 @@ class PlayerData
       bool leftclick, rightclick;
       bool run;
       bool spawned;
-      //Meshlist::iterator torso, legs, larm, rarm;
       vector<Meshlist::iterator> mesh;
       set<unsigned long> partids;
-      //set<unsigned long> hitids;
       set<unsigned long> acked;
-      //list<Hit> servhits;  // Used by server only
-      vector<short> weapons;
+      vector<Weapon> weapons;
       Uint32 lastupdate;  // How long since last player update?
       Uint32 lastmovetick;
       Uint32 lastfiretick;
@@ -44,6 +42,7 @@ class PlayerData
       unsigned long spawnpacketnum;
       short unit;
       short currweapon;
+      short item;
       short pingtick;
       short ping;
       short hp[numbodyparts];
