@@ -2,7 +2,7 @@
 
 Weapon::Weapon(const int newid) : id(newid), damage(10), radius(10.f), velocity(1.f), acceleration(1.f),
                splashradius(0.f), weight(1.f), heat(0.f), reloadtime(50), explode(true), modelfile("projectile"),
-               name("None")
+               name("None"), ammo(0)
 {
    switch (newid)
    {
