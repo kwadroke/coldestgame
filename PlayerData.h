@@ -10,6 +10,7 @@
 #include "Hit.h"
 #include "types.h"
 #include "Weapon.h"
+#include "Item.h"
 
 class PlayerData
 {
@@ -29,6 +30,7 @@ class PlayerData
       set<unsigned long> partids;
       set<unsigned long> acked;
       vector<Weapon> weapons;
+      Item item;
       Uint32 lastupdate;  // How long since last player update?
       Uint32 lastmovetick;
       Uint32 lastfiretick;
@@ -42,7 +44,6 @@ class PlayerData
       unsigned long spawnpacketnum;
       short unit;
       short currweapon;
-      short item;
       short pingtick;
       short ping;
       short hp[numbodyparts];

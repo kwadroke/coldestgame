@@ -109,6 +109,10 @@ void UpdateUnitSelection()
    weapid = rarmbox->Selected();
    if (weapid >= 0 && weapid < Weapon::numweapons)
       player[0].weapons[RArm] = Weapon(weapid);
+   int itemid;
+   itemid = itembox->Selected();
+   if (itemid >= 0 && itemid < Item::numitems)
+      player[0].item = Item(itemid);
 }
 
 

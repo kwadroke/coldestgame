@@ -1,5 +1,5 @@
-#ifndef WEAPON_H
-#define WEAPON_H
+#ifndef __WEAPON_H
+#define __WEAPON_H
 
 #include "IniReader.h"
 
@@ -30,6 +30,7 @@ class Weapon
       
       int id;
       int damage;
+      int ammo;
       float radius;
       float velocity;
       float acceleration;

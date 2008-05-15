@@ -358,6 +358,10 @@ int ServerListen()
                   if (serverplayers[oppnum].weapons[i].Id() != weapid)
                      serverplayers[oppnum].weapons[i] = Weapon(weapid);
                }
+               int itemid;
+               get >> itemid;
+               if (serverplayers[oppnum].item.Id() != itemid)
+                  serverplayers[oppnum].item = Item(itemid);
                Vector3 spawnpointreq;
                get >> spawnpointreq.x;
                get >> spawnpointreq.y;
@@ -782,11 +786,10 @@ void ServerUpdatePlayer(int i)
    
    // Cooling
    float coolrate = .01f;
-   if (serverplayers[i].item == HeatSink)
-      coolrate = .02f;
+   coolrate *= serverplayers[i].item.CoolMult();
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
    serverplayers[i].lastcoolingtick += ticks;
-   serverplayers[i].temperature -= ticks * .01;
+   serverplayers[i].temperature -= ticks * coolrate;
    if (serverplayers[i].temperature < 0)
       serverplayers[i].temperature = 0;
    

@@ -130,6 +130,7 @@ int NetSend(void* dummy)
          {
             p << player[0].weapons[i].Id() << eol;
          }
+         p << player[0].item.Id() << eol;
          ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
          int sel = spawnpointsbox->Selected();
          p << availablespawns[sel].position.x << eol;
