@@ -26,6 +26,8 @@ extern string chatstring;
 extern vector<string> newchatlines;
 extern vector<unsigned short> newchatplayers;
 extern short changeteam;
+extern bool useitem;
+extern vector<Meshlist::iterator> deletemeshes;
 
 void HandleAck(unsigned long);
 

@@ -39,6 +39,7 @@ IPaddress addr;
 // netmutex protects both the send queue and the socket shared by the send and receive threads
 SDL_mutex* netmutex;
 bool socketopen;
+set<unsigned long> itemsreceived;
 
 // Gets split off as a separate thread to handle sending network packets
 int NetSend(void* dummy)
@@ -130,7 +131,7 @@ int NetSend(void* dummy)
          {
             p << player[0].weapons[i].Id() << eol;
          }
-         p << player[0].item.Id() << eol;
+         p << player[0].item.Type() << eol;
          ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
          int sel = spawnpointsbox->Selected();
          p << availablespawns[sel].position.x << eol;
@@ -174,6 +175,19 @@ int NetSend(void* dummy)
          SDL_mutexV(netmutex);
          changeteam = 0;
       }
+      if (useitem)
+      {
+         Packet p(outpack, &socket, &addr);
+         p.ack = sendpacketnum;
+         p << "I\n";
+         p << p.ack << eol;
+         SDL_mutexP(netmutex);
+         sendqueue.push_back(p);
+         SDL_mutexV(netmutex);
+         useitem = false;
+      }
+      
+      
       SDL_mutexP(netmutex);
       list<Packet>::iterator i = sendqueue.begin();
       while (i != sendqueue.end())
@@ -460,11 +474,7 @@ int NetListen(void* dummy)
                   cout << debug << endl;
                }
                
-               // Remove models for disconnected players
-               // TODO: This is a problem.  We can't be removing meshes without locking the meshes object,
-               // but we don't really want to do that or every thread has to wait for the renderer to finish
-               // The solution will probably be a mutex on meshes alone (in most cases that won't affect
-               // render performance, and we won't lock it very often here so it won't be a big deal)
+               // Indicate to main thread that models for unspawned players need to be removed
                vector<PlayerData>::iterator i = player.begin();
                ++i;  // Skip first element because that's local player
                for (; i != player.end(); ++i)
@@ -475,7 +485,9 @@ int NetListen(void* dummy)
                      {
                         if (i->mesh[part] != meshes.end())
                         {
-                           meshes.erase(i->mesh[part]);
+                           SDL_mutexP(clientmutex);
+                           deletemeshes.push_back(i->mesh[part]);
+                           SDL_mutexV(clientmutex);
                            i->mesh[part] = meshes.end();
                         }
                            
@@ -663,7 +675,7 @@ int NetListen(void* dummy)
                      get >> read.position.x >> read.position.y >> read.position.z;
                      get.ignore(); // Throw out \n
                      getline(get, read.name);
-                     availablespawns.push_back(read);
+                     mapspawns.push_back(read);
                   }
                   spawnschanged = true;
                }
@@ -679,6 +691,48 @@ int NetListen(void* dummy)
             SDL_mutexV(clientmutex);
             // Ack it
             Ack(packetnum);
+         }
+         else if (packettype == "I") // Add item
+         {
+            Vector3 itempos;
+            unsigned long id;
+            int type;
+            get >> type;
+            get >> id;
+            get >> itempos.x >> itempos.y >> itempos.z;
+            
+            if (itemsreceived.find(id) == itemsreceived.end())
+            {
+               Item newitem(type, meshes);
+               newitem.id = id;
+               IniReader loadmesh(newitem.ModelFile());
+               Mesh newmesh(loadmesh, resman, false);
+               newmesh.Move(itempos);
+               newmesh.SetGL();
+               newmesh.dynamic = true;
+               SDL_mutexP(clientmutex);
+               meshes.push_front(newmesh);
+               items.push_back(newitem);
+               Item& curritem = items.back();
+               curritem.mesh = meshes.begin();
+               SDL_mutexV(clientmutex);
+               itemsreceived.insert(id);
+               spawnschanged = true;
+            }
+            Ack(packetnum);
+         }
+         else if (packettype == "R") // Remove item
+         {
+            unsigned long id;
+            get >> id;
+            for (vector<Item>::iterator i = items.begin(); i != items.end(); ++i)
+            {
+               if (i->id == id)
+               {
+                  items.erase(i);
+                  break;
+               }
+            }
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before

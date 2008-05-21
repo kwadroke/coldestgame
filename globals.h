@@ -28,6 +28,7 @@ const string objectfilever = "Version3";
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
+extern vector<Item> items;
 extern GUI mainmenu;           // Object that handles the main menu
 extern bool mainmenuvisible;   // Whether the main menu is shown
 extern string nextmap;         // Used to signal the main thread to load a new map
@@ -40,7 +41,6 @@ extern GUI statsdisp;          // Display FPS etc.
 extern GUI consolegui;         // The in-game console
 extern GUIPtr ingamestatus;
 extern GUIPtr chat;
-//extern TextureManager *texman;  // Handles string versions of texture identifiers
 extern ResourceManager resman; // Handles loading and organizing different resources
 extern vector<PlayerData> player;
 extern vector<UnitData> units;
@@ -52,6 +52,7 @@ extern vector<floatvec> heightmap;  // Smoothed heightmap data
 extern int tilesize;
 extern vector<SpawnPointData> spawnpoints;
 extern vector<SpawnPointData> availablespawns;
+extern vector<SpawnPointData> mapspawns;
 extern bool initialized;
 extern Meshlist meshes;
 extern bool serverhasmap;

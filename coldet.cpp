@@ -562,6 +562,18 @@ void GUIUpdate()
       {
          ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
          spawnpointsbox->Clear();
+         availablespawns = mapspawns;
+         for (int i = 0; i < items.size(); ++i)
+         {
+            if (items[i].Type() == Item::SpawnPoint)
+            {
+               string name = "Spawn " + ToString(i);
+               SpawnPointData sp;
+               sp.name = name;
+               sp.position = items[i].mesh->GetPosition();
+               availablespawns.push_back(sp);
+            }
+         }
          for (int i = 0; i < availablespawns.size(); ++i)
          {
             string name = ToString(i) + ": ";
@@ -800,6 +812,10 @@ void GameEventHandler(SDL_Event &event)
          else if (event.button.button == SDL_BUTTON_WHEELUP)
          {
             player[0].currweapon = player[0].currweapon == 0 ? numbodyparts - 1 : player[0].currweapon - 1;
+         }
+         else if (event.button.button == SDL_BUTTON_MIDDLE)
+         {
+            useitem = true;
          }
          break;
       case SDL_MOUSEBUTTONUP:
@@ -1121,6 +1137,12 @@ void SynchronizePosition()
 void Animate()
 {
    SDL_mutexP(clientmutex);
+   // Delete meshes as requested by the net thread
+   for (int i = 0; i < deletemeshes.size(); ++i)
+   {
+      meshes.erase(deletemeshes[i]);
+   }
+   
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {

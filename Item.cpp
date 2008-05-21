@@ -1,8 +1,10 @@
 #include "Item.h"
 
-Item::Item(const int newid) : id(newid), usesleft(1), coolmultiplier(1.f), ammomultiplier(1.f), weight(0.f), name("None")
+Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), mesh(ml.end()), type(newtype), coolmultiplier(1.f), ammomultiplier(1.f),
+           weight(0.f), name("None"), modelfile("models/empty/base")
+           
 {
-   switch (newid)
+   switch (newtype)
    {
       case Item::NoItem:
          break;
@@ -34,6 +36,7 @@ void Item::LoadFromFile(const string& file)
    read.Read(ammomultiplier, "AmmoMult");
    read.Read(weight, "Weight");
    read.ReadLine(name, "Name");
+   read.Read(modelfile, "Model");
 }
 
 

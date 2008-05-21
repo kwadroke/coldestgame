@@ -12,4 +12,6 @@ string chatstring;
 vector<string> newchatlines;
 vector<unsigned short> newchatplayers;
 short changeteam;
+bool useitem;
+vector<Meshlist::iterator> deletemeshes;
 

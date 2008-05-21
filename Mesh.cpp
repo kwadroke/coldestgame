@@ -381,7 +381,7 @@ void Mesh::BindVbo()
 // we don't care about anything but the right shape so we use a very basic material
 void Mesh::Render(Material* overridemat)
 {
-   if (!tris.size()) return;
+   if (!tris.size() || !render || !hasvbo) return;
    BindVbo();
    size_t currindex = 0;
    if (overridemat)
@@ -504,7 +504,9 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
 {
    float interpval = (float)animtime / (float)frametime[currkeyframe];
    
-   if (index < 0 || index >= frameroot.size()) return;
+   if (glops && !hasvbo) // Means we set glops with SetGL
+      LoadMaterials(); // Need to do this before GenTris
+   else if (index < 0 || index >= frameroot.size()) return;
    
    tris.clear();
    //trantris.clear();
