@@ -49,6 +49,7 @@ class Mesh
       Vector3 GetPosition(){return position;}
       float GetWidth(){return width;}
       float GetHeight(){return height;}
+      void SetGL(){glops = true;}
       
       void Begin();
       bool HasNext() const;

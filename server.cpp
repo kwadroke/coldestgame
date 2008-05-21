@@ -40,13 +40,16 @@ void UpdateDOTree(DynamicPrimitive*);
 void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
+void AddItem(const Item&, int);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
+vector<Item> serveritems;
 SDL_mutex* servermutex;
 IDGen servsendpacketnum;
 IDGen nextservparticleid;
+IDGen serveritemid;
 unsigned short servertickrate;
 string currentmap;
 string servername;
@@ -358,10 +361,9 @@ int ServerListen()
                   if (serverplayers[oppnum].weapons[i].Id() != weapid)
                      serverplayers[oppnum].weapons[i] = Weapon(weapid);
                }
-               int itemid;
-               get >> itemid;
-               if (serverplayers[oppnum].item.Id() != itemid)
-                  serverplayers[oppnum].item = Item(itemid);
+               int itemtype;
+               get >> itemtype;
+               serverplayers[oppnum].item = Item(itemtype, servermeshes);
                Vector3 spawnpointreq;
                get >> spawnpointreq.x;
                get >> spawnpointreq.y;
@@ -466,6 +468,21 @@ int ServerListen()
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
          }
+         else if (packettype == "I") // Player wants to use item
+         {
+            SDL_mutexP(servermutex);
+            if (serverplayers[oppnum].item.usesleft > 0)
+            {
+               AddItem(serverplayers[oppnum].item, oppnum);
+               serverplayers[oppnum].item.usesleft--;
+            }
+            Packet response(servoutpack, &servoutsock, &inpack->address);
+            response << "A\n";
+            response << servsendpacketnum << eol;
+            response << packetnum << eol;
+            servqueue.push_back(response);
+            SDL_mutexV(servermutex);
+         }
          
       }
       //t.stop();
@@ -546,19 +563,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
                temp << serverplayers[i].unit << eol;
                temp << serverplayers[i].ping << eol;
             }
-            
-#if 0
-            // This was just for debugging, only worry if it happens a lot or happens
-            // for a player who hasn't just joined
-            if (serverplayers[i].unit != 0)
-            {
-               /*cout << "Server failed packet:\n";
-               cout << debug;
-               cout << "End server packet\n";*/
-               cout << "Server error" << i << endl;
-               cout << serverplayers[i].unit << endl;
-            }
-#endif
          }
          temp << 0 << eol; // Indicates end of player data
          
@@ -879,3 +883,40 @@ void SaveState()
    }
    oldstate.push_back(newstate);
 }
+
+
+// Grab the servermutex before calling
+void AddItem(const Item& it, int oppnum)
+{
+   if (it.Type() == Item::SpawnPoint)
+   {
+      IniReader loadmesh(it.ModelFile());
+      Mesh newmesh(loadmesh, resman, false);
+      newmesh.Move(serverplayers[oppnum].pos);
+      servermeshes.push_front(newmesh);
+      serveritems.push_back(serverplayers[oppnum].item);
+      Item& curritem = serveritems.back();
+      curritem.mesh = servermeshes.begin();
+      curritem.id = serveritemid;
+      
+      for (size_t i = 1; i < serverplayers.size(); ++i)
+      {
+         if (serverplayers[i].connected)
+         {
+            Packet p(servoutpack, &servoutsock, &serverplayers[i].addr);
+            p.ack = servsendpacketnum;
+            p << "I\n";
+            p << p.ack << eol;
+            p << curritem.Type() << eol;
+            p << curritem.id << eol;
+            Vector3 mpos = newmesh.GetPosition();
+            p << mpos.x << eol;
+            p << mpos.y << eol;
+            p << mpos.z << eol;
+            
+            servqueue.push_back(p);
+         }
+      }
+   }
+}
+

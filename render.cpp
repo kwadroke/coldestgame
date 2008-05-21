@@ -267,6 +267,8 @@ void RenderObjects()
    impostormesh.Render(override);
    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
    trislastframe += impostormesh.Size();
+   
+   glDepthMask(GL_TRUE); // Otherwise we may screw up rendering elsewhere
 }
 
 void RenderParticles()
@@ -549,6 +551,7 @@ void UpdateNoise()
    glViewport(0, 0, noiseres, noiseres);
    
    //glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+   glBlendFunc(GL_ONE, GL_ZERO);
    
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();

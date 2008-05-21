@@ -4,6 +4,7 @@
 SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 CollisionDetection coldet; // Collision detection handler object
 list<Particle> particles; // List of active particles
+vector<Item> items;
 GUI mainmenu;           // Object that handles the main menu
 bool mainmenuvisible;   // Whether the main menu is shown
 string nextmap;         // Used to signal the main thread to load a new map
@@ -16,7 +17,6 @@ GUI consolegui;         // The in-game console
 GUIPtr ingamestatus;    // In game status pane triggered by tab key
 GUIPtr chat;            // Display and input for chat box
 
-//TextureManager *texman;  // Handles string versions of texture identifiers
 ResourceManager resman; // Handles loading and organizing different resources
 vector<PlayerData> player;
 vector<UnitData> units;
@@ -28,6 +28,7 @@ vector<floatvec> heightmap;  // Smoothed heightmap data
 int tilesize;
 vector<SpawnPointData> spawnpoints;
 vector<SpawnPointData> availablespawns;
+vector<SpawnPointData> mapspawns;
 bool initialized;
 bool serverhasmap;
 Console console;
