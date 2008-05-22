@@ -25,12 +25,13 @@ class Weapon
       
       enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, numweapons};
       
+      int ammo;
+      
    private:
       void LoadFromFile(const string&);
       
       int id;
       int damage;
-      int ammo;
       float radius;
       float velocity;
       float acceleration;

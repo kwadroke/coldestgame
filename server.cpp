@@ -359,8 +359,7 @@ int ServerListen()
                for (int i = 0; i < numbodyparts; ++i)
                {
                   get >> weapid;
-                  if (serverplayers[oppnum].weapons[i].Id() != weapid)
-                     serverplayers[oppnum].weapons[i] = Weapon(weapid);
+                  serverplayers[oppnum].weapons[i] = Weapon(weapid);
                }
                int itemtype;
                get >> itemtype;
@@ -813,11 +812,15 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Shots fired!
-   Weapon currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
-   if (serverplayers[i].leftclick && (SDL_GetTicks() - serverplayers[i].lastfiretick >= currplayerweapon.ReloadTime()))
+   Weapon& currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
+   if (serverplayers[i].leftclick && 
+       (SDL_GetTicks() - serverplayers[i].lastfiretick >= currplayerweapon.ReloadTime()) &&
+       (currplayerweapon.ammo != 0))
    {
       serverplayers[i].lastfiretick = SDL_GetTicks();
       serverplayers[i].temperature += currplayerweapon.Heat();
+      if (currplayerweapon.ammo > 0)
+         currplayerweapon.ammo--;
       Vector3 dir(0, 0, -1);
       GraphicMatrix m;
       m.rotatex(-serverplayers[i].pitch);
