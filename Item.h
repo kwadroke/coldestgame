@@ -23,6 +23,7 @@ class Item
       
       unsigned long id;
       int usesleft;
+      int hp;
       Meshlist::iterator mesh;
       
    private:

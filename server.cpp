@@ -41,6 +41,7 @@ void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
 void AddItem(const Item&, int);
+vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -773,6 +774,20 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             servqueue.push_back(deadpacket);
          }
       }
+      vector<Item>::iterator i = serveritems.begin();
+      while (i != serveritems.end())
+      {
+         if (&(*i->mesh) == curr)
+         {
+            i->hp -= p.damage;
+            if (i->hp < 0)
+            {
+               i = RemoveItem(i);
+            }
+            else ++i;
+         }
+         else ++i;
+      }
    }
 }
 
@@ -893,6 +908,7 @@ void AddItem(const Item& it, int oppnum)
       IniReader loadmesh(it.ModelFile());
       Mesh newmesh(loadmesh, resman, false);
       newmesh.Move(serverplayers[oppnum].pos);
+      newmesh.dynamic = true;
       servermeshes.push_front(newmesh);
       serveritems.push_back(serverplayers[oppnum].item);
       Item& curritem = serveritems.back();
@@ -918,5 +934,27 @@ void AddItem(const Item& it, int oppnum)
          }
       }
    }
+}
+
+
+vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
+{
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected)
+      {
+         Packet p(servoutpack, &servoutsock, &serverplayers[i].addr);
+         p.ack = servsendpacketnum;
+         p << "R\n";
+         p << p.ack << eol;
+         p << it->id << eol;
+         
+         cout << "Removing " << it->id << endl;
+            
+         servqueue.push_back(p);
+      }
+   }
+   servermeshes.erase(it->mesh);
+   return serveritems.erase(it);
 }
 

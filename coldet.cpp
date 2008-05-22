@@ -1142,6 +1142,7 @@ void Animate()
    {
       meshes.erase(deletemeshes[i]);
    }
+   deletemeshes.clear();
    
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
