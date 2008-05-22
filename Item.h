@@ -19,12 +19,13 @@ class Item
       string Name() const{return name;}
       string ModelFile() const{return modelfile;}
       
-      enum Items{NoItem, SpawnPoint, HeatSink, AmmoCarrier, Radar, numitems};
+      enum Items{NoItem, SpawnPoint, HeatSink, AmmoCarrier, Radar, Base, numitems};
       
       unsigned long id;
       int usesleft;
       int hp;
       Meshlist::iterator mesh;
+      int team;
       
    private:
       void LoadFromFile(const string&);

@@ -41,7 +41,10 @@ void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
 void AddItem(const Item&, int);
+void SendItem(const Item&);
 vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
+void SendKill(int);
+void RemoveTeam(int);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -302,6 +305,8 @@ int ServerListen()
                
                serverplayers.push_back(temp);
                respondto = serverplayers.size() - 1;
+               for (size_t i = 0; i < serveritems.size(); ++i)
+                  SendItem(serveritems[i]);
                cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
             }
             
@@ -479,6 +484,17 @@ int ServerListen()
             Packet response(servoutpack, &servoutsock, &inpack->address);
             response << "A\n";
             response << servsendpacketnum << eol;
+            response << packetnum << eol;
+            servqueue.push_back(response);
+            SDL_mutexV(servermutex);
+         }
+         else if (packettype == "K")
+         {
+            SDL_mutexP(servermutex);
+            SendKill(oppnum);
+            Packet response(servoutpack, &servoutsock, &inpack->address);
+            response << "A\n";
+            response << 0 << eol;
             response << packetnum << eol;
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
@@ -712,6 +728,22 @@ void ServerLoadMap()
    servercoldet = coldet;
    
    servermeshes = meshes;
+   
+   // Generate main base items
+   for (int i = 0; i < spawnpoints.size(); ++i)
+   {
+      Item newitem(Item::Base, servermeshes);
+      IniReader loadmesh(newitem.ModelFile());
+      Mesh newmesh(loadmesh, resman, false);
+      newmesh.Move(spawnpoints[i].position);
+      servermeshes.push_front(newmesh);
+      serveritems.push_back(newitem);
+      Item& curritem = serveritems.back();
+      curritem.mesh = servermeshes.begin();
+      curritem.id = serveritemid;
+      curritem.team = spawnpoints[i].team;
+   }
+   
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {
@@ -763,14 +795,6 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             serverplayers[p.playernum].kills++;
             cout << "Player " << i << " was killed by Player " << p.playernum << endl;
             serverplayers[i].Kill();
-            
-            Packet deadpacket(servoutpack, &servoutsock);
-            deadpacket.ack = servsendpacketnum;
-            deadpacket.addr = serverplayers[i].addr;
-            
-            deadpacket << "d\n";
-            deadpacket << deadpacket.ack << eol; // This line is kind of strange looking, but it's okay
-            servqueue.push_back(deadpacket);
          }
       }
       vector<Item>::iterator i = serveritems.begin();
@@ -781,6 +805,11 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             i->hp -= p.damage;
             if (i->hp < 0)
             {
+               for (size_t j = 0; j < spawnpoints.size(); ++j)
+               {
+                  if (&(*serveritems[j].mesh) == curr)
+                     RemoveTeam(spawnpoints[j].team);
+               }
                i = RemoveItem(i);
             }
             else ++i;
@@ -917,24 +946,33 @@ void AddItem(const Item& it, int oppnum)
       Item& curritem = serveritems.back();
       curritem.mesh = servermeshes.begin();
       curritem.id = serveritemid;
+      curritem.team = serverplayers[oppnum].team;
       
-      for (size_t i = 1; i < serverplayers.size(); ++i)
+      SendItem(curritem);
+   }
+}
+
+
+// Grab the servermutex before calling
+void SendItem(const Item& curritem)
+{
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected)
       {
-         if (serverplayers[i].connected)
-         {
-            Packet p(servoutpack, &servoutsock, &serverplayers[i].addr);
-            p.ack = servsendpacketnum;
-            p << "I\n";
-            p << p.ack << eol;
-            p << curritem.Type() << eol;
-            p << curritem.id << eol;
-            Vector3 mpos = newmesh.GetPosition();
-            p << mpos.x << eol;
-            p << mpos.y << eol;
-            p << mpos.z << eol;
+         Packet p(servoutpack, &servoutsock, &serverplayers[i].addr);
+         p.ack = servsendpacketnum;
+         p << "I\n";
+         p << p.ack << eol;
+         p << curritem.Type() << eol;
+         p << curritem.id << eol;
+         Vector3 mpos = curritem.mesh->GetPosition();
+         p << mpos.x << eol;
+         p << mpos.y << eol;
+         p << mpos.z << eol;
+         p << curritem.team << eol;
             
-            servqueue.push_back(p);
-         }
+         servqueue.push_back(p);
       }
    }
 }
@@ -959,5 +997,25 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
    }
    servermeshes.erase(it->mesh);
    return serveritems.erase(it);
+}
+
+
+// Note: Must grab mutex first
+void SendKill(int num)
+{
+   Packet deadpacket(servoutpack, &servoutsock);
+   deadpacket.ack = servsendpacketnum;
+   deadpacket.addr = serverplayers[num].addr;
+            
+   deadpacket << "d\n";
+   deadpacket << deadpacket.ack << eol; // This line is kind of strange looking, but it's okay
+   servqueue.push_back(deadpacket);
+}
+
+
+// At this time just ends the game because only two teams are supported.  Will more be in the future?  Who knows.
+void RemoveTeam(int num)
+{
+   cout << "Team " << num << " has been defeated" << endl;
 }
 

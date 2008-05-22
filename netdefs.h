@@ -14,7 +14,7 @@
 
 const char eol = '\n';
 
-extern bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
+extern bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged, sendkill;
 extern unsigned long recpacketnum, ackpack;
 extern IDGen sendpacketnum;
 extern set<unsigned long> partids;
