@@ -1,8 +1,8 @@
 #include "Weapon.h"
 
-Weapon::Weapon(const int newid) : id(newid), damage(10), radius(10.f), velocity(1.f), acceleration(1.f),
+Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), radius(10.f), velocity(1.f), acceleration(1.f),
                splashradius(0.f), weight(1.f), heat(0.f), reloadtime(50), explode(true), modelfile("projectile"),
-               name("None"), ammo(0)
+               name("None")
 {
    switch (newid)
    {
@@ -37,6 +37,7 @@ void Weapon::LoadFromFile(const string& file)
 {
    IniReader read(file);
    
+   read.Read(ammo, "Ammo");
    read.Read(damage, "Damage");
    read.Read(radius, "Radius");
    read.Read(velocity, "Velocity");
