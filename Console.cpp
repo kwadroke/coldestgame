@@ -237,4 +237,8 @@ void Console::Action(const string& action)
    {
       InitShaders();
    }
+   else if (action == "kill")
+   {
+      sendkill = true;
+   }
 }

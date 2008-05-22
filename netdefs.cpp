@@ -1,6 +1,6 @@
 #include "netdefs.h"
 
-bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged;
+bool running, connected, doconnect, pingresponse, spawnrequest, spawnschanged, sendkill;
 unsigned long recpacketnum, ackpack;
 IDGen sendpacketnum;
 set<unsigned long> partids;

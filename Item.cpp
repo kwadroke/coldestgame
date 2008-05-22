@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), mesh(ml.end()), type(newtype), coolmultiplier(1.f), ammomultiplier(1.f),
+Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(0), mesh(ml.end()), type(newtype), coolmultiplier(1.f), ammomultiplier(1.f),
            weight(0.f), name("None"), modelfile("models/empty/base")
            
 {
@@ -20,6 +20,8 @@ Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), mesh(
       case Item::Radar:
          LoadFromFile("items/radar");
          break;
+      case Item::Base:
+         LoadFromFile("items/base");
       default:
          cout << "Warning: attempted to create non-existent item." << endl;
          break;
@@ -37,6 +39,7 @@ void Item::LoadFromFile(const string& file)
    read.Read(weight, "Weight");
    read.ReadLine(name, "Name");
    read.Read(modelfile, "Model");
+   read.Read(hp, "HP");
 }
 
 

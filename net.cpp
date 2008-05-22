@@ -186,6 +186,17 @@ int NetSend(void* dummy)
          SDL_mutexV(netmutex);
          useitem = false;
       }
+      if (sendkill)
+      {
+         Packet p(outpack, &socket, &addr);
+         p.ack = sendpacketnum;
+         p << "K\n";
+         p << p.ack << eol;
+         SDL_mutexP(netmutex);
+         sendqueue.push_back(p);
+         SDL_mutexV(netmutex);
+         sendkill = false;
+      }
       
       
       SDL_mutexP(netmutex);
@@ -696,15 +707,17 @@ int NetListen(void* dummy)
          {
             Vector3 itempos;
             unsigned long id;
-            int type;
+            int type, team;
             get >> type;
             get >> id;
             get >> itempos.x >> itempos.y >> itempos.z;
+            get >> team;
             
             if (itemsreceived.find(id) == itemsreceived.end())
             {
                Item newitem(type, meshes);
                newitem.id = id;
+               newitem.team = team;
                IniReader loadmesh(newitem.ModelFile());
                Mesh newmesh(loadmesh, resman, false);
                newmesh.Move(itempos);

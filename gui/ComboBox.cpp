@@ -106,6 +106,7 @@ void ComboBox::Add(const string& str)
 void ComboBox::Clear()
 {
    table->Clear();
+   button->text = "";
 }
 
 

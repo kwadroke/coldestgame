@@ -565,12 +565,13 @@ void GUIUpdate()
          availablespawns = mapspawns;
          for (int i = 0; i < items.size(); ++i)
          {
-            if (items[i].Type() == Item::SpawnPoint)
+            if (items[i].Type() == Item::SpawnPoint && items[i].team == player[0].team)
             {
                string name = "Spawn " + ToString(i);
                SpawnPointData sp;
                sp.name = name;
                sp.position = items[i].mesh->GetPosition();
+               sp.team = items[i].team;
                availablespawns.push_back(sp);
             }
          }
@@ -578,9 +579,6 @@ void GUIUpdate()
          {
             string name = ToString(i) + ": ";
             name += availablespawns[i].name;
-            /*name += ToString(availablespawns[i].position.x) + ", ";
-            name += ToString(availablespawns[i].position.y) + ", ";
-            name += ToString(availablespawns[i].position.z);*/
             spawnpointsbox->Add(name);
          }
          spawnschanged = false;
