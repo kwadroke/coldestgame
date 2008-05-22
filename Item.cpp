@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), mesh(ml.end()), type(newtype), coolmultiplier(1.f), ammomultiplier(1.f),
+Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), mesh(ml.end()), type(newtype), coolmultiplier(1.f), ammomultiplier(1.f),
            weight(0.f), name("None"), modelfile("models/empty/base")
            
 {

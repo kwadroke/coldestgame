@@ -296,6 +296,7 @@ bool sortbyimpdim(const Mesh* l, const Mesh* r)
 
 void UpdateFBO()
 {
+   if (!impfbolist.size()) return;
    vector<Mesh*>::iterator iptr;
    vector<Mesh*> sortedbyimpdim;
    vector<Mesh*> needsupdate;

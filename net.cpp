@@ -729,10 +729,15 @@ int NetListen(void* dummy)
             {
                if (i->id == id)
                {
+                  SDL_mutexP(clientmutex);
+                  deletemeshes.push_back(i->mesh);
                   items.erase(i);
+                  spawnschanged = true;
+                  SDL_mutexV(clientmutex);
                   break;
                }
             }
+            Ack(packetnum);
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before
