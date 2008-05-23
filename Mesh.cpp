@@ -7,9 +7,11 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
             size(100.f), width(0.f), height(0.f), resman(rm), tris(TrianglePtrvec()), trantris(TrianglePtrvec()),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), dist(0.f), 
-            impmat(MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman))),
+            impmat(MaterialPtr()),
             animspeed(1.f)
 {
+   if (gl)
+      impmat = MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman));
    Load(reader);
 }
 
@@ -28,10 +30,14 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), dist(m.dist), impostor(m.impostor), 
-         impmat(MaterialPtr(new Material("materials/impostor", m.resman.texman, m.resman.shaderman))),
+         impmat(MaterialPtr()),
          animspeed(m.animspeed)
 {
-   impmat->SetTexture(0, m.impmat->GetTexture(0));
+   if (m.impmat)
+   {
+      impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
+      impmat->SetTexture(0, m.impmat->GetTexture(0));
+   }
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
@@ -599,6 +605,7 @@ void Mesh::LoadMaterials()
    if (havemats) return;
    for (int i = 0; i < frameroot.size(); ++i)
       frameroot[i]->LoadMaterials(resman);
+   impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
    havemats = true;
 }
 
