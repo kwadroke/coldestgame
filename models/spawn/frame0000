@@ -1,0 +1,100 @@
+Version Version3
+NextID 5
+TimeToNextFrame 1000
+Primitive
+   Type Container
+   ID 0
+   ParentID -1
+   Name Spawn Portal
+   Material 
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+Primitive
+   Type Quad
+   ID 1
+   ParentID 0
+   Material materials/metal
+   Rot1 90 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   p0 -1000 1000 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -1000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -1000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 1000 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 2
+   ParentID 1
+   Material materials/metal
+   Rot1 -90 0 0
+   Rot2 0 0 0
+   Trans 0 1000 -1000
+   p0 -1000 -500 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -1000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -1000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 -500 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 3
+   ParentID 1
+   Material materials/metal
+   Rot1 -90 90 0
+   Rot2 0 0 0
+   Trans 0 1000 -1000
+   p0 -1000 -500 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -1000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -1000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 -500 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0
+Primitive
+   Type Quad
+   ID 4
+   ParentID 1
+   Material materials/metal
+   Rot1 -90 -90 0
+   Rot2 0 0 0
+   Trans 0 1000 -1000
+   p0 -1000 -500 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
+   p1 -1000 -1000 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 1 1 1 1 1 1 
+   p2 1000 -1000 0
+   tc2x 1 1 1 1 1 1 1 1 
+   tc2y 1 1 1 1 1 1 1 1 
+   p3 1000 -500 0
+   tc3x 1 1 1 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
+   Collide 0
+   Facing 0

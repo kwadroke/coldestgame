@@ -24,15 +24,15 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    
    if (!facing)
    {
-      m.rotatex(interprot2.x);
-      m.rotatey(interprot2.y);
       m.rotatez(interprot2.z);
+      m.rotatey(interprot2.y);
+      m.rotatex(interprot2.x);
       
       m.translate(interptrans);
       
-      m.rotatex(interprot1.x);
-      m.rotatey(interprot1.y);
       m.rotatez(interprot1.z);
+      m.rotatey(interprot1.y);
+      m.rotatex(interprot1.x);
    }
    else
    {
@@ -183,7 +183,8 @@ void MeshNode::GetContainers(map<string, MeshNodePtr>& cont, MeshNodePtr& thispt
 
 void MeshNode::LoadMaterials(ResourceManager& resman)
 {
-   material = &resman.LoadMaterial(matname);
+   if (matname != "")
+      material = &resman.LoadMaterial(matname);
    for (int i = 0; i < children.size(); ++i)
    {
       if (children[i]->matname != "")
