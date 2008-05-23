@@ -1,6 +1,6 @@
 Version Version3
 NextID 10
-TimeToNextFrame 3500
+TimeToNextFrame 1000
 Primitive
    Type Container
    ID 0
@@ -19,17 +19,17 @@ Primitive
    Rot2 0 0 0
    Trans 0 0 3000
    p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
    p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 0 1 1 1 1 1 
    p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
+   tc2x 1 1 0 1 1 1 1 1 
+   tc2y 1 1 0 1 1 1 1 1 
+   p3 3000 3000 0
+   tc3x 1 1 0 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
    Collide 1
    Facing 0
 Primitive
@@ -41,17 +41,17 @@ Primitive
    Rot2 0 0 0
    Trans 0 0 3000
    p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
    p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 0 1 1 1 1 1 
    p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
+   tc2x 1 1 0 1 1 1 1 1 
+   tc2y 1 1 0 1 1 1 1 1 
+   p3 3000 3000 0
+   tc3x 1 1 0 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
    Collide 1
    Facing 0
 Primitive
@@ -63,17 +63,17 @@ Primitive
    Rot2 0 0 0
    Trans 0 0 3000
    p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
    p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 0 1 1 1 1 1 
    p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
+   tc2x 1 1 0 1 1 1 1 1 
+   tc2y 1 1 0 1 1 1 1 1 
+   p3 3000 3000 0
+   tc3x 1 1 0 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
    Collide 1
    Facing 0
 Primitive
@@ -85,17 +85,17 @@ Primitive
    Rot2 0 0 0
    Trans 0 0 3000
    p0 -3000 3000 0
-   tc0x 0 0
-   tc0y 0 0
+   tc0x 0 0 0 0 0 0 0 0 
+   tc0y 0 0 0 0 0 0 0 0 
    p1 -3000 -3000 0
-   tc1x 0 0
-   tc1y 1 1
-   p3 3000 3000 0
-   tc3x 1 1
-   tc3y 0 0
+   tc1x 0 0 0 0 0 0 0 0 
+   tc1y 1 1 0 1 1 1 1 1 
    p2 3000 -3000 0
-   tc2x 1 1
-   tc2y 1 1
+   tc2x 1 1 0 1 1 1 1 1 
+   tc2y 1 1 0 1 1 1 1 1 
+   p3 3000 3000 0
+   tc3x 1 1 0 1 1 1 1 1 
+   tc3y 0 0 0 0 0 0 0 0 
    Collide 1
    Facing 0
 Primitive
@@ -103,6 +103,7 @@ Primitive
    ID 7
    ParentID 0
    Name LeftArmConnector
+   Material 
    Rot1 0 0 0
    Rot2 0 0 0
    Trans -4000 0 0
@@ -111,6 +112,7 @@ Primitive
    ID 8
    ParentID 0
    Name RightArmConnector
+   Material 
    Rot1 0 0 0
    Rot2 0 0 0
    Trans 4000 0 0
