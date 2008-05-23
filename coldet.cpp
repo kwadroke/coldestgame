@@ -505,6 +505,13 @@ static void MainLoop()
          loadprogress.visible = false;
          loadoutmenu.visible = true;
       }
+      SDL_mutexP(clientmutex);
+      while (consolecommands.size())
+      {
+         console.Parse(consolecommands[0]);
+         consolecommands.pop_front();
+      }
+      SDL_mutexV(clientmutex);
       
       GUIUpdate();
       

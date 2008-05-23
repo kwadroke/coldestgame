@@ -21,12 +21,6 @@
 #include "netdefs.h"
 #include "ServerState.h"
 #include "IDGen.h"
-// TODO: Does server even need to include these anymore?
-#ifdef LINUX
-#include <sys/types.h>
-#include <linux/unistd.h>
-#include <errno.h>
-#endif
 
 using namespace std;
 
@@ -41,10 +35,11 @@ void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
 void AddItem(const Item&, int);
-void SendItem(const Item&);
+void SendItem(const Item&, const int);
 vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
 void SendKill(int);
 void RemoveTeam(int);
+void SendSyncPacket(PlayerData&);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -305,8 +300,9 @@ int ServerListen()
                
                serverplayers.push_back(temp);
                respondto = serverplayers.size() - 1;
+               SendSyncPacket(serverplayers[respondto]);
                for (size_t i = 0; i < serveritems.size(); ++i)
-                  SendItem(serveritems[i]);
+                  SendItem(serveritems[i], respondto);
                cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
             }
             
@@ -328,6 +324,7 @@ int ServerListen()
             
             fill.addr = serverplayers[respondto].addr;
             servqueue.push_back(fill);
+            
             SDL_mutexV(servermutex);
          }
          else if (packettype == "p")
@@ -948,33 +945,34 @@ void AddItem(const Item& it, int oppnum)
       curritem.id = serveritemid;
       curritem.team = serverplayers[oppnum].team;
       
-      SendItem(curritem);
+      for (size_t i = 1; i < serverplayers.size(); ++i)
+      {
+         if (serverplayers[i].connected)
+         {
+            SendItem(curritem, i);
+         }
+      }
    }
 }
 
 
 // Grab the servermutex before calling
-void SendItem(const Item& curritem)
+void SendItem(const Item& curritem, int oppnum)
 {
-   for (size_t i = 1; i < serverplayers.size(); ++i)
-   {
-      if (serverplayers[i].connected)
-      {
-         Packet p(servoutpack, &servoutsock, &serverplayers[i].addr);
-         p.ack = servsendpacketnum;
-         p << "I\n";
-         p << p.ack << eol;
-         p << curritem.Type() << eol;
-         p << curritem.id << eol;
-         Vector3 mpos = curritem.mesh->GetPosition();
-         p << mpos.x << eol;
-         p << mpos.y << eol;
-         p << mpos.z << eol;
-         p << curritem.team << eol;
-            
-         servqueue.push_back(p);
-      }
-   }
+   
+   Packet p(servoutpack, &servoutsock, &serverplayers[oppnum].addr);
+   p.ack = servsendpacketnum;
+   p << "I\n";
+   p << p.ack << eol;
+   p << curritem.Type() << eol;
+   p << curritem.id << eol;
+   Vector3 mpos = curritem.mesh->GetPosition();
+   p << mpos.x << eol;
+   p << mpos.y << eol;
+   p << mpos.z << eol;
+   p << curritem.team << eol;
+      
+   servqueue.push_back(p);
 }
 
 
@@ -1017,5 +1015,21 @@ void SendKill(int num)
 void RemoveTeam(int num)
 {
    cout << "Team " << num << " has been defeated" << endl;
+}
+
+
+void SendSyncPacket(PlayerData& p)
+{
+   Packet pack(servoutpack, &servoutsock, &p.addr);
+   pack.ack = servsendpacketnum;
+   pack << "Y\n";
+   pack << pack.ack << eol;
+   pack << "set movestep " << console.GetInt("movestep") << eol;
+   pack << "set ghost " << console.GetBool("ghost") << eol;
+   pack << "set fly " << console.GetBool("fly") << eol;
+   pack << "set tickrate " << console.GetInt("tickrate") << eol;
+   pack << "endofcommands\n";
+   
+   servqueue.push_back(pack);
 }
 

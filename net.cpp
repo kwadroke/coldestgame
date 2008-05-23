@@ -40,6 +40,7 @@ IPaddress addr;
 SDL_mutex* netmutex;
 bool socketopen;
 set<unsigned long> itemsreceived;
+unsigned long lastsyncpacket;
 
 // Gets split off as a separate thread to handle sending network packets
 int NetSend(void* dummy)
@@ -48,6 +49,7 @@ int NetSend(void* dummy)
    Uint32 currnettick = 0;
    Uint32 occpacketcounter = 0;
    changeteam = 0;
+   lastsyncpacket = 0;
    
    // Debugging
    Timer t;
@@ -750,6 +752,19 @@ int NetListen(void* dummy)
                   break;
                }
             }
+            Ack(packetnum);
+         }
+         else if (packettype == "Y" && packetnum > lastsyncpacket) // Sync packet
+         {
+            lastsyncpacket = packetnum;
+            string buffer;
+            SDL_mutexP(clientmutex);
+            while (getline(get, buffer) && buffer != "endofcommands")
+            {
+               consolecommands.push_back(buffer);
+            }
+            cout << packetnum << "  " << lastsyncpacket<< endl;
+            SDL_mutexV(clientmutex);
             Ack(packetnum);
          }
       }
