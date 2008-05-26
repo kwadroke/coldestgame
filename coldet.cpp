@@ -498,7 +498,6 @@ static void MainLoop()
       if (nextmap != mapname)
       {
          GUI* progress = loadprogress.GetWidget("loadingprogress");
-         //mainmenu.visible = false;
          loadprogress.visible = true;
          Repaint();
          GetMap(nextmap);
@@ -962,7 +961,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    if (!console.GetBool("ghost"))
    {
       Vector3 offsetold = old;
-      offsetold += (old - mplayer.pos) * mplayer.size; // Not sure mplayer.size is the appropriate value here
+      Vector3 offset = old - mplayer.pos;
+      offset.normalize();
+      offset *= mplayer.size;
+      offsetold += offset;
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
       Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
@@ -980,13 +982,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
             mplayer.pos = old;
             break;
          }
-      }
-      if (0)//mplayer.pos.y < GetTerrainHeight(mplayer.pos.x, mplayer.pos.z) + 10)
-      {
-         cout << "Impossible.........................................................................";
-         cout << GetTerrainHeight(mplayer.pos.x, mplayer.pos.z) << endl;
-         mplayer.pos.print();
-         adjust.print();
       }
    }
 }

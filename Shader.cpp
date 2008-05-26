@@ -234,7 +234,7 @@ void Shader::SetShadow(bool useshadow)
 }
 
 
-void Shader::ReloadAll()
+void Shader::ReloadAll(bool reload)
 {
    vector<string> shaderlist;
    progmap::iterator i = programs.begin();
@@ -247,9 +247,11 @@ void Shader::ReloadAll()
    }
    programs.clear();
    programs["none"] = 0;
+   if (!reload) return;
    for (size_t i = 0; i < shaderlist.size(); ++i)
    {
       LoadShader(shaderlist[i]);
    }
 }
+
 

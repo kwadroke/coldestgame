@@ -23,6 +23,7 @@ class Material
       void SetTexture(int, GLuint);
       GLuint GetTexture(int);
       bool operator<(const Material&) const;
+      void Release();
       
       floatvec diffuse;
       floatvec ambient;

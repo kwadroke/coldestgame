@@ -61,8 +61,6 @@ using namespace std;
 // Function definitions
 void SetupSDL();
 void SetupOpenGL();
-void LoadMaterials();
-void InitShaders();
 void InitNoise();
 static void MainLoop();
 void GetMap(string);

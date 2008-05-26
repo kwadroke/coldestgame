@@ -1,6 +1,6 @@
 Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
-Texture0 textures/transparent.png
-Texture1 textures/transparent.png
+Texture0 
+Texture1 
 Shader shaders/water

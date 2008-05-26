@@ -22,11 +22,14 @@ void ResourceManager::LoadTexture(string filename)
 }
 
 
-// Note: Doesn't actually release shaders at the moment.
+// Note: At this time you must call InitShaders and LoadMaterials again after calling this
 void ResourceManager::ReleaseAll()
 {
+   map<string, Material>::iterator i;
+   for (i = materials.begin(); i != materials.end(); ++i)
+      i->second.Release();
    materials.clear();
-   texman.Clear();
    texhand.ForgetCurrent();
+   shaderman.ReloadAll(false);
 }
 

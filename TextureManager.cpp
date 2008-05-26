@@ -16,6 +16,8 @@ TextureManager::~TextureManager()
 
 GLuint TextureManager::LoadTexture(string filename)
 {
+   if (filename == "") return 0;
+   
    if (loaded.find(filename) == loaded.end())
    {
       GLuint texnum;

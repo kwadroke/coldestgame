@@ -119,6 +119,7 @@ int NetSend(void* dummy)
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
          doconnect = false;
+         cout << "Sending connect" << endl;
       }
       if (spawnrequest)
       {
@@ -570,17 +571,8 @@ int NetListen(void* dummy)
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                list<Packet>::iterator i;
-               SDL_mutexP(netmutex);
-               for (i = sendqueue.begin(); i != sendqueue.end(); ++i)
-               {
-                  if (i->ack == packetnum)
-                  {
-                     sendqueue.erase(i);
-                     break;
-                  }
-               }
-               SDL_mutexV(netmutex);
             }
+            HandleAck(packetnum);
          }
          else if (packettype == "P") // Ping
          {
@@ -680,7 +672,7 @@ int NetListen(void* dummy)
                   cout << "Joined team " << (newteam - 1) << endl;
                   player[0].team = newteam;
                   
-                  availablespawns.clear();
+                  mapspawns.clear();
                   bool morespawns;
                   SpawnPointData read;
                   while (get >> morespawns && morespawns)
@@ -766,6 +758,11 @@ int NetListen(void* dummy)
             cout << packetnum << "  " << lastsyncpacket<< endl;
             SDL_mutexV(clientmutex);
             Ack(packetnum);
+         }
+         else if (packettype == "C")
+         {
+            connected = false;
+            doconnect = true;
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before

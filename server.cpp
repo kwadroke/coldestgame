@@ -40,6 +40,7 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
 void SendKill(int);
 void RemoveTeam(int);
 void SendSyncPacket(PlayerData&);
+string AddressToDD(Uint32);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -56,10 +57,25 @@ list<Packet> servqueue;
 UDPsocket servoutsock;
 UDPpacket *servoutpack;
 Meshlist servermeshes;
-CollisionDetection servercoldet;
 ObjectKDTree serverkdtree;
 short maxplayers;
 deque<ServerState> oldstate;
+
+class SortableIPaddress
+{
+   public:
+      //SortableIPaddress() : addr(INADDR_NONE){}
+      SortableIPaddress(const IPaddress& a) : addr(a){}
+      bool operator<(const SortableIPaddress& a) const
+      {
+         if (addr.host != a.addr.host) return addr.host < a.addr.host;
+         return addr.port < a.addr.port;
+      }
+      
+      IPaddress addr;
+};
+
+set<SortableIPaddress> validaddrs;
 
 int Server(void* dummy)
 {
@@ -123,8 +139,6 @@ int Server(void* dummy)
    if (console.GetString("map") == "")
       console.Parse("set map newtest");
    ServerLoadMap();
-   PlayerData local(servermeshes); // Dummy placeholder for the local player
-   serverplayers.push_back(local);
    servermutex = SDL_CreateMutex();
    serversend = SDL_CreateThread(ServerSend, NULL);
    
@@ -180,6 +194,7 @@ int ServerListen()
       {
          if (serverplayers[i].connected && currtick - serverplayers[i].lastupdate > 5000)
          {
+            validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
             serverplayers[i].Disconnect();
             cout << "Player " << i << " timed out.\n" << flush;
          }
@@ -221,6 +236,20 @@ int ServerListen()
          
          get >> packettype;
          get >> packetnum;
+         
+         // Packet from an address that is not connected.  Inform them that they need to connect.
+         if (packettype != "C" && packettype != "i" && validaddrs.find(SortableIPaddress(inpack->address)) == validaddrs.end())
+         {
+            Packet p(servoutpack, &servoutsock, &inpack->address);
+            p << "C\n";
+            p << 0 << eol;
+            
+            SDL_mutexP(servermutex);
+            servqueue.push_back(p);
+            SDL_mutexV(servermutex);
+            continue;
+         }
+         
          if (packettype == "U") // Update packet
          {
             get >> oppnum;
@@ -275,7 +304,8 @@ int ServerListen()
             short unit;
             string name;
             get >> unit;
-            get >> name;
+            get.ignore();
+            getline(get, name);
             bool add = true;
             int respondto = 0;
             SDL_mutexP(servermutex);
@@ -303,6 +333,7 @@ int ServerListen()
                SendSyncPacket(serverplayers[respondto]);
                for (size_t i = 0; i < serveritems.size(); ++i)
                   SendItem(serveritems[i], respondto);
+               validaddrs.insert(SortableIPaddress(inpack->address));
                cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
             }
             
@@ -722,9 +753,15 @@ void ServerLoadMap()
       SDL_Delay(1); // Wait for main thread to load map
    }
    
-   servercoldet = coldet;
-   
+   servermeshes.clear(); // This is just because right now operator= is not safe on Meshes
    servermeshes = meshes;
+   
+   serveritems.clear();
+   
+   serverplayers.clear();
+   PlayerData local(servermeshes); // Dummy placeholder for the local player
+   serverplayers.push_back(local);
+   validaddrs.clear();
    
    // Generate main base items
    for (int i = 0; i < spawnpoints.size(); ++i)
@@ -744,11 +781,11 @@ void ServerLoadMap()
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {
-      points[i] = servercoldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
+      points[i] = coldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
    }
    for (int i = 0; i < 4; ++i)
    {
-      points[i + 4] = servercoldet.worldbounds[5].GetVertex(i);
+      points[i + 4] = coldet.worldbounds[5].GetVertex(i);
    }
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
@@ -891,6 +928,8 @@ void Rewind(int ticks)
    {
       oldstate.pop_front();
    }
+   
+   if (!oldstate.size()) return;
    
    // Search backwards through our old states.  Stop at 0 and use that if we don't have a state old enough
    for (i = oldstate.size() - 1; i > 0; --i)
