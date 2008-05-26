@@ -98,7 +98,12 @@ void GetMap(string fn)
    progtext->text = "Loading textures";
    Repaint();
 
-   //resman.ReleaseAll();  This or something like it will be necessary at some point or we leak memory
+   // Release any previously allocated resources so we don't leak memory
+   meshes.clear();
+   items.clear();
+   resman.ReleaseAll();
+   InitShaders();
+   LoadMaterials();
    
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");

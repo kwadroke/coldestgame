@@ -26,7 +26,7 @@ class Shader
       string CurrentShader();
       void ForgetCurrent();
       void SetShadow(bool);
-      void ReloadAll();
+      void ReloadAll(bool reload = true);
    
    private:
       GLhandleARB CreatePixelShader();

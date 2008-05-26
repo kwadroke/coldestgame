@@ -129,6 +129,8 @@ void Material::UseTextureOnly() const
 
 void Material::SetTexture(int texunit, GLuint tex)
 {
+   if (texfilename[texunit] != "")
+      cout << "Warning: Possible memory leak in Material::SetTexture" << endl;
    texfilename[texunit] = "";
    texid[texunit] = tex;
 }
@@ -144,5 +146,16 @@ GLuint Material::GetTexture(int texunit)
 bool Material::operator<(const Material& m) const
 {
    return id < m.id;
+}
+
+
+void Material::Release()
+{
+   for (int i = 0; i < 6; ++i)
+   {
+      if (texfilename[i] != "")
+         texman.DeleteTexture(texfilename[i]);
+      // Textures in texid are not our problem because they should come from FBO's.
+   }
 }
 

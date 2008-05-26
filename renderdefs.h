@@ -53,6 +53,7 @@ void UpdateNoise();
 void SynchronizePosition();
 void InitGLState(WorldObjects*);
 void RestoreGLState(WorldObjects*);
+void LoadMaterials();
 void InitShaders();
 
 extern Meshlist meshes;
