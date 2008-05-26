@@ -200,7 +200,7 @@ int NetSend(void* dummy)
          SDL_mutexV(netmutex);
          sendkill = false;
       }
-      if (needsync && nextmap == mapname)
+      if (needsync)
       {
          Packet p(outpack, &socket, &addr);
          p << "Y\n";
@@ -577,7 +577,6 @@ int NetListen(void* dummy)
                nextmap = "maps/" + nextmap;
                doconnect = false;
                connected = true;
-               needsync = true;
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                list<Packet>::iterator i;
@@ -719,6 +718,7 @@ int NetListen(void* dummy)
             
             if (itemsreceived.find(id) == itemsreceived.end())
             {
+               cout << "Adding item " << id << endl;
                Item newitem(type, meshes);
                newitem.id = id;
                newitem.team = team;
@@ -767,6 +767,7 @@ int NetListen(void* dummy)
             }
             SDL_mutexV(clientmutex);
             Ack(packetnum);
+            needsync = false;
          }
          else if (packettype == "C")
          {

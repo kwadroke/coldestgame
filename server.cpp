@@ -527,6 +527,7 @@ int ServerListen()
          }
          else if (packettype == "Y") // Client is ready to sync
          {
+            SDL_mutexP(servermutex);
             if (serverplayers[oppnum].needsync)
             {
                SendSyncPacket(serverplayers[oppnum]);
@@ -534,6 +535,7 @@ int ServerListen()
                   SendItem(serveritems[i], oppnum);
                serverplayers[oppnum].needsync = false;
             }
+            SDL_mutexV(servermutex);
          }
       }
       //t.stop();
