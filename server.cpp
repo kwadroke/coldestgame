@@ -338,9 +338,7 @@ int ServerListen()
                validaddrs.erase(SortableIPaddress(serverplayers[respondto].addr));
                serverplayers[respondto].addr = inpack->address;
                validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
-               SendSyncPacket(serverplayers[respondto]);
-               for (size_t i = 0; i < serveritems.size(); ++i)
-                  SendItem(serveritems[i], respondto);
+               serverplayers[respondto].needsync = true;
                cout << "Player " << respondto << " connected\n" << flush;
             }
             serverplayers[respondto].connected = true;
@@ -527,7 +525,16 @@ int ServerListen()
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
          }
-         
+         else if (packettype == "Y") // Client is ready to sync
+         {
+            if (serverplayers[oppnum].needsync)
+            {
+               SendSyncPacket(serverplayers[oppnum]);
+               for (size_t i = 0; i < serveritems.size(); ++i)
+                  SendItem(serveritems[i], oppnum);
+               serverplayers[oppnum].needsync = false;
+            }
+         }
       }
       //t.stop();
    }

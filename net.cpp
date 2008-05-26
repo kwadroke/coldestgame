@@ -200,6 +200,15 @@ int NetSend(void* dummy)
          SDL_mutexV(netmutex);
          sendkill = false;
       }
+      if (needsync && nextmap == mapname)
+      {
+         Packet p(outpack, &socket, &addr);
+         p << "Y\n";
+         p << sendpacketnum << eol;
+         SDL_mutexP(netmutex);
+         sendqueue.push_back(p);
+         SDL_mutexV(netmutex);
+      }
       
       
       SDL_mutexP(netmutex);
@@ -568,6 +577,7 @@ int NetListen(void* dummy)
                nextmap = "maps/" + nextmap;
                doconnect = false;
                connected = true;
+               needsync = true;
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                list<Packet>::iterator i;
@@ -765,7 +775,7 @@ int NetListen(void* dummy)
          }
          else
          {
-            cout << "Warning: Unknown packet type received." << endl;
+            cout << "Warning: Unknown packet type received: " << packettype << endl;
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before

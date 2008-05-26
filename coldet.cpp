@@ -1222,7 +1222,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    for (size_t i = 0; i < numbodyparts; ++i)
    {
-      p.mesh[i]->SetAnimSpeed(p.speed);
+      //p.mesh[i]->SetAnimSpeed(p.speed);
       //if (floatzero(p.speed))
          //p.mesh[i]->ResetAnimation();
    }

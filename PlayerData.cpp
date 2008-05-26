@@ -1,7 +1,7 @@
 #include "PlayerData.h"
 
 PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(0), mesh(numbodyparts, ml.end()),
-                       item(Item::NoItem, ml), speed(0.f)
+                       item(Item::NoItem, ml), speed(0.f), needsync(true)
 {
    Uint32 ticks = 0;
    if (SDL_WasInit(SDL_INIT_TIMER))
