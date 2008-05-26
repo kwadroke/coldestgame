@@ -755,7 +755,6 @@ int NetListen(void* dummy)
             {
                consolecommands.push_back(buffer);
             }
-            cout << packetnum << "  " << lastsyncpacket<< endl;
             SDL_mutexV(clientmutex);
             Ack(packetnum);
          }
@@ -763,6 +762,10 @@ int NetListen(void* dummy)
          {
             connected = false;
             doconnect = true;
+         }
+         else
+         {
+            cout << "Warning: Unknown packet type received." << endl;
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before
