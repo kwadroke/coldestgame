@@ -512,6 +512,7 @@ bool CollisionDetection::UnitTest()
    cout << "Distance: " << DistanceBetweenLines(s1, d1, s2, d2, j, k) << endl;
    cout << j << "  " << k << endl;
    VectorEdgeCheck(v3, s1, d1, .5);
+   return true;
 }
 
 
