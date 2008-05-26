@@ -67,7 +67,6 @@ void GetMap(string);
 void InitGlobals();
 void InitGUI();
 void InitUnits();
-void InitWeapons();
 vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData*, Meshlist&, ObjectKDTree&, const Vector3&, const Vector3&, const float);
 void HitTerrain();
 int PowerOf2(int);

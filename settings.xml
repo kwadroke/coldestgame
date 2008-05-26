@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
+   <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   
+   <TabWidget x="100" y="110" width="800" height="800" text="">
+      <Tab text="Graphics" buttonwidth="120"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+         <TextArea x="100" y="100" width="500" height="100" name="testmessage"
+                   normal="textures/buttonnormsquare.png">
+The settings page is not functional at this time.  Use the console to change settings if necessary.
+         </TextArea>
+      </Tab>
+      <Tab text="Sound" buttonwidth="120"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+      </Tab>
+      <Tab text="Controls" buttonwidth="120"
+           normal="textures/buttonnorm.png"
+           pressed="textures/buttonpressed.png"
+           hover="textures/buttonhover.png">
+      </Tab>
+   </TabWidget>
+   
+   <Button x="100" y="900" width="200" height="50" text="Cancel" align="center"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="showmain">
+   </Button>
+</GUI>

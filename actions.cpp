@@ -135,6 +135,17 @@ void RequestNewTeam()
 }
 
 
+void ShowMain()
+{
+   ShowGUI(mainmenu);
+}
+
+void ShowSettings()
+{
+   ShowGUI(settings);
+}
+
+
 // Stick this outside of GUI so we don't have to update the class every time we add an action
 void Action(const string& action)
 {
@@ -160,4 +171,8 @@ void Action(const string& action)
       SubmitCommand();
    else if (action == "requestnewteam")
       RequestNewTeam();
+   else if (action == "showmain")
+      ShowMain();
+   else if (action == "showsettings")
+      ShowSettings();
 }

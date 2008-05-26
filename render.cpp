@@ -38,7 +38,8 @@ void Repaint()
    SDL_mutexP(clientmutex);
    localplayer = player[0];
    SDL_mutexV(clientmutex);
-   if (!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible)
+   if (!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
+      !gui[settings]->visible)
    {
       // Update any animated objects
       Animate();
