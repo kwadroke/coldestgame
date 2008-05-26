@@ -119,7 +119,6 @@ void InitGlobals()
    
    InitGUI();
    InitUnits();
-   InitWeapons();
 }
 
 
@@ -142,6 +141,7 @@ void InitGUI()
    gui[consolegui] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "console.xml"));
    gui[ingamestatus] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "ingamestatus.xml"));
    gui[chat] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "chat.xml"));
+   gui[settings] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "settings.xml"));
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
 }
@@ -162,49 +162,6 @@ void InitUnits()
    units[UnitTest].file = "unittest";
    units[Ultra].file = "ultra";
    units[Omega].file = "omega";
-}
-
-
-void InitWeapons()
-{
-#if 0
-   WeaponData dummy;
-   dummy.file = "projectile";
-   dummy.name = "None";
-   dummy.acceleration = 1.f;
-   dummy.velocity = .3f;
-   dummy.weight = .5f;
-   dummy.radius = 5.f;
-   dummy.splashradius = 0.f;
-   dummy.explode = true;
-   dummy.damage = 10;
-   dummy.reloadtime = 50;
-   dummy.heat = 0.f;
-   for (short i = 0; i < numweapons; ++i)
-      weapons.push_back(dummy);
-   
-   weapons[MachineGun].reloadtime = 20;
-   weapons[MachineGun].velocity = 20.f;
-   weapons[MachineGun].radius = 5.f;
-   weapons[MachineGun].weight = .1f;
-   weapons[MachineGun].name = "Machine Gun";
-   weapons[GaussRifle].reloadtime = 1000;
-   weapons[GaussRifle].velocity = 10.f;
-   weapons[GaussRifle].weight = .25f;
-   weapons[GaussRifle].radius = 2.f;
-   weapons[GaussRifle].damage = 50;
-   weapons[GaussRifle].name = "Gauss Rifle";
-   weapons[GaussRifle].heat = 10.f;
-   weapons[Laser].reloadtime = 300;
-   weapons[Laser].velocity = 20.f;
-   weapons[Laser].weight = 0.f;
-   weapons[Laser].name = "Laser";
-   weapons[Laser].heat = 25.f;
-   weapons[Mortar].reloadtime = 1000;
-   weapons[Mortar].velocity = .5f;
-   weapons[Mortar].weight = 1.f;
-   weapons[Mortar].name = "Mortar";
-#endif
 }
 
 
@@ -667,6 +624,12 @@ bool GUIEventHandler(SDL_Event &event)
    {
       SDL_ShowCursor(1);
       gui[loadoutmenu]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[settings]->visible)
+   {
+      SDL_ShowCursor(1);
+      gui[settings]->ProcessEvent(&event);
       eatevent = true;
    }
    
@@ -1348,6 +1311,16 @@ void AppendToChat(int playernum, string line)
    }
    chatout->Append(player[playernum].name + ": " + line + "\n");
    chatout->ScrollToBottom();
+}
+
+
+void ShowGUI(int toshow)
+{
+   for (size_t i = 0; i < gui.size(); ++i)
+      gui[i]->visible = false;
+   gui[toshow]->visible = true;
+   if (console.GetBool("showfps"))
+      gui[statsdisp]->visible = true;
 }
 
 

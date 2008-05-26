@@ -25,7 +25,7 @@ using std::set;
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 const string objectfilever = "Version3";
 
-enum GUINames {mainmenu, loadprogress, loadoutmenu, hud, statsdisp, consolegui, ingamestatus, chat, numguis};
+enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, numguis};
 
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
@@ -84,6 +84,7 @@ void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, const Vect
 void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);
+void ShowGUI(int);
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
