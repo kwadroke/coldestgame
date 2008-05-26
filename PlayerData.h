@@ -27,6 +27,7 @@ class PlayerData
       bool leftclick, rightclick;
       bool run;
       bool spawned;
+      bool needsync;
       vector<Meshlist::iterator> mesh;
       set<unsigned long> partids;
       set<unsigned long> acked;
