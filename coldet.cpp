@@ -133,30 +133,16 @@ void InitGUI()
    }
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
-   mainmenu.SetTextureManager(&resman.texman);
-   mainmenu.SetActualSize(screenwidth, screenheight);
-   mainmenu.InitFromFile("mainmenu.xml");
-   hud.SetTextureManager(&resman.texman);
-   hud.SetActualSize(screenwidth, screenheight);
-   hud.InitFromFile("hud.xml");
-   loadprogress.SetTextureManager(&resman.texman);
-   loadprogress.SetActualSize(screenwidth, screenheight);
-   loadprogress.InitFromFile("loadprogress.xml");
-   loadoutmenu.SetTextureManager(&resman.texman);
-   loadoutmenu.SetActualSize(screenwidth, screenheight);
-   loadoutmenu.InitFromFile("loadout.xml");
-   statsdisp.SetTextureManager(&resman.texman);
-   statsdisp.SetActualSize(screenwidth, screenheight);
-   statsdisp.InitFromFile("stats.xml");
-   consolegui.SetTextureManager(&resman.texman);
-   consolegui.SetActualSize(screenwidth, screenheight);
-   consolegui.InitFromFile("console.xml");
-   // There's no particular reason not to new these, and it allows better RAII semantics
-   ingamestatus = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
-   ingamestatus->InitFromFile("ingamestatus.xml");
-   chat = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman));
-   chat->InitFromFile("chat.xml");
-   TextArea* consoleout = dynamic_cast<TextArea*>(consolegui.GetWidget("consoleoutput"));
+   gui.reserve(numguis);
+   gui[mainmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "mainmenu.xml"));
+   gui[hud] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "hud.xml"));
+   gui[loadprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "loadprogress.xml"));
+   gui[loadoutmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "loadout.xml"));
+   gui[statsdisp] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "stats.xml"));
+   gui[consolegui] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "console.xml"));
+   gui[ingamestatus] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "ingamestatus.xml"));
+   gui[chat] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "chat.xml"));
+   TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
 }
 
@@ -497,12 +483,12 @@ static void MainLoop()
    {
       if (nextmap != mapname)
       {
-         GUI* progress = loadprogress.GetWidget("loadingprogress");
-         loadprogress.visible = true;
+         GUI* progress = gui[loadprogress]->GetWidget("loadingprogress");
+         gui[loadprogress]->visible = true;
          Repaint();
          GetMap(nextmap);
-         loadprogress.visible = false;
-         loadoutmenu.visible = true;
+         gui[loadprogress]->visible = false;
+         gui[loadoutmenu]->visible = true;
       }
       SDL_mutexP(clientmutex);
       while (consolecommands.size())
@@ -532,9 +518,9 @@ void GUIUpdate()
 {
    static Uint32 servupdatecounter = SDL_GetTicks();
    static Uint32 statupdatecounter = SDL_GetTicks();
-   static GUI* teamdisplay = loadoutmenu.GetWidget("TeamDisplay");
+   static GUI* teamdisplay = gui[loadoutmenu]->GetWidget("TeamDisplay");
    Uint32 currtick;
-   if (mainmenu.visible)
+   if (gui[mainmenu]->visible)
    {
       currtick = SDL_GetTicks();
       if (currtick - servupdatecounter > 100)
@@ -543,7 +529,7 @@ void GUIUpdate()
          servupdatecounter = currtick;
       }
    }
-   if (ingamestatus->visible)
+   if (gui[ingamestatus]->visible)
    {
       currtick = SDL_GetTicks();
       if (currtick - statupdatecounter > 100)
@@ -557,7 +543,7 @@ void GUIUpdate()
       AppendToChat(newchatplayers[i], newchatlines[i]);
    newchatlines.clear();
    
-   if (loadoutmenu.visible)
+   if (gui[loadoutmenu]->visible)
    {
       if (player[0].team == 1)
          teamdisplay->text = "Spectator";
@@ -566,7 +552,7 @@ void GUIUpdate()
       
       if (spawnschanged)
       {
-         ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
+         ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
          spawnpointsbox->Clear();
          availablespawns = mapspawns;
          for (int i = 0; i < items.size(); ++i)
@@ -604,37 +590,37 @@ bool GUIEventHandler(SDL_Event &event)
          switch(event.key.keysym.sym)
          {
             case SDLK_BACKQUOTE:
-               consolegui.visible = !consolegui.visible;
-               if (consolegui.visible)
+               gui[consolegui]->visible = !gui[consolegui]->visible;
+               if (gui[consolegui]->visible)
                {
-                  GUI* consolein = consolegui.GetWidget("consoleinput");
+                  GUI* consolein = gui[consolegui]->GetWidget("consoleinput");
                   consolein->SetActive();
                }
                eatevent = true;
                break;
             case SDLK_ESCAPE:
-               if (consolegui.visible)
+               if (gui[consolegui]->visible)
                {
-                  consolegui.visible = false;
+                  gui[consolegui]->visible = false;
                   eatevent = true;
                }
-               if (chat->visible)
+               if (gui[chat]->visible)
                {
-                  chat->visible = false;
+                  gui[chat]->visible = false;
                   eatevent = true;
                }
                break;
             case SDLK_RETURN:
-               if (consolegui.visible)
+               if (gui[consolegui]->visible)
                {
-                  GUI* consolein = consolegui.GetWidget("consoleinput");
+                  GUI* consolein = gui[consolegui]->GetWidget("consoleinput");
                   console.Parse(consolein->text);
                   consolein->text = "";
                }
-               else if (!chat->visible)
+               else if (!gui[chat]->visible)
                {
-                  chat->visible = true;
-                  GUI* chatin = chat->GetWidget("chatinput");
+                  gui[chat]->visible = true;
+                  GUI* chatin = gui[chat]->GetWidget("chatinput");
                   if (!chatin)
                   {
                      cout << "Error getting chat input widget" << endl;
@@ -644,7 +630,7 @@ bool GUIEventHandler(SDL_Event &event)
                }
                else
                {
-                  GUI *chatin = chat->GetWidget("chatinput");
+                  GUI *chatin = gui[chat]->GetWidget("chatinput");
                   if (!chatin)
                   {
                      cout << "Error getting chat input widget" << endl;
@@ -671,29 +657,29 @@ bool GUIEventHandler(SDL_Event &event)
    };
    
    // If a menu is visible it eats all events
-   if (mainmenu.visible) 
+   if (gui[mainmenu]->visible) 
    {
       SDL_ShowCursor(1);
-      mainmenu.ProcessEvent(&event);
+      gui[mainmenu]->ProcessEvent(&event);
       eatevent = true;
    }
-   else if (loadoutmenu.visible)
+   else if (gui[loadoutmenu]->visible)
    {
       SDL_ShowCursor(1);
-      loadoutmenu.ProcessEvent(&event);
+      gui[loadoutmenu]->ProcessEvent(&event);
       eatevent = true;
    }
    
    if (!eatevent)
    {
-      if (consolegui.visible)
+      if (gui[consolegui]->visible)
       {
          SDL_ShowCursor(1);
-         consolegui.ProcessEvent(&event);
+         gui[consolegui]->ProcessEvent(&event);
       }
-      if (chat->visible)
+      if (gui[chat]->visible)
       {
-         chat->ProcessEvent(&event);
+         gui[chat]->ProcessEvent(&event);
       }
    }
    
@@ -710,13 +696,13 @@ void GameEventHandler(SDL_Event &event)
    switch(event.type) 
    {
       case SDL_KEYDOWN:
-         if (!consolegui.visible)
+         if (!gui[consolegui]->visible)
          {
             switch (event.key.keysym.sym) 
             {
                case SDLK_ESCAPE:
-                  mainmenu.visible = !mainmenu.visible;
-                  hud.visible = !hud.visible;
+                  gui[mainmenu]->visible = !gui[mainmenu]->visible;
+                  gui[hud]->visible = !gui[hud]->visible;
                   break;
                case SDLK_a:
                   player[0].moveleft = true;
@@ -749,7 +735,7 @@ void GameEventHandler(SDL_Event &event)
                   player[0].pos.z = 200;
                   break;
                case SDLK_TAB:
-                  ingamestatus->visible = true;
+                  gui[ingamestatus]->visible = true;
                   break;
             }
          }
@@ -781,14 +767,14 @@ void GameEventHandler(SDL_Event &event)
                player[0].run = false;
                break;
             case SDLK_TAB:
-               ingamestatus->visible = false;
+               gui[ingamestatus]->visible = false;
                break;
          }
          break;
          
       case SDL_MOUSEMOTION:
          if ((event.motion.x != screenwidth / 2 || 
-              event.motion.y != screenheight / 2) && !consolegui.visible)
+              event.motion.y != screenheight / 2) && !gui[consolegui]->visible)
          {
             player[0].pitch += event.motion.yrel / 4.;
             if (player[0].pitch < -90) player[0].pitch = -90;
@@ -868,6 +854,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    if (numticks > 60) numticks = 60; // Yes this is a hack, it should be removed eventually
    float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
    if (mplayer.run) step *= 2.f;
+   if (mplayer.pos.y < 0) step /= 2.f;
    
    bool onground = false;
    bool moving = false;
@@ -1167,7 +1154,7 @@ void Animate()
 
 void UpdateServerList()
 {
-   Table* serverlist = (Table*)mainmenu.GetWidget("serverlist");
+   Table* serverlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
    string values;
    vector<ServerInfo>::iterator i;
    if (!serverlist)
@@ -1331,7 +1318,7 @@ void UpdatePlayerList()
 {
    SDL_mutexP(clientmutex);
    
-   Table* playerlist = (Table*)ingamestatus->GetWidget("playerlist");
+   Table* playerlist = (Table*)gui[ingamestatus]->GetWidget("playerlist");
    
    playerlist->Clear();
    playerlist->Add("Name|Kills|Deaths|Ping");
@@ -1353,7 +1340,7 @@ void UpdatePlayerList()
 // Must grab clientmutex before calling this function
 void AppendToChat(int playernum, string line)
 {
-   TextArea *chatout = (TextArea*)chat->GetWidget("chatoutput");
+   TextArea *chatout = (TextArea*)gui[chat]->GetWidget("chatoutput");
    if (!chatout)
    {
       cout << "Error getting chat output widget" << endl;

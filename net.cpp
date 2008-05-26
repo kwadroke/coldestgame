@@ -135,7 +135,7 @@ int NetSend(void* dummy)
             p << player[0].weapons[i].Id() << eol;
          }
          p << player[0].item.Type() << eol;
-         ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
+         ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
          int sel = spawnpointsbox->Selected();
          p << availablespawns[sel].position.x << eol;
          p << availablespawns[sel].position.y << eol;
@@ -611,13 +611,13 @@ int NetListen(void* dummy)
             get >> accepted;
             get >> acknum;
             
-            if (loadoutmenu.visible)
+            if (gui[loadoutmenu]->visible)
             {
                if (accepted)
                {
-                  ComboBox *spawnpointsbox = (ComboBox*)loadoutmenu.GetWidget("SpawnPoints");
-                  loadoutmenu.visible = false;
-                  hud.visible = true;
+                  ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
+                  gui[loadoutmenu]->visible = false;
+                  gui[hud]->visible = true;
                   player[0].pos = availablespawns[spawnpointsbox->Selected()].position;
                   player[0].size = units[player[0].unit].size;
                   player[0].lastmovetick = SDL_GetTicks();
@@ -689,8 +689,8 @@ int NetListen(void* dummy)
          }
          else if (packettype == "d") // We died:-(
          {
-            loadoutmenu.visible = true;
-            hud.visible = false;
+            gui[loadoutmenu]->visible = true;
+            gui[hud]->visible = false;
             SDL_mutexP(clientmutex); // Otherwise we can end up firing after we respawn
             player[0].leftclick = false;
             SDL_mutexV(clientmutex);

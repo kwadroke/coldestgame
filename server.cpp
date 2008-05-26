@@ -868,6 +868,8 @@ void ServerUpdatePlayer(int i)
    // Cooling
    float coolrate = .01f;
    coolrate *= serverplayers[i].item.CoolMult();
+   if (serverplayers[i].pos.y < 0)
+      coolrate *= 1.5f;
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
    serverplayers[i].lastcoolingtick += ticks;
    serverplayers[i].temperature -= ticks * coolrate;

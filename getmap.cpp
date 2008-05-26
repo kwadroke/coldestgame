@@ -55,8 +55,8 @@ void GetMap(string fn)
    string heightmapname = fn + ".png";
    string lightmapname = fn + "light.png";
    vector<floatvec> maparray;  // Heightmap data scaled by heightscale
-   ProgressBar* progress = (ProgressBar*)loadprogress.GetWidget("loadprogressbar");
-   GUI* progtext = loadprogress.GetWidget("progresstext");
+   ProgressBar* progress = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
+   GUI* progtext = gui[loadprogress]->GetWidget("progresstext");
    
    IniReader mapdata(dataname);
    

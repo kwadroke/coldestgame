@@ -38,7 +38,7 @@ void Repaint()
    SDL_mutexP(clientmutex);
    localplayer = player[0];
    SDL_mutexV(clientmutex);
-   if (!mainmenu.visible && !loadprogress.visible && !loadoutmenu.visible)
+   if (!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible)
    {
       // Update any animated objects
       Animate();
@@ -755,28 +755,28 @@ void RenderWater()
 
 void RenderHud()
 {
-   static GUI* fpslabel = statsdisp.GetWidget("fps");
-   static GUI* tpslabel = statsdisp.GetWidget("trispersec");
-   static GUI* tpflabel = statsdisp.GetWidget("trisperframe");
-   static GUI* pinglabel = statsdisp.GetWidget("ping");
-   static GUI* mpflabel = statsdisp.GetWidget("msperframe");
-   static GUI* poslabel = statsdisp.GetWidget("position");
-   static GUI* partlabel = statsdisp.GetWidget("particles");
-   static GUI* torsohplabel = hud.GetWidget("torsohp");
-   static GUI* legshplabel = hud.GetWidget("legshp");
-   static GUI* leftarmhplabel = hud.GetWidget("leftarmhp");
-   static GUI* rightarmhplabel = hud.GetWidget("rightarmhp");
-   static GUI* torsoweaponlabel = hud.GetWidget("torsoweapon");
-   static GUI* larmweaponlabel = hud.GetWidget("larmweapon");
-   static GUI* rarmweaponlabel = hud.GetWidget("rarmweapon");
-   static GUI* torsoselectedlabel = hud.GetWidget("torsoselected");
-   static GUI* larmselectedlabel = hud.GetWidget("larmselected");
-   static GUI* rarmselectedlabel = hud.GetWidget("rarmselected");
-   static ProgressBar* tempbar = (ProgressBar*)hud.GetWidget("temperature");
-   static ProgressBar* rotbar = (ProgressBar*)hud.GetWidget("facing");
-   static GUI* minimaplabel = hud.GetWidget("minimap");
-   static GUI* playerposlabel = hud.GetWidget("playerpos");
-   static GUI* loadoutmaplabel = loadoutmenu.GetWidget("map");
+   static GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
+   static GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
+   static GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
+   static GUI* pinglabel = gui[statsdisp]->GetWidget("ping");
+   static GUI* mpflabel = gui[statsdisp]->GetWidget("msperframe");
+   static GUI* poslabel = gui[statsdisp]->GetWidget("position");
+   static GUI* partlabel = gui[statsdisp]->GetWidget("particles");
+   static GUI* torsohplabel = gui[hud]->GetWidget("torsohp");
+   static GUI* legshplabel = gui[hud]->GetWidget("legshp");
+   static GUI* leftarmhplabel = gui[hud]->GetWidget("leftarmhp");
+   static GUI* rightarmhplabel = gui[hud]->GetWidget("rightarmhp");
+   static GUI* torsoweaponlabel = gui[hud]->GetWidget("torsoweapon");
+   static GUI* larmweaponlabel = gui[hud]->GetWidget("larmweapon");
+   static GUI* rarmweaponlabel = gui[hud]->GetWidget("rarmweapon");
+   static GUI* torsoselectedlabel = gui[hud]->GetWidget("torsoselected");
+   static GUI* larmselectedlabel = gui[hud]->GetWidget("larmselected");
+   static GUI* rarmselectedlabel = gui[hud]->GetWidget("rarmselected");
+   static ProgressBar* tempbar = (ProgressBar*)gui[hud]->GetWidget("temperature");
+   static ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
+   static GUI* minimaplabel = gui[hud]->GetWidget("minimap");
+   static GUI* playerposlabel = gui[hud]->GetWidget("playerpos");
+   static GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("map");
    
    if (frames >= 30) // Update FPS
    {
@@ -850,15 +850,10 @@ void RenderHud()
    // Render all of the GUI objects, they know whether they're visible or not
    resman.shaderman.UseShader("none");
    glColor4f(1, 1, 1, 1);
-   mainmenu.Render();
-   hud.Render();
-   loadoutmenu.Render();
-   loadprogress.Render();
-   if (console.GetBool("showfps"))
-      statsdisp.Render();
-   consolegui.Render();
-   ingamestatus->Render();
-   chat->Render();
+   for (size_t i = 0; i < gui.size(); ++i)
+   {
+      gui[i]->Render();
+   }
    
    SDL_GL_Exit2dMode();
 }
