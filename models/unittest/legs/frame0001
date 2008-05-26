@@ -15,7 +15,7 @@ Primitive
    ParentID 13
    Name LeftLeg
    Material 
-   Rot1 0 0 0
+   Rot1 20 0 0
    Rot2 0 0 0
    Trans 1500 0 0
 Primitive
@@ -112,7 +112,7 @@ Primitive
    ParentID 13
    Name RightLeg
    Material 
-   Rot1 0 0 0
+   Rot1 -20 0 0
    Rot2 0 0 0
    Trans -1500 0 0
 Primitive

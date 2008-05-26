@@ -152,6 +152,7 @@ void InitUnits()
    UnitData dummy;
    dummy.file = "unittest";
    dummy.turnspeed = 1.f;
+   dummy.acceleration = .05f;
    dummy.maxspeed = 1.f;
    dummy.size = 10.f;
    dummy.weight = 100;
@@ -815,40 +816,34 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    mplayer.lastmovetick = SDL_GetTicks();
    if (numticks > 60) numticks = 60; // Yes this is a hack, it should be removed eventually
    float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
-   if (mplayer.run) step *= 2.f;
-   if (mplayer.pos.y < 0) step /= 2.f;
    
    bool onground = false;
    bool moving = false;
    
-   Vector3 temp;
+   float direction;
    if (mplayer.moveforward)
    {
-      temp.z += 1;
-      
+      direction = 1;
    }
    if (mplayer.moveback)
    {
-      temp.z -= 1;
+      direction = -1;
    }
    
    if (mplayer.moveleft)
    {
-      //temp.x -= 1;
       mplayer.facing -= step * 2;
       if (mplayer.facing < 0) mplayer.facing += 360;
    }
    if (mplayer.moveright)
    {
-      //temp.x += 1;
       mplayer.facing += step * 2;
       if (mplayer.facing > 360) mplayer.facing -= 360;
    }
-   //temp.normalize();
-   if (mplayer.moveforward || mplayer.moveback)// || mplayer.moveleft || mplayer.moveright)
+   if (mplayer.moveforward || mplayer.moveback)
       moving = true;
    
-   Vector3 d = temp;
+   Vector3 d = Vector3(0, 0, 1);
    GraphicMatrix rot;
    if (mplayer.pitch > 89.99)
       rot.rotatex(89.99);
@@ -861,14 +856,50 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       d.y = 0.f;
    d.normalize();
    
-   mplayer.pos.x += d.x * step;
-   mplayer.pos.z -= d.z * step;
+   float oldspeed = mplayer.speed;
+   UnitData punit = units[mplayer.unit];
+   float maxspeed = punit.maxspeed;
+   float acceleration = punit.acceleration;
+   float accmodifier = 1.f;
+   if (mplayer.run)
+   {
+      maxspeed *= 2.f;
+      acceleration *= 2.f;
+   }
+   if (mplayer.pos.y < 0)
+   {
+      maxspeed /= 2.f;
+      acceleration /= 2.f;
+   }
+   
+   if (moving) // Accelerate or decelerate properly
+   {
+      if (fabs(oldspeed) > maxspeed) accmodifier = -1;
+      mplayer.speed += acceleration * accmodifier * step * direction;
+      if (fabs(mplayer.speed) > maxspeed) mplayer.speed = maxspeed * direction;
+   }
+   else if (!floatzero(mplayer.speed)) // Decelerate them back to 0 speed
+   {
+      if (oldspeed > 0.f)
+      {
+         mplayer.speed -= acceleration * step;
+         if (mplayer.speed < 0.f) mplayer.speed = 0.f;
+      }
+      if (oldspeed < 0.f)
+      {
+         mplayer.speed += acceleration * step;
+         if (mplayer.speed > 0.f) mplayer.speed = 0.f;
+      }
+   }
+   
+   mplayer.pos.x += d.x * step * mplayer.speed;
+   mplayer.pos.z -= d.z * step * mplayer.speed;
    
    static const float threshold = .35f;
    static float gravity = .1f;
    
    if (console.GetBool("fly"))
-      mplayer.pos.y += d.y * step;
+      mplayer.pos.y += d.y * step * mplayer.speed;
    else
    {
       Vector3 groundcheck = old;
@@ -887,14 +918,16 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          mplayer.fallvelocity = 0.f;
          groundcheck = mplayer.pos;
          /* It turns out that our collision detection isn't accurate enough to just use our previous
-            height, so calculate the exact height so we know whether we're on a downslope.*/
+            height, so calculate the exact height so we know whether we're on a downslope.
+            Note: Collision detection has undergone significant changes since this was written, but
+            it still works so I'm not going to change it.*/
          groundcheck.y = GetTerrainHeight(old.x, old.z);
          groundcheck.y += .01f;
          check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
          groundcheck = coldet.CheckSphereHit(old, groundcheck, .01, check, NULL);
          /* If this vector comes back zero then it means they're on a downslope and might need a little help
             staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
-         if (moving && groundcheck.magnitude() < .00001f)
+         if (!floatzero(mplayer.speed) && groundcheck.magnitude() < .00001f)
          {
             mplayer.pos.y -= step;
          }
@@ -1048,7 +1081,7 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .1f;
+   float pingslop = .2f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
    
@@ -1063,7 +1096,7 @@ void SynchronizePosition()
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
    if (difference > 10.f)
       posadj *= .7f;
-   else if (!player[0].moveforward && !player[0].moveback)
+   else if (floatzero(player[0].speed))
       posadj *= 0.f;
    else if (difference > .3f)
       posadj *= .5f;
@@ -1186,6 +1219,13 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[RArm] = ml.begin();
    }
    p.size = units[p.unit].size;
+   
+   for (size_t i = 0; i < numbodyparts; ++i)
+   {
+      p.mesh[i]->SetAnimSpeed(p.speed);
+      if (floatzero(p.speed))
+         p.mesh[i]->ResetAnimation();
+   }
 }
 
 
