@@ -1098,9 +1098,9 @@ void SynchronizePosition()
       posadj *= .7f;
    else if (floatzero(player[0].speed))
       posadj *= 0.f;
-   else if (difference > .3f)
+   else if (difference > .2f)
       posadj *= .5f;
-   // Note: If difference < .3f then we snap to the server location, but it's not noticeable
+   // Note: If difference < .2f then we snap to the server location, but it's not noticeable
    // because the error is so small
    
    player[0].pos += posadj;
@@ -1223,8 +1223,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    for (size_t i = 0; i < numbodyparts; ++i)
    {
       p.mesh[i]->SetAnimSpeed(p.speed);
-      if (floatzero(p.speed))
-         p.mesh[i]->ResetAnimation();
+      //if (floatzero(p.speed))
+         //p.mesh[i]->ResetAnimation();
    }
 }
 

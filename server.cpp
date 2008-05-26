@@ -320,21 +320,14 @@ int ServerListen()
             if (add)
             {
                PlayerData temp(servermeshes);
-               temp.recpacketnum = packetnum;
                temp.addr = inpack->address;
-               temp.connected = true;
-               temp.lastupdate = SDL_GetTicks();
                temp.unit = unit;
                temp.acked.insert(packetnum);
                UpdatePlayerModel(temp, servermeshes, false);
                
                serverplayers.push_back(temp);
                respondto = serverplayers.size() - 1;
-               SendSyncPacket(serverplayers[respondto]);
-               for (size_t i = 0; i < serveritems.size(); ++i)
-                  SendItem(serveritems[i], respondto);
                validaddrs.insert(SortableIPaddress(inpack->address));
-               cout << "Player " << (serverplayers.size() - 1) << " connected\n" << flush;
             }
             
             if (!serverplayers[respondto].connected)
@@ -342,6 +335,13 @@ int ServerListen()
                serverplayers[respondto].lastupdate = SDL_GetTicks();
                serverplayers[respondto].recpacketnum = packetnum;
                serverplayers[respondto].spawnpacketnum = 0;
+               validaddrs.erase(SortableIPaddress(serverplayers[respondto].addr));
+               serverplayers[respondto].addr = inpack->address;
+               validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
+               SendSyncPacket(serverplayers[respondto]);
+               for (size_t i = 0; i < serveritems.size(); ++i)
+                  SendItem(serveritems[i], respondto);
+               cout << "Player " << respondto << " connected\n" << flush;
             }
             serverplayers[respondto].connected = true;
             serverplayers[respondto].name = name;
@@ -884,7 +884,7 @@ void ServerUpdatePlayer(int i)
    {
       serverplayers[i].lastfiretick = SDL_GetTicks();
       serverplayers[i].temperature += currplayerweapon.Heat();
-      if (currplayerweapon.ammo > 0)
+      if (currplayerweapon.ammo > 0) // Negative ammo value indicated infinite ammo
          currplayerweapon.ammo--;
       Vector3 dir(0, 0, -1);
       GraphicMatrix m;
@@ -1000,7 +1000,6 @@ void AddItem(const Item& it, int oppnum)
 // Grab the servermutex before calling
 void SendItem(const Item& curritem, int oppnum)
 {
-   
    Packet p(servoutpack, &servoutsock, &serverplayers[oppnum].addr);
    p.ack = servsendpacketnum;
    p << "I\n";
