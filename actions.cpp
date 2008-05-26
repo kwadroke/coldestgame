@@ -35,8 +35,7 @@ void Connect()
    SDL_mutexV(clientmutex);
    console.Parse("set serveraddr " + serveraddress);
    console.Parse("connect");
-   gui[mainmenu]->visible = false;
-   gui[loadoutmenu]->visible = true;
+   ShowGUI(loadoutmenu);
 }
 
 
@@ -45,8 +44,7 @@ void ConnectToIp()
    GUI* servname = gui[mainmenu]->GetWidget("servername");
    console.Parse("set serveraddr " + servname->text);
    console.Parse("connect");
-   gui[mainmenu]->visible = false;
-   gui[loadoutmenu]->visible = true;
+   ShowGUI(loadoutmenu);
 }
 
 
@@ -56,8 +54,7 @@ void Host()
    serverthread = SDL_CreateThread(Server, NULL);
    console.Parse("set serveraddr localhost");
    console.Parse("connect");
-   gui[mainmenu]->visible = false;
-   gui[loadoutmenu]->visible = true;
+   ShowGUI(loadoutmenu);
 }
 
 
@@ -85,8 +82,7 @@ void Spawn()
 
 void LoadoutToMain()
 {
-   gui[loadoutmenu]->visible = false;
-   gui[mainmenu]->visible = true;
+   ShowGUI(mainmenu);
 }
 
 

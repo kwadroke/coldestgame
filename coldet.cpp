@@ -441,11 +441,10 @@ static void MainLoop()
       if (nextmap != mapname)
       {
          GUI* progress = gui[loadprogress]->GetWidget("loadingprogress");
-         gui[loadprogress]->visible = true;
+         ShowGUI(loadprogress);
          Repaint();
          GetMap(nextmap);
-         gui[loadprogress]->visible = false;
-         gui[loadoutmenu]->visible = true;
+         ShowGUI(loadoutmenu);
       }
       SDL_mutexP(clientmutex);
       while (consolecommands.size())
