@@ -660,6 +660,8 @@ void GetMap(string fn)
    glFogf(GL_FOG_START, viewdist * .8f);
    glFogf(GL_FOG_END, viewdist);
    
+   // Signal the net thread that we can sync now
+   needsync = true;
 }
 
 
