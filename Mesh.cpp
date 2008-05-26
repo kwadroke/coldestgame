@@ -616,6 +616,7 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
    if (frameroot.size() != m.frameroot.size())
    {
       cout << "Warning: Not inserting mesh.  Keyframe mismatch." << endl;
+      return;
    }
    
    for (int i = 0; i < frameroot.size(); ++i)
@@ -631,6 +632,14 @@ void Mesh::SetAnimSpeed(const float newas)
    /*float ratio = newas / animspeed;
    animspeed = newas;
    animtime = static_cast<int>(static_cast<float>(animtime) * ratio);*/
+}
+
+
+void Mesh::ResetAnimation()
+{
+   animspeed = 0.f;
+   currkeyframe = 0;
+   animtime = 0;
 }
 
 

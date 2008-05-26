@@ -31,6 +31,7 @@ struct UnitData
    int baseweight;
    string file;
    float turnspeed;
+   float acceleration;
    float maxspeed;
    float size;
 };

@@ -44,6 +44,7 @@ class Mesh
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
       void SetAnimSpeed(const float);
+      void ResetAnimation();
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
       void ReadState(Vector3&, Vector3&, int&, int&, float&);
       Vector3 GetPosition(){return position;}
