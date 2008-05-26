@@ -383,6 +383,7 @@ int NetListen(void* dummy)
                   get >> player[oppnum].moveback;
                   get >> player[oppnum].moveleft;
                   get >> player[oppnum].moveright;
+                  get >> player[oppnum].speed;
                   oldunit = player[oppnum].unit;
                   get >> player[oppnum].unit;
                   get >> player[oppnum].ping;
@@ -577,6 +578,7 @@ int NetListen(void* dummy)
                nextmap = "maps/" + nextmap;
                doconnect = false;
                connected = true;
+               needsync = false; // Set to true after map is loaded
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                list<Packet>::iterator i;

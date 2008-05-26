@@ -613,6 +613,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                temp << serverplayers[i].moveback << eol;
                temp << serverplayers[i].moveleft << eol;
                temp << serverplayers[i].moveright << eol;
+               temp << serverplayers[i].speed << eol;
                temp << serverplayers[i].unit << eol;
                temp << serverplayers[i].ping << eol;
             }
