@@ -25,22 +25,25 @@ using std::set;
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 const string objectfilever = "Version3";
 
+enum GUINames {mainmenu, loadprogress, loadoutmenu, hud, statsdisp, consolegui, ingamestatus, chat, numguis};
+
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
 extern vector<Item> items;
-extern GUI mainmenu;           // Object that handles the main menu
-extern bool mainmenuvisible;   // Whether the main menu is shown
+extern vector<GUIPtr> gui;
+//extern GUI mainmenu;           // Object that handles the main menu
+//extern bool mainmenuvisible;   // Whether the main menu is shown
 extern string nextmap;         // Used to signal the main thread to load a new map
 extern string mapname;         // The name of the current map
 
-extern GUI hud;                // Handles drawing the HUD
-extern GUI loadprogress;       // Shows loading progress
-extern GUI loadoutmenu;        // The loadout screen
-extern GUI statsdisp;          // Display FPS etc.
-extern GUI consolegui;         // The in-game console
-extern GUIPtr ingamestatus;
-extern GUIPtr chat;
+//extern GUI hud;                // Handles drawing the HUD
+//extern GUI loadprogress;       // Shows loading progress
+//extern GUI loadoutmenu;        // The loadout screen
+//extern GUI statsdisp;          // Display FPS etc.
+//extern GUI consolegui;         // The in-game console
+//extern GUIPtr ingamestatus;
+//extern GUIPtr chat;
 extern ResourceManager resman; // Handles loading and organizing different resources
 extern vector<PlayerData> player;
 extern vector<UnitData> units;

@@ -50,7 +50,7 @@ class GUI
    friend class TextArea;
    friend class Slider;
    public:
-      GUI(float aw = 640.f, float ah = 480.f, TextureManager* texm = NULL);
+      GUI(float aw = 640.f, float ah = 480.f, TextureManager* texm = NULL, const string file = "");
       virtual ~GUI();
       void Render();
       virtual void ProcessEvent(SDL_Event*);

@@ -18,7 +18,7 @@
    -Tab widget
 */
 
-GUI::GUI(float aw, float ah, TextureManager* texm)
+GUI::GUI(float aw, float ah, TextureManager* texm, const string file)
 {
    actualw = aw;
    actualh = ah;
@@ -28,6 +28,8 @@ GUI::GUI(float aw, float ah, TextureManager* texm)
    name = "root";
    xoff = yoff = 0;
    Init(this, texm);
+   if (file != "")
+      InitFromFile(file);
 }
 
 
