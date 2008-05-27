@@ -447,13 +447,6 @@ static void MainLoop()
          GetMap(nextmap);
          ShowGUI(loadoutmenu);
       }
-      SDL_mutexP(clientmutex);
-      while (consolecommands.size())
-      {
-         console.Parse(consolecommands[0]);
-         consolecommands.pop_front();
-      }
-      SDL_mutexV(clientmutex);
       
       GUIUpdate();
       

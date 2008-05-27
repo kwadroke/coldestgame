@@ -46,11 +46,12 @@ bool Console::GetBool(const string& key)
 }
 
 
-void Console::Parse(const string& line)
+void Console::Parse(const string& line, bool echo)
 {
    string simple = SimplifyWhitespace(line);
    
-   WriteToConsole(simple);
+   if (echo)
+      WriteToConsole(simple);
    
    int ntokens = NumTokens(simple);
    if (ntokens == 0 ||
