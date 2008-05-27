@@ -765,7 +765,7 @@ int NetListen(void* dummy)
             SDL_mutexP(clientmutex);
             while (getline(get, buffer) && buffer != "endofcommands")
             {
-               consolecommands.push_back(buffer);
+               console.Parse(buffer, false);
             }
             SDL_mutexV(clientmutex);
             Ack(packetnum);

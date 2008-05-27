@@ -28,7 +28,6 @@ extern vector<unsigned short> newchatplayers;
 extern short changeteam;
 extern bool useitem;
 extern vector<Meshlist::iterator> deletemeshes;
-extern deque<string> consolecommands;
 
 void HandleAck(unsigned long);
 

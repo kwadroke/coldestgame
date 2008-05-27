@@ -14,5 +14,4 @@ vector<unsigned short> newchatplayers;
 short changeteam;
 bool useitem;
 vector<Meshlist::iterator> deletemeshes;
-deque<string> consolecommands;
 

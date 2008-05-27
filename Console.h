@@ -24,7 +24,7 @@ class Console
       float GetFloat(const string&);
       string GetString(const string&);
       bool GetBool(const string&);
-      void Parse(const string&);
+      void Parse(const string&, bool echo = true);
       void InitWidget(TextArea&);
       void WriteToConsole(const string&);
       

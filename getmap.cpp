@@ -57,6 +57,8 @@ void GetMap(string fn)
    vector<floatvec> maparray;  // Heightmap data scaled by heightscale
    ProgressBar* progress = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
    GUI* progtext = gui[loadprogress]->GetWidget("progresstext");
+   GUI* progname = gui[loadprogress]->GetWidget("loadname");
+   progname->text = "Loading " + fn;
    
    IniReader mapdata(dataname);
    
@@ -104,6 +106,8 @@ void GetMap(string fn)
    resman.ReleaseAll();
    InitShaders();
    LoadMaterials();
+   particles.clear();
+   particlemesh = MeshPtr();  // Otherwise we may try to render it later and that will be bad
    
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");

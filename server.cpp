@@ -41,6 +41,7 @@ void SendKill(int);
 void RemoveTeam(int);
 void SendSyncPacket(PlayerData&);
 string AddressToDD(Uint32);
+void LoadMapList();
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -60,6 +61,8 @@ Meshlist servermeshes;
 ObjectKDTree serverkdtree;
 short maxplayers;
 deque<ServerState> oldstate;
+vector<string> maplist;
+bool gameover;
 
 class SortableIPaddress
 {
@@ -138,6 +141,7 @@ int Server(void* dummy)
    maxplayers = 32;
    if (console.GetString("map") == "")
       console.Parse("set map newtest");
+   LoadMapList();
    ServerLoadMap();
    servermutex = SDL_CreateMutex();
    serversend = SDL_CreateThread(ServerSend, NULL);
@@ -186,7 +190,7 @@ int ServerListen()
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
-      if ("maps/" + console.GetString("map") != mapname) // If the server changed maps load the new one
+      if ("maps/" + console.GetString("map") != mapname || gameover) // If the server changed maps load the new one
       {
          ServerLoadMap();
       }
@@ -585,6 +589,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
       ++runtimes;
       //t.start();
       SDL_Delay(1);  // Keep the loop from eating too much CPU
+      while (gameover) // Just to be safe, stop this thread while loading the next map
+         SDL_Delay(1);
       
       currnettick = SDL_GetTicks();
       if (currnettick - lastnettick >= 1000 / servertickrate)
@@ -758,6 +764,7 @@ void ServerLoadMap()
    SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
    serverhasmap = false;
    nextmap = "maps/" + console.GetString("map");
+   mapname = "";
    while (mapname != nextmap)
    {
       SDL_Delay(1); // Wait for main thread to load map
@@ -772,6 +779,8 @@ void ServerLoadMap()
    PlayerData local(servermeshes); // Dummy placeholder for the local player
    serverplayers.push_back(local);
    validaddrs.clear();
+   
+   servparticles.clear();
    
    // Generate main base items
    for (int i = 0; i < spawnpoints.size(); ++i)
@@ -802,6 +811,7 @@ void ServerLoadMap()
    
    cout << "Map loaded" << endl;
    serverhasmap = true;
+   gameover = false;
    SDL_mutexV(servermutex);
 }
 
@@ -839,8 +849,10 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             serverplayers[p.playernum].kills++;
             cout << "Player " << i << " was killed by Player " << p.playernum << endl;
             serverplayers[i].Kill();
+            SendKill(i);
          }
       }
+      bool doremove;
       vector<Item>::iterator i = serveritems.begin();
       while (i != serveritems.end())
       {
@@ -849,12 +861,18 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             i->hp -= p.damage;
             if (i->hp < 0)
             {
+               doremove = true;
                for (size_t j = 0; j < spawnpoints.size(); ++j)
                {
                   if (&(*serveritems[j].mesh) == curr)
+                  {
                      RemoveTeam(spawnpoints[j].team);
+                     doremove = false;
+                  }
                }
-               i = RemoveItem(i);
+               if (doremove)
+                  i = RemoveItem(i);
+               else ++i;
             }
             else ++i;
          }
@@ -1064,7 +1082,16 @@ void SendKill(int num)
 // At this time just ends the game because only two teams are supported.  Will more be in the future?  Who knows.
 void RemoveTeam(int num)
 {
-   cout << "Team " << num << " has been defeated" << endl;
+   if (!gameover)
+   {
+      cout << "Team " << num << " has been defeated" << endl;
+      srand(time(0));
+      int choosemap = (int)Random(0, maplist.size());
+      SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
+      console.Parse("set map " + maplist[choosemap], false);
+      SDL_mutexV(clientmutex);
+      gameover = true;
+   }
 }
 
 
@@ -1081,5 +1108,19 @@ void SendSyncPacket(PlayerData& p)
    pack << "endofcommands\n";
    
    servqueue.push_back(pack);
+}
+
+
+void LoadMapList()
+{
+   IniReader readmaps("maps/maplist");
+   
+   for (size_t i = 0; i < readmaps.NumChildren(); ++i)
+   {
+      const IniReader& currmap = readmaps(i);
+      string buffer;
+      currmap.Read(buffer, "File");
+      maplist.push_back(buffer);
+   }
 }
 
