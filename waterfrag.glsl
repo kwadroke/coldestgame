@@ -10,20 +10,28 @@ void main()
 {
    // Texturing
    vec4 shiftedtc = gl_TexCoord[0];
+//    vec3 v1, v2, v3;
+//    v1 = vec3(0, 0, 0);
+//    v2 = vec3(3, 0, 0);
+//    v3 = vec3(0, 0, 3);
+//    v1.y = texture2D(noisetex, gl_TexCoord[1].st * 100.).r - .5;
+//    v2.y = texture2D(noisetex, gl_TexCoord[1].st * 101.).r - .5;
+//    v3.y = texture2D(noisetex, gl_TexCoord[1].st * 101.).r - .5;
+//    vec3 normal = normalize(cross((v3 - v1), (v2 - v1)));
+//    vec4 shiftamount;
+//    shiftamount.x = normal.x;
+//    shiftamount.y = normal.z;
    vec4 shiftamount;
-   //vec2 shiftamount1;
    shiftamount.x = texture2D(noisetex, gl_TexCoord[1].st * 100.).r - .5;
-   shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 25.).r - .5;
-   shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 10.).r - .5;
-   shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 4.).r - .5;
-   //shiftamount1.x = texture2D(noisetex, gl_TexCoord[1].st * 150.).r - .5;
-   //shiftamount1.y = texture2D(noisetex, gl_TexCoord[1].st * 140.).r - .5;
-   //shiftamount *= .9;
+   shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 100.).r - .5;
+   shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 50.).r - .5;
+   shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 50.).r - .5;
    shiftamount.zw *= 3.;
    shiftamount.x += shiftamount.z;
    shiftamount.y += shiftamount.w;
+   shiftamount /= 2.;
    shiftedtc += vec4(shiftamount.x, shiftamount.y, shiftamount.x, shiftamount.x);
-   vec3 normal = vec3(0., 1.5, 0.);
+   vec3 normal = vec3(0., 2, 0.);
    normal += vec3(shiftamount.x, 0, shiftamount.y);
    vec4 color = texture2DProj(tex, shiftedtc);
    

@@ -27,7 +27,7 @@ struct eqptr
    {
       return (p1 == p2);
    }
-   bool operator()(Mesh* hashme) const
+   intptr_t operator()(Mesh* hashme) const
    {
       return (intptr_t)hashme % 10000; // Umm, probably not ideal, but we can fix it later
    }
