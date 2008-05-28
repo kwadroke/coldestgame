@@ -109,6 +109,9 @@ void GetMap(string fn)
    particles.clear();
    particlemesh = MeshPtr();  // Otherwise we may try to render it later and that will be bad
    deletemeshes.clear(); // Also a problem if not empty when we load a new map
+   PlayerData local = player[0];
+   player.clear();
+   player.push_back(local);
    
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
