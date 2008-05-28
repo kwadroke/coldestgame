@@ -108,6 +108,7 @@ void GetMap(string fn)
    LoadMaterials();
    particles.clear();
    particlemesh = MeshPtr();  // Otherwise we may try to render it later and that will be bad
+   deletemeshes.clear(); // Also a problem if not empty when we load a new map
    
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");

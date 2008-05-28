@@ -574,15 +574,18 @@ int NetListen(void* dummy)
          {
             if (!connected)
             {
+               SDL_mutexP(clientmutex);
                get >> servplayernum;
                get >> nextmap;
+               if (!server)
+                  mapname = ""; // Force reload of the map even if same name
                nextmap = "maps/" + nextmap;
                doconnect = false;
                connected = true;
                needsync = false; // Set to true after map is loaded
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
-               list<Packet>::iterator i;
+               SDL_mutexV(clientmutex);
             }
             HandleAck(packetnum);
          }
