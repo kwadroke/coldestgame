@@ -5,7 +5,6 @@
 #include <list>
 #include <set>
 #include "SDL_net.h"
-#include "DynamicObject.h"
 #include "Mesh.h"
 #include "Hit.h"
 #include "types.h"

@@ -2,10 +2,7 @@
 #define OBJECTKDTREE_H
 
 #include "Mesh.h"
-#include "WorldObjects.h"
 #include "Vector3.h"
-#include "GenericPrimitive.h"
-#include "GraphicMatrix.h"
 #include <list>
 #include <vector>
 #include <set>

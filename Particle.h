@@ -6,7 +6,6 @@
 #include "CollisionDetection.h"
 #include "Vector3.h"
 #include "Timer.h"
-#include "DynamicObject.h"
 #include "SDL.h"
 #include "SDL_thread.h"
 
@@ -28,6 +27,7 @@ class Particle
       
       Vector3 dir;
       Vector3 pos;
+      Vector3 origin;
       float velocity;
       float accel;
       float weight;

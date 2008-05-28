@@ -4,11 +4,7 @@
 #include <vector>
 #include <list>
 #include "ObjectKDTree.h"
-#include "DynamicObject.h"
-#include "DynamicPrimitive.h"
 #include "Vector3.h"
-#include "PrimitiveOctree.h"
-#include "WorldPrimitives.h"
 #include "Quad.h"
 #include "Timer.h"
 #include "SDL_thread.h"
