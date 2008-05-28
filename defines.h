@@ -27,13 +27,9 @@
 #include <queue>
 #include <set>
 
-#include "GenericPrimitive.h"
 #include "TextureHandler.h"
 #include "Vector3.h"
 #include "GraphicMatrix.h"
-#include "DynamicObject.h"
-#include "WorldPrimitives.h"
-#include "WorldObjects.h"
 #include "ObjectKDTree.h"
 #include "CollisionDetection.h"
 #include "ProceduralTree.h"

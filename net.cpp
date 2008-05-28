@@ -28,7 +28,6 @@ using namespace std;
 int NetSend(void*);
 int NetListen(void*);
 string FillUpdatePacket();
-list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 string AddressToDD(Uint32);
 void Ack(unsigned long);
 
@@ -707,7 +706,8 @@ int NetListen(void* dummy)
             gui[loadoutmenu]->visible = true;
             gui[hud]->visible = false;
             SDL_mutexP(clientmutex); // Otherwise we can end up firing after we respawn
-            player[0].leftclick = false;
+            player[0].leftclick = player[0].rightclick = false;
+            player[0].moveforward = player[0].moveback = player[0].moveleft = player[0].moveright = false;
             SDL_mutexV(clientmutex);
             // Ack it
             Ack(packetnum);

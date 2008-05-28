@@ -15,7 +15,6 @@
 #include "ObjectKDTree.h"
 #include "CollisionDetection.h"
 #include "ProceduralTree.h"
-#include "DynamicObject.h"
 #include "Timer.h"
 #include "globals.h"
 #include "netdefs.h"
@@ -29,8 +28,6 @@ int ServerSend(void*);
 int ServerListen();
 void ServerLoadMap();
 void HandleHit(Particle& p, vector<Mesh*>& hitobjs);
-list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
-void UpdateDOTree(DynamicPrimitive*);
 void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
@@ -821,64 +818,74 @@ void ServerLoadMap()
 void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
 {
    Mesh* curr;
+   float currmindist = 0.f, currdist = 0.f;
    bool dead;
    // Should only hit each body part once per projectile
    sort(hitobjs.begin(), hitobjs.end());
    hitobjs.erase(unique(hitobjs.begin(), hitobjs.end()), hitobjs.end());
+   // In fact, we should probably only hit a single object with a single shot, even if it
+   // would have passed through multiple objects.  Eliminate all but the nearest one.
+   // This may obsolete the above, but I suspect that's a quicker way to eliminate dupes
+   // so I'm going to leave it.
    for (int j = 0; j < hitobjs.size(); ++j)
    {
-      curr = hitobjs[j];
-      for (int i = 1; i < serverplayers.size(); ++i)
+      currdist = hitobjs[j]->GetPosition().distance2(p.origin);
+      if (currdist < currmindist)
       {
-         dead = false;
-         for (int part = 0; part < numbodyparts; ++part)
+         curr = hitobjs[j];
+         currmindist = currdist;
+      }
+   }
+   for (int i = 1; i < serverplayers.size(); ++i)
+   {
+      dead = false;
+      for (int part = 0; part < numbodyparts; ++part)
+      {
+         if (serverplayers[i].mesh[part] != servermeshes.end())
          {
-            if (serverplayers[i].mesh[part] != servermeshes.end())
+            if (curr == &(*serverplayers[i].mesh[part]))
             {
-               if (curr == &(*serverplayers[i].mesh[part]))
-               {
-                  cout << "Hit " << part << endl;
-                  serverplayers[i].hp[part] -= p.damage;
-                  if (serverplayers[i].hp[part] <= 0)
-                     dead = true;
-               }
+               cout << "Hit " << part << endl;
+               serverplayers[i].hp[part] -= p.damage;
+               if (serverplayers[i].hp[part] <= 0)
+                  dead = true;
             }
-         }
-         if (dead)
-         {
-            serverplayers[i].deaths++;
-            serverplayers[p.playernum].kills++;
-            cout << "Player " << i << " was killed by Player " << p.playernum << endl;
-            serverplayers[i].Kill();
-            SendKill(i);
          }
       }
-      bool doremove;
-      vector<Item>::iterator i = serveritems.begin();
-      while (i != serveritems.end())
+      if (dead)
       {
-         if (&(*i->mesh) == curr)
+         serverplayers[i].deaths++;
+         serverplayers[p.playernum].kills++;
+         cout << "Player " << i << " was killed by Player " << p.playernum << endl;
+         serverplayers[i].Kill();
+         SendKill(i);
+      }
+   }
+   bool doremove;
+   vector<Item>::iterator i = serveritems.begin();
+   while (i != serveritems.end())
+   {
+      if (&(*i->mesh) == curr)
+      {
+         i->hp -= p.damage;
+         if (i->hp < 0)
          {
-            i->hp -= p.damage;
-            if (i->hp < 0)
+            doremove = true;
+            for (size_t j = 0; j < spawnpoints.size(); ++j)
             {
-               doremove = true;
-               for (size_t j = 0; j < spawnpoints.size(); ++j)
+               if (&(*serveritems[j].mesh) == curr)
                {
-                  if (&(*serveritems[j].mesh) == curr)
-                  {
-                     RemoveTeam(spawnpoints[j].team);
-                     doremove = false;
-                  }
+                  RemoveTeam(spawnpoints[j].team);
+                  doremove = false;
                }
-               if (doremove)
-                  i = RemoveItem(i);
-               else ++i;
             }
+            if (doremove)
+               i = RemoveItem(i);
             else ++i;
          }
          else ++i;
       }
+      else ++i;
    }
 }
 
@@ -945,6 +952,7 @@ void ServerUpdatePlayer(int i)
       Mesh weaponmesh(readweapon, resman);
       Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.pos += part.dir * 50;
+      part.origin = part.pos;
       part.playernum = i;
       part.damage = currplayerweapon.Damage();
       part.dmgrad = currplayerweapon.Splash();

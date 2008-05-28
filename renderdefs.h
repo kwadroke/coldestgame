@@ -8,11 +8,8 @@
 #include <deque>
 #include <sstream>
 #include <algorithm>
-#include "WorldObjects.h"
 #include "PlayerData.h"
-#include "DynamicObject.h"
 #include "TextureHandler.h"
-#include "PrimitiveOctree.h"
 #include "ObjectKDTree.h"
 #include "CollisionDetection.h"
 #include "Light.h"
@@ -30,18 +27,14 @@ using std::string;
 
 void Repaint();
 void RenderSkybox();
-void RenderPrimitives(vector<WorldPrimitives>&, bool distsort = false);
 void RenderObjects();
 void RenderParticles();
 void RenderHud();
 void RenderClouds();
-void RenderDynamicObjects();
-void RenderDOTree(DynamicPrimitive*);
 void RenderWater();
 void UpdateFBO();
 void GenShadows(Vector3, float, FBO&);
 void GenClouds();
-list<DynamicObject>::iterator LoadObject(string, list<DynamicObject>&);
 void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
 int PowerOf2(int);
@@ -51,8 +44,6 @@ void UpdateClouds();
 void SetReflection(bool);
 void UpdateNoise();
 void SynchronizePosition();
-void InitGLState(WorldObjects*);
-void RestoreGLState(WorldObjects*);
 void LoadMaterials();
 void InitShaders();
 
