@@ -195,6 +195,7 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "K\n";
          p << p.ack << eol;
+         p << servplayernum << eol;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);

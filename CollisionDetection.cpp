@@ -131,6 +131,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    // If we moved a fairly long distance we're probably a projectile and need to do the following
    // These aren't useful for player movement though so we shouldn't do them in that case.
+   
+   // TODO: This doesn't work well.  Need to pass in a parameter to indicate when we want this done.
    if (oldpos.distance2(newpos) > radius * radius * 9)
    {
       // Do another edge check that checks the entire movement path, not just the ending position.

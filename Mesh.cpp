@@ -592,6 +592,7 @@ void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, 
 void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, float& aspeed)
 {
    pos = position;
+   rot = rots;
    keyframe = currkeyframe;
    atime = animtime;
    aspeed = animspeed;
