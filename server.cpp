@@ -214,13 +214,13 @@ int ServerListen()
          i->AdvanceAnimation();
       }
       
+      // Save state so we can recall it for collision detection
+      SaveState();
+      
       // Update particles
       int updinterval = 100;
       UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, Vector3(), &HandleHit, &Rewind);
       SDL_mutexV(servermutex);
-      
-      // Save state so we can recall it for collision detection
-      SaveState();
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
          packet per outer loop, which meant it did the entire ~20 ms particle/player update
@@ -885,13 +885,21 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
 // Note: must be called from within mutex'd code
 void ServerUpdatePlayer(int i)
 {
-   // TODO: Hmm, this doesn't really make sense.  We should move and then update the model, but we have to do
-   // this first to make sure the model has actually been loaded.  Slight refactoring is probably needed.
-   UpdatePlayerModel(serverplayers[i], servermeshes, false);
    // Movement and necessary model updates
-   Rewind(serverplayers[i].ping);
+   
+   // This is odd, but I'm too lazy to fix it.  We call UpdatePlayerModel twice: once to make sure
+   // the model is loaded, the second to move it to its new position.  Loading and moving should
+   // probably be done separately, but I doubt this is going to have any significant effect
+   // so I'm just going to leave it.
+   UpdatePlayerModel(serverplayers[i], servermeshes, false);
+   
+   // If we rewind here then when we put the state back to 0 time offset we actually get the
+   // previous state, which is bad because player models get stuck.  Thus movement collisions
+   // won't be lag-compensated for now (will this be a problem? We'll see).
+   //Rewind(serverplayers[i].ping);
    Move(serverplayers[i], servermeshes, serverkdtree);
-   Rewind(0);
+   //Rewind(0);
+   UpdatePlayerModel(serverplayers[i], servermeshes, false);
    
    // Cooling
    float coolrate = .01f;

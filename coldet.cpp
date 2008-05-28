@@ -1171,7 +1171,6 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    if (p.mesh[Legs] == ml.end())
    {
-      cout << "GL: " << gl << endl;
       IniReader load("models/" + units[p.unit].file + "/legs/base");
       Mesh newmesh(load, resman, gl);
       newmesh.dynamic = true;

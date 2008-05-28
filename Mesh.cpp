@@ -576,7 +576,7 @@ void Mesh::CalcBounds()
 // I am not at all certain that animspeed needs to be part of the state, we'll see
 void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, const int atime, const float aspeed)
 {
-   if (frameroot.size() <= 1) return;
+   if (frameroot.size() < 1) return;
    
    position = pos;
    rots = rot;
