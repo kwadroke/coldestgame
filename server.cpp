@@ -520,6 +520,7 @@ int ServerListen()
          }
          else if (packettype == "K")
          {
+            get >> oppnum;
             SDL_mutexP(servermutex);
             SendKill(oppnum);
             Packet response(servoutpack, &servoutsock, &inpack->address);
