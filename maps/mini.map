@@ -13,7 +13,7 @@ Ambient .2 .2 .2 1
 
 SkyBox materials/sky
 
-DummyNode
+DummyNode  This is no longer used, is it?
    0 textures/sky.png
    1 textures/test.png
    2 textures/Grass1.png
@@ -67,6 +67,14 @@ Node
       HeightRange -10000 -10000
       SlopeRange 0 0
       RandRange 0 10
+      
+Node
+   GrassData
+   Node
+      File grass
+      Model models/projectile/base
+      GroupSize 10
+      Density 4
 
 Node
    SpawnPoints

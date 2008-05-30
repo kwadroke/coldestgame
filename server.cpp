@@ -21,8 +21,6 @@
 #include "ServerState.h"
 #include "IDGen.h"
 
-using namespace std;
-
 // Necessary declarations
 int ServerSend(void*);
 int ServerListen();
@@ -818,7 +816,8 @@ void ServerLoadMap()
 void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
 {
    Mesh* curr;
-   float currmindist = 0.f, currdist = 0.f;
+   // 10e38 is near the maximum representable value for a single precision float
+   float currmindist = 10e38, currdist = 0.f;
    bool dead;
    // Should only hit each body part once per projectile
    sort(hitobjs.begin(), hitobjs.end());

@@ -75,6 +75,7 @@ void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);
 void ShowGUI(int);
+void ResetKeys();
 
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);

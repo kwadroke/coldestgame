@@ -112,6 +112,7 @@ void GetMap(string fn)
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);
+   ResetKeys();
    
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
@@ -155,7 +156,6 @@ void GetMap(string fn)
    }
    
    // Load objects
-   meshes.clear();
    progtext->text = "Loading objects";
    progress->value = 1;
    Repaint();
@@ -530,6 +530,7 @@ void GetMap(string fn)
    }
    watermesh->GenVbo();
    
+   
    // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
    // copies the meshes they cannot have had GenVbo run on them yet
    progress->value = 4;
@@ -548,6 +549,93 @@ void GetMap(string fn)
    mapname = fn; // Signal server that the map data is available
    if (server)   // Then wait for the server to copy the data before generating buffers
       while (!serverhasmap) SDL_Delay(1);
+   
+   
+   // Generate grass - do this after the server has meshes because it doesn't care about grass, but before
+   // generating the KDTree because we definitely want spatial partitioning of grass
+   IniReader grassnode = mapdata.GetItemByName("GrassData");
+   for (size_t i = 0; i < grassnode.NumChildren(); ++i)
+   {
+      string file, model;
+      int grassw, grassh, groupsize = 10;
+      float density;
+      currnode = grassnode(i);
+      
+      currnode.Read(file, "File");
+      file = fn + file + ".png";
+      currnode.Read(model, "Model");
+      currnode.Read(groupsize, "GroupSize");
+      currnode.Read(density, "Density");
+      
+      SDL_Surface *loadgrass;
+   
+      loadgrass = IMG_Load(file.c_str());
+      if (!loadgrass)
+      {
+         cout << "Error loading grassmap for file: " << file << endl;
+         exit(-1);
+      }
+      
+      grassw = loadgrass->w;
+      grassh = loadgrass->h;
+      float mapwidth = (mapw - 1) * tilesize;
+      float mapheight = (maph - 1) * tilesize;
+      float grasssize = mapwidth / (float)grassw;
+      float maxperpoint = 10;
+   
+      SDL_LockSurface(loadgrass);
+      data = (unsigned char*)loadgrass->pixels;
+      
+      // Iterate over the entire map in groups of groupsize
+      for (int x = 0; x < grassw; x += groupsize)
+      {
+         for (int y = 0; y < grassh; y += groupsize)
+         {
+            IniReader empty("models/empty/base");
+            Mesh grassmesh(empty, resman, false);
+            // Iterate over each group
+            for (int ix = 0; ix < groupsize && ix + x < grassw; ++ix)
+            {
+               for (int iy = 0; iy < groupsize && iy + y < grassh; ++iy)
+               {
+                  int offset = (y + iy) * grassw + (x + ix);
+                  offset *= loadgrass->format->BytesPerPixel;
+                  float d = static_cast<float>(data[offset]) / 255.f * Random(0, density);
+                  int num = static_cast<int>(d);
+                  
+                  for (int j = 0; j < num; ++j)
+                  {
+                     float angle = Random(0, 2.f * PI);
+                     float dist = Random(0, mapwidth / (float)grassw);
+                     float newx = dist * cos(angle) + (x + ix) * grasssize;
+                     float newy = dist * sin(angle) + (y + iy) * grasssize;
+                     
+                     if (newx > 0 && newx < mapwidth && newy > 0 && newy < mapwidth)
+                     {
+                        IniReader readmodel(model);
+                        Mesh newmesh(readmodel, resman, false); // Don't need GL because this is a temp mesh
+                        Vector3 newpos(newx, GetTerrainHeight(newx, newy), newy);
+                        newmesh.Move(newpos);
+                        newmesh.Rotate(Vector3(0, angle, 0));
+                        newmesh.LoadMaterials();
+                        newmesh.AdvanceAnimation();
+                        
+                        grassmesh.Add(newmesh);
+                     }
+                  }
+               }
+            }
+            float mx = (x + groupsize / 2) * tilesize;
+            float my = (y + groupsize / 2) * tilesize;
+            //grassmesh.Move(Vector3(mx, 0, my));
+            //grassmesh.CalcBounds();
+            grassmesh.dynamic = true;
+            meshes.push_back(grassmesh);
+         }
+      }
+   }
+   
+   
    kdtree = ObjectKDTree(&meshes, points);
    cout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
