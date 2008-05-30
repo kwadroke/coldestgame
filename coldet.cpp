@@ -58,28 +58,28 @@ void InitGlobals()
 {
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    // Variables that can be set by the console
-   console.Parse("set screenwidth 640");
-   console.Parse("set screenheight 480");
-   console.Parse("set showfps 1");
-   console.Parse("set quiet 1");
-   console.Parse("set fly 0");
-   console.Parse("set thirdperson 0");
-   console.Parse("set camdist 100");
-   console.Parse("set consoletrans 128");
-   console.Parse("set movestep 200");
-   console.Parse("set ghost 0");
-   console.Parse("set fov 60");
-   console.Parse("set viewdist 1000");
-   console.Parse("set showkdtree 0");
-   console.Parse("set tickrate 30");
-   console.Parse("set serveraddr localhost");
-   console.Parse("set shadows 1");
-   console.Parse("set reflection 1");
-   console.Parse("set partupdateinterval 0");
-   console.Parse("set serversync 1");
-   console.Parse("set aa 0");
-   console.Parse("set af 1");
-   console.Parse("set impdistmulti 1");
+   console.Parse("set screenwidth 640", false);
+   console.Parse("set screenheight 480", false);
+   console.Parse("set showfps 1", false);
+   console.Parse("set quiet 1", false);
+   console.Parse("set fly 0", false);
+   console.Parse("set thirdperson 0", false);
+   console.Parse("set camdist 100", false);
+   console.Parse("set consoletrans 128", false);
+   console.Parse("set movestep 200", false);
+   console.Parse("set ghost 0", false);
+   console.Parse("set fov 60", false);
+   console.Parse("set viewdist 1000", false);
+   console.Parse("set showkdtree 0", false);
+   console.Parse("set tickrate 30", false);
+   console.Parse("set serveraddr localhost", false);
+   console.Parse("set shadows 1", false);
+   console.Parse("set reflection 1", false);
+   console.Parse("set partupdateinterval 0", false);
+   console.Parse("set serversync 1", false);
+   console.Parse("set aa 0", false);
+   console.Parse("set af 1", false);
+   console.Parse("set impdistmulti 1", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -1352,6 +1352,15 @@ void ShowGUI(int toshow)
    gui[toshow]->visible = true;
    if (console.GetBool("showfps"))
       gui[statsdisp]->visible = true;
+}
+
+
+void ResetKeys()
+{
+   SDL_mutexP(clientmutex); // Otherwise we can end up firing after we respawn
+   player[0].leftclick = player[0].rightclick = false;
+   player[0].moveforward = player[0].moveback = player[0].moveleft = player[0].moveright = false;
+   SDL_mutexV(clientmutex);
 }
 
 
