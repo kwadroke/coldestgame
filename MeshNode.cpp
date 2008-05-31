@@ -93,7 +93,9 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    // Save vertices for next time...
    Vector3vec savevert = vert;
    for (int i = 0; i < vert.size(); ++i)
+   {
       vert[i].transform(m);
+   }
    
    if (render)
    {

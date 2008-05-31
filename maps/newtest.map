@@ -46,6 +46,14 @@ Node
       HeightRange -10000 -10000
       SlopeRange 0 0
       RandRange 0 10
+      
+Node
+   GrassData
+   Node
+      File grass
+      Model models/grass/base
+      GroupSize 20
+      Density 3
 
 Node
    SpawnPoints
