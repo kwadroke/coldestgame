@@ -72,9 +72,9 @@ Node
    GrassData
    Node
       File grass
-      Model models/projectile/base
+      Model models/grass/base
       GroupSize 10
-      Density 4
+      Density 5
 
 Node
    SpawnPoints

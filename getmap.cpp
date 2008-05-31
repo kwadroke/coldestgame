@@ -95,7 +95,7 @@ void GetMap(string fn)
    
    // Load the textures themselves
    // Actually, the textures get loaded as Materials get loaded now, so this is really a bogus step
-   progress->SetRange(0, 6);
+   progress->SetRange(0, 7);
    progress->value = 0;
    progtext->text = "Loading textures";
    Repaint();
@@ -533,19 +533,6 @@ void GetMap(string fn)
    
    // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
    // copies the meshes they cannot have had GenVbo run on them yet
-   progress->value = 4;
-   progtext->text = "Generating spatial tree";
-   Repaint();
-   // Add objects to kd-tree
-   Vector3vec points(8, Vector3());
-   for (int i = 0; i < 4; ++i)
-   {
-      points[i] = coldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
-   }
-   for (int i = 0; i < 4; ++i)
-   {
-      points[i + 4] = coldet.worldbounds[5].GetVertex(i);
-   }
    mapname = fn; // Signal server that the map data is available
    if (server)   // Then wait for the server to copy the data before generating buffers
       while (!serverhasmap) SDL_Delay(1);
@@ -553,6 +540,9 @@ void GetMap(string fn)
    
    // Generate grass - do this after the server has meshes because it doesn't care about grass, but before
    // generating the KDTree because we definitely want spatial partitioning of grass
+   progress->value = 4;
+   progtext->text = "Generating grass";
+   Repaint();
    IniReader grassnode = mapdata.GetItemByName("GrassData");
    for (size_t i = 0; i < grassnode.NumChildren(); ++i)
    {
@@ -586,6 +576,7 @@ void GetMap(string fn)
       SDL_LockSurface(loadgrass);
       data = (unsigned char*)loadgrass->pixels;
       
+      cout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
       for (int x = 0; x < grassw; x += groupsize)
       {
@@ -609,6 +600,9 @@ void GetMap(string fn)
                      float dist = Random(0, mapwidth / (float)grassw);
                      float newx = dist * cos(angle) + (x + ix) * grasssize;
                      float newy = dist * sin(angle) + (y + iy) * grasssize;
+                     Vector3 rots;
+                     rots.x = Random(25, 50);
+                     rots.y = Random(0, 360);
                      
                      if (newx > 0 && newx < mapwidth && newy > 0 && newy < mapwidth)
                      {
@@ -616,7 +610,7 @@ void GetMap(string fn)
                         Mesh newmesh(readmodel, resman, false); // Don't need GL because this is a temp mesh
                         Vector3 newpos(newx, GetTerrainHeight(newx, newy), newy);
                         newmesh.Move(newpos);
-                        newmesh.Rotate(Vector3(0, angle, 0));
+                        newmesh.Rotate(rots);
                         newmesh.LoadMaterials();
                         newmesh.AdvanceAnimation();
                         
@@ -635,13 +629,25 @@ void GetMap(string fn)
       }
    }
    
-   
+   progress->value = 6;
+   progtext->text = "Partitioning world";
+   Repaint();
+   // Add objects to kd-tree
+   Vector3vec points(8, Vector3());
+   for (int i = 0; i < 4; ++i)
+   {
+      points[i] = coldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
+   }
+   for (int i = 0; i < 4; ++i)
+   {
+      points[i + 4] = coldet.worldbounds[5].GetVertex(i);
+   }
    kdtree = ObjectKDTree(&meshes, points);
    cout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
    cout << "Done\n" << flush;
    
-   progress->value = 5;
+   progress->value = 6;
    progtext->text = "Generating buffers";
    Repaint();
    int fbodim = fbodims[2];
@@ -666,7 +672,7 @@ void GetMap(string fn)
       i->GenVbo();
    }
    
-   progress->value = 6;
+   progress->value = 7;
    progtext->text = "Entering game";
    Repaint();
    
