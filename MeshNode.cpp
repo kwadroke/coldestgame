@@ -195,3 +195,17 @@ void MeshNode::LoadMaterials(ResourceManager& resman)
 }
 
 
+void MeshNode::Scale(const float& sval)
+{
+   for (size_t i = 0; i < vert.size(); ++i)
+   {
+      vert[i] *= sval;
+   }
+   trans *= sval;
+   for (int i = 0; i < children.size(); ++i)
+   {
+      children[i]->Scale(sval);
+   }
+}
+
+

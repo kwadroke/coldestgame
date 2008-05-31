@@ -609,6 +609,13 @@ void Mesh::LoadMaterials()
 }
 
 
+void Mesh::Scale(const float& sval)
+{
+   for (int i = 0; i < frameroot.size(); ++i)
+      frameroot[i]->Scale(sval);
+}
+
+
 // The insertion happens conceptually, but m remains a separate Mesh
 void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {
