@@ -5,10 +5,10 @@ Primitive
    Type Quad
    ID 0
    ParentID -1
-   Material materials/projectile
+   Material materials/grass
    Rot1 0 0 0
    Rot2 0 0 0
-   Trans 0 0 0
+   Trans 0 800 0
    p0 -1000 1000 0
    tc0x 0 0 0 0 0 0 0 0 
    tc0y 0 0 0 0 0 0 0 0 
@@ -22,4 +22,4 @@ Primitive
    tc3x 1 1 1 1 1 1 1 1 
    tc3y 0 0 0 0 0 0 0 0 
    Collide 0
-   Facing 1
+   Facing 0
