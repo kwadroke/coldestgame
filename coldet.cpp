@@ -154,7 +154,7 @@ void InitUnits()
    dummy.turnspeed = 1.f;
    dummy.acceleration = .05f;
    dummy.maxspeed = 1.f;
-   dummy.size = 10.f;
+   dummy.size = 25.f;
    dummy.weight = 100;
    dummy.baseweight = 50;
    for (short i = 0; i < numunits; ++i)
@@ -896,7 +896,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    else
    {
       Vector3 groundcheck = old;
-      groundcheck.y -= mplayer.size + mplayer.size * threshold;
+      groundcheck.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
       groundcheck = coldet.CheckSphereHit(old, groundcheck, .01, check, NULL);
@@ -940,15 +940,20 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       offset.normalize();
       offset *= mplayer.size;
       offsetold += offset;
+      Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
+      Vector3 oldleg = offsetold - Vector3(0, mplayer.size, 0);
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
       Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
+      adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check, NULL);
       int count = 0;
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
          mplayer.pos += adjust;
+         legoffset += adjust;
          adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
+         adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check, NULL);
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
