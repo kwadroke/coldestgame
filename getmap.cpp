@@ -489,6 +489,7 @@ void GetMap(string fn)
    watermaxy = maph * tilesize + 5000.f;
    int numwaterx = (int)(watermaxx - waterminx) / (int)waterchunksize;
    int numwatery = (int)(watermaxy - waterminy) / (int)waterchunksize;
+   cout << numwaterx << "  " << numwatery << endl;
    
    if (watermesh) delete watermesh;
    
@@ -550,12 +551,15 @@ void GetMap(string fn)
       int grassw, grassh, groupsize = 10;
       float density;
       currnode = grassnode(i);
+      float maxtilt = 50.f, mintilt = 25.f;
       
       currnode.Read(file, "File");
       file = fn + file + ".png";
       currnode.Read(model, "Model");
       currnode.Read(groupsize, "GroupSize");
       currnode.Read(density, "Density");
+      currnode.Read(maxtilt, "MaxTilt");
+      currnode.Read(mintilt, "MinTilt");
       
       SDL_Surface *loadgrass;
    
@@ -601,7 +605,7 @@ void GetMap(string fn)
                      float newx = dist * cos(angle) + (x + ix) * grasssize;
                      float newy = dist * sin(angle) + (y + iy) * grasssize;
                      Vector3 rots;
-                     rots.x = Random(25, 50);
+                     rots.x = Random(mintilt, maxtilt);
                      rots.y = Random(0, 360);
                      
                      if (newx > 0 && newx < mapwidth && newy > 0 && newy < mapwidth)
@@ -609,6 +613,7 @@ void GetMap(string fn)
                         IniReader readmodel(model);
                         Mesh newmesh(readmodel, resman, false); // Don't need GL because this is a temp mesh
                         Vector3 newpos(newx, GetTerrainHeight(newx, newy), newy);
+                        newmesh.Scale(sqrt(d / density));
                         newmesh.Move(newpos);
                         newmesh.Rotate(rots);
                         newmesh.LoadMaterials();

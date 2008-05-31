@@ -43,6 +43,7 @@ class Mesh
       void Add(Mesh&);
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
+      void Scale(const float&);
       void SetAnimSpeed(const float);
       void ResetAnimation();
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);

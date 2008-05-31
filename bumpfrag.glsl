@@ -1,4 +1,4 @@
-void basiclighting(in vec3 norm, in vec3 lightdir, out vec4 col, out vec4 amb, out vec4 diff);
+void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
 void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
 void fog(float dist, inout vec4 color);
 
@@ -21,7 +21,7 @@ void main()
    vec3 bump = texture2D(bumptex, gl_TexCoord[0].st).xyz * 2. - 1.;
    
    vec4 ambient, diffuse;
-   basiclighting(bump, lightdir, color, ambient, diffuse);
+   basiclighting(bump, lightdir, color, ambient, diffuse, 0.);
    shadow(ambient, diffuse, dist, color);
    
    fog(dist, color);

@@ -1,7 +1,7 @@
-void basiclighting(in vec3 norm, in vec3 lightdir, out vec4 col, out vec4 amb, out vec4 diff)
+void basiclighting(in vec3 norm, in vec3 lightdir, out vec4 col, out vec4 amb, out vec4 diff, in float twoside)
 {
    // Diffuse calculations
-   float ndotl = max(dot(norm, lightdir), 0.0);
+   float ndotl = max(dot(norm, lightdir), -twoside * dot(norm, lightdir));
    diff = ndotl * gl_FrontMaterial.diffuse * gl_LightSource[0].diffuse;
    
    // Ambient calculations

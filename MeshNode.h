@@ -23,6 +23,7 @@ class MeshNode
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void LoadMaterials(ResourceManager&);
+      void Scale(const float&);
       
       int id, parentid;
       bool facing, collide, render;
