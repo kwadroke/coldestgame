@@ -74,7 +74,7 @@ void Shader::LoadShader(string file)
          free(infoLog);
       }
       
-      //exit(-13);
+      exit(-13);
    }
    
    UseProgram(0);
@@ -91,10 +91,46 @@ void Shader::LoadShader(string file)
          in >> uniname >> buffer;
          SetUniform1i(file, uniname, atoi(buffer.c_str()));
       }
-      else
+      else if (buffer == "float")
       {
          in >> uniname >> buffer;
          SetUniform1f(file, uniname, atof(buffer.c_str()));
+      }
+      else if (buffer == "float3")
+      {
+         vector<GLfloat> vals(3);
+         in >> uniname;
+         for (int i = 0; i < 3; ++i)
+            in >> vals[i];
+         SetUniform3f(file, uniname, vals);
+      }
+      else if (buffer == "float2v")
+      {
+         size_t count;
+         vector<GLfloat> vals;
+         in >> uniname;
+         in >> count;
+         for (size_t i = 0; i < count; ++i)
+         {
+            in >> buffer;
+            vals.push_back(atof(buffer.c_str()));
+            in >> buffer;
+            vals.push_back(atof(buffer.c_str()));
+         }
+         SetUniform2fv(file, uniname, count, &vals[0]);
+      }
+      else if (buffer == "floatv")
+      {
+         size_t count;
+         vector<GLfloat> vals;
+         in >> uniname;
+         in >> count;
+         for (size_t i = 0; i < count; ++i)
+         {
+            in >> buffer;
+            vals.push_back(atof(buffer.c_str()));
+         }
+         SetUniform1fv(file, uniname, count, &vals[0]);
       }
       in >> buffer;
    }
@@ -198,6 +234,42 @@ void Shader::SetUniform1f(string shader, string name, GLfloat val)
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
    glUniform1fARB(loc, val);
+   
+   UseShader(save);
+}
+
+
+void Shader::SetUniform3f(string shader, string name, const vector<GLfloat>& val)
+{
+   string save = currshader;
+   UseShader(shader); // Have to be bound to a shader to do the following
+   
+   GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
+   glUniform3fARB(loc, val[0], val[1], val[2]);
+   
+   UseShader(save);
+}
+
+
+void Shader::SetUniform1fv(string shader, string name, GLsizei count, GLfloat* val)
+{
+   string save = currshader;
+   UseShader(shader);
+   
+   GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
+   glUniform1fvARB(loc, count, val);
+   
+   UseShader(save);
+}
+
+
+void Shader::SetUniform2fv(string shader, string name, GLsizei count, GLfloat* val)
+{
+   string save = currshader;
+   UseShader(shader);
+   
+   GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
+   glUniform2fvARB(loc, count, val);
    
    UseShader(save);
 }

@@ -80,6 +80,7 @@ void InitGlobals()
    console.Parse("set aa 0", false);
    console.Parse("set af 1", false);
    console.Parse("set impdistmulti 1", false);
+   console.Parse("set shadowblur 1", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -106,6 +107,7 @@ void InitGlobals()
    watershader = "shaders/water";
    cloudgenshader = "shaders/cloudgen";
    bumpshader = "shaders/bump";
+   blurshader = "shaders/blur";
    
    ReadConfig();
    
@@ -340,6 +342,11 @@ void SetupOpenGL()
       cout << "We don't have ARB_multitexture.  This is fatal." << endl;
       exit(-8);
    }
+   if (!GLEW_ARB_texture_float)
+   {
+      cout << "We don't have ARB_texture_float.  This is fatal." << endl;
+      exit(-8);
+   }
    
    noisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
    resman.texhand.BindTexture(noisefbo.GetTexture());
@@ -378,6 +385,8 @@ void InitShaders()
    resman.shaderman.LoadShader(watershader);
    
    resman.shaderman.LoadShader(bumpshader);
+   
+   resman.shaderman.LoadShader(blurshader);
    
    resman.shaderman.UseShader("none");
 }

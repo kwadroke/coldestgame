@@ -13,6 +13,7 @@ class ComboBox : public GUI
       ComboBox(GUI*, TextureManager*);
       ~ComboBox();
       int Selected();
+      void Select(int);
       void ReadNodeExtra(DOMNode* current, GUI* parentw);
       virtual bool FloatsInWidget(float, float);
       void Add(const string&);

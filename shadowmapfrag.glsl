@@ -1,12 +1,15 @@
 uniform sampler2D tex;
 
-varying vec3 normal;
-varying vec3 light;
+varying float dist;
 
 void main()
 {
-   float val = dot(normal, light);
-   /*if (val < .45 && val > -.45) discard;*/
-   /* Texturing */
-   gl_FragColor = texture2D(tex, gl_TexCoord[0].st);
+   // Texturing
+   vec4 color = texture2D(tex, gl_TexCoord[0].st);
+   
+   // Write VSM values
+   vec2 m = vec2(dist, dist * dist); // Not sure which we want to use yet
+   //m = vec2(gl_FragCoord.z, gl_FragCoord.z * gl_FragCoord.z);
+   
+   gl_FragColor = vec4(m, 0, color.a);
 }

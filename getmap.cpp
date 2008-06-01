@@ -38,7 +38,6 @@ float Max(float, float);
 Vector3 GetTerrainNormal(int, int, int, int);
 float GetSmoothedTerrain(int, int, int, int, vector< floatvec >&);
 float Random(float, float);
-void GenShadows(Vector3, float, FBO&);
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -684,7 +683,7 @@ void GetMap(string fn)
    // Render static shadow map
    // Generate FBO to render to the shadow map texture
    int shadowmapsize = console.GetInt("shadowmapsize");
-#ifndef DEBUGSMT
+#ifdef NOVSM
    if (!shadowmapfbo.IsValid())
       shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
    if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
@@ -694,15 +693,19 @@ void GetMap(string fn)
       shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
    if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
       worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
+   if (!shadowblurfbo.IsValid())
+      shadowblurfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
+   if (!worldshadowblurfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
+      worldshadowblurfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
 #endif
    float shadowsize = (int)(mapw > maph ? mapw : maph);
    shadowsize *= tilesize;
    Vector3 center((mapw - 1) / 2.f, 0, (maph - 1) / 2.f);
    center *= tilesize;
-   GenShadows(center, shadowsize / 1.4f, worldshadowmapfbo);
+   GenShadows(center, shadowsize / 1.4f, worldshadowmapfbo, worldshadowblurfbo);
    resman.texhand.ActiveTexture(7);
    
-   resman.texhand.BindTexture(worldshadowmapfbo.GetTexture());
+   resman.texhand.BindTexture(worldshadowblurfbo.GetTexture());
    
    GraphicMatrix biasmat, proj, view;
    GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
@@ -722,6 +725,16 @@ void GetMap(string fn)
    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
    
    resman.texhand.ActiveTexture(0);
+   
+   Vector3 lightpos = lights.GetPos(0);
+   lightpos += center;
+   vector<GLfloat> tempv(3);
+   tempv[0] = lightpos.x;
+   tempv[1] = lightpos.y;
+   tempv[2] = lightpos.z;
+   resman.shaderman.SetUniform3f(terrainshader, "worldlightpos", tempv);
+   resman.shaderman.SetUniform3f(standardshader, "worldlightpos", tempv);
+   resman.shaderman.SetUniform3f(bumpshader, "worldlightpos", tempv);
    
    
    // Render minimap

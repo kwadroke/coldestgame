@@ -17,6 +17,7 @@ class Table : public GUI
       void Clear();
       void Add(string);
       int Selected();
+      void Select(int);
       string GetSelectedString(int);
       bool InScrollbar(float, float);
       void ScrollToBottom();

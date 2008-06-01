@@ -1,12 +1,10 @@
-varying vec3 normal;
-varying vec3 light;
+varying float dist;
 
 void main()
 {
    gl_TexCoord[0] = gl_MultiTexCoord0;
    
-   normal = gl_Normal;/*normalize(gl_NormalMatrix * gl_Normal);*/
-   light = gl_LightSource[0].position.xyz;/*normalize(gl_NormalMatrix * gl_LightSource[0].position.xyz);*/
+   dist = distance(gl_Vertex, gl_ModelViewMatrixInverse[3]) / 15000.;// + 2. / 15000.;
    
    gl_Position = ftransform();
 }

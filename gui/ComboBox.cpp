@@ -97,6 +97,14 @@ int ComboBox::Selected()
 }
 
 
+void ComboBox::Select(int i)
+{
+   table->Select(i);
+   DoAction(valuechanged);
+   button->text = table->GetSelectedString(0);
+}
+
+
 void ComboBox::Add(const string& str)
 {
    table->Add(str);
