@@ -11,12 +11,6 @@
 #include "Slider.h"
 #include "TabWidget.h"
 
-/* TODO:
-   *-Move textures into nodes instead of being subnodes
-   *-Click events even if mouse not in widget (separate event for when it is)
-   *-Allow all widgets to have children (somewhat related to first item)
-   -Tab widget
-*/
 
 GUI::GUI(float aw, float ah, TextureManager* texm, const string file)
 {

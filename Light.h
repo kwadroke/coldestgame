@@ -33,6 +33,7 @@ class Light
       bool isvalid(int);
       
       vector<Vector3> posdir;
+      vector<Vector3> offset;
       vector<glfvec> diffuse;
       vector<glfvec> ambient;
       vector<glfvec> specular;

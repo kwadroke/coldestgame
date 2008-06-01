@@ -1,0 +1,16 @@
+Vertex:
+blurvert.glsl
+Pixel:
+blurfrag.glsl
+Uniforms:
+int tex 0
+float2v offsets 25 -2 -2 -1 -2 0 -2 1 -2 2 -2
+                  -2 -1 -1 -1 0 -1 1 -1 2 -1
+	          -2 0 -1 0 0 0 1 0 2 0
+	          -2 1 -1 1 0 1 1 1 2 1
+	          -2 2 -1 2 0 2 1 2 2 2
+floatv kernel 25 1 4 7 4 1
+                 4 20 33 20 4
+	         7 33 55 33 7
+	         4 20 33 20 4
+	         1 4 7 4 1

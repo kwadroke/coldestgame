@@ -1,5 +1,5 @@
 void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
-void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
+void shadow(vec3, vec4, vec4, float, inout vec4);
 void fog(float dist, inout vec4 color);
 
 uniform sampler2D tex, bumptex;
@@ -22,7 +22,7 @@ void main()
    
    vec4 ambient, diffuse;
    basiclighting(bump, lightdir, color, ambient, diffuse, 0.);
-   shadow(ambient, diffuse, dist, color);
+   shadow(worldcoords.xyz, ambient, diffuse, dist, color);
    
    fog(dist, color);
    

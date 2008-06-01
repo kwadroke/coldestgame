@@ -99,6 +99,23 @@ int Table::Selected()
 }
 
 
+void Table::Select(int n)
+{
+   int selected = 0;
+   guiiter i;
+   for (i = scrollview->children.begin(); i != scrollview->children.end(); ++i)
+   {
+      TableItem* curritem = (dynamic_cast<TableItem*>((*i).get()));
+      if (selected == n)
+      {
+         curritem->selected = true;
+      }
+      else curritem->selected = false;
+      ++selected;
+   }
+}
+
+
 string Table::GetSelectedString(int num)
 {
    guiiter i;

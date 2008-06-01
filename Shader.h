@@ -19,6 +19,9 @@ class Shader
       void UseProgram(GLhandleARB);
       void SetUniform1i(string, string, GLint);
       void SetUniform1f(string, string, GLfloat);
+      void SetUniform3f(string, string, const vector<GLfloat>&);
+      void SetUniform1fv(string, string, GLsizei, GLfloat*);
+      void SetUniform2fv(string, string, GLsizei, GLfloat*);
       void LoadShader(string);
       void UseShader(string);
       int GetAttribLocation(string, string);
