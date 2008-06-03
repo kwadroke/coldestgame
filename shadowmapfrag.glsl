@@ -12,9 +12,9 @@ void main()
    float d = dist * 2. - 1;
    float adjdist = exp(exp(c * d));
    vec2 m = vec2(adjdist, adjdist * adjdist);
-   // Note: this should be -exp(exp(-c * d)), but that messes up our floating point precision, so we add the - in the receiving shader
-   adjdist = exp(exp(-c * d));
-   vec2 mneg = vec2(adjdist, adjdist * adjdist);
-   mneg.y *= step(.5, color.a); // Simulate alpha test
-   gl_FragColor = vec4(m, mneg);
+   float distfactor = 32.;
+   vec2 mdist = fract(m * distfactor);
+   mdist.y = step(.5, color.a); // Simulate alpha test
+   m -= mdist / distfactor;
+   gl_FragColor = vec4(m, mdist);
 }

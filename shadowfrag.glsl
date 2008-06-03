@@ -25,7 +25,9 @@ float vsm(sampler2D tex, vec4 pos, float d)
    float dist = 2. * d - 1.;
    float posd = exp(exp(c * dist));
    
-   vec2 m = texture2DProj(tex, pos).rg; // Shadow2D is a legacy thing, should probably replace it with texture2D
+   float distfactor = 32.;
+   vec4 m = texture2DProj(tex, pos);
+   m.xy += m.zw / distfactor;
    
    float posscale = c * posd;
    float posminvar = exp(exp(c * eps));//eps * posscale * posscale;
