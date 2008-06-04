@@ -56,7 +56,7 @@ void Repaint()
       if (shadows)
       {
          Vector3 rots = lights.GetRots(0);
-         float shadowmapsizeworld = 20 * 1.42;
+         float shadowmapsizeworld = 200 * 1.42;
          float worldperoneshadow = shadowmapsizeworld / console.GetInt("shadowmapsize");
          
          // Find out where we're looking, a little rough ATM
@@ -64,7 +64,7 @@ void Repaint()
          rot.rotatex(-localplayer.pitch);
          rot.rotatey(localplayer.facing + localplayer.rotation);
          //rot.rotatez(localplayer.roll);
-         Vector3 look(0, 0, -10);
+         Vector3 look(0, 0, -100);
          look.transform(rot);
          look += localplayer.pos;
          
@@ -83,7 +83,7 @@ void Repaint()
          
          look.transform(rot);
          
-         GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo, shadowblurfbo);
+         GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo);
       }
       
       // Set the camera's location and orientation
@@ -121,7 +121,7 @@ void Repaint()
          
          resman.texhand.ActiveTexture(6);
          
-         resman.texhand.BindTexture(shadowblurfbo.GetTexture());
+         resman.texhand.BindTexture(shadowmapfbo.GetTexture());
          
          GraphicMatrix biasmat;
          GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
@@ -427,7 +427,7 @@ void UpdateFBO()
 
 
 // Generates the depth texture that will be used in shadowing
-void GenShadows(Vector3 center, float size, FBO& fbo, FBO& blurfbo)
+void GenShadows(Vector3 center, float size, FBO& fbo)
 {
    fbo.Bind();
    
@@ -452,7 +452,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo, FBO& blurfbo)
 #ifndef DEBUGSMT
    //glCullFace(GL_FRONT); // Breaks tree shadows
    //glEnable(GL_CULL_FACE);
-   //glColorMask(0, 0, 0, 0);
+   glColorMask(0, 0, 0, 0);
 #endif
    
    // Need to reset kdtree frustum...
@@ -462,8 +462,8 @@ void GenShadows(Vector3 center, float size, FBO& fbo, FBO& blurfbo)
    float lightfov = tan(size * 1.42f / Light::infinity) * 180.f / PI;
    kdtree.setfrustum(p + center, rots, Light::infinity - 5000, Light::infinity + 5000, lightfov, 1);
    
-   //glEnable(GL_POLYGON_OFFSET_FILL);
-   //glPolygonOffset(2.0f, 2.0f);
+   glEnable(GL_POLYGON_OFFSET_FILL);
+   glPolygonOffset(2.0f, 2.0f);
    
    // Render objects to depth map
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -477,7 +477,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo, FBO& blurfbo)
    //glCullFace(GL_BACK);
    glShadeModel(GL_SMOOTH);
    //glDisable(GL_CULL_FACE);
-   //glColorMask(1, 1, 1, 1);
+   glColorMask(1, 1, 1, 1);
    
    glEnable(GL_FOG);
    glEnable(GL_LIGHTING);
@@ -489,44 +489,6 @@ void GenShadows(Vector3 center, float size, FBO& fbo, FBO& blurfbo)
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    fbo.Unbind();
-   
-   // Now blur the shadowmap texture if necessary
-   if (console.GetBool("shadowblur"))
-   {
-      blurfbo.Bind();
-      glViewport(0, 0, shadowmapsize, shadowmapsize);
-      glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-      
-      glMatrixMode(GL_PROJECTION);
-      glPushMatrix();
-      glLoadIdentity();
-   
-      glOrtho(0.0, 1., 1., 0.0, -1.0, 1.0);
-      
-      resman.texhand.BindTexture(fbo.GetTexture());
-      resman.shaderman.UseShader(blurshader);
-      glBegin(GL_QUADS);
-      glTexCoord2i(0, 1);
-      glVertex2i(0, 0);
-      glTexCoord2i(0, 0);
-      glVertex2i(0, 1);
-      glTexCoord2i(1, 0);
-      glVertex2i(1, 1);
-      glTexCoord2i(1, 1);
-      glVertex2i(1, 0);
-      glEnd();
-   
-      glMatrixMode(GL_MODELVIEW);
-      glPushMatrix();
-      glLoadIdentity();
-      
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
-      glMatrixMode(GL_MODELVIEW);
-      glPopMatrix();
-      glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
-      blurfbo.Unbind();
-   }
 }
 
 
@@ -868,20 +830,20 @@ void RenderHud()
    playerposlabel->y -= playerposlabel->height / 2.f;
    loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    
-#if 0
+#ifdef DEBUGSMT
    // Debug the shadowmap texture
-   resman.texhand.BindTexture(shadowblurfbo.GetTexture());
+   resman.texhand.BindTexture(shadowmapfbo.GetTexture());
    
    glColor4f(1, 1, 1, 1);//.9);
-   glBegin(GL_QUADS);
-   glTexCoord2f(0, 0);
-   glVertex2f(0, 0);
+   glBegin(GL_TRIANGLE_STRIP);
    glTexCoord2f(0, 1);
+   glVertex2f(0, 0);
+   glTexCoord2f(0, 0);
    glVertex2f(0, 500);
    glTexCoord2f(1, 1);
-   glVertex2f(500, 500);
-   glTexCoord2f(1, 0);
    glVertex2f(500, 0);
+   glTexCoord2f(1, 0);
+   glVertex2f(500, 500);
    glEnd();
    glColor4f(1, 1, 1, 1);
 #endif

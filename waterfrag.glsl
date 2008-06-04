@@ -22,16 +22,16 @@ void main()
 //    shiftamount.x = normal.x;
 //    shiftamount.y = normal.z;
    vec4 shiftamount;
-   shiftamount.x = texture2D(noisetex, gl_TexCoord[1].st * 1000.).r - .5;
-   shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 1000.).r - .5;
-   shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 500.).r - .5;
-   shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 500.).r - .5;
+   shiftamount.x = texture2D(noisetex, gl_TexCoord[1].st * 100.).r - .5;
+   shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 100.).r - .5;
+   shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 50.).r - .5;
+   shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 50.).r - .5;
    shiftamount.zw *= 3.;
    shiftamount.x += shiftamount.z;
    shiftamount.y += shiftamount.w;
-   shiftamount /= 20.;
+   shiftamount /= 2.;
    shiftedtc += vec4(shiftamount.x, shiftamount.y, shiftamount.x, shiftamount.x);
-   vec3 normal = vec3(0., .2, 0.);
+   vec3 normal = vec3(0., 2, 0.);
    normal += vec3(shiftamount.x, 0, shiftamount.y);
    vec4 color = texture2DProj(tex, shiftedtc);
    

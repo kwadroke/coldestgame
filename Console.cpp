@@ -191,11 +191,10 @@ void Console::Action(const string& action)
       if (value >= 8  && value <= 8192)
       {
          int shadowmapsize = value;
-#ifdef NOVSM
+#ifndef DEBUGSMT
          shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
 #else
          shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
-         shadowblurfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
 #endif
       }
       else WriteToConsole(string("Invalid value"));
