@@ -8,7 +8,7 @@ void main()
    vec4 color = texture2D(tex, gl_TexCoord[0].st);
    
    // Write VSM values
-   float c = 5.;
+   float c = 6.;
    float d = dist * 2. - 1;
    float adjdist = exp(exp(c * d));
    vec2 m = vec2(adjdist, adjdist * adjdist);

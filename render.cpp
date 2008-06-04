@@ -56,7 +56,7 @@ void Repaint()
       if (shadows)
       {
          Vector3 rots = lights.GetRots(0);
-         float shadowmapsizeworld = 200 * 1.42;
+         float shadowmapsizeworld = 20 * 1.42;
          float worldperoneshadow = shadowmapsizeworld / console.GetInt("shadowmapsize");
          
          // Find out where we're looking, a little rough ATM
@@ -64,7 +64,7 @@ void Repaint()
          rot.rotatex(-localplayer.pitch);
          rot.rotatey(localplayer.facing + localplayer.rotation);
          //rot.rotatez(localplayer.roll);
-         Vector3 look(0, 0, -100);
+         Vector3 look(0, 0, -10);
          look.transform(rot);
          look += localplayer.pos;
          

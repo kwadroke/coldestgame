@@ -44,7 +44,7 @@ void main()
    
    vec4 color = vec4(0, 0, 0, 0);
    
-   float normweight = smoothstep(-300., 600., dist) * .7;
+   float normweight = smoothstep(-30., 60., dist) * .7;
    float detailweight = 1. - normweight;
    
    color += texweight.r * texture2D(tex, gl_TexCoord[0].st) * detailweight;
