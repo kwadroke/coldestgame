@@ -595,6 +595,7 @@ void GetMap(string fn)
                   int offset = (y + iy) * grassw + (x + ix);
                   offset *= loadgrass->format->BytesPerPixel;
                   float d = static_cast<float>(data[offset]) / 255.f * Random(0, density);
+                  d *= console.GetFloat("grassdensity");
                   int num = static_cast<int>(d);
                   
                   for (int j = 0; j < num; ++j)

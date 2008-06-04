@@ -13,14 +13,14 @@ float chebyshev(vec2 moments, float mean, float minvar)
    
    float d = mean - moments.x;
    float pmax = variance / (variance + d * d);
-   return max(smoothstep(.15, 1., pmax), lit);
+   return max(smoothstep(.3, 1., pmax), lit);
 }
 
 
 float vsm(sampler2D tex, vec4 pos, float d)
 {
    float eps = .00000001;
-   float c = 5.;
+   float c = 6.;
    
    float dist = 2. * d - 1.;
    float posd = exp(exp(c * dist));
@@ -38,7 +38,7 @@ float vsm(sampler2D tex, vec4 pos, float d)
 
 void shadow(vec3 coords, vec4 amb, vec4 diff, float d, inout vec4 col)
 {
-   float detailmapsize = 200.;
+   float detailmapsize = 20.;
    float alpha = col.a;
    vec4 color1 = col;
    
