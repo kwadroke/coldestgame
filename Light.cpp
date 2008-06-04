@@ -14,7 +14,6 @@ int Light::Add()
    for (int i = 0; i < 4; ++i)
       temp.push_back(1);
    posdir.push_back(Vector3());
-   offset.push_back(Vector3());
    diffuse.push_back(temp);
    ambient.push_back(temp);
    specular.push_back(temp);
@@ -98,9 +97,9 @@ void Light::Place()
    // Place the lights
    for (int i = 0; i < NumLights(); ++i)
    {
-      v[0] = posdir[i].x * infinity + offset[i].x;
-      v[1] = posdir[i].y * infinity + offset[i].y;
-      v[2] = posdir[i].z * infinity + offset[i].z;
+      v[0] = posdir[i].x;
+      v[1] = posdir[i].y;
+      v[2] = posdir[i].z;
       v[3] = type[i];
       
       switch(i)
@@ -125,8 +124,6 @@ void Light::Place()
 GraphicMatrix Light::GetView(int num, Vector3 lookat)
 {
    if (!isvalid(num)) return GraphicMatrix();
-   
-   offset[num] = lookat;
    
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();

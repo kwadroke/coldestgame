@@ -4,4 +4,4 @@ Specular 1 1 1 1
 Texture0 textures/transparent.png
 Shader shaders/shadowmap
 CullFace 0
-AlphaTest .0001
+AlphaTest .5

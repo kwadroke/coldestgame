@@ -66,7 +66,7 @@ void InitGlobals()
    console.Parse("set thirdperson 0", false);
    console.Parse("set camdist 100", false);
    console.Parse("set consoletrans 128", false);
-   console.Parse("set movestep 40", false);
+   console.Parse("set movestep 200", false);
    console.Parse("set ghost 0", false);
    console.Parse("set fov 60", false);
    console.Parse("set viewdist 1000", false);
@@ -80,8 +80,6 @@ void InitGlobals()
    console.Parse("set aa 0", false);
    console.Parse("set af 1", false);
    console.Parse("set impdistmulti 1", false);
-   console.Parse("set shadowblur 1", false);
-   console.Parse("set grassdensity 1", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -108,7 +106,6 @@ void InitGlobals()
    watershader = "shaders/water";
    cloudgenshader = "shaders/cloudgen";
    bumpshader = "shaders/bump";
-   blurshader = "shaders/blur";
    
    ReadConfig();
    
@@ -155,9 +152,9 @@ void InitUnits()
    UnitData dummy;
    dummy.file = "unittest";
    dummy.turnspeed = 1.f;
-   dummy.acceleration = .5f;
+   dummy.acceleration = .05f;
    dummy.maxspeed = 1.f;
-   dummy.size = 2.5f;
+   dummy.size = 25.f;
    dummy.weight = 100;
    dummy.baseweight = 50;
    for (short i = 0; i < numunits; ++i)
@@ -343,11 +340,6 @@ void SetupOpenGL()
       cout << "We don't have ARB_multitexture.  This is fatal." << endl;
       exit(-8);
    }
-   if (!GLEW_ARB_texture_float)
-   {
-      cout << "We don't have ARB_texture_float.  This is fatal." << endl;
-      exit(-8);
-   }
    
    noisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
    resman.texhand.BindTexture(noisefbo.GetTexture());
@@ -386,8 +378,6 @@ void InitShaders()
    resman.shaderman.LoadShader(watershader);
    
    resman.shaderman.LoadShader(bumpshader);
-   
-   resman.shaderman.LoadShader(blurshader);
    
    resman.shaderman.UseShader("none");
 }
@@ -835,12 +825,12 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    
    if (mplayer.moveleft)
    {
-      mplayer.facing -= step * 10.f;
+      mplayer.facing -= step * 2;
       if (mplayer.facing < 0) mplayer.facing += 360;
    }
    if (mplayer.moveright)
    {
-      mplayer.facing += step * 10.f;
+      mplayer.facing += step * 2;
       if (mplayer.facing > 360) mplayer.facing -= 360;
    }
    if (mplayer.moveforward || mplayer.moveback)
@@ -1089,7 +1079,7 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .001f;
+   float pingslop = .2f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
    
@@ -1102,13 +1092,13 @@ void SynchronizePosition()
    /* If we're way off, snap quite a bit because things are hopelessly out of sync and need
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
-   if (difference > 1.f)
+   if (difference > 10.f)
       posadj *= .7f;
    else if (floatzero(player[0].speed))
       posadj *= 0.f;
-   else if (difference > .02f)
+   else if (difference > .2f)
       posadj *= .5f;
-   // Note: If difference < .02f then we snap to the server location, but it's not noticeable
+   // Note: If difference < .2f then we snap to the server location, but it's not noticeable
    // because the error is so small
    
    player[0].pos += posadj;
