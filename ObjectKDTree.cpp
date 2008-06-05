@@ -326,7 +326,8 @@ void ObjectKDTree::getmeshes(const Vector3& pos, const float size, vector<Mesh*>
             if (retobjs->find(*i) == retobjs->end())
             {
                retobjs->insert(*i);
-               ret.push_back(*i);
+               if ((*i)->collide)
+                  ret.push_back(*i);
             }
          }
       }

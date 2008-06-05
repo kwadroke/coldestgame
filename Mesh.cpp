@@ -6,7 +6,7 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), width(0.f), height(0.f), resman(rm), tris(TrianglePtrvec()), trantris(TrianglePtrvec()),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
-            frametime(), glops(gl), havemats(false), dynamic(false), dist(0.f), 
+            frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
             impmat(MaterialPtr()), animspeed(1.f)
 {
    if (gl)
@@ -28,7 +28,7 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          size(m.size), width(m.width), height(m.height),
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
-         dynamic(m.dynamic), dist(m.dist), impostor(m.impostor), 
+         dynamic(m.dynamic), collide(m.collide), dist(m.dist), impostor(m.impostor), 
          impmat(MaterialPtr()), animspeed(m.animspeed)
 {
    if (m.impmat)

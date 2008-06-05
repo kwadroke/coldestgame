@@ -30,31 +30,6 @@ void TabWidget::ReadSpecialNodes(DOMNode* current, GUI* parentw)
       float buttonwidth = atof(ReadAttribute(current, XSWrapper("buttonwidth")).c_str());
       string buttontext = ReadAttribute(current, XSWrapper("text"));
       
-      vector<string> buttontex(3, "");
-      // Load textures
-      string val = ReadAttribute(current, XSWrapper("normal"));
-      if (val != "")
-      {
-         buttontex[Normal] = val;
-         if (buttontex[Hover] == "")
-            buttontex[Hover] = buttontex[Normal];
-         if (buttontex[Clicked] == "")
-            buttontex[Clicked] = buttontex[Normal];
-         texman->LoadTexture(buttontex[Normal]);
-      }
-      val = ReadAttribute(current, XSWrapper("hover"));
-      if (val != "")
-      {
-         buttontex[Hover] = val;
-         texman->LoadTexture(buttontex[Hover]);
-      }
-      val = ReadAttribute(current, XSWrapper("pressed"));
-      if (val != "")
-      {
-         buttontex[Clicked] = val;
-         texman->LoadTexture(buttontex[Clicked]);
-      }
-      
       ButtonPtr newbutton = ButtonPtr(new Button(this, texman));
       float newx, newy;
       GetNextButtonPosition(newx, newy);
@@ -66,7 +41,7 @@ void TabWidget::ReadSpecialNodes(DOMNode* current, GUI* parentw)
       newbutton->toggle = true;
       if (!buttons.size())
          newbutton->togglestate = 1;
-      newbutton->textures = buttontex;
+      newbutton->textures = ReadTextures(current, "button");
       buttons.push_back(newbutton);
       
       ScrollViewPtr newsv = ScrollViewPtr(new ScrollView(this, texman));
@@ -75,7 +50,7 @@ void TabWidget::ReadSpecialNodes(DOMNode* current, GUI* parentw)
       newsv->width = width;
       newsv->height = height - buttonheight;
       newsv->name = buttontext + " Tab";
-      newsv->textures = buttontex;  // Temp
+      newsv->textures = ReadTextures(current);
       if (scrollviews.size())
       {
          newsv->visible = false;

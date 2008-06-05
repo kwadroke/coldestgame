@@ -630,6 +630,7 @@ void GetMap(string fn)
             //grassmesh.Move(Vector3(mx, 0, my));
             //grassmesh.CalcBounds();
             grassmesh.dynamic = true;
+            grassmesh.collide = false;
             meshes.push_back(grassmesh);
          }
       }

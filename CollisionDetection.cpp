@@ -43,6 +43,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    float maxdim, tempdim;
    int adjusted = 0;
    
+   //cout << "Checking " << objs.size() << endl;
+   
    Mesh* current;
    for (int i = 0; i < objs.size(); i++)
    {
@@ -133,7 +135,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // These aren't useful for player movement though so we shouldn't do them in that case.
    
    // TODO: This doesn't work well.  Need to pass in a parameter to indicate when we want this done.
-   if (oldpos.distance2(newpos) > radius * radius * 9)
+   if (0)//oldpos.distance2(newpos) > radius * radius * 9)
    {
       // Do another edge check that checks the entire movement path, not just the ending position.
       // This is necessary because projectiles may move significantly larger distances than their

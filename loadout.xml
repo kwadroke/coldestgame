@@ -4,21 +4,21 @@
    
    <TabWidget x="100" y="110" width="500" height="700" text="">
       <Tab text="Map" buttonwidth="80"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png">
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png">
          <Label x="0" y="0" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map"
                normal="textures/buttonnormsquare.png">
          </Label>
       </Tab>
       <Tab text="Players" buttonwidth="120"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png">
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png">
       </Tab>
    </TabWidget>
    
-   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit"
+   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit" selected="1"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>UnitTest</ComboBoxItem>
@@ -58,7 +58,7 @@
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
       <ComboBoxItem>Mortar</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item"
+   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item" selected="1"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>

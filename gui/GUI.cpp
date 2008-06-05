@@ -464,28 +464,8 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             newwidget->align = Right;
          
          // Load textures
-         val = ReadAttribute(current, XSWrapper("normal"));
-         if (val != "")
-         {
-            newwidget->textures[Normal] = val;
-            if (newwidget->textures[Hover] == "")
-               newwidget->textures[Hover] = newwidget->textures[Normal];
-            if (newwidget->textures[Clicked] == "")
-               newwidget->textures[Clicked] = newwidget->textures[Normal];
-            texman->LoadTexture(newwidget->textures[Normal]);
-         }
-         val = ReadAttribute(current, XSWrapper("hover"));
-         if (val != "")
-         {
-            newwidget->textures[Hover] = val;
-            texman->LoadTexture(newwidget->textures[Hover]);
-         }
-         val = ReadAttribute(current, XSWrapper("pressed"));
-         if (val != "")
-         {
-            newwidget->textures[Clicked] = val;
-            texman->LoadTexture(newwidget->textures[Clicked]);
-         }
+         newwidget->textures = ReadTextures(current);
+         
          newwidget->ReadNodeExtra(current, parent);
          children.push_back(newwidget);
          
@@ -495,8 +475,38 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             currnode = children->item(i);
             newwidget->ReadNode(currnode, newwidget.get());
          }
+         newwidget->PostReadNode(current, parent);
       }
    }
+}
+
+
+vector<string> GUI::ReadTextures(DOMNode* current, const string& prefix)
+{
+   vector<string> ret(numstates);
+   string val = ReadAttribute(current, XSWrapper(prefix + "normal"));
+   if (val != "")
+   {
+      ret[Normal] = val;
+      if (ret[Hover] == "")
+         ret[Hover] = ret[Normal];
+      if (ret[Clicked] == "")
+         ret[Clicked] = ret[Normal];
+      texman->LoadTexture(ret[Normal]);
+   }
+   val = ReadAttribute(current, XSWrapper(prefix + "hover"));
+   if (val != "")
+   {
+      ret[Hover] = val;
+      texman->LoadTexture(ret[Hover]);
+   }
+   val = ReadAttribute(current, XSWrapper(prefix + "pressed"));
+   if (val != "")
+   {
+      ret[Clicked] = val;
+      texman->LoadTexture(ret[Clicked]);
+   }
+   return ret;
 }
 
 
