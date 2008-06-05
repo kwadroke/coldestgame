@@ -62,6 +62,7 @@ class Mesh
       
       bool render;
       bool dynamic;
+      bool collide;
       float size; // I'm not sure this should be public, but for the moment we'll go with it
       
       float impdist;

@@ -36,7 +36,7 @@ using xercesc::DOMNamedNodeMap;
 using xercesc::XMLString;
 using boost::shared_ptr;
 
-enum {Normal, Hover, Clicked};
+enum {Normal, Hover, Clicked, numstates};
 enum Alignment {Left, Center, Right};
 
 class GUI
@@ -81,12 +81,14 @@ class GUI
       void ReadNode(DOMNode*, GUI*);
       virtual void ReadNodeExtra(DOMNode*, GUI*){}
       virtual void ReadSpecialNodes(DOMNode*, GUI*){}
+      virtual void PostReadNode(DOMNode*, GUI*){}
       virtual void Cleanup();
       virtual void RenderWidget(){}
       virtual void PostRender(){}
       void Init(GUI*, TextureManager*);
       void StringDim(TTF_Font*, string, int&, int&);
       void RenderBase();
+      vector<string> ReadTextures(DOMNode*, const string& prefix = "");
       
       // Event handlers
       virtual void CustomProcessEvent(SDL_Event*){}

@@ -54,10 +54,8 @@ void Host()
    serverthread = SDL_CreateThread(Server, NULL);
    console.Parse("set serveraddr localhost");
    console.Parse("connect");
-   ComboBox* unitbox = dynamic_cast<ComboBox*>(gui[loadoutmenu]->GetWidget("Unit"));
-   unitbox->Select(0);
    ComboBox *teamselect = (ComboBox*)gui[loadoutmenu]->GetWidget("TeamSelect");
-   teamselect->Select(teamselect->Selected() == 1 ? 2 : 1);
+   teamselect->Select(1);
    ShowGUI(loadoutmenu);
 }
 

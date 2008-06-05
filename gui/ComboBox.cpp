@@ -91,16 +91,25 @@ void ComboBox::ReadSpecialNodes(DOMNode* current, GUI* parentw)
 }
 
 
+void ComboBox::PostReadNode(DOMNode* current, GUI* parentw)
+{
+   string val = ReadAttribute(current, XSWrapper("selected"));
+   if (val != "")
+      Select(atoi(val.c_str()), false);
+}
+
+
 int ComboBox::Selected()
 {
    return table->Selected();
 }
 
 
-void ComboBox::Select(int i)
+void ComboBox::Select(int i, bool doaction)
 {
    table->Select(i);
-   DoAction(valuechanged);
+   if (doaction)
+      DoAction(valuechanged);
    button->text = table->GetSelectedString(0);
 }
 

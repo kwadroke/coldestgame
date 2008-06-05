@@ -4,23 +4,26 @@
    
    <TabWidget x="100" y="110" width="800" height="800" text="">
       <Tab text="Graphics" buttonwidth="120"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png">
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
          <TextArea x="100" y="100" width="500" height="100" name="testmessage"
                    normal="textures/buttonnormsquare.png">
 The settings page is not functional at this time.  Use the console to change settings if necessary.
          </TextArea>
       </Tab>
       <Tab text="Sound" buttonwidth="120"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png">
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
       </Tab>
       <Tab text="Controls" buttonwidth="120"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png">
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
       </Tab>
    </TabWidget>
    

@@ -988,7 +988,7 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
 {
    for (Meshlist::iterator i = ml.begin(); i != ml.end(); ++i)
    {
-      if (i->dynamic)
+      if (i->dynamic && i->collide)
       {
          appto.push_back(&(*i));
       }
