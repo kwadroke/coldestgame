@@ -545,8 +545,8 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
 
 void Mesh::CalcBounds()
 {
-   float size2 = 0.f;
-   float dist2 = 0.f;
+   size = 0.f;
+   float dist = 0.f;
    Vector3 min;
    Vector3 max;
    float temp;
@@ -554,20 +554,19 @@ void Mesh::CalcBounds()
    {
       for (int j = 0; j < 3; ++j)
       {
-         dist2 = tris[i]->vert[j].distance2(position);
-         if (dist2 > size2) size2 = dist2;
+         dist = tris[i]->vert[j].distance(position) + tris[i]->radmod;
+         if (dist > size) size = dist;
          temp = tris[i]->vert[j].x - position.x;
-         if (temp > max.x) max.x = temp;
-         if (temp < min.x) min.x = temp;
+         if (temp + tris[i]->radmod > max.x) max.x = temp + tris[i]->radmod;
+         if (temp - tris[i]->radmod < min.x) min.x = temp - tris[i]->radmod;
          temp = tris[i]->vert[j].y - position.y;
-         if (temp > max.y) max.y = temp;
-         if (temp < min.y) min.y = temp;
+         if (temp + tris[i]->radmod > max.y) max.y = temp + tris[i]->radmod;
+         if (temp - tris[i]->radmod < min.y) min.y = temp - tris[i]->radmod;
          temp = tris[i]->vert[j].z - position.z;
-         if (temp > max.z) max.z = temp;
-         if (temp < min.z) min.z = temp;
+         if (temp + tris[i]->radmod > max.z) max.z = temp + tris[i]->radmod;
+         if (temp - tris[i]->radmod < min.z) min.z = temp - tris[i]->radmod;
       }
    }
-   size = sqrt(size2) * 2.f;
    height = max.y - min.y;
    width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
 }

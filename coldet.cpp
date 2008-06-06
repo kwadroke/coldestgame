@@ -895,6 +895,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       mplayer.pos.y += d.y * step * mplayer.speed;
    else
    {
+      float startheight = GetTerrainHeight(old.x, old.z);
+      float endheight = GetTerrainHeight(mplayer.pos.x, mplayer.pos.z);
       Vector3 groundcheck = old;
       groundcheck.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
@@ -910,17 +912,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          }
          mplayer.fallvelocity = 0.f;
          groundcheck = mplayer.pos;
-         /* It turns out that our collision detection isn't accurate enough to just use our previous
-            height, so calculate the exact height so we know whether we're on a downslope.
-            Note: Collision detection has undergone significant changes since this was written, but
-            it still works so I'm not going to change it.*/
-         groundcheck.y = GetTerrainHeight(old.x, old.z);
-         groundcheck.y += .01f;
-         check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
-         groundcheck = coldet.CheckSphereHit(old, groundcheck, .01, check, NULL);
-         /* If this vector comes back zero then it means they're on a downslope and might need a little help
-            staying on the ground.  Otherwise we get a nasty stairstepping effect that looks quite bad.*/
-         if (!floatzero(mplayer.speed) && groundcheck.magnitude() < .00001f)
+         if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4))
          {
             mplayer.pos.y -= step;
          }
@@ -947,11 +939,12 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
       adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check, NULL);
       int count = 0;
+      float slop = .1f;
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
-         mplayer.pos += adjust;
-         legoffset += adjust;
+         mplayer.pos += adjust * (1 + count * slop);
+         legoffset += adjust * (1 + count * slop);
          adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
          adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check, NULL);
          ++count;

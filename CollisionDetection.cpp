@@ -57,10 +57,13 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          {
             if (currtri.maxdim < 0) currtri.CalcMaxDim();
             
-            if (currtri.midpoint.distance2(midpoint) < currtri.maxdim + radius * radius)
+            float checkrad = currtri.maxdim + radius;
+            float localrad = radius + currtri.radmod;
+            
+            if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
             {
                temp = adjust;
-               adjust += PlaneSphereCollision(currtri.vert, oldpos, newpos, radius);
+               adjust += PlaneSphereCollision(currtri.vert, oldpos, newpos, localrad);
                if (adjust.distance2(temp) > .00001)
                {
                   adjusted++;
@@ -113,11 +116,14 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             if (currtri.collide)
             {
                if (currtri.maxdim < 0) currtri.CalcMaxDim();
+               
+               float checkrad = currtri.maxdim + radius;
+               float localrad = radius + currtri.radmod;
             
-               if (currtri.midpoint.distance2(midpoint) < currtri.maxdim + radius * radius)
+               if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                {
                   temp = adjust;
-                  adjust += PlaneEdgeSphereCollision(currtri.vert, newpos, radius);
+                  adjust += PlaneEdgeSphereCollision(currtri.vert, newpos, localrad);
                   if (adjust.distance2(temp) > .00001)
                   {
                      adjusted++;
@@ -158,11 +164,14 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                if (currtri.collide)
                {
                   if (currtri.maxdim < 0) currtri.CalcMaxDim();
-               
-                  if (currtri.midpoint.distance2(midpoint) < currtri.maxdim + radius * radius)
+                  
+                  float checkrad = currtri.maxdim + radius;
+                  float localrad = radius + currtri.radmod;
+            
+                  if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                   {
                      temp = adjust;
-                     adjust += VectorEdgeCheck(currtri.vert, oldpos, newpos, radius);
+                     adjust += VectorEdgeCheck(currtri.vert, oldpos, newpos, localrad);
                      if (adjust.distance2(temp) > .00001)
                      {
                         adjusted++;
@@ -189,12 +198,15 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                if (currtri.collide)
                {
                   if (currtri.maxdim < 0) currtri.CalcMaxDim();
-               
-                  if (currtri.midpoint.distance2(midpoint) < currtri.maxdim + radius * radius)
+                  
+                  float checkrad = currtri.maxdim + radius;
+                  float localrad = radius + currtri.radmod;
+            
+                  if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                   {
                      for (int j = 0; j < 3; ++j)
                      {
-                        if (RaySphereCheck(oldpos, newpos, currtri.vert[j], radius, temp))
+                        if (RaySphereCheck(oldpos, newpos, currtri.vert[j], localrad, temp))
                         {
                            adjust += temp;
                            adjusted++;
