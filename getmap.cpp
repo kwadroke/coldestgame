@@ -625,11 +625,10 @@ void GetMap(string fn)
                   }
                }
             }
-            float mx = (x + groupsize / 2) * tilesize;
-            float my = (y + groupsize / 2) * tilesize;
-            //grassmesh.Move(Vector3(mx, 0, my));
-            //grassmesh.CalcBounds();
-            grassmesh.dynamic = true;
+            float mx = (x + (float)groupsize / 2.f) * grasssize;
+            float my = (y + (float)groupsize / 2.f) * grasssize;
+            grassmesh.Move(Vector3(mx, 0, my));
+            grassmesh.CalcBounds();
             grassmesh.collide = false;
             meshes.push_back(grassmesh);
          }

@@ -260,8 +260,10 @@ void RenderObjects()
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (i->dynamic)
+      {
          i->Render(override);
-      trislastframe += i->Size();
+         trislastframe += i->Size();
+      }
    }
    
    impostormesh.GenVbo();

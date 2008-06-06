@@ -194,13 +194,32 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       }
       
       // Generate primitives from our points
-      //for (int j = 0; j < numslices; ++j)
+      if (lev == 0)
+      {
+         Vector3 colstart, colend;
+         for (int j = 0; j < oldpts.size(); ++j)
+         {
+            colstart += oldpts[j];
+         }
+         colstart /= oldpts.size();
+         for (int j = 0; j < newpts.size(); ++j)
+         {
+            colend += newpts[j];
+         }
+         colend /= newpts.size();
+         TrianglePtr coltri = TrianglePtr(new Triangle());
+         coltri->vert[0] = colstart;
+         coltri->vert[1] = colstart;
+         coltri->vert[2] = colend;
+         coltri->radmod = radius;
+         coltri->collide = true;
+         mesh->tris.push_back(coltri);
+      }
       int newind, newind1;
       for (int j = 0; j < oldpts.size(); ++j)
       {
          Quad temp;
          temp.SetMaterial(bark);
-         temp.SetCollide(lev == 0);
          newind = (int)(j * ((float)numslices / (float)oldpts.size()));
          newind1 = (int)((j + 1) * ((float)numslices / (float)oldpts.size()));
          temp.SetVertex(0, newpts[newind]);
