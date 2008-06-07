@@ -1,6 +1,7 @@
 #ifndef __TRIANGLE_H
 #define __TRIANGLE_H
 
+#include "Vertex.h"
 #include "Vector3.h"
 #include "types.h"
 #include "GraphicMatrix.h"
@@ -47,14 +48,9 @@ class Triangle
       static bool TriPtrComp(const shared_ptr<Triangle>&, const shared_ptr<Triangle>&);
       void CalcMaxDim();
       
-      Vector3vec vert;
-      Vector3vec norm;
+      Vertexvec v;
       Material* material;
-      Vector3 tangent;
       bool collide;
-      vector< vector< floatvec > > texcoords; // [Texture unit][vertex][x/y]
-      vector<GLubytevec> color;
-      vector<floatvec> terrainwt;
       GraphicMatrix matrix;
       float maxdim;
       Vector3 midpoint;

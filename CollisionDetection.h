@@ -16,10 +16,9 @@ class CollisionDetection
    public:
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&,
                              vector<Mesh*>* = NULL, const bool debug = false);
-      Vector3 CheckSphereHitDebug(const Vector3&, const Vector3&, const float&, vector<Mesh*>&,
-                             vector<Mesh*>* = NULL);
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&);
       bool UnitTest();
       
       int intmethod;
@@ -27,9 +26,9 @@ class CollisionDetection
       vector<Quad> worldbounds;
       
    private:
-      Vector3 PlaneSphereCollision(Vector3vec, const Vector3&, const Vector3&, const float&, const bool debug = false);
-      Vector3 PlaneEdgeSphereCollision(const Vector3vec&, const Vector3&, const float&);
-      Vector3 VectorEdgeCheck(const Vector3vec&, const Vector3&, const Vector3&, const float&);
+      Vector3 PlaneSphereCollision(const Triangle&, const Vector3&, const Vector3&, const float&, const bool debug = false);
+      Vector3 PlaneEdgeSphereCollision(const Triangle&, const Vector3&, const float&);
+      Vector3 VectorEdgeCheck(const Triangle&, const Vector3&, const Vector3&, const float&);
       bool InVector(Mesh*, vector<Meshlist::iterator>&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const Vector3&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&);

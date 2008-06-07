@@ -20,6 +20,7 @@
 #include "netdefs.h"
 #include "ServerState.h"
 #include "IDGen.h"
+#include "util.h"
 
 // Necessary declarations
 int ServerSend(void*);
@@ -796,7 +797,7 @@ void ServerLoadMap()
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {
-      points[i] = coldet.worldbounds[0].GetVertex(i);// + Vector3(0, 10, 0);
+      points[i] = coldet.worldbounds[0].GetVertex(i);
    }
    for (int i = 0; i < 4; ++i)
    {

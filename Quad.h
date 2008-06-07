@@ -40,9 +40,9 @@ Vector3 Quad::GetVertex(const int num) const
    GetVertNums(num, vert, vert1);
    
    if (vert >= 0 && vert < 3)
-      return first->vert[vert];
+      return first->v[vert].pos;
    if (vert1 >= 0 && vert1 < 3) 
-      return second->vert[vert1];
+      return second->v[vert1].pos;
    return Vector3(); // Uh oh
 }
 

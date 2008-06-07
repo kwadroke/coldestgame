@@ -1,5 +1,5 @@
 #include "CollisionDetection.h"
-#include "globals.h" // for floatzero
+#include "util.h" // for floatzero
 
 #define PI 3.14159265
 
@@ -19,11 +19,10 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 }
 
 
-Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
-                                           vector<Mesh*>* retobjs)
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs)
 {
-   Vector3 retval = CheckSphereHit(oldpos, newpos, radius, objs, retobjs, true);
-   return retval;
+   Vector3 dummy;
+   CheckSphereHit(oldpos, newpos, radius, objs, dummy);
 }
 
 
@@ -35,7 +34,7 @@ Vector3 CollisionDetection::CheckSphereHitDebug(const Vector3& oldpos, const Vec
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
-                                           vector<Mesh*>* retobjs, bool debug)
+                                           Vector3& hitpos, vector<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
    Vector3 temp;
@@ -63,9 +62,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
             {
                temp = adjust;
-               adjust += PlaneSphereCollision(currtri.vert, oldpos, newpos, localrad);
+               adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad);
                if (adjust.distance2(temp) > .00001)
                {
+                  hitpos = newpos;
                   adjusted++;
                   if (retobjs)
                      retobjs->push_back(current);
@@ -97,6 +97,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       Vector3 move;
       if (CrossesPlane(oldpos, newpos, norm, d, denominator, move))  // Crossed the plane
       {
+         hitpos = newpos;
          float endside = norm.dot(newpos) + d;
          adjust += norm * -endside;// * 1.05f;
          adjusted++;
@@ -123,9 +124,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                {
                   temp = adjust;
-                  adjust += PlaneEdgeSphereCollision(currtri.vert, newpos, localrad);
+                  adjust += PlaneEdgeSphereCollision(currtri, newpos, localrad);
                   if (adjust.distance2(temp) > .00001)
                   {
+                     hitpos = newpos;
                      adjusted++;
                      if (retobjs)
                         retobjs->push_back(current);
@@ -171,9 +173,11 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                   {
                      temp = adjust;
-                     adjust += VectorEdgeCheck(currtri.vert, oldpos, newpos, localrad);
+                     adjust += VectorEdgeCheck(currtri, oldpos, newpos, localrad);
                      if (adjust.distance2(temp) > .00001)
                      {
+                        if (oldpos.distance2(adjust) < oldpos.distance2(hitpos))
+                           hitpos = adjust;
                         adjusted++;
                         if (retobjs)
                            retobjs->push_back(current);
@@ -206,8 +210,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   {
                      for (int j = 0; j < 3; ++j)
                      {
-                        if (RaySphereCheck(oldpos, newpos, currtri.vert[j], localrad, temp))
+                        if (RaySphereCheck(oldpos, newpos, currtri.v[j].pos, localrad, temp))
                         {
+                           if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j].pos))
+                              hitpos = currtri.v[j].pos;
                            adjust += temp;
                            adjusted++;
                            if (retobjs)
@@ -228,8 +234,11 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 
 
 // May want to precalculate normals where we can to speed things up
-Vector3 CollisionDetection::PlaneSphereCollision(Vector3vec v, const Vector3& pos, const Vector3& pos1, const float& radius, bool debug)
+Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector3& pos, const Vector3& pos1, const float& radius, bool debug)
 {
+   Vector3vec v(3);
+   for (int i = 0; i < 3; ++i)
+      v[i] = t.v[i].pos;
    Vector3 adjust;
    Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
    norm.normalize();
@@ -329,8 +338,11 @@ Vector3 CollisionDetection::PlaneSphereCollision(Vector3vec v, const Vector3& po
 }
 
 
-Vector3 CollisionDetection::PlaneEdgeSphereCollision(const Vector3vec& v, const Vector3& pos, const float& radius)
+Vector3 CollisionDetection::PlaneEdgeSphereCollision(const Triangle& t, const Vector3& pos, const float& radius)
 {
+   Vector3vec v(3);
+   for (int i = 0; i < 3; ++i)
+      v[i] = t.v[i].pos;
    Vector3 adjust, tempadj;
    int numhits = 0;
    for (int i = 0; i < 3; i++)
@@ -353,8 +365,11 @@ Vector3 CollisionDetection::PlaneEdgeSphereCollision(const Vector3vec& v, const 
 // Finds the point of nearest approach of the vectors describing the movement and the edge
 // of the triangle.  If this point falls on the edge of the polygon and the minimum distance
 // between the two vectors is less than radius then we hit
-Vector3 CollisionDetection::VectorEdgeCheck(const Vector3vec& v, const Vector3& start, const Vector3& end, const float& radius)
+Vector3 CollisionDetection::VectorEdgeCheck(const Triangle& t, const Vector3& start, const Vector3& end, const float& radius)
 {
+   Vector3vec v(3);
+   for (int i = 0; i < 3; ++i)
+      v[i] = t.v[i].pos;
    Vector3 adjust;
    Vector3 n;
    Vector3 move = end - start;
@@ -373,7 +388,7 @@ Vector3 CollisionDetection::VectorEdgeCheck(const Vector3vec& v, const Vector3& 
       {
          if (j < -1e-5 || k < -1e-5 || j > 1 || k > 1) // No hit
             continue;
-         return Vector3(1, 1, 1);
+         return start + move * j;
       }
    }
    return Vector3();
@@ -516,18 +531,7 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
 
 bool CollisionDetection::UnitTest()
 {
-   Vector3 s1(1, 0, 1);
-   Vector3 s2(0, 0, 3);
-   Vector3 d1(0, 1, 1);
-   Vector3 d2(1, 0, 0);
-   float j, k;
-   Vector3vec v3(3);
-   v3[0] = Vector3(0, 0, 0);
-   v3[1] = Vector3(1, 0, 0);
-   v3[2] = Vector3(0, 0, 1);
-   cout << "Distance: " << DistanceBetweenLines(s1, d1, s2, d2, j, k) << endl;
-   cout << j << "  " << k << endl;
-   VectorEdgeCheck(v3, s1, d1, .5);
+   
    return true;
 }
 

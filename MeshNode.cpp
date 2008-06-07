@@ -91,10 +91,12 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    m *= parentm;
    
    // Save vertices for next time...
-   Vector3vec savevert = vert;
+   Vertexvec newvert(4, Vertex());
    for (int i = 0; i < vert.size(); ++i)
    {
-      vert[i].transform(m);
+      newvert[i].pos = vert[i];
+      newvert[i].pos.transform(m);
+      newvert[i].texcoords = texcoords[i];
    }
    
    if (render)
@@ -108,15 +110,14 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
       
       if (vert.size() == 3) // Generate one triangle
       {
-         newtris[0]->vert = vert;
-         newtris[0]->texcoords = texcoords;
+         copy(newvert.begin(), newvert.begin() + 3, newtris[0]->v.begin());
       }
       else if (vert.size() == 4) // Generate quad
       {
          Quad newquad;
          for (int i = 0; i < 4; ++i)
          {
-            newquad.SetVertex(i, vert[i]);
+            newquad.SetVertex(i, newvert[i].pos);
             for (int j = 0; j < 8; ++j)
             {
                newquad.SetTexCoords(i, j, texcoords[j][i]);
@@ -131,17 +132,16 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
       {
          newtris[i]->material = material;
          
-         Vector3 norm = newtris[i]->vert[1] - newtris[i]->vert[0];
-         norm = norm.cross(newtris[i]->vert[2] - newtris[i]->vert[0]);
+         Vector3 norm = newtris[i]->v[1].pos - newtris[i]->v[0].pos;
+         norm = norm.cross(newtris[i]->v[2].pos - newtris[i]->v[0].pos);
          for (int j = 0; j < 3; ++j)
          {
-            newtris[i]->norm[j] = norm;
+            newtris[i]->v[j].norm = norm;
          }
          newtris[i]->collide = collide;
          tris.push_back(newtris[i]);
       }
    }
-   vert = savevert;
    
    // Recursively call this on our children
    for (int i = 0; i < children.size(); ++i)
