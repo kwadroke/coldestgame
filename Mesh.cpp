@@ -1,6 +1,5 @@
 #include "Mesh.h"
 #include "ProceduralTree.h" // Circular dependency
-#include "globals.h"        // Ditto
 
 Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
@@ -554,15 +553,15 @@ void Mesh::CalcBounds()
    {
       for (int j = 0; j < 3; ++j)
       {
-         dist = tris[i]->vert[j].distance(position) + tris[i]->radmod;
+         dist = tris[i]->v[j].pos.distance(position) + tris[i]->radmod;
          if (dist > size) size = dist;
-         temp = tris[i]->vert[j].x - position.x;
+         temp = tris[i]->v[j].pos.x - position.x;
          if (temp + tris[i]->radmod > max.x) max.x = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.x) min.x = temp - tris[i]->radmod;
-         temp = tris[i]->vert[j].y - position.y;
+         temp = tris[i]->v[j].pos.y - position.y;
          if (temp + tris[i]->radmod > max.y) max.y = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.y) min.y = temp - tris[i]->radmod;
-         temp = tris[i]->vert[j].z - position.z;
+         temp = tris[i]->v[j].pos.z - position.z;
          if (temp + tris[i]->radmod > max.z) max.z = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.z) min.z = temp - tris[i]->radmod;
       }

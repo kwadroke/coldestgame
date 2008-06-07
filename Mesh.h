@@ -10,6 +10,7 @@
 #include "Quad.h"
 #include "MeshNode.h"
 #include "FBO.h"
+#include "util.h"
 #include <map>
 
 using std::map;
@@ -108,5 +109,7 @@ class Mesh
 typedef list<Mesh> Meshlist;
 typedef map<int, MeshNodePtr> MeshNodeMap;
 typedef shared_ptr<Mesh> MeshPtr;
+
+const string objectfilever = "Version3";
 
 #endif

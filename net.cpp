@@ -16,12 +16,7 @@
 #include "gui/ComboBox.h"
 #include "netdefs.h"
 #include "globals.h"
-// Does this also need to be here?
-#ifdef LINUX
-#include <sys/types.h>
-#include <linux/unistd.h>
-#include <errno.h>
-#endif
+#include "util.h"
 
 using namespace std;
 

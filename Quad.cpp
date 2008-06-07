@@ -15,9 +15,9 @@ Quad::Quad() : first(new Triangle()), second(new Triangle())
       {
          GetVertNums(j, vert, vert1);
          if (vert >= 0)
-            first->texcoords[i][vert] = tcv[j];
+            first->v[vert].texcoords[i] = tcv[j];
          if (vert1 >= 0)
-            second->texcoords[i][vert1] = tcv[j];
+            second->v[vert1].texcoords[i] = tcv[j];
       }
    }
 }
@@ -43,9 +43,9 @@ void Quad::SetVertex(const int num, const Vector3& v)
    GetVertNums(num, vert, vert1);
    
    if (vert >= 0 && vert < 3)
-      first->vert[vert] = v;
+      first->v[vert].pos = v;
    if (vert1 >= 0 && vert1 < 3)
-      second->vert[vert1] = v;
+      second->v[vert1].pos = v;
 }
 
 
@@ -56,9 +56,9 @@ void Quad::SetNormal(const int num, const Vector3& v)
    GetVertNums(num, vert, vert1);
    
    if (vert >= 0 && vert < 3)
-      first->norm[vert] = v;
+      first->v[vert].norm = v;
    if (vert1 >= 0 && vert1 < 3)
-      second->norm[vert1] = v;
+      second->v[vert1].norm = v;
 }
 
 
@@ -69,9 +69,9 @@ void Quad::SetColor(const int num, const GLubytevec val)
    GetVertNums(num, vert, vert1);
    
    if (vert >= 0 && vert < 3)
-      first->color[vert] = val;
+      first->v[vert].color = val;
    if (vert1 >= 0 && vert1 < 3)
-      second->color[vert1] = val;
+      second->v[vert1].color = val;
 }
 
 
@@ -82,9 +82,9 @@ void Quad::SetTexCoords(const int num, const int texunit, const floatvec val)
    GetVertNums(num, vert, vert1);
    
    if (vert >= 0 && vert < 3)
-      first->texcoords[texunit][vert] = val;
+      first->v[vert].texcoords[texunit] = val;
    if (vert1 >= 0 && vert1 < 3)
-      second->texcoords[texunit][vert1] = val;
+      second->v[vert1].texcoords[texunit] = val;
 }
 
 
@@ -95,9 +95,9 @@ void Quad::SetTerrainWeight(const int vertex, const int tex, const float val)
    GetVertNums(vertex, vert, vert1);
    
    if (vert >= 0 && vert < 3)
-      first->terrainwt[vert][tex] = val;
+      first->v[vert].terrainwt[tex] = val;
    if (vert1 >= 0 && vert1 < 3)
-      second->terrainwt[vert1][tex] = val;
+      second->v[vert1].terrainwt[tex] = val;
 }
 
 

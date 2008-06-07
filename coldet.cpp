@@ -901,7 +901,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       groundcheck.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
-      groundcheck = coldet.CheckSphereHit(old, groundcheck, .01, check, NULL);
+      groundcheck = coldet.CheckSphereHit(old, groundcheck, .01f, check);
       
       if (groundcheck.magnitude() > .00001f) // They were on the ground
       {
@@ -911,11 +911,11 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
             //cout << "Hit ground " << mplayer.fallvelocity << endl;
          }
          mplayer.fallvelocity = 0.f;
-         groundcheck = mplayer.pos;
          if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4))
          {
             mplayer.pos.y -= step;
          }
+         else if (!floatzero(mplayer.speed)) mplayer.pos.y -= step * .1f;
       }
       else
       {
@@ -936,8 +936,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 oldleg = offsetold - Vector3(0, mplayer.size, 0);
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
-      Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
-      adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check, NULL);
+      Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
+      adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
       int count = 0;
       float slop = .1f;
       
@@ -945,8 +945,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       {
          mplayer.pos += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check, NULL);
-         adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check, NULL);
+         adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
+         adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
@@ -1124,6 +1124,13 @@ void Animate()
    }
    
    // Particles
+   vector<ParticleEmitter>::iterator i = emitters.begin();
+   while (i != emitters.end())
+   {
+      if (i->Update(particles))
+         i = emitters.erase(i);
+      else ++i;
+   }
    static int partupd = 100;
    UpdateParticles(particles, partupd, kdtree, meshes, player[0].pos);
    
@@ -1232,7 +1239,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       particlemesh = MeshPtr(new Mesh(empty, resman));
       particlemesh->dynamic = true;
    }
-   Vector3 oldpos, partcheck;
+   Vector3 oldpos, partcheck, hitpos;
    vector<Mesh*> hitmeshes;
    if (partupd >= console.GetInt("partupdateinterval"))
    {
@@ -1248,7 +1255,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             AppendDynamicMeshes(check, ml);
             if (Rewind)
                Rewind(j->rewind);
-            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, &hitmeshes);
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, &hitmeshes);
             if (Rewind)
                Rewind(0);
          }
@@ -1273,6 +1280,15 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          {
             if (HitHandler)
                HitHandler(*j, hitmeshes);
+            else
+            {
+               IniReader mread("models/projectile/base");
+               Mesh partmesh(mread, resman);
+               Particle newpart(0, Vector3(), Vector3(), 1.f, .9f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
+               newpart.ttl = 100;
+               ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 10);
+               emitters.push_back(newemitter);
+            }
             j = parts.erase(j);
          }
       }
@@ -1365,17 +1381,6 @@ void ResetKeys()
 /****************************************************************
 The following are all utility functions
 ****************************************************************/
-// Quick utility function for texture creation
-int PowerOf2(int input)
-{
-   int value = 1;
-
-   while ( value < input ) 
-   {
-      value <<= 1;
-   }
-   return value;
-}
 
 
 void SDL_GL_Enter2dMode()
@@ -1419,56 +1424,7 @@ void SDL_GL_Exit2dMode()
 }
 
 
-string PadNum(int n, int digits)
-{
-   stringstream temp;
-   temp.width(digits);
-   temp.fill('0');
-   temp << n;
-   return temp.str();
-}
 
-
-// TODO: This is almost certainly not portable as written
-string AddressToDD(Uint32 ahost)
-{
-   int parts[4];
-   parts[0] = ahost & 0x000000ff;
-   parts[1] = (ahost & 0x0000ff00) >> 8;
-   parts[2] = (ahost & 0x00ff0000) >> 16;
-   parts[3] = (ahost & 0xff000000) >> 24;
-   ostringstream dotteddec;
-   dotteddec << parts[0] << '.' << parts[1] << '.' << parts[2] << '.' << parts[3];
-   return dotteddec.str();
-}
-
-
-bool floatzero(float num, float error)
-{
-   return (num < 0 + error && num > 0 - error);
-}
-
-
-float Random(float min, float max)
-{
-   if (max < min) return 0;
-   float size = max - min;
-   return (size * ((float)rand() / (float)RAND_MAX) + min);
-}
-
-
-int gettid()
-{
-#ifdef LINUX
-#ifndef IS64
-   return syscall(224);
-#else
-   return syscall(186);
-#endif
-#else
-return 0;
-#endif
-}
 
 
 void GLError()

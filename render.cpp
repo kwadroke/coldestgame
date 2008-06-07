@@ -2,6 +2,7 @@
 
 #include "globals.h"
 #include "renderdefs.h"
+#include "util.h"
 
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
@@ -851,7 +852,7 @@ void RenderHud()
 #endif
    
    // Render all of the GUI objects, they know whether they're visible or not
-   resman.shaderman.UseShader("none");
+   resman.shaderman.UseShader("shaders/flat");
    glColor4f(1, 1, 1, 1);
    for (size_t i = 0; i < gui.size(); ++i)
    {

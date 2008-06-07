@@ -13,6 +13,7 @@
 #include "Particle.h"
 #include "ObjectKDTree.h"
 #include "Console.h"
+#include "ParticleEmitter.h"
 
 #define PI 3.14159265
 
@@ -23,13 +24,13 @@ using std::vector;
 using std::set;
 
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
-const string objectfilever = "Version3";
 
 enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, numguis};
 
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
+extern vector<ParticleEmitter> emitters;
 extern vector<Item> items;
 extern vector<GUIPtr> gui;
 extern string nextmap;         // Used to signal the main thread to load a new map
@@ -51,21 +52,6 @@ extern Meshlist meshes;
 extern bool serverhasmap;
 extern Console console;
 
-template <typename T>
-string ToString(const T &input)
-{
-   stringstream temp;
-   temp << input;
-   return temp.str();
-}
-
-
-template <typename T>
-T lerp(T x, T y, float a)
-{
-   return (x * a + y * (1 - a));
-}
-
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
 void AppendToChat(int, string);
@@ -76,10 +62,5 @@ void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);
 void ShowGUI(int);
 void ResetKeys();
-
-bool floatzero(float, float error = .00001);
-float Random(float min, float max);
-string PadNum(int, int);
-int gettid();
 
 #endif
