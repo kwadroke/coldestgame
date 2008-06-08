@@ -185,16 +185,16 @@ void Console::Action(const string& action)
    {
       Packet::laghax = GetInt("laghax");
    }
-   else if (action == "shadowmapsize action")
+   else if (action == "shadowres action")
    {
-      int value = GetInt("shadowmapsize");
+      int value = GetInt("shadowres");
       if (value >= 8  && value <= 8192)
       {
-         int shadowmapsize = value;
+         int shadowres = value;
 #ifndef DEBUGSMT
-         shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
+         shadowmapfbo = FBO(shadowres, shadowres, true, &resman.texhand);
 #else
-         shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
+         shadowmapfbo = FBO(shadowres, shadowres, false, &resman.texhand);
 #endif
       }
       else WriteToConsole(string("Invalid value"));

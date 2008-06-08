@@ -80,6 +80,8 @@ void InitGlobals()
    console.Parse("set aa 0", false);
    console.Parse("set af 1", false);
    console.Parse("set impdistmulti 1", false);
+   console.Parse("set detailmapsize 300", false);
+   console.Parse("set samplesize 5", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -114,8 +116,8 @@ void InitGlobals()
       console.Parse("set reflectionres 512");
    if (console.GetInt("cloudres") < 1)
       console.Parse("set cloudres 1024");
-   if (console.GetInt("shadowmapsize") < 1)
-      console.Parse("set shadowmapsize 1024");
+   if (console.GetInt("shadowres") < 1)
+      console.Parse("set shadowres 1024");
    
    InitGUI();
    InitUnits();

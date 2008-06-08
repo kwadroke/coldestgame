@@ -221,9 +221,18 @@ void Shader::SetUniform1i(string shader, string name, GLint val)
    UseShader(shader); // Have to be bound to a shader to do the following
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
-   glUniform1iARB(loc, val);
+   if (loc >= 0)
+      glUniform1iARB(loc, val);
    
    UseShader(save);
+}
+
+void Shader::GlobalSetUniform1i(string name, GLint val)
+{
+   for (progmap::iterator i = programs.begin(); i != programs.end(); ++i)
+   {
+      SetUniform1i(i->first, name, val);
+   }
 }
 
 
@@ -233,9 +242,18 @@ void Shader::SetUniform1f(string shader, string name, GLfloat val)
    UseShader(shader); // Have to be bound to a shader to do the following
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
-   glUniform1fARB(loc, val);
+   if (loc >= 0)
+      glUniform1fARB(loc, val);
    
    UseShader(save);
+}
+
+void Shader::GlobalSetUniform1f(string name, GLfloat val)
+{
+   for (progmap::iterator i = programs.begin(); i != programs.end(); ++i)
+   {
+      SetUniform1f(i->first, name, val);
+   }
 }
 
 
