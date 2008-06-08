@@ -22,7 +22,7 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs)
 {
    Vector3 dummy;
-   CheckSphereHit(oldpos, newpos, radius, objs, dummy);
+   return CheckSphereHit(oldpos, newpos, radius, objs, dummy);
 }
 
 
