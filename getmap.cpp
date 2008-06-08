@@ -684,17 +684,17 @@ void GetMap(string fn)
    
    // Render static shadow map
    // Generate FBO to render to the shadow map texture
-   int shadowmapsize = console.GetInt("shadowmapsize");
+   int shadowres = console.GetInt("shadowres");
 #ifndef DEBUGSMT
    if (!shadowmapfbo.IsValid())
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
-   if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, true, &resman.texhand);
+      shadowmapfbo = FBO(shadowres, shadowres, true, &resman.texhand);
+   if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowres)
+      worldshadowmapfbo = FBO(shadowres, shadowres, true, &resman.texhand);
 #else
    if (!shadowmapfbo.IsValid())
-      shadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
-   if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowmapsize)
-      worldshadowmapfbo = FBO(shadowmapsize, shadowmapsize, false, &resman.texhand);
+      shadowmapfbo = FBO(shadowres, shadowres, false, &resman.texhand);
+   if (!worldshadowmapfbo.IsValid() || worldshadowmapfbo.GetWidth() != shadowres)
+      worldshadowmapfbo = FBO(shadowres, shadowres, false, &resman.texhand);
 #endif
    float shadowsize = (int)(mapw > maph ? mapw : maph);
    shadowsize *= tilesize;

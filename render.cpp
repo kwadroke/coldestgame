@@ -57,8 +57,10 @@ void Repaint()
       if (shadows)
       {
          Vector3 rots = lights.GetRots(0);
-         float shadowmapsizeworld = 200 * 1.42;
-         float worldperoneshadow = shadowmapsizeworld / console.GetInt("shadowmapsize");
+         float detailmapsize = console.GetFloat("detailmapsize");
+         float shadowres = console.GetFloat("shadowres");
+         float shadowmapsizeworld = detailmapsize * 1.42;
+         float worldperoneshadow = shadowmapsizeworld / shadowres;
          
          // Find out where we're looking, a little rough ATM
          GraphicMatrix rot;
@@ -438,8 +440,8 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glDisable(GL_FOG);
    glDisable(GL_LIGHTING);
    
-   int shadowmapsize = console.GetInt("shadowmapsize");
-   glViewport(0, 0, shadowmapsize, shadowmapsize);
+   int shadowres = console.GetInt("shadowres");
+   glViewport(0, 0, shadowres, shadowres);
    
    // Set up light matrices
    lightview = lights.GetView(0, center);
@@ -492,6 +494,12 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    fbo.Unbind();
+   
+   // These calls don't need to be made for generating shadows, but it makes sure that they'll be
+   // set before we try to use the shadow map
+   resman.shaderman.GlobalSetUniform1f("detailmapsize", console.GetFloat("detailmapsize"));
+   resman.shaderman.GlobalSetUniform1f("shadowres", console.GetFloat("shadowres"));
+   resman.shaderman.GlobalSetUniform1i("samplesize", console.GetInt("samplesize"));
 }
 
 

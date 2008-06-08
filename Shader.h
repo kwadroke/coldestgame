@@ -18,7 +18,9 @@ class Shader
       Shader();
       void UseProgram(GLhandleARB);
       void SetUniform1i(string, string, GLint);
+      void GlobalSetUniform1i(string, GLint);
       void SetUniform1f(string, string, GLfloat);
+      void GlobalSetUniform1f(string, GLfloat);
       void SetUniform3f(string, string, const vector<GLfloat>&);
       void SetUniform1fv(string, string, GLsizei, GLfloat*);
       void SetUniform2fv(string, string, GLsizei, GLfloat*);
