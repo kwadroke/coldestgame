@@ -63,12 +63,12 @@ long ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leaves
       temp = Vector3();
       m.translate(trunkrad, 0, 0);
       m.rotatey(-sliceangle * j);
-      m.translate(mesh->position);
+      m.translate(mesh->GetPosition());
       temp.transform(m.members);
       pts.push_back(temp);
    }
    m = GraphicMatrix();
-   m.translate(mesh->position);
+   m.translate(mesh->GetPosition());
    int i = 0;
    if (!multitrunk)
       i = numbranches[0] - 1;
@@ -208,12 +208,12 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          }
          colend /= newpts.size();
          TrianglePtr coltri = TrianglePtr(new Triangle());
-         coltri->v[0].pos = colstart;
-         coltri->v[1].pos = colstart;
-         coltri->v[2].pos = colend;
+         coltri->v[0]->pos = colstart;
+         coltri->v[1]->pos = colstart;
+         coltri->v[2]->pos = colend;
          coltri->radmod = radius;
          coltri->collide = true;
-         mesh->tris.push_back(coltri);
+         mesh->Add(coltri);
       }
       int newind, newind1;
       for (int j = 0; j < oldpts.size(); ++j)
@@ -232,8 +232,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          temp.SetNormal(2, normals[newind1 % numslices]);
          temp.SetNormal(3, normals[newind1 % numslices]);
          
-         mesh->tris.push_back(temp.First());
-         mesh->tris.push_back(temp.Second());
+         mesh->Add(temp);
          ++totalprims;
       }
    }
@@ -295,10 +294,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
             tempn.normalize();
             temp.SetNormal(n, tempn);
          }
-         mesh->tris.push_back(temp.First());
-         mesh->tris.push_back(temp.Second());
+         mesh->Add(temp);
          ++totalprims;
-         
       }
    }
    

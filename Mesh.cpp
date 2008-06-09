@@ -4,7 +4,7 @@
 Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), width(0.f), height(0.f), resman(rm), tris(TrianglePtrvec()), trantris(TrianglePtrvec()),
-            impostortex(0), vbodata(vector<VBOData>()), vbo(0), next(0), hasvbo(false), currkeyframe(0),
+            impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
             impmat(MaterialPtr()), animspeed(1.f)
 {
@@ -22,10 +22,11 @@ Mesh::~Mesh()
 
 
 // TODO: Need to properly copy vbo and impostor Mesh here
+// Also need to copy vertices....
 Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
-         size(m.size), width(m.width), height(m.height),
-         impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), next(m.next), hasvbo(m.hasvbo),
+         size(m.size), width(m.width), height(m.height), impostortex(m.impostortex),
+         vbodata(m.vbodata), vbo(m.vbo), ibo(m.ibo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), collide(m.collide), dist(m.dist), impostor(m.impostor), 
          impmat(MaterialPtr()), animspeed(m.animspeed)
@@ -38,9 +39,20 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
+   map<VertexPtr, VertexPtr> vertmap;
+   for (size_t i = 0; i < m.vertices.size(); ++i)
+   {
+      VertexPtr p(new Vertex(*m.vertices[i]));
+      vertmap[m.vertices[i]] = p;
+      vertices.push_back(p);
+   }
    for (size_t i = 0; i < m.tris.size(); ++i)
    {
       TrianglePtr p(new Triangle(*m.tris[i]));
+      for (size_t j = 0; j < 3; ++j)
+      {
+         p->v[j] = vertmap[p->v[j]];
+      }
       tris.push_back(p);
    }
    for (size_t i = 0; i < m.frameroot.size(); ++i)
@@ -235,8 +247,7 @@ void Mesh::Load(const IniReader& reader)
             prims[nextprim].n[n] = temp1.cross(temp2);
             prims[nextprim].n[n].normalize();
          }*/
-         tris.push_back(newquad.First());
-         tris.push_back(newquad.Second());
+         Add(newquad);
       }
    }
    else if (type == "proctree")
@@ -285,15 +296,39 @@ void Mesh::GenVbo()
    {
       vbosteps.clear();
       vbodata.clear();
+      indexdata.clear();
+      vertices.erase(unique(vertices.begin(), vertices.end()), vertices.end()); // Only one copy of each vertex allowed in VBO
       /*if (hasvbo)
          glDeleteBuffersARB(1, &vbo);
       glGenBuffersARB(1, &vbo);*/
       if (!hasvbo)
       {
          glGenBuffersARB(1, &vbo);
+         glGenBuffersARB(1, &ibo);
       }
-      glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
       
+      for (size_t i = 0; i < tris.size(); ++i)
+      {
+      // Generate tangents for triangles
+         Vector3 one = tris[i]->v[1]->pos - tris[i]->v[0]->pos;
+         Vector3 two = tris[i]->v[2]->pos - tris[i]->v[0]->pos;
+         float tcone = tris[i]->v[1]->texcoords[0][1] - tris[i]->v[0]->texcoords[0][1];
+         float tctwo = tris[i]->v[2]->texcoords[0][1] - tris[i]->v[0]->texcoords[0][1];
+         Vector3 tangent = one * -tctwo + two * tcone;
+         for (size_t j = 0; j < 3; ++j)
+            tris[i]->v[j]->tangent = tangent;
+      }
+      
+      // Build VBO
+      int currindex = 0;
+      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      {
+         (*i)->index = currindex;
+         ++currindex;
+         vbodata.push_back((*i)->GetVboData());
+      }
+      
+      // Build IBO
       sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
       int counter = 0;
       TrianglePtrvec::iterator last = tris.begin();
@@ -304,27 +339,34 @@ void Mesh::GenVbo()
             vbosteps.push_back(counter);
             counter = 0;
          }
-         for (int j = 0; j < 3; ++j)
-         {
-            vbodata.push_back((*i)->GetVboData(j));
-         }
+         ushortvec ind = (*i)->GetIndices();
+         indexdata.insert(indexdata.end(), ind.begin(), ind.end());
          last = i;
          ++counter;
       }
       vbosteps.push_back(counter);
+      
+      glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
+      glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
       if (frameroot.size() <= 1 && !dynamic)
       {
+         glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
+                         0, GL_STATIC_DRAW_ARB);
          glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                      vbodata.size() * sizeof(VBOData), 
                      0, GL_STATIC_DRAW_ARB);
       }
       else
       {
+         glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
+                         0, GL_STREAM_DRAW_ARB);
          glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                         vbodata.size() * sizeof(VBOData), 
                         0, GL_STREAM_DRAW_ARB);
       }
+      glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
       glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
+      glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       
       if (!glops)
@@ -347,6 +389,7 @@ void Mesh::BindVbo()
    }
    VBOData dummy;
    
+   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ibo);
    glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
    
    glEnableClientState(GL_VERTEX_ARRAY);
@@ -398,10 +441,14 @@ void Mesh::Render(Material* overridemat)
          else tris[currindex]->material->UseTextureOnly();
       }
       BindAttribs();
-      glDrawArrays(GL_TRIANGLES, currindex * 3, vbosteps[i] * 3);
+      void* offset = (void*)(ptrdiff_t(&indexdata[currindex * 3]) - ptrdiff_t(&indexdata[0]));
+      glDrawElements(GL_TRIANGLES, vbosteps[i] * 3, GL_UNSIGNED_SHORT, offset);
       UnbindAttribs();
       currindex += vbosteps[i];
    }
+   
+   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+   glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 }
 
 
@@ -512,6 +559,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    else if (index < 0 || index >= frameroot.size()) return;
    
    tris.clear();
+   vertices.clear();
    //trantris.clear();
    
    GraphicMatrix m;
@@ -524,15 +572,15 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    if (frameroot.size() == 1) // Implies index has to be 0
    {
       //if (tris.size() <= 0)
-         frameroot[0]->GenTris(frameroot[0], interpval, m, tris, campos);
+         frameroot[0]->GenTris(frameroot[0], interpval, m, *this, campos);
    }
    else if (index == frameroot.size() - 1) // Could happen if we land exactly on the last keyframe
    {
-      frameroot[index]->GenTris(frameroot[index], interpval, m, tris, campos);
+      frameroot[index]->GenTris(frameroot[index], interpval, m, *this, campos);
    }
    else
    {
-      frameroot[index]->GenTris(frameroot[index + 1], interpval, m, tris, campos);
+      frameroot[index]->GenTris(frameroot[index + 1], interpval, m, *this, campos);
    }
    
    CalcBounds();
@@ -553,15 +601,15 @@ void Mesh::CalcBounds()
    {
       for (int j = 0; j < 3; ++j)
       {
-         dist = tris[i]->v[j].pos.distance(position) + tris[i]->radmod;
+         dist = tris[i]->v[j]->pos.distance(position) + tris[i]->radmod;
          if (dist > size) size = dist;
-         temp = tris[i]->v[j].pos.x - position.x;
+         temp = tris[i]->v[j]->pos.x - position.x;
          if (temp + tris[i]->radmod > max.x) max.x = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.x) min.x = temp - tris[i]->radmod;
-         temp = tris[i]->v[j].pos.y - position.y;
+         temp = tris[i]->v[j]->pos.y - position.y;
          if (temp + tris[i]->radmod > max.y) max.y = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.y) min.y = temp - tris[i]->radmod;
-         temp = tris[i]->v[j].pos.z - position.z;
+         temp = tris[i]->v[j]->pos.z - position.z;
          if (temp + tris[i]->radmod > max.z) max.z = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.z) min.z = temp - tris[i]->radmod;
       }
@@ -650,20 +698,23 @@ void Mesh::ResetAnimation()
 void Mesh::Add(TrianglePtr& tri)
 {
    tris.push_back(tri);
+   vertices.insert(vertices.end(), tri->v.begin(), tri->v.end());
 }
 
 
 void Mesh::Add(Quad& quad)
 {
-   tris.push_back(quad.First());
-   tris.push_back(quad.Second());
+   TrianglePtr temp = quad.First();
+   Add(temp);
+   temp = quad.Second();
+   Add(temp);
 }
 
 
 void Mesh::Add(Mesh &mesh)
 {
    for (size_t i = 0; i < mesh.tris.size(); ++i)
-      tris.push_back(mesh.tris[i]);
+      Add(mesh.tris[i]);
 }
 
 

@@ -81,7 +81,7 @@ void InitGlobals()
    console.Parse("set af 1", false);
    console.Parse("set impdistmulti 1", false);
    console.Parse("set detailmapsize 300", false);
-   console.Parse("set samplesize 5", false);
+   console.Parse("set samplesize 1", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -996,7 +996,7 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
 // TODO: Currently this code leaks memory because it never removes anything from oldpos
 void SynchronizePosition()
 {
-#ifdef NOCLIENTPREDICTION
+#if 0
    player[0].pos = player[servplayernum].pos;
    return;
 #endif
@@ -1286,8 +1286,8 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             {
                IniReader mread("models/projectile/base");
                Mesh partmesh(mread, resman);
-               Particle newpart(0, Vector3(), Vector3(), 1.f, .9f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
-               newpart.ttl = 100;
+               Particle newpart(0, Vector3(), Vector3(), .5f, 1.f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
+               newpart.ttl = 500;
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 10);
                emitters.push_back(newemitter);
             }
