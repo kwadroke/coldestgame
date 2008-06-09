@@ -1,5 +1,6 @@
 #include "MeshNode.h"
 #include "globals.h" // Causes problems if included in header
+#include "Mesh.h"
 
 MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
                   trans(Vector3()), vert(Vector3vec(3, Vector3())), facing(false),
@@ -13,7 +14,7 @@ MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
 
 
 // Returned triangles go directly into tris
-void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, TrianglePtrvec& tris,
+void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, const GraphicMatrix& parentm, Mesh& mesh,
                        const Vector3& campos)
 {
    Vector3 interprot1 = lerp(interpnode->rot1, rot1, interpval);
@@ -90,13 +91,13 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
    }
    m *= parentm;
    
-   // Save vertices for next time...
-   Vertexvec newvert(4, Vertex());
+   VertexPtrvec newvert(4);
    for (int i = 0; i < vert.size(); ++i)
    {
-      newvert[i].pos = vert[i];
-      newvert[i].pos.transform(m);
-      newvert[i].texcoords = texcoords[i];
+      newvert[i] = VertexPtr(new Vertex());
+      newvert[i]->pos = vert[i];
+      newvert[i]->pos.transform(m);
+      newvert[i]->texcoords = texcoords[i];
    }
    
    if (render)
@@ -117,7 +118,7 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
          Quad newquad;
          for (int i = 0; i < 4; ++i)
          {
-            newquad.SetVertex(i, newvert[i].pos);
+            newquad.SetVertex(i, newvert[i]->pos);
             for (int j = 0; j < 8; ++j)
             {
                newquad.SetTexCoords(i, j, texcoords[j][i]);
@@ -132,21 +133,22 @@ void MeshNode::GenTris(const MeshNodePtr& interpnode, const float interpval, con
       {
          newtris[i]->material = material;
          
-         Vector3 norm = newtris[i]->v[1].pos - newtris[i]->v[0].pos;
-         norm = norm.cross(newtris[i]->v[2].pos - newtris[i]->v[0].pos);
+         Vector3 norm = newtris[i]->v[1]->pos - newtris[i]->v[0]->pos;
+         norm = norm.cross(newtris[i]->v[2]->pos - newtris[i]->v[0]->pos);
+         
          for (int j = 0; j < 3; ++j)
          {
-            newtris[i]->v[j].norm = norm;
+            newtris[i]->v[j]->norm = norm;
          }
          newtris[i]->collide = collide;
-         tris.push_back(newtris[i]);
+         mesh.Add(newtris[i]);
       }
    }
    
    // Recursively call this on our children
    for (int i = 0; i < children.size(); ++i)
    {
-      children[i]->GenTris(interpnode->children[i], interpval, m, tris, campos);
+      children[i]->GenTris(interpnode->children[i], interpval, m, mesh, campos);
    }
 }
 

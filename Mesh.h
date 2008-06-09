@@ -20,8 +20,8 @@ using std::map;
 */
 class Mesh
 {
-   friend class ProceduralTree;
-   friend class ObjectKDTree; // Not entirely sure this is still necessary...
+   //friend class ProceduralTree; // Also not necessary?
+   //friend class ObjectKDTree; // Not entirely sure this is still necessary...
    public:
       Mesh(IniReader&, ResourceManager&, bool gl = false);
       ~Mesh();
@@ -78,11 +78,14 @@ class Mesh
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;
+      VertexPtrvec vertices;
       intvec vbosteps;
       GLuint vbo;
+      GLuint ibo;
       vector<VBOData> vbodata;
+      ushortvec indexdata;
       vector<MeshNodePtr> frameroot;
-      vector<int> frametime;
+      intvec frametime;
       vector<map<string, MeshNodePtr> > framecontainer;
       bool hasvbo;
       

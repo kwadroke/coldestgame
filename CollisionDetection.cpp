@@ -210,10 +210,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   {
                      for (int j = 0; j < 3; ++j)
                      {
-                        if (RaySphereCheck(oldpos, newpos, currtri.v[j].pos, localrad, temp))
+                        if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, localrad, temp))
                         {
-                           if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j].pos))
-                              hitpos = currtri.v[j].pos;
+                           if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+                              hitpos = currtri.v[j]->pos;
                            adjust += temp;
                            adjusted++;
                            if (retobjs)
@@ -238,7 +238,7 @@ Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector
 {
    Vector3vec v(3);
    for (int i = 0; i < 3; ++i)
-      v[i] = t.v[i].pos;
+      v[i] = t.v[i]->pos;
    Vector3 adjust;
    Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
    norm.normalize();
@@ -342,7 +342,7 @@ Vector3 CollisionDetection::PlaneEdgeSphereCollision(const Triangle& t, const Ve
 {
    Vector3vec v(3);
    for (int i = 0; i < 3; ++i)
-      v[i] = t.v[i].pos;
+      v[i] = t.v[i]->pos;
    Vector3 adjust, tempadj;
    int numhits = 0;
    for (int i = 0; i < 3; i++)
@@ -369,7 +369,7 @@ Vector3 CollisionDetection::VectorEdgeCheck(const Triangle& t, const Vector3& st
 {
    Vector3vec v(3);
    for (int i = 0; i < 3; ++i)
-      v[i] = t.v[i].pos;
+      v[i] = t.v[i]->pos;
    Vector3 adjust;
    Vector3 n;
    Vector3 move = end - start;

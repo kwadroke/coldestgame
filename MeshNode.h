@@ -10,16 +10,18 @@
 #include <boost/shared_ptr.hpp>
 
 /**
-	@author Ben Nemec <ben@nemebean.com>
+	@author Ben Nemec <cybertron@nemebean.com>
 */
 
 using boost::shared_ptr;
+
+class Mesh;
 
 class MeshNode
 {
    public:
       MeshNode();
-      void GenTris(const shared_ptr<MeshNode>&, const float, const GraphicMatrix&, TrianglePtrvec&, const Vector3& campos);
+      void GenTris(const shared_ptr<MeshNode>&, const float, const GraphicMatrix&, Mesh&, const Vector3& campos);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void LoadMaterials(ResourceManager&);

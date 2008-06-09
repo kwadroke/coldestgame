@@ -229,7 +229,9 @@ void Shader::SetUniform1i(string shader, string name, GLint val)
 
 void Shader::GlobalSetUniform1i(string name, GLint val)
 {
-   for (progmap::iterator i = programs.begin(); i != programs.end(); ++i)
+   progmap::iterator i = programs.begin();
+   ++i;
+   for (; i != programs.end(); ++i)
    {
       SetUniform1i(i->first, name, val);
    }
@@ -250,7 +252,9 @@ void Shader::SetUniform1f(string shader, string name, GLfloat val)
 
 void Shader::GlobalSetUniform1f(string name, GLfloat val)
 {
-   for (progmap::iterator i = programs.begin(); i != programs.end(); ++i)
+   progmap::iterator i = programs.begin();
+   ++i;
+   for (; i != programs.end(); ++i)
    {
       SetUniform1f(i->first, name, val);
    }

@@ -22,6 +22,7 @@ enum Items{NoItem, SpawnPoint, HeatSink, AmmoCarrier, Radar, numitems};
 
 typedef vector<float> floatvec;
 typedef vector<int> intvec;
+typedef vector<unsigned short> ushortvec;
 typedef vector<Vector3> Vector3vec;
 typedef vector<GLubyte> GLubytevec;
 
