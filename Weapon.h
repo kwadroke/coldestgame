@@ -12,11 +12,12 @@ class Weapon
       Weapon(const int);
       int Id(){return id;}
       int Damage(){return damage;}
+      int Weight(){return weight;}
       float Radius(){return radius;}
       float Velocity(){return velocity;}
       float Acceleration(){return acceleration;}
       float Splash(){return splashradius;}
-      float Weight(){return weight;}
+      float ProjectileWeight(){return projectileweight;}
       float Heat(){return heat;}
       int ReloadTime(){return reloadtime;}
       bool Explode(){return explode;}
@@ -32,11 +33,12 @@ class Weapon
       
       int id;
       int damage;
+      int weight;
       float radius;
       float velocity;
       float acceleration;
       float splashradius;
-      float weight;
+      float projectileweight;
       float heat;
       int reloadtime;
       bool explode;

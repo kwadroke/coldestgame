@@ -15,7 +15,7 @@ class Item
       int Uses() const{return usesleft;}
       float CoolMult() const{return coolmultiplier;}
       float AmmoMult() const{return ammomultiplier;}
-      float Weight() const{return weight;}
+      int Weight() const{return weight;}
       string Name() const{return name;}
       string ModelFile() const{return modelfile;}
       
@@ -33,7 +33,7 @@ class Item
       int type;
       float coolmultiplier;
       float ammomultiplier;
-      float weight;
+      int weight;
       string name;
       string modelfile;
       

@@ -1,7 +1,7 @@
 #include "Item.h"
 
-Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(0), mesh(ml.end()), type(newtype), coolmultiplier(1.f), ammomultiplier(1.f),
-           weight(0.f), name("None"), modelfile("models/empty/base")
+Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(0), mesh(ml.end()), type(newtype), 
+           coolmultiplier(1.f), ammomultiplier(1.f), weight(0), name("None"), modelfile("models/empty/base")
            
 {
    switch (newtype)

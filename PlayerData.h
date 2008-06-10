@@ -22,6 +22,7 @@ class PlayerData
       Vector3 clientpos; // So server can keep track of both
       float pitch, rotation, roll, facing;
       float speed;
+      float turnspeed;
       bool moveforward, moveleft, moveright, moveback;
       bool leftclick, rightclick;
       bool run;

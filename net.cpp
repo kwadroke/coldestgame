@@ -577,6 +577,7 @@ int NetListen(void* dummy)
                doconnect = false;
                connected = true;
                needsync = false; // Set to true after map is loaded
+               winningteam = 0;
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                SDL_mutexV(clientmutex);
@@ -772,7 +773,13 @@ int NetListen(void* dummy)
             connected = false;
             doconnect = true;
          }
-         else
+         else if (packettype == "O") // Game over man, game over
+         {
+            get >> winningteam;
+            cout << "Team " << winningteam << " wins!" << endl;
+            Ack(packetnum);
+         }
+         else if (packettype != "Y") // It's okay to get here on a Y packet
          {
             cout << "Warning: Unknown packet type received: " << packettype << endl;
          }

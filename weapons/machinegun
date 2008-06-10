@@ -1,5 +1,6 @@
 ReloadTime 20
 Velocity 20
 Radius 5
-Weight .1
+ProjectileWeight .1
+Weight 5
 Name Machine Gun

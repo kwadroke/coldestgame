@@ -25,3 +25,4 @@ vector<SpawnPointData> mapspawns;
 bool initialized;
 bool serverhasmap;
 Console console;
+int winningteam;

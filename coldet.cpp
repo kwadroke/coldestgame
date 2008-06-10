@@ -82,6 +82,8 @@ void InitGlobals()
    console.Parse("set impdistmulti 1", false);
    console.Parse("set detailmapsize 300", false);
    console.Parse("set samplesize 1", false);
+   console.Parse("set turnsmooth 10", false);
+   console.Parse("set endgametime 10", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -99,6 +101,7 @@ void InitGlobals()
    nextmap = mapname = "";
    clientmutex = SDL_CreateMutex();
    spawnschanged = true;
+   winningteam = 0;
    
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
@@ -144,6 +147,7 @@ void InitGUI()
    gui[ingamestatus] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "ingamestatus.xml"));
    gui[chat] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "chat.xml"));
    gui[settings] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "settings.xml"));
+   gui[endgame] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "endgame.xml"));
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
 }
@@ -158,7 +162,6 @@ void InitUnits()
    dummy.maxspeed = 1.f;
    dummy.size = 25.f;
    dummy.weight = 100;
-   dummy.baseweight = 50;
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
    
@@ -459,6 +462,14 @@ static void MainLoop()
          {
             GameEventHandler(event);
          }
+      }
+      
+      // Check for end of game
+      if (winningteam)
+      {
+         GUI* gotext = gui[endgame]->GetWidget("GameOverText");
+         gotext->text = "Team " + ToString(winningteam) + " wins!";
+        ShowGUI(endgame);
       }
       // update the screen
       Repaint();
@@ -827,16 +838,23 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    
    if (mplayer.moveleft)
    {
-      mplayer.facing -= step * 2;
-      if (mplayer.facing < 0) mplayer.facing += 360;
+      mplayer.turnspeed -= step / console.GetFloat("turnsmooth");
+      if (mplayer.turnspeed < -2.f) mplayer.turnspeed = -2.f;
    }
    if (mplayer.moveright)
    {
-      mplayer.facing += step * 2;
-      if (mplayer.facing > 360) mplayer.facing -= 360;
+      mplayer.turnspeed += step / console.GetFloat("turnsmooth");
+      if (mplayer.turnspeed > 2.f) mplayer.turnspeed = 2.f;
    }
    if (mplayer.moveforward || mplayer.moveback)
       moving = true;
+   if (!mplayer.moveleft && !mplayer.moveright)
+      mplayer.turnspeed = 0;
+   
+   // Turning
+   mplayer.facing += mplayer.turnspeed * step;
+   if (mplayer.facing < 0.f) mplayer.facing += 360.f;
+   if (mplayer.facing > 360.f) mplayer.facing -= 360.f;
    
    Vector3 d = Vector3(0, 0, 1);
    GraphicMatrix rot;

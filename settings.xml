@@ -25,6 +25,68 @@ The settings page is not functional at this time.  Use the console to change set
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
       </Tab>
+      <Tab text="Test" buttonwidth="100"
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
+         <ComboBox x="40" y="500" width="120" height="20" name="testcb" text="Test"
+                   normal="textures/buttonnorm.png">
+            <ComboBoxItem>Test</ComboBoxItem>
+            <ComboBoxItem>They have weapons</ComboBoxItem>
+            <ComboBoxItem>So what?</ComboBoxItem>
+            <ComboBoxItem>Fuck!</ComboBoxItem>
+            <ComboBoxItem>28 Days</ComboBoxItem>
+            <ComboBoxItem>Later</ComboBoxItem>
+            <ComboBoxItem>Mutated</ComboBoxItem>
+            <ComboBoxItem>Sheep</ComboBoxItem>
+            <ComboBoxItem>Test</ComboBoxItem>
+            <ComboBoxItem>They have weapons</ComboBoxItem>
+            <ComboBoxItem>So what?</ComboBoxItem>
+            <ComboBoxItem>Fuck!</ComboBoxItem>
+         </ComboBox>
+         
+         <TextArea x="10" y="100" width="200" height="100" name="testta"
+                   normal="textures/buttonnormsquare.png">
+            Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
+         </TextArea>
+         
+         <Slider x="10" y="300" width="180" height="30" name="testslider"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png"/>
+         
+         <Button x="10" y="400" width="200" height="40" text="Toggle" name="testtogglebutton" xmargin="3" ymargin="6" align="center" toggle="true"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png"/>
+         
+         <TabWidget x="300" y="300" width="250" height="300" name="testtw" text="">
+            <Tab buttonwidth="100" text="Test Tab"
+                 buttonnormal="textures/buttonnorm.png"
+                 buttonpressed="textures/buttonpressed.png"
+                 buttonhover="textures/buttonhover.png"
+                 normal="textures/buttonnormsquare.png">
+               <TextArea x="0" y="0" width="200" height="100" name="testta1"
+                         normal="textures/buttonnormsquare.png">
+                  Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
+               </TextArea>
+            </Tab>
+            <Tab buttonwidth="110" text="Test Tab 1"
+                 buttonnormal="textures/buttonnorm.png"
+                 buttonpressed="textures/buttonpressed.png"
+                 buttonhover="textures/buttonhover.png">
+               <TextArea x="0" y="0" width="200" height="100" name="testta2"
+                         normal="textures/buttonnormsquare.png">
+                  Another text area
+               </TextArea>
+            </Tab>
+            <Tab buttonwidth="110" text="Test Tab 2"
+                 buttonnormal="textures/buttonnorm.png"
+                 buttonpressed="textures/buttonpressed.png"
+                 buttonhover="textures/buttonhover.png"/>
+         </TabWidget>
+      </Tab>
    </TabWidget>
    
    <Button x="100" y="900" width="200" height="50" text="Cancel" align="center"

@@ -25,7 +25,7 @@ using std::set;
 
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 
-enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, numguis};
+enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, endgame, numguis};
 
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
@@ -51,6 +51,7 @@ extern bool initialized;
 extern Meshlist meshes;
 extern bool serverhasmap;
 extern Console console;
+extern int winningteam;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

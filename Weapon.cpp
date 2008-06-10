@@ -1,7 +1,7 @@
 #include "Weapon.h"
 
-Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), radius(10.f), velocity(1.f), acceleration(1.f),
-               splashradius(0.f), weight(1.f), heat(0.f), reloadtime(50), explode(true), modelfile("projectile"),
+Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), weight(0), radius(10.f), velocity(1.f), acceleration(1.f),
+               splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50), explode(true), modelfile("projectile"),
                name("None")
 {
    switch (newid)
@@ -44,6 +44,7 @@ void Weapon::LoadFromFile(const string& file)
    read.Read(acceleration, "Acceleration");
    read.Read(splashradius, "Splash");
    read.Read(weight, "Weight");
+   read.Read(projectileweight, "ProjectileWeight");
    read.Read(heat, "Heat");
    read.Read(reloadtime, "ReloadTime");
    read.Read(explode, "Explode");

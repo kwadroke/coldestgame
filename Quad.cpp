@@ -2,6 +2,8 @@
 
 Quad::Quad() : first(new Triangle()), second(new Triangle())
 {
+   second->v[0] = first->v[1];
+   second->v[2] = first->v[2];
    floatvec tc(2, 0.f);
    vector<floatvec> tcv(4, tc);
    tcv[1][1] = 1.f;
@@ -30,6 +32,8 @@ Quad::Quad(const Quad& q) : first(new Triangle(*q.first)), second(new Triangle(*
       first->v[i] = VertexPtr(new Vertex(*first->v[i]));
       second->v[i] = VertexPtr(new Vertex(*second->v[i]));
    }
+   second->v[0] = first->v[1];
+   second->v[2] = first->v[2];
 }
 
 
@@ -42,6 +46,8 @@ Quad& Quad::operator=(const Quad& q)
       first->v[i] = VertexPtr(new Vertex(*first->v[i]));
       second->v[i] = VertexPtr(new Vertex(*second->v[i]));
    }
+   second->v[0] = first->v[1];
+   second->v[2] = first->v[2];
    return *this;
 }
 
