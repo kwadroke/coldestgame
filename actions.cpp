@@ -14,74 +14,6 @@
 void ConsoleHandler(string);
 void Quit();
 
-void Connect()
-{
-   Table* servlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
-   vector<ServerInfo>::iterator i;
-   string serveraddress;
-   int currsel = servlist->Selected();
-   if (currsel == -1) return;
-   int counter = 0;
-   SDL_mutexP(clientmutex);
-   for (i = servers.begin(); i != servers.end(); ++i)
-   {
-      if (counter == currsel)
-      {
-         serveraddress = i->strip;
-         break;
-      }
-      ++counter;
-   }
-   SDL_mutexV(clientmutex);
-   console.Parse("set serveraddr " + serveraddress);
-   console.Parse("connect");
-   ShowGUI(loadoutmenu);
-}
-
-
-void ConnectToIp()
-{
-   GUI* servname = gui[mainmenu]->GetWidget("servername");
-   console.Parse("set serveraddr " + servname->text);
-   console.Parse("connect");
-   ShowGUI(loadoutmenu);
-}
-
-
-void Host()
-{
-   server = true;
-   serverthread = SDL_CreateThread(Server, NULL);
-   console.Parse("set serveraddr localhost");
-   console.Parse("connect");
-   ComboBox *teamselect = (ComboBox*)gui[loadoutmenu]->GetWidget("TeamSelect");
-   teamselect->Select(1);
-   ShowGUI(loadoutmenu);
-}
-
-
-void TestAction()
-{
-   GUI* temp = gui[loadprogress]->GetWidget("loadingprogress");
-   temp->visible = true;
-   ProgressBar* temp1 = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
-   temp1->value = 50;
-}
-
-
-void Resume()
-{
-   gui[mainmenu]->visible = false;
-   gui[hud]->visible = true;
-}
-
-
-void LoadoutToMain()
-{
-   ShowGUI(mainmenu);
-}
-
-
 void UpdateUnitSelection()
 {
    ComboBox* unitbox = (ComboBox*)gui[loadoutmenu]->GetWidget("Unit");
@@ -105,6 +37,90 @@ void UpdateUnitSelection()
    itemtype = itembox->Selected();
    if (itemtype >= 0 && itemtype < Item::numitems)
       player[0].item = Item(itemtype, meshes);
+   
+   // Calculate weight
+   int maxweight = units[player[0].unit].weight;
+   int totalweight = 0;
+   for (size_t i = 0; i < numbodyparts; ++i)
+      totalweight += player[0].weapons[i].Weight();
+   totalweight += player[0].item.Weight();
+   GUI* weightbox = gui[loadoutmenu]->GetWidget("Weight");
+   GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
+   weightbox->text = ToString(totalweight) + "/" + ToString(maxweight) + " tons";
+   if (totalweight > maxweight)
+      spawnbutton->visible = false;
+   else spawnbutton->visible = true;
+}
+
+
+void Connect()
+{
+   Table* servlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
+   vector<ServerInfo>::iterator i;
+   string serveraddress;
+   int currsel = servlist->Selected();
+   if (currsel == -1) return;
+   int counter = 0;
+   SDL_mutexP(clientmutex);
+   for (i = servers.begin(); i != servers.end(); ++i)
+   {
+      if (counter == currsel)
+      {
+         serveraddress = i->strip;
+         break;
+      }
+      ++counter;
+   }
+   SDL_mutexV(clientmutex);
+   console.Parse("set serveraddr " + serveraddress);
+   console.Parse("connect");
+   UpdateUnitSelection();
+   ShowGUI(loadoutmenu);
+}
+
+
+void ConnectToIp()
+{
+   GUI* servname = gui[mainmenu]->GetWidget("servername");
+   console.Parse("set serveraddr " + servname->text);
+   console.Parse("connect");
+   UpdateUnitSelection();
+   ShowGUI(loadoutmenu);
+}
+
+
+void Host()
+{
+   server = true;
+   serverthread = SDL_CreateThread(Server, NULL);
+   console.Parse("set serveraddr localhost");
+   console.Parse("connect");
+   ComboBox *teamselect = (ComboBox*)gui[loadoutmenu]->GetWidget("TeamSelect");
+   teamselect->Select(1);
+   UpdateUnitSelection();
+   ShowGUI(loadoutmenu);
+}
+
+
+void TestAction()
+{
+   GUI* temp = gui[loadprogress]->GetWidget("loadingprogress");
+   temp->visible = true;
+   ProgressBar* temp1 = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
+   temp1->value = 50;
+}
+
+
+void Resume()
+{
+   gui[mainmenu]->visible = false;
+   gui[hud]->visible = true;
+}
+
+
+void LoadoutToMain()
+{
+   ShowGUI(mainmenu);
 }
 
 

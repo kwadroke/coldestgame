@@ -29,7 +29,6 @@ typedef vector<GLubyte> GLubytevec;
 struct UnitData
 {
    int weight;
-   int baseweight;
    string file;
    float turnspeed;
    float acceleration;

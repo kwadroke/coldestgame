@@ -36,6 +36,7 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
 void SendKill(int);
 void RemoveTeam(int);
 void SendSyncPacket(PlayerData&);
+void SendGameOver(PlayerData&, int);
 string AddressToDD(Uint32);
 void LoadMapList();
 
@@ -59,6 +60,7 @@ short maxplayers;
 deque<ServerState> oldstate;
 vector<string> maplist;
 bool gameover;
+Uint32 nextmaptime;
 
 class SortableIPaddress
 {
@@ -186,8 +188,14 @@ int ServerListen()
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
-      if ("maps/" + console.GetString("map") != mapname || gameover) // If the server changed maps load the new one
+      //if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
+      if (gameover && SDL_GetTicks() > nextmaptime)
       {
+         srand(time(0));
+         int choosemap = (int)Random(0, maplist.size());
+         SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
+         console.Parse("set map " + maplist[choosemap], false);
+         SDL_mutexV(clientmutex);
          ServerLoadMap();
       }
       for (int i = 1; i < serverplayers.size(); ++i)
@@ -404,7 +412,10 @@ int ServerListen()
                serverplayers[oppnum].lastmovetick = SDL_GetTicks();
                serverplayers[oppnum].spawnpacketnum = packetnum;
                for (int i = 0; i < numbodyparts; ++i)
+               {
                   serverplayers[oppnum].hp[i] = 100;
+                  serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
+               }
             }
             
             Packet response(servoutpack, &servoutsock, &inpack->address);
@@ -586,8 +597,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
       ++runtimes;
       //t.start();
       SDL_Delay(1);  // Keep the loop from eating too much CPU
-      while (gameover) // Just to be safe, stop this thread while loading the next map
-         SDL_Delay(1);
+      //while (gameover) // Just to be safe, stop this thread while loading the next map
+      //   SDL_Delay(1);
       
       currnettick = SDL_GetTicks();
       if (currnettick - lastnettick >= 1000 / servertickrate)
@@ -939,7 +950,7 @@ void ServerUpdatePlayer(int i)
                
       float vel = currplayerweapon.Velocity();
       float acc = currplayerweapon.Acceleration();
-      float w = currplayerweapon.Weight();
+      float w = currplayerweapon.ProjectileWeight();
       float rad = currplayerweapon.Radius();
       bool exp = currplayerweapon.Explode();
       Vector3 startpos = serverplayers[i].pos;
@@ -1097,17 +1108,21 @@ void SendKill(int num)
 
 
 // At this time just ends the game because only two teams are supported.  Will more be in the future?  Who knows.
+// Must have mutex before calling this function
 void RemoveTeam(int num)
 {
    if (!gameover)
    {
       cout << "Team " << num << " has been defeated" << endl;
-      srand(time(0));
-      int choosemap = (int)Random(0, maplist.size());
-      SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
-      console.Parse("set map " + maplist[choosemap], false);
-      SDL_mutexV(clientmutex);
       gameover = true;
+      nextmaptime = SDL_GetTicks() + console.GetInt("endgametime") * 1000;
+      for (size_t i = 0; i < serverplayers.size(); ++i)
+      {
+         if (serverplayers[i].connected)
+         {
+            SendGameOver(serverplayers[i], num == 1 ? 2 : 1);
+         }
+      }
    }
 }
 
@@ -1123,6 +1138,18 @@ void SendSyncPacket(PlayerData& p)
    pack << "set fly " << console.GetBool("fly") << eol;
    pack << "set tickrate " << console.GetInt("tickrate") << eol;
    pack << "endofcommands\n";
+   
+   servqueue.push_back(pack);
+}
+
+
+void SendGameOver(PlayerData& p, const int winner)
+{
+   Packet pack(servoutpack, &servoutsock, &p.addr);
+   pack.ack = servsendpacketnum;
+   pack << "O\n";
+   pack << pack.ack << eol;
+   pack << winner << eol;
    
    servqueue.push_back(pack);
 }

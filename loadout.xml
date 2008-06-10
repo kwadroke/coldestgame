@@ -18,14 +18,14 @@
       </Tab>
    </TabWidget>
    
-   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" text="Unit" selected="1"
+   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>UnitTest</ComboBoxItem>
       <ComboBoxItem>Ultra</ComboBoxItem>
       <ComboBoxItem>Omega</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="150" width="200" height="40" name="Left Arm" text="Left Arm"
+   <ComboBox x="700"  y="150" width="200" height="40" name="Left Arm" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -36,7 +36,7 @@
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
       <ComboBoxItem>Mortar</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" text="Right Arm"
+   <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -47,7 +47,7 @@
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
       <ComboBoxItem>Mortar</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="250" width="200" height="40" name="Torso" text="Torso"
+   <ComboBox x="700"  y="250" width="200" height="40" name="Torso" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -67,7 +67,9 @@
       <ComboBoxItem>Ammo Carrier</ComboBoxItem>
       <ComboBoxItem>Radar</ComboBoxItem>
    </ComboBox>
-   <Button x="700" y="900" width="200" height="50" text="Spawn" align="center"
+   <Label x="700" y="350" width="200" height="40" name="Weight" text="0 tons"
+          normal="textures/buttonnorm.png"/>
+   <Button x="700" y="900" width="200" height="50" name="Spawn" text="Spawn" align="center"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"
            pressed="textures/buttonpressed.png"
@@ -81,14 +83,14 @@
    </Button>
    
    <!-- Team display and selection -->
-   <ComboBox x="700" y="400" width="150" height="40" name="TeamSelect" text="Select Team"
+   <ComboBox x="700" y="550" width="150" height="40" name="TeamSelect" text="Select Team"
              normal="textures/buttonnorm.png"
              valuechanged="requestnewteam">
       <ComboBoxItem>Spectate</ComboBoxItem>
       <ComboBoxItem>Team 1</ComboBoxItem>
       <ComboBoxItem>Team 2</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="450" width="150" height="20" name="TeamDisplay" text="Team"/>
+   <Label x="700" y="600" width="150" height="20" name="TeamDisplay" text="Team"/>
    
    <!-- Spawn points -->
    <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints"
