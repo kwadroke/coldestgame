@@ -84,6 +84,7 @@ void InitGlobals()
    console.Parse("set samplesize 1", false);
    console.Parse("set turnsmooth 10", false);
    console.Parse("set endgametime 10", false);
+   console.Parse("set splashlevels 3", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -492,7 +493,7 @@ void GUIUpdate()
          servupdatecounter = currtick;
       }
    }
-   if (gui[ingamestatus]->visible)
+   if (gui[ingamestatus]->visible || gui[loadoutmenu]->visible)
    {
       currtick = SDL_GetTicks();
       if (currtick - statupdatecounter > 100)
@@ -1251,7 +1252,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // and if the server thread tries to do GL it will crash
 // The server is also the only one to pass in Rewind
 void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, const Vector3& campos,
-                     void (*HitHandler)(Particle&, vector<Mesh*>&), void (*Rewind)(int))
+                     void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&), void (*Rewind)(int))
 {
    IniReader empty("models/empty/base");
    if (!HitHandler)
@@ -1299,8 +1300,8 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          else
          {
             if (HitHandler)
-               HitHandler(*j, hitmeshes);
-            else
+               HitHandler(*j, hitmeshes, hitpos);
+            else // This should probably be triggered by the server, but we'll see
             {
                IniReader mread("models/projectile/base");
                Mesh partmesh(mread, resman);
@@ -1346,10 +1347,13 @@ void UpdatePlayerList()
 {
    SDL_mutexP(clientmutex);
    
-   Table* playerlist = (Table*)gui[ingamestatus]->GetWidget("playerlist");
+   Table* playerlist = dynamic_cast<Table*>(gui[ingamestatus]->GetWidget("playerlist"));
+   Table* lplayerlist = dynamic_cast<Table*>(gui[loadoutmenu]->GetWidget("playerlist"));
    
    playerlist->Clear();
    playerlist->Add("Name|Kills|Deaths|Ping");
+   lplayerlist->Clear();
+   lplayerlist->Add("Name|Kills|Deaths|Ping");
    
    string add;
    for (int i = 1; i < player.size(); ++i)
@@ -1359,6 +1363,7 @@ void UpdatePlayerList()
       add += ToString(player[i].deaths) + "|";
       add += ToString(player[i].ping);
       playerlist->Add(add);
+      lplayerlist->Add(add);
    }
    
    SDL_mutexV(clientmutex);
