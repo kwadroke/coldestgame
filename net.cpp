@@ -347,7 +347,6 @@ int NetListen(void* dummy)
                for (vector<PlayerData>::iterator i = player.begin(); i != player.end(); i++)
                {
                   i->connected = false;
-                  i->spawned = false;
                }
                
                get >> oppnum;
@@ -360,44 +359,46 @@ int NetListen(void* dummy)
                      player.push_back(dummy);
                      cout << "Adding player " << (player.size() - 1) << endl;
                   }
-                  // It's not necessary to load these into buffers, but for debugging
-                  // it's handy to.
-                  get >> oppx >> oppy >> oppz;
-                  get >> opprot;
-                  player[oppnum].rotation = opprot;
-                  get >> opppitch;
-                  player[oppnum].pitch = opppitch;
-                  get >> opproll;
-                  player[oppnum].roll = opproll;
-                  get >> oppfacing;
-                  player[oppnum].facing = oppfacing;
-                  get >> player[oppnum].temperature;
-                  if (oppnum == servplayernum)
-                     player[0].temperature = player[oppnum].temperature;
-                  get >> player[oppnum].moveforward;
-                  get >> player[oppnum].moveback;
-                  get >> player[oppnum].moveleft;
-                  get >> player[oppnum].moveright;
-                  get >> player[oppnum].speed;
-                  oldunit = player[oppnum].unit;
-                  get >> player[oppnum].unit;
-                  get >> player[oppnum].ping;
-                  
-                  /*cout << "Player " << oppnum << endl;
-                  //if (player[oppnum].unit != "unittest")
-                  //   cout << "Died on packet " << packetnum << endl;*/
-                  /*cout << oppnum << ": " << oppx << "  " << oppy << "  " << oppz << endl << flush;
-                  cout << oppfacing << "  ";
-                  cout << opppitch << "  ";
-                  cout << opproll << "  \n\n";*/
-                  
-                  player[oppnum].pos.x = oppx;
-                  player[oppnum].pos.y = oppy;
-                  player[oppnum].pos.z = oppz;
-                  
-                  player[oppnum].connected = true;
-                  player[oppnum].spawned = true;
-                  
+                  get >> player[oppnum].spawned;
+                  if (player[oppnum].spawned)
+                  {
+                     // It's not necessary to load these into buffers, but for debugging
+                     // it's handy to.
+                     get >> oppx >> oppy >> oppz;
+                     get >> opprot;
+                     player[oppnum].rotation = opprot;
+                     get >> opppitch;
+                     player[oppnum].pitch = opppitch;
+                     get >> opproll;
+                     player[oppnum].roll = opproll;
+                     get >> oppfacing;
+                     player[oppnum].facing = oppfacing;
+                     get >> player[oppnum].temperature;
+                     if (oppnum == servplayernum)
+                        player[0].temperature = player[oppnum].temperature;
+                     get >> player[oppnum].moveforward;
+                     get >> player[oppnum].moveback;
+                     get >> player[oppnum].moveleft;
+                     get >> player[oppnum].moveright;
+                     get >> player[oppnum].speed;
+                     oldunit = player[oppnum].unit;
+                     get >> player[oppnum].unit;
+                     get >> player[oppnum].ping;
+                     
+                     /*cout << "Player " << oppnum << endl;
+                     //if (player[oppnum].unit != "unittest")
+                     //   cout << "Died on packet " << packetnum << endl;*/
+                     /*cout << oppnum << ": " << oppx << "  " << oppy << "  " << oppz << endl << flush;
+                     cout << oppfacing << "  ";
+                     cout << opppitch << "  ";
+                     cout << opproll << "  \n\n";*/
+                     
+                     player[oppnum].pos.x = oppx;
+                     player[oppnum].pos.y = oppy;
+                     player[oppnum].pos.z = oppz;
+                     
+                     player[oppnum].connected = true;
+                  }
 #if 0 // This probably doesn't need to go back in, but we'll see
                   if (oppnum != servplayernum)// && player[oppnum].unit != 0)
                   {

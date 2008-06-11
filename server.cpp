@@ -26,7 +26,9 @@
 int ServerSend(void*);
 int ServerListen();
 void ServerLoadMap();
-void HandleHit(Particle& p, vector<Mesh*>& hitobjs);
+void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
+void SplashDamage(const Vector3&, Particle&);
+void ApplyDamage(Mesh*, const float, const int);
 void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
@@ -188,14 +190,16 @@ int ServerListen()
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
-      //if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
-      if (gameover && SDL_GetTicks() > nextmaptime)
+      if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
       {
-         srand(time(0));
-         int choosemap = (int)Random(0, maplist.size());
-         SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
-         console.Parse("set map " + maplist[choosemap], false);
-         SDL_mutexV(clientmutex);
+         if (gameover && SDL_GetTicks() > nextmaptime)
+         {
+            srand(time(0));
+            int choosemap = (int)Random(0, maplist.size());
+            SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
+            console.Parse("set map " + maplist[choosemap], false);
+            SDL_mutexV(clientmutex);
+         }
          ServerLoadMap();
       }
       for (int i = 1; i < serverplayers.size(); ++i)
@@ -612,9 +616,10 @@ int ServerSend(void* dummy)  // Thread for sending updates
          SDL_mutexP(servermutex);
          for (int i = 1; i < serverplayers.size(); ++i)
          {
+            temp << i << eol;
+            temp << serverplayers[i].spawned << eol;
             if (serverplayers[i].spawned)
             {
-               temp << i << eol;
                temp << serverplayers[i].pos.x << eol;
                temp << serverplayers[i].pos.y << eol;
                temp << serverplayers[i].pos.z << eol;
@@ -825,7 +830,7 @@ void ServerLoadMap()
 
 
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
-void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
+void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
 {
    Mesh* curr;
    // 10e38 is near the maximum representable value for a single precision float
@@ -847,6 +852,44 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
          currmindist = currdist;
       }
    }
+   
+   ApplyDamage(curr, p.damage, p.playernum);
+   
+   if (!floatzero(p.dmgrad))
+   {
+      SplashDamage(hitpos, p);
+   }
+}
+
+
+void SplashDamage(const Vector3& hitpos, Particle& p)
+{
+   vector<Mesh*> hitmeshes;
+   vector<Mesh*> check;
+   Vector3 dummy; // Don't care about where we hit with splash
+   
+   unsigned int numlevels = console.GetInt("splashlevels");
+   for (size_t i = 0; i < numlevels; ++i)
+   {
+      // Have to reget the meshes each time or we can end up checking removed ones
+      check = serverkdtree.getmeshes(hitpos, hitpos, p.radius);
+      AppendDynamicMeshes(check, servermeshes);
+      
+      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, p.dmgrad * (float(i + 1) / float(numlevels)), check, dummy, &hitmeshes);
+      sort(hitmeshes.begin(), hitmeshes.end());
+      hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
+      
+      for (vector<Mesh*>::iterator j = hitmeshes.begin(); j != hitmeshes.end(); ++j)
+      {
+         ApplyDamage(*j, p.damage / float(numlevels), p.playernum);
+      }
+   }
+}
+
+
+void ApplyDamage(Mesh* curr, const float damage, const int playernum)
+{
+   bool dead;
    for (int i = 1; i < serverplayers.size(); ++i)
    {
       dead = false;
@@ -857,7 +900,7 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
             if (curr == &(*serverplayers[i].mesh[part]))
             {
                cout << "Hit " << part << endl;
-               serverplayers[i].hp[part] -= p.damage;
+               serverplayers[i].hp[part] -= int(damage);
                if (serverplayers[i].hp[part] <= 0)
                   dead = true;
             }
@@ -866,8 +909,8 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
       if (dead)
       {
          serverplayers[i].deaths++;
-         serverplayers[p.playernum].kills++;
-         cout << "Player " << i << " was killed by Player " << p.playernum << endl;
+         serverplayers[playernum].kills++;
+         cout << "Player " << i << " was killed by Player " << playernum << endl;
          serverplayers[i].Kill();
          SendKill(i);
       }
@@ -878,7 +921,8 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs)
    {
       if (&(*i->mesh) == curr)
       {
-         i->hp -= p.damage;
+         cout << "Hit " << curr << endl;
+         i->hp -= int(damage);
          if (i->hp < 0)
          {
             doremove = true;
