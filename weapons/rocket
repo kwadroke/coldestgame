@@ -1,0 +1,6 @@
+Name Rocket
+Weight 30
+ProjectileWeight 0
+Splash 50
+Acceleration 1.05
+Velocity .05

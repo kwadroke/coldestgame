@@ -726,6 +726,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                   occup << serverplayers[i].ping << eol;
                   occup << serverplayers[i].spawned << eol;
                   occup << serverplayers[i].name << eol;
+                  occup << serverplayers[i].salvage << eol;
                }
             }
             occup << 0 << eol;
@@ -909,7 +910,9 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum)
       if (dead)
       {
          serverplayers[i].deaths++;
+         serverplayers[i].salvage += 100;
          serverplayers[playernum].kills++;
+         serverplayers[playernum].salvage += CalculatePlayerWeight(serverplayers[i]) / 2;
          cout << "Player " << i << " was killed by Player " << playernum << endl;
          serverplayers[i].Kill();
          SendKill(i);

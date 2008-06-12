@@ -54,7 +54,8 @@ class GUI
       virtual ~GUI();
       void Render();
       virtual void ProcessEvent(SDL_Event*);
-      void Add(shared_ptr<GUI>, string);
+      void Add(shared_ptr<GUI>);
+      void ClearChildren();
       virtual GUI* GetWidget(string);
       void InitFromFile(string);
       string ReadAttribute(DOMNode*, XMLCh*);
@@ -67,6 +68,7 @@ class GUI
       void RenderText(string, string, int, int, int, TTF_Font*, GLuint, float scale = 1.f, bool shadow = true);
       void SetActive(bool act = true);
       void SetTextureID(int, GLuint);
+      void SetTexture(int, const string&);
       
       bool visible;
       bool readonly;
@@ -75,6 +77,8 @@ class GUI
       string text;
       float xmargin, ymargin;
       Alignment align;
+      string leftclickaction, rightclickaction, valuechanged;
+      string leftdownaction, rightdownaction;
    
    protected:
       void DoAction(string);
@@ -122,8 +126,6 @@ class GUI
       int state;
       bool active;
       string name;
-      string leftclickaction, rightclickaction, valuechanged;
-      string leftdownaction, rightdownaction;
       string oldtext;
       GLuint texttexture;
       vector<string> textures;

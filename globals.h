@@ -63,5 +63,6 @@ void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);
 void ShowGUI(int);
 void ResetKeys();
+int CalculatePlayerWeight(const PlayerData&);
 
 #endif

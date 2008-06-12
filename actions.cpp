@@ -22,6 +22,7 @@ void UpdateUnitSelection()
    ComboBox* rarmbox = (ComboBox*)gui[loadoutmenu]->GetWidget("Right Arm");
    ComboBox* itembox = (ComboBox*)gui[loadoutmenu]->GetWidget("Item");
    
+   SDL_mutexP(clientmutex);
    player[0].unit = unitbox->Selected();
    int weapid;
    weapid = torsobox->Selected();
@@ -46,10 +47,14 @@ void UpdateUnitSelection()
    totalweight += player[0].item.Weight();
    GUI* weightbox = gui[loadoutmenu]->GetWidget("Weight");
    GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
+   GUI* salvagebox = gui[loadoutmenu]->GetWidget("Salvage");
    weightbox->text = ToString(totalweight) + "/" + ToString(maxweight) + " tons";
-   if (totalweight > maxweight)
+   int sweight = CalculatePlayerWeight(player[0]);
+   salvagebox->text = ToString(player[0].salvage - sweight) + " tons";
+   if (totalweight > maxweight &&  sweight > player[0].salvage)
       spawnbutton->visible = false;
    else spawnbutton->visible = true;
+   SDL_mutexV(clientmutex);
 }
 
 
@@ -160,6 +165,21 @@ void ShowSettings()
 }
 
 
+void SelectSpawn()
+{
+   for (size_t i = 0; i < spawnbuttons.size(); ++i)
+   {
+      Button* current = dynamic_cast<Button*>(spawnbuttons[i].get());
+      if (current->togglestate)
+      {
+         ComboBox *spawnpointsbox = dynamic_cast<ComboBox*>(gui[loadoutmenu]->GetWidget("SpawnPoints"));
+         spawnpointsbox->Select(i);
+         current->togglestate = 0;
+      }
+   }
+}
+
+
 // Stick this outside of GUI so we don't have to update the class every time we add an action
 void Action(const string& action)
 {
@@ -189,4 +209,8 @@ void Action(const string& action)
       ShowMain();
    else if (action == "showsettings")
       ShowSettings();
+   else if (action == "selectspawn")
+      SelectSpawn();
+   else if (action != "")
+      cout << "Warning: Attempted to do undefined action " << action << endl;
 }

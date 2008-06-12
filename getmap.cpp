@@ -214,6 +214,8 @@ void GetMap(string fn)
    
    SDL_FreeSurface(loadmap);
    maxworldheight *= 5;
+   mapwidth = (mapw - 1) * tilesize;
+   mapheight = (maph - 1) * tilesize;
    // Done loading heightmap
    
    // Data structures for storing relevant values
@@ -572,8 +574,6 @@ void GetMap(string fn)
       
       grassw = loadgrass->w;
       grassh = loadgrass->h;
-      float mapwidth = (mapw - 1) * tilesize;
-      float mapheight = (maph - 1) * tilesize;
       float grasssize = mapwidth / (float)grassw;
       float maxperpoint = 10;
    
@@ -736,8 +736,6 @@ void GetMap(string fn)
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
-   mapwidth = (mapw - 1) * tilesize;
-   mapheight = (maph - 1) * tilesize;
    glOrtho(-mapwidth / 2.f, mapwidth / 2.f, -mapheight / 2.f, mapheight / 2.f, 10, minimapheight * 2.f);
    
    glMatrixMode(GL_MODELVIEW);
