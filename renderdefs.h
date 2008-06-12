@@ -62,12 +62,13 @@ extern FBO shadowmapfbo, worldshadowmapfbo, cloudfbo, reflectionfbo, noisefbo, m
 extern GLuint texnum[], shadowmaptex[], worldshadowmaptex[];
 extern Light lights;
 extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;
-extern string terrainshader, cloudgenshader, bumpshader;
+extern string terrainshader, cloudgenshader, bumpshader, flatshader;
 extern vector<FBO> impfbolist;
 extern vector<Mesh*> impmeshes;
 extern Mesh* watermesh;
 extern Material* skyboxmat;
 extern Material* shadowmat;
 extern MeshPtr particlemesh;
+extern vector<GUIPtr> spawnbuttons;
 
 #endif

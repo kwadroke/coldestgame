@@ -26,6 +26,9 @@ string FillUpdatePacket();
 string AddressToDD(Uint32);
 void Ack(unsigned long);
 
+// From actions.cpp
+void Action(const string&);
+
 list<Packet> sendqueue;
 UDPsocket socket;
 UDPpacket *outpack;
@@ -497,10 +500,12 @@ int NetListen(void* dummy)
                // Indicate to main thread that models for unspawned players need to be removed
                vector<PlayerData>::iterator i = player.begin();
                ++i;  // Skip first element because that's local player
+               bool addemitter;
                for (; i != player.end(); ++i)
                {
                   if (!i->spawned)
                   {
+                     addemitter = false;
                      for (int part = 0; part < numbodyparts; ++part)
                      {
                         if (i->mesh[part] != meshes.end())
@@ -509,8 +514,19 @@ int NetListen(void* dummy)
                            deletemeshes.push_back(i->mesh[part]);
                            SDL_mutexV(clientmutex);
                            i->mesh[part] = meshes.end();
+                           addemitter = true;
                         }
-                           
+                     }
+                     if (addemitter)
+                     {
+                        SDL_mutexP(clientmutex);
+                        IniReader mread("models/projectile/base");
+                        Mesh partmesh(mread, resman);
+                        Particle newpart(0, Vector3(), Vector3(), .5f, 1.f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
+                        newpart.ttl = 500;
+                        ParticleEmitter newemitter(i->pos, newpart, 1000, 100.f, 10);
+                        emitters.push_back(newemitter);
+                        SDL_mutexV(clientmutex);
                      }
                   }
                }
@@ -525,7 +541,7 @@ int NetListen(void* dummy)
                
                get >> oppnum;
                short getunit;
-               int getkills, getdeaths;
+               int getkills, getdeaths, getsalvage;
                vector<int> gethp(numbodyparts);
                int getping;
                bool getspawned;
@@ -541,6 +557,7 @@ int NetListen(void* dummy)
                   get >> getping;
                   get >> getspawned;
                   get >> getname;
+                  get >> getsalvage;
                   if (oppnum < player.size())
                   {
                      player[oppnum].unit = getunit;
@@ -551,6 +568,7 @@ int NetListen(void* dummy)
                      player[oppnum].ping = getping;
                      player[oppnum].spawned = getspawned;
                      player[oppnum].name = getname;
+                     player[oppnum].salvage = getsalvage;
                   }
                   get >> oppnum;
                }
@@ -561,6 +579,8 @@ int NetListen(void* dummy)
                   for (int i = 0; i < numbodyparts; ++i)
                      player[0].hp[i] = player[servplayernum].hp[i];
                   player[0].ping = player[servplayernum].ping;
+                  player[0].salvage = player[servplayernum].salvage;
+                  Action("updateunitselection");
                }
                SDL_mutexV(clientmutex);
             }

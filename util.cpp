@@ -50,15 +50,20 @@ float Random(float min, float max)
 }
 
 
+// This maybe shouldn't return an int...
 int gettid()
 {
 #ifdef LINUX
-#ifndef IS64
-   return syscall(224);
-#else
-   return syscall(186);
+   if (bitcount() == 32)
+      return syscall(224);
+   else if (bitcount() == 64)
+      return syscall(186);
 #endif
-#else
    return 0;
-#endif
+}
+
+
+int bitcount()
+{
+   return sizeof(void*) * 8;
 }

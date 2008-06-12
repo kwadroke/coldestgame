@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(GUI* p, TextureManager* tm) : toggle(false), togglestate(0)
+Button::Button(GUI* p, TextureManager* tm) : toggle(false), togglestate(0)//, children(list<GUIPtr>())
 {
    Init(p, tm);
 }

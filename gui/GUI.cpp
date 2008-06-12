@@ -182,13 +182,13 @@ void GUI::ProcessEvent(SDL_Event* event)
             active = true;
             if (event->button.button == SDL_BUTTON_LEFT)
             {
-               DoAction(leftdownaction);
                LeftDown(event);
+               DoAction(leftdownaction);
             }
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
-               DoAction(rightdownaction);
                RightDown(event);
+               DoAction(rightdownaction);
             }
             else if (event->button.button == SDL_BUTTON_WHEELUP)
             {
@@ -215,15 +215,15 @@ void GUI::ProcessEvent(SDL_Event* event)
             state = Hover;
             if (event->button.button == SDL_BUTTON_LEFT)
             {
-               DoAction(leftclickaction);
                LeftClick(event);
                GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
+               DoAction(leftclickaction);
             }
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
-               DoAction(rightclickaction);
                RightClick(event);
                GlobalRightClick(event);
+               DoAction(rightclickaction);
             }
          }
          else
@@ -268,18 +268,15 @@ void GUI::ProcessEvent(SDL_Event* event)
 
 
 // I'm not sure this works, since I've never had occasion to use it
-void GUI::Add(GUIPtr widget, string parentname)
+void GUI::Add(GUIPtr widget)
 {
-   if (parentname == name)
-   {
-      widget->parent = this;
-      children.push_back(widget);
-      return;
-   }
-   
-   guiiter i;
-   for (i = children.begin(); i != children.end(); ++i)
-      (*i)->Add(widget, parentname);
+   children.push_back(widget);
+}
+
+
+void GUI::ClearChildren()
+{
+   children.clear();
 }
 
 
@@ -728,5 +725,18 @@ void GUI::SetTextureID(int state, GLuint id)
    }
    texids[state] = id;
    textures[state] = "USEID";
+}
+
+
+void GUI::SetTexture(int state, const string& file)
+{
+   if (textures[state] != "" && (state == Normal || textures[state] != textures[Normal]))
+      cout << "Warning: Possible memory leak in GUI::SetTexture" << endl;
+   textures[state] = file;
+   texman->LoadTexture(file);
+   if (state == Normal && textures[Hover] == "")
+      textures[Hover] = textures[Normal];
+   if (state == Normal && textures[Clicked] == "")
+      textures[Clicked] = textures[Normal];
 }
 

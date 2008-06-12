@@ -53,6 +53,7 @@ class PlayerData
       short team;
       float temperature;
       string name;
+      int salvage;
       
    private:
       Meshlist* meshes;

@@ -26,6 +26,9 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), weight(0), ra
       case Weapon::Mortar:
          LoadFromFile("weapons/mortar");
          break;
+      case Weapon::Rocket:
+         LoadFromFile("weapons/rocket");
+         break;
       default:
          cout << "Warning: attempted to create non-existent weapon." << endl;
          break;

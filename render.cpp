@@ -788,7 +788,7 @@ void RenderHud()
    static ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
    static GUI* minimaplabel = gui[hud]->GetWidget("minimap");
    static GUI* playerposlabel = gui[hud]->GetWidget("playerpos");
-   static GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("map");
+   static GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
    
    if (frames >= 30) // Update FPS
    {
@@ -860,7 +860,7 @@ void RenderHud()
 #endif
    
    // Render all of the GUI objects, they know whether they're visible or not
-   resman.shaderman.UseShader("shaders/flat");
+   resman.shaderman.UseShader("none");
    glColor4f(1, 1, 1, 1);
    for (size_t i = 0; i < gui.size(); ++i)
    {

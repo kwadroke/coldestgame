@@ -7,7 +7,7 @@
            buttonnormal="textures/buttonnorm.png"
            buttonpressed="textures/buttonpressed.png"
            buttonhover="textures/buttonhover.png">
-         <Label x="0" y="0" width="500" height="600" text="Map" readonly="true" xmargin="100" ymargin="100" align="center" name="map"
+         <Label x="0" y="0" width="500" height="600" readonly="true" xmargin="100" ymargin="100" align="center" name="Map"
                normal="textures/buttonnormsquare.png">
          </Label>
       </Tab>
@@ -37,6 +37,7 @@
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
       <ComboBoxItem>Mortar</ComboBoxItem>
+      <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
    <ComboBox x="700"  y="200" width="200" height="40" name="Right Arm" selected="0"
              normal="textures/buttonnorm.png"
@@ -48,6 +49,7 @@
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
       <ComboBoxItem>Mortar</ComboBoxItem>
+      <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
    <ComboBox x="700"  y="250" width="200" height="40" name="Torso" selected="0"
              normal="textures/buttonnorm.png"
@@ -59,6 +61,7 @@
       <ComboBoxItem>Gauss Rifle</ComboBoxItem>
       <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
       <ComboBoxItem>Mortar</ComboBoxItem>
+      <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
    <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item" selected="1"
              normal="textures/buttonnorm.png"
@@ -70,6 +73,8 @@
       <ComboBoxItem>Radar</ComboBoxItem>
    </ComboBox>
    <Label x="700" y="350" width="200" height="40" name="Weight" text="0 tons"
+          normal="textures/buttonnorm.png"/>
+   <Label x="700" y="400" width="200" height="40" name="Salvage" text="0 tons"
           normal="textures/buttonnorm.png"/>
    <Button x="700" y="900" width="200" height="50" name="Spawn" text="Spawn" align="center"
            normal="textures/buttonnorm.png"
@@ -96,9 +101,6 @@
    
    <!-- Spawn points -->
    <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints"
-             normal="textures/buttonnorm.png"
-             valuechanged="selectspawnpoint">
-      <Normal>textures/buttonnorm.png</Normal>
-      <ValueChangedAction>selectspawnpoint</ValueChangedAction>
+             normal="textures/buttonnorm.png">
    </ComboBox>
 </GUI>

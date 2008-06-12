@@ -112,6 +112,7 @@ void InitGlobals()
    watershader = "shaders/water";
    cloudgenshader = "shaders/cloudgen";
    bumpshader = "shaders/bump";
+   flatshader = "shaders/flat";
    
    ReadConfig();
    
@@ -162,7 +163,7 @@ void InitUnits()
    dummy.acceleration = .05f;
    dummy.maxspeed = 1.f;
    dummy.size = 25.f;
-   dummy.weight = 100;
+   dummy.weight = 50;
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
    
@@ -385,6 +386,8 @@ void InitShaders()
    
    resman.shaderman.LoadShader(bumpshader);
    
+   resman.shaderman.LoadShader(flatshader);
+   
    resman.shaderman.UseShader("none");
 }
 
@@ -517,7 +520,10 @@ void GUIUpdate()
       if (spawnschanged)
       {
          ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
+         GUI* maplabel = gui[loadoutmenu]->GetWidget("Map");
          spawnpointsbox->Clear();
+         maplabel->ClearChildren();
+         spawnbuttons.clear();
          availablespawns = mapspawns;
          for (int i = 0; i < items.size(); ++i)
          {
@@ -533,6 +539,20 @@ void GUIUpdate()
          }
          for (int i = 0; i < availablespawns.size(); ++i)
          {
+            GUIPtr newbutton(new Button(maplabel, &resman.texman));
+            Button* buttonptr = dynamic_cast<Button*>(newbutton.get()); // Can't set toggle on a GUIPtr
+            buttonptr->toggle = true;
+            newbutton->width = 50;
+            newbutton->height = 50;
+            newbutton->x = availablespawns[i].position.x / mapwidth * maplabel->width - newbutton->width / 2.f;
+            newbutton->y = availablespawns[i].position.z / mapwidth * maplabel->height - newbutton->height / 2.f;
+            newbutton->text = ToString(i);
+            newbutton->leftclickaction = "selectspawn";
+            newbutton->SetTexture(Normal, "textures/buttonnorm.png");
+            newbutton->SetTexture(Hover, "textures/buttonhover.png");
+            newbutton->SetTexture(Clicked, "textures/buttonpressed.png");
+            spawnbuttons.push_back(newbutton);
+            maplabel->Add(newbutton);
             string name = ToString(i) + ": ";
             name += availablespawns[i].name;
             spawnpointsbox->Add(name);
@@ -620,8 +640,20 @@ bool GUIEventHandler(SDL_Event &event)
       
    };
    
-   // If a menu is visible it eats all events
-   if (gui[mainmenu]->visible) 
+   if (eatevent) return eatevent;
+   
+   if (gui[consolegui]->visible)
+   {
+      SDL_ShowCursor(1);
+      gui[consolegui]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[chat]->visible)
+   {
+      gui[chat]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[mainmenu]->visible) 
    {
       SDL_ShowCursor(1);
       gui[mainmenu]->ProcessEvent(&event);
@@ -640,18 +672,6 @@ bool GUIEventHandler(SDL_Event &event)
       eatevent = true;
    }
    
-   if (!eatevent)
-   {
-      if (gui[consolegui]->visible)
-      {
-         SDL_ShowCursor(1);
-         gui[consolegui]->ProcessEvent(&event);
-      }
-      if (gui[chat]->visible)
-      {
-         gui[chat]->ProcessEvent(&event);
-      }
-   }
    
    return eatevent;
 }
@@ -1255,14 +1275,15 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&), void (*Rewind)(int))
 {
    IniReader empty("models/empty/base");
-   if (!HitHandler)
+   int updint = console.GetInt("partupdateinterval");
+   if (!HitHandler && partupd >= updint)
    {
       particlemesh = MeshPtr(new Mesh(empty, resman));
       particlemesh->dynamic = true;
    }
    Vector3 oldpos, partcheck, hitpos;
    vector<Mesh*> hitmeshes;
-   if (partupd >= console.GetInt("partupdateinterval"))
+   if (partupd >= updint)
    {
       // Update particles
       list<Particle>::iterator j = parts.begin();
@@ -1400,6 +1421,17 @@ void ResetKeys()
    player[0].leftclick = player[0].rightclick = false;
    player[0].moveforward = player[0].moveback = player[0].moveleft = player[0].moveright = false;
    SDL_mutexV(clientmutex);
+}
+
+
+int CalculatePlayerWeight(const PlayerData& p)
+{
+   int total = 0;
+   for (size_t j = 0; j < numbodyparts; ++j)
+      total += p.weapons[j].Weight();
+   total += p.item.Weight();
+   total += units[p.unit].weight;
+   return total;
 }
 
 

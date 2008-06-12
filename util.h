@@ -12,6 +12,7 @@ string PadNum(int, int);
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
 int gettid();
+int bitcount();
 
 template <typename T>
       string ToString(const T &input)
