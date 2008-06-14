@@ -12,6 +12,7 @@
 #include "IniReader.h"
 #include "Mesh.h"
 #include "Quad.h"
+#include "StableRandom.h"
 
 using namespace std;
 
@@ -34,9 +35,12 @@ class ProceduralTree
       int trunknumsegs;
       int branchevery;
       int sidebranches;
+      int leafsegs;
+      int seed;
       float maxangle;
       float minangle;
       float maxbranchangle;
+      float maxtrunkangle;
       float initrad;
       float radreductionperc;
       float initheight;
@@ -50,6 +54,7 @@ class ProceduralTree
       float maxheightvar;
       float sidetaper;
       float curvecoeff;
+      float leafcurve;
       bool continuebranch;
       bool multitrunk;
       bool split;
@@ -60,6 +65,7 @@ class ProceduralTree
       void GenBranch(GraphicMatrix, int, int, vector<Vector3>, bool, int);
       float Random(float, float);
       Material *bark, *leaves;
+      StableRandom random;
       
       
 };

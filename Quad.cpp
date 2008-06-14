@@ -52,6 +52,19 @@ Quad& Quad::operator=(const Quad& q)
 }
 
 
+void Quad::SetVertexPtr(const int num, const VertexPtr& v)
+{
+   int vert, vert1;
+   
+   GetVertNums(num, vert, vert1);
+   
+   if (vert >= 0 && vert < 3)
+      first->v[vert] = v;
+   if (vert1 >= 0 && vert1 < 3)
+      second->v[vert1] = v;
+}
+
+
 void Quad::SetVertex(const int num, const Vector3& v)
 {
    int vert, vert1;

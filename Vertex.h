@@ -39,7 +39,7 @@ class Vertex
 {
    public:
       Vertex();
-      VBOData GetVboData();
+      VBOData& GetVboData();
       
       Vector3 pos;
       Vector3 norm;
@@ -48,6 +48,9 @@ class Vertex
       GLubytevec color;
       floatvec terrainwt;
       unsigned short index;
+      
+   private:
+      VBOData vbodata;
 
 };
 

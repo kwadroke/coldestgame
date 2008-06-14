@@ -9,37 +9,35 @@ Vertex::Vertex() : index(0)
 }
 
 
-VBOData Vertex::GetVboData()
+VBOData& Vertex::GetVboData()
 {
-   VBOData ret;
+   vbodata.x = pos.x;
+   vbodata.y = pos.y;
+   vbodata.z = pos.z;
+   vbodata.nx = norm.x;
+   vbodata.ny = norm.y;
+   vbodata.nz = norm.z;
    
-   ret.x = pos.x;
-   ret.y = pos.y;
-   ret.z = pos.z;
-   ret.nx = norm.x;
-   ret.ny = norm.y;
-   ret.nz = norm.z;
-   
-   ret.tx = tangent.x;
-   ret.ty = tangent.y;
-   ret.tz = tangent.z;
+   vbodata.tx = tangent.x;
+   vbodata.ty = tangent.y;
+   vbodata.tz = tangent.z;
    
    for (int i = 0; i < 8; ++i)
    {
-      ret.tc[i][0] = texcoords[i][0];
-      ret.tc[i][1] = texcoords[i][1];
+      vbodata.tc[i][0] = texcoords[i][0];
+      vbodata.tc[i][1] = texcoords[i][1];
    }
-   ret.r = color[0];
-   ret.g = color[1];
-   ret.b = color[2];
-   ret.a = color[3];
-   ret.terrainwt[0] = terrainwt[0];
-   ret.terrainwt[1] = terrainwt[1];
-   ret.terrainwt[2] = terrainwt[2];
-   ret.terrainwt1[0] = terrainwt[3];
-   ret.terrainwt1[1] = terrainwt[4];
-   ret.terrainwt1[2] = terrainwt[5];
-   return ret;
+   vbodata.r = color[0];
+   vbodata.g = color[1];
+   vbodata.b = color[2];
+   vbodata.a = color[3];
+   vbodata.terrainwt[0] = terrainwt[0];
+   vbodata.terrainwt[1] = terrainwt[1];
+   vbodata.terrainwt[2] = terrainwt[2];
+   vbodata.terrainwt1[0] = terrainwt[3];
+   vbodata.terrainwt1[1] = terrainwt[4];
+   vbodata.terrainwt1[2] = terrainwt[5];
+   return vbodata;
 }
 
 
