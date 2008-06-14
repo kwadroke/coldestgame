@@ -30,7 +30,7 @@ class Shader
       void BindAttribLocation(string, GLuint, string);
       string CurrentShader();
       void ForgetCurrent();
-      void SetShadow(bool);
+      void SetShadow(bool, bool);
       void ReloadAll(bool reload = true);
    
    private:
@@ -43,7 +43,7 @@ class Shader
       
       string currshader;
       map<string, GLhandleARB> programs;
-      bool shadows;
+      bool shadows, softshadows;
 };
 
 #endif

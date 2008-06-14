@@ -499,7 +499,6 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    // set before we try to use the shadow map
    resman.shaderman.GlobalSetUniform1f("detailmapsize", console.GetFloat("detailmapsize"));
    resman.shaderman.GlobalSetUniform1f("shadowres", console.GetFloat("shadowres"));
-   resman.shaderman.GlobalSetUniform1i("samplesize", console.GetInt("samplesize"));
 }
 
 

@@ -37,7 +37,13 @@ void Shader::LoadShader(string file)
    while (buffer != "Uniforms:" && !in.eof()) // Read pixel shaders
    {
       if (buffer == "$shadow")
-         buffer = shadows ? "shadowfrag.glsl" : "noshadowfrag.glsl";
+      {
+         if (shadows)
+         {
+            buffer = softshadows ? "softshadowfrag.glsl" : "shadowfrag.glsl";
+         }
+         else buffer = "noshadowfrag.glsl";
+      }
       else if (buffer == "$fog")
          buffer = "fogfrag.glsl"; // Currently no other available, may change though
       else if (buffer == "$basiclight")
@@ -321,10 +327,11 @@ void Shader::BindAttribLocation(string shader, GLuint location, string name)
 }
 
 
-void Shader::SetShadow(bool useshadow)
+void Shader::SetShadow(bool useshadow, bool soft)
 {
    shadows = useshadow;
-   ReloadAll();
+   softshadows = soft;
+   //ReloadAll();
 }
 
 

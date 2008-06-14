@@ -234,7 +234,7 @@ void Console::Action(const string& action)
    {
       resman.texhand.af = GetFloat("af");
    }
-   else if (action == "shadows action" || action == "reloadshaders")
+   else if (action == "shadows action" || action == "softshadows action" || action == "reloadshaders")
    {
       InitShaders();
    }

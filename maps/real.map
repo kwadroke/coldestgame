@@ -1,5 +1,5 @@
 TileSize 30
-HeightScale .8
+HeightScale 1.4
 ZeroHeight 20
 NumTextures 18
 NumObjects 26
@@ -60,11 +60,11 @@ Node
    SpawnPoints
    Node
       Team 1
-      Location 150 150 150
+      Location 150 450 150
       Name Team1Spawn
    Node
       Team 2
-      Location 250 250 250
+      Location 250 550 250
       Name Team2Spawn
       
 Node

@@ -154,6 +154,7 @@ void GetMap(string fn)
       currnode.Read(spawntemp.name, "Name");
       spawnpoints.push_back(spawntemp);
    }
+   spawnschanged = true;
    
    // Load objects
    progtext->text = "Loading objects";
@@ -580,6 +581,9 @@ void GetMap(string fn)
       SDL_LockSurface(loadgrass);
       data = (unsigned char*)loadgrass->pixels;
       
+      IniReader readmodel(model);
+      Mesh basemesh(readmodel, resman, false); // Don't need GL because this is a temp mesh
+      
       cout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
       for (int x = 0; x < grassw; x += groupsize)
@@ -611,8 +615,7 @@ void GetMap(string fn)
                      
                      if (newx > 0 && newx < mapwidth && newy > 0 && newy < mapwidth)
                      {
-                        IniReader readmodel(model);
-                        Mesh newmesh(readmodel, resman, false); // Don't need GL because this is a temp mesh
+                        Mesh newmesh(basemesh);
                         Vector3 newpos(newx, GetTerrainHeight(newx, newy), newy);
                         newmesh.Scale(sqrt(d / density));
                         newmesh.Move(newpos);

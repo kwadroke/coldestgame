@@ -100,6 +100,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 11
       numlevels 2
       numslices 3
       numbranches0 12
@@ -137,6 +138,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 12
       numlevels 2
       numslices 2
       numbranches0 8
@@ -164,7 +166,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 120
@@ -173,6 +175,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 13
       numlevels 2
       numslices 3
       numbranches0 7
@@ -201,7 +204,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       curvecoeff .02
       endopts
       ImpostorDistance 150
@@ -211,6 +214,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 14
       numlevels 1
       numslices 3
       numsegs 5
@@ -218,6 +222,7 @@ Node
       maxangle 70
       minangle 2
       maxbranchangle 8
+      maxtrunkangle 1
       initrad 3
       radreductionperc .2
       initheight 100
@@ -235,7 +240,7 @@ Node
       split 0
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       sidetaper .8
       curvecoeff .02
       endopts
@@ -246,6 +251,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 15
       numlevels 2
       numslices 3
       numbranches0 7
@@ -273,7 +279,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -282,6 +288,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 16
       numlevels 2
       numslices 3
       numbranches0 7
@@ -309,7 +316,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -318,6 +325,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 17
       numlevels 2
       numslices 3
       numbranches0 12
@@ -345,7 +353,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -354,6 +362,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 18
       numlevels 2
       numslices 3
       numbranches0 12
@@ -381,7 +390,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -390,6 +399,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 19
       numlevels 2
       numslices 3
       numbranches0 12
@@ -417,7 +427,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -426,6 +436,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 20
       numlevels 2
       numslices 3
       numbranches0 12
@@ -453,7 +464,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -462,6 +473,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 21
       numlevels 2
       numslices 3
       numbranches0 12
@@ -489,7 +501,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -498,6 +510,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 22
       numlevels 2
       numslices 3
       numbranches0 12
@@ -525,7 +538,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -534,6 +547,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 23
       numlevels 2
       numslices 3
       numbranches0 12
@@ -561,7 +575,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -570,6 +584,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 24
       numlevels 2
       numslices 3
       numbranches0 12
@@ -597,7 +612,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -606,6 +621,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 25
       numlevels 2
       numslices 3
       numbranches0 12
@@ -633,7 +649,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -642,6 +658,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 26
       numlevels 2
       numslices 3
       numbranches0 12
@@ -669,7 +686,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -678,6 +695,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 27
       numlevels 2
       numslices 3
       numbranches0 12
@@ -705,7 +723,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -714,6 +732,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 28
       numlevels 2
       numslices 3
       numbranches0 12
@@ -741,7 +760,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -750,6 +769,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 29
       numlevels 2
       numslices 3
       numbranches0 12
@@ -777,7 +797,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -786,6 +806,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 30
       numlevels 2
       numslices 3
       numbranches0 12
@@ -813,7 +834,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -822,6 +843,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 31
       numlevels 2
       numslices 3
       numbranches0 12
@@ -849,7 +871,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160
@@ -858,6 +880,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
+      seed 32
       numlevels 2
       numslices 3
       numbranches0 12
@@ -885,7 +908,7 @@ Node
       split 1
       continuebranch 0
       multitrunk 0
-      branchwithleaves 1
+      branchwithleaves 0
       endopts
       ImpostorDistance 150
       size 160

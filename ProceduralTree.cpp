@@ -15,6 +15,7 @@ ProceduralTree::ProceduralTree()
    maxangle = 70;
    minangle = 20;
    maxbranchangle = 5;
+   maxtrunkangle = 5.f;
    initrad = 5;
    radreductionperc = .3;
    initheight = 20;
@@ -39,6 +40,9 @@ ProceduralTree::ProceduralTree()
    continuebranch = true;
    multitrunk = false;
    branchwithleaves = true;
+   leafsegs = 2;
+   leafcurve = 3.f;
+   seed = 0;
 }
 
 
@@ -49,8 +53,7 @@ long ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leaves
    bark = barkmat;
    leaves = leavesmat;
    totalprims = 0;
-   srand(time(0) + rand());  // Seed random number generator - the rand() is to make sure that
-                             // when we create two trees in the same ms they're not identical
+   random.Seed(seed);
    
    GraphicMatrix m;
    Vector3 temp;
@@ -106,7 +109,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    
    float height;
    height = initheight * pow(heightreductionperc, lev);
-   height = Random(height * minheightvar, height * maxheightvar);
+   height = random.Random(height * minheightvar, height * maxheightvar);
    height /= locnumsegs;
    
    if (side)
@@ -123,25 +126,31 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    GraphicMatrix m;
    
    anglex = angley = anglez = 0;
-   if (seg == 0 && lev != 0 && !trunk && side != 1)
+   if (seg == 0 && lev != 0 && side != 1)
    {
-      anglex = Random(minangle, maxangle);
-      if (Random(0, 1) > .5) anglex *= -1;
+      anglex = random.Random(minangle, maxangle);
+      if (random.Random(0, 1) > .5) anglex *= -1;
       angley = 0;
-      anglez = Random(minangle, maxangle);
-      if (Random(0, 1) > .5) anglez *= -1;
+      anglez = random.Random(minangle, maxangle);
+      if (random.Random(0, 1) > .5) anglez *= -1;
    }
    else if (side == 1)
    {
-      anglex = 90 + Random(minsidebranchangle, maxsidebranchangle);
-      angley = Random(0, 360);
+      anglex = 90 + random.Random(minsidebranchangle, maxsidebranchangle);
+      angley = random.Random(0, 360);
       anglez = 0;
    }
    else if (lev != 0)
    {
-      anglex = Random(-maxbranchangle, maxbranchangle);
+      anglex = random.Random(-maxbranchangle, maxbranchangle);
       angley = 0;
-      anglez = Random(-maxbranchangle, maxbranchangle);
+      anglez = random.Random(-maxbranchangle, maxbranchangle);
+   }
+   else
+   {
+      anglex = random.Random(-maxtrunkangle, maxtrunkangle);
+      angley = 0;
+      anglez = random.Random(-maxtrunkangle, maxtrunkangle);
    }
    
    if (branchwithleaves || lev < firstleaflevel)
@@ -218,21 +227,21 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       int newind, newind1;
       for (int j = 0; j < oldpts.size(); ++j)
       {
-         Quad temp;
-         temp.SetMaterial(bark);
+         Quad tempq;
+         tempq.SetMaterial(bark);
          newind = (int)(j * ((float)numslices / (float)oldpts.size()));
          newind1 = (int)((j + 1) * ((float)numslices / (float)oldpts.size()));
-         temp.SetVertex(0, newpts[newind]);
-         temp.SetVertex(1, oldpts[j]);
-         temp.SetVertex(2, oldpts[(j + 1) % oldpts.size()]);
-         temp.SetVertex(3, newpts[newind1 % numslices]);
+         tempq.SetVertex(0, newpts[newind]);
+         tempq.SetVertex(1, oldpts[j]);
+         tempq.SetVertex(2, oldpts[(j + 1) % oldpts.size()]);
+         tempq.SetVertex(3, newpts[newind1 % numslices]);
          
-         temp.SetNormal(0, normals[newind]);
-         temp.SetNormal(1, normals[newind]);
-         temp.SetNormal(2, normals[newind1 % numslices]);
-         temp.SetNormal(3, normals[newind1 % numslices]);
+         tempq.SetNormal(0, normals[newind]);
+         tempq.SetNormal(1, normals[newind]);
+         tempq.SetNormal(2, normals[newind1 % numslices]);
+         tempq.SetNormal(3, normals[newind1 % numslices]);
          
-         mesh->Add(temp);
+         mesh->Add(tempq);
          ++totalprims;
       }
    }
@@ -243,59 +252,120 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    // Generate leaves if necessary
    if (lev >= firstleaflevel && (!seg || side == 1))
    {
-      vector<Vector3> verts;
-      float leafangle = 180. / numleaves + Random(-45.f, 45.f);
+      vector<vector<VertexPtr> > verts(leafsegs + 1, vector<VertexPtr>(leafsegs + 1));
+      float leafangle = 0.f;//180. / numleaves + random.Random(-45.f, 45.f);
+      float leafscale = 1.5;
+      float leafheight = height * (locnumsegs - seg) * leafscale;
+      float overlap = 5;
       for (int i = 0; i < numleaves; ++i)
       {
-         verts.clear();
-         for (int j = 0; j < 4; ++j)
+         for (int x = -leafsegs / 2; x < leafsegs / 2; ++x)
          {
-            temp = Vector3();
-            m.identity();
-            float leafscale = 1.5;
-            float overlap = 5;
-            switch(j)
+            for (int y = -leafsegs / 2; y < leafsegs / 2; ++y)
             {
-               case 0:
-                  m.translate(-leafsize, height * (locnumsegs - seg) * leafscale, radius);
-                  break;
-               case 1:
-                  m.translate(-leafsize, -overlap, radius);
-                  break;
-               case 2:
-                  m.translate(leafsize, -overlap, radius);
-                  break;
-               case 3:
-                  m.translate(leafsize, height * (locnumsegs - seg) * leafscale, radius);
-                  break;
-            };
+               float x1 = float(x + 1);
+               float y1 = float(y + 1);
+               float curveoffset = leafcurve * (float(x * x) + float(y * y));
+               float curveoffset1 = leafcurve * (float(x1 * x1) + float(y * y));
+               float curveoffset2 = leafcurve * (float(x * x) + float(y1 * y1));
+               float curveoffset3 = leafcurve * (float(x1 * x1) + float(y1 * y1));
                
-            m.rotatey(leafangle * i);
-            m.rotatex(anglex);
-            m.rotatey(angley);
-            m.rotatez(anglez);
-            m *= trans;
-            temp.transform(m);
-            verts.push_back(temp);
+               Quad tempq;
+               tempq.SetMaterial(leaves);
+               tempq.SetCollide(false);
+               VertexPtrvec vertptrs(4);
+               
+               for (int j = 0; j < 4; ++j)
+               {
+                  temp = Vector3();
+                  VertexPtr newvert(new Vertex());
+                  m.identity();
+                  switch(j)
+                  {
+                     case 0:
+                        m.translate(-leafsize + (leafsize * 2.f * float(x + leafsegs / 2) / float(leafsegs)), 
+                                     leafheight * float(y + 1 + leafsegs / 2) / float(leafsegs) - overlap, 
+                                    radius + curveoffset2);
+                        newvert->texcoords[0][0] = 1.f - float(x + leafsegs / 2) / float(leafsegs);
+                        newvert->texcoords[0][1] = 1.f - float(y + 1 + leafsegs / 2) / float(leafsegs);
+                        break;
+                     case 1:
+                        m.translate(-leafsize + (leafsize * 2.f * float(x + leafsegs / 2) / float(leafsegs)), 
+                                     leafheight * float(y + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     radius + curveoffset);
+                        newvert->texcoords[0][0] = 1.f - float(x + leafsegs / 2) / float(leafsegs);
+                        newvert->texcoords[0][1] = 1.f - float(y + leafsegs / 2) / float(leafsegs);
+                        break;
+                     case 2:
+                        m.translate(-leafsize + (leafsize * 2.f * float(x + 1 + leafsegs / 2) / float(leafsegs)), 
+                                     leafheight * float(y + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     radius + curveoffset1);
+                        newvert->texcoords[0][0] = 1.f - float(x + 1 + leafsegs / 2) / float(leafsegs);
+                        newvert->texcoords[0][1] = 1.f - float(y + leafsegs / 2) / float(leafsegs);
+                        break;
+                     case 3:
+                        m.translate(-leafsize + (leafsize * 2.f * float(x + 1 + leafsegs / 2) / float(leafsegs)), 
+                                     leafheight * float(y + 1 + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     radius + curveoffset3);
+                        newvert->texcoords[0][0] = 1.f - float(x + 1 + leafsegs / 2) / float(leafsegs);
+                        newvert->texcoords[0][1] = 1.f - float(y + 1 + leafsegs / 2) / float(leafsegs);
+                        break;
+                  };
+                     
+                  m.rotatey(leafangle * i);
+                  m.rotatex(anglex);
+                  m.rotatey(angley);
+                  m.rotatez(anglez);
+                  m *= trans;
+                  temp.transform(m);
+                  newvert->pos = temp;
+                  
+                  switch (j)
+                  {
+                     case 0:
+                        if (!verts[x + leafsegs / 2][y + 1 + leafsegs / 2])
+                           verts[x + leafsegs / 2][y + 1 + leafsegs / 2] = newvert;
+                        vertptrs[j] = verts[x + leafsegs / 2][y + 1 + leafsegs / 2];
+                        break;
+                     case 1:
+                        if (!verts[x + leafsegs / 2][y + leafsegs / 2])
+                           verts[x + leafsegs / 2][y + leafsegs / 2] = newvert;
+                        vertptrs[j] = verts[x + leafsegs / 2][y + leafsegs / 2];
+                        break;
+                     case 2:
+                        if (!verts[x + 1 + leafsegs / 2][y + leafsegs / 2])
+                           verts[x + 1 + leafsegs / 2][y + leafsegs / 2] = newvert;
+                        vertptrs[j] = verts[x + 1 + leafsegs / 2][y + leafsegs / 2];
+                        break;
+                     case 3:
+                        if (!verts[x + 1 + leafsegs / 2][y + 1 + leafsegs / 2])
+                           verts[x + 1 + leafsegs / 2][y + 1 + leafsegs / 2] = newvert;
+                        vertptrs[j] = verts[x + 1 + leafsegs / 2][y + 1 + leafsegs / 2];
+                        break;
+                  };
+               }
+               
+               for (int j = 0; j < 4; ++j)
+               {
+                  if (!(x % 2) && !(y % 2))
+                     tempq.SetVertexPtr(j, vertptrs[j]);
+                  else tempq.SetVertexPtr(j, vertptrs[(j + 1) % 4]);
+               }
+               // Generate normals - note that this is not completely accurate because
+               // it forces all of the quads to share a single quads normal rather than
+               // averaging them, but it's close enough IMHO
+               Vector3 temp1 = vertptrs[1]->pos - vertptrs[0]->pos;
+               Vector3 temp2 = vertptrs[2]->pos - vertptrs[0]->pos;
+               Vector3 tempn = temp1.cross(temp2);
+               tempn.normalize();
+               for (int n = 0; n < 4; n++)
+               {
+                  tempq.SetNormal(n, tempn);
+               }
+               mesh->Add(tempq);
+               ++totalprims;
+            }
          }
-         
-         Quad temp;
-         temp.SetMaterial(leaves);
-         temp.SetCollide(false);
-         
-         for (int j = 0; j < 4; ++j)
-            temp.SetVertex(j, verts[j]);
-         // Generate normals
-         for (int n = 0; n < 4; n++)
-         {
-            Vector3 temp1 = verts[1] - verts[0];
-            Vector3 temp2 = verts[2] - verts[0];
-            Vector3 tempn = temp1.cross(temp2);
-            tempn.normalize();
-            temp.SetNormal(n, tempn);
-         }
-         mesh->Add(temp);
-         ++totalprims;
       }
    }
    
@@ -330,16 +400,6 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
 }
 
 
-float ProceduralTree::Random(float min, float max)
-{
-   if (max < min) return 0;
-   float size = max - min;
-   return (size * ((float)rand() / (float)RAND_MAX) + min);
-}
-
-
-
-
 // Reads tree parameters from the designated stringstream
 void ProceduralTree::ReadParams(const IniReader &get)
 {
@@ -353,6 +413,7 @@ void ProceduralTree::ReadParams(const IniReader &get)
    get.Read(maxangle, "maxangle");
    get.Read(minangle, "minangle");
    get.Read(maxbranchangle, "maxbranchangle");
+   get.Read(maxtrunkangle, "maxtrunkangle");
    get.Read(initrad, "initrad");
    get.Read(radreductionperc, "radreductionperc");
    get.Read(initheight, "initheight");
@@ -377,6 +438,9 @@ void ProceduralTree::ReadParams(const IniReader &get)
    get.Read(minheightvar, "minheightvar");
    get.Read(maxheightvar, "maxheightvar");
    get.Read(curvecoeff, "curvecoeff");
+   get.Read(leafsegs, "leafsegs");
+   get.Read(leafcurve, "leafcurve");
+   get.Read(seed, "seed");
 }
 
 
