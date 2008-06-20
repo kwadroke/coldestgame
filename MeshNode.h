@@ -21,21 +21,17 @@ class MeshNode
 {
    public:
       MeshNode();
-      void GenTris(const shared_ptr<MeshNode>&, const float, const GraphicMatrix&, Mesh&, const Vector3& campos);
+      void Transform(const shared_ptr<MeshNode>&, const float, map<string, VertexPtr>&, const GraphicMatrix&, const Vector3&);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
-      void LoadMaterials(ResourceManager&);
       void Scale(const float&);
       
       int id, parentid;
-      bool facing, collide, render;
-      Material* material;
-      string matname;
+      bool facing;
       Vector3 rot1, rot2;
       Vector3 trans;
-      Vector3vec vert;
-      vector< vector<floatvec> > texcoords;
       vector<shared_ptr<MeshNode> > children;
+      vector<VertexPtr> vertices;
       GraphicMatrix m;
       string name;
       MeshNode* parent;

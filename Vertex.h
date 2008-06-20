@@ -2,10 +2,13 @@
 #define __VERTEX_H
 
 #include <vector>
+#include <map>
 #include "Vector3.h"
 #include "glinc.h"
 #include "types.h"
 #include <boost/shared_ptr.hpp>
+
+using std::map;
 
 // We pass this structure directly to OpenGL, so it needs to be aligned on single bytes
 // Edit: Maybe.  It seems to work without doing that, but it may waste memory to align this
@@ -48,6 +51,7 @@ class Vertex
       GLubytevec color;
       floatvec terrainwt;
       unsigned short index;
+      string id;
       
    private:
       VBOData vbodata;
@@ -57,5 +61,6 @@ class Vertex
 typedef vector<Vertex> Vertexvec;
 typedef boost::shared_ptr<Vertex> VertexPtr;
 typedef vector<VertexPtr> VertexPtrvec;
+typedef map<string, VertexPtr> VertMap;
 
 #endif

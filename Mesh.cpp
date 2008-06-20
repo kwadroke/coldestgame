@@ -3,7 +3,7 @@
 
 Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
-            size(100.f), width(0.f), height(0.f), resman(rm), tris(TrianglePtrvec()), trantris(TrianglePtrvec()),
+            size(100.f), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
             impmat(MaterialPtr()), animspeed(1.f)
@@ -39,19 +39,18 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
-   map<VertexPtr, VertexPtr> vertmap;
-   for (size_t i = 0; i < m.vertices.size(); ++i)
+   VertMap localvert = m.vertices;
+   for (VertMap::iterator i = localvert.begin(); i != localvert.end(); ++i)
    {
-      VertexPtr p(new Vertex(*m.vertices[i]));
-      vertmap[m.vertices[i]] = p;
-      vertices.push_back(p);
+      VertexPtr p(new Vertex(*i->second));
+      vertices[p->id] = p;
    }
    for (size_t i = 0; i < m.tris.size(); ++i)
    {
       TrianglePtr p(new Triangle(*m.tris[i]));
       for (size_t j = 0; j < 3; ++j)
       {
-         p->v[j] = vertmap[p->v[j]];
+         p->v[j] = vertices[p->v[j]->id];
       }
       tris.push_back(p);
    }
@@ -81,7 +80,7 @@ void Mesh::Load(const IniReader& reader)
    reader.Read(position.x, "Position", 0);
    reader.Read(position.y, "Position", 1);
    reader.Read(position.z, "Position", 2);
-   reader.Read(rots.y, "Rotations", 0); // Note: Might be better to change this order
+   reader.Read(rots.y, "Rotations", 0); // TODO: Might be better to change this order
    reader.Read(rots.x, "Rotations", 1);
    reader.Read(rots.z, "Rotations", 2);
    reader.Read(size, "Size");
@@ -95,14 +94,26 @@ void Mesh::Load(const IniReader& reader)
       string currfile;
       int numkeyframes = 0;
       
-      reader.Read(basepath, "Files");
-      reader.Read(numkeyframes, "NumFrames");
+      string basefile;
+      reader.Read(basefile, "BaseFile");
+      if (basefile != "")
+      {
+         basepath = basefile;
+         IniReader base(basefile);
+         base.Read(numkeyframes, "NumFrames");
+      }
+      else
+      {
+         basepath = reader.GetPath();
+         reader.Read(numkeyframes, "NumFrames");
+      }
+      basepath = basepath.substr(0, basepath.length() - 5);
       
       //cout << "Loading " << basepath << endl;
       
       for (int i = 0; i < numkeyframes; ++i)
       {
-         currfile = "models/" + basepath + "/frame" + PadNum(i, 4);
+         currfile = basepath + "/frame" + PadNum(i, 4);
          IniReader currframe(currfile);
          
          string currver("");
@@ -110,6 +121,7 @@ void Mesh::Load(const IniReader& reader)
          if (currver != objectfilever)
          {
             cout << "Object file version mismatch for file: " << currfile << endl << flush;
+            cout << currver << endl;
             return;
          }
          
@@ -120,60 +132,51 @@ void Mesh::Load(const IniReader& reader)
          framecontainer.push_back(map<string, MeshNodePtr>());
          
          MeshNodeMap nodes;
-         for (int j = 0; j < currframe.NumChildren(); ++j)
+         for (int j = 0; j < currframe.GetItemIndex("Triangles"); ++j)
          {
-            IniReader currprim = currframe.GetItem(j);
+            IniReader currcon = currframe.GetItem(j);
             MeshNodePtr newnode(new MeshNode());
             
-            string type;
-            currprim.Read(type, "Type");
-            if (type == "Quad") // Need to add one more vert and related properties
-            {
-               newnode->vert.push_back(Vector3());
-               for (int k = 0; k < 8; ++k)
-                  newnode->texcoords[k].push_back(floatvec(2, 0.f));
-            }
-            if (type == "Container")
-               newnode->render = false;
-            currprim.Read(newnode->id, "ID");
-            currprim.Read(newnode->parentid, "ParentID");
-            currprim.Read(newnode->matname, "Material");
-            if (newnode->matname != "" && glops)
-               newnode->material = &resman.LoadMaterial(newnode->matname);
+            currcon.Read(newnode->id, "ID");
+            currcon.Read(newnode->parentid, "ParentID");
             
-            currprim.Read(newnode->rot1.x, "Rot1", 0);
-            currprim.Read(newnode->rot1.y, "Rot1", 1);
-            currprim.Read(newnode->rot1.z, "Rot1", 2);
-            currprim.Read(newnode->rot2.x, "Rot2", 0);
-            currprim.Read(newnode->rot2.y, "Rot2", 1);
-            currprim.Read(newnode->rot2.z, "Rot2", 2);
-            currprim.Read(newnode->trans.x, "Trans", 0);
-            currprim.Read(newnode->trans.y, "Trans", 1);
-            currprim.Read(newnode->trans.z, "Trans", 2);
+            currcon.Read(newnode->rot1.x, "Rot1", 0);
+            currcon.Read(newnode->rot1.y, "Rot1", 1);
+            currcon.Read(newnode->rot1.z, "Rot1", 2);
+            currcon.Read(newnode->rot2.x, "Rot2", 0);
+            currcon.Read(newnode->rot2.y, "Rot2", 1);
+            currcon.Read(newnode->rot2.z, "Rot2", 2);
+            currcon.Read(newnode->trans.x, "Trans", 0);
+            currcon.Read(newnode->trans.y, "Trans", 1);
+            currcon.Read(newnode->trans.z, "Trans", 2);
             newnode->trans *= scale;
-            string pname;
-            string tcname;
-            for (int k = 0; k < newnode->vert.size(); ++k)
+            string vertid;
+            // Read vertices
+            for (int k = 0; k < currcon.NumChildren(); ++k)
             {
-               pname = "p" + ToString(k);
-               tcname = "tc" + ToString(k);
-               currprim.Read(newnode->vert[k].x, pname, 0);
-               currprim.Read(newnode->vert[k].y, pname, 1);
-               currprim.Read(newnode->vert[k].z, pname, 2);
-               // Apply scaling
-               newnode->vert[k] *= scale;
+               const IniReader& currvert = currcon(k);
+               VertexPtr newv(new Vertex());
+               currvert.Read(newv->id, "ID");
+               currvert.Read(newv->pos.x, "Pos", 0);
+               currvert.Read(newv->pos.y, "Pos", 1);
+               currvert.Read(newv->pos.z, "Pos", 2);
+               currvert.Read(newv->norm.x, "Norm", 0);
+               currvert.Read(newv->norm.y, "Norm", 1);
+               currvert.Read(newv->norm.z, "Norm", 2);
+               newv->pos *= scale;
                for (int m = 0; m < 8; ++m)
                {
-                  currprim.Read(newnode->texcoords[m][k][0], tcname + "x", m);
-                  currprim.Read(newnode->texcoords[m][k][1], tcname + "y", m);
+                  currvert.Read(newv->texcoords[m][0], "TC", m * 2);
+                  currvert.Read(newv->texcoords[m][1], "TC", m * 2 + 1);
                }
+               newnode->vertices.push_back(newv);
+               if (!i)
+                  vertices[newv->id] = newv;
             }
-            currprim.Read(newnode->collide, "Collide");
-            currprim.Read(newnode->facing, "Facing");
-            currprim.Read(newnode->name, "Name");
+            currcon.Read(newnode->facing, "Facing");
+            currcon.Read(newnode->name, "Name");
             nodes[newnode->id] = newnode;
-            if (type == "Container")
-               framecontainer[i][newnode->name] = newnode;
+            framecontainer[i][newnode->name] = newnode;
          }
          
          // Now that the nodes are loaded, rebuild the tree to get their proper positions
@@ -194,6 +197,32 @@ void Mesh::Load(const IniReader& reader)
             else
             {
                frameroot.push_back(it->second);
+            }
+         }
+         
+         // Load triangles
+         if (!i)
+         {
+            string vid, matname;
+            const IniReader& readtris = currframe.GetItemByName("Triangles");
+            cout << readtris.NumChildren() << endl;
+            for (size_t j = 0; j < readtris.NumChildren(); ++j)
+            {
+               const IniReader& curr = readtris(j);
+               TrianglePtr newtri(new Triangle());
+               for (int k = 0; k < 3; ++k)
+               {
+                  curr.Read(vid, "Verts", k);
+                  newtri->v[k] = vertices[vid];
+                  string tempid;
+                  curr.Read(tempid, "ID");
+                  cout << "Loaded " << vid << " for " << tempid << endl;
+               }
+               curr.Read(newtri->matname, "Material");
+               if (glops && newtri->matname != "")
+                  newtri->material = &resman.LoadMaterial(newtri->matname);
+               curr.Read(newtri->collide, "Collide");
+               tris.push_back(newtri);
             }
          }
       }
@@ -297,7 +326,6 @@ void Mesh::GenVbo()
       vbosteps.clear();
       vbodata.clear();
       indexdata.clear();
-      vertices.erase(unique(vertices.begin(), vertices.end()), vertices.end()); // Only one copy of each vertex allowed in VBO
       /*if (hasvbo)
          glDeleteBuffersARB(1, &vbo);
       glGenBuffersARB(1, &vbo);*/
@@ -321,11 +349,11 @@ void Mesh::GenVbo()
       
       // Build VBO
       int currindex = 0;
-      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      for (map<string, VertexPtr>::iterator i = vertices.begin(); i != vertices.end(); ++i)
       {
-         (*i)->index = currindex;
+         i->second->index = currindex;
          ++currindex;
-         vbodata.push_back((*i)->GetVboData());
+         vbodata.push_back(i->second->GetVboData());
       }
       
       // Build IBO
@@ -503,20 +531,22 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    {
       IniReader impread("models/impostor/base");
       impostor = MeshPtr(new Mesh(impread, resman, false));
-      impostor->frameroot[0]->material = impmat.get();
-      impostor->frameroot[0]->texcoords[0][0][1] = 1.f;
-      impostor->frameroot[0]->texcoords[0][1][1] = 0.f;
-      impostor->frameroot[0]->texcoords[0][2][1] = 0.f;
-      impostor->frameroot[0]->texcoords[0][3][1] = 1.f;
+      TrianglePtr first = impostor->tris[0];
+      TrianglePtr second = impostor->tris[1];
+      first->material = impmat.get();
+      second->material = impmat.get();
    }
+   
+   TrianglePtr first = impostor->tris[0];
+   TrianglePtr second = impostor->tris[1];
    
    impmat->SetTexture(0, impfbo.GetTexture());
    float width2 = width / 2.f;
    float height2 = height / 2.f;
-   impostor->frameroot[0]->vert[0] = Vector3(-width2, height2, 0);
-   impostor->frameroot[0]->vert[1] = Vector3(-width2, -height2, 0);
-   impostor->frameroot[0]->vert[2] = Vector3(width2, -height2, 0);
-   impostor->frameroot[0]->vert[3] = Vector3(width2, height2, 0);
+   first->v[0]->pos = Vector3(-width2, height2, 0);
+   first->v[1]->pos = Vector3(-width2, -height2, 0);
+   first->v[2]->pos = Vector3(width2, height2, 0);
+   second->v[2]->pos = Vector3(width2, -height2, 0);
    
    Vector3 moveto = position;
    moveto.y += height2;
@@ -558,10 +588,6 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
       LoadMaterials(); // Need to do this before GenTris
    else if (index < 0 || index >= frameroot.size()) return;
    
-   tris.clear();
-   vertices.clear();
-   //trantris.clear();
-   
    GraphicMatrix m;
    
    m.rotatex(rots.x);
@@ -571,16 +597,15 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    
    if (frameroot.size() == 1) // Implies index has to be 0
    {
-      //if (tris.size() <= 0)
-         frameroot[0]->GenTris(frameroot[0], interpval, m, *this, campos);
+      frameroot[0]->Transform(frameroot[0], interpval, vertices, m, campos);
    }
    else if (index == frameroot.size() - 1) // Could happen if we land exactly on the last keyframe
    {
-      frameroot[index]->GenTris(frameroot[index], interpval, m, *this, campos);
+      frameroot[index]->Transform(frameroot[index], interpval, vertices, m, campos);
    }
    else
    {
-      frameroot[index]->GenTris(frameroot[index + 1], interpval, m, *this, campos);
+      frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, campos);
    }
    
    CalcBounds();
@@ -648,8 +673,14 @@ void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, floa
 void Mesh::LoadMaterials()
 {
    if (havemats) return;
-   for (int i = 0; i < frameroot.size(); ++i)
-      frameroot[i]->LoadMaterials(resman);
+   for (size_t i = 0; i < tris.size(); ++i)
+   {
+      for (size_t j = 0; j < tris.size(); ++j)
+      {
+         if (!tris[i]->material && tris[i]->matname != "")
+            tris[i]->material = &resman.LoadMaterial(tris[i]->matname);
+      }
+   }
    impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
    havemats = true;
 }
@@ -695,10 +726,17 @@ void Mesh::ResetAnimation()
 }
 
 
+// Theoretically putting tris in vertices based on their address could overwrite tris loaded
+// from a model file, but in reality we only use Add on meshes that start out empty so this
+// properly enforces the rule that only one copy of each vertex gets added to vertices
 void Mesh::Add(TrianglePtr& tri)
 {
    tris.push_back(tri);
-   vertices.insert(vertices.end(), tri->v.begin(), tri->v.end());
+   for (size_t i = 0; i < 3; ++i)
+   {
+      vertices[ToString(tri->v[i])] = tri->v[i];
+      tri->v[i]->id = ToString(tri->v[i]);
+   }
 }
 
 

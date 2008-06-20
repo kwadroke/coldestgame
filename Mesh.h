@@ -78,7 +78,7 @@ class Mesh
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;
-      VertexPtrvec vertices;
+      map<string, VertexPtr> vertices;
       intvec vbosteps;
       GLuint vbo;
       GLuint ibo;
@@ -113,6 +113,6 @@ typedef list<Mesh> Meshlist;
 typedef map<int, MeshNodePtr> MeshNodeMap;
 typedef shared_ptr<Mesh> MeshPtr;
 
-const string objectfilever = "Version3";
+const string objectfilever = "Version4";
 
 #endif

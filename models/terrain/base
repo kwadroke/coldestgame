@@ -1,5 +1,7 @@
 Type Terrain
+Version Version4
 Position 0 0 0
 Rotations 0 0 0
 Size 300
 ImpostorDistance 0
+NumFrames 0

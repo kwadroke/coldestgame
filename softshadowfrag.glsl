@@ -20,6 +20,7 @@ void shadow(vec4 amb, vec4 diff, float d, inout vec4 col)
    total += shadow2DProj(shadowtex, shadowmappos + vec4(-1. / shadowres, 1. / shadowres, 0., 0.)).r;
    total += shadow2DProj(shadowtex, shadowmappos + vec4(0., 1. / shadowres, 0., 0.)).r;
    total += shadow2DProj(shadowtex, shadowmappos + vec4(1. / shadowres, 1. / shadowres, 0., 0.)).r;
+   
    //col.rgb -= diff.rgb * (1 - shadow2DProj(shadowtex, shadowmappos).r);
    col.rgb -= diff.rgb * (1. - smoothstep(0., .95, total / 9.));
    col.a = alpha;

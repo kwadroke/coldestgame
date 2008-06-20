@@ -6,6 +6,9 @@ Vertex::Vertex() : index(0)
    texcoords = vector<floatvec>(8, tc);
    color = GLubytevec(4, 255);
    terrainwt = floatvec(6, 0.f);
+#ifdef EDITOR
+   id = "";
+#endif
 }
 
 

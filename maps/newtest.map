@@ -70,10 +70,9 @@ Node
    Objects
    Node
       Type External
-      Files unittest/torso
+      BaseFile models/unittest/torso/base
       Position 400 200 400
       Rotations -45 25 0
-      NumFrames 3 // It's probably bad that we have to specify this here...
       AnimSpeed 5
       Scale .01
    Node
