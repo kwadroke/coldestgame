@@ -1,118 +1,109 @@
-Version Version3
-NextID 10
+Version Version4
+NextID 19
 TimeToNextFrame 1000
-Primitive
-   Type Container
+Container
    ID 0
    ParentID -1
-   Name Torso
-   Material materials/test
+   Name 
+   Facing 0
    Rot1 0 0 0
    Rot2 0 0 0
-   Trans 0 3000 0
-Primitive
-   Type Quad
+   Trans 0 0 0
+   Vertex
+      ID 10
+      Pos 1000 1000 1000
+      Norm 0 0 0
+      TC 0.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 3
+      Pos -1000 1000 -1000
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 4
+      Pos -1000 -1000 -1000
+      Norm 0 0 0
+      TC 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 5
+      Pos 1000 -1000 -1000
+      Norm 0 0 0
+      TC 0.25 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 6
+      Pos 1000 1000 -1000
+      Norm 0 0 0
+      TC 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 7
+      Pos -1000 1000 1000
+      Norm 0 0 0
+      TC 0.75 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 8
+      Pos -1000 -1000 1000
+      Norm 0 0 0
+      TC 0.75 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 9
+      Pos 1000 -1000 1000
+      Norm 0 0 0
+      TC 0.5 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Container
    ID 1
    ParentID 0
-   Material materials/test
+   Name LeftArmConnector
+   Facing 0
    Rot1 0 0 0
    Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -3000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 0 1 1 1 1 1 
-   p2 3000 -3000 0
-   tc2x 1 1 0 1 1 1 1 1 
-   tc2y 1 1 0 1 1 1 1 1 
-   p3 3000 3000 0
-   tc3x 1 1 0 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
+   Trans -1000 0 0
+Container
    ID 2
    ParentID 0
-   Material materials/test
-   Rot1 0 90 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -3000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 0 1 1 1 1 1 
-   p2 3000 -3000 0
-   tc2x 1 1 0 1 1 1 1 1 
-   tc2y 1 1 0 1 1 1 1 1 
-   p3 3000 3000 0
-   tc3x 1 1 0 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 3
-   ParentID 0
-   Material materials/test
-   Rot1 0 -90 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -3000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 0 1 1 1 1 1 
-   p2 3000 -3000 0
-   tc2x 1 1 0 1 1 1 1 1 
-   tc2y 1 1 0 1 1 1 1 1 
-   p3 3000 3000 0
-   tc3x 1 1 0 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 4
-   ParentID 0
-   Material materials/test
-   Rot1 0 180 0
-   Rot2 0 0 0
-   Trans 0 0 3000
-   p0 -3000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -3000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 0 1 1 1 1 1 
-   p2 3000 -3000 0
-   tc2x 1 1 0 1 1 1 1 1 
-   tc2y 1 1 0 1 1 1 1 1 
-   p3 3000 3000 0
-   tc3x 1 1 0 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Container
-   ID 7
-   ParentID 0
-   Name LeftArmConnector
-   Material 
-   Rot1 0 0 0
-   Rot2 0 0 0
-   Trans -4000 0 0
-Primitive
-   Type Container
-   ID 8
-   ParentID 0
    Name RightArmConnector
-   Material 
+   Facing 0
    Rot1 0 0 0
    Rot2 0 0 0
-   Trans 4000 0 0
+   Trans 1000 0 0
+Node
+   Triangles
+   Tri
+      ID 11
+      Verts 3 4 5
+      Material materials/test
+      Collide 0
+   Tri
+      ID 12
+      Verts 3 5 6
+      Material materials/test
+      Collide 0
+   Tri
+      ID 13
+      Verts 3 4 8
+      Material materials/test
+      Collide 0
+   Tri
+      ID 14
+      Verts 3 8 7
+      Material materials/test
+      Collide 0
+   Tri
+      ID 15
+      Verts 7 8 9
+      Material materials/test
+      Collide 0
+   Tri
+      ID 16
+      Verts 7 9 10
+      Material materials/test
+      Collide 0
+   Tri
+      ID 17
+      Verts 10 9 5
+      Material materials/test
+      Collide 0
+   Tri
+      ID 18
+      Verts 10 6 5
+      Material materials/test
+      Collide 0

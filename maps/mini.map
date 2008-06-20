@@ -13,27 +13,6 @@ Ambient .2 .2 .2 1
 
 SkyBox materials/sky
 
-DummyNode  This is no longer used, is it?
-   0 textures/sky.png
-   1 textures/test.png
-   2 textures/Grass1.png
-   3 textures/Grass1.png
-   4 textures/Rockt.png
-   5 textures/test.png
-   6 textures/dirt.png
-   7 textures/stone.png
-   8 textures/highcontrastgrass.png
-   9 textures/treebark.png
-   10 textures/treebarkbase.png
-   11 textures/leaves2.png
-   12 textures/water.png
-   13 textures/metal.png
-   14 textures/leaves6.png
-   15 textures/leaves3.png
-   16 textures/leaves4.png
-   17 textures/leaves6.png
-   9999 dummy
-
 TerrainMaterial materials/terrain
 Node
    TerrainParams
@@ -97,6 +76,14 @@ Node
       
 Node
    Objects
+   Node
+      Type External
+      BaseFile models/unittest/torso/base
+      Position 400 200 400
+      Rotations -45 25 0
+      AnimSpeed 5
+      Scale .01
+EOF
    Node
       Type proctree
       Materials materials/bark materials/leaves

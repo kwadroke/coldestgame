@@ -1,205 +1,43 @@
-Version Version3
-NextID 24
+Version Version4
+NextID 7
 TimeToNextFrame 1000
-Primitive
-   Type Container
-   ID 13
+Container
+   ID 0
    ParentID -1
-   Material 
+   Name 
+   Facing 0
    Rot1 0 0 0
    Rot2 0 0 0
    Trans 0 0 0
-Primitive
-   Type Container
-   ID 14
-   ParentID 13
-   Name LeftLeg
-   Material 
-   Rot1 -20 0 0
-   Rot2 0 0 0
-   Trans 1500 0 0
-Primitive
-   Type Quad
-   ID 15
-   ParentID 14
-   Material ../coldest/materials/test
-   Rot1 0 90 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 16
-   ParentID 14
-   Material ../coldest/materials/test
-   Rot1 0 -90 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 17
-   ParentID 14
-   Material ../coldest/materials/test
-   Rot1 0 0 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 18
-   ParentID 14
-   Material ../coldest/materials/test
-   Rot1 0 180 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Container
-   ID 19
-   ParentID 13
-   Name RightLeg
-   Material 
-   Rot1 20 0 0
-   Rot2 0 0 0
-   Trans -1500 0 0
-Primitive
-   Type Quad
-   ID 20
-   ParentID 19
-   Material ../coldest/materials/test
-   Rot1 0 90 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 21
-   ParentID 19
-   Material ../coldest/materials/test
-   Rot1 0 -90 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 22
-   ParentID 19
-   Material ../coldest/materials/test
-   Rot1 0 0 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
-Primitive
-   Type Quad
-   ID 23
-   ParentID 19
-   Material ../coldest/materials/test
-   Rot1 0 180 0
-   Rot2 0 0 0
-   Trans 0 -2500 1000
-   p0 -1000 3000 0
-   tc0x 0 0 0 0 0 0 0 0 
-   tc0y 0 0 0 0 0 0 0 0 
-   p1 -1000 -3000 0
-   tc1x 0 0 0 0 0 0 0 0 
-   tc1y 1 1 1 1 1 1 1 1 
-   p2 1000 -3000 0
-   tc2x 1 1 1 1 1 1 1 1 
-   tc2y 1 1 1 1 1 1 1 1 
-   p3 1000 3000 0
-   tc3x 1 1 1 1 1 1 1 1 
-   tc3y 0 0 0 0 0 0 0 0 
-   Collide 1
-   Facing 0
+   Vertex
+      ID 1
+      Pos 0 0 0
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 2
+      Pos 0 -1700 0
+      Norm 0 0 0
+      TC 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 3
+      Pos 1900 0 0
+      Norm 0 0 0
+      TC 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 4
+      Pos 1900 -1900 1000
+      Norm 0 0 0
+      TC 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Node
+   Triangles
+   Tri
+      ID 5
+      Verts 1 2 3
+      Material materials/test
+      Collide 0
+   Tri
+      ID 6
+      Verts 3 2 4
+      Material materials/test
+      Collide 0

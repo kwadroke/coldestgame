@@ -7,8 +7,10 @@
 #include "GraphicMatrix.h"
 #include "Material.h"
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
@@ -31,6 +33,7 @@ class Triangle
       
       VertexPtrvec v;
       Material* material;
+      string matname;
       bool collide;
       GraphicMatrix matrix;
       float maxdim;

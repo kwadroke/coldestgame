@@ -1327,7 +1327,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                IniReader mread("models/projectile/base");
                Mesh partmesh(mread, resman);
                Particle newpart(0, Vector3(), Vector3(), .3f, .9f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
-               newpart.ttl = 200;
+               newpart.ttl = 150;
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 60);
                emitters.push_back(newemitter);
             }
