@@ -116,6 +116,11 @@ MeshNodePtr MeshNode::Clone()
    newmn->children.clear();
    newmn->parent = parent;
    
+   for (size_t i = 0; i < vertices.size(); ++i)
+   {
+      newmn->vertices[i] = VertexPtr(new Vertex(*vertices[i]));
+   }
+   
    for (int i = 0; i < children.size(); ++i)
    {
       newmn->children.push_back(children[i]->Clone());
