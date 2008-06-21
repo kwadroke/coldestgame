@@ -811,6 +811,12 @@ void ServerLoadMap()
       curritem.team = spawnpoints[i].team;
    }
    
+   // Must be done here so it's available for KDTree creation
+   for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
+   {
+      i->CalcBounds();
+   }
+   
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {

@@ -255,7 +255,7 @@ Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector
       norm.normalize();
    }*/
    for (int i = 0; i < 3; ++i)
-      v[i] += norm * radius * .9999;
+      v[i] += norm * radius;
    /*if (startside < 0)
       norm = (v[2] - v[0]).cross(v[1] - v[0]);
    else

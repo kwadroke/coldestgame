@@ -978,7 +978,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
       Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
-      adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
+      Vector3 legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
+      if (adjust.distance2() && legadjust.distance2())
+         adjust = (adjust + legadjust) / 2.f;
+      else adjust = adjust + legadjust;
       int count = 0;
       float slop = .1f;
       
@@ -987,7 +990,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          mplayer.pos += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
          adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
-         adjust += coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
+         legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
+         if (adjust.distance2() && legadjust.distance2())
+            adjust = (adjust + legadjust) / 2.f;
+         else adjust = adjust + legadjust;
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
@@ -1035,7 +1041,7 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
 // TODO: Currently this code leaks memory because it never removes anything from oldpos
 void SynchronizePosition()
 {
-#if 1
+#if 0
    player[0].pos = player[servplayernum].pos;
    return;
 #endif

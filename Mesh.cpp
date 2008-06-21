@@ -750,7 +750,9 @@ void Mesh::Add(Quad& quad)
 void Mesh::Add(Mesh &mesh)
 {
    for (size_t i = 0; i < mesh.tris.size(); ++i)
+   {
       Add(mesh.tris[i]);
+   }
 }
 
 

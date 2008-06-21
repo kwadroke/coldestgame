@@ -476,13 +476,14 @@ void GetMap(string fn)
    }
    
    
-   // Must be done here so it's available for KDTree creation
-   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
-   {
-      i->CalcBounds();
-   }
+   // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
+   // copies the meshes they cannot have had GenVbo run on them yet
+   mapname = fn; // Signal server that the map data is available
+   if (server)   // Then wait for the server to copy the data before generating buffers
+      while (!serverhasmap) SDL_Delay(1);
    
    
+   // All meshes added from here on out will not be present on the server
    // Build water object
    float waterminx, waterminy;
    float watermaxx, watermaxy;
@@ -533,13 +534,6 @@ void GetMap(string fn)
       }
    }
    watermesh->GenVbo();
-   
-   
-   // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
-   // copies the meshes they cannot have had GenVbo run on them yet
-   mapname = fn; // Signal server that the map data is available
-   if (server)   // Then wait for the server to copy the data before generating buffers
-      while (!serverhasmap) SDL_Delay(1);
    
    
    // Generate grass - do this after the server has meshes because it doesn't care about grass, but before
@@ -644,6 +638,13 @@ void GetMap(string fn)
    progress->value = 6;
    progtext->text = "Partitioning world";
    Repaint();
+   
+   // Must be done here so it's available for KDTree creation
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      i->CalcBounds();
+   }
+   
    // Add objects to kd-tree
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
