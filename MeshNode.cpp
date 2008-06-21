@@ -89,10 +89,13 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
    m *= parentm;
    
    // Reset vertices then transform them to new positions
+   GraphicMatrix normalm = m;
+   normalm.members[12] = normalm.members[13] = normalm.members[14] = 0.f;
    for (size_t i = 0; i < vertices.size(); ++i)
    {
       *verts[vertices[i]->id] = *vertices[i];
       verts[vertices[i]->id]->pos.transform(m);
+      verts[vertices[i]->id]->norm.transform(normalm);
    }
    
    // Recursively call this on our children

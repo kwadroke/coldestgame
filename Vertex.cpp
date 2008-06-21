@@ -1,6 +1,6 @@
 #include "Vertex.h"
 
-Vertex::Vertex() : index(0)
+Vertex::Vertex() : index(0), norm(Vector3(0, 0, 1))
 {
    floatvec tc(2, 0.f);
    texcoords = vector<floatvec>(8, tc);

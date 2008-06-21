@@ -171,7 +171,7 @@ void Mesh::Load(const IniReader& reader)
                }
                newnode->vertices.push_back(newv);
                if (!i)
-                  vertices[newv->id] = newv;
+                  vertices[newv->id] = VertexPtr(new Vertex(*newv)); // Can't share these dummy
             }
             currcon.Read(newnode->facing, "Facing");
             currcon.Read(newnode->name, "Name");
@@ -216,7 +216,6 @@ void Mesh::Load(const IniReader& reader)
                   newtri->v[k] = vertices[vid];
                   string tempid;
                   curr.Read(tempid, "ID");
-                  cout << "Loaded " << vid << " for " << tempid << endl;
                }
                curr.Read(newtri->matname, "Material");
                if (glops && newtri->matname != "")
