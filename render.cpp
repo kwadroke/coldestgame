@@ -786,7 +786,6 @@ void RenderHud()
    static ProgressBar* tempbar = (ProgressBar*)gui[hud]->GetWidget("temperature");
    static ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
    static GUI* minimaplabel = gui[hud]->GetWidget("minimap");
-   static GUI* playerposlabel = gui[hud]->GetWidget("playerpos");
    static GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
    
    if (frames >= 30) // Update FPS
@@ -832,12 +831,30 @@ void RenderHud()
    rotbar->value = (int)localplayer.rotation;
    
    minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
-   playerposlabel->x = localplayer.pos.x / mapwidth;
-   playerposlabel->x *= minimaplabel->width;
-   playerposlabel->x -= playerposlabel->width / 2.f;
-   playerposlabel->y = localplayer.pos.z / mapheight;
-   playerposlabel->y *= minimaplabel->height;
-   playerposlabel->y -= playerposlabel->height / 2.f;
+   minimaplabel->ClearChildren();
+   
+   SDL_mutexP(clientmutex);
+   for (size_t i = 1; i < player.size(); ++i)
+   {
+      GUIPtr playerposlabel(new Button(minimaplabel, &resman.texman));
+      if (i == servplayernum)
+         playerposlabel->SetTexture(Normal, "textures/miniplayer.png");
+      else if (player[i].team == localplayer.team)
+         playerposlabel->SetTexture(Normal, "textures/minifriend.png");
+      else
+         playerposlabel->SetTexture(Normal, "textures/minienemy.png");
+      playerposlabel->width = 10;
+      playerposlabel->height = 16;
+      playerposlabel->x = player[i].pos.x / mapwidth;
+      playerposlabel->x *= minimaplabel->width;
+      playerposlabel->x -= playerposlabel->width / 2.f;
+      playerposlabel->y = player[i].pos.z / mapheight;
+      playerposlabel->y *= minimaplabel->height;
+      playerposlabel->y -= playerposlabel->height / 2.f;
+      minimaplabel->Add(playerposlabel);
+   }
+   SDL_mutexV(clientmutex);
+   
    loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    
 #ifdef DEBUGSMT

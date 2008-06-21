@@ -28,7 +28,7 @@
    <Label x="800" y="700" width="190" height="290" text="" name="minimapback"
           normal="textures/black.png"/>
    <Label x="800" y="700" width="190" height="290" text="" name="minimap">
-      <Label x="0" y="0" width="10" height="16" text="" name="playerpos"
+      <Label x="0" y="0" width="10" height="16" text="" name="playerpos" visible="false"
              normal="textures/miniplayer.png"/>
    </Label>
 </GUI>

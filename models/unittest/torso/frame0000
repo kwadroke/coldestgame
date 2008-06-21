@@ -143,39 +143,39 @@ Node
       ID 15
       Verts 11 12 13
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 16
       Verts 13 12 14
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 22
       Verts 18 19 20
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 23
       Verts 20 19 21
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 29
       Verts 25 26 27
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 30
       Verts 27 26 28
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 8
       Verts 4 5 6
       Material materials/test
-      Collide 0
+      Collide 1
    Tri
       ID 9
       Verts 6 5 7
       Material materials/test
-      Collide 0
+      Collide 1
