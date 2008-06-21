@@ -80,8 +80,8 @@ void Mesh::Load(const IniReader& reader)
    reader.Read(position.x, "Position", 0);
    reader.Read(position.y, "Position", 1);
    reader.Read(position.z, "Position", 2);
-   reader.Read(rots.y, "Rotations", 0); // TODO: Might be better to change this order
-   reader.Read(rots.x, "Rotations", 1);
+   reader.Read(rots.x, "Rotations", 0);
+   reader.Read(rots.y, "Rotations", 1);
    reader.Read(rots.z, "Rotations", 2);
    reader.Read(size, "Size");
    reader.Read(impdist, "ImpostorDistance");
@@ -205,7 +205,6 @@ void Mesh::Load(const IniReader& reader)
          {
             string vid, matname;
             const IniReader& readtris = currframe.GetItemByName("Triangles");
-            cout << readtris.NumChildren() << endl;
             for (size_t j = 0; j < readtris.NumChildren(); ++j)
             {
                const IniReader& curr = readtris(j);

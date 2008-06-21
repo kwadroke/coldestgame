@@ -126,10 +126,7 @@ MeshNodePtr MeshNode::Clone()
 
 void MeshNode::GetContainers(map<string, MeshNodePtr>& cont, MeshNodePtr& thisptr)
 {
-   //if (!render)
-   {
-      cont[name] = thisptr;
-   }
+   cont[name] = thisptr;
    for (int i = 0; i < children.size(); ++i)
       children[i]->GetContainers(cont, children[i]);
 }

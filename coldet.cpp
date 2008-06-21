@@ -1035,7 +1035,7 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
 // TODO: Currently this code leaks memory because it never removes anything from oldpos
 void SynchronizePosition()
 {
-#if 0
+#if 1
    player[0].pos = player[servplayernum].pos;
    return;
 #endif

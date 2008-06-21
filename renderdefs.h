@@ -17,6 +17,7 @@
 #include "FBO.h"
 #include "gui/GUI.h"
 #include "gui/ProgressBar.h"
+#include "gui/Button.h"
 #include "Timer.h"
 #include "SDL_ttf.h"
 #include "Mesh.h"
