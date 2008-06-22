@@ -77,6 +77,7 @@ class Mesh
    private:
       void UpdateTris(int, const Vector3&);
       void BindVbo();
+      void ResetTriMaxDims();
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;

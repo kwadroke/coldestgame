@@ -24,8 +24,8 @@ Mesh::~Mesh()
 // TODO: Need to properly copy vbo and impostor Mesh here
 Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
-         size(m.size), drawdistmult(m.drawdistmult), width(m.width), height(m.height), impostortex(m.impostortex),
-         vbodata(m.vbodata), vbo(m.vbo), ibo(m.ibo), next(m.next), hasvbo(m.hasvbo),
+         size(m.size), drawdistmult(m.drawdistmult), debug(m.debug), width(m.width), height(m.height),
+         impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), ibo(m.ibo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), collide(m.collide), dist(m.dist), impostor(m.impostor), 
          impmat(MaterialPtr()), animspeed(m.animspeed)
@@ -301,6 +301,7 @@ void Mesh::Load(const IniReader& reader)
 void Mesh::Move(const Vector3& v)
 {
    position = v;
+   ResetTriMaxDims();
 }
 
 
@@ -313,6 +314,7 @@ const Vector3& Mesh::GetPosition() const
 void Mesh::Rotate(const Vector3& v)
 {
    rots = v;
+   ResetTriMaxDims();
 }
 
 
@@ -582,7 +584,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    float interpval = (float)animtime / (float)frametime[currkeyframe];
    
    if (glops && !hasvbo) // Means we set glops with SetGL
-      LoadMaterials(); // Need to do this before GenTris
+      LoadMaterials(); // Need to do this before Transform
    else if (index < 0 || index >= frameroot.size()) return;
    
    GraphicMatrix m;
@@ -687,6 +689,7 @@ void Mesh::Scale(const float& sval)
 {
    for (int i = 0; i < frameroot.size(); ++i)
       frameroot[i]->Scale(sval);
+   ResetTriMaxDims();
 }
 
 
@@ -720,6 +723,13 @@ void Mesh::ResetAnimation()
    animspeed = 0.f;
    currkeyframe = 0;
    animtime = 0;
+}
+
+
+void Mesh::ResetTriMaxDims()
+{
+   for (size_t i = 0; i < tris.size(); ++i)
+      tris[i]->maxdim = -1.f;
 }
 
 
