@@ -3,7 +3,7 @@
 
 Particle::Particle(Mesh& meshin) : mesh(meshin), unsent(true), senttimes(0), playernum(0), id(0),
                    playerid(0), velocity(0.f), accel(1.f), weight(0.f), radius(0.f), explode(true),
-                   lasttick(0), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false)
+                   lasttick(0), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1)
 {
    t.start();
 }
@@ -12,7 +12,7 @@ Particle::Particle(Mesh& meshin) : mesh(meshin), unsent(true), senttimes(0), pla
 Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc, float w,
                    float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin), unsent(true), senttimes(0), playernum(0), id(nid),
                    playerid(0), dir(v), pos(p), origin(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
-                   lasttick(tick), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false)
+                   lasttick(tick), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1)
 {
    dir.normalize();
    t.start();
