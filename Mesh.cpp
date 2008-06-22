@@ -541,10 +541,10 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    impmat->SetTexture(0, impfbo.GetTexture());
    float width2 = width / 2.f;
    float height2 = height / 2.f;
-   first->v[0]->pos = Vector3(-width2, height2, 0);
-   first->v[1]->pos = Vector3(-width2, -height2, 0);
-   first->v[2]->pos = Vector3(width2, height2, 0);
-   second->v[2]->pos = Vector3(width2, -height2, 0);
+   impostor->frameroot[0]->vertices[0]->pos = Vector3(-width2, height2, 0);
+   impostor->frameroot[0]->vertices[1]->pos = Vector3(-width2, -height2, 0);
+   impostor->frameroot[0]->vertices[2]->pos = Vector3(width2, height2, 0);
+   impostor->frameroot[0]->vertices[3]->pos = Vector3(width2, -height2, 0);
    
    Vector3 moveto = position;
    moveto.y += height2;
