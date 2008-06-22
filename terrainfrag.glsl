@@ -1,5 +1,5 @@
 void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
-void shadow(vec4 amb, vec4 diff, float d, inout vec4 color);
+void shadow(vec4, vec4, float, inout vec4);
 void fog(float dist, inout vec4 color);
 
 uniform sampler2D tex, tex1, tex2, tex3;
@@ -21,7 +21,7 @@ void main()
    basiclighting(normal, normalize(vec3(gl_LightSource[0].position)), base, ambient, diffuse, 0.);
    base.a = 1.;
    
-   shadow(ambient, diffuse, dist, base);
+   shadow(diffuse, vec4(0.), dist, base);
    
    vec4 color = vec4(0, 0, 0, 0);
    

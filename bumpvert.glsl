@@ -29,20 +29,14 @@ void main()
    b = normalize(cross(t, n));
    
    vec3 location = gl_ModelViewMatrixInverse[3].xyz;
-   worldcoords = gl_Vertex.xyz;
    lightdir = normalize(gl_ModelViewMatrixInverse * gl_LightSource[0].position).xyz;
-   //lightdir = vec3(-1, 1, -1);
-   //lightdir = normalize(lightdir);
-   //lightdir = normalize(gl_LightSource[0].position.xyz);
-   //lightdir.x *= -1.; // Not entirely clear on why this is necessary, but it is
-   //lightdir.z *= -1.;
    
    vec3 tmp = lightdir;
    lightdir.x = dot(tmp, t);
    lightdir.y = dot(tmp, b);
    lightdir.z = dot(tmp, n);
    
-   view = normalize(worldcoords - location);
+   view = normalize(location - worldcoords);
    tmp = view;
    view.x = dot(tmp, t);
    view.y = dot(tmp, b);

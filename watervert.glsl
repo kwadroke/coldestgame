@@ -1,9 +1,9 @@
 #version 110
 
-varying float dist;
 varying vec3 location;
 varying vec3 worldcoords;
 varying vec3 lightdir;
+varying vec4 shadowmappos, worldshadowmappos;
 
 void main()
 {
@@ -16,11 +16,11 @@ void main()
    location = gl_ModelViewMatrixInverse[3].xyz;
    worldcoords = gl_Vertex.xyz;
    lightdir = normalize(gl_ModelViewMatrixInverse * gl_LightSource[0].position).xyz;
-   lightdir.x *= -1.; // Not entirely clear on why this is necessary, but it is
-   lightdir.z *= -1.;
+   
+   /* Shadow calculations, the grunt work is done on the CPU and passed in
+   using the texture matrix. */
+   shadowmappos = gl_TextureMatrix[6] * gl_Vertex;
+   worldshadowmappos = gl_TextureMatrix[7] * gl_Vertex;
    
    gl_Position = ftransform();
-   
-   /* For fogging*/
-   dist = gl_Position.z;
 }

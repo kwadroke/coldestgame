@@ -48,6 +48,8 @@ void Shader::LoadShader(string file)
          buffer = "fogfrag.glsl"; // Currently no other available, may change though
       else if (buffer == "$basiclight")
          buffer = "basiclighting.glsl"; // Ditto
+      else if (buffer == "$specular")
+         buffer = "specularfrag.glsl";
       shader = CreatePixelShader();
       InitShader(shader, buffer);
       AttachShader(program, shader);

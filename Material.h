@@ -28,6 +28,7 @@ class Material
       floatvec diffuse;
       floatvec ambient;
       floatvec specular;
+      float shininess;
       
    private:
       vector<GLuint> texid;

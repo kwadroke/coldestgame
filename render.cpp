@@ -25,7 +25,7 @@ void Repaint()
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glShadeModel(GL_SMOOTH);
    float viewdist = console.GetFloat("viewdist");
-   glFogf(GL_FOG_START, viewdist * .8);
+   glFogf(GL_FOG_START, viewdist * .5f);
    glFogf(GL_FOG_END, viewdist);
    farclip = viewdist;
    
@@ -639,7 +639,7 @@ void RenderClouds()
    glMatrixMode(GL_MODELVIEW);
    
    float viewdist = console.GetFloat("viewdist");
-   glFogf(GL_FOG_START, viewdist * .8);
+   glFogf(GL_FOG_START, viewdist * .5);
    glFogf(GL_FOG_END, viewdist);
    glEnable(GL_DEPTH_TEST);
    resman.shaderman.UseShader("none");

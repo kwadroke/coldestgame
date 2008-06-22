@@ -1,10 +1,12 @@
+void shadow(vec4, vec4, float, inout vec4);
+
 uniform sampler2D tex;
 uniform sampler2D noisetex;
 
-varying float dist;
 varying vec3 location;
 varying vec3 worldcoords;
 varying vec3 lightdir;
+varying vec4 shadowmappos, worldshadowmappos;
 
 void main()
 {
@@ -26,28 +28,31 @@ void main()
    shiftamount.y = texture2D(noisetex, gl_TexCoord[1].st * 100.).r - .5;
    shiftamount.z = texture2D(noisetex, gl_TexCoord[1].st * 50.).r - .5;
    shiftamount.w = texture2D(noisetex, gl_TexCoord[1].st * 50.).r - .5;
-   shiftamount.zw *= 3.;
+   shiftamount.zw *= 1.;
    shiftamount.x += shiftamount.z;
    shiftamount.y += shiftamount.w;
-   shiftamount /= 2.;
+   shiftamount *= 1.;
    shiftedtc += vec4(shiftamount.x, shiftamount.y, shiftamount.x, shiftamount.x);
    vec3 normal = vec3(0., 2, 0.);
    normal += vec3(shiftamount.x, 0, shiftamount.y);
    vec4 color = texture2DProj(tex, shiftedtc);
    
    // Specular is still a little flickery, but per-pixel it looks alright
-   vec3 view = normalize(worldcoords - location);
+   vec3 view = normalize(location - worldcoords);
    vec3 halfvector = normalize(view + lightdir);
    float ndothv = max(0., dot(normalize(normal), halfvector));
-   float specval = pow(ndothv, 16.) * .8;
+   float specval = pow(ndothv, 16.) * .5;
    
    color.a = .3;
    color *= vec4(.6, .6, .8, 1.);
    color.a = .6;
    
-   color += vec4(specval, specval, specval, specval);
+   color += vec4(specval);
    //color += gl_FrontMaterial.specular * gl_LightSource[0].specular * pow(ndothv, gl_FrontMaterial.shininess);
-   
+   vec4 diffuse = vec4(.6, .6, .8, .6) * .6;
+   float dist = distance(location, worldcoords);
+   shadow(diffuse, vec4(specval), dist, color);
+      
    // Fogging
    if (dist > gl_Fog.start)
    {

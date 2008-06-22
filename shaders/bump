@@ -4,10 +4,12 @@ Pixel:
 $fog
 $shadow
 $basiclight
+$specular
 bumpfrag.glsl
 Uniforms:
 int tex 0
 int bumptex 1
+int spectex 2
 int shadowtex 6
 int worldshadowtex 7
 float reflectval 0
