@@ -63,6 +63,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             {
                temp = adjust;
                adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad);
+               
                if (adjust.distance2(temp) > .00001)
                {
                   hitpos = newpos;

@@ -434,14 +434,17 @@ int NetListen(void* dummy)
                while (partnum != 0)
                {
                   unsigned long playerid, playernum;
-                  Vector3 getdir, getpos;
+                  Vector3 getdir, getpos, getrots;
                   float getvel, getacc, getweight, getrad;
                   bool getexp;
+                  int weapid;
                   
+                  get >> weapid;
                   get >> playernum;
                   get >> playerid;
                   get >> getdir.x >> getdir.y >> getdir.z;
                   get >> getpos.x >> getpos.y >> getpos.z;
+                  get >> getrots.x >> getrots.y >> getrots.z;
                   get >> getvel;
                   get >> getacc;
                   get >> getweight;
@@ -453,12 +456,15 @@ int NetListen(void* dummy)
                   // Only add the particle if we don't already have it
                   if ((partids.find(partnum) == partids.end()))
                   {
-                     IniReader tempreader("models/projectile/base");
+                     Weapon dummy(weapid);
+                     IniReader tempreader("models/" + dummy.ModelFile() + "/base");
                      Mesh tempmesh(tempreader, resman);
+                     tempmesh.Rotate(getrots);
                      Particle temppart(tempmesh);
                      temppart.playerid = playerid;
                      temppart.dir = getdir;
                      temppart.pos = getpos;
+                     temppart.rots = getrots;
                      temppart.velocity = getvel;
                      temppart.accel = getacc;
                      temppart.weight = getweight;

@@ -3,7 +3,7 @@
 
 Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
-            size(100.f), drawdistmult(-1.f), width(0.f), height(0.f), resman(rm),
+            size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
             impmat(MaterialPtr()), animspeed(1.f)
@@ -22,7 +22,6 @@ Mesh::~Mesh()
 
 
 // TODO: Need to properly copy vbo and impostor Mesh here
-// Also need to copy vertices....
 Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
          size(m.size), drawdistmult(m.drawdistmult), width(m.width), height(m.height), impostortex(m.impostortex),

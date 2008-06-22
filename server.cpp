@@ -647,10 +647,12 @@ int ServerSend(void* dummy)  // Thread for sending updates
                //cout << "Server sending particle " << i->id;
                //cout << " from " << i->playernum << endl;
                temp << i->id << eol;
+               temp << i->weapid << eol;
                temp << i->playernum << eol;
                temp << i->playerid << eol;
                temp << i->dir.x << eol << i->dir.y << eol << i->dir.z << eol;
                temp << i->pos.x << eol << i->pos.y << eol << i->pos.z << eol;
+               temp << i->rots.x << eol << i->rots.y << eol << i->rots.z << eol;
                temp << i->velocity << eol;
                temp << i->accel << eol;
                temp << i->weight << eol;
@@ -1001,6 +1003,9 @@ void ServerUpdatePlayer(int i)
       m.rotatey(serverplayers[i].facing + serverplayers[i].rotation);
       //m.rotatez(player[0].roll);
       dir.transform(m.members);
+      Vector3 rot;
+      rot.x = -serverplayers[i].pitch;
+      rot.y = serverplayers[i].facing + serverplayers[i].rotation;
                
       float vel = currplayerweapon.Velocity();
       float acc = currplayerweapon.Acceleration();
@@ -1015,10 +1020,13 @@ void ServerUpdatePlayer(int i)
          startpos = serverplayers[i].clientpos;
       IniReader readweapon("models/" + currplayerweapon.ModelFile() + "/base");
       Mesh weaponmesh(readweapon, resman);
+      weaponmesh.Rotate(rot);
       Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.pos += part.dir * 50;
       part.origin = part.pos;
+      part.rots = rot;
       part.playernum = i;
+      part.weapid = currplayerweapon.Id();
       part.damage = currplayerweapon.Damage();
       part.dmgrad = currplayerweapon.Splash();
       part.unsent = true;

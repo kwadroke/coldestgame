@@ -72,6 +72,7 @@ class Mesh
       int impostorfbo;
       GLuint impostortex;
       Uint32 lastimpupdate;
+      bool debug;
       
    private:
       void UpdateTris(int, const Vector3&);

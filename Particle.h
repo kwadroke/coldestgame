@@ -28,6 +28,7 @@ class Particle
       Vector3 dir;
       Vector3 pos;
       Vector3 origin;
+      Vector3 rots;
       float velocity;
       float accel;
       float weight;
@@ -41,6 +42,7 @@ class Particle
       bool collide;
       Uint32 ttl;
       bool expired;
+      int weapid;
       
    private:
       Timer t;
