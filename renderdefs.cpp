@@ -2,7 +2,6 @@
 
 // Variables that need to be shared for rendering
 float nearclip = 1;
-float farclip = 2000;  // Why didn't I just use viewdist?
 int fbostarts[3] = {0, 10, 20};
 int fbodims[3] = {128, 64, 32};
 
@@ -14,6 +13,7 @@ int noiseres;
 float fps;
 float aspect;
 float mapwidth, mapheight;
+bool staticdrawdist;
 GLuint noisetex;
 vector<GLuint> textures;
 FBO worldshadowmapfbo, shadowmapfbo, cloudfbo, reflectionfbo, noisefbo, minimapfbo;

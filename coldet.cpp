@@ -85,6 +85,7 @@ void InitGlobals()
    console.Parse("set turnsmooth 10", false);
    console.Parse("set endgametime 10", false);
    console.Parse("set splashlevels 3", false);
+   console.Parse("set grassdrawdist 1000", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -103,6 +104,7 @@ void InitGlobals()
    clientmutex = SDL_CreateMutex();
    spawnschanged = true;
    winningteam = 0;
+   staticdrawdist = false;
    
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
@@ -266,7 +268,7 @@ void SetupOpenGL()
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    
-   gluPerspective(console.GetFloat("fov"), aspect, nearclip, farclip);
+   gluPerspective(console.GetFloat("fov"), aspect, nearclip, console.GetFloat("viewdist"));
    //glFrustum(-1, 1, -1 / aspect, 1 / aspect, 1, 10000.);
    
    glMatrixMode(GL_MODELVIEW);
