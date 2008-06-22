@@ -629,6 +629,7 @@ void GetMap(string fn)
                grassmesh.Move(Vector3(mx, 0, my));
                grassmesh.CalcBounds();
                grassmesh.collide = false;
+               grassmesh.drawdistmult = console.GetFloat("grassdrawdist") / console.GetFloat("viewdist");
                meshes.push_back(grassmesh);
             }
          }
@@ -755,12 +756,13 @@ void GetMap(string fn)
    
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    
+   staticdrawdist = true;
    float saveidm = console.GetFloat("impdistmulti");
-   console.Parse("set impdistmulti 10000");
+   console.Parse("set impdistmulti 10000", false);
    lights.Place();
    RenderObjects();
    RenderWater();
-   console.Parse("set impdistmulti " + ToString(saveidm));
+   console.Parse("set impdistmulti " + ToString(saveidm), false);
    
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
@@ -769,9 +771,6 @@ void GetMap(string fn)
    
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    minimapfbo.Unbind();
-   float viewdist = console.GetFloat("viewdist");
-   glFogf(GL_FOG_START, viewdist * .8f);
-   glFogf(GL_FOG_END, viewdist);
    
    // Signal the net thread that we can sync now
    needsync = true;

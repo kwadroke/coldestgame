@@ -24,14 +24,10 @@ void Repaint()
    glDepthMask(GL_TRUE);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glShadeModel(GL_SMOOTH);
-   float viewdist = console.GetFloat("viewdist");
-   glFogf(GL_FOG_START, viewdist * .5f);
-   glFogf(GL_FOG_END, viewdist);
-   farclip = viewdist;
    
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   gluPerspective(fov, aspect, nearclip, farclip);
+   gluPerspective(fov, aspect, nearclip, console.GetFloat("viewdist"));
    
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -111,7 +107,7 @@ void Repaint()
          is called when shadowing as well, and that needs a different frustum setup.
       */
       Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-      kdtree.setfrustum(localplayer.pos, look, nearclip, viewdist, fov, aspect);
+      kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist"), fov, aspect);
       
       // Place the light(s)
       lights.Place();
@@ -235,11 +231,31 @@ void RenderObjects()
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
    float impmod = 1000.f;
+   
+   int viewdist = console.GetInt("viewdist");
+   int currdrawdist = viewdist;
+   int localdrawdist = 0;
+   if (!staticdrawdist)
+   {
+      glFogf(GL_FOG_START, float(viewdist) * .5f);
+      glFogf(GL_FOG_END, float(viewdist));
+   }
+   
    for (iptr = m.begin(); iptr != m.end(); ++iptr)
    {
       Mesh* i = *iptr;
       float adjustedimpdist = i->impdist * console.GetFloat("impdistmulti");
       adjustedimpdist *= adjustedimpdist;
+      if (i->drawdistmult > 0.f)
+         localdrawdist = int(viewdist * i->drawdistmult);
+      else localdrawdist = viewdist;
+      if (localdrawdist != currdrawdist && !staticdrawdist)
+      {
+         currdrawdist = localdrawdist;
+         glFogf(GL_FOG_START, float(localdrawdist) * .5f);
+         glFogf(GL_FOG_END, float(localdrawdist));
+      }
+      
       if (floatzero(i->impdist) || i->dist < adjustedimpdist || shadowrender || debug)
       {
          i->Render(override);
@@ -256,6 +272,9 @@ void RenderObjects()
          }
       }
    }
+   
+   glFogf(GL_FOG_START, float(viewdist) * .5f);
+   glFogf(GL_FOG_END, float(viewdist));
    
    UpdateFBO();
    
@@ -489,7 +508,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   gluPerspective(console.GetFloat("fov"), aspect, nearclip, farclip);
+   gluPerspective(console.GetFloat("fov"), aspect, nearclip, console.GetFloat("viewdist"));
    
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
