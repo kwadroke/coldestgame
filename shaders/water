@@ -1,7 +1,10 @@
 Vertex:
 watervert.glsl
 Pixel:
+$shadow
 waterfrag.glsl
 Uniforms:
 int tex 0
 int noisetex 1
+int shadowtex 6
+int worldshadowtex 7

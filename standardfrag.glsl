@@ -20,7 +20,7 @@ void main()
    
    basiclighting(normal, normalize(vec3(gl_LightSource[0].position)), color, ambient, diffuse, 1.);
    
-   shadow(ambient, diffuse, dist, color);
+   shadow(diffuse, vec4(0.), dist, color);
           
    color *= texture2D(tex, gl_TexCoord[0].st);
    

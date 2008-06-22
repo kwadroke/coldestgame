@@ -979,7 +979,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
       Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
       Vector3 legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
-      if (adjust.distance2() && legadjust.distance2())
+      if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
          adjust = (adjust + legadjust) / 2.f;
       else adjust = adjust + legadjust;
       int count = 0;
@@ -991,7 +991,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          legoffset += adjust * (1 + count * slop);
          adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
          legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
-         if (adjust.distance2() && legadjust.distance2())
+         if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
             adjust = (adjust + legadjust) / 2.f;
          else adjust = adjust + legadjust;
          ++count;
