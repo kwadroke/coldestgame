@@ -249,6 +249,13 @@ void RenderObjects()
       if (i->drawdistmult > 0.f)
          localdrawdist = int(viewdist * i->drawdistmult);
       else localdrawdist = viewdist;
+      
+      if (i->dist > (localdrawdist + i->size) * (localdrawdist + i->size)
+          && !staticdrawdist && !shadowrender)
+      {
+         continue; // Skip it if it's too far away
+      }
+      
       if (localdrawdist != currdrawdist && !staticdrawdist)
       {
          currdrawdist = localdrawdist;
@@ -858,7 +865,7 @@ void RenderHud()
       GUIPtr playerposlabel(new Button(minimaplabel, &resman.texman));
       if (i == servplayernum)
          playerposlabel->SetTexture(Normal, "textures/miniplayer.png");
-      else if (player[i].team == localplayer.team)
+      else if (player[i].team == player[servplayernum].team)
          playerposlabel->SetTexture(Normal, "textures/minifriend.png");
       else
          playerposlabel->SetTexture(Normal, "textures/minienemy.png");
