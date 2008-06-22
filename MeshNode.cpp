@@ -30,20 +30,9 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
       m.rotatey(interprot1.y);
       m.rotatex(interprot1.x);
    }
-#if 0
    else
    {
-      if (collide)
-      {
-         cout << "Warning: Polygons with both facing and collide are not supported.\n";
-         cout << "This will most likely not work as you intend." << endl;
-      }
-      // Facing tris need norms before they are transformed, others need them after
-      // Note that it is assumed a facing quad will be coplanar so the normals of
-      // both triangles will be the same.
-      Vector3 norm = vert[1] - vert[0];
-      norm = norm.cross(vert[2] - vert[0]);
-      norm.normalize();
+      Vector3 norm(0, 0, 1);
       Vector3 dir;
       Vector3 start = -norm; // Initial view direction
       Vector3 facerot, currpos;
@@ -54,11 +43,6 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
       facem.translate(interptrans);
       if (parent) facem *= parent->m;
       facem *= parentm;
-      for (int i = 0; i < vert.size(); ++i)
-      {
-         currpos += vert[i];
-      }
-      currpos /= vert.size();
       currpos.transform(facem);
       dir = campos - currpos;
       
@@ -80,7 +64,6 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
       m.rotatey(facerot.y + 180.f);
       m.translate(interptrans);
    }
-#endif
 
    if (parent)
    {
