@@ -718,6 +718,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                if (serverplayers[i].connected)
                {
                   occup << i << eol;
+                  occup << serverplayers[i].team << eol;
                   occup << serverplayers[i].unit << eol;
                   occup << serverplayers[i].kills << eol;
                   occup << serverplayers[i].deaths << eol;
@@ -904,7 +905,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum)
       {
          if (serverplayers[i].mesh[part] != servermeshes.end())
          {
-            if (curr == &(*serverplayers[i].mesh[part]))
+            if (curr == &(*serverplayers[i].mesh[part]) && serverplayers[i].team != serverplayers[playernum].team)
             {
                cout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage);
