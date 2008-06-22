@@ -540,7 +540,7 @@ int NetListen(void* dummy)
                oppnum = 0;
                
                get >> oppnum;
-               short getunit;
+               short getunit, getteam;
                int getkills, getdeaths, getsalvage;
                vector<int> gethp(numbodyparts);
                int getping;
@@ -549,6 +549,7 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                while (oppnum != 0)
                {
+                  get >> getteam;
                   get >> getunit;
                   get >> getkills;
                   get >> getdeaths;
@@ -560,6 +561,7 @@ int NetListen(void* dummy)
                   get >> getsalvage;
                   if (oppnum < player.size())
                   {
+                     player[oppnum].team = getteam;
                      player[oppnum].unit = getunit;
                      player[oppnum].kills = getkills;
                      player[oppnum].deaths = getdeaths;
