@@ -763,6 +763,7 @@ void GetMap(string fn)
    RenderObjects();
    RenderWater();
    console.Parse("set impdistmulti " + ToString(saveidm), false);
+   staticdrawdist = false;
    
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
