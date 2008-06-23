@@ -427,63 +427,6 @@ int NetListen(void* dummy)
                   get >> oppnum;
                }
                
-               // Get particles from server
-               unsigned long partnum;
-               get >> partnum;
-               
-               while (partnum != 0)
-               {
-                  unsigned long playerid, playernum;
-                  Vector3 getdir, getpos, getrots;
-                  float getvel, getacc, getweight, getrad;
-                  bool getexp;
-                  int weapid;
-                  
-                  get >> weapid;
-                  get >> playernum;
-                  get >> playerid;
-                  get >> getdir.x >> getdir.y >> getdir.z;
-                  get >> getpos.x >> getpos.y >> getpos.z;
-                  get >> getrots.x >> getrots.y >> getrots.z;
-                  get >> getvel;
-                  get >> getacc;
-                  get >> getweight;
-                  get >> getrad;
-                  get >> getexp;
-                  
-                  //cout << "Received particle " << partnum << " from ";
-                  //cout << playernum << endl;
-                  // Only add the particle if we don't already have it
-                  if ((partids.find(partnum) == partids.end()))
-                  {
-                     Weapon dummy(weapid);
-                     IniReader tempreader("models/" + dummy.ModelFile() + "/base");
-                     Mesh tempmesh(tempreader, resman);
-                     tempmesh.Rotate(getrots);
-                     Particle temppart(tempmesh);
-                     temppart.playerid = playerid;
-                     temppart.dir = getdir;
-                     temppart.pos = getpos;
-                     temppart.rots = getrots;
-                     temppart.velocity = getvel;
-                     temppart.accel = getacc;
-                     temppart.weight = getweight;
-                     temppart.radius = getrad;
-                     temppart.explode = getexp;
-                     
-                     temppart.lasttick = SDL_GetTicks();
-                     temppart.id = partnum;
-                     temppart.playerid = partnum;
-                     temppart.playernum = playernum;
-                     temppart.unsent = false;  // Actually meaningless on client
-                     temppart.collide = true;
-                           
-                     partids.insert(partnum);
-                     particles.push_back(temppart);
-                  }
-                  get >> partnum;
-               }
-               
                // Freak out if we get a packet whose checksum isn't right
                unsigned long value = 0;
                for (int i = 0; i < debug.length(); ++i)
@@ -622,6 +565,45 @@ int NetListen(void* dummy)
             SDL_mutexP(netmutex);
             sendqueue.push_back(p);
             SDL_mutexV(netmutex);
+         }
+         else if (packettype == "s") // Shots
+         {
+            unsigned long id, weapid;
+            
+            get >> id;
+            if (partids.find(id) == partids.end())
+            {
+               partids.insert(id);
+               get >> weapid;
+               Weapon dummy(weapid);
+               IniReader tempreader("models/" + dummy.ModelFile() + "/base");
+               Mesh tempmesh(tempreader, resman);
+               Particle temppart(tempmesh);
+               temppart.id = id;
+               temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
+               get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
+               get >> temppart.dir.x >> temppart.dir.y >> temppart.dir.z;
+               get >> temppart.playernum;
+               temppart.velocity = dummy.Velocity();
+               temppart.accel = dummy.Acceleration();
+               temppart.weight = dummy.ProjectileWeight();
+               temppart.radius = dummy.Radius();
+               temppart.explode = dummy.Explode();
+               temppart.collide = true;
+               temppart.lasttick = SDL_GetTicks();
+               
+               // Add tracer if necessary
+               if (dummy.Tracer() != "")
+               {
+                  tempreader = IniReader("models/" + dummy.Tracer() + "/base");
+                  temppart.tracer = MeshPtr(new Mesh(tempreader, resman));
+                  temppart.tracertime = dummy.TracerTime();
+               }
+               SDL_mutexP(clientmutex);
+               particles.push_back(temppart);
+               SDL_mutexV(clientmutex);
+            }
+            Ack(packetnum);
          }
          else if (packettype == "i")  // Server info
          {

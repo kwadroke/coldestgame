@@ -39,6 +39,7 @@ void SendKill(int);
 void RemoveTeam(int);
 void SendSyncPacket(PlayerData&);
 void SendGameOver(PlayerData&, int);
+void SendShot(const Particle&);
 string AddressToDD(Uint32);
 void LoadMapList();
 
@@ -533,6 +534,7 @@ int ServerListen()
          {
             get >> oppnum;
             SDL_mutexP(servermutex);
+            serverplayers[oppnum].spawned = false;
             SendKill(oppnum);
             Packet response(servoutpack, &servoutsock, &inpack->address);
             response << "A\n";
@@ -638,32 +640,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
             }
          }
          temp << 0 << eol; // Indicates end of player data
-         
-         list<Particle>::iterator i;
-         for (i = servparticles.begin(); i != servparticles.end(); ++i)
-         {
-            if (i->unsent)
-            {
-               //cout << "Server sending particle " << i->id;
-               //cout << " from " << i->playernum << endl;
-               temp << i->id << eol;
-               temp << i->weapid << eol;
-               temp << i->playernum << eol;
-               temp << i->playerid << eol;
-               temp << i->dir.x << eol << i->dir.y << eol << i->dir.z << eol;
-               temp << i->pos.x << eol << i->pos.y << eol << i->pos.z << eol;
-               temp << i->rots.x << eol << i->rots.y << eol << i->rots.z << eol;
-               temp << i->velocity << eol;
-               temp << i->accel << eol;
-               temp << i->weight << eol;
-               temp << i->radius << eol;
-               temp << i->explode << eol;
-               i->senttimes++;
-               if (i->senttimes > 10)
-                  i->unsent = false;
-            }
-         }
-         temp << 0 << eol;
          
          SDL_mutexV(servermutex);
          
@@ -1001,7 +977,6 @@ void ServerUpdatePlayer(int i)
       GraphicMatrix m;
       m.rotatex(-serverplayers[i].pitch);
       m.rotatey(serverplayers[i].facing + serverplayers[i].rotation);
-      //m.rotatez(player[0].roll);
       dir.transform(m.members);
       Vector3 rot;
       rot.x = -serverplayers[i].pitch;
@@ -1029,11 +1004,12 @@ void ServerUpdatePlayer(int i)
       part.weapid = currplayerweapon.Id();
       part.damage = currplayerweapon.Damage();
       part.dmgrad = currplayerweapon.Splash();
-      part.unsent = true;
       part.rewind = serverplayers[i].ping;
       part.collide = true;
                
       servparticles.push_back(part);
+      
+      SendShot(part);
    }
 }
 
@@ -1214,6 +1190,28 @@ void SendGameOver(PlayerData& p, const int winner)
    pack << winner << eol;
    
    servqueue.push_back(pack);
+}
+
+
+void SendShot(const Particle& p)
+{
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected)
+      {
+         Packet pack(servoutpack, &servoutsock, &serverplayers[i].addr);
+         pack.ack = servsendpacketnum;
+         pack << "s\n";
+         pack << pack.ack << eol;
+         pack << p.id << eol;
+         pack << p.weapid << eol;
+         pack << p.pos.x << eol << p.pos.y << eol << p.pos.z << eol;
+         pack << p.dir.x << eol << p.dir.y << eol << p.dir.z << eol;
+         pack << p.playernum << eol;
+         
+         servqueue.push_back(pack);
+      }
+   }
 }
 
 

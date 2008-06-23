@@ -10,6 +10,7 @@
 #include "SDL_thread.h"
 
 using namespace std;
+using boost::shared_ptr;
 
 class Particle
 {
@@ -19,11 +20,8 @@ class Particle
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
       
-      bool unsent;
-      unsigned short senttimes;
       short playernum;
       unsigned long id;
-      unsigned long playerid;
       
       Vector3 dir;
       Vector3 pos;
@@ -44,8 +42,12 @@ class Particle
       bool expired;
       int weapid;
       
+      MeshPtr tracer;
+      Uint32 tracertime;
+      
    private:
       Timer t;
 };
+
 
 #endif

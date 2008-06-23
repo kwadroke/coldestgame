@@ -1282,6 +1282,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, const Vector3& campos,
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&), void (*Rewind)(int))
 {
+   list<Particle> newparts;
    IniReader empty("models/empty/base");
    int updint = console.GetInt("partupdateinterval");
    if (!HitHandler && partupd >= updint)
@@ -1312,6 +1313,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
          {
+            if (!HitHandler && j->tracer)
+            {
+               AddTracer(*j, oldpos);
+            }
             if (j->expired)
             {
                j = parts.erase(j);
@@ -1320,7 +1325,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             {
                if (!HitHandler)
                {
-                  j->mesh.LoadMaterials();
                   j->Render(particlemesh.get(), player[0].pos);
                }
                ++j;
@@ -1338,15 +1342,36 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                newpart.ttl = 150;
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 60);
                emitters.push_back(newemitter);
+               j->pos = hitpos;
+               AddTracer(*j, oldpos);
             }
             j = parts.erase(j);
          }
       }
       partupd = 0;
       if (!HitHandler)
+      {
          particlemesh->GenVbo();
+         particles.insert(particles.end(), newparts.begin(), newparts.end());
+      }
    }
    else ++partupd;
+}
+
+
+void AddTracer(const Particle& p, const Vector3& oldpos)
+{
+   Mesh newmesh(*p.tracer);
+   Vector3 move = p.pos - oldpos;
+   float msize = move.magnitude();
+   newmesh.ScaleZ(msize);
+   Vector3 rots = RotateBetweenVectors(Vector3(0, 0, -1), move);
+   newmesh.Rotate(rots);
+   newmesh.GenVbo();
+   Particle tracepart(newmesh);
+   tracepart.ttl = p.tracertime;
+   tracepart.pos = p.pos;
+   particles.push_back(tracepart);
 }
 
 

@@ -1,9 +1,9 @@
 Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
-Shininess 16
-Texture0 textures/diffuse.png
-Texture1 textures/normal.png
-Texture2 textures/specular.png
+Shininess 32
+Texture0 textures/baremetal.png
+Texture1 textures/baremetalnorm.png
+Texture2 textures/baremetalspec.png
 Shader shaders/bump
 CullFace 0
