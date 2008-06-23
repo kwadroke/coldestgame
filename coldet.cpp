@@ -1031,6 +1031,7 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
    for (Meshlist::iterator i = ml.begin(); i != ml.end(); ++i)
    {
       if (i->dynamic && i->collide)
+      //if (i->collide)
       {
          appto.push_back(&(*i));
       }
@@ -1342,8 +1343,12 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                newpart.ttl = 150;
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 60);
                emitters.push_back(newemitter);
-               j->pos = hitpos;
-               AddTracer(*j, oldpos);
+               if (j->tracer)
+               {
+                  j->pos = hitpos;
+                  hitpos.print();
+                  AddTracer(*j, oldpos);
+               }
             }
             j = parts.erase(j);
          }
@@ -1377,6 +1382,7 @@ void AddTracer(const Particle& p, const Vector3& oldpos)
 
 float GetTerrainHeight(const float x, const float y)
 {
+   if ((x < 0 || x > mapwidth) || y < 0 || y > mapheight) return 0.f;
    int xindex = (int)floor(x / (float)tilesize);
    int yindex = (int)floor(y / (float)tilesize);
    

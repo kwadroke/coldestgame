@@ -395,14 +395,14 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    }
    else if (!side && seg < locnumsegs)  // This branch, next segment
       GenBranch(m, lev, seg + 1, newpts, true, 0);
-   else if (side && side < locnumsegs)
+   else if (side && side < locnumsegs)  // Side branch next segment (?)
       GenBranch(m, lev, seg, newpts, true, side + 1);
    if (continuebranch && seg >= locnumsegs)  // Continue, probably pretty useless
       GenBranch(m, lev + 1, 0, newpts, true, 0);
 }
 
 
-// Reads tree parameters from the designated stringstream
+// Reads tree parameters from the designated IniReader
 void ProceduralTree::ReadParams(const IniReader &get)
 {
    get.Read(numlevels, "numlevels");

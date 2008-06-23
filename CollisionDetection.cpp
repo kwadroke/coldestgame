@@ -37,10 +37,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                                            Vector3& hitpos, vector<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
-   Vector3 temp;
+   Vector3 temp, temphitpos;
    Vector3 midpoint = (oldpos + newpos) / 2.f;
    float maxdim, tempdim;
    int adjusted = 0;
+   // 10e38 is near the maximum representable value for a single precision float
+   hitpos = Vector3(10e38f, 10e38f, 10e38f);
    
    //cout << "Checking " << objs.size() << endl;
    
@@ -56,17 +58,18 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          {
             if (currtri.maxdim < 0) currtri.CalcMaxDim();
             
-            float checkrad = currtri.maxdim + radius;
             float localrad = radius + currtri.radmod;
+            float checkrad = currtri.maxdim + localrad;
             
-            if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
+            if (DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad)
             {
                temp = adjust;
-               adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad);
+               adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad, temphitpos);
                
                if (adjust.distance2(temp) > .00001)
                {
-                  hitpos = newpos;
+                  if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
+                     hitpos = temphitpos;
                   adjusted++;
                   if (retobjs)
                      retobjs->push_back(current);
@@ -98,7 +101,11 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       Vector3 move;
       if (CrossesPlane(oldpos, newpos, norm, d, denominator, move))  // Crossed the plane
       {
-         hitpos = newpos;
+         // Note that this is most likely bogus for fast moving things, but since it looks fine (better even)
+         // to have weapon tracers disappear off into the distance rather than explode against the bounding
+         // box, that's okay.
+         if (oldpos.distance2(newpos) < oldpos.distance2(hitpos))
+            hitpos = newpos;
          float endside = norm.dot(newpos) + d;
          adjust += norm * -endside;// * 1.05f;
          adjusted++;
@@ -144,7 +151,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // These aren't useful for player movement though so we shouldn't do them in that case.
    
    // TODO: This doesn't work well.  Need to pass in a parameter to indicate when we want this done.
-   if (0)//oldpos.distance2(newpos) > radius * radius * 9)
+   if (oldpos.distance2(newpos) > radius * radius * 9)
    {
       // Do another edge check that checks the entire movement path, not just the ending position.
       // This is necessary because projectiles may move significantly larger distances than their
@@ -235,7 +242,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 
 
 // May want to precalculate normals where we can to speed things up
-Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector3& pos, const Vector3& pos1, const float& radius, bool debug)
+Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector3& pos, const Vector3& pos1,
+      const float& radius, Vector3& hitpos, bool debug)
 {
    Vector3vec v(3);
    for (int i = 0; i < 3; ++i)
@@ -308,7 +316,10 @@ Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector
    {
       // The following line has to be here because CrossesPlane does not have access to
       // radius, nor should it IMHO
-      if (x > move.magnitude() + radius || x < -radius) return Vector3();
+      if (x > move.magnitude() + radius || x < -radius)
+      {
+         return Vector3();
+      }
       // Determine whether we're on the poly
       float angle = 0.f;
       bool forcehit = false;
@@ -331,7 +342,8 @@ Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector
       if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
       {
          float endside = norm.dot(pos1) + d;
-         adjust = norm * -endside;// * 1.01f;
+         adjust = norm * -endside;
+         hitpos = intpoint;
          return adjust;
       }
    }
@@ -490,6 +502,14 @@ float CollisionDetection::DistanceBetweenLines(const Vector3& start, const Vecto
    p = start + dir * j;
    p1 = start1 + dir1 * k;
    return p.distance(p1);
+}
+
+
+// From http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
+float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, const Vector3& start, const Vector3& end)
+{
+   if (start.distance2(end) < 1e-5f) return 0.f;
+   return ((end - start).cross(start - point)).magnitude() / (end - start).magnitude();
 }
 
 
