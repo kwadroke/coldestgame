@@ -126,7 +126,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    GraphicMatrix m;
    
    anglex = angley = anglez = 0;
-   if (seg == 0 && lev != 0 && side != 1)
+   if (seg == 0 && lev != 0 && !side) // Angle of new normal branch
    {
       anglex = random.Random(minangle, maxangle);
       if (random.Random(0, 1) > .5) anglex *= -1;
@@ -134,19 +134,19 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       anglez = random.Random(minangle, maxangle);
       if (random.Random(0, 1) > .5) anglez *= -1;
    }
-   else if (side == 1)
+   else if (side == 1) // Angle of new side branch
    {
       anglex = 90 + random.Random(minsidebranchangle, maxsidebranchangle);
       angley = random.Random(0, 360);
       anglez = 0;
    }
-   else if (lev != 0)
+   else if (lev != 0) // Continued angle of current branch
    {
       anglex = random.Random(-maxbranchangle, maxbranchangle);
       angley = 0;
       anglez = random.Random(-maxbranchangle, maxbranchangle);
    }
-   else
+   else // Trunk angle
    {
       anglex = random.Random(-maxtrunkangle, maxtrunkangle);
       angley = 0;
@@ -285,28 +285,28 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
                   {
                      case 0:
                         m.translate(-leafsize + (leafsize * 2.f * float(x + leafsegs / 2) / float(leafsegs)), 
-                                     leafheight * float(y + 1 + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     -leafsize + (leafsize * 2.f * float(y + 1 + leafsegs / 2) / float(leafsegs)), 
                                     radius + curveoffset2);
                         newvert->texcoords[0][0] = 1.f - float(x + leafsegs / 2) / float(leafsegs);
                         newvert->texcoords[0][1] = 1.f - float(y + 1 + leafsegs / 2) / float(leafsegs);
                         break;
                      case 1:
                         m.translate(-leafsize + (leafsize * 2.f * float(x + leafsegs / 2) / float(leafsegs)), 
-                                     leafheight * float(y + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     -leafsize + (leafsize * 2.f * float(y + leafsegs / 2) / float(leafsegs)), 
                                      radius + curveoffset);
                         newvert->texcoords[0][0] = 1.f - float(x + leafsegs / 2) / float(leafsegs);
                         newvert->texcoords[0][1] = 1.f - float(y + leafsegs / 2) / float(leafsegs);
                         break;
                      case 2:
                         m.translate(-leafsize + (leafsize * 2.f * float(x + 1 + leafsegs / 2) / float(leafsegs)), 
-                                     leafheight * float(y + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     -leafsize + (leafsize * 2.f * float(y + leafsegs / 2) / float(leafsegs)), 
                                      radius + curveoffset1);
                         newvert->texcoords[0][0] = 1.f - float(x + 1 + leafsegs / 2) / float(leafsegs);
                         newvert->texcoords[0][1] = 1.f - float(y + leafsegs / 2) / float(leafsegs);
                         break;
                      case 3:
                         m.translate(-leafsize + (leafsize * 2.f * float(x + 1 + leafsegs / 2) / float(leafsegs)), 
-                                     leafheight * float(y + 1 + leafsegs / 2) / float(leafsegs) - overlap, 
+                                     -leafsize + (leafsize * 2.f * float(y + 1 + leafsegs / 2) / float(leafsegs)), 
                                      radius + curveoffset3);
                         newvert->texcoords[0][0] = 1.f - float(x + 1 + leafsegs / 2) / float(leafsegs);
                         newvert->texcoords[0][1] = 1.f - float(y + 1 + leafsegs / 2) / float(leafsegs);
