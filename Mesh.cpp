@@ -693,6 +693,14 @@ void Mesh::Scale(const float& sval)
 }
 
 
+void Mesh::ScaleZ(const float& sval)
+{
+   for (size_t i = 0; i < frameroot.size(); ++i)
+      frameroot[i]->ScaleZ(sval);
+   ResetTriMaxDims();
+}
+
+
 // The insertion happens conceptually, but m remains a separate Mesh
 void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {

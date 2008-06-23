@@ -25,6 +25,7 @@ class MeshNode
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void Scale(const float&);
+      void ScaleZ(const float&);
       
       int id, parentid;
       bool facing;

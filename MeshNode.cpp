@@ -37,7 +37,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
       Vector3 start = -norm; // Initial view direction
       Vector3 facerot, currpos;
       
-      // Find the current position - note that this duplicates code, but with facing polygons
+      // Find the current position - note that this duplicates code, but with facing containers
       // it is necessary to do this twice so there's not a good way around that
       GraphicMatrix facem;
       facem.translate(interptrans);
@@ -46,22 +46,10 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
       currpos.transform(facem);
       dir = campos - currpos;
       
-      dir.y = 0;
-      dir.normalize();
-      facerot.y = acos(start.dot(dir)) * 180.f / 3.14159265;
-      if (start.cross(dir).y >= 0)
-         facerot.y *= -1;
-      dir = campos - currpos;
-      dir.normalize();
-      GraphicMatrix rotm;
-      rotm.rotatey(facerot.y);
-      start.transform(rotm);
-      facerot.x = acos(start.dot(dir)) * 180.f / 3.14159265;
-      if (dir.y >= 0)
-         facerot.x *= -1;
+      facerot = RotateBetweenVectors(start, dir);
       
       m.rotatex(facerot.x);
-      m.rotatey(facerot.y + 180.f);
+      m.rotatey(facerot.y);
       m.translate(interptrans);
    }
 
@@ -132,5 +120,20 @@ void MeshNode::Scale(const float& sval)
       children[i]->Scale(sval);
    }
 }
+
+
+void MeshNode::ScaleZ(const float& sval)
+{
+   for (size_t i = 0; i < vertices.size(); ++i)
+   {
+      vertices[i]->pos.z *= sval;
+   }
+   trans.z *= sval;
+   for (int i = 0; i < children.size(); ++i)
+   {
+      children[i]->ScaleZ(sval);
+   }
+}
+
 
 

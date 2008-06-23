@@ -3,6 +3,8 @@
 
 #include <string>
 #include <sstream>
+#include "Vector3.h"
+#include "GraphicMatrix.h"
 
 using std::string;
 using std::stringstream;
@@ -11,6 +13,7 @@ using std::ostringstream;
 string PadNum(int, int);
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
+Vector3 RotateBetweenVectors(Vector3, const Vector3&);
 int gettid();
 int bitcount();
 

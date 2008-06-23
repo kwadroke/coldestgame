@@ -2,7 +2,7 @@
 
 Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), weight(0), radius(10.f), velocity(1.f), acceleration(1.f),
                splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50), explode(true), modelfile("projectile"),
-               name("None")
+               name("None"), tracerfile(""), tracertime(10000)
 {
    switch (newid)
    {
@@ -51,8 +51,10 @@ void Weapon::LoadFromFile(const string& file)
    read.Read(heat, "Heat");
    read.Read(reloadtime, "ReloadTime");
    read.Read(explode, "Explode");
-   read.Read(modelfile, "Model");
+   read.ReadLine(modelfile, "Model");
    read.ReadLine(name, "Name");
+   read.ReadLine(tracerfile, "Tracer");
+   read.Read(tracertime, "TracerTime");
 }
 
 

@@ -50,6 +50,27 @@ float Random(float min, float max)
 }
 
 
+Vector3 RotateBetweenVectors(Vector3 start, const Vector3& end)
+{
+   Vector3 ret;
+   Vector3 dir = end;
+   dir.y = 0;
+   dir.normalize();
+   ret.y = acos(start.dot(dir)) * 180.f / 3.14159265f;
+   if (start.cross(dir).y >= 0)
+      ret.y *= -1;
+   dir = end;
+   dir.normalize();
+   GraphicMatrix rotm;
+   rotm.rotatey(ret.y);
+   start.transform(rotm);
+   ret.x = acos(start.dot(dir)) * 180.f / 3.14159265f;
+   if (dir.y <= 0)
+      ret.x *= -1;
+   return ret;
+}
+
+
 // This maybe shouldn't return an int...
 int gettid()
 {
