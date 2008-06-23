@@ -1,5 +1,6 @@
 ReloadTime 300
-Velocity 20
+Velocity 1000
+Radius .01
 ProjectileWeight 0
 Weight 10
 Name Laser

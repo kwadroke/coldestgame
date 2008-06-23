@@ -63,7 +63,7 @@ Node
       Name Team1Spawn
    Node
       Team 2
-      Location 250 250 250
+      Location 650 250 1000
       Name Team2Spawn
 
 Node
