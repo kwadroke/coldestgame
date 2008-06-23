@@ -174,7 +174,7 @@ Node
    Node
       Type proctree
       Materials materials/bark materials/leaves
-      seed 13
+      seed 133
       numlevels 2
       numslices 3
       numbranches0 7
