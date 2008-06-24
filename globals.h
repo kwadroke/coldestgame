@@ -52,6 +52,7 @@ extern Meshlist meshes;
 extern bool serverhasmap;
 extern Console console;
 extern int winningteam;
+extern vector<BodyParts> weaponslots;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

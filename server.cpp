@@ -964,7 +964,7 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Shots fired!
-   Weapon& currplayerweapon = serverplayers[i].weapons[serverplayers[i].currweapon];
+   Weapon& currplayerweapon = serverplayers[i].weapons[weaponslots[serverplayers[i].currweapon]];
    if (serverplayers[i].leftclick && 
        (SDL_GetTicks() - serverplayers[i].lastfiretick >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0))
@@ -977,10 +977,7 @@ void ServerUpdatePlayer(int i)
       GraphicMatrix m;
       m.rotatex(-serverplayers[i].pitch);
       m.rotatey(serverplayers[i].facing + serverplayers[i].rotation);
-      dir.transform(m.members);
-      Vector3 rot;
-      rot.x = -serverplayers[i].pitch;
-      rot.y = serverplayers[i].facing + serverplayers[i].rotation;
+      dir.transform(m);
                
       float vel = currplayerweapon.Velocity();
       float acc = currplayerweapon.Acceleration();
@@ -995,11 +992,9 @@ void ServerUpdatePlayer(int i)
          startpos = serverplayers[i].clientpos;
       IniReader readweapon("models/" + currplayerweapon.ModelFile() + "/base");
       Mesh weaponmesh(readweapon, resman);
-      weaponmesh.Rotate(rot);
       Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
-      part.pos += part.dir * 50;
+      part.pos += part.dir * 10.f;
       part.origin = part.pos;
-      part.rots = rot;
       part.playernum = i;
       part.weapid = currplayerweapon.Id();
       part.damage = currplayerweapon.Damage();
@@ -1008,6 +1003,20 @@ void ServerUpdatePlayer(int i)
       part.collide = true;
                
       servparticles.push_back(part);
+      
+      Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
+      Vector3 rawoffset = offset;
+      offset.transform(m);
+      part.pos += offset;
+      
+      Vector3 actualaim = Vector3(0, 0, -1000);
+      Vector3 difference = actualaim + rawoffset;
+      Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
+      m.identity();
+      m.rotatex(-serverplayers[i].pitch - rot.x);
+      m.rotatey(serverplayers[i].facing + serverplayers[i].rotation + rot.y);
+      part.dir = Vector3(0, 0, -1);
+      part.dir.transform(m);
       
       SendShot(part);
    }
