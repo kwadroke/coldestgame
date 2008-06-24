@@ -26,7 +26,7 @@ typedef vector<unsigned short> ushortvec;
 typedef vector<Vector3> Vector3vec;
 typedef vector<GLubyte> GLubytevec;
 
-struct UnitData
+struct UnitData // This should probably be a class like Weapon and Item, but meh
 {
    int weight;
    string file;
@@ -34,6 +34,7 @@ struct UnitData
    float acceleration;
    float maxspeed;
    float size;
+   Vector3 weaponoffset[numbodyparts];
 };
 
 

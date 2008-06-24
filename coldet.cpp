@@ -105,6 +105,9 @@ void InitGlobals()
    spawnschanged = true;
    winningteam = 0;
    staticdrawdist = false;
+   weaponslots.push_back(Torso);
+   weaponslots.push_back(LArm);
+   weaponslots.push_back(RArm);
    
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
@@ -166,6 +169,10 @@ void InitUnits()
    dummy.maxspeed = 1.f;
    dummy.size = 25.f;
    dummy.weight = 50;
+   dummy.weaponoffset[Legs] = Vector3();
+   dummy.weaponoffset[Torso] = Vector3(0, -10, 0);
+   dummy.weaponoffset[LArm] = Vector3(-15, 0, 0);
+   dummy.weaponoffset[RArm] = Vector3(15, 0, 0);
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
    
@@ -789,11 +796,11 @@ void GameEventHandler(SDL_Event &event)
          }
          else if (event.button.button == SDL_BUTTON_WHEELDOWN)
          {
-            player[0].currweapon = (player[0].currweapon + 1) % numbodyparts;
+            player[0].currweapon = (player[0].currweapon + 1) % weaponslots.size();
          }
          else if (event.button.button == SDL_BUTTON_WHEELUP)
          {
-            player[0].currweapon = player[0].currweapon == 0 ? numbodyparts - 1 : player[0].currweapon - 1;
+            player[0].currweapon = player[0].currweapon == 0 ? weaponslots.size() - 1 : player[0].currweapon - 1;
          }
          else if (event.button.button == SDL_BUTTON_MIDDLE)
          {
@@ -1303,8 +1310,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          oldpos = j->Update();
          if (j->collide)
          {
-            vector<Mesh*> check = kt.getmeshes(oldpos, j->pos, j->radius);
-            AppendDynamicMeshes(check, ml);
+            vector<Mesh*> check = GetMeshesWithoutPlayer(&player[j->playernum], ml, kt, oldpos, j->pos, j->radius);
             if (Rewind)
                Rewind(j->rewind);
             partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, &hitmeshes);
@@ -1346,7 +1352,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                if (j->tracer)
                {
                   j->pos = hitpos;
-                  hitpos.print();
                   AddTracer(*j, oldpos);
                }
             }

@@ -26,7 +26,6 @@ class Particle
       Vector3 dir;
       Vector3 pos;
       Vector3 origin;
-      Vector3 rots;
       float velocity;
       float accel;
       float weight;

@@ -54,6 +54,7 @@ Vector3 RotateBetweenVectors(Vector3 start, const Vector3& end)
 {
    Vector3 ret;
    Vector3 dir = end;
+   start.normalize();
    dir.y = 0;
    dir.normalize();
    ret.y = acos(start.dot(dir)) * 180.f / 3.14159265f;

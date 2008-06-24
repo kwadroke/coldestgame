@@ -25,7 +25,7 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(1), spawnpacketnum(
    lastfiretick = 0;
    leftclick = rightclick = run = false;
    meshes = &ml;
-   currweapon = Torso;
+   currweapon = 0;
    ping = 0;
    temperature = 0.f;
    fallvelocity = 0.f;

@@ -26,3 +26,4 @@ bool initialized;
 bool serverhasmap;
 Console console;
 int winningteam;
+vector<BodyParts> weaponslots;

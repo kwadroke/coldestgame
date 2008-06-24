@@ -841,13 +841,13 @@ void RenderHud()
    torsoweaponlabel->text = localplayer.weapons[Torso].Name();
    larmweaponlabel->text = localplayer.weapons[LArm].Name();
    rarmweaponlabel->text = localplayer.weapons[RArm].Name();
-   if (localplayer.currweapon == Torso)
+   if (weaponslots[localplayer.currweapon] == Torso)
       torsoselectedlabel->visible = true;
    else torsoselectedlabel->visible = false;
-   if (localplayer.currweapon == LArm)
+   if (weaponslots[localplayer.currweapon] == LArm)
       larmselectedlabel->visible = true;
    else larmselectedlabel->visible = false;
-   if (localplayer.currweapon == RArm)
+   if (weaponslots[localplayer.currweapon] == RArm)
       rarmselectedlabel->visible = true;
    else rarmselectedlabel->visible = false;
    
