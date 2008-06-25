@@ -88,16 +88,27 @@ void Repaint()
       }
       
       // Set the camera's location and orientation
+      Vector3 viewoff;
       if (!guncam)
       {
-         Vector3 viewoff = units[localplayer.unit].viewoffset;
+         viewoff = units[localplayer.unit].viewoffset;
          gluLookAt(viewoff.x, viewoff.y, viewoff.z + .01f, viewoff.x, viewoff.y, viewoff.z, 0, 1, 0);
       }
       else
       {
-         Vector3 viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
+         viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
          gluLookAt(viewoff.x, viewoff.y + 1.5f, viewoff.z + .01f, viewoff.x, viewoff.y + 1.5f, viewoff.z, 0, 1, 0);
       }
+      
+      Vector3 rawoffset = viewoff;
+      GraphicMatrix viewm;
+      viewm.rotatex(localplayer.pitch);
+      viewm.rotatey(localplayer.facing + localplayer.rotation);
+      viewoff.transform(viewm);
+      
+      Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
+      Vector3 difference = actualaim + rawoffset;
+      Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
          
       // For debugging third person view
       if (console.GetBool("thirdperson"))
@@ -106,8 +117,8 @@ void Repaint()
          glPushMatrix();
       }
       
-      glRotatef(localplayer.pitch, 1, 0, 0);
-      glRotatef(localplayer.facing + localplayer.rotation, 0, 1, 0);
+      glRotatef(localplayer.pitch + rot.x, 1, 0, 0);
+      glRotatef(localplayer.facing + localplayer.rotation + rot.y, 0, 1, 0);
       glRotatef(localplayer.roll, 0, 0, 1);
    
       RenderSkybox();
@@ -117,6 +128,7 @@ void Repaint()
       /* This has to be set here instead of in RenderObjects because RenderObjects
          is called when shadowing as well, and that needs a different frustum setup.
       */
+      localplayer.pos += viewoff;
       Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
       kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist"), fov, aspect);
       
@@ -165,7 +177,7 @@ void Repaint()
       
       RenderObjects();
       
-      if (localplayer.pos.y > 0)
+      if ((localplayer.pos - viewoff).y > 0)
       {
          UpdateNoise();
          RenderWater();
@@ -659,6 +671,7 @@ void RenderClouds()
    {
       gluPerspective(console.GetFloat("fov"), aspect, 100, 10000);
    }
+   else
    {
       gluPerspective(console.GetFloat("fov") / console.GetFloat("zoomfactor"), aspect, 100, 10000);
    }

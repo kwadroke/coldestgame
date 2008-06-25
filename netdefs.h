@@ -28,6 +28,9 @@ extern vector<unsigned short> newchatplayers;
 extern short changeteam;
 extern bool useitem;
 extern vector<Meshlist::iterator> deletemeshes;
+extern set<unsigned long> itemsreceived;
+extern set<unsigned long> hitsreceived;
+extern unsigned long lastsyncpacket;
 
 void HandleAck(unsigned long);
 

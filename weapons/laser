@@ -7,4 +7,4 @@ Name Laser
 Heat 25
 Model empty
 Tracer laser
-TracerTime 20000
+TracerTime 100

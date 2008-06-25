@@ -87,6 +87,7 @@ void InitGlobals()
    console.Parse("set splashlevels 3", false);
    console.Parse("set grassdrawdist 1000", false);
    console.Parse("set zoomfactor 2", false);
+   console.Parse("set weaponfocus 1000", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -1350,12 +1351,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                HitHandler(*j, hitmeshes, hitpos);
             else // This should probably be triggered by the server, but we'll see
             {
-               IniReader mread("models/projectile/base");
-               Mesh partmesh(mread, resman);
-               Particle newpart(0, Vector3(), Vector3(), .3f, .9f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
-               newpart.ttl = 150;
-               ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 60);
-               emitters.push_back(newemitter);
                if (j->tracer)
                {
                   j->pos = hitpos;
