@@ -56,7 +56,7 @@ extern int fbostarts[3];
 extern int fbodims[3];
 extern float fps;
 extern float nearclip, aspect, impdistmulti, mapwidth, mapheight;
-extern bool staticdrawdist;
+extern bool staticdrawdist, guncam;
 extern GLuint noisetex;
 extern vector<GLuint> textures;
 extern FBO shadowmapfbo, worldshadowmapfbo, cloudfbo, reflectionfbo, noisefbo, minimapfbo;

@@ -16,6 +16,8 @@ void Repaint()
    static Timer t, ts;
    static bool updateclouds = true;
    float fov = console.GetFloat("fov");
+   if (guncam)
+      fov /= console.GetFloat("zoomfactor");
    bool shadows = console.GetBool("shadows");
    t.start();
    
@@ -86,7 +88,16 @@ void Repaint()
       }
       
       // Set the camera's location and orientation
-      //gluLookAt(0, localplayer.size / 2.f, .01, 0, localplayer.size / 2.f, 0, 0, 1, 0);
+      if (!guncam)
+      {
+         Vector3 viewoff = units[localplayer.unit].viewoffset;
+         gluLookAt(viewoff.x, viewoff.y, viewoff.z + .01f, viewoff.x, viewoff.y, viewoff.z, 0, 1, 0);
+      }
+      else
+      {
+         Vector3 viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
+         gluLookAt(viewoff.x, viewoff.y + 1.5f, viewoff.z + .01f, viewoff.x, viewoff.y + 1.5f, viewoff.z, 0, 1, 0);
+      }
          
       // For debugging third person view
       if (console.GetBool("thirdperson"))
@@ -474,9 +485,11 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    lightproj = lights.GetProj(0, size);
    
    glMatrixMode(GL_PROJECTION);
+   glPushMatrix();
    glLoadMatrixf(lightproj);
    
    glMatrixMode(GL_MODELVIEW);
+   glPushMatrix();
    glLoadMatrixf(lightview);
    
    glShadeModel(GL_FLAT);
@@ -514,11 +527,13 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    glEnable(GL_LIGHTING);
    
    glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   gluPerspective(console.GetFloat("fov"), aspect, nearclip, console.GetFloat("viewdist"));
+   glPopMatrix();
+   //glLoadIdentity();
+   //gluPerspective(console.GetFloat("fov"), aspect, nearclip, console.GetFloat("viewdist"));
    
    glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+   glPopMatrix();
+   //glLoadIdentity();
    fbo.Unbind();
    
    // These calls don't need to be made for generating shadows, but it makes sure that they'll be
@@ -640,7 +655,13 @@ void RenderClouds()
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
-   gluPerspective(console.GetFloat("fov"), aspect, 100, 10000);
+   if (!guncam)
+   {
+      gluPerspective(console.GetFloat("fov"), aspect, 100, 10000);
+   }
+   {
+      gluPerspective(console.GetFloat("fov") / console.GetFloat("zoomfactor"), aspect, 100, 10000);
+   }
    glMatrixMode(GL_MODELVIEW);
    
    float height = 1000;

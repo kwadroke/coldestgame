@@ -13,7 +13,7 @@ int noiseres;
 float fps;
 float aspect;
 float mapwidth, mapheight;
-bool staticdrawdist;
+bool staticdrawdist, guncam;
 GLuint noisetex;
 vector<GLuint> textures;
 FBO worldshadowmapfbo, shadowmapfbo, cloudfbo, reflectionfbo, noisefbo, minimapfbo;

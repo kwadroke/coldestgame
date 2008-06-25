@@ -32,7 +32,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #endif
 {
 #ifdef LINUX
-   //system("ulimit -c unlimited");
+   //system("ulimit -c unlimited"); // This doesn't seem to work anyway:-(
 #endif
    //Debug();
    initialized = false;
@@ -57,7 +57,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 void InitGlobals()
 {
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
-   // Variables that can be set by the console
+   // Default cvars
    console.Parse("set screenwidth 640", false);
    console.Parse("set screenheight 480", false);
    console.Parse("set showfps 1", false);
@@ -86,6 +86,7 @@ void InitGlobals()
    console.Parse("set endgametime 10", false);
    console.Parse("set splashlevels 3", false);
    console.Parse("set grassdrawdist 1000", false);
+   console.Parse("set zoomfactor 2", false);
    
    // Variables that cannot be set from the console
    dummy.unit = UnitTest;
@@ -170,9 +171,10 @@ void InitUnits()
    dummy.size = 25.f;
    dummy.weight = 50;
    dummy.weaponoffset[Legs] = Vector3();
-   dummy.weaponoffset[Torso] = Vector3(0, -10, 0);
-   dummy.weaponoffset[LArm] = Vector3(-15, 0, 0);
-   dummy.weaponoffset[RArm] = Vector3(15, 0, 0);
+   dummy.weaponoffset[Torso] = Vector3(0, 0, 0);
+   dummy.weaponoffset[LArm] = Vector3(-25, 0, 0);
+   dummy.weaponoffset[RArm] = Vector3(25, 0, 0);
+   dummy.viewoffset = Vector3(0, 15, 0);
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
    
@@ -775,16 +777,17 @@ void GameEventHandler(SDL_Event &event)
          if ((event.motion.x != screenwidth / 2 || 
               event.motion.y != screenheight / 2) && !gui[consolegui]->visible)
          {
-            player[0].pitch += event.motion.yrel / 4.;
+            float zoomfactor = console.GetFloat("zoomfactor");
+            if (!guncam) 
+               zoomfactor = 1.f;
+            
+            player[0].pitch += event.motion.yrel / 4. / zoomfactor;
             if (player[0].pitch < -90) player[0].pitch = -90;
             if (player[0].pitch > 90) player[0].pitch = 90;
-            player[0].rotation += event.motion.xrel / 4.;
-            /*if (player[0].rotation < 0) player[0].rotation += 360;
-            if (player[0].rotation > 359) player[0].rotation -= 360;*/
+            
+            player[0].rotation += event.motion.xrel / 4. / zoomfactor;
             if (player[0].rotation < -90) player[0].rotation = -90;
             if (player[0].rotation > 90) player[0].rotation = 90;
-            if (!console.GetBool("quiet"))
-               cout << "Pitch: " << player[0].pitch << "  Rotation: " << player[0].rotation << "\n";
             SDL_WarpMouse(screenwidth / 2, screenheight / 2);
          }
          break;
@@ -805,6 +808,10 @@ void GameEventHandler(SDL_Event &event)
          else if (event.button.button == SDL_BUTTON_MIDDLE)
          {
             useitem = true;
+         }
+         else if (event.button.button == SDL_BUTTON_RIGHT)
+         {
+            guncam = !guncam;
          }
          break;
       case SDL_MOUSEBUTTONUP:
