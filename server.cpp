@@ -993,7 +993,6 @@ void ServerUpdatePlayer(int i)
       IniReader readweapon("models/" + currplayerweapon.ModelFile() + "/base");
       Mesh weaponmesh(readweapon, resman);
       Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
-      part.pos += part.dir * 10.f;
       part.origin = part.pos;
       part.playernum = i;
       part.weapid = currplayerweapon.Id();
@@ -1001,22 +1000,20 @@ void ServerUpdatePlayer(int i)
       part.dmgrad = currplayerweapon.Splash();
       part.rewind = serverplayers[i].ping;
       part.collide = true;
-               
-      servparticles.push_back(part);
       
       Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
-      Vector3 rawoffset = offset;
-      offset.transform(m);
       part.pos += offset;
       
       Vector3 actualaim = Vector3(0, 0, -1000);
-      Vector3 difference = actualaim + rawoffset;
+      Vector3 difference = actualaim + offset;
       Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
       m.identity();
       m.rotatex(-serverplayers[i].pitch - rot.x);
       m.rotatey(serverplayers[i].facing + serverplayers[i].rotation + rot.y);
       part.dir = Vector3(0, 0, -1);
       part.dir.transform(m);
+               
+      servparticles.push_back(part);
       
       SendShot(part);
    }
