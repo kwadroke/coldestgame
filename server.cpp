@@ -27,7 +27,7 @@ int ServerSend(void*);
 int ServerListen();
 void ServerLoadMap();
 void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
-void SplashDamage(const Vector3&, Particle&);
+void SplashDamage(const Vector3&, const float, const float, const int);
 void ApplyDamage(Mesh*, const float, const int);
 void ServerUpdatePlayer(int);
 void Rewind(int);
@@ -40,6 +40,7 @@ void RemoveTeam(int);
 void SendSyncPacket(PlayerData&);
 void SendGameOver(PlayerData&, int);
 void SendShot(const Particle&);
+void SendHit(const Vector3&);
 string AddressToDD(Uint32);
 void LoadMapList();
 
@@ -51,6 +52,7 @@ SDL_mutex* servermutex;
 IDGen servsendpacketnum;
 IDGen nextservparticleid;
 IDGen serveritemid;
+IDGen nexthitid;
 unsigned short servertickrate;
 string currentmap;
 string servername;
@@ -839,16 +841,21 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
       }
    }
    
-   ApplyDamage(curr, p.damage, p.playernum);
+   SendHit(hitpos);
    
-   if (!floatzero(p.dmgrad))
+   
+   if (floatzero(p.dmgrad))
    {
-      SplashDamage(hitpos, p);
+      ApplyDamage(curr, p.damage, p.playernum);
+   }
+   else
+   {
+      SplashDamage(hitpos, p.damage, p.dmgrad, p.playernum);
    }
 }
 
 
-void SplashDamage(const Vector3& hitpos, Particle& p)
+void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playernum)
 {
    vector<Mesh*> hitmeshes;
    vector<Mesh*> check;
@@ -858,16 +865,16 @@ void SplashDamage(const Vector3& hitpos, Particle& p)
    for (size_t i = 0; i < numlevels; ++i)
    {
       // Have to reget the meshes each time or we can end up checking removed ones
-      check = serverkdtree.getmeshes(hitpos, hitpos, p.radius);
+      check = serverkdtree.getmeshes(hitpos, hitpos, dmgrad);
       AppendDynamicMeshes(check, servermeshes);
       
-      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, p.dmgrad * (float(i + 1) / float(numlevels)), check, dummy, &hitmeshes);
+      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, &hitmeshes);
       sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
       
       for (vector<Mesh*>::iterator j = hitmeshes.begin(); j != hitmeshes.end(); ++j)
       {
-         ApplyDamage(*j, p.damage / float(numlevels), p.playernum);
+         ApplyDamage(*j, damage / float(numlevels), playernum);
       }
    }
 }
@@ -1002,17 +1009,20 @@ void ServerUpdatePlayer(int i)
       part.collide = true;
       
       Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
+      Vector3 rawoffset = offset;
+      offset.transform(m);
       part.pos += offset;
       
-      Vector3 actualaim = Vector3(0, 0, -1000);
-      Vector3 difference = actualaim + offset;
+      // Note: weaponfocus should actually be configurable per-player
+      Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
+      Vector3 difference = actualaim + rawoffset;
       Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
       m.identity();
       m.rotatex(-serverplayers[i].pitch - rot.x);
       m.rotatey(serverplayers[i].facing + serverplayers[i].rotation + rot.y);
       part.dir = Vector3(0, 0, -1);
       part.dir.transform(m);
-               
+      
       servparticles.push_back(part);
       
       SendShot(part);
@@ -1214,6 +1224,27 @@ void SendShot(const Particle& p)
          pack << p.pos.x << eol << p.pos.y << eol << p.pos.z << eol;
          pack << p.dir.x << eol << p.dir.y << eol << p.dir.z << eol;
          pack << p.playernum << eol;
+         
+         servqueue.push_back(pack);
+      }
+   }
+}
+
+
+void SendHit(const Vector3& hitpos)
+{
+   unsigned long hid = nexthitid;
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected)
+      {
+         Packet pack(servoutpack, &servoutsock, &serverplayers[i].addr);
+         pack.ack = servsendpacketnum;
+         pack << "h\n";
+         pack << pack.ack << eol;
+         pack << hid << eol;
+         pack << hitpos.x << eol << hitpos.y << eol << hitpos.z << eol;
+         pack << 0 << eol; // For future use
          
          servqueue.push_back(pack);
       }

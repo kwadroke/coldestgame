@@ -36,8 +36,6 @@ IPaddress addr;
 // netmutex protects both the send queue and the socket shared by the send and receive threads
 SDL_mutex* netmutex;
 bool socketopen;
-set<unsigned long> itemsreceived;
-unsigned long lastsyncpacket;
 
 // Gets split off as a separate thread to handle sending network packets
 int NetSend(void* dummy)
@@ -603,6 +601,31 @@ int NetListen(void* dummy)
                particles.push_back(temppart);
                SDL_mutexV(clientmutex);
             }
+            Ack(packetnum);
+         }
+         else if (packettype == "h")
+         {
+            Vector3 hitpos;
+            int type;
+            unsigned long id;
+            get >> id;
+            if (hitsreceived.find(id) == hitsreceived.end())
+            {
+               hitsreceived.insert(id);
+               get >> hitpos.x >> hitpos.y >> hitpos.z;
+               get >> type;
+               
+               // Eventually this should probably be determined by the type of projectile
+               IniReader mread("models/projectile/base");
+               Mesh partmesh(mread, resman);
+               Particle newpart(0, Vector3(), Vector3(), .3f, .9f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
+               newpart.ttl = 150;
+               ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 60);
+               SDL_mutexP(clientmutex);
+               emitters.push_back(newemitter);
+               SDL_mutexV(clientmutex);
+            }
+            
             Ack(packetnum);
          }
          else if (packettype == "i")  // Server info
