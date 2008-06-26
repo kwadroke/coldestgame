@@ -54,6 +54,8 @@ class PlayerData
       float temperature;
       string name;
       int salvage;
+      int powerdowntime;
+      float healaccum;
       
    private:
       Meshlist* meshes;

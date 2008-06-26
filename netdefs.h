@@ -33,5 +33,6 @@ extern set<unsigned long> hitsreceived;
 extern unsigned long lastsyncpacket;
 
 void HandleAck(unsigned long);
+void SendPowerdown();
 
 #endif
