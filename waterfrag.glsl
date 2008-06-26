@@ -18,9 +18,9 @@ void main()
    vec4 shiftamount1;
    vec2 offsets[4];
    offsets[0] = gl_TexCoord[1].st * vec2(3., 5.);
-   offsets[1] = gl_TexCoord[1].st * vec2(35., 45.);
-   offsets[2] = gl_TexCoord[1].st * vec2(95., 85.);
-   offsets[3] = gl_TexCoord[1].st * vec2(155., 165.);
+   offsets[1] = gl_TexCoord[1].st * vec2(25., 65.);
+   offsets[2] = gl_TexCoord[1].st * vec2(65., 125.);
+   offsets[3] = gl_TexCoord[1].st * vec2(105., 195.);
    for (int i = 0; i < 4; ++i)
       offsets[i] += vec2(0., time / 40000.);
    

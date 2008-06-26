@@ -43,6 +43,7 @@ void SendShot(const Particle&);
 void SendHit(const Vector3&);
 string AddressToDD(Uint32);
 void LoadMapList();
+void Ack(unsigned long acknum, UDPpacket* inpack);
 
 SDL_Thread* serversend;
 vector<PlayerData> serverplayers;
@@ -241,6 +242,9 @@ int ServerListen()
          Note: Having this blindly loop as long as there are packets could cause problems under
          extremely heavy network loads.  It remains to be seen whether that's actually an issue
          (or whether the server would be usable under such circumstances, loop or not)
+      
+         TODO: Can't trust the client to tell us which player they are.  Look up addresses in
+         serverplayers list.
       */
       while (SDLNet_UDP_Recv(insock, inpack))
       {
@@ -269,7 +273,7 @@ int ServerListen()
          {
             get >> oppnum;
             SDL_mutexP(servermutex);
-            if (oppnum < serverplayers.size() && (packetnum > serverplayers[oppnum].recpacketnum)) // Ignore out of order packets
+            if (oppnum < serverplayers.size() && (packetnum > serverplayers[oppnum].recpacketnum))  // Ignore out of order packets
             {
                serverplayers[oppnum].recpacketnum = packetnum;
                get >> oppx >> oppy >> oppz;
@@ -464,13 +468,8 @@ int ServerListen()
                   }
                }
             }
-            Packet response(servoutpack, &servoutsock, &inpack->address);
-            response << "A\n";
-            response << 0 << eol; // Or this for that matter (see duplicate line above)
-            response << packetnum << eol;
-            servqueue.push_back(response);
-            
             SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
          }
          else if (packettype == "A")
          {
@@ -525,12 +524,8 @@ int ServerListen()
                AddItem(serverplayers[oppnum].item, oppnum);
                serverplayers[oppnum].item.usesleft--;
             }
-            Packet response(servoutpack, &servoutsock, &inpack->address);
-            response << "A\n";
-            response << servsendpacketnum << eol;
-            response << packetnum << eol;
-            servqueue.push_back(response);
             SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
          }
          else if (packettype == "K")
          {
@@ -538,15 +533,12 @@ int ServerListen()
             SDL_mutexP(servermutex);
             serverplayers[oppnum].spawned = false;
             SendKill(oppnum);
-            Packet response(servoutpack, &servoutsock, &inpack->address);
-            response << "A\n";
-            response << 0 << eol;
-            response << packetnum << eol;
-            servqueue.push_back(response);
             SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
          }
          else if (packettype == "Y") // Client is ready to sync
          {
+            get >> oppnum;
             SDL_mutexP(servermutex);
             if (serverplayers[oppnum].needsync)
             {
@@ -556,6 +548,27 @@ int ServerListen()
                serverplayers[oppnum].needsync = false;
             }
             SDL_mutexV(servermutex);
+         }
+         else if (packettype == "P") // Powerdown - be careful, we also send this type as a ping packet
+         {
+            get >> oppnum;
+            SDL_mutexP(servermutex);
+            // Note: Theoretically this could cause someone to accidentally power down when they don't
+            // want to, but if their packets are delayed 5+ seconds then the game is probably not
+            // playable anyway.  I suppose a single packet could for some reason get delayed, but
+            // we'll see if that's actually a realistic problem.
+            if (!serverplayers[oppnum].powerdowntime)
+            {
+               serverplayers[oppnum].powerdowntime = 5000;
+               for (int i = 0; i < numbodyparts; ++i)
+               {
+                  serverplayers[oppnum].hp[i] += 75; // TODO: Needs to change based on unit
+                  if (serverplayers[oppnum].hp[i] > 100)
+                     serverplayers[oppnum].hp[i] = 100;
+               }
+            }
+            SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
          }
       }
       //t.stop();
@@ -637,8 +650,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                temp << serverplayers[i].moveleft << eol;
                temp << serverplayers[i].moveright << eol;
                temp << serverplayers[i].speed << eol;
-               temp << serverplayers[i].unit << eol;
-               temp << serverplayers[i].ping << eol;
+               temp << serverplayers[i].powerdowntime << eol; // This may not belong here
             }
          }
          temp << 0 << eol; // Indicates end of player data
@@ -890,7 +902,8 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum)
       {
          if (serverplayers[i].mesh[part] != servermeshes.end())
          {
-            if (curr == &(*serverplayers[i].mesh[part]) && serverplayers[i].team != serverplayers[playernum].team)
+            if (curr == &(*serverplayers[i].mesh[part]) &&
+                (serverplayers[i].team != serverplayers[playernum].team || i == playernum))
             {
                cout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage);
@@ -943,6 +956,38 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum)
 // Note: must be called from within mutex'd code
 void ServerUpdatePlayer(int i)
 {
+   // Cooling
+   float coolrate = .01f;
+   coolrate *= serverplayers[i].item.CoolMult();
+   if (serverplayers[i].pos.y < 0)
+      coolrate *= 1.5f;
+   Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
+   serverplayers[i].lastcoolingtick += ticks;
+   serverplayers[i].temperature -= ticks * coolrate;
+   if (serverplayers[i].temperature < 0)
+      serverplayers[i].temperature = 0;
+   
+   serverplayers[i].powerdowntime -= ticks; // Reuse lastcoolingtick
+   if (serverplayers[i].powerdowntime <= 0)
+   {
+      serverplayers[i].powerdowntime = 0;
+   }
+   
+   if (serverplayers[i].powerdowntime) return;
+   
+   serverplayers[i].healaccum += float(ticks) * .0005f;
+   if (serverplayers[i].healaccum > 1)
+   {
+      int addhp = int(serverplayers[i].healaccum);
+      serverplayers[i].healaccum -= addhp;
+      for (size_t j = 0; j < numbodyparts; ++j)
+      {
+         serverplayers[i].hp[j] += addhp;
+         if (serverplayers[i].hp[j] > 100) // TODO: Also needs to be based on unit type
+            serverplayers[i].hp[j] = 100;
+      }
+   }
+   
    // Movement and necessary model updates
    
    // This is odd, but I'm too lazy to fix it.  We call UpdatePlayerModel twice: once to make sure
@@ -954,21 +999,13 @@ void ServerUpdatePlayer(int i)
    // If we rewind here then when we put the state back to 0 time offset we actually get the
    // previous state, which is bad because player models get stuck.  Thus movement collisions
    // won't be lag-compensated for now (will this be a problem? We'll see).
-   //Rewind(serverplayers[i].ping);
-   Move(serverplayers[i], servermeshes, serverkdtree);
-   //Rewind(0);
-   UpdatePlayerModel(serverplayers[i], servermeshes, false);
-   
-   // Cooling
-   float coolrate = .01f;
-   coolrate *= serverplayers[i].item.CoolMult();
-   if (serverplayers[i].pos.y < 0)
-      coolrate *= 1.5f;
-   Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
-   serverplayers[i].lastcoolingtick += ticks;
-   serverplayers[i].temperature -= ticks * coolrate;
-   if (serverplayers[i].temperature < 0)
-      serverplayers[i].temperature = 0;
+   if (!serverplayers[i].powerdowntime)
+   {
+      //Rewind(serverplayers[i].ping);
+      Move(serverplayers[i], servermeshes, serverkdtree);
+      //Rewind(0);
+      UpdatePlayerModel(serverplayers[i], servermeshes, false);
+   }
    
    // Shots fired!
    Weapon& currplayerweapon = serverplayers[i].weapons[weaponslots[serverplayers[i].currweapon]];
@@ -1263,5 +1300,17 @@ void LoadMapList()
       currmap.Read(buffer, "File");
       maplist.push_back(buffer);
    }
+}
+
+
+void Ack(unsigned long acknum, UDPpacket* inpack)
+{
+   Packet response(servoutpack, &servoutsock, &inpack->address);
+   response << "A\n";
+   response << 0 << eol;
+   response << acknum << eol;
+   SDL_mutexP(servermutex);
+   servqueue.push_back(response);
+   SDL_mutexV(servermutex);
 }
 

@@ -700,133 +700,139 @@ void GameEventHandler(SDL_Event &event)
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
    SDL_mutexP(clientmutex);
-   switch(event.type) 
+   if (!player[servplayernum].powerdowntime)
    {
-      case SDL_KEYDOWN:
-         if (!gui[consolegui]->visible)
-         {
-            switch (event.key.keysym.sym) 
+      switch(event.type) 
+      {
+         case SDL_KEYDOWN:
+            if (!gui[consolegui]->visible)
             {
-               case SDLK_ESCAPE:
-                  gui[mainmenu]->visible = !gui[mainmenu]->visible;
-                  gui[hud]->visible = !gui[hud]->visible;
-                  break;
+               switch (event.key.keysym.sym) 
+               {
+                  case SDLK_ESCAPE:
+                     gui[mainmenu]->visible = !gui[mainmenu]->visible;
+                     gui[hud]->visible = !gui[hud]->visible;
+                     break;
+                  case SDLK_a:
+                     player[0].moveleft = true;
+                     break;
+                  case SDLK_d:
+                     player[0].moveright = true;
+                     break;
+                  case SDLK_w:
+                     player[0].moveforward = true;
+                     break;
+                  case SDLK_s:
+                     player[0].moveback = true;
+                     break;
+                  /* Doesn't currently work, most likely due to using Euler angles for player
+                     rotation, but this probably doesn't make sense in this type of game
+                     anyway so Euler angles it is!:-)
+                  case SDLK_e:
+                     player[0].roll = 45;
+                     break;
+                  case SDLK_q:
+                     player[0].roll = -45;
+                     break;*/
+                  case SDLK_LSHIFT:
+                  case SDLK_RSHIFT:
+                     player[0].run = true;
+                     break;
+                  case SDLK_SPACE:
+                     player[0].pos.x = 200;
+                     player[0].pos.y = 200;
+                     player[0].pos.z = 200;
+                     break;
+                  case SDLK_TAB:
+                     gui[ingamestatus]->visible = true;
+                     break;
+                  case SDLK_p:
+                     SendPowerdown();
+                     break;
+               }
+            }
+            break;
+            
+         case SDL_KEYUP:
+            switch (event.key.keysym.sym)
+            {
                case SDLK_a:
-                  player[0].moveleft = true;
+                  player[0].moveleft = false;
                   break;
                case SDLK_d:
-                  player[0].moveright = true;
+                  player[0].moveright = false;
                   break;
                case SDLK_w:
-                  player[0].moveforward = true;
+                  player[0].moveforward = false;
                   break;
                case SDLK_s:
-                  player[0].moveback = true;
+                  player[0].moveback = false;
                   break;
-               /* Doesn't currently work, most likely due to using Euler angles for player
-                  rotation, but this probably doesn't make sense in this type of game
-                  anyway so Euler angles it is!:-)
                case SDLK_e:
-                  player[0].roll = 45;
+                  player[0].roll = 0;
                   break;
                case SDLK_q:
-                  player[0].roll = -45;
-                  break;*/
+                  player[0].roll = 0;
+                  break;
                case SDLK_LSHIFT:
                case SDLK_RSHIFT:
-                  player[0].run = true;
-                  break;
-               case SDLK_SPACE:
-                  player[0].pos.x = 200;
-                  player[0].pos.y = 200;
-                  player[0].pos.z = 200;
+                  player[0].run = false;
                   break;
                case SDLK_TAB:
-                  gui[ingamestatus]->visible = true;
+                  gui[ingamestatus]->visible = false;
                   break;
             }
-         }
-         break;
-         
-      case SDL_KEYUP:
-         switch (event.key.keysym.sym)
-         {
-            case SDLK_a:
-               player[0].moveleft = false;
-               break;
-            case SDLK_d:
-               player[0].moveright = false;
-               break;
-            case SDLK_w:
-               player[0].moveforward = false;
-               break;
-            case SDLK_s:
-               player[0].moveback = false;
-               break;
-            case SDLK_e:
-               player[0].roll = 0;
-               break;
-            case SDLK_q:
-               player[0].roll = 0;
-               break;
-            case SDLK_LSHIFT:
-            case SDLK_RSHIFT:
-               player[0].run = false;
-               break;
-            case SDLK_TAB:
-               gui[ingamestatus]->visible = false;
-               break;
-         }
-         break;
-         
-      case SDL_MOUSEMOTION:
-         if ((event.motion.x != screenwidth / 2 || 
-              event.motion.y != screenheight / 2) && !gui[consolegui]->visible)
-         {
-            float zoomfactor = console.GetFloat("zoomfactor");
-            if (!guncam) 
-               zoomfactor = 1.f;
+            break;
             
-            player[0].pitch += event.motion.yrel / 4. / zoomfactor;
-            if (player[0].pitch < -90) player[0].pitch = -90;
-            if (player[0].pitch > 90) player[0].pitch = 90;
+         case SDL_MOUSEMOTION:
+            if ((event.motion.x != screenwidth / 2 || 
+               event.motion.y != screenheight / 2) && !gui[consolegui]->visible)
+            {
+               float zoomfactor = console.GetFloat("zoomfactor");
+               if (!guncam) 
+                  zoomfactor = 1.f;
+               
+               player[0].pitch += event.motion.yrel / 4. / zoomfactor;
+               if (player[0].pitch < -90) player[0].pitch = -90;
+               if (player[0].pitch > 90) player[0].pitch = 90;
+               
+               player[0].rotation += event.motion.xrel / 4. / zoomfactor;
+               if (player[0].rotation < -90) player[0].rotation = -90;
+               if (player[0].rotation > 90) player[0].rotation = 90;
+               SDL_WarpMouse(screenwidth / 2, screenheight / 2);
+            }
+            break;
             
-            player[0].rotation += event.motion.xrel / 4. / zoomfactor;
-            if (player[0].rotation < -90) player[0].rotation = -90;
-            if (player[0].rotation > 90) player[0].rotation = 90;
-            SDL_WarpMouse(screenwidth / 2, screenheight / 2);
-         }
-         break;
-         
-      case SDL_MOUSEBUTTONDOWN:
-         if (event.button.button == SDL_BUTTON_LEFT)
-         {
-            player[0].leftclick = true;
-         }
-         else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-         {
-            player[0].currweapon = (player[0].currweapon + 1) % weaponslots.size();
-         }
-         else if (event.button.button == SDL_BUTTON_WHEELUP)
-         {
-            player[0].currweapon = player[0].currweapon == 0 ? weaponslots.size() - 1 : player[0].currweapon - 1;
-         }
-         else if (event.button.button == SDL_BUTTON_MIDDLE)
-         {
-            useitem = true;
-         }
-         else if (event.button.button == SDL_BUTTON_RIGHT)
-         {
-            guncam = !guncam;
-         }
-         break;
-      case SDL_MOUSEBUTTONUP:
-         if (event.button.button == SDL_BUTTON_LEFT)
-            player[0].leftclick = false;
-         break;
-
-      case SDL_QUIT:
-         Quit();
+         case SDL_MOUSEBUTTONDOWN:
+            if (event.button.button == SDL_BUTTON_LEFT)
+            {
+               player[0].leftclick = true;
+            }
+            else if (event.button.button == SDL_BUTTON_WHEELDOWN)
+            {
+               player[0].currweapon = (player[0].currweapon + 1) % weaponslots.size();
+            }
+            else if (event.button.button == SDL_BUTTON_WHEELUP)
+            {
+               player[0].currweapon = player[0].currweapon == 0 ? weaponslots.size() - 1 : player[0].currweapon - 1;
+            }
+            else if (event.button.button == SDL_BUTTON_MIDDLE)
+            {
+               useitem = true;
+            }
+            else if (event.button.button == SDL_BUTTON_RIGHT)
+            {
+               guncam = !guncam;
+            }
+            break;
+         case SDL_MOUSEBUTTONUP:
+            if (event.button.button == SDL_BUTTON_LEFT)
+               player[0].leftclick = false;
+            break;
+   
+         case SDL_QUIT:
+            Quit();
+      }
    }
    SDL_mutexV(clientmutex);
 }

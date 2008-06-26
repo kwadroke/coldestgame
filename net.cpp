@@ -201,6 +201,7 @@ int NetSend(void* dummy)
          Packet p(outpack, &socket, &addr);
          p << "Y\n";
          p << sendpacketnum << eol;
+         p << servplayernum << eol;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
@@ -382,9 +383,7 @@ int NetListen(void* dummy)
                      get >> player[oppnum].moveleft;
                      get >> player[oppnum].moveright;
                      get >> player[oppnum].speed;
-                     oldunit = player[oppnum].unit;
-                     get >> player[oppnum].unit;
-                     get >> player[oppnum].ping;
+                     get >> player[oppnum].powerdowntime;
                      
                      /*cout << "Player " << oppnum << endl;
                      //if (player[oppnum].unit != "unittest")
@@ -509,7 +508,7 @@ int NetListen(void* dummy)
                   if (oppnum < player.size())
                   {
                      player[oppnum].team = getteam;
-                     player[oppnum].unit = getunit;
+                     player[oppnum].unit = getunit; // Check that this hasn't changed?
                      player[oppnum].kills = getkills;
                      player[oppnum].deaths = getdeaths;
                      for (size_t i = 0; i < numbodyparts; ++i)
@@ -881,5 +880,17 @@ void Ack(unsigned long acknum)
    response << acknum << eol;
    SDL_mutexP(netmutex);
    sendqueue.push_back(response);
+   SDL_mutexV(netmutex);
+}
+
+
+void SendPowerdown()
+{
+   Packet pack(outpack, &socket, &addr);
+   pack.ack = sendpacketnum;
+   pack << "P\n";
+   pack << pack.ack << eol;
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
    SDL_mutexV(netmutex);
 }
