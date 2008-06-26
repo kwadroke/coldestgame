@@ -6,5 +6,6 @@ waterfrag.glsl
 Uniforms:
 int tex 0
 int noisetex 1
+int fastnoisetex 2
 int shadowtex 6
 int worldshadowtex 7

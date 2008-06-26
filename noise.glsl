@@ -4,11 +4,10 @@
  *
  * You may use, modify and redistribute this code free of charge,
  * provided that the author's names and this notice appear intact.
- *
- * Additional modifications by Ben Nemec in 2007.
  */
 uniform sampler2D permTexture;
 uniform float time;
+uniform float speed;
 
 /*
  * Efficient simplex indexing functions by Bill Licea-Kane, ATI. Thanks!
@@ -34,92 +33,92 @@ void simplex( const in vec3 P, out vec3 offset1, out vec3 offset2 )
 /*
  * 3D simplex noise. Comparable in speed to classic noise, better looking.
  */
-float snoise(vec3 P) 
+float snoise(vec3 P)
 {
 
-/* The skewing and unskewing factors are much simpler for the 3D case*/
-/* #defines weren't working because my shader loader was stripping off
-   all of the \n's, so the compiler kept reading everything as a single line
+// The skewing and unskewing factors are much simpler for the 3D case
 #define F3 0.333333333333
 #define G3 0.166666666667
-#define ONE 0.00390625
-#define ONEHALF 0.001953125*/
-   
-   /* Exceeding register limits, lets group some stuff up
-      This is no longer actually necessary as we're no longer register limited,
-      but it would be more work than it's worth to go through and change it again.*/
-   const vec4 consts = vec4(0.333333333333, 0.166666666667, 0.00390625, 0.001953125);
+   float ONE = 1. / 128.;
+   float ONEHALF = 1. / 128.;
 
-   /* Skew the (x,y,z) space to determine which cell of 6 simplices we're in*/
-   float s = (P.x + P.y + P.z) * consts.x;
+  // Skew the (x,y,z) space to determine which cell of 6 simplices we're in
+   float s = (P.x + P.y + P.z) * F3; // Factor for 3D skewing
    vec3 Pi = floor(P + s);
-   float ts = (Pi.x + Pi.y + Pi.z) * consts.y;
-   vec3 P0 = Pi - ts;
-   Pi = Pi * consts.z + consts.w;
-   
-   vec3 Pf0 = P - P0; 
-   
-   /* For the 3D case, the simplex shape is a slightly irregular tetrahedron.
-      To find out which of the six possible tetrahedra we're in, we need to
-      determine the magnitude ordering of x, y and z components of Pf0.*/
+   float t = (Pi.x + Pi.y + Pi.z) * G3;
+   vec3 P0 = Pi - t; // Unskew the cell origin back to (x,y,z) space
+   Pi = Pi * ONE + ONEHALF; // Integer part, scaled and offset for texture lookup
+
+   vec3 Pf0 = P - P0;  // The x,y distances from the cell origin
+
+  // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+  // To find out which of the six possible tetrahedra we're in, we need to
+  // determine the magnitude ordering of x, y and z components of Pf0.
    vec3 o1;
    vec3 o2;
    simplex(Pf0, o1, o2);
-   
-   vec4 t, n, perm;
-   /* Noise contribution from simplex origin*/
-   perm.x = texture2D(permTexture, Pi.xy).a;
-   vec3  grad0 = texture2D(permTexture, vec2(perm.x, Pi.z)).rgb * 4.0 - 1.0;
-   t.x = 0.6 - dot(Pf0, Pf0);
-   if (t.x < 0.0) n.x = 0.0;
+
+  // Noise contribution from simplex origin
+   float perm0 = texture2D(permTexture, Pi.xy).a;
+   vec3  grad0 = texture2D(permTexture, vec2(perm0, Pi.z)).rgb * 4.0 - 1.0;
+   float t0 = 0.6 - dot(Pf0, Pf0);
+   float n0;
+   if (t0 < 0.0) n0 = 0.0;
    else {
-      t.x *= t.x;
-      n.x = t.x * t.x * dot(grad0, Pf0);
+      t0 *= t0;
+      n0 = t0 * t0 * dot(grad0, Pf0);
    }
-   
-   /* Noise contribution from second corner*/
-   vec3 Pf1 = Pf0 - o1 + consts.y;
-   perm.y = texture2D(permTexture, Pi.xy + o1.xy * consts.z).a;
-   vec3  grad1 = texture2D(permTexture, vec2(perm.y, Pi.z + o1.z * consts.z)).rgb * 4.0 - 1.0;
-   t.y = 0.6 - dot(Pf1, Pf1);
-   if (t.y < 0.0) n.y = 0.0;
+
+  // Noise contribution from second corner
+   vec3 Pf1 = Pf0 - o1 + G3;
+   float perm1 = texture2D(permTexture, Pi.xy + o1.xy*ONE).a;
+   vec3  grad1 = texture2D(permTexture, vec2(perm1, Pi.z + o1.z*ONE)).rgb * 4.0 - 1.0;
+   float t1 = 0.6 - dot(Pf1, Pf1);
+   float n1;
+   if (t1 < 0.0) n1 = 0.0;
    else {
-      t.y *= t.y;
-      n.y = t.y * t.y * dot(grad1, Pf1);
+      t1 *= t1;
+      n1 = t1 * t1 * dot(grad1, Pf1);
    }
-   
-   /* Noise contribution from third corner*/
-   vec3 Pf2 = Pf0 - o2 + 2.0 * consts.y;
-   perm.z = texture2D(permTexture, Pi.xy + o2.xy * consts.z).a;
-   vec3  grad2 = texture2D(permTexture, vec2(perm.z, Pi.z + o2.z * consts.z)).rgb * 4.0 - 1.0;
-   t.z = 0.6 - dot(Pf2, Pf2);
-   if (t.z < 0.0) n.z = 0.0;
+  
+  // Noise contribution from third corner
+   vec3 Pf2 = Pf0 - o2 + 2.0 * G3;
+   float perm2 = texture2D(permTexture, Pi.xy + o2.xy*ONE).a;
+   vec3  grad2 = texture2D(permTexture, vec2(perm2, Pi.z + o2.z*ONE)).rgb * 4.0 - 1.0;
+   float t2 = 0.6 - dot(Pf2, Pf2);
+   float n2;
+   if (t2 < 0.0) n2 = 0.0;
    else {
-      t.z *= t.z;
-      n.z = t.z * t.z * dot(grad2, Pf2);
+      t2 *= t2;
+      n2 = t2 * t2 * dot(grad2, Pf2);
    }
-   
-   /* Noise contribution from last corner*/
-   vec3 Pf3 = Pf0 - vec3(1.0 - 3.0 * consts.y);
-   perm.w = texture2D(permTexture, Pi.xy + vec2(consts.z, consts.z)).a;
-   vec3  grad3 = texture2D(permTexture, vec2(perm.w, Pi.z + consts.z)).rgb * 4.0 - 1.0;
-   t.w = 0.6 - dot(Pf3, Pf3);
-   if(t.w < 0.0) n.w = 0.0;
+  
+  // Noise contribution from last corner
+   vec3 Pf3 = Pf0 - vec3(1.0-3.0*G3);
+   float perm3 = texture2D(permTexture, Pi.xy + vec2(ONE, ONE)).a;
+   vec3  grad3 = texture2D(permTexture, vec2(perm3, Pi.z + ONE)).rgb * 4.0 - 1.0;
+   float t3 = 0.6 - dot(Pf3, Pf3);
+   float n3;
+   if(t3 < 0.0) n3 = 0.0;
    else {
-      t.w *= t.w;
-      n.w = t.w * t.w * dot(grad3, Pf3);
+      t3 *= t3;
+      n3 = t3 * t3 * dot(grad3, Pf3);
    }
-   
-   /* Sum up and scale the result to cover the range [-1,1]*/
-   return 32.0 * (n.x + n.y + n.z + n.w);
+
+  // Sum up and scale the result to cover the range [-1,1]
+   return 32.0 * (n0 + n1 + n2 + n3);
 }
 
 
 void main()
 {
-   float nval = 0;
+   float nval = 0.;
    
-   nval = snoise(vec3(gl_FragCoord.xy, time));
+   vec3 ncoord;
+   ncoord.x = gl_FragCoord.x;
+   ncoord.y = gl_FragCoord.y;
+   ncoord.z = time / speed;
+   nval = snoise(ncoord);
    
    /* Duh, it's scaled from -1 to 1, we need 0 to 1*/
    nval *= .5;

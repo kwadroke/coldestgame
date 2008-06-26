@@ -230,7 +230,7 @@ int ServerListen()
       
       // Update particles
       int updinterval = 100;
-      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, Vector3(), &HandleHit, &Rewind);
+      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
       SDL_mutexV(servermutex);
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
@@ -822,7 +822,7 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
 {
    Mesh* curr;
    // 10e38 is near the maximum representable value for a single precision float
-   float currmindist = 10e38, currdist = 0.f;
+   float currmindist = 10e38f, currdist = 0.f;
    bool dead;
    // Should only hit each body part once per projectile
    sort(hitobjs.begin(), hitobjs.end());

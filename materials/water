@@ -1,7 +1,7 @@
-Diffuse 1 1 1 1
+Diffuse .6 .6 .9 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 
 Texture1 
 Shader shaders/water
-Shininess 16
+Shininess 64

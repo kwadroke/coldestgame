@@ -29,6 +29,4 @@ void main()
    fog(dist, color);
    
    gl_FragColor = color * texture2D(tex, gl_TexCoord[0].st);
-   //gl_FragColor = specval;
-   gl_FragColor.a = 1.;
 }

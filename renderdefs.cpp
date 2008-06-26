@@ -16,7 +16,7 @@ float mapwidth, mapheight;
 bool staticdrawdist, guncam;
 GLuint noisetex;
 vector<GLuint> textures;
-FBO worldshadowmapfbo, shadowmapfbo, cloudfbo, reflectionfbo, noisefbo, minimapfbo;
+FBO worldshadowmapfbo, shadowmapfbo, cloudfbo, reflectionfbo, noisefbo, fastnoisefbo, minimapfbo;
 Light lights;
 string standardshader, noiseshader, shadowshader, cloudshader, watershader;
 string terrainshader, cloudgenshader, bumpshader, flatshader;
