@@ -59,7 +59,7 @@ extern float nearclip, aspect, impdistmulti, mapwidth, mapheight;
 extern bool staticdrawdist, guncam;
 extern GLuint noisetex;
 extern vector<GLuint> textures;
-extern FBO shadowmapfbo, worldshadowmapfbo, cloudfbo, reflectionfbo, noisefbo, minimapfbo;
+extern FBO shadowmapfbo, worldshadowmapfbo, cloudfbo, reflectionfbo, noisefbo, fastnoisefbo, minimapfbo;
 extern GLuint texnum[], shadowmaptex[], worldshadowmaptex[];
 extern Light lights;
 extern string standardshader, noiseshader, shadowshader, cloudshader, watershader;

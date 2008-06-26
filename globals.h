@@ -57,7 +57,7 @@ extern vector<BodyParts> weaponslots;
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
 void AppendToChat(int, string);
-void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, const Vector3& campos = Vector3(),
+void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, vector<PlayerData>&, const Vector3& campos = Vector3(),
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&) = NULL, void (*Rewind)(int) = NULL);
 void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);

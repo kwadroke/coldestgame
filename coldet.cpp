@@ -361,7 +361,12 @@ void SetupOpenGL()
    }
    
    noisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
+   fastnoisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
    resman.texhand.BindTexture(noisefbo.GetTexture());
+   // Need different tex params for this texture
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   resman.texhand.BindTexture(fastnoisefbo.GetTexture());
    // Need different tex params for this texture
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -1197,7 +1202,7 @@ void Animate()
       else ++i;
    }
    static int partupd = 100;
-   UpdateParticles(particles, partupd, kdtree, meshes, player[0].pos);
+   UpdateParticles(particles, partupd, kdtree, meshes, player, player[0].pos);
    
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
@@ -1295,7 +1300,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // This is important because this function decides whether to do GL stuff based on that
 // and if the server thread tries to do GL it will crash
 // The server is also the only one to pass in Rewind
-void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, const Vector3& campos,
+void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, vector<PlayerData>& playervec, const Vector3& campos,
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&), void (*Rewind)(int))
 {
    list<Particle> newparts;
@@ -1318,7 +1323,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          oldpos = j->Update();
          if (j->collide)
          {
-            vector<Mesh*> check = GetMeshesWithoutPlayer(&player[j->playernum], ml, kt, oldpos, j->pos, j->radius);
+            vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
             if (Rewind)
                Rewind(j->rewind);
             partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, &hitmeshes);

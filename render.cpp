@@ -611,7 +611,7 @@ void UpdateNoise()
    resman.shaderman.UseShader(noiseshader);
    // Don't remove this, it's not the texture we're trying to render to, it's used in the noise shader
    resman.texhand.BindTexture(noisetex);
-   resman.shaderman.SetUniform1f(noiseshader, "time", (float)SDL_GetTicks() / 700.f);
+   resman.shaderman.SetUniform1f(noiseshader, "time", float(SDL_GetTicks()));
    
    glViewport(0, 0, noiseres, noiseres);
    
@@ -633,12 +633,24 @@ void UpdateNoise()
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_TEXTURE_2D);
    glColor4f(1, 1, 1, 1);
+   
+   resman.shaderman.SetUniform1f(noiseshader, "speed", 3000.f);
    glBegin(GL_TRIANGLE_STRIP);
    glVertex2f(0, 0);
    glVertex2f(0, noiseres);
    glVertex2f(noiseres, 0);
    glVertex2f(noiseres, noiseres);
    glEnd();
+   
+   resman.shaderman.SetUniform1f(noiseshader, "speed", 700.f);
+   fastnoisefbo.Bind();
+   glBegin(GL_TRIANGLE_STRIP);
+   glVertex2f(0, 0);
+   glVertex2f(0, noiseres);
+   glVertex2f(noiseres, 0);
+   glVertex2f(noiseres, noiseres);
+   glEnd();
+   
    glEnable(GL_TEXTURE_2D);
    glEnable(GL_DEPTH_TEST);
    
@@ -653,7 +665,7 @@ void UpdateNoise()
    
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    resman.shaderman.UseShader("none");
-   noisefbo.Unbind();
+   fastnoisefbo.Unbind();
 }
 
 
@@ -812,7 +824,10 @@ void RenderWater()
    
    resman.texhand.ActiveTexture(1);
    resman.texhand.BindTexture(noisefbo.GetTexture());
+   resman.texhand.ActiveTexture(2);
+   resman.texhand.BindTexture(fastnoisefbo.GetTexture());
    resman.texhand.ActiveTexture(0);
+   resman.shaderman.SetUniform1f("shaders/water", "time", float(SDL_GetTicks()));
    
    watermesh->Render();
    
