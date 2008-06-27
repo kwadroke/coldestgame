@@ -27,7 +27,7 @@
       <ComboBoxItem>Ultra</ComboBoxItem>
       <ComboBoxItem>Omega</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="150" width="200" height="40" name="Torso" selected="6"
+   <ComboBox x="700"  y="150" width="200" height="40" name="Torso" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>

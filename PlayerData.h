@@ -31,6 +31,7 @@ class PlayerData
       vector<Meshlist::iterator> mesh;
       set<unsigned long> partids;
       set<unsigned long> acked;
+      set<unsigned long> commandids;
       vector<Weapon> weapons;
       Item item;
       Uint32 lastupdate;  // How long since last player update?

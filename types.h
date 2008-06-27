@@ -36,6 +36,7 @@ struct UnitData // This should probably be a class like Weapon and Item, but meh
    float size;
    Vector3 weaponoffset[numbodyparts];
    Vector3 viewoffset;
+   int maxhp[numbodyparts];
 };
 
 

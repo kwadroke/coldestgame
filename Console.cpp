@@ -50,6 +50,8 @@ void Console::Parse(const string& line, bool echo)
 {
    string simple = SimplifyWhitespace(line);
    
+   cout << simple << endl;
+   
    if (echo)
       WriteToConsole(simple);
    
@@ -60,8 +62,20 @@ void Console::Parse(const string& line, bool echo)
    
    if (Token(simple, 0) == "set" && NumTokens(simple) == 3)
    {
+      cout << "*" << Token(simple, 2) << "*" << endl;
       values[Token(simple, 1)] = Token(simple, 2);
       Action(Token(simple, 1) + " action");
+   }
+   if (Token(simple, 0) == "send")
+   {
+      string remote;
+      for (size_t i = 1; i < NumTokens(simple); ++i)
+      {
+         remote += Token(simple, i);
+         if (i != NumTokens(simple) - 1)
+            remote += " ";
+      }
+      SendCommand(remote);
    }
    else Action(Token(simple, 0));
 }
@@ -111,6 +125,7 @@ string Console::Token(const string& str, int tokennum)
 }
 
 
+// Note: Does not strip all trailing spaces.
 string Console::SimplifyWhitespace(const string& str)
 {
    string newstr = "";
