@@ -3,7 +3,7 @@ vec4 specular(vec3, vec3, in vec3, inout vec4);
 void shadow(vec4, vec4, float, inout vec4);
 void fog(float, inout vec4);
 
-uniform sampler2D tex, bumptex, spectex;
+uniform sampler2D tex, bumptex;
 uniform float reflectval;
 
 //varying vec4 shadowmappos, worldshadowmappos; // Just a reminder

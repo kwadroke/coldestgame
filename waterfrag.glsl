@@ -7,7 +7,6 @@ uniform float time;
 varying vec3 location;
 varying vec3 worldcoords;
 varying vec3 lightdir;
-varying vec4 shadowmappos, worldshadowmappos;
 
 void main()
 {
