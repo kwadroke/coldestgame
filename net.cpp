@@ -790,6 +790,7 @@ int NetListen(void* dummy)
          }
          else if (packettype == "Y" && packetnum > lastsyncpacket) // Sync packet
          {
+            cout << "Got sync packet " << packetnum << endl;
             lastsyncpacket = packetnum;
             string buffer;
             SDL_mutexP(clientmutex);
@@ -890,6 +891,20 @@ void SendPowerdown()
    pack.ack = sendpacketnum;
    pack << "P\n";
    pack << pack.ack << eol;
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
+   SDL_mutexV(netmutex);
+}
+
+
+void SendCommand(const string& command)
+{
+   Packet pack(outpack, &socket, &addr);
+   pack.ack = sendpacketnum;
+   pack << "c\n";
+   pack << pack.ack << eol;
+   pack << servplayernum << eol;
+   pack << command << eol;
    SDL_mutexP(netmutex);
    sendqueue.push_back(pack);
    SDL_mutexV(netmutex);

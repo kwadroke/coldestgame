@@ -27,8 +27,8 @@ int ServerSend(void*);
 int ServerListen();
 void ServerLoadMap();
 void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
-void SplashDamage(const Vector3&, const float, const float, const int);
-void ApplyDamage(Mesh*, const float, const int);
+void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
+void ApplyDamage(Mesh*, const float, const int, const bool teamdamage = false);
 void ServerUpdatePlayer(int);
 void Rewind(int);
 void SaveState();
@@ -67,6 +67,7 @@ deque<ServerState> oldstate;
 vector<string> maplist;
 bool gameover;
 Uint32 nextmaptime;
+set<unsigned long> commandids;
 
 class SortableIPaddress
 {
@@ -549,7 +550,7 @@ int ServerListen()
             }
             SDL_mutexV(servermutex);
          }
-         else if (packettype == "P") // Powerdown - be careful, we also send this type as a ping packet
+         else if (packettype == "P") // Powerdown - be careful, we send this type as a ping packet, but don't receive it
          {
             get >> oppnum;
             SDL_mutexP(servermutex);
@@ -562,12 +563,33 @@ int ServerListen()
                serverplayers[oppnum].powerdowntime = 5000;
                for (int i = 0; i < numbodyparts; ++i)
                {
-                  serverplayers[oppnum].hp[i] += 75; // TODO: Needs to change based on unit
-                  if (serverplayers[oppnum].hp[i] > 100)
-                     serverplayers[oppnum].hp[i] = 100;
+                  int maxhp = units[serverplayers[oppnum].unit].maxhp[i];
+                  serverplayers[oppnum].hp[i] += maxhp * 3 / 4;
+                  if (serverplayers[oppnum].hp[i] > maxhp)
+                     serverplayers[oppnum].hp[i] = maxhp;
                }
             }
             SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
+         }
+         else if (packettype == "c") // Console command
+         {
+            // TODO: Anyone is allowed to do this right now.  Need to authenticate only admins.
+            get >> oppnum;
+            if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end())
+            {
+               serverplayers[oppnum].commandids.insert(packetnum);
+               string command;
+               get.ignore();
+               getline(get, command);
+               SDL_mutexP(clientmutex);
+               cout << "*" << command << "*" << endl;
+               console.Parse(command, false);
+               cout << console.GetBool("ghost") << endl;
+               for (size_t i = 0; i < serverplayers.size(); ++i)
+                  SendSyncPacket(serverplayers[i]);
+               SDL_mutexV(clientmutex);
+            }
             Ack(packetnum, inpack);
          }
       }
@@ -867,7 +889,7 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
 }
 
 
-void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playernum)
+void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playernum, const bool teamdamage)
 {
    vector<Mesh*> hitmeshes;
    vector<Mesh*> check;
@@ -886,13 +908,13 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
       
       for (vector<Mesh*>::iterator j = hitmeshes.begin(); j != hitmeshes.end(); ++j)
       {
-         ApplyDamage(*j, damage / float(numlevels), playernum);
+         ApplyDamage(*j, damage / float(numlevels), playernum, teamdamage);
       }
    }
 }
 
 
-void ApplyDamage(Mesh* curr, const float damage, const int playernum)
+void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool teamdamage)
 {
    bool dead;
    for (int i = 1; i < serverplayers.size(); ++i)
@@ -903,7 +925,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum)
          if (serverplayers[i].mesh[part] != servermeshes.end())
          {
             if (curr == &(*serverplayers[i].mesh[part]) &&
-                (serverplayers[i].team != serverplayers[playernum].team || i == playernum))
+                (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage))
             {
                cout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage);
@@ -921,6 +943,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum)
          cout << "Player " << i << " was killed by Player " << playernum << endl;
          serverplayers[i].Kill();
          SendKill(i);
+         SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
       }
    }
    bool doremove;
@@ -982,9 +1005,10 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].healaccum -= addhp;
       for (size_t j = 0; j < numbodyparts; ++j)
       {
+         int maxhp = units[serverplayers[i].unit].maxhp[j];
          serverplayers[i].hp[j] += addhp;
-         if (serverplayers[i].hp[j] > 100) // TODO: Also needs to be based on unit type
-            serverplayers[i].hp[j] = 100;
+         if (serverplayers[i].hp[j] > maxhp)
+            serverplayers[i].hp[j] = maxhp;
       }
    }
    
