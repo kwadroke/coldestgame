@@ -55,10 +55,12 @@ void GetMap(string fn)
    string heightmapname = fn + ".png";
    string lightmapname = fn + "light.png";
    vector<floatvec> maparray;  // Heightmap data scaled by heightscale
+#ifndef DEDICATED
    ProgressBar* progress = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
    GUI* progtext = gui[loadprogress]->GetWidget("progresstext");
    GUI* progname = gui[loadprogress]->GetWidget("loadname");
    progname->text = "Loading " + fn;
+#endif
    
    IniReader mapdata(dataname);
    
@@ -71,7 +73,9 @@ void GetMap(string fn)
    mapdata.Read(terrainstretch, "Stretch");
    
    // Read global lighting information
+#ifndef DEDICATED
    lights.Add();
+#endif
    float diff[4];
    float spec[4];
    float amb[4];
@@ -88,32 +92,40 @@ void GetMap(string fn)
       mapdata.Read(amb[i], "Ambient", i);
    }
    
+#ifndef DEDICATED
    lights.SetDir(0, Vector3(fromx, fromy, fromz));
    lights.SetDiffuse(0, diff);
    lights.SetSpecular(0, spec);
    lights.SetAmbient(0, amb);
+#endif
    
    // Load the textures themselves
    // Actually, the textures get loaded as Materials get loaded now, so this is really a bogus step
+#ifndef DEDICATED
    progress->SetRange(0, 7);
    progress->value = 0;
    progtext->text = "Loading textures";
    Repaint();
+#endif
 
    // Release any previously allocated resources so we don't leak memory
    meshes.clear();
    items.clear();
+#ifndef DEDICATED
    resman.ReleaseAll();
    InitShaders();
    LoadMaterials();
-   particles.clear();
    particlemesh = MeshPtr();  // Otherwise we may try to render it later and that will be bad
+#endif
+   particles.clear();
    deletemeshes.clear(); // Also a problem if not empty when we load a new map
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);
    ResetKeys();
    
+   IniReader currnode;
+#ifndef DEDICATED
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
    skyboxmat = &resman.LoadMaterial(readskybox);
@@ -124,7 +136,6 @@ void GetMap(string fn)
    string terrainmaterial;
    mapdata.Read(terrainmaterial, "TerrainMaterial");
    IniReader texnode = mapdata.GetItemByName("TerrainParams");
-   IniReader currnode;
    for (int i = 0; i < texnode.NumChildren(); ++i)
    {
       terrparams.push_back(dummytp);
@@ -137,7 +148,7 @@ void GetMap(string fn)
       currnode.Read(terrparams[i].minrand, "RandRange", 0);
       currnode.Read(terrparams[i].maxrand, "RandRange", 1);
    }
-   
+#endif
    
    // Read spawnpoints
    spawnpoints.clear();
@@ -157,9 +168,11 @@ void GetMap(string fn)
    spawnschanged = true;
    
    // Load objects
+#ifndef DEDICATED
    progtext->text = "Loading objects";
    progress->value = 1;
    Repaint();
+#endif
    
    IniReader objectlist = mapdata.GetItemByName("Objects");
    string currmaterial;
@@ -170,9 +183,11 @@ void GetMap(string fn)
       meshes.push_back(currmesh);
    }
    
+#ifndef DEDICATED
    progress->value = 2;
    progtext->text = "Loading map data";
    Repaint();
+#endif
    
    // Build terrain objects
    float maxworldheight = 0;
@@ -329,6 +344,7 @@ void GetMap(string fn)
          heightmap[x][y] = GetSmoothedTerrain(x, y, mapw, maph, maparray);
       }
    }
+#ifndef DEDICATED
    for (int x = 0; x < mapw; ++x)
    {
       for (int y = 0; y < maph; ++y)
@@ -373,6 +389,7 @@ void GetMap(string fn)
    progress->value = 3;
    progtext->text = "Building terrain";
    Repaint();
+#endif
    // Build terrain objects
    int numobjsx = mapw / terrobjsize;
    int numobjsy = maph / terrobjsize;
@@ -408,7 +425,9 @@ void GetMap(string fn)
          tempquad.SetNormal(1, normals[x][y + 1]);
          tempquad.SetNormal(2, normals[x + 1][y + 1]);
          tempquad.SetNormal(3, normals[x + 1][y]);
+#ifndef DEDICATED
          tempquad.SetMaterial(&resman.LoadMaterial(terrainmaterial));
+#endif
          tempquad.SetCollide(true);
          
          // Terrain texturing needs to be handled at some point, but I haven't decided how yet
@@ -482,7 +501,7 @@ void GetMap(string fn)
    if (server)   // Then wait for the server to copy the data before generating buffers
       while (!serverhasmap) SDL_Delay(1);
    
-   
+#ifndef DEDICATED
    // All meshes added from here on out will not be present on the server
    // Build water object
    float waterminx, waterminy;
@@ -775,6 +794,7 @@ void GetMap(string fn)
    
    // Signal the net thread that we can sync now
    needsync = true;
+#endif
 }
 
 

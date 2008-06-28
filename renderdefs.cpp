@@ -7,12 +7,13 @@ int fbodims[3] = {128, 64, 32};
 
 Meshlist meshes;
 
-vector<GLuint> dotextures;
+float mapwidth, mapheight;
+
+#ifndef DEDICATED
 int lasttick, frames, trislastframe;
 int noiseres;
 float fps;
 float aspect;
-float mapwidth, mapheight;
 bool staticdrawdist, guncam;
 GLuint noisetex;
 vector<GLuint> textures;
@@ -27,3 +28,4 @@ Material* skyboxmat;
 Material* shadowmat;
 MeshPtr particlemesh;
 vector<GUIPtr> spawnbuttons;
+#endif

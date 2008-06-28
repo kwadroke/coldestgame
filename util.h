@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <csignal>
 #include "Vector3.h"
 #include "GraphicMatrix.h"
 
@@ -16,6 +17,8 @@ float Random(float min, float max);
 Vector3 RotateBetweenVectors(Vector3, const Vector3&);
 int gettid();
 int bitcount();
+void setsighandler();
+extern bool running;
 
 template <typename T>
       string ToString(const T &input)

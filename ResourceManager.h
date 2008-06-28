@@ -18,13 +18,18 @@ class ResourceManager
       void LoadTexture(string);
       void ReleaseAll();
       
+#ifndef DEDICATED
       // Do not reorder these, texhand needs to come before texman
       TextureHandler texhand;
       TextureManager texman;
       Shader shaderman;
+#endif
       
    private:
       map<string, Material> materials;
+#ifdef DEDICATED
+      Material dummymat;
+#endif
 };
 
 #endif

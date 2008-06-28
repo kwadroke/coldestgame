@@ -21,7 +21,7 @@ void main()
    offsets[2] = gl_TexCoord[1].st * vec2(65., 125.);
    offsets[3] = gl_TexCoord[1].st * vec2(105., 195.);
    for (int i = 0; i < 4; ++i)
-      offsets[i] += vec2(0., time / 40000.);
+      offsets[i] += vec2(0., time / 80000.);
    
    shiftamount.xy = texture2D(noisetex, offsets[0]).rg - .5;
    shiftamount.zw = texture2D(fastnoisetex, offsets[1]).rg - .5;

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include "Mesh.h"
 #include "Particle.h"
 #include "ServerInfo.h"
 #include "gui/GUI.h"
@@ -14,6 +15,7 @@
 #include "ObjectKDTree.h"
 #include "Console.h"
 #include "ParticleEmitter.h"
+
 
 #define PI 3.14159265
 
@@ -32,10 +34,12 @@ extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
 extern vector<ParticleEmitter> emitters;
 extern vector<Item> items;
-extern vector<GUIPtr> gui;
 extern string nextmap;         // Used to signal the main thread to load a new map
 extern string mapname;         // The name of the current map
 extern ResourceManager resman; // Handles loading and organizing different resources
+#ifndef DEDICATED
+extern vector<GUIPtr> gui;
+#endif
 extern vector<PlayerData> player;
 extern vector<UnitData> units;
 extern bool server;

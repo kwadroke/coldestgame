@@ -50,8 +50,6 @@ void Console::Parse(const string& line, bool echo)
 {
    string simple = SimplifyWhitespace(line);
    
-   cout << simple << endl;
-   
    if (echo)
       WriteToConsole(simple);
    
@@ -62,10 +60,10 @@ void Console::Parse(const string& line, bool echo)
    
    if (Token(simple, 0) == "set" && NumTokens(simple) == 3)
    {
-      cout << "*" << Token(simple, 2) << "*" << endl;
       values[Token(simple, 1)] = Token(simple, 2);
       Action(Token(simple, 1) + " action");
    }
+#ifndef DEDICATED
    if (Token(simple, 0) == "send")
    {
       string remote;
@@ -77,6 +75,7 @@ void Console::Parse(const string& line, bool echo)
       }
       SendCommand(remote);
    }
+#endif
    else Action(Token(simple, 0));
 }
 
@@ -148,6 +147,7 @@ string Console::SimplifyWhitespace(const string& str)
 }
 
 
+#ifndef DEDICATED
 void Console::InitWidget(TextArea& co)
 {
    consoleout = &co;
@@ -158,6 +158,7 @@ void Console::InitWidget(TextArea& co)
       i = consolebuffer.erase(i);
    }
 }
+#endif
 
 
 /* The console needs to be written to in the process of loading autoexec.cfg, which means
@@ -167,11 +168,13 @@ void Console::InitWidget(TextArea& co)
 void Console::WriteToConsole(const string& line)
 {
    cout << line << endl;
+#ifndef DEDICATED
    if (consoleout)
    {
       consoleout->Append(line + "\n");
       return;
    }
+#endif
    consolebuffer.push_back(line + "\n");
 }
 
@@ -206,10 +209,12 @@ void Console::Action(const string& action)
       if (value >= 8  && value <= 8192)
       {
          int shadowres = value;
+#ifndef DEDICATED
 #ifndef DEBUGSMT
          shadowmapfbo = FBO(shadowres, shadowres, true, &resman.texhand);
 #else
          shadowmapfbo = FBO(shadowres, shadowres, false, &resman.texhand);
+#endif
 #endif
       }
       else WriteToConsole(string("Invalid value"));
@@ -220,12 +225,9 @@ void Console::Action(const string& action)
       if (value >= 8  && value <= 8192)
       {
          int reflectionres = value;
+#ifndef DEDICATED
          reflectionfbo = FBO(reflectionres, reflectionres, false, &resman.texhand);
-         if (initialized)
-         {
-               //for (vector<WorldPrimitives>::iterator i = waterobj->prims.begin(); i != waterobj->prims.end(); ++i)
-               //   i->texnums[0] = reflectionfbo.GetTexture();
-         }
+#endif
       }
       else WriteToConsole(string("Invalid value"));
    }
@@ -235,7 +237,9 @@ void Console::Action(const string& action)
       if (value >= 8  && value <= 8192)
       {
          int cloudres = value;
+#ifndef DEDICATED
          cloudfbo = FBO(cloudres, cloudres, false, &resman.texhand);
+#endif
       }
       else WriteToConsole(string("Invalid value"));
    }
@@ -247,7 +251,9 @@ void Console::Action(const string& action)
    }
    else if (action == "af action")
    {
+#ifndef DEDICATED
       resman.texhand.af = GetFloat("af");
+#endif
    }
    else if (action == "shadows action" || action == "softshadows action" || action == "reloadshaders")
    {

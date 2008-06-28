@@ -31,10 +31,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 #endif
 {
-#ifdef LINUX
-   //system("ulimit -c unlimited"); // This doesn't seem to work anyway:-(
-#endif
    //Debug();
+   setsighandler();
    initialized = false;
    InitGlobals();
    initialized = true;
@@ -46,8 +44,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    InitNoise();
    
    // Start network threads
+#ifndef DEDICATED
    netin = SDL_CreateThread(NetListen, NULL);
-   
+#else
+   server = true;
+   serverthread = SDL_CreateThread(Server, NULL);
+#endif
    MainLoop();
 
    return 0;
@@ -93,24 +95,27 @@ void InitGlobals()
    dummy.unit = UnitTest;
    player.push_back(dummy);
    
+#ifndef DEDICATED
    lasttick = SDL_GetTicks();
    frames = 0;
+   noiseres = 128;
+   staticdrawdist = false;
+#endif
    running = true;
    sendpacketnum.next();  // 0 has special meaning
    recpacketnum = 0;
    ackpack = 0;
    doconnect = false;
    connected = false;
-   noiseres = 128;
    nextmap = mapname = "";
    clientmutex = SDL_CreateMutex();
    spawnschanged = true;
    winningteam = 0;
-   staticdrawdist = false;
    weaponslots.push_back(Torso);
    weaponslots.push_back(LArm);
    weaponslots.push_back(RArm);
    
+#ifndef DEDICATED
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
    terrainshader = "shaders/terrain";
@@ -120,6 +125,7 @@ void InitGlobals()
    cloudgenshader = "shaders/cloudgen";
    bumpshader = "shaders/bump";
    flatshader = "shaders/flat";
+#endif
    
    ReadConfig();
    
@@ -138,6 +144,7 @@ void InitGlobals()
 
 void InitGUI()
 {
+#ifndef DEDICATED
    // SDL_ttf must be initialized before GUI's are built
    if (TTF_Init() == -1)
    {
@@ -159,6 +166,7 @@ void InitGUI()
    gui[endgame] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "endgame.xml"));
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
+#endif
 }
 
 
@@ -213,6 +221,7 @@ void SetupSDL()
    
    atexit(SDL_Quit);
    
+#ifndef DEDICATED
    video = SDL_GetVideoInfo();
    
    if (!video) 
@@ -263,11 +272,13 @@ void SetupSDL()
    }
    
    atexit(SDLNet_Quit);
+#endif
 }
 
 
 void SetupOpenGL()
 {
+#ifndef DEDICATED
    static bool first = true;
    
    int screenwidth = console.GetInt("screenwidth");
@@ -372,18 +383,22 @@ void SetupOpenGL()
    // Need different tex params for this texture
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+#endif
 }
 
 
 void LoadMaterials()
 {
+#ifndef DEDICATED
    resman.LoadMaterial("materials/water");
    shadowmat = &resman.LoadMaterial("materials/shadowgen");
+#endif
 }
 
 
 void InitShaders()
 {
+#ifndef DEDICATED
    if (!initialized) return;
    resman.shaderman.SetShadow(console.GetBool("shadows"), console.GetBool("softshadows"));
    resman.shaderman.ReloadAll();
@@ -408,6 +423,7 @@ void InitShaders()
    resman.shaderman.LoadShader(flatshader);
    
    resman.shaderman.UseShader("none");
+#endif
 }
 
 
@@ -415,6 +431,7 @@ void InitShaders()
 // Credit to: TODO: Need to look this up again, same source as the noise shader
 void InitNoise()
 {
+#ifndef DEDICATED
    int perm[256] = {151,160,137,91,90,15,
   131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
   190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
@@ -459,6 +476,7 @@ void InitNoise()
    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+#endif
 }
 
 
@@ -467,15 +485,22 @@ static void MainLoop()
    SDL_Event event;
    while(1) 
    {
+      if (!running)
+         Quit();
       if (nextmap != mapname)
       {
+#ifndef DEDICATED
          GUI* progress = gui[loadprogress]->GetWidget("loadingprogress");
          ShowGUI(loadprogress);
          Repaint();
+#endif
          GetMap(nextmap);
+#ifndef DEDICATED
          ShowGUI(loadoutmenu);
+#endif
       }
       
+#ifndef DEDICATED
       GUIUpdate();
       
       // process pending events
@@ -496,12 +521,14 @@ static void MainLoop()
       }
       // update the screen
       Repaint();
+#endif
    } // End of while(1)
 }  // End of MainLoop function
 
 
 void GUIUpdate()
 {
+#ifndef DEDICATED
    static Uint32 servupdatecounter = SDL_GetTicks();
    static Uint32 statupdatecounter = SDL_GetTicks();
    static GUI* teamdisplay = gui[loadoutmenu]->GetWidget("TeamDisplay");
@@ -580,11 +607,13 @@ void GUIUpdate()
       }
    }
    SDL_mutexV(clientmutex);
+#endif
 }
 
 
 bool GUIEventHandler(SDL_Event &event)
 {
+#ifndef DEDICATED
    // Mini keyboard handler to deal with the console
    bool eatevent = false;
    switch (event.type)
@@ -693,11 +722,13 @@ bool GUIEventHandler(SDL_Event &event)
    
    
    return eatevent;
+#endif
 }
 
 
 void GameEventHandler(SDL_Event &event)
 {
+#ifndef DEDICATED
    SDL_ShowCursor(0);
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
@@ -837,6 +868,7 @@ void GameEventHandler(SDL_Event &event)
       }
    }
    SDL_mutexV(clientmutex);
+#endif
 }
 
 
@@ -850,16 +882,15 @@ void Quit()
 void Cleanup()
 {
    running = false;
+#ifndef DEDICATED
    cout << "Waiting for netout thread to end" << endl;
    SDL_WaitThread(netout, NULL);
    cout << "Waiting for netin thread to end" << endl;
    SDL_WaitThread(netin, NULL);
+#endif
    cout << "Waiting for server to end" << endl;
    SDL_WaitThread(serverthread, NULL);
    SDL_DestroyMutex(clientmutex);
-#ifdef LINUX
-   //system("ulimit -c 0");
-#endif
 }
 
 
@@ -959,7 +990,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    mplayer.pos.x += d.x * step * mplayer.speed;
    mplayer.pos.z -= d.z * step * mplayer.speed;
    
-   static const float threshold = .35f;
+   static const float threshold = .25f;
    static float gravity = .1f;
    
    if (console.GetBool("fly"))
@@ -1225,6 +1256,7 @@ void Animate()
 
 void UpdateServerList()
 {
+#ifndef DEDICATED
    Table* serverlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
    string values;
    vector<ServerInfo>::iterator i;
@@ -1245,6 +1277,7 @@ void UpdateServerList()
       }
    }
    SDL_mutexV(clientmutex);
+#endif
 }
 
 
@@ -1314,11 +1347,13 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
    list<Particle> newparts;
    IniReader empty("models/empty/base");
    int updint = console.GetInt("partupdateinterval");
+#ifndef DEDICATED
    if (!HitHandler && partupd >= updint)
    {
       particlemesh = MeshPtr(new Mesh(empty, resman));
       particlemesh->dynamic = true;
    }
+#endif
    Vector3 oldpos, partcheck, hitpos;
    vector<Mesh*> hitmeshes;
    if (partupd >= updint)
@@ -1351,10 +1386,12 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             }
             else
             {
+#ifndef DEDICATED
                if (!HitHandler)
                {
                   j->Render(particlemesh.get(), player[0].pos);
                }
+#endif
                ++j;
             }
          }
@@ -1374,11 +1411,13 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          }
       }
       partupd = 0;
+#ifndef DEDICATED
       if (!HitHandler)
       {
          particlemesh->GenVbo();
          particles.insert(particles.end(), newparts.begin(), newparts.end());
       }
+#endif
    }
    else ++partupd;
 }
@@ -1425,6 +1464,7 @@ float GetTerrainHeight(const float x, const float y)
 
 void UpdatePlayerList()
 {
+#ifndef DEDICATED
    SDL_mutexP(clientmutex);
    
    Table* playerlist = dynamic_cast<Table*>(gui[ingamestatus]->GetWidget("playerlist"));
@@ -1447,12 +1487,14 @@ void UpdatePlayerList()
    }
    
    SDL_mutexV(clientmutex);
+#endif
 }
 
 
 // Must grab clientmutex before calling this function
 void AppendToChat(int playernum, string line)
 {
+#ifndef DEDICATED
    TextArea *chatout = (TextArea*)gui[chat]->GetWidget("chatoutput");
    if (!chatout)
    {
@@ -1461,16 +1503,19 @@ void AppendToChat(int playernum, string line)
    }
    chatout->Append(player[playernum].name + ": " + line + "\n");
    chatout->ScrollToBottom();
+#endif
 }
 
 
 void ShowGUI(int toshow)
 {
+#ifndef DEDICATED
    for (size_t i = 0; i < gui.size(); ++i)
       gui[i]->visible = false;
    gui[toshow]->visible = true;
    if (console.GetBool("showfps"))
       gui[statsdisp]->visible = true;
+#endif
 }
 
 
@@ -1501,6 +1546,7 @@ The following are all utility functions
 
 void SDL_GL_Enter2dMode()
 {
+#ifndef DEDICATED
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
    // Make the viewport cover the whole window
@@ -1525,11 +1571,13 @@ void SDL_GL_Enter2dMode()
    glDisable(GL_LIGHTING);
    //glDisable(GL_FOG);
    //glDisable(GL_CULL_FACE);
+#endif
 }
 
 
 void SDL_GL_Exit2dMode()
 {
+#ifndef DEDICATED
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
    
@@ -1537,6 +1585,7 @@ void SDL_GL_Exit2dMode()
    glPopMatrix();
    
    glPopAttrib();
+#endif
 }
 
 
