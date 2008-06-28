@@ -63,6 +63,12 @@ void Console::Parse(const string& line, bool echo)
       values[Token(simple, 1)] = Token(simple, 2);
       Action(Token(simple, 1) + " action");
    }
+   if (Token(simple, 0) == "setsave" && NumTokens(simple) == 3)
+   {
+      saveval.insert(Token(simple, 1));
+      values[Token(simple, 1)] = Token(simple, 2);
+      Action(Token(simple, 1) + " action");
+   }
 #ifndef DEDICATED
    if (Token(simple, 0) == "send")
    {
@@ -176,6 +182,48 @@ void Console::WriteToConsole(const string& line)
    }
 #endif
    consolebuffer.push_back(line + "\n");
+}
+
+
+void Console::SaveToFile(const string& filename)
+{
+   ifstream read(filename.c_str());
+   string buffer;
+   deque<string> lines;
+   set<string> saved;
+   while(getline(read, buffer))
+   {
+      string simple = SimplifyWhitespace(buffer);
+      
+      if (Token(simple, 0) == "set" || Token(simple, 0) == "setsave")
+      {
+         if (saveval.find(Token(simple, 1)) != saveval.end())
+         {
+            string newcommand = Token(simple, 0);
+            newcommand += " " + Token(simple, 1) + " " + values[Token(simple, 1)] + '\n';
+            lines.push_back(newcommand);
+            saved.insert(Token(simple, 1));
+         }
+         else lines.push_back(simple + '\n');
+      }
+      else
+         lines.push_back(simple + '\n');
+   }
+   read.close();
+   
+   ofstream save(filename.c_str());
+   while (lines.size())
+   {
+      save << lines.front();
+      lines.pop_front();
+   }
+   set<string> remaining;
+   set_difference(saveval.begin(), saveval.end(), saved.begin(), saved.end(), inserter(remaining, remaining.end()));
+   for (set<string>::iterator i = remaining.begin(); i != remaining.end(); ++i)
+   {
+      save << "set " << *i << " " << values[*i] << endl;
+   }
+   save.close();
 }
 
 

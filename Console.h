@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
+#include <set>
 #include "gui/TextArea.h"
 #include "renderdefs.h"
 #include "netdefs.h"
@@ -15,6 +16,8 @@ using std::string;
 using std::endl;
 using std::cout;
 using std::deque;
+using std::set;
+using std::inserter;
 
 class Console
 {
@@ -27,6 +30,7 @@ class Console
       void Parse(const string&, bool echo = true);
       void InitWidget(TextArea&);
       void WriteToConsole(const string&);
+      void SaveToFile(const string&);
       
       
    private:
@@ -36,6 +40,7 @@ class Console
       void Action(const string&);
       
       map<string, string> values;
+      set<string> saveval;
       deque<string> consolebuffer;
       TextArea* consoleout;
 };
