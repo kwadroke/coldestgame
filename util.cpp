@@ -72,6 +72,19 @@ Vector3 RotateBetweenVectors(Vector3 start, const Vector3& end)
 }
 
 
+// The main thread isn't necessarily the one getting this signal, and Quit() needs to
+// be called from there, so signal it that we're done.
+void handler(int param)
+{
+   running = false;
+}
+void setsighandler()
+{
+   signal(SIGTERM, handler);
+   signal(SIGINT, handler);
+}
+
+
 // This maybe shouldn't return an int...
 int gettid()
 {

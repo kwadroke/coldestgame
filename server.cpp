@@ -170,6 +170,8 @@ int ServerListen()
    unsigned short oppnum;
    Uint32 currtick;
    
+   setsighandler();
+   
    // Debugging
    Timer t;
    unsigned long runtimes = 0;
@@ -329,9 +331,9 @@ int ServerListen()
             bool add = true;
             int respondto = 0;
             SDL_mutexP(servermutex);
-            for (int i = 0; i < serverplayers.size(); ++i)
+            for (int i = 1; i < serverplayers.size(); ++i)
             {
-               if (serverplayers[i].addr.host == inpack->address.host)
+               if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].addr.port == inpack->address.port)
                {
                   respondto = i;
                   add = false;
@@ -583,9 +585,7 @@ int ServerListen()
                get.ignore();
                getline(get, command);
                SDL_mutexP(clientmutex);
-               cout << "*" << command << "*" << endl;
                console.Parse(command, false);
-               cout << console.GetBool("ghost") << endl;
                for (size_t i = 0; i < serverplayers.size(); ++i)
                   SendSyncPacket(serverplayers[i]);
                SDL_mutexV(clientmutex);
@@ -610,6 +610,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
    Uint32 currnettick = 0;
    short int pingtick = 0;
    UDPsocket broadcastsock;
+   
+   setsighandler();
    
    // Debugging
    Timer t;

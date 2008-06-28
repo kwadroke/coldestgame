@@ -50,12 +50,15 @@ void InitShaders();
 
 extern Meshlist meshes;
 
+extern float mapwidth, mapheight;
+
+#ifndef DEDICATED
 extern int lasttick, frames, trislastframe;
 extern int noiseres;
 extern int fbostarts[3];
 extern int fbodims[3];
 extern float fps;
-extern float nearclip, aspect, impdistmulti, mapwidth, mapheight;
+extern float nearclip, aspect, impdistmulti;
 extern bool staticdrawdist, guncam;
 extern GLuint noisetex;
 extern vector<GLuint> textures;
@@ -71,5 +74,6 @@ extern Material* skyboxmat;
 extern Material* shadowmat;
 extern MeshPtr particlemesh;
 extern vector<GUIPtr> spawnbuttons;
+#endif
 
 #endif

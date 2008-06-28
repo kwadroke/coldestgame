@@ -3,6 +3,7 @@
 
 int Material::nummats = 0;
 
+#ifndef DEDICATED
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f), shininess(0.f),
                    texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
                    shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true)
@@ -47,10 +48,16 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
    
    ++nummats;
 }
+#else
+
+Material::Material(){}
+
+#endif
 
 
 void Material::Use() const
 {
+#ifndef DEDICATED
    for (int i = 0; i < 6; ++i) // At this time, textures 7 and 8 are reserved for shadowmaps
    {
       texman.texhand->ActiveTexture(i);
@@ -113,15 +120,18 @@ void Material::Use() const
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &diffuse[0]);
    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, &specular[0]);
    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+#endif
 }
 
 
 void Material::UseTextureOnly() const
 {
+#ifndef DEDICATED
    if (texfilename[0] != "")
       texman.BindTexture(texfilename[0]);
    else
       texman.texhand->BindTexture(texid[0]);
+#endif
 }
 
 
@@ -149,11 +159,13 @@ bool Material::operator<(const Material& m) const
 
 void Material::Release()
 {
+#ifndef DEDICATED
    for (int i = 0; i < 6; ++i)
    {
       if (texfilename[i] != "")
          texman.DeleteTexture(texfilename[i]);
       // Textures in texid are not our problem because they should come from FBO's.
    }
+#endif
 }
 

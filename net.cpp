@@ -46,6 +46,8 @@ int NetSend(void* dummy)
    changeteam = 0;
    lastsyncpacket = 0;
    
+   setsighandler();
+   
    // Debugging
    Timer t;
    unsigned long runtimes = 0;
@@ -281,6 +283,9 @@ int NetListen(void* dummy)
    unsigned short oppnum;
    string getdata;
    string packettype;
+   bool annlisten = true;
+   
+   setsighandler();
    
    // Just for announcement packets
    UDPsocket annsock;
@@ -296,7 +301,8 @@ int NetListen(void* dummy)
    if (!(annsock = SDLNet_UDP_Open(1336)))
    {
       cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
-      return -1;
+      annlisten = false;
+      //return -1;
    }
    
    if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
@@ -824,27 +830,30 @@ int NetListen(void* dummy)
       
       // Have to listen on a specific port for server announcements.  Since this is only for LAN play
       // it doesn't matter that this won't work with NAT
-      while (SDLNet_UDP_Recv(annsock, inpack))
+      if (annlisten)
       {
-         getdata = (char*)inpack->data;
-         stringstream get(getdata);
-         
-         get >> packettype;
-         get >> packetnum;
-         if (packettype == "a")
+         while (SDLNet_UDP_Recv(annsock, inpack))
          {
-            ServerInfo addme;
-            addme.address = inpack->address;
-            if (knownservers.find(addme) == knownservers.end())
+            getdata = (char*)inpack->data;
+            stringstream get(getdata);
+            
+            get >> packettype;
+            get >> packetnum;
+            if (packettype == "a")
             {
-               cout << "Received announcement packet from ";
-               string dotteddec = AddressToDD(inpack->address.host);
-               cout << dotteddec << endl;
-               addme.strip = dotteddec;
-               SDL_mutexP(clientmutex);
-               servers.push_back(addme);
-               SDL_mutexV(clientmutex);
-               knownservers.insert(addme); // No need to wrap this, only used here
+               ServerInfo addme;
+               addme.address = inpack->address;
+               if (knownservers.find(addme) == knownservers.end())
+               {
+                  cout << "Received announcement packet from ";
+                  string dotteddec = AddressToDD(inpack->address.host);
+                  cout << dotteddec << endl;
+                  addme.strip = dotteddec;
+                  SDL_mutexP(clientmutex);
+                  servers.push_back(addme);
+                  SDL_mutexV(clientmutex);
+                  knownservers.insert(addme); // No need to wrap this, only used here
+               }
             }
          }
       }

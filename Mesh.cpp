@@ -6,10 +6,12 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), currkeyframe(0),
             frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
-            impmat(MaterialPtr()), animspeed(1.f)
+            animspeed(1.f)
 {
+#ifndef DEDICATED
    if (gl)
       impmat = MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman));
+#endif
    Load(reader);
 }
 
@@ -28,13 +30,15 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), ibo(m.ibo), next(m.next), hasvbo(m.hasvbo),
          currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), collide(m.collide), dist(m.dist), impostor(m.impostor), 
-         impmat(MaterialPtr()), animspeed(m.animspeed)
+         animspeed(m.animspeed)
 {
+#ifndef DEDICATED
    if (m.impmat)
    {
       impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
       impmat->SetTexture(0, m.impmat->GetTexture(0));
    }
+#endif
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
@@ -284,7 +288,6 @@ void Mesh::Load(const IniReader& reader)
       t.ReadParams(reader);
       reader.Read(barkmat, "Materials", 0);
       reader.Read(leafmat, "Materials", 1);
-      
       size_t save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
       cout << "Tree primitives: " << save << endl;
    }
@@ -454,6 +457,7 @@ void Mesh::BindVbo()
 // we don't care about anything but the right shape so we use a very basic material
 void Mesh::Render(Material* overridemat)
 {
+#ifndef DEDICATED
    if (!tris.size() || !render || !hasvbo) return;
    BindVbo();
    size_t currindex = 0;
@@ -476,11 +480,13 @@ void Mesh::Render(Material* overridemat)
    
    glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+#endif
 }
 
 
 void Mesh::BindAttribs()
 {
+#ifndef DEDICATED
    VBOData dummy;
    int location;
    location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
@@ -501,11 +507,13 @@ void Mesh::BindAttribs()
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tx) - (ptrdiff_t)&dummy));
    }
+#endif
 }
 
 
 void Mesh::UnbindAttribs()
 {
+#ifndef DEDICATED
    int location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
    if (location >= 0)
    {
@@ -521,11 +529,13 @@ void Mesh::UnbindAttribs()
    {
       glDisableVertexAttribArrayARB(location);
    }
+#endif
 }
 
 
 void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 {
+#ifndef DEDICATED
    if (!impostor)
    {
       IniReader impread("models/impostor/base");
@@ -552,6 +562,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    impostor->Move(moveto);
    impostor->AdvanceAnimation(campos);
    rendermesh.Add(*impostor);
+#endif
 }
 
 
@@ -671,6 +682,7 @@ void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, floa
 
 void Mesh::LoadMaterials()
 {
+#ifndef DEDICATED
    if (havemats) return;
    for (size_t i = 0; i < tris.size(); ++i)
    {
@@ -682,6 +694,7 @@ void Mesh::LoadMaterials()
    }
    impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
    havemats = true;
+#endif
 }
 
 

@@ -229,7 +229,9 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       for (int j = 0; j < oldpts.size(); ++j)
       {
          Quad tempq;
+#ifndef DEDICATED
          tempq.SetMaterial(bark);
+#endif
          newind = (int)(j * ((float)numslices / (float)oldpts.size()));
          newind1 = (int)((j + 1) * ((float)numslices / (float)oldpts.size()));
          tempq.SetVertex(0, newpts[newind]);

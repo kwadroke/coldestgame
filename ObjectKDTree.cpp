@@ -646,6 +646,7 @@ void ObjectKDTree::setretobjs(MeshSet* in)
 // Grr, some of these quads are defined backwards, hence the disable face culling
 void ObjectKDTree::visualize()
 {
+#ifndef DEDICATED
    float alpha = .05;
    glDisable(GL_TEXTURE_2D);
    glDisable(GL_FOG);
@@ -711,4 +712,5 @@ void ObjectKDTree::visualize()
    if (!haschildren) return;
    for (int i = 0; i < 2; ++i)
       children[i].visualize();
+#endif
 }

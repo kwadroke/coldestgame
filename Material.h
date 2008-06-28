@@ -17,7 +17,11 @@ using boost::shared_ptr;
 class Material
 {
    public:
+#ifndef DEDICATED
       Material(string, TextureManager&, Shader&);
+#else
+      Material();
+#endif
       void Use() const;
       void UseTextureOnly() const;
       void SetTexture(int, GLuint);
@@ -34,8 +38,10 @@ class Material
       vector<GLuint> texid;
       vector<string> texfilename;
       string shader;
+#ifndef DEDICATED
       TextureManager& texman;
       Shader& shaderhand;
+#endif
       int id;
       static int nummats;
       bool cullface, doalphatest, alphatocoverage, additive, depthtest, depthwrite;
