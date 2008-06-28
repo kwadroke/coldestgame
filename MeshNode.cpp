@@ -32,7 +32,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
    }
    else
    {
-      Vector3 norm(0, 0, 1);
+      Vector3 norm(0, 0, -1);
       Vector3 dir;
       Vector3 start = -norm; // Initial view direction
       Vector3 facerot, currpos;

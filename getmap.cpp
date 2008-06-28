@@ -588,8 +588,9 @@ void GetMap(string fn)
       
       grassw = loadgrass->w;
       grassh = loadgrass->h;
-      float grasssize = mapwidth / (float)grassw;
-      float maxperpoint = 10;
+      float grasssizex = mapwidth / float(grassw);
+      float grasssizey = mapheight / float(grassh);
+      float maxperpoint = 100;
    
       SDL_LockSurface(loadgrass);
       data = (unsigned char*)loadgrass->pixels;
@@ -612,7 +613,7 @@ void GetMap(string fn)
                {
                   int offset = (y + iy) * grassw + (x + ix);
                   offset *= loadgrass->format->BytesPerPixel;
-                  float d = static_cast<float>(data[offset]) / 255.f * Random(0, density);
+                  float d = static_cast<float>(data[offset]) / 255.f * density;
                   d *= console.GetFloat("grassdensity");
                   int num = static_cast<int>(d);
                   
@@ -620,8 +621,8 @@ void GetMap(string fn)
                   {
                      float angle = Random(0, 2.f * PI);
                      float dist = Random(0, mapwidth / (float)grassw);
-                     float newx = dist * cos(angle) + (x + ix) * grasssize;
-                     float newy = dist * sin(angle) + (y + iy) * grasssize;
+                     float newx = dist * cos(angle) + (x + ix) * grasssizex;
+                     float newy = dist * sin(angle) + (y + iy) * grasssizey;
                      Vector3 rots;
                      rots.x = Random(mintilt, maxtilt);
                      rots.y = Random(0, 360);
@@ -643,8 +644,8 @@ void GetMap(string fn)
             }
             if (grassmesh.Size())
             {
-               float mx = (x + (float)groupsize / 2.f) * grasssize;
-               float my = (y + (float)groupsize / 2.f) * grasssize;
+               float mx = (x + (float)groupsize / 2.f) * grasssizex;
+               float my = (y + (float)groupsize / 2.f) * grasssizey;
                grassmesh.Move(Vector3(mx, 0, my));
                grassmesh.CalcBounds();
                grassmesh.collide = false;

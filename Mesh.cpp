@@ -487,6 +487,7 @@ void Mesh::Render(Material* overridemat)
 void Mesh::BindAttribs()
 {
 #ifndef DEDICATED
+   if (resman.shaderman.CurrentShader() == "none") return;
    VBOData dummy;
    int location;
    location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
@@ -514,6 +515,7 @@ void Mesh::BindAttribs()
 void Mesh::UnbindAttribs()
 {
 #ifndef DEDICATED
+   if (resman.shaderman.CurrentShader() == "none") return;
    int location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
    if (location >= 0)
    {
