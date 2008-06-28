@@ -32,9 +32,8 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, m
    }
    else
    {
-      Vector3 norm(0, 0, -1);
       Vector3 dir;
-      Vector3 start = -norm; // Initial view direction
+      Vector3 start(0, 0, 1);
       Vector3 facerot, currpos;
       
       // Find the current position - note that this duplicates code, but with facing containers

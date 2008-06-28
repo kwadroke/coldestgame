@@ -66,7 +66,7 @@ Vector3 RotateBetweenVectors(Vector3 start, const Vector3& end)
    rotm.rotatey(ret.y);
    start.transform(rotm);
    ret.x = acos(start.dot(dir)) * 180.f / 3.14159265f;
-   if (dir.y <= 0)
+   if (dir.y >= 0)
       ret.x *= -1;
    return ret;
 }
