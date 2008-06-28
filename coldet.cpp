@@ -176,7 +176,7 @@ void InitUnits()
    dummy.file = "unittest";
    dummy.turnspeed = 1.f;
    dummy.acceleration = .05f;
-   dummy.maxspeed = 1.f;
+   dummy.maxspeed = 2.f;
    dummy.size = 25.f;
    dummy.weight = 50;
    dummy.weaponoffset[Legs] = Vector3();
@@ -591,7 +591,7 @@ void GUIUpdate()
             newbutton->width = 50;
             newbutton->height = 50;
             newbutton->x = availablespawns[i].position.x / mapwidth * maplabel->width - newbutton->width / 2.f;
-            newbutton->y = availablespawns[i].position.z / mapwidth * maplabel->height - newbutton->height / 2.f;
+            newbutton->y = availablespawns[i].position.z / mapheight * maplabel->height - newbutton->height / 2.f;
             newbutton->text = ToString(i);
             newbutton->leftclickaction = "selectspawn";
             newbutton->SetTexture(Normal, "textures/buttonnorm.png");
