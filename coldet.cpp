@@ -891,6 +891,7 @@ void Cleanup()
    cout << "Waiting for server to end" << endl;
    SDL_WaitThread(serverthread, NULL);
    SDL_DestroyMutex(clientmutex);
+   console.SaveToFile("autoexec.cfg");
 }
 
 
