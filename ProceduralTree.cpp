@@ -244,6 +244,18 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          tempq.SetNormal(2, normals[newind1 % numslices]);
          tempq.SetNormal(3, normals[newind1 % numslices]);
          
+         floatvec tc(2, 0.f);
+         int currseg = side ? side : seg;
+         tc[0] = float(j) / float(oldpts.size());
+         tc[1] = float(currseg + 1) / float(numsegs);
+         tempq.SetTexCoords(0, 0, tc);
+         tc[1] = float(currseg) / float(numsegs);
+         tempq.SetTexCoords(1, 0, tc);
+         tc[0] = float(j + 1) / float(oldpts.size());
+         tempq.SetTexCoords(2, 0, tc);
+         tc[1] = float(currseg + 1) / float(numsegs);
+         tempq.SetTexCoords(3, 0, tc);
+         
          mesh->Add(tempq);
          ++totalprims;
       }
