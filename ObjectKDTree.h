@@ -59,7 +59,6 @@ class ObjectKDTree
    private:
       int size();
       bool innode(Vector3, float);
-      bool innode2d(Vector3, float);
       bool infrustum();
       bool infrustum(Mesh*);
       void setretobjs(MeshSet*);

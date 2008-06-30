@@ -254,36 +254,18 @@ bool ObjectKDTree::insert(Mesh *obj)
       members.push_back(obj);
       return true;
    }
-   /*else if (obj->type == "terrain" && innode2d(Vector3(obj->x, obj->y, obj->z), obj->size))
-   {
-      members.push_back(obj);
-      return true;
-   }*/
    return false;
 }
 
 
 bool ObjectKDTree::innode(Vector3 v, float size)
 {
-   float size2 = size / 2.f;
-   return (v.x >= vertices[0].x - size2 &&
-           v.y <= vertices[0].y + size2 &&
-           v.z >= vertices[0].z - size2 &&
-           v.x <= vertices[6].x + size2 &&
-           v.y >= vertices[6].y - size2 &&
-           v.z <= vertices[6].z + size2);
-}
-
-
-// Just for terrain because we only care about x and z coords
-// Don't think we're actually using this function anymore...
-bool ObjectKDTree::innode2d(Vector3 v, float size)
-{
-   float size2 = size / 2.f;
-   return (v.x >= vertices[0].x - size2 &&
-           v.z >= vertices[0].z - size2 &&
-           v.x <= vertices[6].x + size2 &&
-           v.z <= vertices[6].z + size2);
+   return (v.x >= vertices[0].x - size &&
+           v.y <= vertices[0].y + size &&
+           v.z >= vertices[0].z - size &&
+           v.x <= vertices[6].x + size &&
+           v.y >= vertices[6].y - size &&
+           v.z <= vertices[6].z + size);
 }
 
 
