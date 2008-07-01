@@ -991,8 +991,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    mplayer.pos.x += d.x * step * mplayer.speed;
    mplayer.pos.z -= d.z * step * mplayer.speed;
    
-   static const float threshold = .25f;
-   static float gravity = .1f;
+   static const float threshold = .2f;
+   static float gravity = .5f;
    
    if (console.GetBool("fly"))
       mplayer.pos.y += d.y * step * mplayer.speed;
@@ -1351,8 +1351,12 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 #ifndef DEDICATED
    if (!HitHandler && partupd >= updint)
    {
-      particlemesh = MeshPtr(new Mesh(empty, resman));
-      particlemesh->dynamic = true;
+      if (!particlemesh)
+      {
+         particlemesh = MeshPtr(new Mesh(empty, resman));
+         particlemesh->dynamic = true;
+      }
+      particlemesh->Clear();
    }
 #endif
    Vector3 oldpos, partcheck, hitpos;

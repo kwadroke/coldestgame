@@ -47,3 +47,9 @@ void Triangle::CalcMaxDim()
 }
 
 
+float Triangle::Perimeter(const Vector3& one, const Vector3& two, const Vector3& three)
+{
+   return one.distance(two) + two.distance(three) + three.distance(one);
+}
+
+

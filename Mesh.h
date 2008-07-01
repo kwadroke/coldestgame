@@ -42,6 +42,7 @@ class Mesh
       void Add(TrianglePtr&);
       void Add(Quad&);
       void Add(Mesh&);
+      void Clear();
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
       void Scale(const float&);
@@ -92,6 +93,7 @@ class Mesh
       intvec frametime;
       vector<map<string, MeshNodePtr> > framecontainer;
       bool hasvbo;
+      int vbosize, ibosize;
       
       int animtime;
       int currkeyframe;

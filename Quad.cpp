@@ -65,6 +65,20 @@ void Quad::SetVertexPtr(const int num, const VertexPtr& v)
 }
 
 
+VertexPtr Quad::GetVertexPtr(const int num) const
+{
+   int vert, vert1;
+   
+   GetVertNums(num, vert, vert1);
+   
+   if (vert >= 0 && vert < 3)
+      return first->v[vert];
+   if (vert1 >= 0 && vert1 < 3) 
+      return second->v[vert1];
+   return VertexPtr(); // Uh oh
+}
+
+
 void Quad::SetVertex(const int num, const Vector3& v)
 {
    int vert, vert1;

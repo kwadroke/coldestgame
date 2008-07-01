@@ -4,8 +4,8 @@
 Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
-            impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), currkeyframe(0),
-            frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
+            impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
+            currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
             animspeed(1.f)
 {
 #ifndef DEDICATED
@@ -378,22 +378,27 @@ void Mesh::GenVbo()
       
       glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
-      if (frameroot.size() <= 1 && !dynamic)
+      if (!hasvbo || (vbodata.size() * sizeof(VBOData) > vbosize) || (indexdata.size() * sizeof(unsigned short) > ibosize))
       {
-         glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                         0, GL_STATIC_DRAW_ARB);
-         glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
-                     vbodata.size() * sizeof(VBOData), 
-                     0, GL_STATIC_DRAW_ARB);
-      }
-      else
-      {
-         glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                         0, GL_STREAM_DRAW_ARB);
-         glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+         if (frameroot.size() <= 1 && !dynamic)
+         {
+            glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
+                           0, GL_STATIC_DRAW_ARB);
+            glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                         vbodata.size() * sizeof(VBOData), 
-                        0, GL_STREAM_DRAW_ARB);
+                        0, GL_STATIC_DRAW_ARB);
+         }
+         else
+         {
+            glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
+                           0, GL_STREAM_DRAW_ARB);
+            glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+                           vbodata.size() * sizeof(VBOData), 
+                           0, GL_STREAM_DRAW_ARB);
+         }
       }
+      vbosize = vbodata.size() * sizeof(VBOData);
+      ibosize = indexdata.size() * sizeof(unsigned short);
       glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
       glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
       glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
@@ -810,6 +815,13 @@ Triangle& Mesh::Next()
 int Mesh::Size() const
 {
    return tris.size();
+}
+
+
+void Mesh::Clear()
+{
+   tris.clear();
+   vertices.clear();
 }
 
 

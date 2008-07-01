@@ -45,11 +45,6 @@ inline float Vector3::dot(const Vector3& v) const
 
 inline Vector3 Vector3::cross(const Vector3& v) const
 {
-/*   Vector3 newv(0, 0, 0);
-   newv.x = y * v.z - z * v.y;
-   newv.y = z * v.x - x * v.z;
-   newv.z = x * v.y - y * v.x;
-   return newv;*/
    return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 }
 
@@ -62,6 +57,16 @@ inline void Vector3::normalize()
       y /= mag;
       z /= mag;
    }
+}
+
+inline float Vector3::magnitude() const
+{
+   return sqrt(x * x + y * y + z * z);
+}
+
+inline Vector3 Vector3::operator- (const Vector3& v) const
+{
+   return Vector3(x - v.x, y - v.y, z - v.z);
 }
 
 

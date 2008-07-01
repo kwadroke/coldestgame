@@ -29,6 +29,7 @@ class Triangle
       bool operator>(const Triangle&) const;
       ushortvec GetIndices();
       static bool TriPtrComp(const shared_ptr<Triangle>&, const shared_ptr<Triangle>&);
+      static float Perimeter(const Vector3&, const Vector3&, const Vector3&);
       void CalcMaxDim();
       
       VertexPtrvec v;

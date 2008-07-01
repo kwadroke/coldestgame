@@ -13,6 +13,7 @@ class Quad
       Quad(const Quad&);
       Quad& operator=(const Quad&);
       void SetVertexPtr(const int, const VertexPtr&);
+      VertexPtr GetVertexPtr(const int) const;
       void SetVertex(const int, const Vector3&);
       inline Vector3 GetVertex(const int) const;
       void SetNormal(const int, const Vector3&);

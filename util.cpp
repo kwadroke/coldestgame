@@ -44,7 +44,7 @@ bool floatzero(float num, float error)
 
 float Random(float min, float max)
 {
-   if (max < min) return 0;
+   if (max <= min) return min;
    float size = max - min;
    return (size * ((float)rand() / (float)RAND_MAX) + min);
 }

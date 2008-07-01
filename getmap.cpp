@@ -490,6 +490,42 @@ void GetMap(string fn)
          temptc[0] = ((x % terrainstretch) + 1) * texpiece;
          temptc[1] = (y % terrainstretch) * texpiece;
          tempquad.SetTexCoords(3, 1, temptc);
+         
+         Vector3 mid1 = tempquad.GetVertex(0) + tempquad.GetVertex(2);
+         mid1 /= 2.f;
+         Vector3 mid2 = tempquad.GetVertex(1) + tempquad.GetVertex(3);
+         mid2 /= 2.f;
+         Vector3 avgnorm;
+         for (size_t i = 0; i < 4; ++i)
+         {
+            avgnorm += tempquad.GetVertexPtr(i)->norm;
+         }
+         avgnorm /= 4.f;
+         Vector3 rots = RotateBetweenVectors(Vector3(0, 1, 0), avgnorm);
+         GraphicMatrix m;
+         m.rotatex(rots.x);
+         m.rotatey(rots.y);
+         mid1.transform(m);
+         mid2.transform(m);
+         
+         float tri1 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(1), tempquad.GetVertex(3));
+         float tri2 = Triangle::Perimeter(tempquad.GetVertex(1), tempquad.GetVertex(2), tempquad.GetVertex(3));
+         float size1 = min(tri1, tri2);
+         tri1 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(1), tempquad.GetVertex(2));
+         tri2 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(2), tempquad.GetVertex(3));
+         float size2 = min(tri1, tri2);
+         if (size1 - size2 > float(tilesize) * .2f || 
+             (mid1.y < mid2.y && size1 - size2 > -float(tilesize) * .2f))// Then rotate the quad so the triangle split happens on the other axis
+         {
+            VertexPtr last = tempquad.GetVertexPtr(0);
+            for (size_t i = 0; i < 3; ++i)
+            {
+               tempquad.SetVertexPtr(i, tempquad.GetVertexPtr((i + 1) % 4));
+            }
+            tempquad.SetVertexPtr(3, last);
+               
+         }
+         
          currmesh->Add(tempquad);
       }
    }
