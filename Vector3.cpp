@@ -50,12 +50,6 @@ void Vector3::operator+= (const Vector3& v)
 }
 
 
-Vector3 Vector3::operator- (const Vector3& v) const
-{
-   return Vector3(x - v.x, y - v.y, z - v.z);
-}
-
-
 void Vector3::operator-= (const Vector3& v)
 {
    x -= v.x;
@@ -177,12 +171,6 @@ float Vector3::distance2(const Vector3& v) const
    return (x - v.x) * (x - v.x) + 
          (y - v.y) * (y - v.y) + 
          (z - v.z) * (z - v.z);
-}
-
-
-float Vector3::magnitude() const
-{
-   return sqrt(x * x + y * y + z * z);
 }
 
 

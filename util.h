@@ -21,7 +21,7 @@ void setsighandler();
 extern bool running;
 
 template <typename T>
-      string ToString(const T &input)
+string ToString(const T &input)
 {
    stringstream temp;
    temp << input;
@@ -30,7 +30,7 @@ template <typename T>
 
 
 template <typename T>
-      T lerp(T x, T y, float a)
+T lerp(T x, T y, float a)
 {
    return (x * a + y * (1 - a));
 }

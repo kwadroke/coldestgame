@@ -13,7 +13,7 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
    Uint32 currtick = SDL_GetTicks();
    Uint32 numticks = currtick - lastupdate;
    int addcount = int(Random(0.f, density * float(numticks)));
-   for (size_t i = 0; i < addcount; ++i)
+   for (size_t i = 0; i < addcount, count != 0; ++i)
    {
       Particle newpart(particle);
       newpart.pos = position;
@@ -24,9 +24,8 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
       newpart.dir.transform(m);
       partlist.push_back(newpart);
       --count;
-      if (count == 0) return true;
    }
-   if (numticks >= emittertime) return true;
+   if (numticks >= emittertime || count == 0) return true;
    emittertime -= numticks;
    return false;
 }
