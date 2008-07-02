@@ -5,3 +5,4 @@ Texture0
 Texture1 
 Shader shaders/water
 Shininess 64
+CullFace 0

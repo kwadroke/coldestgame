@@ -44,6 +44,7 @@ void GLError();
 void UpdateClouds();
 void SetReflection(bool);
 void UpdateNoise();
+void UpdateReflection();
 void SynchronizePosition();
 void LoadMaterials();
 void InitShaders();
