@@ -65,7 +65,7 @@ void Repaint()
          rot.rotatex(-localplayer.pitch);
          rot.rotatey(localplayer.facing + localplayer.rotation);
          //rot.rotatez(localplayer.roll);
-         Vector3 look(0, 0, -100);
+         Vector3 look(0, 0, -detailmapsize / 2.f);
          look.transform(rot);
          look += localplayer.pos;
          
@@ -513,7 +513,9 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    Vector3 p = lights.GetPos(0);
    Vector3 rots = lights.GetRots(0);
    
-   float lightfov = tan(size * 1.42f / Light::infinity) * 180.f / PI;
+   // 1.5 is to leave some room for error since we're approximating an ortho view with
+   // a perspective projection
+   float lightfov = tan(size * 1.5f / Light::infinity) * 180.f / PI;
    kdtree.setfrustum(p + center, rots, Light::infinity - 5000, Light::infinity + 5000, lightfov, 1);
    
    glEnable(GL_POLYGON_OFFSET_FILL);
