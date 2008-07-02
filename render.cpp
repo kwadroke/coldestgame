@@ -125,9 +125,6 @@ void Repaint()
       
       glTranslatef(-localplayer.pos.x, -localplayer.pos.y, -localplayer.pos.z);
       
-      /* This has to be set here instead of in RenderObjects because RenderObjects
-         is called when shadowing as well, and that needs a different frustum setup.
-      */
       localplayer.pos += viewoff;
       Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
       kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist"), fov, aspect);
@@ -180,6 +177,7 @@ void Repaint()
       if ((localplayer.pos - viewoff).y > 0)
       {
          UpdateNoise();
+         UpdateReflection();
          RenderWater();
       }
       
@@ -302,9 +300,11 @@ void RenderObjects()
          }
       }
    }
-   
-   glFogf(GL_FOG_START, float(viewdist) * .5f);
-   glFogf(GL_FOG_END, float(viewdist));
+   if (!staticdrawdist)
+   {
+      glFogf(GL_FOG_START, float(viewdist) * .5f);
+      glFogf(GL_FOG_END, float(viewdist));
+   }
    
    UpdateFBO();
    
@@ -320,7 +320,6 @@ void RenderObjects()
    
    impostormesh.GenVbo();
    impostormesh.Render(override);
-   glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
    trislastframe += impostormesh.Size();
    
    glDepthMask(GL_TRUE); // Otherwise we may screw up rendering elsewhere
@@ -336,7 +335,6 @@ void RenderParticles()
       if (shadowrender) override = shadowmat;
       particlemesh->GenVbo();
       particlemesh->Render(override);
-      glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       trislastframe += particlemesh->Size();
    }
 }
@@ -669,86 +667,7 @@ void UpdateNoise()
 }
 
 
-void RenderClouds()
-{
-   resman.shaderman.UseShader(cloudshader);
-   glFogf(GL_FOG_START, 5000);
-   glFogf(GL_FOG_END, 10000);
-   glDisable(GL_DEPTH_TEST);
-   
-   glMatrixMode(GL_PROJECTION);
-   glPushMatrix();
-   glLoadIdentity();
-   if (!guncam)
-   {
-      gluPerspective(console.GetFloat("fov"), aspect, 100, 10000);
-   }
-   else
-   {
-      gluPerspective(console.GetFloat("fov") / console.GetFloat("zoomfactor"), aspect, 100, 10000);
-   }
-   glMatrixMode(GL_MODELVIEW);
-   
-   float height = 1000;
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   resman.texhand.BindTexture(cloudfbo.GetTexture());
-   glColor4f(1, 1, 1, 1);
-   
-   glBegin(GL_TRIANGLE_STRIP);
-   glTexCoord2i(0, 0);
-   glVertex3f(-10000, height, -10000);
-   glTexCoord2i(1, 0);
-   glVertex3f(10000, height, -10000);
-   glTexCoord2i(0, 1);
-   glVertex3f(-10000, height, 10000);
-   glTexCoord2i(1, 1);
-   glVertex3f(10000, height, 10000);
-   glEnd();
-   
-   glMatrixMode(GL_PROJECTION);
-   glPopMatrix();
-   glMatrixMode(GL_MODELVIEW);
-   
-   float viewdist = console.GetFloat("viewdist");
-   glFogf(GL_FOG_START, viewdist * .5);
-   glFogf(GL_FOG_END, viewdist);
-   glEnable(GL_DEPTH_TEST);
-   resman.shaderman.UseShader("none");
-}
-
-
-// We may yet come up with a better way to do this
-// Or maybe this works pretty well
-void RenderSkybox()
-{
-   //resman.shaderman.UseShader("none");
-   skyboxmat->Use();
-   // Render ourselves a gigantic sphere to serve as the skybox
-   glDisable(GL_FOG);
-   glDisable(GL_LIGHTING);
-   glDisable(GL_DEPTH_TEST);
-   glDisable(GL_BLEND);
-   
-   //resman.texhand.BindTexture(textures[0]);
-   glTexCoord3f(0, 0, 0);
-   GLUquadricObj *s = gluNewQuadric();
-   gluQuadricTexture(s, GL_TRUE);
-   
-   glPushMatrix();
-   glRotatef(90, 1, 0, 0);
-   gluSphere(s, console.GetFloat("viewdist"), 10, 10);
-   glPopMatrix();
-   
-   gluDeleteQuadric(s);
-   
-   glEnable(GL_FOG);
-   glEnable(GL_LIGHTING);
-   glEnable(GL_DEPTH_TEST);
-}
-
-
-void RenderWater()
+void UpdateReflection()
 {
    int reflectionres = console.GetInt("reflectionres");
    reflectionfbo.Bind();
@@ -792,41 +711,128 @@ void RenderWater()
          SetReflection(false);
       }
       
-      GraphicMatrix biasmat, camproj, camview;
-      GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
-      for (int i = 0; i < 16; ++i)
-         biasmat.members[i] = bias[i];
-      
-      glMatrixMode(GL_PROJECTION);
-      glGetFloatv(GL_PROJECTION_MATRIX, camproj);
-      glMatrixMode(GL_MODELVIEW);
-      glGetFloatv(GL_MODELVIEW_MATRIX, camview);
-      
-      glMatrixMode(GL_TEXTURE);
-      glPushMatrix();
-      glLoadMatrixf(biasmat);
-      glMultMatrixf(camproj);
-      glMultMatrixf(camview);
-      
       glMatrixMode(GL_MODELVIEW);
       glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    }
    glPopMatrix();
    reflectionfbo.Unbind();
+}
+
+
+void RenderClouds()
+{
+   resman.shaderman.UseShader(cloudshader);
+   if (!staticdrawdist)
+   {
+      glFogf(GL_FOG_START, 5000);
+      glFogf(GL_FOG_END, 10000);
+   }
+   glDisable(GL_DEPTH_TEST);
+   
+   glMatrixMode(GL_PROJECTION);
+   glPushMatrix();
+   glLoadIdentity();
+   if (!guncam)
+   {
+      gluPerspective(console.GetFloat("fov"), aspect, 100, 10000);
+   }
+   else
+   {
+      gluPerspective(console.GetFloat("fov") / console.GetFloat("zoomfactor"), aspect, 100, 10000);
+   }
+   glMatrixMode(GL_MODELVIEW);
+   
+   float height = 1000;
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   resman.texhand.BindTexture(cloudfbo.GetTexture());
+   glColor4f(1, 1, 1, 1);
+   
+   glBegin(GL_TRIANGLE_STRIP);
+   glTexCoord2i(0, 0);
+   glVertex3f(-10000, height, -10000);
+   glTexCoord2i(1, 0);
+   glVertex3f(10000, height, -10000);
+   glTexCoord2i(0, 1);
+   glVertex3f(-10000, height, 10000);
+   glTexCoord2i(1, 1);
+   glVertex3f(10000, height, 10000);
+   glEnd();
+   
+   glMatrixMode(GL_PROJECTION);
+   glPopMatrix();
+   glMatrixMode(GL_MODELVIEW);
+   
+   float viewdist = console.GetFloat("viewdist");
+   if (!staticdrawdist)
+   {
+      glFogf(GL_FOG_START, viewdist * .5);
+      glFogf(GL_FOG_END, viewdist);
+   }
+   glEnable(GL_DEPTH_TEST);
+   resman.shaderman.UseShader("none");
+}
+
+
+// We may yet come up with a better way to do this
+// Or maybe this works pretty well
+void RenderSkybox()
+{
+   //resman.shaderman.UseShader("none");
+   skyboxmat->Use();
+   // Render ourselves a gigantic sphere to serve as the skybox
+   glDisable(GL_FOG);
+   glDisable(GL_LIGHTING);
+   glDisable(GL_DEPTH_TEST);
+   glDisable(GL_BLEND);
+   
+   //resman.texhand.BindTexture(textures[0]);
+   glTexCoord3f(0, 0, 0);
+   GLUquadricObj *s = gluNewQuadric();
+   gluQuadricTexture(s, GL_TRUE);
+   
+   glPushMatrix();
+   glRotatef(90, 1, 0, 0);
+   gluSphere(s, console.GetFloat("viewdist"), 10, 10);
+   glPopMatrix();
+   
+   gluDeleteQuadric(s);
+   
+   glEnable(GL_FOG);
+   glEnable(GL_LIGHTING);
+   glEnable(GL_DEPTH_TEST);
+}
+
+
+void RenderWater()
+{
    lights.Place();
    
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    
-   float height = 0;
-   Vector3 norm = lights.GetPos(0);
-   norm.normalize();
+   GraphicMatrix biasmat, camproj, camview;
+   GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
+   for (int i = 0; i < 16; ++i)
+      biasmat.members[i] = bias[i];
+      
+   glMatrixMode(GL_PROJECTION);
+   glGetFloatv(GL_PROJECTION_MATRIX, camproj);
+   glMatrixMode(GL_MODELVIEW);
+   glGetFloatv(GL_MODELVIEW_MATRIX, camview);
+      
+   glMatrixMode(GL_TEXTURE);
+   glPushMatrix();
+   glLoadMatrixf(biasmat);
+   glMultMatrixf(camproj);
+   glMultMatrixf(camview);
    
    resman.texhand.ActiveTexture(1);
    resman.texhand.BindTexture(noisefbo.GetTexture());
    resman.texhand.ActiveTexture(2);
    resman.texhand.BindTexture(fastnoisefbo.GetTexture());
    resman.texhand.ActiveTexture(0);
+   resman.texhand.BindTexture(reflectionfbo.GetTexture());
    resman.shaderman.SetUniform1f("shaders/water", "time", float(SDL_GetTicks()));
    
    watermesh->Render();

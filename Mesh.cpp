@@ -401,8 +401,6 @@ void Mesh::GenVbo()
       ibosize = indexdata.size() * sizeof(unsigned short);
       glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
       glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
-      glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
-      glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
       
       if (!glops)
       {
@@ -463,7 +461,10 @@ void Mesh::BindVbo()
 void Mesh::Render(Material* overridemat)
 {
 #ifndef DEDICATED
-   if (!tris.size() || !render || !hasvbo) return;
+   if (!tris.size() || !render || !hasvbo)
+   {
+      return;
+   }
    BindVbo();
    size_t currindex = 0;
    if (overridemat)
@@ -482,9 +483,6 @@ void Mesh::Render(Material* overridemat)
       UnbindAttribs();
       currindex += vbosteps[i];
    }
-   
-   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
-   glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 #endif
 }
 

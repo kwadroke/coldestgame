@@ -491,22 +491,11 @@ void GetMap(string fn)
          temptc[1] = (y % terrainstretch) * texpiece;
          tempquad.SetTexCoords(3, 1, temptc);
          
+         // Smooth things out a bit by intelligently splitting quads
          Vector3 mid1 = tempquad.GetVertex(0) + tempquad.GetVertex(2);
          mid1 /= 2.f;
          Vector3 mid2 = tempquad.GetVertex(1) + tempquad.GetVertex(3);
          mid2 /= 2.f;
-         Vector3 avgnorm;
-         for (size_t i = 0; i < 4; ++i)
-         {
-            avgnorm += tempquad.GetVertexPtr(i)->norm;
-         }
-         avgnorm /= 4.f;
-         Vector3 rots = RotateBetweenVectors(Vector3(0, 1, 0), avgnorm);
-         GraphicMatrix m;
-         m.rotatex(rots.x);
-         m.rotatey(rots.y);
-         mid1.transform(m);
-         mid2.transform(m);
          
          float tri1 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(1), tempquad.GetVertex(3));
          float tri2 = Triangle::Perimeter(tempquad.GetVertex(1), tempquad.GetVertex(2), tempquad.GetVertex(3));
@@ -542,7 +531,7 @@ void GetMap(string fn)
    // Build water object
    float waterminx, waterminy;
    float watermaxx, watermaxy;
-   float waterchunksize = 300.f;
+   float waterchunksize = 1000.f;
    waterminx = waterminy = -5000.f;
    watermaxx = mapw * tilesize + 5000.f;
    watermaxy = maph * tilesize + 5000.f;
@@ -553,6 +542,7 @@ void GetMap(string fn)
    if (watermesh) delete watermesh;
    
    watermesh = new Mesh(tempini, resman);
+   watermesh->collide = false;
    
    for (int i = 0; i < numwaterx; ++i)
    {
@@ -817,9 +807,16 @@ void GetMap(string fn)
    console.Parse("set impdistmulti 10000", false);
    lights.Place();
    RenderObjects();
+   UpdateNoise();
+   UpdateReflection();
+   minimapfbo.Bind();
+   glViewport(0, 0, 512, 512);
    RenderWater();
    console.Parse("set impdistmulti " + ToString(saveidm), false);
    staticdrawdist = false;
+   int viewdist = console.GetInt("viewdist");
+   glFogf(GL_FOG_START, float(viewdist) * .5f);
+   glFogf(GL_FOG_END, float(viewdist));
    
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
