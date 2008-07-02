@@ -657,17 +657,18 @@ int NetListen(void* dummy)
          {
             bool accepted;
             unsigned long acknum;
+            Vector3 newpos;
             get >> accepted;
             get >> acknum;
+            get >> newpos.x >> newpos.y >> newpos.z;
             
             if (gui[loadoutmenu]->visible)
             {
                if (accepted)
                {
-                  ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
                   gui[loadoutmenu]->visible = false;
                   gui[hud]->visible = true;
-                  player[0].pos = availablespawns[spawnpointsbox->Selected()].position;
+                  player[0].pos = newpos;
                   player[0].size = units[player[0].unit].size;
                   player[0].lastmovetick = SDL_GetTicks();
                }
