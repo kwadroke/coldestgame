@@ -992,7 +992,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    mplayer.pos.z -= d.z * step * mplayer.speed;
    
    static const float threshold = .2f;
-   static float gravity = .5f;
+   static float gravity = .2f;
    
    if (console.GetBool("fly"))
       mplayer.pos.y += d.y * step * mplayer.speed;
@@ -1431,10 +1431,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 void AddTracer(const Particle& p, const Vector3& oldpos)
 {
    Mesh newmesh(*p.tracer);
-   Vector3 move = p.pos - oldpos;
+   Vector3 move = oldpos - p.pos;
    float msize = move.magnitude();
    newmesh.ScaleZ(msize);
-   Vector3 rots = RotateBetweenVectors(Vector3(0, 0, -1), move);
+   Vector3 rots = RotateBetweenVectors(Vector3(0, 0, 1), move);
    newmesh.Rotate(rots);
    newmesh.GenVbo();
    Particle tracepart(newmesh);

@@ -26,7 +26,19 @@ void shadow(vec4 diff, vec4 spec, float d, inout vec4 col)
    col.rgb -= spec.rgb * shadowval;
    col.a = alpha;
    
-   shadowval = 1. - shadow2DProj(worldshadowtex, worldshadowmappos).r;
+   total = 0.;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(-1. / shadowres, -1. / shadowres, 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(0., -1. / shadowres, 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(1. / shadowres, -1. / shadowres, 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(-1. / shadowres, 0., 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(1. / shadowres, 0., 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(-1. / shadowres, 1. / shadowres, 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(0., 1. / shadowres, 0., 0.)).r;
+   total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(1. / shadowres, 1. / shadowres, 0., 0.)).r;
+   
+   //shadowval = 1. - shadow2DProj(worldshadowtex, worldshadowmappos).r;
+   shadowval = 1. - smoothstep(0., .95, total / 9.);
    color1.rgb -= diff.rgb * shadowval;
    color1.rgb -= spec.rgb * shadowval;
    color1.a = alpha;

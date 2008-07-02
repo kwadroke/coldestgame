@@ -402,6 +402,7 @@ int ServerListen()
          else if (packettype == "S")
          {
             bool accepted = true;
+            Vector3 spawnpointreq;
             get >> oppnum;
             if (packetnum > serverplayers[oppnum].spawnpacketnum)
             {
@@ -417,7 +418,6 @@ int ServerListen()
                int itemtype;
                get >> itemtype;
                serverplayers[oppnum].item = Item(itemtype, servermeshes);
-               Vector3 spawnpointreq;
                get >> spawnpointreq.x;
                get >> spawnpointreq.y;
                get >> spawnpointreq.z;
@@ -439,6 +439,7 @@ int ServerListen()
                response << 1 << eol;
             else response << 0 << eol;
             response << packetnum << eol;
+            response << spawnpointreq.x << eol << spawnpointreq.y << eol << spawnpointreq.z << eol;
             
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
