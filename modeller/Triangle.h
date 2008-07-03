@@ -1,1 +1,0 @@
-../coldest/Triangle.h
