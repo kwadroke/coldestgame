@@ -139,7 +139,7 @@ void GetMap(string fn)
    for (int i = 0; i < texnode.NumChildren(); ++i)
    {
       terrparams.push_back(dummytp);
-      currnode = texnode.GetItem(i);
+      currnode = texnode(i);
       
       currnode.Read(terrparams[i].minheight, "HeightRange", 0);
       currnode.Read(terrparams[i].maxheight, "HeightRange", 1);
@@ -179,7 +179,7 @@ void GetMap(string fn)
    for (int i = 0; i < objectlist.NumChildren(); ++i)
    {
       currnode = objectlist(i);
-      Mesh currmesh(currnode, resman);
+      Mesh currmesh("", resman, currnode);
       meshes.push_back(currmesh);
    }
    
@@ -394,13 +394,13 @@ void GetMap(string fn)
    int numobjsx = mapw / terrobjsize;
    int numobjsy = maph / terrobjsize;
    vector<Meshlist::iterator> meshits;
-   IniReader tempini("models/terrain/base");
+   Mesh baseterrain("models/terrain/base", resman);
    
    for (int y = 0; y < numobjsy; ++y)
    {
       for (int x = 0; x < numobjsx; ++x)
       {
-         Mesh tempmesh(tempini, resman);
+         Mesh tempmesh(baseterrain);
          tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
@@ -541,7 +541,7 @@ void GetMap(string fn)
    
    if (watermesh) delete watermesh;
    
-   watermesh = new Mesh(tempini, resman);
+   watermesh = new Mesh("models/empty/base", resman);
    watermesh->collide = false;
    
    for (int i = 0; i < numwaterx; ++i)
@@ -621,8 +621,7 @@ void GetMap(string fn)
       SDL_LockSurface(loadgrass);
       data = (unsigned char*)loadgrass->pixels;
       
-      IniReader readmodel(model);
-      Mesh basemesh(readmodel, resman, false); // Don't need GL because this is a temp mesh
+      Mesh basemesh(model, resman); // Don't need GL because this is a temp mesh
       
       cout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
@@ -630,8 +629,7 @@ void GetMap(string fn)
       {
          for (int y = 0; y < grassh; y += groupsize)
          {
-            IniReader empty("models/empty/base");
-            Mesh grassmesh(empty, resman, false);
+            Mesh grassmesh("models/empty/base", resman);
             // Iterate over each group
             for (int ix = 0; ix < groupsize && ix + x < grassw; ++ix)
             {

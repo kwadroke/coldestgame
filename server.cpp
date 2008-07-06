@@ -40,7 +40,7 @@ void RemoveTeam(int);
 void SendSyncPacket(PlayerData&);
 void SendGameOver(PlayerData&, int);
 void SendShot(const Particle&);
-void SendHit(const Vector3&);
+void SendHit(const Vector3&, const Particle& p);
 string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
@@ -272,9 +272,18 @@ int ServerListen()
             continue;
          }
          
+         for (size_t i = 1; i < serverplayers.size(); ++i)
+         {
+            if (serverplayers[i].addr.host == inpack->address.host &&
+               serverplayers[i].addr.port == inpack->address.port)
+            {
+               oppnum = i;
+               break;
+            }
+         }
+         
          if (packettype == "U") // Update packet
          {
-            get >> oppnum;
             SDL_mutexP(servermutex);
             if (oppnum < serverplayers.size() && (packetnum > serverplayers[oppnum].recpacketnum))  // Ignore out of order packets
             {
@@ -380,7 +389,6 @@ int ServerListen()
          }
          else if (packettype == "p")
          {
-            get >> oppnum;
             SDL_mutexP(servermutex);
             serverplayers[oppnum].ping = SDL_GetTicks() - serverplayers[oppnum].pingtick;
             //cout << oppnum << " ping: " << serverplayers[oppnum].ping << endl;
@@ -403,7 +411,6 @@ int ServerListen()
          {
             bool accepted = true;
             Vector3 spawnpointreq;
-            get >> oppnum;
             if (packetnum > serverplayers[oppnum].spawnpacketnum)
             {
                cout << "Player " << oppnum << " is spawning" << endl;
@@ -447,8 +454,7 @@ int ServerListen()
          else if (packettype == "T")  // Chat packet
          {
             string line;
-            get >> oppnum;
-            getline(get, line); // \n is still in buffer
+            get.ignore(); // \n is still in buffer
             getline(get, line);
             SDL_mutexP(servermutex);
             if (serverplayers[oppnum].acked.find(packetnum) == serverplayers[oppnum].acked.end())
@@ -494,7 +500,6 @@ int ServerListen()
          {
             // For the moment just ack it, we probably want to ensure even teams at some point
             short newteam;
-            get >> oppnum;
             get >> newteam;
             
             Packet response(servoutpack, &servoutsock, &inpack->address);
@@ -533,7 +538,6 @@ int ServerListen()
          }
          else if (packettype == "K")
          {
-            get >> oppnum;
             SDL_mutexP(servermutex);
             serverplayers[oppnum].spawned = false;
             SendKill(oppnum);
@@ -542,7 +546,6 @@ int ServerListen()
          }
          else if (packettype == "Y") // Client is ready to sync
          {
-            get >> oppnum;
             SDL_mutexP(servermutex);
             if (serverplayers[oppnum].needsync)
             {
@@ -555,7 +558,6 @@ int ServerListen()
          }
          else if (packettype == "P") // Powerdown - be careful, we send this type as a ping packet, but don't receive it
          {
-            get >> oppnum;
             SDL_mutexP(servermutex);
             // Note: Theoretically this could cause someone to accidentally power down when they don't
             // want to, but if their packets are delayed 5+ seconds then the game is probably not
@@ -578,7 +580,6 @@ int ServerListen()
          else if (packettype == "c") // Console command
          {
             // TODO: Anyone is allowed to do this right now.  Need to authenticate only admins.
-            get >> oppnum;
             if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end())
             {
                serverplayers[oppnum].commandids.insert(packetnum);
@@ -818,8 +819,7 @@ void ServerLoadMap()
    for (int i = 0; i < spawnpoints.size(); ++i)
    {
       Item newitem(Item::Base, servermeshes);
-      IniReader loadmesh(newitem.ModelFile());
-      Mesh newmesh(loadmesh, resman, false);
+      Mesh newmesh(newitem.ModelFile(), resman);
       newmesh.Move(spawnpoints[i].position);
       servermeshes.push_front(newmesh);
       serveritems.push_back(newitem);
@@ -878,7 +878,7 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
       }
    }
    
-   SendHit(hitpos);
+   SendHit(hitpos, p);
    
    
    if (floatzero(p.dmgrad))
@@ -1061,8 +1061,7 @@ void ServerUpdatePlayer(int i)
       they expect, even if the positions don't match exactly (and they rarely will:-).*/
       if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
          startpos = serverplayers[i].clientpos;
-      IniReader readweapon("models/" + currplayerweapon.ModelFile() + "/base");
-      Mesh weaponmesh(readweapon, resman);
+      Mesh weaponmesh("models/" + currplayerweapon.ModelFile() + "/base", resman);
       Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
       part.origin = part.pos;
       part.playernum = i;
@@ -1149,8 +1148,7 @@ void AddItem(const Item& it, int oppnum)
 {
    if (it.Type() == Item::SpawnPoint)
    {
-      IniReader loadmesh(it.ModelFile());
-      Mesh newmesh(loadmesh, resman, false);
+      Mesh newmesh(it.ModelFile(), resman);
       newmesh.Move(serverplayers[oppnum].pos);
       newmesh.dynamic = true;
       servermeshes.push_front(newmesh);
@@ -1295,7 +1293,7 @@ void SendShot(const Particle& p)
 }
 
 
-void SendHit(const Vector3& hitpos)
+void SendHit(const Vector3& hitpos, const Particle& p)
 {
    unsigned long hid = nexthitid;
    for (size_t i = 1; i < serverplayers.size(); ++i)
@@ -1308,7 +1306,7 @@ void SendHit(const Vector3& hitpos)
          pack << pack.ack << eol;
          pack << hid << eol;
          pack << hitpos.x << eol << hitpos.y << eol << hitpos.z << eol;
-         pack << 0 << eol; // For future use
+         pack << p.weapid << eol;
          
          servqueue.push_back(pack);
       }

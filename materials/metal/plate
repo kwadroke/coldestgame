@@ -1,0 +1,10 @@
+Diffuse 1 1 1 1
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Shininess 8
+Texture0 textures/plate.png
+Texture1 textures/platenorm.png
+Texture2 textures/platespec.png
+Repeat 1
+Shader shaders/bump
+CullFace 1

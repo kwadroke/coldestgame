@@ -20,10 +20,8 @@ using std::map;
 */
 class Mesh
 {
-   //friend class ProceduralTree; // Also not necessary?
-   //friend class ObjectKDTree; // Not entirely sure this is still necessary...
    public:
-      Mesh(IniReader&, ResourceManager&, bool gl = false);
+      Mesh(const string&, ResourceManager&, IniReader read = IniReader(), bool gl = false);
       ~Mesh();
       Mesh(const Mesh&);
       Mesh& operator=(const Mesh&);
@@ -83,7 +81,7 @@ class Mesh
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;
-      map<string, VertexPtr> vertices;
+      VertMap vertices;
       intvec vbosteps;
       GLuint vbo;
       GLuint ibo;

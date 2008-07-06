@@ -21,7 +21,7 @@ class MeshNode
 {
    public:
       MeshNode();
-      void Transform(const shared_ptr<MeshNode>&, const float, map<string, VertexPtr>&, const GraphicMatrix&, const Vector3&);
+      void Transform(const shared_ptr<MeshNode>&, const float, VertMap&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void Scale(const float&);

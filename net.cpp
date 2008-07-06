@@ -124,7 +124,6 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "S\n";
          p << p.ack << eol;
-         p << servplayernum << eol;
          SDL_mutexP(clientmutex);
          p << player[0].unit << eol;
          for (int i = 0; i < numbodyparts; ++i)
@@ -151,7 +150,6 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "T\n";
          p << p.ack << eol;
-         p << servplayernum << eol;
          p << chatstring << eol;
          chatstring = "";
          SDL_mutexV(clientmutex); // Just to be safe, don't hold both mutexes at once
@@ -168,7 +166,6 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "M\n";
          p << p.ack << eol;
-         p << servplayernum << eol;
          p << changeteam << eol;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
@@ -192,7 +189,6 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "K\n";
          p << p.ack << eol;
-         p << servplayernum << eol;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
@@ -203,7 +199,6 @@ int NetSend(void* dummy)
          Packet p(outpack, &socket, &addr);
          p << "Y\n";
          p << sendpacketnum << eol;
-         p << servplayernum << eol;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
@@ -241,7 +236,6 @@ string FillUpdatePacket()
    
    temp << "U" << eol;
    temp << sendpacketnum << eol;
-   temp << servplayernum << eol;
    SDL_mutexP(clientmutex);
    temp << player[0].pos.x << eol;
    temp << player[0].pos.y << eol;
@@ -472,8 +466,7 @@ int NetListen(void* dummy)
                      if (addemitter)
                      {
                         SDL_mutexP(clientmutex);
-                        IniReader mread("models/projectile/base");
-                        Mesh partmesh(mread, resman);
+                        Mesh partmesh("models/projectile/base", resman);
                         Particle newpart(0, Vector3(), Vector3(), .5f, 1.f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
                         newpart.ttl = 500;
                         ParticleEmitter newemitter(i->pos, newpart, 1000, 100.f, 10);
@@ -564,7 +557,6 @@ int NetListen(void* dummy)
             Packet p(outpack, &socket, &addr);
             p << "p\n";
             p << sendpacketnum << eol;
-            p << servplayernum << eol;
             SDL_mutexP(netmutex);
             sendqueue.push_back(p);
             SDL_mutexV(netmutex);
@@ -579,8 +571,7 @@ int NetListen(void* dummy)
                partids.insert(id);
                get >> weapid;
                Weapon dummy(weapid);
-               IniReader tempreader("models/" + dummy.ModelFile() + "/base");
-               Mesh tempmesh(tempreader, resman);
+               Mesh tempmesh("models/" + dummy.ModelFile() + "/base", resman);
                Particle temppart(tempmesh);
                temppart.id = id;
                temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
@@ -598,8 +589,7 @@ int NetListen(void* dummy)
                // Add tracer if necessary
                if (dummy.Tracer() != "")
                {
-                  tempreader = IniReader("models/" + dummy.Tracer() + "/base");
-                  temppart.tracer = MeshPtr(new Mesh(tempreader, resman));
+                  temppart.tracer = MeshPtr(new Mesh("models/" + dummy.Tracer() + "/base", resman));
                   temppart.tracertime = dummy.TracerTime();
                }
                SDL_mutexP(clientmutex);
@@ -620,11 +610,8 @@ int NetListen(void* dummy)
                get >> hitpos.x >> hitpos.y >> hitpos.z;
                get >> type;
                
-               // Eventually this should probably be determined by the type of projectile
-               IniReader mread("models/projectile/base");
-               Mesh partmesh(mread, resman);
-               Particle newpart(0, Vector3(), Vector3(), .3f, .9f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
-               newpart.ttl = 150;
+               Weapon dummy(type);
+               Particle newpart(dummy.ExpFile(), resman);
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 60);
                SDL_mutexP(clientmutex);
                emitters.push_back(newemitter);
@@ -757,12 +744,10 @@ int NetListen(void* dummy)
             
             if (itemsreceived.find(id) == itemsreceived.end())
             {
-               cout << "Adding item " << id << endl;
                Item newitem(type, meshes);
                newitem.id = id;
                newitem.team = team;
-               IniReader loadmesh(newitem.ModelFile());
-               Mesh newmesh(loadmesh, resman, false);
+               Mesh newmesh(newitem.ModelFile(), resman);
                newmesh.Move(itempos);
                newmesh.SetGL();
                newmesh.dynamic = true;
@@ -913,7 +898,6 @@ void SendCommand(const string& command)
    pack.ack = sendpacketnum;
    pack << "c\n";
    pack << pack.ack << eol;
-   pack << servplayernum << eol;
    pack << command << eol;
    SDL_mutexP(netmutex);
    sendqueue.push_back(pack);

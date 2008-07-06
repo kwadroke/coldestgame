@@ -7,7 +7,7 @@ Stretch 8
 
 LightData
 Direction -1 1 -1
-Diffuse 1.5 1.5 1.5 1
+Diffuse 1 1 1 1
 Specular 1 1 1 1
 Ambient .2 .2 .2 1
 

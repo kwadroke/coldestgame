@@ -20,7 +20,8 @@ using std::endl;
 class IniReader
 {
    public:
-      IniReader(string filename = "", int lev = 0);
+      explicit IniReader(int lev = 0);
+      IniReader(string); // Allow implicit conversion from string though
       const IniReader& GetItem(const int) const;
       const IniReader& operator()(const int num) const;
       const IniReader& GetItemByName(const string) const;

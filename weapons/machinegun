@@ -4,3 +4,4 @@ Radius 5
 ProjectileWeight .1
 Weight 5
 Name Machine Gun
+ExplosionParticle particles/debris
