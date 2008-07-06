@@ -1,0 +1,1617 @@
+Version Version4
+NextID 351
+TimeToNextFrame 1000
+Container
+   ID 0
+   ParentID -1
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 -3000 0
+Container
+   ID 1
+   ParentID 0
+   Name Floor
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 2
+      Pos -5000 0 -5000
+      Norm 0 1 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 3
+      Pos -5000 0 5000
+      Norm 0 1 0
+      TC 0 15 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 345
+      Pos 5000 -100 -5000
+      Norm 0 -1 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 346
+      Pos 5000 -100 5000
+      Norm 0 -1 0
+      TC 0 15 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 347
+      Pos -5000 -100 -5000
+      Norm 0 -1 0
+      TC 15 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 348
+      Pos -5000 -100 5000
+      Norm 0 -1 0
+      TC 15 15 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 4
+      Pos 5000 0 -5000
+      Norm 0 1 0
+      TC 15 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 5
+      Pos 5000 0 5000
+      Norm 0 1 0
+      TC 15 15 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Container
+   ID 8
+   ParentID 0
+   Name Edge
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 3500 0 5000
+Container
+   ID 9
+   ParentID 8
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 10
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 11
+      Pos -3500 0 500
+      Norm 0 0 1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 12
+      Pos 2000 400 500
+      Norm 0 0 1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 13
+      Pos 2000 -400 500
+      Norm 0 0 1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 16
+      Pos -3500 0 500
+      Norm -0.0673722 -0.926367 0.370547
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 17
+      Pos -3500 -200 0
+      Norm -0.0840831 -0.788216 0.609627
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 18
+      Pos 2000 -400 500
+      Norm -0.0840831 -0.788216 0.609627
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 19
+      Pos 1500 -1000 0
+      Norm -0.0943596 -0.589747 0.802056
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 22
+      Pos -3500 -200 0
+      Norm -0.146944 -0.918398 -0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 23
+      Pos -3500 0 -500
+      Norm -0.105982 -0.814856 -0.569893
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 24
+      Pos 1500 -1000 0
+      Norm -0.105982 -0.814856 -0.569893
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 25
+      Pos 1000 -400 -500
+      Norm -0.0593587 -0.667785 -0.741984
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 28
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 29
+      Pos -3500 0 -500
+      Norm 0 0 -1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 30
+      Pos 1000 -400 -500
+      Norm 0 0 -1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 31
+      Pos 1000 400 -500
+      Norm 0 0 -1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 34
+      Pos -3500 0 -500
+      Norm -0.0822516 0.925331 -0.370132
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 35
+      Pos -3500 200 0
+      Norm -0.0984344 0.82554 -0.555693
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 36
+      Pos 1000 400 -500
+      Norm -0.0984344 0.82554 -0.555693
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 37
+      Pos 1500 1000 0
+      Norm -0.110222 0.688886 -0.716441
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 40
+      Pos -3500 200 0
+      Norm -0.146944 0.918398 0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 41
+      Pos -3500 0 500
+      Norm -0.0994062 0.795742 0.597422
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 42
+      Pos 1500 1000 0
+      Norm -0.0994062 0.795742 0.597422
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 43
+      Pos 2000 400 500
+      Norm -0.0448872 0.617199 0.785526
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Container
+   ID 83
+   ParentID 8
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 -90 180
+   Trans 1500 0 -1500
+   Vertex
+      ID 100
+      Pos 1500 -1000 0
+      Norm -0.569893 0.814856 -0.105982
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 101
+      Pos 1000 -400 -500
+      Norm -0.741984 0.667785 -0.0593587
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 102
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 104
+      Pos -3500 0 -500
+      Norm -1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 106
+      Pos 1000 -400 -500
+      Norm -1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 107
+      Pos 1000 400 -500
+      Norm -1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 108
+      Pos -3500 0 -500
+      Norm -0.370132 -0.925331 -0.0822516
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 110
+      Pos -3500 200 0
+      Norm -0.555693 -0.82554 -0.0984344
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 112
+      Pos 1000 400 -500
+      Norm -0.555693 -0.82554 -0.0984344
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 113
+      Pos 1500 1000 0
+      Norm -0.716441 -0.688886 -0.110222
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 114
+      Pos -3500 200 0
+      Norm 0.367359 -0.918398 -0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 116
+      Pos -3500 0 500
+      Norm 0.597422 -0.795742 -0.0994062
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 118
+      Pos 1500 1000 0
+      Norm 0.597422 -0.795742 -0.0994062
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 119
+      Pos 2000 400 500
+      Norm 0.785526 -0.617199 -0.0448872
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 84
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 86
+      Pos -3500 0 500
+      Norm 1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 88
+      Pos 2000 400 500
+      Norm 1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 89
+      Pos 2000 -400 500
+      Norm 1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 90
+      Pos -3500 0 500
+      Norm 0.370547 0.926367 -0.0673722
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 92
+      Pos -3500 -200 0
+      Norm 0.609627 0.788216 -0.0840831
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 94
+      Pos 2000 -400 500
+      Norm 0.609627 0.788216 -0.0840831
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 95
+      Pos 1500 -1000 0
+      Norm 0.802056 0.589747 -0.0943596
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 96
+      Pos -3500 -200 0
+      Norm -0.367359 0.918398 -0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 98
+      Pos -3500 0 -500
+      Norm -0.569893 0.814856 -0.105982
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+Container
+   ID 120
+   ParentID 0
+   Name Edge
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 90 0
+   Trans -5000 0 3500
+Container
+   ID 121
+   ParentID 120
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 -90 180
+   Trans 1500 0 -1500
+   Vertex
+      ID 122
+      Pos 2000 400 500
+      Norm 0.0448872 -0.617199 0.785526
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 124
+      Pos 1500 1000 0
+      Norm 0.0994062 -0.795742 0.597422
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 126
+      Pos -3500 0 500
+      Norm 0.0994062 -0.795742 0.597422
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 127
+      Pos -3500 200 0
+      Norm 0.146944 -0.918398 0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 128
+      Pos 1500 1000 0
+      Norm 0.110222 -0.688886 -0.716441
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 130
+      Pos 1000 400 -500
+      Norm 0.0984344 -0.82554 -0.555693
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 132
+      Pos -3500 200 0
+      Norm 0.0984344 -0.82554 -0.555693
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 133
+      Pos -3500 0 -500
+      Norm 0.0822516 -0.925331 -0.370132
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 134
+      Pos 1000 400 -500
+      Norm 0 0 -1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 136
+      Pos 1000 -400 -500
+      Norm 0 0 -1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 138
+      Pos -3500 0 -500
+      Norm 0 0 -1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 139
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 140
+      Pos 1000 -400 -500
+      Norm 0.0593587 0.667785 -0.741984
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 142
+      Pos 1500 -1000 0
+      Norm 0.105982 0.814856 -0.569893
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 144
+      Pos -3500 0 -500
+      Norm 0.105982 0.814856 -0.569893
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 145
+      Pos -3500 -200 0
+      Norm 0.146944 0.918398 -0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 146
+      Pos 1500 -1000 0
+      Norm 0.0943596 0.589747 0.802056
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 148
+      Pos 2000 -400 500
+      Norm 0.0840831 0.788216 0.609627
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 150
+      Pos -3500 -200 0
+      Norm 0.0840831 0.788216 0.609627
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 151
+      Pos -3500 0 500
+      Norm 0.0673722 0.926367 0.370547
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 152
+      Pos 2000 -400 500
+      Norm 0 0 1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 154
+      Pos 2000 400 500
+      Norm 0 0 1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 156
+      Pos -3500 0 500
+      Norm 0 0 1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 157
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Container
+   ID 158
+   ParentID 120
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 159
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 161
+      Pos -3500 0 500
+      Norm -1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 163
+      Pos 2000 400 500
+      Norm -1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 164
+      Pos 2000 -400 500
+      Norm -1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 165
+      Pos -3500 0 500
+      Norm -0.370547 -0.926367 -0.0673722
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 167
+      Pos -3500 -200 0
+      Norm -0.609627 -0.788216 -0.0840831
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 169
+      Pos 2000 -400 500
+      Norm -0.609627 -0.788216 -0.0840831
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 170
+      Pos 1500 -1000 0
+      Norm -0.802056 -0.589747 -0.0943596
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 171
+      Pos -3500 -200 0
+      Norm 0.367359 -0.918398 -0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 173
+      Pos -3500 0 -500
+      Norm 0.569893 -0.814856 -0.105982
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 175
+      Pos 1500 -1000 0
+      Norm 0.569893 -0.814856 -0.105982
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 176
+      Pos 1000 -400 -500
+      Norm 0.741984 -0.667785 -0.0593587
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 177
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 179
+      Pos -3500 0 -500
+      Norm 1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 181
+      Pos 1000 -400 -500
+      Norm 1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 182
+      Pos 1000 400 -500
+      Norm 1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 183
+      Pos -3500 0 -500
+      Norm 0.370132 0.925331 -0.0822516
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 185
+      Pos -3500 200 0
+      Norm 0.555693 0.82554 -0.0984344
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 187
+      Pos 1000 400 -500
+      Norm 0.555693 0.82554 -0.0984344
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 188
+      Pos 1500 1000 0
+      Norm 0.716441 0.688886 -0.110222
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 189
+      Pos -3500 200 0
+      Norm -0.367359 0.918398 -0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 191
+      Pos -3500 0 500
+      Norm -0.597422 0.795742 -0.0994062
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 193
+      Pos 1500 1000 0
+      Norm -0.597422 0.795742 -0.0994062
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 194
+      Pos 2000 400 500
+      Norm -0.785526 0.617199 -0.0448872
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Container
+   ID 195
+   ParentID 0
+   Name Edge
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 180 0
+   Trans -3500 0 -5000
+Container
+   ID 196
+   ParentID 195
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 -90 180
+   Trans 1500 0 -1500
+   Vertex
+      ID 197
+      Pos 2000 400 500
+      Norm -0.785526 -0.617199 0.0448872
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 199
+      Pos 1500 1000 0
+      Norm -0.597422 -0.795742 0.0994062
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 201
+      Pos -3500 0 500
+      Norm -0.597422 -0.795742 0.0994062
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 202
+      Pos -3500 200 0
+      Norm -0.367359 -0.918398 0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 203
+      Pos 1500 1000 0
+      Norm 0.716441 -0.688886 0.110222
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 205
+      Pos 1000 400 -500
+      Norm 0.555693 -0.82554 0.0984344
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 207
+      Pos -3500 200 0
+      Norm 0.555693 -0.82554 0.0984344
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 208
+      Pos -3500 0 -500
+      Norm 0.370132 -0.925331 0.0822516
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 209
+      Pos 1000 400 -500
+      Norm 1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 211
+      Pos 1000 -400 -500
+      Norm 1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 213
+      Pos -3500 0 -500
+      Norm 1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 214
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 215
+      Pos 1000 -400 -500
+      Norm 0.741984 0.667785 0.0593587
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 217
+      Pos 1500 -1000 0
+      Norm 0.569893 0.814856 0.105982
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 219
+      Pos -3500 0 -500
+      Norm 0.569893 0.814856 0.105982
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 220
+      Pos -3500 -200 0
+      Norm 0.367359 0.918398 0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 221
+      Pos 1500 -1000 0
+      Norm -0.802056 0.589747 0.0943596
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 223
+      Pos 2000 -400 500
+      Norm -0.609627 0.788216 0.0840831
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 225
+      Pos -3500 -200 0
+      Norm -0.609627 0.788216 0.0840831
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 226
+      Pos -3500 0 500
+      Norm -0.370547 0.926367 0.0673722
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 227
+      Pos 2000 -400 500
+      Norm -1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 229
+      Pos 2000 400 500
+      Norm -1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 231
+      Pos -3500 0 500
+      Norm -1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 232
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Container
+   ID 233
+   ParentID 195
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 234
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 236
+      Pos -3500 0 500
+      Norm 0 0 -1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 238
+      Pos 2000 400 500
+      Norm 0 0 -1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 239
+      Pos 2000 -400 500
+      Norm 0 0 -1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 240
+      Pos -3500 0 500
+      Norm 0.0673722 -0.926367 -0.370547
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 242
+      Pos -3500 -200 0
+      Norm 0.0840831 -0.788216 -0.609627
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 244
+      Pos 2000 -400 500
+      Norm 0.0840831 -0.788216 -0.609627
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 245
+      Pos 1500 -1000 0
+      Norm 0.0943596 -0.589747 -0.802056
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 246
+      Pos -3500 -200 0
+      Norm 0.146944 -0.918398 0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 248
+      Pos -3500 0 -500
+      Norm 0.105982 -0.814856 0.569893
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 250
+      Pos 1500 -1000 0
+      Norm 0.105982 -0.814856 0.569893
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 251
+      Pos 1000 -400 -500
+      Norm 0.0593587 -0.667785 0.741984
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 252
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 254
+      Pos -3500 0 -500
+      Norm 0 0 1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 256
+      Pos 1000 -400 -500
+      Norm 0 0 1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 257
+      Pos 1000 400 -500
+      Norm 0 0 1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 258
+      Pos -3500 0 -500
+      Norm 0.0822516 0.925331 0.370132
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 260
+      Pos -3500 200 0
+      Norm 0.0984344 0.82554 0.555693
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 262
+      Pos 1000 400 -500
+      Norm 0.0984344 0.82554 0.555693
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 263
+      Pos 1500 1000 0
+      Norm 0.110222 0.688886 0.716441
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 264
+      Pos -3500 200 0
+      Norm 0.146944 0.918398 -0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 266
+      Pos -3500 0 500
+      Norm 0.0994062 0.795742 -0.597422
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 268
+      Pos 1500 1000 0
+      Norm 0.0994062 0.795742 -0.597422
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 269
+      Pos 2000 400 500
+      Norm 0.0448872 0.617199 -0.785526
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Container
+   ID 270
+   ParentID 0
+   Name Edge
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 -90 0
+   Trans 5000 0 -3500
+Container
+   ID 271
+   ParentID 270
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 -90 180
+   Trans 1500 0 -1500
+   Vertex
+      ID 272
+      Pos 2000 400 500
+      Norm -0.0448872 -0.617199 -0.785526
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 274
+      Pos 1500 1000 0
+      Norm -0.0994062 -0.795742 -0.597422
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 276
+      Pos -3500 0 500
+      Norm -0.0994062 -0.795742 -0.597422
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 277
+      Pos -3500 200 0
+      Norm -0.146944 -0.918398 -0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 278
+      Pos 1500 1000 0
+      Norm -0.110222 -0.688886 0.716441
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 280
+      Pos 1000 400 -500
+      Norm -0.0984344 -0.82554 0.555693
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 282
+      Pos -3500 200 0
+      Norm -0.0984344 -0.82554 0.555693
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 283
+      Pos -3500 0 -500
+      Norm -0.0822516 -0.925331 0.370132
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 284
+      Pos 1000 400 -500
+      Norm 0 0 1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 286
+      Pos 1000 -400 -500
+      Norm 0 0 1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 288
+      Pos -3500 0 -500
+      Norm 0 0 1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 289
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 290
+      Pos 1000 -400 -500
+      Norm -0.0593587 0.667785 0.741984
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 292
+      Pos 1500 -1000 0
+      Norm -0.105982 0.814856 0.569893
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 294
+      Pos -3500 0 -500
+      Norm -0.105982 0.814856 0.569893
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 295
+      Pos -3500 -200 0
+      Norm -0.146944 0.918398 0.367359
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 296
+      Pos 1500 -1000 0
+      Norm -0.0943596 0.589747 -0.802056
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 298
+      Pos 2000 -400 500
+      Norm -0.0840831 0.788216 -0.609627
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 300
+      Pos -3500 -200 0
+      Norm -0.0840831 0.788216 -0.609627
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 301
+      Pos -3500 0 500
+      Norm -0.0673722 0.926367 -0.370547
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 302
+      Pos 2000 -400 500
+      Norm 0 0 -1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 304
+      Pos 2000 400 500
+      Norm 0 0 -1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 306
+      Pos -3500 0 500
+      Norm 0 0 -1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 307
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Container
+   ID 308
+   ParentID 270
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 309
+      Pos -3500 0 500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 311
+      Pos -3500 0 500
+      Norm 1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 313
+      Pos 2000 400 500
+      Norm 1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 314
+      Pos 2000 -400 500
+      Norm 1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 315
+      Pos -3500 0 500
+      Norm 0.370547 -0.926367 0.0673722
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 317
+      Pos -3500 -200 0
+      Norm 0.609627 -0.788216 0.0840831
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 319
+      Pos 2000 -400 500
+      Norm 0.609627 -0.788216 0.0840831
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 320
+      Pos 1500 -1000 0
+      Norm 0.802056 -0.589747 0.0943596
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 321
+      Pos -3500 -200 0
+      Norm -0.367359 -0.918398 0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 323
+      Pos -3500 0 -500
+      Norm -0.569893 -0.814856 0.105982
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 325
+      Pos 1500 -1000 0
+      Norm -0.569893 -0.814856 0.105982
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 326
+      Pos 1000 -400 -500
+      Norm -0.741984 -0.667785 0.0593587
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 327
+      Pos -3500 0 -500
+      Norm 0 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 329
+      Pos -3500 0 -500
+      Norm -1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 331
+      Pos 1000 -400 -500
+      Norm -1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 332
+      Pos 1000 400 -500
+      Norm -1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 333
+      Pos -3500 0 -500
+      Norm -0.370132 0.925331 0.0822516
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 335
+      Pos -3500 200 0
+      Norm -0.555693 0.82554 0.0984344
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 337
+      Pos 1000 400 -500
+      Norm -0.555693 0.82554 0.0984344
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 338
+      Pos 1500 1000 0
+      Norm -0.716441 0.688886 0.110222
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 339
+      Pos -3500 200 0
+      Norm 0.367359 0.918398 0.146944
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 341
+      Pos -3500 0 500
+      Norm 0.597422 0.795742 0.0994062
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 343
+      Pos 1500 1000 0
+      Norm 0.597422 0.795742 0.0994062
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 344
+      Pos 2000 400 500
+      Norm 0.785526 0.617199 0.0448872
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Node
+   Triangles
+   Tri
+      ID 103
+      Verts 102 104 106
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 105
+      Verts 106 104 107
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 109
+      Verts 108 110 112
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 111
+      Verts 112 110 113
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 115
+      Verts 114 116 118
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 117
+      Verts 118 116 119
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 123
+      Verts 124 126 122
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 125
+      Verts 127 126 124
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 129
+      Verts 130 132 128
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 131
+      Verts 133 132 130
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 135
+      Verts 136 138 134
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 137
+      Verts 139 138 136
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 14
+      Verts 10 11 12
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 141
+      Verts 142 144 140
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 143
+      Verts 145 144 142
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 147
+      Verts 148 150 146
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 149
+      Verts 151 150 148
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 15
+      Verts 12 11 13
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 153
+      Verts 154 156 152
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 155
+      Verts 157 156 154
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 160
+      Verts 159 161 163
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 162
+      Verts 163 161 164
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 166
+      Verts 165 167 169
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 168
+      Verts 169 167 170
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 172
+      Verts 171 173 175
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 174
+      Verts 175 173 176
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 178
+      Verts 177 179 181
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 180
+      Verts 181 179 182
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 184
+      Verts 183 185 187
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 186
+      Verts 187 185 188
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 190
+      Verts 189 191 193
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 192
+      Verts 193 191 194
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 198
+      Verts 199 201 197
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 20
+      Verts 16 17 18
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 200
+      Verts 202 201 199
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 204
+      Verts 205 207 203
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 206
+      Verts 208 207 205
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 21
+      Verts 18 17 19
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 210
+      Verts 211 213 209
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 212
+      Verts 214 213 211
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 216
+      Verts 217 219 215
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 218
+      Verts 220 219 217
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 222
+      Verts 223 225 221
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 224
+      Verts 226 225 223
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 228
+      Verts 229 231 227
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 230
+      Verts 232 231 229
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 235
+      Verts 234 236 238
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 237
+      Verts 238 236 239
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 241
+      Verts 240 242 244
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 243
+      Verts 244 242 245
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 247
+      Verts 246 248 250
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 249
+      Verts 250 248 251
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 253
+      Verts 252 254 256
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 255
+      Verts 256 254 257
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 259
+      Verts 258 260 262
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 26
+      Verts 22 23 24
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 261
+      Verts 262 260 263
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 265
+      Verts 264 266 268
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 267
+      Verts 268 266 269
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 27
+      Verts 24 23 25
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 273
+      Verts 274 276 272
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 275
+      Verts 277 276 274
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 279
+      Verts 280 282 278
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 281
+      Verts 283 282 280
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 285
+      Verts 286 288 284
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 287
+      Verts 289 288 286
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 291
+      Verts 292 294 290
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 293
+      Verts 295 294 292
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 297
+      Verts 298 300 296
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 299
+      Verts 301 300 298
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 303
+      Verts 304 306 302
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 305
+      Verts 307 306 304
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 310
+      Verts 309 311 313
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 312
+      Verts 313 311 314
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 316
+      Verts 315 317 319
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 318
+      Verts 319 317 320
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 32
+      Verts 28 29 30
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 322
+      Verts 321 323 325
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 324
+      Verts 325 323 326
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 328
+      Verts 327 329 331
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 33
+      Verts 30 29 31
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 330
+      Verts 331 329 332
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 334
+      Verts 333 335 337
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 336
+      Verts 337 335 338
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 340
+      Verts 339 341 343
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 342
+      Verts 343 341 344
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 349
+      Verts 345 346 347
+      Material materials/metal/plate
+      Collide 1
+   Tri
+      ID 350
+      Verts 347 346 348
+      Material materials/metal/plate
+      Collide 1
+   Tri
+      ID 38
+      Verts 34 35 36
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 39
+      Verts 36 35 37
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 44
+      Verts 40 41 42
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 45
+      Verts 42 41 43
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 6
+      Verts 2 3 4
+      Material materials/metal/plate
+      Collide 1
+   Tri
+      ID 7
+      Verts 4 3 5
+      Material materials/metal/plate
+      Collide 1
+   Tri
+      ID 85
+      Verts 84 86 88
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 87
+      Verts 88 86 89
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 91
+      Verts 90 92 94
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 93
+      Verts 94 92 95
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 97
+      Verts 96 98 100
+      Material materials/metal/rusty
+      Collide 0
+   Tri
+      ID 99
+      Verts 100 98 101
+      Material materials/metal/rusty
+      Collide 0
