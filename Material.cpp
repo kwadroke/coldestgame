@@ -21,6 +21,8 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
    
    reader.Read(shininess, "Shininess");
    
+   bool repeat = false;
+   reader.Read(repeat, "Repeat");
    for (int i = 0; i < 8; ++i)
    {
       string name = "Texture";
@@ -28,7 +30,14 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
       reader.Read(texfilename[i], name);
       if (texfilename[i] != "")
          texid[i] = texman.LoadTexture(texfilename[i]);
+      
+      if (repeat)
+      {
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      }
    }
+   
    reader.Read(shader, "Shader");
    shaderhand.LoadShader(shader);
    

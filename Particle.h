@@ -17,6 +17,7 @@ class Particle
    public:
       Particle(Mesh&);
       Particle(unsigned long, Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
+      Particle(const string&, ResourceManager&);
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
       

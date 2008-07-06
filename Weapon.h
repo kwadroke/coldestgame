@@ -25,6 +25,7 @@ class Weapon
       string Name() const {return name;}
       string Tracer() const {return tracerfile;}
       int TracerTime() const {return tracertime;}
+      string ExpFile() const {return expfile;}
       
       enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, Rocket, numweapons};
       
@@ -47,6 +48,7 @@ class Weapon
       string modelfile;
       string name;
       string tracerfile;
+      string expfile;
       int tracertime;
 
 };

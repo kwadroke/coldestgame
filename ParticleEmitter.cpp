@@ -13,10 +13,11 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
    Uint32 currtick = SDL_GetTicks();
    Uint32 numticks = currtick - lastupdate;
    int addcount = int(Random(0.f, density * float(numticks)));
-   for (size_t i = 0; i < addcount, count != 0; ++i)
+   for (ssize_t i = 0; i < addcount, count != 0; ++i)
    {
       Particle newpart(particle);
       newpart.pos = position;
+      newpart.lasttick = currtick;
       GraphicMatrix m;
       m.rotatex(Random(0, 360));
       m.rotatey(Random(0, 360));

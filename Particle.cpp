@@ -20,6 +20,33 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 }
 
 
+Particle::Particle(const string& filename, ResourceManager& resman) : mesh(Mesh("models/empty/base", resman)), playernum(0), id(0), velocity(0.f), accel(1.f),
+                   weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
+                   rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
+{
+   IniReader read(filename);
+   read.Read(velocity, "Velocity");
+   read.Read(accel, "Accel");
+   read.Read(weight, "Weight");
+   read.Read(radius, "Radius");
+   read.Read(explode, "Explode");
+   read.Read(damage, "Damage");
+   read.Read(dmgrad, "DamageRadius");
+   read.Read(collide, "Collide");
+   int temp = 10000;
+   read.Read(temp, "TTL");
+   ttl = temp;
+   temp = 10000;
+   read.Read(temp, "TracerTime");
+   tracertime = temp;
+   
+   string meshname;
+   read.Read(meshname, "Mesh");
+   mesh.Load(IniReader(meshname));
+   t.start();
+}
+
+
 Vector3 Particle::Update()
 {
    Vector3 oldpos = pos;

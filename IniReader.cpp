@@ -1,8 +1,12 @@
 #include "IniReader.h"
 
-IniReader::IniReader(string filename, int lev) : level(lev), name(""), path(filename)
+IniReader::IniReader(int lev) : level(lev), name(""), path("")
 {
-   if (filename == "") return;
+}
+
+IniReader::IniReader(string filename) : level(0), name(""), path(filename)
+{
+   if (filename == "") return; // Don't think this is necessary anymore, but it doesn't hurt
    
    ifstream in(filename.c_str(), ios::in);
    
@@ -44,7 +48,7 @@ string IniReader::Parse(string instr)
       
       if (linelevel > level)
       {
-         IniReader newreader("", linelevel);
+         IniReader newreader(linelevel);
          string currstr = in.str().substr(strpos);
          currstr = newreader.Parse(currstr);
          in.clear();

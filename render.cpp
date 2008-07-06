@@ -247,8 +247,7 @@ void RenderObjects()
    
    m.sort(meshptrcomp);
    
-   IniReader empty("models/empty/base");
-   Mesh impostormesh(empty, resman);
+   Mesh impostormesh("models/empty/base", resman);
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
    float impmod = 1000.f;

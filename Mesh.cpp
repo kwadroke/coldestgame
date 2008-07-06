@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "ProceduralTree.h" // Circular dependency
 
-Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
+Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
@@ -12,7 +12,13 @@ Mesh::Mesh(IniReader& reader, ResourceManager &rm, bool gl) : vbosteps(), impdis
    if (gl)
       impmat = MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman));
 #endif
-   Load(reader);
+   if (filename != "")
+   {
+      IniReader reader(filename);
+      Load(reader);
+   }
+   else Load(read);
+   
 }
 
 
@@ -337,6 +343,10 @@ void Mesh::GenVbo()
          glGenBuffersARB(1, &ibo);
       }
       
+      for (map<string, VertexPtr>::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      {
+         i->second->tangent = Vector3();
+      }
       for (size_t i = 0; i < tris.size(); ++i)
       {
       // Generate tangents for triangles
@@ -346,7 +356,11 @@ void Mesh::GenVbo()
          float tctwo = tris[i]->v[2]->texcoords[0][1] - tris[i]->v[0]->texcoords[0][1];
          Vector3 tangent = one * -tctwo + two * tcone;
          for (size_t j = 0; j < 3; ++j)
-            tris[i]->v[j]->tangent = tangent;
+            tris[i]->v[j]->tangent += tangent;
+      }
+      for (map<string, VertexPtr>::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      {
+         i->second->tangent.normalize();
       }
       
       // Build VBO
@@ -543,8 +557,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 #ifndef DEDICATED
    if (!impostor)
    {
-      IniReader impread("models/impostor/base");
-      impostor = MeshPtr(new Mesh(impread, resman, false));
+      impostor = MeshPtr(new Mesh("models/impostor/base", resman));
       TrianglePtr first = impostor->tris[0];
       TrianglePtr second = impostor->tris[1];
       first->material = impmat.get();
@@ -608,19 +621,20 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    m.rotatex(rots.x);
    m.rotatey(rots.y);
    m.rotatez(rots.z);
+   GraphicMatrix nm = m;
    m.translate(position);
    
    if (frameroot.size() == 1) // Implies index has to be 0
    {
-      frameroot[0]->Transform(frameroot[0], interpval, vertices, m, campos);
+      frameroot[0]->Transform(frameroot[0], interpval, vertices, m, nm, campos);
    }
    else if (index == frameroot.size() - 1) // Could happen if we land exactly on the last keyframe
    {
-      frameroot[index]->Transform(frameroot[index], interpval, vertices, m, campos);
+      frameroot[index]->Transform(frameroot[index], interpval, vertices, m, nm, campos);
    }
    else
    {
-      frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, campos);
+      frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, nm, campos);
    }
    
    CalcBounds();

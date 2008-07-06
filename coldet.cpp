@@ -1288,16 +1288,14 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    if (p.mesh[Legs] == ml.end())
    {
-      IniReader load("models/" + units[p.unit].file + "/legs/base");
-      Mesh newmesh(load, resman, gl);
+      Mesh newmesh("models/" + units[p.unit].file + "/legs/base", resman, IniReader(), gl);
       newmesh.dynamic = true;
       ml.push_front(newmesh);
       p.mesh[Legs] = ml.begin();
    }
    if (p.mesh[Torso] == ml.end())
    {
-      IniReader load("models/" + units[p.unit].file + "/torso/base");
-      Mesh newmesh(load, resman, gl);
+      Mesh newmesh("models/" + units[p.unit].file + "/torso/base", resman, IniReader(), gl);
       newmesh.dynamic = true;
       ml.push_front(newmesh);
       p.mesh[Torso] = ml.begin();
@@ -1311,8 +1309,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    if (p.mesh[LArm] == ml.end())
    {
-      IniReader load("models/" + units[p.unit].file + "/larm/base");
-      Mesh newmesh(load, resman, gl);
+      Mesh newmesh("models/" + units[p.unit].file + "/larm/base", resman, IniReader(), gl);
       newmesh.dynamic = true;
       p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", newmesh);
       ml.push_front(newmesh);
@@ -1320,8 +1317,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    }
    if (p.mesh[RArm] == ml.end())
    {
-      IniReader load("models/" + units[p.unit].file + "/rarm/base");
-      Mesh newmesh(load, resman, gl);
+      Mesh newmesh("models/" + units[p.unit].file + "/rarm/base", resman, IniReader(), gl);
       newmesh.dynamic = true;
       p.mesh[Torso]->InsertIntoContainer("RightArmConnector", newmesh);
       ml.push_front(newmesh);
@@ -1346,14 +1342,13 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&), void (*Rewind)(int))
 {
    list<Particle> newparts;
-   IniReader empty("models/empty/base");
    int updint = console.GetInt("partupdateinterval");
 #ifndef DEDICATED
    if (!HitHandler && partupd >= updint)
    {
       if (!particlemesh)
       {
-         particlemesh = MeshPtr(new Mesh(empty, resman));
+         particlemesh = MeshPtr(new Mesh("models/empty/base", resman));
          particlemesh->dynamic = true;
       }
       particlemesh->Clear();
@@ -1419,7 +1414,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 #ifndef DEDICATED
       if (!HitHandler)
       {
-         particlemesh->GenVbo();
          particles.insert(particles.end(), newparts.begin(), newparts.end());
       }
 #endif
