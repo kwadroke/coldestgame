@@ -1,6 +1,8 @@
 Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
-Texture0 textures/baremetal.png
+Texture0 textures/metal/baremetal.png
+Texture1 textures/metal/baremetalnorm.png
+Texture2 textures/metal/baremetalspec.png
 Shader shaders/standard
 CullFace 0

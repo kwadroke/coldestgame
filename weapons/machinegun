@@ -1,7 +1,10 @@
 ReloadTime 20
 Velocity 20
-Radius 5
+Radius 1
 ProjectileWeight .1
 Weight 5
+Model empty
 Name Machine Gun
 ExplosionParticle particles/debris
+Tracer machinegun
+TracerTime 100

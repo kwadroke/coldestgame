@@ -114,13 +114,15 @@ string IniReader::Read(string& ret, const string name, const int num) const
 
 string IniReader::ReadLine(string& ret, const string name) const
 {
-   ret = "";
    if (HaveValue(name, 0))
    {
+      string tempret = "";
       stringstream readval(values[name]);
-      readval >> ret;
+      readval >> tempret;
       readval.ignore();
-      getline(readval, ret);
+      getline(readval, tempret);
+      if (tempret != "")
+         ret = tempret;
    }
    return ret;
 }
@@ -156,6 +158,17 @@ bool IniReader::Read(bool& ret, const string name, const int num) const
       return ret;
    }
    return false;
+}
+
+
+unsigned char IniReader::Read(unsigned char& ret, const string name, const int num) const
+{
+   if (HaveValue(name, num))
+   {
+      ret = static_cast<unsigned char>(atoi(ReadVal(values[name], num).c_str()));
+      return ret;
+   }
+   return 0;
 }
 
 

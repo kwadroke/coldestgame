@@ -13,7 +13,7 @@ void main()
    
    /* Texturing */
    
-   vec4 color = texture2D(tex, gl_TexCoord[0].st);
+   vec4 color = texture2D(tex, gl_TexCoord[0].st) * gl_Color;
    
    fog(dist, color);
    

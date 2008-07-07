@@ -1,5 +1,3 @@
-Velocity .3
-Acceleration .9
-Weight 2
-TTL 150
-Mesh models/projectile/base
+Velocity .1
+TTL 400
+Mesh models/explosion/base

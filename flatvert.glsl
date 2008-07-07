@@ -13,5 +13,8 @@ void main()
    /* Used in reflection */
    worldcoords.xyz = gl_Vertex.xyz;
    
+   gl_FrontColor = gl_Color;
+   gl_BackColor = gl_Color;
+   
    gl_Position = ftransform();
 }

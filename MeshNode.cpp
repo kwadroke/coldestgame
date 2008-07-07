@@ -35,6 +35,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
       Vector3 dir;
       Vector3 start(0, 0, 1);
       Vector3 facerot, currpos;
+      start.transform(normalm);
       
       // Find the current position - note that this duplicates code, but with facing containers
       // it is necessary to do this twice so there's not a good way around that
@@ -61,7 +62,14 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
    // Reset vertices then transform them to new positions
    for (size_t i = 0; i < vertices.size(); ++i)
    {
-      *verts[vertices[i]->id] = *vertices[i];
+      verts[vertices[i]->id]->pos = lerp(interpnode->vertices[i]->pos, vertices[i]->pos, interpval);
+      verts[vertices[i]->id]->norm = lerp(interpnode->vertices[i]->norm, vertices[i]->norm, interpval);
+      for (size_t j = 0; j < 4; ++j)
+      {
+         verts[vertices[i]->id]->color[j] = 
+               static_cast<unsigned char>(lerp(float(interpnode->vertices[i]->color[j]), float(vertices[i]->color[j]), interpval));
+      }
+      
       verts[vertices[i]->id]->pos.transform(m);
       verts[vertices[i]->id]->norm.transform(normalm);
    }
