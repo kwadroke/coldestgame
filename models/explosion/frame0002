@@ -1,0 +1,181 @@
+Version Version4
+NextID 29
+TimeToNextFrame 100
+Container
+   ID 0
+   ParentID -1
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+Container
+   ID 1
+   ParentID 0
+   Name 
+   Facing 1
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 2
+      Pos -50000 50000 1000
+      Norm 0 0 1
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+      Color 255 255 255 0
+   Vertex
+      ID 3
+      Pos -50000 -50000 1000
+      Norm 0 0 1
+      TC 0 0.5 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+      Color 255 255 255 0
+   Vertex
+      ID 4
+      Pos 50000 50000 1000
+      Norm 0 0 1
+      TC 0.5 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+      Color 255 255 255 0
+   Vertex
+      ID 5
+      Pos 50000 -50000 1000
+      Norm 0 0 1
+      TC 0.5 0.5 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+      Color 255 255 255 0
+Container
+   ID 8
+   ParentID 0
+   Name 
+   Facing 1
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 11
+      Pos -100000 -100000 1500
+      Norm 0 0 1
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+      Color 255 255 255 255
+   Vertex
+      ID 13
+      Pos 100000 100000 1500
+      Norm 0 0 1
+      TC 0.5 0.5 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+      Color 255 255 255 255
+   Vertex
+      ID 14
+      Pos 100000 -100000 1500
+      Norm 0 0 1
+      TC 0.5 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+      Color 255 255 255 255
+   Vertex
+      ID 9
+      Pos -100000 75000 1500
+      Norm 0 0 1
+      TC 0 0.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+      Color 255 255 255 0
+Container
+   ID 15
+   ParentID 0
+   Name 
+   Facing 1
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 16
+      Pos -100000 -100000 2000
+      Norm 0 0 1
+      TC 0.5 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+      Color 255 255 255 0
+   Vertex
+      ID 19
+      Pos 100000 100000 2000
+      Norm 0 0 1
+      TC 1 0.5 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+      Color 255 255 255 0
+   Vertex
+      ID 20
+      Pos 100000 -100000 2000
+      Norm 0 0 1
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+      Color 255 255 255 0
+   Vertex
+      ID 21
+      Pos -100000 100000 2000
+      Norm 0 0 1
+      TC 0.5 0.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+      Color 255 255 255 0
+Container
+   ID 22
+   ParentID 0
+   Name 
+   Facing 1
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 23
+      Pos -100000 -100000 2500
+      Norm 0 0 1
+      TC 0.5 0.5 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+      Color 255 255 255 0
+   Vertex
+      ID 26
+      Pos 100000 100000 2500
+      Norm 0 0 1
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+      Color 255 255 255 0
+   Vertex
+      ID 27
+      Pos 100000 -100000 2500
+      Norm 0 0 1
+      TC 1 0.5 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+      Color 255 255 255 0
+   Vertex
+      ID 28
+      Pos -100000 100000 2500
+      Norm 0 0 1
+      TC 0.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+      Color 255 255 255 0
+Node
+   Triangles
+   Tri
+      ID 10
+      Verts 9 11 13
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 12
+      Verts 13 11 14
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 17
+      Verts 21 16 19
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 18
+      Verts 19 16 20
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 24
+      Verts 28 23 26
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 25
+      Verts 26 23 27
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 6
+      Verts 2 3 4
+      Material materials/explosion
+      Collide 0
+   Tri
+      ID 7
+      Verts 4 3 5
+      Material materials/explosion
+      Collide 0
