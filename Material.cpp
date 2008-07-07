@@ -8,6 +8,9 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
                    texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
                    shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true)
 {
+   ifstream check(filename.c_str());
+   if (check.fail())
+      filename = "materials/default";
    IniReader reader(filename);
    
    for (int i = 0; i < 4; ++i)

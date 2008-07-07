@@ -1,1 +1,5 @@
 Weight 50
+Velocity 0
+Model explosion
+Name Autocannon
+ReloadTime 200

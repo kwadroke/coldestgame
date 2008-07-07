@@ -2,5 +2,10 @@ Name Rocket
 Weight 30
 ProjectileWeight 0
 Splash 50
-Acceleration 1.05
-Velocity .05
+Acceleration 1.1
+Velocity .8
+ReloadTime 300
+Model projectile
+ExplosionParticle particles/explosion
+Tracer smoke
+TracerTime 2500

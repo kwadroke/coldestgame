@@ -178,6 +178,10 @@ void Mesh::Load(const IniReader& reader)
                   currvert.Read(newv->texcoords[m][0], "TC", m * 2);
                   currvert.Read(newv->texcoords[m][1], "TC", m * 2 + 1);
                }
+               currvert.Read(newv->color[0], "Color", 0);
+               currvert.Read(newv->color[1], "Color", 1);
+               currvert.Read(newv->color[2], "Color", 2);
+               currvert.Read(newv->color[3], "Color", 3);
                newnode->vertices.push_back(newv);
                if (!i)
                   vertices[newv->id] = VertexPtr(new Vertex(*newv)); // Can't share these dummy

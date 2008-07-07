@@ -31,6 +31,7 @@ class IniReader
       int Read(int&, const string, const int num = 0) const;
       float Read(float&, const string, const int num = 0) const;
       bool Read(bool&, const string, const int num = 0) const;
+      unsigned char Read(unsigned char&, const string, const int num = 0) const;
       int NumChildren() const;
       string GetPath() const;
       
