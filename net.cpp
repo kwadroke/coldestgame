@@ -578,7 +578,6 @@ int NetListen(void* dummy)
                temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
                get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
                get >> temppart.dir.x >> temppart.dir.y >> temppart.dir.z;
-               get >> temppart.playernum;
                temppart.velocity = dummy.Velocity();
                temppart.accel = dummy.Acceleration();
                temppart.weight = dummy.ProjectileWeight();
@@ -913,6 +912,18 @@ void SendCommand(const string& command)
    pack << "c\n";
    pack << pack.ack << eol;
    pack << command << eol;
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
+   SDL_mutexV(netmutex);
+}
+
+
+void SendFire()
+{
+   Packet pack(outpack, &socket, &addr);
+   pack.ack = sendpacketnum;
+   pack << "f\n";
+   pack << pack.ack << eol;
    SDL_mutexP(netmutex);
    sendqueue.push_back(pack);
    SDL_mutexV(netmutex);

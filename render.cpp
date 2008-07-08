@@ -7,7 +7,6 @@
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
-PlayerData localplayer(meshes); // TODO: Static initialization order fiasco brewing?
 set<Mesh*> implist;
 set<Mesh*> visiblemeshes;
 
@@ -19,6 +18,7 @@ void Repaint()
    if (guncam)
       fov /= console.GetFloat("zoomfactor");
    bool shadows = console.GetBool("shadows");
+   PlayerData localplayer(meshes);
    t.start();
    
    // Apparently if this is turned off even glClear doesn't override it, so we end up never
@@ -37,9 +37,13 @@ void Repaint()
    SDL_mutexP(clientmutex);
    localplayer = player[0];
    SDL_mutexV(clientmutex);
+   
    if (!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
       !gui[settings]->visible && !gui[endgame]->visible)
    {
+      // So a bunch of this stuff doesn't belong here (not rendering related), but it's not
+      // causing problems ATM so it stays.
+      
       // Update any animated objects
       Animate();
       
@@ -51,6 +55,32 @@ void Repaint()
          SynchronizePosition();
       localplayer = player[0];
       SDL_mutexV(clientmutex);
+      
+      int weaponslot = weaponslots[localplayer.currweapon];
+      Weapon& currplayerweapon = localplayer.weapons[weaponslot];
+      if (localplayer.leftclick && 
+          (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
+          (currplayerweapon.ammo != 0))
+      {
+         SendFire();
+         SDL_mutexP(clientmutex);
+         player[0].lastfiretick[weaponslot] = SDL_GetTicks();
+         if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicated infinite ammo
+            player[0].weapons[weaponslot].ammo--;
+         
+         Vector3 startpos = localplayer.pos;
+         Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
+         Vector3 offset = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
+         Particle part = CreateShot(currplayerweapon, rot, startpos, offset);
+         // Add tracer if necessary
+         if (currplayerweapon.Tracer() != "")
+         {
+            part.tracer = MeshPtr(new Mesh("models/" + currplayerweapon.Tracer() + "/base", resman));
+            part.tracertime = currplayerweapon.TracerTime();
+         }
+         particles.push_back(part);
+         SDL_mutexV(clientmutex);
+      }
       
       if (shadows)
       {
@@ -84,7 +114,7 @@ void Repaint()
          
          look.transform(rot);
          
-         GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo);
+         GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo, localplayer);
       }
       
       // Set the camera's location and orientation
@@ -172,12 +202,12 @@ void Repaint()
       
       lights.Place();
       
-      RenderObjects();
+      RenderObjects(localplayer);
       
       if ((localplayer.pos - viewoff).y > 0)
       {
          UpdateNoise();
-         UpdateReflection();
+         UpdateReflection(localplayer);
          RenderWater();
       }
       
@@ -193,7 +223,7 @@ void Repaint()
       resman.shaderman.UseShader("none");
    }
    
-   RenderHud();
+   RenderHud(localplayer);
    
    if (console.GetBool("showkdtree"))
       kdtree.visualize();
@@ -227,7 +257,7 @@ bool meshptrcomp(const Mesh* l, const Mesh* r)
 }
 
 
-void RenderObjects()
+void RenderObjects(const PlayerData& localplayer)
 {
    float dist;
    bool debug = false; // Turns off impostoring if true
@@ -305,7 +335,7 @@ void RenderObjects()
       glFogf(GL_FOG_END, float(viewdist));
    }
    
-   UpdateFBO();
+   UpdateFBO(localplayer);
    
    // Render all dynamic meshes (since they won't show up in the KDTree)
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
@@ -346,7 +376,7 @@ bool sortbyimpdim(const Mesh* l, const Mesh* r)
 }
 
 
-void UpdateFBO()
+void UpdateFBO(const PlayerData& localplayer)
 {
    if (!impfbolist.size()) return;
    vector<Mesh*>::iterator iptr;
@@ -478,7 +508,7 @@ void UpdateFBO()
 
 
 // Generates the depth texture that will be used in shadowing
-void GenShadows(Vector3 center, float size, FBO& fbo)
+void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localplayer)
 {
    fbo.Bind();
    
@@ -523,7 +553,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo)
    // Render objects to depth map
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    shadowrender = true;
-   RenderObjects();
+   RenderObjects(localplayer);
    shadowrender = false;
    glDisable(GL_POLYGON_OFFSET_FILL);
    
@@ -668,7 +698,7 @@ void UpdateNoise()
 }
 
 
-void UpdateReflection()
+void UpdateReflection(const PlayerData& localplayer)
 {
    int reflectionres = console.GetInt("reflectionres");
    reflectionfbo.Bind();
@@ -705,7 +735,7 @@ void UpdateReflection()
          SetReflection(true);
          
          glFrontFace(GL_CW);
-         RenderObjects();
+         RenderObjects(localplayer);
          RenderParticles();
          glFrontFace(GL_CCW);
          
@@ -846,7 +876,7 @@ void RenderWater()
 }
 
 
-void RenderHud()
+void RenderHud(const PlayerData& localplayer)
 {
    // These don't have to be static, but since we only ever create the GUI once
    // and GetWidget could be a bit time-consuming, it's not a bad idea

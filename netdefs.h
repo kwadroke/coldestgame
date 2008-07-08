@@ -35,5 +35,6 @@ extern unsigned long lastsyncpacket;
 void HandleAck(unsigned long);
 void SendPowerdown();
 void SendCommand(const string&);
+void SendFire();
 
 #endif

@@ -1,9 +1,10 @@
 Name Rocket
 Weight 30
 ProjectileWeight 0
+Damage 60
 Splash 50
-Acceleration 1.1
-Velocity .8
+Acceleration .01
+Velocity 1
 ReloadTime 300
 Model projectile
 ExplosionParticle particles/explosion

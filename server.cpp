@@ -586,18 +586,34 @@ int ServerListen()
          else if (packettype == "c") // Console command
          {
             // TODO: Anyone is allowed to do this right now.  Need to authenticate only admins.
+            SDL_mutexP(servermutex);
             if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end())
             {
                serverplayers[oppnum].commandids.insert(packetnum);
+               SDL_mutexV(servermutex); // Don't hold two mutexes at a time
                string command;
                get.ignore();
                getline(get, command);
                SDL_mutexP(clientmutex);
                console.Parse(command, false);
+               SDL_mutexV(clientmutex);
+               SDL_mutexP(servermutex);
                for (size_t i = 0; i < serverplayers.size(); ++i)
                   SendSyncPacket(serverplayers[i]);
-               SDL_mutexV(clientmutex);
+               
             }
+            SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
+         }
+         else if (packettype == "f") // Fire request
+         {
+            SDL_mutexP(servermutex);
+            if (serverplayers[oppnum].fireids.find(packetnum) == serverplayers[oppnum].fireids.end())
+            {
+               serverplayers[oppnum].fireids.insert(packetnum);
+               serverplayers[oppnum].firerequests++;
+            }
+            SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
          }
       }
@@ -1041,56 +1057,31 @@ void ServerUpdatePlayer(int i)
    }
    
    // Shots fired!
-   Weapon& currplayerweapon = serverplayers[i].weapons[weaponslots[serverplayers[i].currweapon]];
-   if (serverplayers[i].leftclick && 
-       (SDL_GetTicks() - serverplayers[i].lastfiretick >= currplayerweapon.ReloadTime()) &&
+   int weaponslot = weaponslots[serverplayers[i].currweapon];
+   Weapon& currplayerweapon = serverplayers[i].weapons[weaponslot];
+   if (serverplayers[i].firerequests && 
+       (SDL_GetTicks() - serverplayers[i].lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0))
    {
-      serverplayers[i].lastfiretick = SDL_GetTicks();
-      serverplayers[i].temperature += currplayerweapon.Heat();
-      if (currplayerweapon.ammo > 0) // Negative ammo value indicated infinite ammo
-         currplayerweapon.ammo--;
-      Vector3 dir(0, 0, -1);
-      GraphicMatrix m;
-      m.rotatex(-serverplayers[i].pitch);
-      m.rotatey(serverplayers[i].facing + serverplayers[i].rotation);
-      dir.transform(m);
-               
-      float vel = currplayerweapon.Velocity();
-      float acc = currplayerweapon.Acceleration();
-      float w = currplayerweapon.ProjectileWeight();
-      float rad = currplayerweapon.Radius();
-      bool exp = currplayerweapon.Explode();
-      Vector3 startpos = serverplayers[i].pos;
+      serverplayers[i].firerequests--;
       /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
       slide the player around as much because this way they see their shots going exactly where
       they expect, even if the positions don't match exactly (and they rarely will:-).*/
+      Vector3 startpos = serverplayers[i].pos;
       if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
          startpos = serverplayers[i].clientpos;
-      Mesh weaponmesh("models/" + currplayerweapon.ModelFile() + "/base", resman);
-      Particle part(nextservparticleid, startpos, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
-      part.origin = part.pos;
-      part.playernum = i;
-      part.weapid = currplayerweapon.Id();
-      part.damage = currplayerweapon.Damage();
-      part.dmgrad = currplayerweapon.Splash();
-      part.rewind = serverplayers[i].ping;
-      part.collide = true;
-      
+      Vector3 rot(serverplayers[i].pitch, serverplayers[i].facing + serverplayers[i].rotation, 0.f);
       Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
-      Vector3 rawoffset = offset;
-      offset.transform(m);
-      part.pos += offset;
       
-      // Note: weaponfocus should actually be configurable per-player
-      Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
-      Vector3 difference = actualaim + rawoffset;
-      Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
-      m.identity();
-      m.rotatex(-serverplayers[i].pitch - rot.x);
-      m.rotatey(serverplayers[i].facing + serverplayers[i].rotation + rot.y);
-      part.dir = Vector3(0, 0, -1);
-      part.dir.transform(m);
+      Particle part = CreateShot(currplayerweapon, rot, startpos, offset, i);
+      part.rewind = serverplayers[i].ping;
+      part.id = nextservparticleid;
+      
+
+      serverplayers[i].lastfiretick[weaponslot] = SDL_GetTicks();
+      serverplayers[i].temperature += currplayerweapon.Heat();
+      if (currplayerweapon.ammo > 0) // Negative ammo value indicated infinite ammo
+         currplayerweapon.ammo--;
       
       servparticles.push_back(part);
       
@@ -1281,7 +1272,7 @@ void SendShot(const Particle& p)
 {
    for (size_t i = 1; i < serverplayers.size(); ++i)
    {
-      if (serverplayers[i].connected)
+      if (serverplayers[i].connected && i != p.playernum)
       {
          Packet pack(servoutpack, &servoutsock, &serverplayers[i].addr);
          pack.ack = servsendpacketnum;
@@ -1291,7 +1282,6 @@ void SendShot(const Particle& p)
          pack << p.weapid << eol;
          pack << p.pos.x << eol << p.pos.y << eol << p.pos.z << eol;
          pack << p.dir.x << eol << p.dir.y << eol << p.dir.z << eol;
-         pack << p.playernum << eol;
          
          servqueue.push_back(pack);
       }

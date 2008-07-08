@@ -23,7 +23,7 @@
    <ComboBox x="700"  y="100" width="200" height="40" name="Unit" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
-      <ComboBoxItem>UnitTest</ComboBoxItem>
+      <ComboBoxItem>Nemesis</ComboBoxItem>
       <ComboBoxItem>Ultra</ComboBoxItem>
       <ComboBoxItem>Omega</ComboBoxItem>
    </ComboBox>

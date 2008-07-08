@@ -32,11 +32,13 @@ class PlayerData
       set<unsigned long> partids;
       set<unsigned long> acked;
       set<unsigned long> commandids;
+      set<unsigned long> fireids;
+      int firerequests;
       vector<Weapon> weapons;
       Item item;
-      Uint32 lastupdate;  // How long since last player update?
+      Uint32 lastupdate;
       Uint32 lastmovetick;
-      Uint32 lastfiretick;
+      vector<Uint32> lastfiretick;
       Uint32 lastcoolingtick;
       float size;
       float fallvelocity;
