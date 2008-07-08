@@ -1,7 +1,7 @@
 #include "Particle.h"
 
 
-Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0.f), accel(1.f),
+Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0.f), accel(0.f),
                    weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
 {
@@ -20,8 +20,8 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 }
 
 
-Particle::Particle(const string& filename, ResourceManager& resman) : mesh(Mesh("models/empty/base", resman)), playernum(0), id(0), velocity(0.f), accel(1.f),
-                   weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
+Particle::Particle(const string& filename, ResourceManager& resman) : mesh(Mesh("models/empty/base", resman)), playernum(0), id(0),
+                   velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
 {
    IniReader read(filename);
@@ -53,8 +53,8 @@ Vector3 Particle::Update()
    Uint32 currtick = SDL_GetTicks();
    Uint32 interval = currtick - lasttick;
    lasttick = currtick;
-   velocity *= accel;
-   dir.y -= weight * interval / 1000.f;
+   velocity += accel * float(interval) / 10.f;
+   dir.y -= weight * float(interval) / 1000.f;
    pos += dir * (velocity * interval);
    mesh.Move(pos);
    if (ttl > 0)

@@ -38,7 +38,6 @@ float Max(float, float);
 Vector3 GetTerrainNormal(int, int, int, int);
 float GetSmoothedTerrain(int, int, int, int, vector< floatvec >&);
 float Random(float, float);
-void GenShadows(Vector3, float, FBO&);
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -752,7 +751,7 @@ void GetMap(string fn)
    shadowsize *= tilesize;
    Vector3 center((mapw - 1) / 2.f, 0, (maph - 1) / 2.f);
    center *= tilesize;
-   GenShadows(center, shadowsize / 1.4f, worldshadowmapfbo);
+   GenShadows(center, shadowsize / 1.4f, worldshadowmapfbo, player[0]);
    resman.texhand.ActiveTexture(7);
    
    resman.texhand.BindTexture(worldshadowmapfbo.GetTexture());
@@ -804,9 +803,9 @@ void GetMap(string fn)
    float saveidm = console.GetFloat("impdistmulti");
    console.Parse("set impdistmulti 10000", false);
    lights.Place();
-   RenderObjects();
+   RenderObjects(player[0]);
    UpdateNoise();
-   UpdateReflection();
+   UpdateReflection(player[0]);
    minimapfbo.Bind();
    glViewport(0, 0, 512, 512);
    RenderWater();

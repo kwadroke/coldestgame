@@ -92,7 +92,7 @@ void InitGlobals()
    console.Parse("set weaponfocus 1000", false);
    
    // Variables that cannot be set from the console
-   dummy.unit = UnitTest;
+   dummy.unit = Nemesis;
    player.push_back(dummy);
    
 #ifndef DEDICATED
@@ -173,7 +173,7 @@ void InitGUI()
 void InitUnits()
 {
    UnitData dummy;
-   dummy.file = "unittest";
+   dummy.file = "nemesis";
    dummy.turnspeed = 1.f;
    dummy.acceleration = .05f;
    dummy.maxspeed = 2.f;
@@ -189,7 +189,7 @@ void InitUnits()
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
    
-   units[UnitTest].file = "unittest";
+   units[Nemesis].file = "nemesis";
    units[Ultra].file = "ultra";
    units[Omega].file = "omega";
 }
@@ -608,7 +608,7 @@ void GUIUpdate()
 bool GUIEventHandler(SDL_Event &event)
 {
 #ifndef DEDICATED
-   // Mini keyboard handler to deal with the console
+   // Mini keyboard handler to deal with the console and chat
    bool eatevent = false;
    switch (event.type)
    {
@@ -1529,6 +1529,45 @@ int CalculatePlayerWeight(const PlayerData& p)
    total += p.item.Weight();
    total += units[p.unit].weight;
    return total;
+}
+
+
+Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& start, Vector3 offset, int pnum)
+{
+   Vector3 dir(0, 0, -1);
+   GraphicMatrix m;
+   m.rotatex(-rots.x);
+   m.rotatey(rots.y);
+   dir.transform(m);
+   float vel = weapon.Velocity();
+   float acc = weapon.Acceleration();
+   float w = weapon.ProjectileWeight();
+   float rad = weapon.Radius();
+   bool exp = weapon.Explode();
+   
+   Mesh weaponmesh("models/" + weapon.ModelFile() + "/base", resman);
+   Particle part(0, start, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
+   part.origin = part.pos;
+   part.playernum = pnum;
+   part.weapid = weapon.Id();
+   part.damage = weapon.Damage();
+   part.dmgrad = weapon.Splash();
+   part.collide = true;
+      
+   Vector3 rawoffset = offset;
+   offset.transform(m);
+   part.pos += offset;
+      
+   // Note: weaponfocus should actually be configurable per-player
+   Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
+   Vector3 difference = actualaim + rawoffset;
+   Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
+   m.identity();
+   m.rotatex(-rots.x - rot.x);
+   m.rotatey(rots.y + rot.y);
+   part.dir = Vector3(0, 0, -1);
+   part.dir.transform(m);
+   return part;
 }
 
 

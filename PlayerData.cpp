@@ -2,7 +2,7 @@
 
 PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), spawnpacketnum(0), mesh(numbodyparts, ml.end()),
                        item(Item::NoItem, ml), speed(0.f), turnspeed(0.f), needsync(true), salvage(100), powerdowntime(0),
-                       healaccum(0.f)
+                       healaccum(0.f), firerequests(0)
 {
    Uint32 ticks = 0;
    if (SDL_WasInit(SDL_INIT_TIMER))
@@ -18,12 +18,11 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), spawnpacketnum(
    unit = numunits;
    kills = 0;
    deaths = 0;
-   lastmovetick = ticks;
+   lastmovetick = lastcoolingtick = ticks;
    pos = Vector3();
    pitch = roll = rotation = facing = 0.f;
    moveleft = moveright = moveforward = moveback = false;
    size = 0;
-   lastfiretick = 0;
    leftclick = rightclick = run = false;
    meshes = &ml;
    currweapon = 0;
@@ -35,6 +34,7 @@ PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), spawnpacketnum(
    {
       weapons.push_back(none);
       hp[i] = 100;
+      lastfiretick.push_back(0);
    }
 }
 
