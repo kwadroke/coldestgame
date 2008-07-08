@@ -539,6 +539,7 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                get >> servplayernum;
                get >> nextmap;
+               get >> changeteam;
                if (!server)
                   mapname = ""; // Force reload of the map even if same name
                nextmap = "maps/" + nextmap;
@@ -706,12 +707,12 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                if (player[0].team != newteam)
                {
-                  cout << "Joined team " << (newteam - 1) << endl;
+                  cout << "Joined team " << newteam << endl;
                   player[0].team = newteam;
                   
                   mapspawns.clear();
                   bool morespawns;
-                  SpawnPointData read;
+                  SpawnPointData read; // Come to think of it, I don't think this is strictly necessary
                   while (get >> morespawns && morespawns)
                   {
                      get >> read.position.x >> read.position.y >> read.position.z;
@@ -720,6 +721,19 @@ int NetListen(void* dummy)
                      mapspawns.push_back(read);
                   }
                   spawnschanged = true;
+               }
+               
+               static Button* team1button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team1"));
+               static Button* team2button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team2"));
+               if (player[0].team == 1)
+               {
+                  team1button->togglestate = 1;
+                  team2button->togglestate = 0;
+               }
+               else
+               {
+                  team1button->togglestate = 0;
+                  team2button->togglestate = 1;
                }
                SDL_mutexV(clientmutex);
             }

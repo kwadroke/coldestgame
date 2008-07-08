@@ -80,7 +80,6 @@ void Connect()
    console.Parse("set serveraddr " + serveraddress);
    console.Parse("connect");
    UpdateUnitSelection();
-   ShowGUI(loadoutmenu);
 }
 
 
@@ -90,7 +89,6 @@ void ConnectToIp()
    console.Parse("set serveraddr " + servname->text);
    console.Parse("connect");
    UpdateUnitSelection();
-   ShowGUI(loadoutmenu);
 }
 
 
@@ -101,9 +99,7 @@ void Host()
    console.Parse("set serveraddr localhost");
    console.Parse("connect");
    ComboBox *teamselect = (ComboBox*)gui[loadoutmenu]->GetWidget("TeamSelect");
-   teamselect->Select(1);
    UpdateUnitSelection();
-   ShowGUI(loadoutmenu);
 }
 
 
@@ -147,10 +143,9 @@ void SubmitCommand()
 }
 
 
-void RequestNewTeam()
+void SelectTeam(int team)
 {
-   ComboBox *teamselect = (ComboBox*)gui[loadoutmenu]->GetWidget("TeamSelect");
-   changeteam = teamselect->Selected() + 1;
+   changeteam = team;
 }
 
 
@@ -203,8 +198,10 @@ void Action(const string& action)
       UpdateUnitSelection();
    else if (action == "submitcommand")
       SubmitCommand();
-   else if (action == "requestnewteam")
-      RequestNewTeam();
+   else if (action == "selectteam1")
+      SelectTeam(1);
+   else if (action == "selectteam2")
+      SelectTeam(2);
    else if (action == "showmain")
       ShowMain();
    else if (action == "showsettings")

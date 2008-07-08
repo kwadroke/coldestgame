@@ -517,7 +517,7 @@ static void MainLoop()
       {
          GUI* gotext = gui[endgame]->GetWidget("GameOverText");
          gotext->text = "Team " + ToString(winningteam) + " wins!";
-        ShowGUI(endgame);
+         ShowGUI(endgame);
       }
       // update the screen
       Repaint();
@@ -531,7 +531,6 @@ void GUIUpdate()
 #ifndef DEDICATED
    static Uint32 servupdatecounter = SDL_GetTicks();
    static Uint32 statupdatecounter = SDL_GetTicks();
-   static GUI* teamdisplay = gui[loadoutmenu]->GetWidget("TeamDisplay");
    Uint32 currtick;
    if (gui[mainmenu]->visible)
    {
@@ -558,11 +557,6 @@ void GUIUpdate()
    
    if (gui[loadoutmenu]->visible)
    {
-      if (player[0].team == 1)
-         teamdisplay->text = "Spectator";
-      else
-         teamdisplay->text = "Team " + ToString(player[0].team - 1);
-      
       if (spawnschanged)
       {
          ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");

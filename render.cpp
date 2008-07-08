@@ -848,6 +848,8 @@ void RenderWater()
 
 void RenderHud()
 {
+   // These don't have to be static, but since we only ever create the GUI once
+   // and GetWidget could be a bit time-consuming, it's not a bad idea
    static GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
    static GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
    static GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
