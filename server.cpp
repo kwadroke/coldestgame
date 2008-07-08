@@ -380,7 +380,13 @@ int ServerListen()
             fill << packetnum << eol;
             fill << respondto << eol;
             fill << console.GetString("map") << eol;
-            //cout << "Server Sent ACK" << packetnum << " to player " << respondto << endl;
+            vector<int> teamcount(2, 0);
+            for (size_t i = 1; i < serverplayers.size(); ++i)
+            {
+               if (serverplayers[i].team != 0)
+                  ++teamcount[serverplayers[i].team - 1];
+            }
+            fill << (teamcount[0] > teamcount[1] ? 2 : 1) << eol;
             
             fill.addr = serverplayers[respondto].addr;
             servqueue.push_back(fill);
@@ -511,7 +517,7 @@ int ServerListen()
             serverplayers[oppnum].team = newteam;
             for (int i = 0; i < spawnpoints.size(); ++i)
             {
-               if ((spawnpoints[i].team == serverplayers[oppnum].team - 1) || serverplayers[oppnum].team == 1)
+               if ((spawnpoints[i].team == serverplayers[oppnum].team) || serverplayers[oppnum].team == 0)
                {
                   response << "1\n"; // Indicate that there are more spawn points to be read
                   response << spawnpoints[i].position.x << eol;
