@@ -9,6 +9,7 @@ set<ServerInfo> knownservers;
 SDL_Thread* netout;
 SDL_Thread* netin;
 string chatstring;
+bool chatteam;
 vector<string> newchatlines;
 vector<unsigned short> newchatplayers;
 short changeteam;

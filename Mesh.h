@@ -40,6 +40,7 @@ class Mesh
       void Add(TrianglePtr&);
       void Add(Quad&);
       void Add(Mesh&);
+      void Add(Mesh*);
       void Clear();
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
@@ -74,6 +75,8 @@ class Mesh
       Uint32 lastimpupdate;
       bool debug;
       
+      bool glops; // Whether to do things like GenVbo
+      
    private:
       void UpdateTris(int, const Vector3&);
       void BindVbo();
@@ -81,7 +84,7 @@ class Mesh
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;
-      VertMap vertices;
+      VertexPtrvec vertices;
       intvec vbosteps;
       GLuint vbo;
       GLuint ibo;
@@ -92,6 +95,7 @@ class Mesh
       vector<map<string, MeshNodePtr> > framecontainer;
       bool hasvbo;
       int vbosize, ibosize;
+      vector<Mesh*> childmeshes;
       
       int animtime;
       int currkeyframe;
@@ -109,7 +113,7 @@ class Mesh
       MaterialPtr impmat;
 
       int next;
-      bool glops; // Whether to do things like GenVbo
+      
       bool havemats;
 };
 

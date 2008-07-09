@@ -34,7 +34,7 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
          size(m.size), drawdistmult(m.drawdistmult), debug(m.debug), width(m.width), height(m.height),
          impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), ibo(m.ibo), next(m.next), hasvbo(m.hasvbo),
-         currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
+         childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          dynamic(m.dynamic), collide(m.collide), dist(m.dist), impostor(m.impostor), 
          animspeed(m.animspeed)
 {
@@ -48,11 +48,11 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
-   VertMap localvert = m.vertices;
-   for (VertMap::iterator i = localvert.begin(); i != localvert.end(); ++i)
+   VertexPtrvec localvert = m.vertices;
+   for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
    {
-      VertexPtr p(new Vertex(*i->second));
-      vertices[p->id] = p;
+      VertexPtr p(new Vertex(**i));
+      vertices.push_back(p);
    }
    for (size_t i = 0; i < m.tris.size(); ++i)
    {
@@ -120,6 +120,7 @@ void Mesh::Load(const IniReader& reader)
       
       //cout << "Loading " << basepath << endl;
       
+      map<size_t, size_t> vertmap;
       for (int i = 0; i < numkeyframes; ++i)
       {
          currfile = basepath + "/frame" + PadNum(i, 4);
@@ -159,7 +160,7 @@ void Mesh::Load(const IniReader& reader)
             currcon.Read(newnode->trans.y, "Trans", 1);
             currcon.Read(newnode->trans.z, "Trans", 2);
             newnode->trans *= scale;
-            string vertid;
+            
             // Read vertices
             for (int k = 0; k < currcon.NumChildren(); ++k)
             {
@@ -184,7 +185,12 @@ void Mesh::Load(const IniReader& reader)
                currvert.Read(newv->color[3], "Color", 3);
                newnode->vertices.push_back(newv);
                if (!i)
-                  vertices[newv->id] = VertexPtr(new Vertex(*newv)); // Can't share these dummy
+               {
+                  vertices.push_back(VertexPtr(new Vertex(*newv)));
+                  vertmap[newv->id] = vertices.size() - 1;
+                  vertices.back()->id = vertices.size() - 1;
+               }
+               newv->id = vertmap[newv->id];
             }
             currcon.Read(newnode->facing, "Facing");
             currcon.Read(newnode->name, "Name");
@@ -216,7 +222,8 @@ void Mesh::Load(const IniReader& reader)
          // Load triangles
          if (!i)
          {
-            string vid, matname;
+            string matname;
+            size_t vid;
             const IniReader& readtris = currframe.GetItemByName("Triangles");
             for (size_t j = 0; j < readtris.NumChildren(); ++j)
             {
@@ -225,7 +232,7 @@ void Mesh::Load(const IniReader& reader)
                for (int k = 0; k < 3; ++k)
                {
                   curr.Read(vid, "Verts", k);
-                  newtri->v[k] = vertices[vid];
+                  newtri->v[k] = vertices[vertmap[vid]];
                   string tempid;
                   curr.Read(tempid, "ID");
                }
@@ -333,47 +340,55 @@ void Mesh::Rotate(const Vector3& v)
 
 void Mesh::GenVbo()
 {
-   if (tris.size())
+   if (tris.size() || childmeshes.size())
    {
       vbosteps.clear();
       vbodata.clear();
       indexdata.clear();
-      /*if (hasvbo)
-         glDeleteBuffersARB(1, &vbo);
-      glGenBuffersARB(1, &vbo);*/
+      if (childmeshes.size())
+         tris.clear();
+      int currindex = 0;
       if (!hasvbo)
       {
          glGenBuffersARB(1, &vbo);
          glGenBuffersARB(1, &ibo);
       }
-      
-      for (map<string, VertexPtr>::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      for (size_t m = 0; m < childmeshes.size() + 1; ++m)
       {
-         i->second->tangent = Vector3();
-      }
-      for (size_t i = 0; i < tris.size(); ++i)
-      {
-      // Generate tangents for triangles
-         Vector3 one = tris[i]->v[1]->pos - tris[i]->v[0]->pos;
-         Vector3 two = tris[i]->v[2]->pos - tris[i]->v[0]->pos;
-         float tcone = tris[i]->v[1]->texcoords[0][1] - tris[i]->v[0]->texcoords[0][1];
-         float tctwo = tris[i]->v[2]->texcoords[0][1] - tris[i]->v[0]->texcoords[0][1];
-         Vector3 tangent = one * -tctwo + two * tcone;
-         for (size_t j = 0; j < 3; ++j)
-            tris[i]->v[j]->tangent += tangent;
-      }
-      for (map<string, VertexPtr>::iterator i = vertices.begin(); i != vertices.end(); ++i)
-      {
-         i->second->tangent.normalize();
-      }
-      
-      // Build VBO
-      int currindex = 0;
-      for (map<string, VertexPtr>::iterator i = vertices.begin(); i != vertices.end(); ++i)
-      {
-         i->second->index = currindex;
-         ++currindex;
-         vbodata.push_back(i->second->GetVboData());
+         Mesh* currmesh;
+         if (m < 1)
+            currmesh = this;
+         else
+            currmesh = childmeshes[m - 1];
+         VertexPtrvec& currvertices = currmesh->vertices;
+         for (VertexPtrvec::iterator i = currvertices.begin(); i != currvertices.end(); ++i)
+         {
+            (*i)->tangent = Vector3();
+         }
+         TrianglePtrvec& currtris = currmesh->tris;
+         for (size_t i = 0; i < currtris.size(); ++i)
+         {
+            // Generate tangents for triangles
+            Vector3 one = currtris[i]->v[1]->pos - currtris[i]->v[0]->pos;
+            Vector3 two = currtris[i]->v[2]->pos - currtris[i]->v[0]->pos;
+            float tcone = currtris[i]->v[1]->texcoords[0][1] - currtris[i]->v[0]->texcoords[0][1];
+            float tctwo = currtris[i]->v[2]->texcoords[0][1] - currtris[i]->v[0]->texcoords[0][1];
+            Vector3 tangent = one * -tctwo + two * tcone;
+            for (size_t j = 0; j < 3; ++j)
+               currtris[i]->v[j]->tangent += tangent;
+            
+            if (m > 0)
+               tris.push_back(currtris[i]);
+         }
+         
+         // Build VBO
+         for (VertexPtrvec::iterator i = currvertices.begin(); i != currvertices.end(); ++i)
+         {
+            (*i)->tangent.normalize();
+            (*i)->index = currindex;
+            ++currindex;
+            vbodata.push_back((*i)->GetVboData());
+         }
       }
       
       // Build IBO
@@ -426,7 +441,6 @@ void Mesh::GenVbo()
       }
       hasvbo = true;
    }
-   
    glops = true;
 }
 
@@ -614,7 +628,11 @@ void Mesh::AdvanceAnimation(const Vector3& campos)
 // TODO: Doesn't currently update transparent tris (but then neither does anything else ATM)
 void Mesh::UpdateTris(int index, const Vector3& campos)
 {
-   float interpval = (float)animtime / (float)frametime[currkeyframe];
+   float interpval;
+   if (frametime.size() > 0)
+      interpval = (float)animtime / (float)frametime[currkeyframe];
+   else 
+      interpval = 0.f;
    
    if (glops && !hasvbo) // Means we set glops with SetGL
       LoadMaterials(); // Need to do this before Transform
@@ -777,16 +795,16 @@ void Mesh::ResetTriMaxDims()
 }
 
 
-// Theoretically putting tris in vertices based on their address could overwrite tris loaded
-// from a model file, but in reality we only use Add on meshes that start out empty so this
-// properly enforces the rule that only one copy of each vertex gets added to vertices
 void Mesh::Add(TrianglePtr& tri)
 {
    tris.push_back(tri);
    for (size_t i = 0; i < 3; ++i)
    {
-      vertices[ToString(tri->v[i])] = tri->v[i];
-      tri->v[i]->id = ToString(tri->v[i]);
+      if (find(vertices.begin(), vertices.end(), tri->v[i]) == vertices.end())
+      {
+         vertices.push_back(tri->v[i]);
+         tri->v[i]->id = vertices.size() - 1;
+      }
    }
 }
 
@@ -806,6 +824,12 @@ void Mesh::Add(Mesh &mesh)
    {
       Add(mesh.tris[i]);
    }
+}
+
+
+void Mesh::Add(Mesh* mesh)
+{
+   childmeshes.push_back(mesh);
 }
 
 
@@ -838,6 +862,7 @@ void Mesh::Clear()
 {
    tris.clear();
    vertices.clear();
+   childmeshes.clear();
 }
 
 

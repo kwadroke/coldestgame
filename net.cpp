@@ -150,6 +150,7 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "T\n";
          p << p.ack << eol;
+         p << chatteam << eol;
          p << chatstring << eol;
          chatstring = "";
          SDL_mutexV(clientmutex); // Just to be safe, don't hold both mutexes at once

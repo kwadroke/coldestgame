@@ -43,6 +43,7 @@ void Repaint()
    {
       // So a bunch of this stuff doesn't belong here (not rendering related), but it's not
       // causing problems ATM so it stays.
+      gui[chat]->visible = true;
       
       // Update any animated objects
       Animate();
@@ -221,6 +222,7 @@ void Repaint()
    {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       resman.shaderman.UseShader("none");
+      gui[chat]->visible = false;
    }
    
    RenderHud(localplayer);

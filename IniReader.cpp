@@ -139,6 +139,17 @@ int IniReader::Read(int& ret, const string name, const int num) const
 }
 
 
+size_t IniReader::Read(size_t& ret, const string name, const int num) const
+{
+   if (HaveValue(name, num))
+   {
+      ret = atol(ReadVal(values[name], num).c_str());
+      return ret;
+   }
+   return 0;
+}
+
+
 float IniReader::Read(float& ret, const string name, const int num) const 
 {
    if (HaveValue(name, num))

@@ -81,6 +81,6 @@ void UpdatePlayerList();
 void GUIUpdate();
 bool GUIEventHandler(SDL_Event&);
 void GameEventHandler(SDL_Event&);
-void AddTracer(const Particle&, const Vector3&);
+void AddTracer(const Particle&);
 
 #endif

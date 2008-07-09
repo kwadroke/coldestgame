@@ -51,7 +51,11 @@ class Vertex
       GLubytevec color;
       floatvec terrainwt;
       unsigned short index;
+#ifdef EDITOR
       string id;
+#else
+      size_t id;
+#endif
       
    private:
       VBOData vbodata;

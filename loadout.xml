@@ -20,7 +20,7 @@
       </Tab>
    </TabWidget>
    
-   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" selected="0"
+   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" selected="0" menuheight="200"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>Nemesis</ComboBoxItem>

@@ -6,9 +6,9 @@ ComboBox::ComboBox(GUI* p, TextureManager* tm)
    table = new Table(this, tm);
    table->visible = false;
    table->colwidths = ToString(width);
-   table->rowheight = 20;
+   table->rowheight = 30;
    button = new Button(this, tm);
-   menuheight = 200.f;
+   menuheight = 300.f;
 }
 
 
@@ -78,6 +78,13 @@ void ComboBox::ReadNodeExtra(DOMNode* current, GUI* parentw)
 {
    table->colwidths = ToString(width);
    button->text = text;
+   float buffer;
+   buffer = atof(ReadAttribute(current, XSWrapper("rowheight")).c_str());
+   if (!floatzero(buffer))
+      table->rowheight = buffer;
+   buffer = atof(ReadAttribute(current, XSWrapper("menuheight")).c_str());
+   if (!floatzero(buffer))
+      menuheight = buffer;
 }
 
 
