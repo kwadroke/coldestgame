@@ -11,7 +11,7 @@ Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0
 
 Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc, float w,
                    float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin), playernum(0), id(nid),
-                   dir(v), pos(p), origin(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
+                   dir(v), pos(p), origin(p), lasttracer(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
                    lasttick(tick), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1),
                    tracertime(10000)
 {
@@ -79,7 +79,7 @@ void Particle::Render(Mesh* rendermesh, const Vector3& campos)
    if (rendermesh)
    {
       mesh.LoadMaterials();
-      rendermesh->Add(mesh);
+      rendermesh->Add(&mesh);
    }
 }
 

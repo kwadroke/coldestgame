@@ -9,7 +9,7 @@ MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
 }
 
 
-void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, VertMap& verts, 
+void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, VertexPtrvec& verts, 
                          const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
 {
    Vector3 interprot1 = lerp(interpnode->rot1, rot1, interpval);
@@ -72,6 +72,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
       
       verts[vertices[i]->id]->pos.transform(m);
       verts[vertices[i]->id]->norm.transform(normalm);
+      verts[vertices[i]->id]->norm.normalize();
    }
    
    // Recursively call this on our children

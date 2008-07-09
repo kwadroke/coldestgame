@@ -23,6 +23,7 @@ extern SDL_Thread* netin;
 extern vector<ServerInfo> servers;
 extern set<ServerInfo> knownservers;
 extern string chatstring;
+extern bool chatteam;
 extern vector<string> newchatlines;
 extern vector<unsigned short> newchatplayers;
 extern short changeteam;

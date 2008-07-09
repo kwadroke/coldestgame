@@ -23,6 +23,7 @@
 #include <SDL_ttf.h>
 #include "../TextureManager.h"
 #include "XSWrapper.h"
+#include "../util.h"
 
 using namespace std;
 using xercesc::DOMElement;

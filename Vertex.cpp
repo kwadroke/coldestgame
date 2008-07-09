@@ -8,6 +8,8 @@ Vertex::Vertex() : index(0), norm(Vector3(0, 0, 1))
    terrainwt = floatvec(6, 0.f);
 #ifdef EDITOR
    id = "";
+#else
+   id = 0;
 #endif
 }
 

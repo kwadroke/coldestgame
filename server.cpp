@@ -460,6 +460,8 @@ int ServerListen()
          else if (packettype == "T")  // Chat packet
          {
             string line;
+            bool team;
+            get >> team;
             get.ignore(); // \n is still in buffer
             getline(get, line);
             SDL_mutexP(servermutex);
@@ -470,7 +472,7 @@ int ServerListen()
                // Propogate that chat text to all other connected players
                for (int i = 1; i < serverplayers.size(); ++i)
                {
-                  if (serverplayers[i].connected && i != oppnum)
+                  if (serverplayers[i].connected && i != oppnum && (!team || serverplayers[i].team == serverplayers[oppnum].team))
                   {
                      unsigned long packid = servsendpacketnum;
                      Packet temp(servoutpack, &servoutsock);
@@ -478,6 +480,8 @@ int ServerListen()
                      temp << "T\n";
                      temp << packid << eol;
                      temp << oppnum << eol;
+                     if (team)
+                        temp << "[Team]";
                      temp << line << eol;
                      temp.addr = serverplayers[i].addr;
                      servqueue.push_back(temp);

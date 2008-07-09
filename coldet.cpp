@@ -610,6 +610,12 @@ bool GUIEventHandler(SDL_Event &event)
 #ifndef DEDICATED
    // Mini keyboard handler to deal with the console and chat
    bool eatevent = false;
+   GUI* chatin = gui[chat]->GetWidget("chatinput");
+   if (!chatin)
+   {
+      cout << "Error getting chat input widget" << endl;
+      return false;
+   }
    switch (event.type)
    {
       case SDL_KEYDOWN:
@@ -630,9 +636,11 @@ bool GUIEventHandler(SDL_Event &event)
                   gui[consolegui]->visible = false;
                   eatevent = true;
                }
-               if (gui[chat]->visible)
+               if (chatin->visible)
                {
-                  gui[chat]->visible = false;
+                  chatin->visible = false;
+                  GUI* teamlabel = gui[chat]->GetWidget("chatteam");
+                  teamlabel->visible = false;
                   eatevent = true;
                }
                break;
@@ -643,15 +651,19 @@ bool GUIEventHandler(SDL_Event &event)
                   console.Parse(consolein->text);
                   consolein->text = "";
                }
-               else if (!gui[chat]->visible)
+               else if (!chatin->visible)
                {
-                  gui[chat]->visible = true;
-                  GUI* chatin = gui[chat]->GetWidget("chatinput");
-                  if (!chatin)
+                  GUI* teamlabel = gui[chat]->GetWidget("chatteam");
+                  if (event.key.keysym.mod & KMOD_LSHIFT || event.key.keysym.mod & KMOD_RSHIFT)
                   {
-                     cout << "Error getting chat input widget" << endl;
-                     break;
+                     chatteam = true;
+                     teamlabel->visible = true;
                   }
+                  else
+                  {
+                     chatteam = false;
+                  }
+                  chatin->visible = true;
                   chatin->SetActive();
                }
                else
@@ -667,6 +679,9 @@ bool GUIEventHandler(SDL_Event &event)
                   AppendToChat(0, chatin->text);
                   SDL_mutexV(clientmutex);
                   chatin->text = "";
+                  chatin->visible = false;
+                  GUI* teamlabel = gui[chat]->GetWidget("chatteam");
+                  teamlabel->visible = false;
                }
                eatevent = true;
                
@@ -690,7 +705,7 @@ bool GUIEventHandler(SDL_Event &event)
       gui[consolegui]->ProcessEvent(&event);
       eatevent = true;
    }
-   else if (gui[chat]->visible)
+   else if (chatin->visible)
    {
       gui[chat]->ProcessEvent(&event);
       eatevent = true;
@@ -1370,9 +1385,12 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
          {
-            if (!HitHandler && j->tracer)
+            if (j->pos.distance2(j->origin) < .1f)
+               j->lasttracer = j->pos;
+            if (!HitHandler && j->tracer && j->lasttracer.distance2(j->pos) > 10000.f)
             {
-               AddTracer(*j, oldpos);
+               AddTracer(*j);
+               j->lasttracer = j->pos;
             }
             if (j->expired)
             {
@@ -1398,7 +1416,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                if (j->tracer)
                {
                   j->pos = hitpos;
-                  AddTracer(*j, oldpos);
+                  AddTracer(*j);
                }
             }
             j = parts.erase(j);
@@ -1416,15 +1434,14 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 }
 
 
-void AddTracer(const Particle& p, const Vector3& oldpos)
+void AddTracer(const Particle& p)
 {
    Mesh newmesh(*p.tracer);
-   Vector3 move = oldpos - p.pos;
+   Vector3 move = p.lasttracer - p.pos;
    float msize = move.magnitude();
    newmesh.ScaleZ(msize);
    Vector3 rots = RotateBetweenVectors(Vector3(0, 0, 1), move);
    newmesh.Rotate(rots);
-   newmesh.GenVbo();
    Particle tracepart(newmesh);
    tracepart.ttl = p.tracertime;
    tracepart.pos = p.pos;
@@ -1494,6 +1511,8 @@ void AppendToChat(int playernum, string line)
       cout << "Error getting chat output widget" << endl;
       return;
    }
+   if (chatteam)
+      chatout->Append("[Team]");
    chatout->Append(player[playernum].name + ": " + line + "\n");
    chatout->ScrollToBottom();
 #endif
