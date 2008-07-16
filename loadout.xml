@@ -63,7 +63,7 @@
       <ComboBoxItem>Mortar</ComboBoxItem>
       <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item" selected="0"
+   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item" selected="1"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>

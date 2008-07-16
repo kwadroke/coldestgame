@@ -6,6 +6,7 @@ Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
 {
    t.start();
+   mesh.dynamic = true;
 }
 
 
@@ -17,6 +18,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 {
    dir.normalize();
    t.start();
+   mesh.dynamic = true;
 }
 
 
@@ -44,6 +46,7 @@ Particle::Particle(const string& filename, ResourceManager& resman) : mesh(Mesh(
    read.Read(meshname, "Mesh");
    mesh.Load(IniReader(meshname));
    t.start();
+   mesh.dynamic = true;
 }
 
 
