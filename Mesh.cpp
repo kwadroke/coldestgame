@@ -969,7 +969,8 @@ void Mesh::Clear()
 
 void Mesh::SetAnimation(const int newanim)
 {
-   nextanimation = newanim;
+   if (numframes[newanim] != 0)
+      nextanimation = newanim;
 }
 
 
