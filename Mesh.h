@@ -48,6 +48,7 @@ class Mesh
       void ScaleZ(const float&);
       void SetAnimSpeed(const float);
       void ResetAnimation();
+      void SetAnimation(const int);
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
       void ReadState(Vector3&, Vector3&, int&, int&, float&);
       Vector3 GetPosition(){return position;}
@@ -101,6 +102,9 @@ class Mesh
       int currkeyframe;
       Uint32 lastanimtick;
       float animspeed;
+      int curranimation, nextanimation;
+      intvec numframes;
+      intvec startframe;
       
       Vector3 position;
       Vector3 rots;

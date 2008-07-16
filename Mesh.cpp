@@ -6,7 +6,7 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
             currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
-            animspeed(1.f)
+            animspeed(1.f), curranimation(0), nextanimation(0)
 {
 #ifndef DEDICATED
    if (gl)
@@ -24,25 +24,31 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
 
 Mesh::~Mesh()
 {
-   // TODO: Need to properly free vbo here, also free impostor Mesh (maybe, smart pointers ftw)
-   //cout << "Warning: Called unimplemented destructor" << endl;
+   if (hasvbo)
+   {
+      glDeleteBuffers(1, &vbo);
+      glDeleteBuffers(1, &ibo);
+   }
 }
 
 
-// TODO: Need to properly copy vbo and impostor Mesh here
 Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
          size(m.size), drawdistmult(m.drawdistmult), debug(m.debug), width(m.width), height(m.height),
-         impostortex(m.impostortex), vbodata(m.vbodata), vbo(m.vbo), ibo(m.ibo), next(m.next), hasvbo(m.hasvbo),
+         impostortex(m.impostortex), vbo(0), ibo(0), next(m.next), hasvbo(false),
          childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
-         dynamic(m.dynamic), collide(m.collide), dist(m.dist), impostor(m.impostor), 
-         animspeed(m.animspeed)
+         dynamic(m.dynamic), collide(m.collide), dist(m.dist), animspeed(m.animspeed), curranimation(m.curranimation),
+         nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe)
 {
 #ifndef DEDICATED
    if (m.impmat)
    {
       impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
       impmat->SetTexture(0, m.impmat->GetTexture(0));
+   }
+   if (m.impostor)
+   {
+      impostor = MeshPtr(new Mesh(*m.impostor));
    }
 #endif
    // The following containers hold smart pointers, which means that when we copy them
@@ -74,7 +80,76 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
 
 Mesh& Mesh::operator=(const Mesh& m)
 {
-   cout <<  "Warning: Called undefined operator=" << endl;
+   if (this == &m)
+      return *this;
+   
+   resman = m.resman;
+   vbosteps = m.vbosteps;
+   impdist = m.impdist;
+   render = m.render;
+   animtime = m.animtime;
+   lastanimtick = m.lastanimtick;
+   position = m.position;
+   rots = m.rots;
+   size = m.size;
+   drawdistmult = m.drawdistmult;
+   debug = m.debug;
+   width = m.width;
+   height = m.height;
+   impostortex = m.impostortex;
+   vbo = 0;
+   ibo = 0;
+   hasvbo = false;
+   next = m.next;
+   childmeshes = m.childmeshes;
+   currkeyframe = m.currkeyframe;
+   frametime = m.frametime;
+   glops = m.glops;
+   havemats = m.havemats;
+   dynamic = m.dynamic;
+   collide = m.collide;
+   dist = m.dist;
+   animspeed = m.animspeed;
+   curranimation = m.curranimation;
+   nextanimation = m.nextanimation;
+   numframes = m.numframes;
+   startframe = m.startframe;
+   
+#ifndef DEDICATED
+   if (m.impmat)
+   {
+      impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
+      impmat->SetTexture(0, m.impmat->GetTexture(0));
+   }
+   if (m.impostor)
+   {
+      impostor = MeshPtr(new Mesh(*m.impostor));
+   }
+#endif
+   // The following containers hold smart pointers, which means that when we copy them
+   // the objects are still shared.  That's a bad thing, so we manually copy every
+   // object to the new container
+   VertexPtrvec localvert = m.vertices;
+   for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
+   {
+      VertexPtr p(new Vertex(**i));
+      vertices.push_back(p);
+   }
+   for (size_t i = 0; i < m.tris.size(); ++i)
+   {
+      TrianglePtr p(new Triangle(*m.tris[i]));
+      for (size_t j = 0; j < 3; ++j)
+      {
+         p->v[j] = vertices[p->v[j]->id];
+      }
+      tris.push_back(p);
+   }
+   for (size_t i = 0; i < m.frameroot.size(); ++i)
+   {
+      frameroot.push_back(m.frameroot[i]->Clone());
+      framecontainer.push_back(map<string, MeshNodePtr>());
+      frameroot[i]->GetContainers(framecontainer[i], frameroot[i]);
+   }
    return *this;
 }
 
@@ -101,20 +176,36 @@ void Mesh::Load(const IniReader& reader)
    {
       string basepath;
       string currfile;
-      int numkeyframes = 0;
+      numframes = intvec(10, 0);
+      startframe = intvec(10, 0);
       
       string basefile;
       reader.Read(basefile, "BaseFile");
+      int numkeyframes = 0;
       if (basefile != "")
       {
          basepath = basefile;
          IniReader base(basefile);
-         base.Read(numkeyframes, "NumFrames");
+         for (size_t i = 0; i < 10; ++i)
+         {
+            base.Read(numframes[i], "NumFrames", i);
+            startframe[i] = numkeyframes;
+            numkeyframes += numframes[i];
+            if (numframes[i] == 0)
+               break;
+         }
       }
       else
       {
          basepath = reader.GetPath();
-         reader.Read(numkeyframes, "NumFrames");
+         for (size_t i = 0; i < 10; ++i)
+         {
+            reader.Read(numframes[i], "NumFrames", i);
+            startframe[i] = numkeyframes;
+            numkeyframes += numframes[i];
+            if (numframes[i] == 0)
+               break;
+         }
       }
       basepath = basepath.substr(0, basepath.length() - 5);
       
@@ -604,7 +695,8 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 
 void Mesh::AdvanceAnimation(const Vector3& campos)
 {
-   if (frameroot.size() < 1) return;
+   // Ideally this would be < 2, but it causes some problems ATM
+   if (frameroot.size() < 1 && !dynamic) return;
    
    Uint32 currtick = SDL_GetTicks();
    animtime += static_cast<int>(animspeed * static_cast<float>(currtick - lastanimtick));
@@ -612,9 +704,18 @@ void Mesh::AdvanceAnimation(const Vector3& campos)
    while (animtime > frametime[currkeyframe])
    {
       animtime -= frametime[currkeyframe];
-      ++currkeyframe;
-      if (currkeyframe >= frameroot.size() - 1)
-         currkeyframe = 0;
+      // Move to next frame
+      if (curranimation != nextanimation)
+      {
+         curranimation = nextanimation;
+         currkeyframe = startframe[curranimation];
+      }
+      else
+         ++currkeyframe;
+      
+      // Loop
+      if (currkeyframe >= startframe[curranimation] + numframes[curranimation] - 1)
+         currkeyframe = startframe[curranimation];
    }
    UpdateTris(currkeyframe, campos);
 }
@@ -636,7 +737,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    
    if (glops && !hasvbo) // Means we set glops with SetGL
       LoadMaterials(); // Need to do this before Transform
-   else if (index < 0 || index >= frameroot.size()) return;
+   else if (index < startframe[curranimation] || index >= startframe[curranimation] + numframes[curranimation]) return;
    
    GraphicMatrix m;
    
@@ -646,17 +747,20 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    GraphicMatrix nm = m;
    m.translate(position);
    
-   if (frameroot.size() == 1) // Implies index has to be 0
+   if (curranimation != nextanimation)
    {
-      frameroot[0]->Transform(frameroot[0], interpval, vertices, m, nm, campos);
-   }
-   else if (index == frameroot.size() - 1) // Could happen if we land exactly on the last keyframe
-   {
-      frameroot[index]->Transform(frameroot[index], interpval, vertices, m, nm, campos);
+      frameroot[index]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, nm, campos);
    }
    else
    {
-      frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, nm, campos);
+      if (index == startframe[curranimation] + numframes[curranimation] - 1)
+      {
+         frameroot[index]->Transform(frameroot[index], interpval, vertices, m, nm, campos);
+      }
+      else
+      {
+         frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, nm, campos);
+      }
    }
    
    CalcBounds();
@@ -774,9 +878,6 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 void Mesh::SetAnimSpeed(const float newas)
 {
    animspeed = newas;
-   /*float ratio = newas / animspeed;
-   animspeed = newas;
-   animtime = static_cast<int>(static_cast<float>(animtime) * ratio);*/
 }
 
 
@@ -863,6 +964,12 @@ void Mesh::Clear()
    tris.clear();
    vertices.clear();
    childmeshes.clear();
+}
+
+
+void Mesh::SetAnimation(const int newanim)
+{
+   nextanimation = newanim;
 }
 
 

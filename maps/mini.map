@@ -61,18 +61,18 @@ Node
       Team 1
       Location 150 150 150
       Name Base1
-Node
-   Team 1
-   Location 150 150 250
-   Name Spawn1
-Node
-   Team 2
-   Location 250 150 250
-   Name Base2
-Node
-   Team 2
-   Location 250 150 150
-   Name Spawn2
+   Node
+      Team 1
+      Location 150 150 250
+      Name Spawn1
+   Node
+      Team 2
+      Location 250 150 250
+      Name Base2
+   Node
+      Team 2
+      Location 250 150 150
+      Name Spawn2
       
 Node
    Objects

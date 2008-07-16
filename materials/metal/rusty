@@ -6,4 +6,4 @@ Texture0 textures/metal/rusty.png
 Texture1 textures/metal/rustynorm.png
 Texture2 textures/metal/rustyspec.png
 Shader shaders/bump
-CullFace 0
+CullFace 1
