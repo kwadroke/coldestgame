@@ -1338,7 +1338,9 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       p.mesh[i]->SetAnimSpeed(p.speed);
       if (floatzero(p.speed))
-         p.mesh[i]->ResetAnimation();
+         p.mesh[i]->SetAnimation(0);
+      else
+         p.mesh[i]->SetAnimation(1);
    }
 }
 
