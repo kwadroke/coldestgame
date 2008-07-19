@@ -10,6 +10,10 @@
 #include "globals.h"
 #include "netdefs.h"
 #include "renderdefs.h"
+#include <boost/tokenizer.hpp>
+
+using boost::tokenizer;
+using boost::char_separator;
 
 void ConsoleHandler(string);
 void Quit();
@@ -63,6 +67,7 @@ void Connect()
    Table* servlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
    vector<ServerInfo>::iterator i;
    string serveraddress;
+   Uint16 serverport;
    int currsel = servlist->Selected();
    if (currsel == -1) return;
    int counter = 0;
@@ -72,12 +77,14 @@ void Connect()
       if (counter == currsel)
       {
          serveraddress = i->strip;
+         serverport = i->address.port;
          break;
       }
       ++counter;
    }
    SDL_mutexV(clientmutex);
-   console.Parse("set serveraddr " + serveraddress);
+   console.Parse("set serveraddr " + serveraddress, false);
+   console.Parse("set serverport " + serverport, false);
    console.Parse("connect");
    UpdateUnitSelection();
 }
@@ -86,7 +93,23 @@ void Connect()
 void ConnectToIp()
 {
    GUI* servname = gui[mainmenu]->GetWidget("servername");
-   console.Parse("set serveraddr " + servname->text);
+   string wholeaddr = servname->text;
+   string serveraddr, serverport = "12010";
+   if (wholeaddr.find(":") != string::npos)
+   {
+      char_separator<char> sep(":");
+      tokenizer<char_separator<char> > tok(wholeaddr, sep);
+      tokenizer<char_separator<char> >::iterator i = tok.begin();
+      serveraddr = *i;
+      ++i;
+      serverport = *i;
+   }
+   else
+   {
+      serveraddr = wholeaddr;
+   }
+   console.Parse("set serveraddr " + serveraddr);
+   console.Parse("set serverport " + serverport);
    console.Parse("connect");
    UpdateUnitSelection();
 }
@@ -98,7 +121,6 @@ void Host()
    serverthread = SDL_CreateThread(Server, NULL);
    console.Parse("set serveraddr localhost");
    console.Parse("connect");
-   ComboBox *teamselect = (ComboBox*)gui[loadoutmenu]->GetWidget("TeamSelect");
    UpdateUnitSelection();
 }
 
