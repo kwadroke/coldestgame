@@ -108,8 +108,8 @@ void ConnectToIp()
    {
       serveraddr = wholeaddr;
    }
-   console.Parse("set serveraddr " + serveraddr);
-   console.Parse("set serverport " + serverport);
+   console.Parse("set serveraddr " + serveraddr, false);
+   console.Parse("set serverport " + serverport, false);
    console.Parse("connect");
    UpdateUnitSelection();
 }
@@ -119,8 +119,8 @@ void Host()
 {
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
-   console.Parse("set serveraddr localhost");
-   console.Parse("connect");
+   console.Parse("set serveraddr localhost", false);
+   console.Parse("connect", false);
    UpdateUnitSelection();
 }
 
