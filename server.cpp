@@ -245,9 +245,6 @@ int ServerListen()
          Note: Having this blindly loop as long as there are packets could cause problems under
          extremely heavy network loads.  It remains to be seen whether that's actually an issue
          (or whether the server would be usable under such circumstances, loop or not)
-      
-         TODO: Can't trust the client to tell us which player they are.  Look up addresses in
-         serverplayers list.
       */
       while (SDLNet_UDP_Recv(servsock, inpack))
       {
@@ -383,7 +380,7 @@ int ServerListen()
             vector<int> teamcount(2, 0);
             for (size_t i = 1; i < serverplayers.size(); ++i)
             {
-               if (serverplayers[i].team != 0)
+               if (serverplayers[i].team != 0 && serverplayers[i].connected)
                   ++teamcount[serverplayers[i].team - 1];
             }
             fill << (teamcount[0] > teamcount[1] ? 2 : 1) << eol;
@@ -787,6 +784,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             Packet bcpack(&bc);
             bcpack << "a\n";
             bcpack << servsendpacketnum << eol;
+            bcpack << console.GetString("serverport") << eol;
             bcpack.Send(servoutpack, broadcastsock);
             
             SDL_mutexV(servermutex);
