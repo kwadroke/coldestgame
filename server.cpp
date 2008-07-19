@@ -149,6 +149,11 @@ int Server(void* dummy)
    LoadMapList();
    ServerLoadMap();
    servermutex = SDL_CreateMutex();
+   if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
+   {
+      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      return -1;
+   }
    serversend = SDL_CreateThread(ServerSend, NULL);
    
    ServerListen();
@@ -175,12 +180,6 @@ int ServerListen()
    // Debugging
    Timer t;
    unsigned long runtimes = 0;
-   
-   if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
-   {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
-      return -1;
-   }
    
    if (!(inpack = SDLNet_AllocPacket(5000)))
    {
@@ -640,12 +639,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
    // Debugging
    Timer t;
    unsigned long runtimes = 0;
-   
-   if (!(servsock = SDLNet_UDP_Open(0)))  // Use any open port
-   {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
-      return -1;
-   }
    
    if (!(servoutpack = SDLNet_AllocPacket(5000)))  // 5000 is arbitrary at this point
    {
