@@ -125,15 +125,6 @@ void Host()
 }
 
 
-void TestAction()
-{
-   GUI* temp = gui[loadprogress]->GetWidget("loadingprogress");
-   temp->visible = true;
-   ProgressBar* temp1 = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
-   temp1->value = 50;
-}
-
-
 void Resume()
 {
    gui[mainmenu]->visible = false;
@@ -208,8 +199,6 @@ void Action(const string& action)
       ConnectToIp();
    else if (action == "host")
       Host();
-   else if (action == "showprogress")
-      TestAction();
    else if (action == "resume")
       Resume();
    else if (action == "spawn")

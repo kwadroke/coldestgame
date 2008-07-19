@@ -569,6 +569,7 @@ int NetListen(void* dummy)
             get >> id;
             if (partids.find(id) == partids.end())
             {
+               cout << "Got particle " << id << endl;
                partids.insert(id);
                get >> weapid;
                Weapon dummy(weapid);
@@ -840,8 +841,11 @@ int NetListen(void* dummy)
             get >> packetnum;
             if (packettype == "a")
             {
+               Uint16 serverport;
+               get >> serverport;
                ServerInfo addme;
                addme.address = inpack->address;
+               SDLNet_Write16(serverport, &addme.address.port);
                if (knownservers.find(addme) == knownservers.end())
                {
                   cout << "Received announcement packet from ";
