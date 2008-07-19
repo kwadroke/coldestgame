@@ -101,17 +101,6 @@ int IniReader::GetItemIndex(const string name) const
 }
 
 
-string IniReader::Read(string& ret, const string name, const int num) const
-{
-   if (HaveValue(name, num))
-   {
-      ret = ReadVal(values[name], num);
-      return ret;
-   }
-   return "";
-}
-
-
 string IniReader::ReadLine(string& ret, const string name) const
 {
    if (HaveValue(name, 0))
@@ -125,61 +114,6 @@ string IniReader::ReadLine(string& ret, const string name) const
          ret = tempret;
    }
    return ret;
-}
-
-
-int IniReader::Read(int& ret, const string name, const int num) const
-{
-   if (HaveValue(name, num))
-   {
-      ret = atoi(ReadVal(values[name], num).c_str());
-      return ret;
-   }
-   return 0;
-}
-
-
-size_t IniReader::Read(size_t& ret, const string name, const int num) const
-{
-   if (HaveValue(name, num))
-   {
-      ret = atol(ReadVal(values[name], num).c_str());
-      return ret;
-   }
-   return 0;
-}
-
-
-float IniReader::Read(float& ret, const string name, const int num) const 
-{
-   if (HaveValue(name, num))
-   {
-      ret = atof(ReadVal(values[name], num).c_str());
-      return ret;
-   }
-   return 0;
-}
-
-
-bool IniReader::Read(bool& ret, const string name, const int num) const
-{
-   if (HaveValue(name, num))
-   {
-      ret = ReadVal(values[name], num) != "0";
-      return ret;
-   }
-   return false;
-}
-
-
-unsigned char IniReader::Read(unsigned char& ret, const string name, const int num) const
-{
-   if (HaveValue(name, num))
-   {
-      ret = static_cast<unsigned char>(atoi(ReadVal(values[name], num).c_str()));
-      return ret;
-   }
-   return 0;
 }
 
 

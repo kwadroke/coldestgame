@@ -90,6 +90,7 @@ void InitGlobals()
    console.Parse("set grassdrawdist 1000", false);
    console.Parse("set zoomfactor 2", false);
    console.Parse("set weaponfocus 1000", false);
+   console.Parse("set serverport 12010", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -1336,11 +1337,21 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    for (size_t i = 0; i < numbodyparts; ++i)
    {
-      p.mesh[i]->SetAnimSpeed(p.speed);
       if (floatzero(p.speed))
+      {
+         p.mesh[i]->SetAnimSpeed(1.f);
          p.mesh[i]->SetAnimation(0);
-      else
+      }
+      else if (p.speed > 0.f)
+      {
+         p.mesh[i]->SetAnimSpeed(p.speed);
          p.mesh[i]->SetAnimation(1);
+      }
+      else
+      {
+         p.mesh[i]->SetAnimSpeed(-p.speed);
+         p.mesh[i]->SetAnimation(2);
+      }
    }
 }
 

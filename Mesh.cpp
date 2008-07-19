@@ -270,10 +270,13 @@ void Mesh::Load(const IniReader& reader)
                   currvert.Read(newv->texcoords[m][0], "TC", m * 2);
                   currvert.Read(newv->texcoords[m][1], "TC", m * 2 + 1);
                }
-               currvert.Read(newv->color[0], "Color", 0);
-               currvert.Read(newv->color[1], "Color", 1);
-               currvert.Read(newv->color[2], "Color", 2);
-               currvert.Read(newv->color[3], "Color", 3);
+               int intermediate; // These are uchars, so they will only read a single digit if read directly
+               for (size_t m = 0; m < 4; ++m)
+               {
+                  intermediate = newv->color[m];
+                  currvert.Read(intermediate, "Color", m);
+                  newv->color[m] = intermediate;
+               }
                newnode->vertices.push_back(newv);
                if (!i)
                {
@@ -699,7 +702,7 @@ void Mesh::AdvanceAnimation(const Vector3& campos)
    if (frameroot.size() < 1 && !dynamic) return;
    
    Uint32 currtick = SDL_GetTicks();
-   animtime += static_cast<int>(animspeed * static_cast<float>(currtick - lastanimtick));
+   animtime += static_cast<int>(fabs(animspeed) * static_cast<float>(currtick - lastanimtick));
    lastanimtick = currtick;
    while (animtime > frametime[currkeyframe])
    {
@@ -969,7 +972,7 @@ void Mesh::Clear()
 
 void Mesh::SetAnimation(const int newanim)
 {
-   if (numframes[newanim] != 0)
+   if (newanim < 10 && numframes[newanim] != 0)
       nextanimation = newanim;
 }
 

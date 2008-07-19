@@ -46,6 +46,7 @@ void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
 
 SDL_Thread* serversend;
+UDPsocket servsock;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 vector<Item> serveritems;
@@ -58,7 +59,6 @@ unsigned short servertickrate;
 string currentmap;
 string servername;
 list<Packet> servqueue;
-UDPsocket servoutsock;
 UDPpacket *servoutpack;
 Meshlist servermeshes;
 ObjectKDTree serverkdtree;
@@ -154,13 +154,13 @@ int Server(void* dummy)
    ServerListen();
    
    SDL_WaitThread(serversend, NULL);
+   SDLNet_UDP_Close(servsock);
    return 0;
 }
 
 
 int ServerListen()
 {
-   UDPsocket insock;
    UDPpacket *inpack;
    unsigned long packetnum;
    string getdata;
@@ -176,7 +176,7 @@ int ServerListen()
    Timer t;
    unsigned long runtimes = 0;
    
-   if (!(insock = SDLNet_UDP_Open(1337)))
+   if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
       cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
@@ -249,7 +249,7 @@ int ServerListen()
          TODO: Can't trust the client to tell us which player they are.  Look up addresses in
          serverplayers list.
       */
-      while (SDLNet_UDP_Recv(insock, inpack))
+      while (SDLNet_UDP_Recv(servsock, inpack))
       {
          getdata = (char*)inpack->data;
          stringstream get(getdata);
@@ -262,7 +262,7 @@ int ServerListen()
          // Packet from an address that is not connected.  Inform them that they need to connect.
          if (packettype != "C" && packettype != "i" && validaddrs.find(SortableIPaddress(inpack->address)) == validaddrs.end())
          {
-            Packet p(servoutpack, &servoutsock, &inpack->address);
+            Packet p(&inpack->address);
             p << "C\n";
             p << 0 << eol;
             
@@ -375,7 +375,7 @@ int ServerListen()
             serverplayers[respondto].connected = true;
             serverplayers[respondto].name = name;
             
-            Packet fill(servoutpack, &servoutsock);
+            Packet fill;
             fill << "c\n";
             fill << packetnum << eol;
             fill << respondto << eol;
@@ -402,7 +402,7 @@ int ServerListen()
          }
          else if (packettype == "i")
          {
-            Packet response(servoutpack, &servoutsock, &inpack->address);
+            Packet response(&inpack->address);
             response << "i\n";
             response << 0 << eol; // Don't care about the packet number
             SDL_mutexP(servermutex);
@@ -445,7 +445,7 @@ int ServerListen()
                }
             }
             
-            Packet response(servoutpack, &servoutsock, &inpack->address);
+            Packet response(&inpack->address);
             response << "S\n";
             response << 0 << eol;  // Not sure this is okay either...
             if (accepted)
@@ -475,7 +475,7 @@ int ServerListen()
                   if (serverplayers[i].connected && i != oppnum && (!team || serverplayers[i].team == serverplayers[oppnum].team))
                   {
                      unsigned long packid = servsendpacketnum;
-                     Packet temp(servoutpack, &servoutsock);
+                     Packet temp;
                      temp.ack = packid;
                      temp << "T\n";
                      temp << packid << eol;
@@ -512,7 +512,7 @@ int ServerListen()
             short newteam;
             get >> newteam;
             
-            Packet response(servoutpack, &servoutsock, &inpack->address);
+            Packet response(&inpack->address);
             response << "M\n";
             response << servsendpacketnum << eol;
             response << packetnum << eol;
@@ -628,7 +628,6 @@ int ServerListen()
    
    // Clean up
    SDLNet_FreePacket(inpack);
-   SDLNet_UDP_Close(insock);
 }
 
 
@@ -645,7 +644,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
    Timer t;
    unsigned long runtimes = 0;
    
-   if (!(servoutsock = SDLNet_UDP_Open(0)))  // Use any open port
+   if (!(servsock = SDLNet_UDP_Open(0)))  // Use any open port
    {
       cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
@@ -678,7 +677,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
       {
          lastnettick = currnettick;
          // Send out an update packet
-         Packet temp(servoutpack, &servoutsock);
+         Packet temp;
    
          temp << "U" << eol;
          temp << servsendpacketnum << eol;
@@ -739,7 +738,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          pingtick++;
          if (pingtick > 30)
          {
-            Packet pingpack(servoutpack, &servoutsock);
+            Packet pingpack;
             
             pingpack << "P\n";
             pingpack << servsendpacketnum << eol;
@@ -753,7 +752,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             pingtick = 0;
             
             // Occasional update packet
-            Packet occup(servoutpack, &servoutsock);
+            Packet occup;
             
             occup << "u\n";
             occup << servsendpacketnum << eol;
@@ -784,11 +783,11 @@ int ServerSend(void* dummy)  // Thread for sending updates
             // Broadcast announcement packets to the subnet for LAN servers
             IPaddress bc;
             bc.host = INADDR_BROADCAST;
-            SDLNet_Write16(1336, &(bc.port));
-            Packet bcpack(servoutpack, &broadcastsock, &bc);
+            SDLNet_Write16(12011, &(bc.port));
+            Packet bcpack(&bc);
             bcpack << "a\n";
             bcpack << servsendpacketnum << eol;
-            bcpack.Send();
+            bcpack.Send(servoutpack, broadcastsock);
             
             SDL_mutexV(servermutex);
          }
@@ -800,8 +799,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
       {
          if (i->sendtick <= currnettick)
          {
-            i->Send();
-            if (!i->ack || i->attempts > 1000) // Non-ack packets get sent once and then are on their own
+            i->Send(servoutpack, servsock);
+            if (!i->ack || i->attempts > 5000) // Non-ack packets get sent once and then are on their own
             {
                i = servqueue.erase(i);
                continue;
@@ -1173,7 +1172,7 @@ void AddItem(const Item& it, int oppnum)
 // Grab the servermutex before calling
 void SendItem(const Item& curritem, int oppnum)
 {
-   Packet p(servoutpack, &servoutsock, &serverplayers[oppnum].addr);
+   Packet p(&serverplayers[oppnum].addr);
    p.ack = servsendpacketnum;
    p << "I\n";
    p << p.ack << eol;
@@ -1195,7 +1194,7 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
    {
       if (serverplayers[i].connected)
       {
-         Packet p(servoutpack, &servoutsock, &serverplayers[i].addr);
+         Packet p(&serverplayers[i].addr);
          p.ack = servsendpacketnum;
          p << "R\n";
          p << p.ack << eol;
@@ -1214,7 +1213,7 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
 // Note: Must grab mutex first
 void SendKill(int num)
 {
-   Packet deadpacket(servoutpack, &servoutsock);
+   Packet deadpacket;
    deadpacket.ack = servsendpacketnum;
    deadpacket.addr = serverplayers[num].addr;
             
@@ -1246,7 +1245,7 @@ void RemoveTeam(int num)
 
 void SendSyncPacket(PlayerData& p)
 {
-   Packet pack(servoutpack, &servoutsock, &p.addr);
+   Packet pack(&p.addr);
    pack.ack = servsendpacketnum;
    pack << "Y\n";
    pack << pack.ack << eol;
@@ -1262,7 +1261,7 @@ void SendSyncPacket(PlayerData& p)
 
 void SendGameOver(PlayerData& p, const int winner)
 {
-   Packet pack(servoutpack, &servoutsock, &p.addr);
+   Packet pack(&p.addr);
    pack.ack = servsendpacketnum;
    pack << "O\n";
    pack << pack.ack << eol;
@@ -1278,7 +1277,7 @@ void SendShot(const Particle& p)
    {
       if (serverplayers[i].connected && i != p.playernum)
       {
-         Packet pack(servoutpack, &servoutsock, &serverplayers[i].addr);
+         Packet pack(&serverplayers[i].addr);
          pack.ack = servsendpacketnum;
          pack << "s\n";
          pack << pack.ack << eol;
@@ -1300,7 +1299,7 @@ void SendHit(const Vector3& hitpos, const Particle& p)
    {
       if (serverplayers[i].connected)
       {
-         Packet pack(servoutpack, &servoutsock, &serverplayers[i].addr);
+         Packet pack(&serverplayers[i].addr);
          pack.ack = servsendpacketnum;
          pack << "h\n";
          pack << pack.ack << eol;
@@ -1330,7 +1329,7 @@ void LoadMapList()
 
 void Ack(unsigned long acknum, UDPpacket* inpack)
 {
-   Packet response(servoutpack, &servoutsock, &inpack->address);
+   Packet response(&inpack->address);
    response << "A\n";
    response << 0 << eol;
    response << acknum << eol;
