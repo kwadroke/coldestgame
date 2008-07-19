@@ -78,7 +78,7 @@ Node
    Objects
    Node
       Type External
-      BaseFile models/unittest/torso/base
+      BaseFile models/nemesis/torso/base
       Position 400 200 400
       Rotations -45 25 0
       AnimSpeed 5

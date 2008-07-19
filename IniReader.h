@@ -23,17 +23,12 @@ class IniReader
       explicit IniReader(int lev = 0);
       IniReader(string); // Allow implicit conversion from string though
       const IniReader& GetItem(const int) const;
-      const IniReader& operator()(const int num) const;
+      const IniReader& operator()(const int) const;
       const IniReader& GetItemByName(const string) const;
       int GetItemIndex(const string) const;
-      // Yes, these should have been templated
-      string Read(string&, const string, const int num = 0) const;
+      template <typename T>
+      T Read(T&, const string&, const int num = 0) const;
       string ReadLine(string&, const string) const;
-      int Read(int&, const string, const int num = 0) const;
-      size_t Read(size_t&, const string, const int num = 0) const;
-      float Read(float&, const string, const int num = 0) const;
-      bool Read(bool&, const string, const int num = 0) const;
-      unsigned char Read(unsigned char&, const string, const int num = 0) const;
       int NumChildren() const;
       string GetPath() const;
       
@@ -55,5 +50,17 @@ class IniReader
       string name;
       string path;
 };
+
+
+template <typename T>
+T IniReader::Read(T& ret, const string& name, const int num) const
+{
+   if (HaveValue(name, num))
+   {
+      stringstream convert(ReadVal(values[name], num));
+      convert >> ret;
+   }
+   return ret;
+}
 
 #endif

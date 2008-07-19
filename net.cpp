@@ -76,7 +76,7 @@ int NetSend(void* dummy)
          if (connected)
          {
             lastnettick = currnettick;
-            Packet p(outpack, &socket, &addr);
+            Packet p(&addr);
             p << FillUpdatePacket();
             SDL_mutexP(netmutex);
             sendqueue.push_back(p);
@@ -91,8 +91,7 @@ int NetSend(void* dummy)
          vector<ServerInfo>::iterator i;
          for (i = servers.begin(); i != servers.end(); ++i)
          {
-            Packet p(outpack, &socket, &i->address);
-            SDLNet_Write16(1337, &(p.addr.port));
+            Packet p(&i->address);
             p << "i\n";
             p << sendpacketnum;
             SDL_mutexP(netmutex);
@@ -105,8 +104,8 @@ int NetSend(void* dummy)
       }
       if (doconnect)
       {
-         SDLNet_ResolveHost(&addr, console.GetString("serveraddr").c_str(), 1337);
-         Packet p(outpack, &socket, &addr);
+         SDLNet_ResolveHost(&addr, console.GetString("serveraddr").c_str(), console.GetInt("serverport"));
+         Packet p(&addr);
          p.ack = sendpacketnum;
          p << "C\n";
          p << p.ack << eol;
@@ -120,7 +119,7 @@ int NetSend(void* dummy)
       }
       if (spawnrequest)
       {
-         Packet p(outpack, &socket, &addr);
+         Packet p(&addr);
          p.ack = sendpacketnum;
          p << "S\n";
          p << p.ack << eol;
@@ -146,7 +145,7 @@ int NetSend(void* dummy)
       SDL_mutexP(clientmutex);
       if (chatstring != "")
       {
-         Packet p(outpack, &socket, &addr);
+         Packet p(&addr);
          p.ack = sendpacketnum;
          p << "T\n";
          p << p.ack << eol;
@@ -163,7 +162,7 @@ int NetSend(void* dummy)
       if (changeteam)
       {
          cout << "Changing team " << endl;
-         Packet p(outpack, &socket, &addr);
+         Packet p(&addr);
          p.ack = sendpacketnum;
          p << "M\n";
          p << p.ack << eol;
@@ -175,7 +174,7 @@ int NetSend(void* dummy)
       }
       if (useitem)
       {
-         Packet p(outpack, &socket, &addr);
+         Packet p(&addr);
          p.ack = sendpacketnum;
          p << "I\n";
          p << p.ack << eol;
@@ -186,7 +185,7 @@ int NetSend(void* dummy)
       }
       if (sendkill)
       {
-         Packet p(outpack, &socket, &addr);
+         Packet p(&addr);
          p.ack = sendpacketnum;
          p << "K\n";
          p << p.ack << eol;
@@ -197,7 +196,7 @@ int NetSend(void* dummy)
       }
       if (needsync)
       {
-         Packet p(outpack, &socket, &addr);
+         Packet p(&addr);
          p << "Y\n";
          p << sendpacketnum << eol;
          SDL_mutexP(netmutex);
@@ -212,7 +211,7 @@ int NetSend(void* dummy)
       {
          if (i->sendtick <= currnettick)
          {
-            i->Send();
+            i->Send(outpack, socket);
             if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
             {
                i = sendqueue.erase(i);
@@ -293,7 +292,7 @@ int NetListen(void* dummy)
    
    // Note: This socket should be opened before the other, on the off chance that it would choose
    // this port.  No, I didn't learn that the hard way, but I did almost forget.
-   if (!(annsock = SDLNet_UDP_Open(1336)))
+   if (!(annsock = SDLNet_UDP_Open(12011)))
    {
       cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       annlisten = false;
@@ -556,7 +555,7 @@ int NetListen(void* dummy)
          }
          else if (packettype == "P") // Ping
          {
-            Packet p(outpack, &socket, &addr);
+            Packet p(&addr);
             p << "p\n";
             p << sendpacketnum << eol;
             SDL_mutexP(netmutex);
@@ -884,7 +883,7 @@ void HandleAck(unsigned long acknum)
 // This grabs the send mutex, it should probably not be called while holding the client mutex
 void Ack(unsigned long acknum)
 {
-   Packet response(outpack, &socket, &addr);
+   Packet response(&addr);
    response << "A\n";
    response << 0 << eol;
    response << acknum << eol;
@@ -896,7 +895,7 @@ void Ack(unsigned long acknum)
 
 void SendPowerdown()
 {
-   Packet pack(outpack, &socket, &addr);
+   Packet pack(&addr);
    pack.ack = sendpacketnum;
    pack << "P\n";
    pack << pack.ack << eol;
@@ -908,7 +907,7 @@ void SendPowerdown()
 
 void SendCommand(const string& command)
 {
-   Packet pack(outpack, &socket, &addr);
+   Packet pack(&addr);
    pack.ack = sendpacketnum;
    pack << "c\n";
    pack << pack.ack << eol;
@@ -921,7 +920,7 @@ void SendCommand(const string& command)
 
 void SendFire()
 {
-   Packet pack(outpack, &socket, &addr);
+   Packet pack(&addr);
    pack.ack = sendpacketnum;
    pack << "f\n";
    pack << pack.ack << eol;

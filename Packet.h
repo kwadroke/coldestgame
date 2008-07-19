@@ -11,23 +11,19 @@ using namespace std;
 class Packet
 {
    public:
-      Packet(UDPpacket* outpack = NULL, UDPsocket* outsock = NULL, IPaddress* address = NULL, string s = "");
+      Packet(IPaddress* address = NULL, string s = "");
       template <typename T>
       Packet& operator<<(const T&);
       
       template <typename T>
       Packet& operator<<(T&);
-      void Send();
+      void Send(UDPpacket*, UDPsocket&);
       IPaddress addr;
       string data;
       unsigned long ack;
       int attempts;
       Uint32 sendtick;
       static int laghax;
-   
-   private:
-      UDPpacket* packet;
-      UDPsocket* socket;
 };
 
 // Need both a const and non-const version of this function.

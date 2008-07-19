@@ -66,3 +66,33 @@ Node
       
 Node
    Objects
+   
+Disabled for now
+Node
+   Type External
+   BaseFile models/nemesis/torso/base
+   Position 2000 500 2000
+   Rotations 0 0 0
+   AnimSpeed 5
+   Scale .013
+Node
+   Type External
+   BaseFile models/nemesis/legs/base
+   Position 2000 500 2000
+   Rotations 0 0 0
+   AnimSpeed 5
+   Scale .003
+Node
+   Type External
+   BaseFile models/nemesis/larm/base
+   Position 1980 500 2000
+   Rotations 0 0 0
+   AnimSpeed 5
+   Scale .006
+Node
+   Type External
+   BaseFile models/nemesis/rarm/base
+   Position 2100 500 2000
+   Rotations 0 0 0
+   AnimSpeed 5
+   Scale .006
