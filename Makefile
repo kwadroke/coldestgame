@@ -1,7 +1,7 @@
 LDLIBS = -lGL -lGLU -lSDL_ttf -lSDL_image -lSDL_net -lGLEW -lxerces-c
 CXX = g++
 #`sdl-config --cflags`
-DEBUG=0
+DEBUG=1
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
@@ -11,14 +11,14 @@ else ifeq ($(DEBUG), 2)
 else
    DEBUGOPTS=-ggdb3
 endif
+
 ifeq ($(WARN),1)
    WARNINGS=-Wall
 endif
+
 DEFINES = -DLINUX
 #DEFINES += -DDEBUGSMT
-#DEFINES += -DNOPSM
 DEFINES += -DIS64
-#DEFINES += -DNOCLIENTPREDICTION
 
 #DEFINES += -D_REENTRANT  This one is already added by sdl-config
 
@@ -28,26 +28,42 @@ DEPEND = makedepend $(CXXFLAGS)
 VPATH = .:gui
 
 GENERAL = coldet.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
-		Particle.o ProceduralTree.o TextureHandler.o Hit.o\
-		console.o server.o render.o\
+		Particle.o ProceduralTree.o TextureHandler.o Hit.o Vertex.o\
+		Console.o server.o render.o IDGen.o Weapon.o Item.o util.o\
 		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
-		Timer.o ServerInfo.o getmap.o GenericPrimitive.o\
+		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
+		
+DEDOBJS = coldet.o Vector3.o GraphicMatrix.o CollisionDetection.o\
+		Particle.o ProceduralTree.o Hit.o Vertex.o\
+		Console.o server.o IDGen.o Weapon.o Item.o util.o\
+		ObjectKDTree.o Packet.o\
+		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
+		renderdefs.o globals.o netdefs.o PlayerData.o\
+		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
+		MeshNode.o XSWrapper.o ServerState.o Material.o
 
-OBJS = $(GENERAL) $(GUI)
+ifeq ($(DEDICATED),1)
+   OUT=server
+   OBJS = $(DEDOBJS)
+   DEFINES += -DDEDICATED
+else
+   OUT=coldet
+   OBJS = $(GENERAL) $(GUI)
+endif
 
 #all:
 #	g++ $(CFLAGS) coldet.cpp $(LDLIBS) -o coldet
 all: coldet
 
 coldet: $(OBJS)
-	$(CXX) $(CXXFLAGS) `sdl-config --cflags` $(LDLIBS) `sdl-config --libs` $(OBJS) -o coldet
-
+	$(CXX) $(CXXFLAGS) `sdl-config --cflags` $(LDLIBS) `sdl-config --libs` $(OBJS) -o $(OUT)
+	
 .cpp.o:
 	$(CXX) $(CXXFLAGS) `sdl-config --cflags` -c $<
 
@@ -263,13 +279,12 @@ actions.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 actions.o: /usr/include/bits/mathdef.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 actions.o: /usr/include/bits/mathcalls.h
-actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-actions.o: DynamicObject.h Mesh.h Triangle.h types.h GraphicMatrix.h
-actions.o: Material.h TextureManager.h IniReader.h Shader.h ResourceManager.h
-actions.o: Quad.h MeshNode.h FBO.h Hit.h globals.h Particle.h
-actions.o: CollisionDetection.h ObjectKDTree.h WorldObjects.h
-actions.o: WorldPrimitives.h GenericPrimitive.h Timer.h DynamicPrimitive.h
-actions.o: Quaternion.h PrimitiveOctree.h netdefs.h renderdefs.h Light.h
+actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Mesh.h
+actions.o: Triangle.h Vertex.h types.h GraphicMatrix.h Material.h
+actions.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
+actions.o: MeshNode.h FBO.h util.h Hit.h Weapon.h Item.h globals.h Particle.h
+actions.o: CollisionDetection.h ObjectKDTree.h Timer.h Console.h renderdefs.h
+actions.o: Light.h gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
 coldet.o: defines.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 coldet.o: /usr/include/GL/gl.h /usr/include/stdio.h
 coldet.o: /usr/include/gentoo-multilib/amd64/stdio.h /usr/include/features.h
@@ -324,8 +339,8 @@ coldet.o: /usr/include/bits/mathdef.h
 coldet.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 coldet.o: /usr/include/bits/mathcalls.h
 coldet.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-coldet.o: GenericPrimitive.h Material.h TextureManager.h types.h Vector3.h
-coldet.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
+coldet.o: TextureHandler.h Vector3.h GraphicMatrix.h ObjectKDTree.h Mesh.h
+coldet.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 coldet.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 coldet.o: /usr/include/boost/config/select_compiler_config.hpp
 coldet.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -349,12 +364,11 @@ coldet.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 coldet.o: /usr/include/boost/detail/sp_counted_base.hpp
 coldet.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 coldet.o: /usr/include/boost/detail/sp_counted_impl.hpp
-coldet.o: /usr/include/boost/detail/workaround.hpp TextureHandler.h
-coldet.o: GraphicMatrix.h DynamicObject.h WorldPrimitives.h WorldObjects.h
-coldet.o: FBO.h ObjectKDTree.h Mesh.h Triangle.h ResourceManager.h Quad.h
-coldet.o: MeshNode.h Timer.h CollisionDetection.h DynamicPrimitive.h
-coldet.o: Quaternion.h PrimitiveOctree.h ProceduralTree.h Particle.h Hit.h
-coldet.o: PlayerData.h Light.h gui/GUI.h
+coldet.o: /usr/include/boost/detail/workaround.hpp Material.h
+coldet.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
+coldet.o: MeshNode.h FBO.h util.h Timer.h CollisionDetection.h
+coldet.o: ProceduralTree.h StableRandom.h Particle.h Hit.h PlayerData.h
+coldet.o: Weapon.h Item.h Light.h gui/GUI.h
 coldet.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldet.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldet.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -490,7 +504,8 @@ coldet.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
 coldet.o: gui/XSWrapper.h gui/ProgressBar.h gui/GUI.h ServerInfo.h
 coldet.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 coldet.o: gui/TextArea.h gui/Table.h gui/ComboBox.h gui/Button.h globals.h
-coldet.o: renderdefs.h netdefs.h
+coldet.o: Console.h renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
+coldet.o: ParticleEmitter.h
 CollisionDetection.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 CollisionDetection.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 CollisionDetection.o: /usr/include/GL/gl.h /usr/include/math.h
@@ -511,8 +526,7 @@ CollisionDetection.o: /usr/include/bits/mathdef.h
 CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 CollisionDetection.o: /usr/include/bits/mathcalls.h
 CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-CollisionDetection.o: Triangle.h types.h GraphicMatrix.h Material.h
-CollisionDetection.o: TextureManager.h IniReader.h Shader.h
+CollisionDetection.o: Triangle.h Vertex.h types.h
 CollisionDetection.o: /usr/include/boost/shared_ptr.hpp
 CollisionDetection.o: /usr/include/boost/config.hpp
 CollisionDetection.o: /usr/include/boost/config/user.hpp
@@ -546,543 +560,217 @@ CollisionDetection.o: /usr/include/boost/detail/sp_counted_base.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_impl.hpp
 CollisionDetection.o: /usr/include/boost/detail/workaround.hpp
-CollisionDetection.o: ResourceManager.h Quad.h MeshNode.h FBO.h
-CollisionDetection.o: TextureHandler.h WorldObjects.h WorldPrimitives.h
-CollisionDetection.o: GenericPrimitive.h DynamicObject.h Timer.h
-CollisionDetection.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
-CollisionDetection.o: globals.h Particle.h ServerInfo.h gui/GUI.h
-CollisionDetection.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-CollisionDetection.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocument.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XercesDefs.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XercesVersion.hpp
-CollisionDetection.o: /usr/include/xercesc/util/AutoSense.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNode.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMemory.hpp
-CollisionDetection.o: /usr/include/stdlib.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-CollisionDetection.o: /usr/include/sys/types.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-CollisionDetection.o: /usr/include/time.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/time.h
-CollisionDetection.o: /usr/include/endian.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/endian.h
-CollisionDetection.o: /usr/include/bits/endian.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-CollisionDetection.o: /usr/include/sys/select.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-CollisionDetection.o: /usr/include/bits/select.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-CollisionDetection.o: /usr/include/bits/sigset.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-CollisionDetection.o: /usr/include/bits/time.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-CollisionDetection.o: /usr/include/sys/sysmacros.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-CollisionDetection.o: /usr/include/bits/pthreadtypes.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-CollisionDetection.o: /usr/include/alloca.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/alloca.h
-CollisionDetection.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMError.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLUni.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-CollisionDetection.o: /usr/include/xercesc/util/PlatformUtils.hpp
-CollisionDetection.o: /usr/include/xercesc/util/PanicHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/MemoryManager.hpp
-CollisionDetection.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/util/RefVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/framework/XMLAttr.hpp
-CollisionDetection.o: /usr/include/xercesc/util/QName.hpp
-CollisionDetection.o: /usr/include/xercesc/util/XMLString.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-CollisionDetection.o: /usr/include/string.h
-CollisionDetection.o: /usr/include/gentoo-multilib/amd64/string.h
-CollisionDetection.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-CollisionDetection.o: /usr/include/xercesc/internal/XSerializable.hpp
-CollisionDetection.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/HashBase.hpp
-CollisionDetection.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RuntimeException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/HashXMLCh.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefHashTableOf.c
-CollisionDetection.o: /usr/include/xercesc/util/Janitor.hpp
-CollisionDetection.o: /usr/include/xercesc/util/Janitor.c
-CollisionDetection.o: /usr/include/xercesc/util/NullPointerException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/internal/XSerializationException.hpp
-CollisionDetection.o: /usr/include/xercesc/internal/XProtoType.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-CollisionDetection.o: /usr/include/xercesc/util/KVStringPair.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-CollisionDetection.o: /usr/include/xercesc/util/regx/Op.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/Token.hpp
-CollisionDetection.o: /usr/include/xercesc/util/Mutexes.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-CollisionDetection.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/ValidationContext.hpp
-CollisionDetection.o: /usr/include/xercesc/util/NameIdPool.hpp
-CollisionDetection.o: /usr/include/xercesc/util/NameIdPool.c
-CollisionDetection.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/util/SecurityManager.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueStackOf.hpp
-CollisionDetection.o: /usr/include/xercesc/util/EmptyStackException.hpp
-CollisionDetection.o: /usr/include/xercesc/util/ValueStackOf.c
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-CollisionDetection.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOM.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMAttr.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMText.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMComment.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMElement.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMEntity.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMException.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNotation.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMRange.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMLocator.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMWriter.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-CollisionDetection.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-CollisionDetection.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-CollisionDetection.o: TextureManager.h gui/XSWrapper.h PlayerData.h Hit.h
-console.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-console.o: /usr/include/GL/gl.h CollisionDetection.h ObjectKDTree.h Mesh.h
-console.o: Vector3.h /usr/include/math.h
-console.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
-console.o: /usr/include/gentoo-multilib/amd64/features.h
-console.o: /usr/include/sys/cdefs.h
-console.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-console.o: /usr/include/bits/wordsize.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-console.o: /usr/include/gnu/stubs.h
-console.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-console.o: /usr/include/gnu/stubs-64.h
-console.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-console.o: /usr/include/bits/huge_val.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-console.o: /usr/include/bits/mathdef.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-console.o: /usr/include/bits/mathcalls.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-console.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-console.o: Shader.h /usr/include/boost/shared_ptr.hpp
-console.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
-console.o: /usr/include/boost/config/select_compiler_config.hpp
-console.o: /usr/include/boost/config/compiler/gcc.hpp
-console.o: /usr/include/boost/config/select_stdlib_config.hpp
-console.o: /usr/include/boost/config/no_tr1/utility.hpp
-console.o: /usr/include/boost/config/select_platform_config.hpp
-console.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
-console.o: /usr/include/gentoo-multilib/amd64/unistd.h
-console.o: /usr/include/bits/posix_opt.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-console.o: /usr/include/bits/types.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-console.o: /usr/include/bits/typesizes.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-console.o: /usr/include/bits/confname.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-console.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
-console.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
-console.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
-console.o: /usr/include/boost/checked_delete.hpp
-console.o: /usr/include/boost/throw_exception.hpp
-console.o: /usr/include/boost/config.hpp
-console.o: /usr/include/boost/detail/shared_count.hpp
-console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-console.o: /usr/include/boost/detail/sp_counted_base.hpp
-console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-console.o: /usr/include/boost/detail/sp_counted_impl.hpp
-console.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-console.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-console.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-console.o: Quaternion.h PrimitiveOctree.h Hit.h PlayerData.h Packet.h
-console.o: gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h Light.h
-console.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
-console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-console.o: /usr/include/xercesc/dom/DOMDocument.hpp
-console.o: /usr/include/xercesc/util/XercesDefs.hpp
-console.o: /usr/include/xercesc/util/XercesVersion.hpp
-console.o: /usr/include/xercesc/util/AutoSense.hpp
-console.o: /usr/include/xercesc/dom/DOMNode.hpp
-console.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-console.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-console.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-console.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-console.o: /usr/include/xercesc/util/RefVectorOf.hpp
-console.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-console.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-console.o: /usr/include/xercesc/util/XMLException.hpp
-console.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-console.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-console.o: /usr/include/sys/types.h
-console.o: /usr/include/gentoo-multilib/amd64/sys/types.h /usr/include/time.h
-console.o: /usr/include/gentoo-multilib/amd64/time.h /usr/include/endian.h
-console.o: /usr/include/gentoo-multilib/amd64/endian.h
-console.o: /usr/include/bits/endian.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-console.o: /usr/include/sys/select.h
-console.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-console.o: /usr/include/bits/select.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-console.o: /usr/include/bits/sigset.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-console.o: /usr/include/bits/time.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-console.o: /usr/include/sys/sysmacros.h
-console.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-console.o: /usr/include/bits/pthreadtypes.h
-console.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-console.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
-console.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-console.o: /usr/include/xercesc/dom/DOMError.hpp
-console.o: /usr/include/xercesc/util/XMLUni.hpp
-console.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-console.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-console.o: /usr/include/xercesc/util/PlatformUtils.hpp
-console.o: /usr/include/xercesc/util/PanicHandler.hpp
-console.o: /usr/include/xercesc/framework/MemoryManager.hpp
-console.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-console.o: /usr/include/xercesc/util/RefVectorOf.c
-console.o: /usr/include/xercesc/framework/XMLAttr.hpp
-console.o: /usr/include/xercesc/util/QName.hpp
-console.o: /usr/include/xercesc/util/XMLString.hpp
-console.o: /usr/include/xercesc/framework/XMLBuffer.hpp /usr/include/string.h
-console.o: /usr/include/gentoo-multilib/amd64/string.h
-console.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-console.o: /usr/include/xercesc/internal/XSerializable.hpp
-console.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-console.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-console.o: /usr/include/xercesc/util/HashBase.hpp
-console.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-console.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-console.o: /usr/include/xercesc/util/RuntimeException.hpp
-console.o: /usr/include/xercesc/util/HashXMLCh.hpp
-console.o: /usr/include/xercesc/util/RefHashTableOf.c
-console.o: /usr/include/xercesc/util/Janitor.hpp
-console.o: /usr/include/xercesc/util/Janitor.c
-console.o: /usr/include/xercesc/util/NullPointerException.hpp
-console.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-console.o: /usr/include/xercesc/util/ValueVectorOf.c
-console.o: /usr/include/xercesc/internal/XSerializationException.hpp
-console.o: /usr/include/xercesc/internal/XProtoType.hpp
-console.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-console.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-console.o: /usr/include/xercesc/util/KVStringPair.hpp
-console.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-console.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-console.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-console.o: /usr/include/xercesc/util/regx/Op.hpp
-console.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-console.o: /usr/include/xercesc/util/regx/Token.hpp
-console.o: /usr/include/xercesc/util/Mutexes.hpp
-console.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-console.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-console.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-console.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-console.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-console.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-console.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-console.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-console.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-console.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-console.o: /usr/include/xercesc/framework/ValidationContext.hpp
-console.o: /usr/include/xercesc/util/NameIdPool.hpp
-console.o: /usr/include/xercesc/util/NameIdPool.c
-console.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-console.o: /usr/include/xercesc/util/SecurityManager.hpp
-console.o: /usr/include/xercesc/util/ValueStackOf.hpp
-console.o: /usr/include/xercesc/util/EmptyStackException.hpp
-console.o: /usr/include/xercesc/util/ValueStackOf.c
-console.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-console.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-console.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-console.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-console.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-console.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-console.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-console.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-console.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-console.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-console.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-console.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-console.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-console.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-console.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-console.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-console.o: /usr/include/xercesc/dom/DOM.hpp
-console.o: /usr/include/xercesc/dom/DOMAttr.hpp
-console.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-console.o: /usr/include/xercesc/dom/DOMText.hpp
-console.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-console.o: /usr/include/xercesc/dom/DOMComment.hpp
-console.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-console.o: /usr/include/xercesc/dom/DOMElement.hpp
-console.o: /usr/include/xercesc/dom/DOMEntity.hpp
-console.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-console.o: /usr/include/xercesc/dom/DOMException.hpp
-console.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-console.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-console.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-console.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-console.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-console.o: /usr/include/xercesc/dom/DOMNotation.hpp
-console.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-console.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-console.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-console.o: /usr/include/xercesc/dom/DOMRange.hpp
-console.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-console.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-console.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-console.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-console.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-console.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-console.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-console.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-console.o: /usr/include/xercesc/dom/DOMLocator.hpp
-console.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-console.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-console.o: /usr/include/xercesc/dom/DOMWriter.hpp
-console.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-console.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-console.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-console.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-console.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-console.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-console.o: gui/XSWrapper.h gui/ProgressBar.h netdefs.h ServerInfo.h
-console.o: Particle.h globals.h
-DynamicObject.o: DynamicObject.h Vector3.h glinc.h /usr/include/GL/glew.h
-DynamicObject.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-DynamicObject.o: /usr/include/math.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/math.h
-DynamicObject.o: /usr/include/features.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/features.h
-DynamicObject.o: /usr/include/sys/cdefs.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-DynamicObject.o: /usr/include/bits/wordsize.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-DynamicObject.o: /usr/include/gnu/stubs.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-DynamicObject.o: /usr/include/gnu/stubs-64.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-DynamicObject.o: /usr/include/bits/huge_val.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-DynamicObject.o: /usr/include/bits/mathdef.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-DynamicObject.o: /usr/include/bits/mathcalls.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-DynamicObject.o: DynamicPrimitive.h GenericPrimitive.h Material.h
-DynamicObject.o: TextureManager.h types.h IniReader.h Shader.h
-DynamicObject.o: /usr/include/boost/shared_ptr.hpp
-DynamicObject.o: /usr/include/boost/config.hpp
-DynamicObject.o: /usr/include/boost/config/user.hpp
-DynamicObject.o: /usr/include/boost/config/select_compiler_config.hpp
-DynamicObject.o: /usr/include/boost/config/compiler/gcc.hpp
-DynamicObject.o: /usr/include/boost/config/select_stdlib_config.hpp
-DynamicObject.o: /usr/include/boost/config/no_tr1/utility.hpp
-DynamicObject.o: /usr/include/boost/config/select_platform_config.hpp
-DynamicObject.o: /usr/include/boost/config/posix_features.hpp
-DynamicObject.o: /usr/include/unistd.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/unistd.h
-DynamicObject.o: /usr/include/bits/posix_opt.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-DynamicObject.o: /usr/include/bits/types.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-DynamicObject.o: /usr/include/bits/typesizes.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-DynamicObject.o: /usr/include/bits/confname.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-DynamicObject.o: /usr/include/getopt.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/getopt.h
-DynamicObject.o: /usr/include/boost/config/suffix.hpp
-DynamicObject.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-DynamicObject.o: /usr/include/gentoo-multilib/amd64/assert.h
-DynamicObject.o: /usr/include/boost/checked_delete.hpp
-DynamicObject.o: /usr/include/boost/throw_exception.hpp
-DynamicObject.o: /usr/include/boost/config.hpp
-DynamicObject.o: /usr/include/boost/detail/shared_count.hpp
-DynamicObject.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-DynamicObject.o: /usr/include/boost/detail/sp_counted_base.hpp
-DynamicObject.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-DynamicObject.o: /usr/include/boost/detail/sp_counted_impl.hpp
-DynamicObject.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-DynamicObject.o: Quaternion.h
-DynamicPrimitive.o: DynamicPrimitive.h GenericPrimitive.h Material.h glinc.h
-DynamicPrimitive.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-DynamicPrimitive.o: /usr/include/GL/gl.h TextureManager.h types.h Vector3.h
-DynamicPrimitive.o: /usr/include/math.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/math.h
-DynamicPrimitive.o: /usr/include/features.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/features.h
-DynamicPrimitive.o: /usr/include/sys/cdefs.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-DynamicPrimitive.o: /usr/include/bits/wordsize.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-DynamicPrimitive.o: /usr/include/gnu/stubs.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-DynamicPrimitive.o: /usr/include/gnu/stubs-64.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-DynamicPrimitive.o: /usr/include/bits/huge_val.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-DynamicPrimitive.o: /usr/include/bits/mathdef.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-DynamicPrimitive.o: /usr/include/bits/mathcalls.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-DynamicPrimitive.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
-DynamicPrimitive.o: /usr/include/boost/config.hpp
-DynamicPrimitive.o: /usr/include/boost/config/user.hpp
-DynamicPrimitive.o: /usr/include/boost/config/select_compiler_config.hpp
-DynamicPrimitive.o: /usr/include/boost/config/compiler/gcc.hpp
-DynamicPrimitive.o: /usr/include/boost/config/select_stdlib_config.hpp
-DynamicPrimitive.o: /usr/include/boost/config/no_tr1/utility.hpp
-DynamicPrimitive.o: /usr/include/boost/config/select_platform_config.hpp
-DynamicPrimitive.o: /usr/include/boost/config/posix_features.hpp
-DynamicPrimitive.o: /usr/include/unistd.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/unistd.h
-DynamicPrimitive.o: /usr/include/bits/posix_opt.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-DynamicPrimitive.o: /usr/include/bits/types.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-DynamicPrimitive.o: /usr/include/bits/typesizes.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-DynamicPrimitive.o: /usr/include/bits/confname.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-DynamicPrimitive.o: /usr/include/getopt.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/getopt.h
-DynamicPrimitive.o: /usr/include/boost/config/suffix.hpp
-DynamicPrimitive.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-DynamicPrimitive.o: /usr/include/gentoo-multilib/amd64/assert.h
-DynamicPrimitive.o: /usr/include/boost/checked_delete.hpp
-DynamicPrimitive.o: /usr/include/boost/throw_exception.hpp
-DynamicPrimitive.o: /usr/include/boost/config.hpp
-DynamicPrimitive.o: /usr/include/boost/detail/shared_count.hpp
-DynamicPrimitive.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-DynamicPrimitive.o: /usr/include/boost/detail/sp_counted_base.hpp
-DynamicPrimitive.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-DynamicPrimitive.o: /usr/include/boost/detail/sp_counted_impl.hpp
-DynamicPrimitive.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-DynamicPrimitive.o: Quaternion.h DynamicObject.h
+CollisionDetection.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h
+CollisionDetection.o: Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
+CollisionDetection.o: TextureHandler.h util.h Timer.h
+Console.o: Console.h gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h
+Console.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+Console.o: /usr/include/GL/gl.h PlayerData.h Vector3.h /usr/include/math.h
+Console.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
+Console.o: /usr/include/gentoo-multilib/amd64/features.h
+Console.o: /usr/include/sys/cdefs.h
+Console.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Console.o: /usr/include/bits/wordsize.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Console.o: /usr/include/gnu/stubs.h
+Console.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Console.o: /usr/include/gnu/stubs-64.h
+Console.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Console.o: /usr/include/bits/huge_val.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Console.o: /usr/include/bits/mathdef.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Console.o: /usr/include/bits/mathcalls.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Mesh.h
+Console.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+Console.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Console.o: /usr/include/boost/config/select_compiler_config.hpp
+Console.o: /usr/include/boost/config/compiler/gcc.hpp
+Console.o: /usr/include/boost/config/select_stdlib_config.hpp
+Console.o: /usr/include/boost/config/no_tr1/utility.hpp
+Console.o: /usr/include/boost/config/select_platform_config.hpp
+Console.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Console.o: /usr/include/gentoo-multilib/amd64/unistd.h
+Console.o: /usr/include/bits/posix_opt.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Console.o: /usr/include/bits/types.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Console.o: /usr/include/bits/typesizes.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Console.o: /usr/include/bits/confname.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Console.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Console.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Console.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Console.o: /usr/include/boost/checked_delete.hpp
+Console.o: /usr/include/boost/throw_exception.hpp
+Console.o: /usr/include/boost/config.hpp
+Console.o: /usr/include/boost/detail/shared_count.hpp
+Console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Console.o: /usr/include/boost/detail/sp_counted_base.hpp
+Console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Console.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Console.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Console.o: Material.h TextureManager.h IniReader.h Shader.h ResourceManager.h
+Console.o: Quad.h MeshNode.h FBO.h TextureHandler.h util.h Hit.h Weapon.h
+Console.o: Item.h ObjectKDTree.h Timer.h CollisionDetection.h Light.h
+Console.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+Console.o: /usr/include/xercesc/dom/DOMDocument.hpp
+Console.o: /usr/include/xercesc/util/XercesDefs.hpp
+Console.o: /usr/include/xercesc/util/XercesVersion.hpp
+Console.o: /usr/include/xercesc/util/AutoSense.hpp
+Console.o: /usr/include/xercesc/dom/DOMNode.hpp
+Console.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+Console.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+Console.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+Console.o: /usr/include/xercesc/util/RefVectorOf.hpp
+Console.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+Console.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+Console.o: /usr/include/xercesc/util/XMLException.hpp
+Console.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
+Console.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+Console.o: /usr/include/sys/types.h
+Console.o: /usr/include/gentoo-multilib/amd64/sys/types.h /usr/include/time.h
+Console.o: /usr/include/gentoo-multilib/amd64/time.h /usr/include/endian.h
+Console.o: /usr/include/gentoo-multilib/amd64/endian.h
+Console.o: /usr/include/bits/endian.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Console.o: /usr/include/sys/select.h
+Console.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Console.o: /usr/include/bits/select.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Console.o: /usr/include/bits/sigset.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Console.o: /usr/include/bits/time.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Console.o: /usr/include/sys/sysmacros.h
+Console.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Console.o: /usr/include/bits/pthreadtypes.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Console.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+Console.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+Console.o: /usr/include/xercesc/dom/DOMError.hpp
+Console.o: /usr/include/xercesc/util/XMLUni.hpp
+Console.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+Console.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+Console.o: /usr/include/xercesc/util/PlatformUtils.hpp
+Console.o: /usr/include/xercesc/util/PanicHandler.hpp
+Console.o: /usr/include/xercesc/framework/MemoryManager.hpp
+Console.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+Console.o: /usr/include/xercesc/util/RefVectorOf.c
+Console.o: /usr/include/xercesc/framework/XMLAttr.hpp
+Console.o: /usr/include/xercesc/util/QName.hpp
+Console.o: /usr/include/xercesc/util/XMLString.hpp
+Console.o: /usr/include/xercesc/framework/XMLBuffer.hpp /usr/include/string.h
+Console.o: /usr/include/gentoo-multilib/amd64/string.h
+Console.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+Console.o: /usr/include/xercesc/internal/XSerializable.hpp
+Console.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+Console.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+Console.o: /usr/include/xercesc/util/HashBase.hpp
+Console.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+Console.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+Console.o: /usr/include/xercesc/util/RuntimeException.hpp
+Console.o: /usr/include/xercesc/util/HashXMLCh.hpp
+Console.o: /usr/include/xercesc/util/RefHashTableOf.c
+Console.o: /usr/include/xercesc/util/Janitor.hpp
+Console.o: /usr/include/xercesc/util/Janitor.c
+Console.o: /usr/include/xercesc/util/NullPointerException.hpp
+Console.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+Console.o: /usr/include/xercesc/util/ValueVectorOf.c
+Console.o: /usr/include/xercesc/internal/XSerializationException.hpp
+Console.o: /usr/include/xercesc/internal/XProtoType.hpp
+Console.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+Console.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+Console.o: /usr/include/xercesc/util/KVStringPair.hpp
+Console.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+Console.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+Console.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+Console.o: /usr/include/xercesc/util/regx/Op.hpp
+Console.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+Console.o: /usr/include/xercesc/util/regx/Token.hpp
+Console.o: /usr/include/xercesc/util/Mutexes.hpp
+Console.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Console.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+Console.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
+Console.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+Console.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+Console.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+Console.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+Console.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+Console.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+Console.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+Console.o: /usr/include/xercesc/framework/ValidationContext.hpp
+Console.o: /usr/include/xercesc/util/NameIdPool.hpp
+Console.o: /usr/include/xercesc/util/NameIdPool.c
+Console.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+Console.o: /usr/include/xercesc/util/SecurityManager.hpp
+Console.o: /usr/include/xercesc/util/ValueStackOf.hpp
+Console.o: /usr/include/xercesc/util/EmptyStackException.hpp
+Console.o: /usr/include/xercesc/util/ValueStackOf.c
+Console.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+Console.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+Console.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+Console.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+Console.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+Console.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+Console.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+Console.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+Console.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+Console.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+Console.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
+Console.o: /usr/include/xercesc/dom/DOM.hpp
+Console.o: /usr/include/xercesc/dom/DOMAttr.hpp
+Console.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+Console.o: /usr/include/xercesc/dom/DOMText.hpp
+Console.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+Console.o: /usr/include/xercesc/dom/DOMComment.hpp
+Console.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+Console.o: /usr/include/xercesc/dom/DOMElement.hpp
+Console.o: /usr/include/xercesc/dom/DOMEntity.hpp
+Console.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+Console.o: /usr/include/xercesc/dom/DOMException.hpp
+Console.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+Console.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+Console.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+Console.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+Console.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+Console.o: /usr/include/xercesc/dom/DOMNotation.hpp
+Console.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Console.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+Console.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+Console.o: /usr/include/xercesc/dom/DOMRange.hpp
+Console.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+Console.o: /usr/include/xercesc/dom/DOMBuilder.hpp
+Console.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+Console.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
+Console.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+Console.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+Console.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+Console.o: /usr/include/xercesc/dom/DOMInputSource.hpp
+Console.o: /usr/include/xercesc/dom/DOMLocator.hpp
+Console.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+Console.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+Console.o: /usr/include/xercesc/dom/DOMWriter.hpp
+Console.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+Console.o: /usr/include/xercesc/framework/XMLFormatter.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
+Console.o: gui/XSWrapper.h gui/ProgressBar.h gui/Button.h netdefs.h
+Console.o: ServerInfo.h Particle.h IDGen.h Packet.h globals.h
+Console.o: ParticleEmitter.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h TextureHandler.h
-GenericPrimitive.o: DynamicObject.h Vector3.h glinc.h /usr/include/GL/glew.h
-GenericPrimitive.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-GenericPrimitive.o: /usr/include/math.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/math.h
-GenericPrimitive.o: /usr/include/features.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/features.h
-GenericPrimitive.o: /usr/include/sys/cdefs.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-GenericPrimitive.o: /usr/include/bits/wordsize.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-GenericPrimitive.o: /usr/include/gnu/stubs.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-GenericPrimitive.o: /usr/include/gnu/stubs-64.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-GenericPrimitive.o: /usr/include/bits/huge_val.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-GenericPrimitive.o: /usr/include/bits/mathdef.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-GenericPrimitive.o: /usr/include/bits/mathcalls.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-GenericPrimitive.o: GenericPrimitive.h Material.h TextureManager.h types.h
-GenericPrimitive.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
-GenericPrimitive.o: /usr/include/boost/config.hpp
-GenericPrimitive.o: /usr/include/boost/config/user.hpp
-GenericPrimitive.o: /usr/include/boost/config/select_compiler_config.hpp
-GenericPrimitive.o: /usr/include/boost/config/compiler/gcc.hpp
-GenericPrimitive.o: /usr/include/boost/config/select_stdlib_config.hpp
-GenericPrimitive.o: /usr/include/boost/config/no_tr1/utility.hpp
-GenericPrimitive.o: /usr/include/boost/config/select_platform_config.hpp
-GenericPrimitive.o: /usr/include/boost/config/posix_features.hpp
-GenericPrimitive.o: /usr/include/unistd.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/unistd.h
-GenericPrimitive.o: /usr/include/bits/posix_opt.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-GenericPrimitive.o: /usr/include/bits/types.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-GenericPrimitive.o: /usr/include/bits/typesizes.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-GenericPrimitive.o: /usr/include/bits/confname.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-GenericPrimitive.o: /usr/include/getopt.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/getopt.h
-GenericPrimitive.o: /usr/include/boost/config/suffix.hpp
-GenericPrimitive.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-GenericPrimitive.o: /usr/include/gentoo-multilib/amd64/assert.h
-GenericPrimitive.o: /usr/include/boost/checked_delete.hpp
-GenericPrimitive.o: /usr/include/boost/throw_exception.hpp
-GenericPrimitive.o: /usr/include/boost/config.hpp
-GenericPrimitive.o: /usr/include/boost/detail/shared_count.hpp
-GenericPrimitive.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-GenericPrimitive.o: /usr/include/boost/detail/sp_counted_base.hpp
-GenericPrimitive.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-GenericPrimitive.o: /usr/include/boost/detail/sp_counted_impl.hpp
-GenericPrimitive.o: /usr/include/boost/detail/workaround.hpp
 getmap.o: gui/ProgressBar.h gui/GUI.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -1284,15 +972,14 @@ getmap.o: /usr/include/bits/mathdef.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 getmap.o: /usr/include/bits/mathcalls.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-getmap.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-getmap.o: Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h WorldObjects.h
-getmap.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
-getmap.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ProceduralTree.h
-getmap.o: Light.h globals.h Particle.h ServerInfo.h PlayerData.h Hit.h
-getmap.o: renderdefs.h
-globals.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h
-globals.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-globals.o: /usr/include/GL/gl.h /usr/include/math.h
+getmap.o: Vertex.h types.h GraphicMatrix.h Material.h TextureManager.h
+getmap.o: IniReader.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
+getmap.o: util.h Timer.h ProceduralTree.h StableRandom.h Light.h globals.h
+getmap.o: Particle.h ServerInfo.h PlayerData.h Hit.h Weapon.h Item.h
+getmap.o: Console.h gui/TextArea.h gui/Table.h renderdefs.h gui/Button.h
+getmap.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h
+globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
+globals.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 globals.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
 globals.o: /usr/include/gentoo-multilib/amd64/features.h
 globals.o: /usr/include/sys/cdefs.h
@@ -1309,8 +996,7 @@ globals.o: /usr/include/bits/mathdef.h
 globals.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 globals.o: /usr/include/bits/mathcalls.h
 globals.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-globals.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-globals.o: Shader.h /usr/include/boost/shared_ptr.hpp
+globals.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 globals.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 globals.o: /usr/include/boost/config/select_compiler_config.hpp
 globals.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -1338,10 +1024,10 @@ globals.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 globals.o: /usr/include/boost/detail/sp_counted_base.hpp
 globals.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 globals.o: /usr/include/boost/detail/sp_counted_impl.hpp
-globals.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-globals.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-globals.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-globals.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
+globals.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+globals.o: Material.h TextureManager.h IniReader.h Shader.h ResourceManager.h
+globals.o: Quad.h MeshNode.h FBO.h TextureHandler.h util.h Particle.h
+globals.o: CollisionDetection.h ObjectKDTree.h Timer.h ServerInfo.h gui/GUI.h
 globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -1494,8 +1180,10 @@ globals.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-globals.o: gui/XSWrapper.h PlayerData.h Hit.h renderdefs.h Light.h
-globals.o: gui/ProgressBar.h gui/GUI.h
+globals.o: gui/XSWrapper.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+globals.o: gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h Light.h
+globals.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+globals.o: ParticleEmitter.h
 GraphicMatrix.o: GraphicMatrix.h glinc.h /usr/include/GL/glew.h
 GraphicMatrix.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 GraphicMatrix.o: /usr/include/math.h
@@ -1518,7 +1206,56 @@ GraphicMatrix.o: /usr/include/bits/mathcalls.h
 GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 GraphicMatrix.o: Vector3.h
 Hit.o: Hit.h
+IDGen.o: IDGen.h
 IniReader.o: IniReader.h
+Item.o: Item.h IniReader.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
+Item.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
+Item.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
+Item.o: /usr/include/gentoo-multilib/amd64/features.h
+Item.o: /usr/include/sys/cdefs.h
+Item.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Item.o: /usr/include/bits/wordsize.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Item.o: /usr/include/gnu/stubs.h
+Item.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Item.o: /usr/include/gnu/stubs-64.h
+Item.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Item.o: /usr/include/bits/huge_val.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Item.o: /usr/include/bits/mathdef.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Item.o: /usr/include/bits/mathcalls.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
+Item.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+Item.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Item.o: /usr/include/boost/config/select_compiler_config.hpp
+Item.o: /usr/include/boost/config/compiler/gcc.hpp
+Item.o: /usr/include/boost/config/select_stdlib_config.hpp
+Item.o: /usr/include/boost/config/no_tr1/utility.hpp
+Item.o: /usr/include/boost/config/select_platform_config.hpp
+Item.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Item.o: /usr/include/gentoo-multilib/amd64/unistd.h
+Item.o: /usr/include/bits/posix_opt.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Item.o: /usr/include/bits/types.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Item.o: /usr/include/bits/typesizes.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Item.o: /usr/include/bits/confname.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Item.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Item.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Item.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Item.o: /usr/include/boost/checked_delete.hpp
+Item.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Item.o: /usr/include/boost/detail/shared_count.hpp
+Item.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Item.o: /usr/include/boost/detail/sp_counted_base.hpp
+Item.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Item.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Item.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+Item.o: TextureManager.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
+Item.o: TextureHandler.h util.h
 Light.o: Light.h Vector3.h glinc.h /usr/include/GL/glew.h
 Light.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 Light.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
@@ -1585,13 +1322,11 @@ Material.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Material.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Material.o: /usr/include/boost/detail/workaround.hpp globals.h Particle.h
-Material.o: CollisionDetection.h ObjectKDTree.h Mesh.h Triangle.h
-Material.o: GraphicMatrix.h ResourceManager.h Quad.h MeshNode.h FBO.h
-Material.o: TextureHandler.h WorldObjects.h WorldPrimitives.h
-Material.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-Material.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
-Material.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Material.o: /usr/include/boost/detail/workaround.hpp globals.h Mesh.h
+Material.o: Triangle.h Vertex.h GraphicMatrix.h ResourceManager.h Quad.h
+Material.o: MeshNode.h FBO.h TextureHandler.h util.h Particle.h
+Material.o: CollisionDetection.h ObjectKDTree.h Timer.h ServerInfo.h
+Material.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Material.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Material.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1743,7 +1478,10 @@ Material.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-Material.o: gui/XSWrapper.h PlayerData.h Hit.h
+Material.o: gui/XSWrapper.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+Material.o: gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h Light.h
+Material.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+Material.o: ParticleEmitter.h
 Mesh.o: Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Mesh.o: /usr/include/GL/gl.h /usr/include/math.h
 Mesh.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
@@ -1762,8 +1500,7 @@ Mesh.o: /usr/include/bits/mathdef.h
 Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Mesh.o: /usr/include/bits/mathcalls.h
 Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Mesh.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-Mesh.o: Shader.h /usr/include/boost/shared_ptr.hpp
+Mesh.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 Mesh.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Mesh.o: /usr/include/boost/config/select_compiler_config.hpp
 Mesh.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -1790,165 +1527,14 @@ Mesh.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_base.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Mesh.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-Mesh.o: MeshNode.h FBO.h TextureHandler.h ProceduralTree.h globals.h
-Mesh.o: Particle.h CollisionDetection.h ObjectKDTree.h WorldObjects.h
-Mesh.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
-Mesh.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h ServerInfo.h
-Mesh.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
-Mesh.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMDocument.hpp
-Mesh.o: /usr/include/xercesc/util/XercesDefs.hpp
-Mesh.o: /usr/include/xercesc/util/XercesVersion.hpp
-Mesh.o: /usr/include/xercesc/util/AutoSense.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMNode.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-Mesh.o: /usr/include/xercesc/util/RefVectorOf.hpp
-Mesh.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-Mesh.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-Mesh.o: /usr/include/xercesc/util/XMLException.hpp
-Mesh.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/stdlib.h /usr/include/sys/types.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/sys/types.h /usr/include/time.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/time.h /usr/include/endian.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/endian.h
-Mesh.o: /usr/include/bits/endian.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-Mesh.o: /usr/include/sys/select.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-Mesh.o: /usr/include/bits/select.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-Mesh.o: /usr/include/bits/sigset.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-Mesh.o: /usr/include/bits/time.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-Mesh.o: /usr/include/sys/sysmacros.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-Mesh.o: /usr/include/bits/pthreadtypes.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-Mesh.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
-Mesh.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMError.hpp
-Mesh.o: /usr/include/xercesc/util/XMLUni.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-Mesh.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-Mesh.o: /usr/include/xercesc/util/PlatformUtils.hpp
-Mesh.o: /usr/include/xercesc/util/PanicHandler.hpp
-Mesh.o: /usr/include/xercesc/framework/MemoryManager.hpp
-Mesh.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-Mesh.o: /usr/include/xercesc/util/RefVectorOf.c
-Mesh.o: /usr/include/xercesc/framework/XMLAttr.hpp
-Mesh.o: /usr/include/xercesc/util/QName.hpp
-Mesh.o: /usr/include/xercesc/util/XMLString.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLBuffer.hpp /usr/include/string.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/string.h
-Mesh.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-Mesh.o: /usr/include/xercesc/internal/XSerializable.hpp
-Mesh.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-Mesh.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-Mesh.o: /usr/include/xercesc/util/HashBase.hpp
-Mesh.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-Mesh.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-Mesh.o: /usr/include/xercesc/util/RuntimeException.hpp
-Mesh.o: /usr/include/xercesc/util/HashXMLCh.hpp
-Mesh.o: /usr/include/xercesc/util/RefHashTableOf.c
-Mesh.o: /usr/include/xercesc/util/Janitor.hpp
-Mesh.o: /usr/include/xercesc/util/Janitor.c
-Mesh.o: /usr/include/xercesc/util/NullPointerException.hpp
-Mesh.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-Mesh.o: /usr/include/xercesc/util/ValueVectorOf.c
-Mesh.o: /usr/include/xercesc/internal/XSerializationException.hpp
-Mesh.o: /usr/include/xercesc/internal/XProtoType.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-Mesh.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-Mesh.o: /usr/include/xercesc/util/KVStringPair.hpp
-Mesh.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-Mesh.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-Mesh.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-Mesh.o: /usr/include/xercesc/util/regx/Op.hpp
-Mesh.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-Mesh.o: /usr/include/xercesc/util/regx/Token.hpp
-Mesh.o: /usr/include/xercesc/util/Mutexes.hpp
-Mesh.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-Mesh.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-Mesh.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-Mesh.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-Mesh.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-Mesh.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-Mesh.o: /usr/include/xercesc/framework/ValidationContext.hpp
-Mesh.o: /usr/include/xercesc/util/NameIdPool.hpp
-Mesh.o: /usr/include/xercesc/util/NameIdPool.c
-Mesh.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-Mesh.o: /usr/include/xercesc/util/SecurityManager.hpp
-Mesh.o: /usr/include/xercesc/util/ValueStackOf.hpp
-Mesh.o: /usr/include/xercesc/util/EmptyStackException.hpp
-Mesh.o: /usr/include/xercesc/util/ValueStackOf.c
-Mesh.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-Mesh.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-Mesh.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-Mesh.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-Mesh.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-Mesh.o: /usr/include/xercesc/dom/DOM.hpp /usr/include/xercesc/dom/DOMAttr.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMText.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMComment.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMElement.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMEntity.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMException.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMNotation.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMRange.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMLocator.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMWriter.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-Mesh.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-Mesh.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-Mesh.o: gui/XSWrapper.h PlayerData.h Hit.h
-MeshNode.o: MeshNode.h Triangle.h Vector3.h glinc.h /usr/include/GL/glew.h
-MeshNode.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
-MeshNode.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
+Mesh.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+Mesh.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
+Mesh.o: MeshNode.h FBO.h TextureHandler.h util.h ProceduralTree.h
+Mesh.o: StableRandom.h
+MeshNode.o: MeshNode.h Triangle.h Vertex.h Vector3.h glinc.h
+MeshNode.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+MeshNode.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+MeshNode.o: /usr/include/features.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/features.h
 MeshNode.o: /usr/include/sys/cdefs.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
@@ -1964,7 +1550,6 @@ MeshNode.o: /usr/include/bits/mathdef.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 MeshNode.o: /usr/include/bits/mathcalls.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
-MeshNode.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
 MeshNode.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 MeshNode.o: /usr/include/boost/config/user.hpp
 MeshNode.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -1994,11 +1579,11 @@ MeshNode.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_base.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_impl.hpp
-MeshNode.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
-MeshNode.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h
-MeshNode.o: Quad.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-MeshNode.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-MeshNode.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
+MeshNode.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+MeshNode.o: Material.h TextureManager.h IniReader.h Shader.h
+MeshNode.o: ResourceManager.h globals.h Mesh.h Quad.h FBO.h TextureHandler.h
+MeshNode.o: util.h Particle.h CollisionDetection.h ObjectKDTree.h Timer.h
+MeshNode.o: ServerInfo.h gui/GUI.h
 MeshNode.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2151,7 +1736,10 @@ MeshNode.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-MeshNode.o: gui/XSWrapper.h PlayerData.h Hit.h
+MeshNode.o: gui/XSWrapper.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+MeshNode.o: gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h Light.h
+MeshNode.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+MeshNode.o: ParticleEmitter.h
 net.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 net.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 net.o: /usr/include/GL/gl.h /usr/include/math.h
@@ -2169,10 +1757,9 @@ net.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 net.o: /usr/include/bits/mathdef.h
 net.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 net.o: /usr/include/bits/mathcalls.h
-net.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h types.h
-net.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
-net.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-net.o: /usr/include/boost/config/user.hpp
+net.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
+net.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+net.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 net.o: /usr/include/boost/config/select_compiler_config.hpp
 net.o: /usr/include/boost/config/compiler/gcc.hpp
 net.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -2198,12 +1785,12 @@ net.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 net.o: /usr/include/boost/detail/sp_counted_base.hpp
 net.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 net.o: /usr/include/boost/detail/sp_counted_impl.hpp
-net.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-net.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-net.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-net.o: Quaternion.h PrimitiveOctree.h PlayerData.h Hit.h Packet.h
-net.o: ServerInfo.h gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
-net.o: gui/LineEdit.h gui/Button.h netdefs.h globals.h gui/GUI.h
+net.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+net.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
+net.o: MeshNode.h FBO.h TextureHandler.h util.h Timer.h PlayerData.h Hit.h
+net.o: Weapon.h Item.h Packet.h ServerInfo.h gui/ComboBox.h gui/GUI.h
+net.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/Button.h netdefs.h
+net.o: IDGen.h globals.h gui/GUI.h
 net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2353,13 +1940,8 @@ net.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-net.o: gui/XSWrapper.h /usr/include/linux/unistd.h /usr/include/asm/unistd.h
-net.o: /usr/include/asm-x86_64/unistd.h /usr/include/errno.h
-net.o: /usr/include/gentoo-multilib/amd64/errno.h /usr/include/bits/errno.h
-net.o: /usr/include/gentoo-multilib/amd64/bits/errno.h
-net.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
-net.o: /usr/include/asm-x86_64/errno.h /usr/include/asm-generic/errno.h
-net.o: /usr/include/asm-generic/errno-base.h
+net.o: gui/XSWrapper.h Console.h gui/TextArea.h renderdefs.h Light.h
+net.o: gui/ProgressBar.h gui/Button.h ParticleEmitter.h
 netdefs.o: netdefs.h ServerInfo.h CollisionDetection.h ObjectKDTree.h Mesh.h
 netdefs.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 netdefs.o: /usr/include/GL/gl.h /usr/include/math.h
@@ -2379,8 +1961,7 @@ netdefs.o: /usr/include/bits/mathdef.h
 netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 netdefs.o: /usr/include/bits/mathcalls.h
 netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-netdefs.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-netdefs.o: Shader.h /usr/include/boost/shared_ptr.hpp
+netdefs.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 netdefs.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 netdefs.o: /usr/include/boost/config/select_compiler_config.hpp
 netdefs.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -2408,10 +1989,10 @@ netdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
-netdefs.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-netdefs.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-netdefs.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-netdefs.o: Quaternion.h PrimitiveOctree.h PlayerData.h Hit.h Particle.h
+netdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+netdefs.o: Material.h TextureManager.h IniReader.h Shader.h ResourceManager.h
+netdefs.o: Quad.h MeshNode.h FBO.h TextureHandler.h util.h Timer.h
+netdefs.o: PlayerData.h Hit.h Weapon.h Item.h Particle.h IDGen.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/math.h
@@ -2432,9 +2013,7 @@ ObjectKDTree.o: /usr/include/bits/mathdef.h
 ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ObjectKDTree.o: /usr/include/bits/mathcalls.h
 ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ObjectKDTree.o: Triangle.h types.h GraphicMatrix.h Material.h
-ObjectKDTree.o: TextureManager.h IniReader.h Shader.h
-ObjectKDTree.o: /usr/include/boost/shared_ptr.hpp
+ObjectKDTree.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/config.hpp
 ObjectKDTree.o: /usr/include/boost/config/user.hpp
 ObjectKDTree.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2466,9 +2045,10 @@ ObjectKDTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
-ObjectKDTree.o: Quad.h MeshNode.h FBO.h TextureHandler.h WorldObjects.h
-ObjectKDTree.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
+ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ObjectKDTree.o: Material.h TextureManager.h IniReader.h Shader.h
+ObjectKDTree.o: ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h
+ObjectKDTree.o: util.h Timer.h
 Packet.o: Packet.h
 Particle.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 Particle.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
@@ -2489,8 +2069,7 @@ Particle.o: /usr/include/bits/mathdef.h
 Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Particle.o: /usr/include/bits/mathcalls.h
 Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Particle.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-Particle.o: Shader.h /usr/include/boost/shared_ptr.hpp
+Particle.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 Particle.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Particle.o: /usr/include/boost/config/select_compiler_config.hpp
 Particle.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -2519,10 +2098,68 @@ Particle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_base.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Particle.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-Particle.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h
-Particle.o: WorldPrimitives.h GenericPrimitive.h DynamicObject.h Timer.h
-Particle.o: DynamicPrimitive.h Quaternion.h PrimitiveOctree.h
+Particle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Particle.o: Material.h TextureManager.h IniReader.h Shader.h
+Particle.o: ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h util.h
+Particle.o: Timer.h
+ParticleEmitter.o: ParticleEmitter.h Particle.h CollisionDetection.h
+ParticleEmitter.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
+ParticleEmitter.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
+ParticleEmitter.o: /usr/include/GL/gl.h /usr/include/math.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/math.h
+ParticleEmitter.o: /usr/include/features.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/features.h
+ParticleEmitter.o: /usr/include/sys/cdefs.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+ParticleEmitter.o: /usr/include/bits/wordsize.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+ParticleEmitter.o: /usr/include/gnu/stubs.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+ParticleEmitter.o: /usr/include/gnu/stubs-64.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+ParticleEmitter.o: /usr/include/bits/huge_val.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+ParticleEmitter.o: /usr/include/bits/mathdef.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+ParticleEmitter.o: /usr/include/bits/mathcalls.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
+ParticleEmitter.o: Triangle.h Vertex.h types.h
+ParticleEmitter.o: /usr/include/boost/shared_ptr.hpp
+ParticleEmitter.o: /usr/include/boost/config.hpp
+ParticleEmitter.o: /usr/include/boost/config/user.hpp
+ParticleEmitter.o: /usr/include/boost/config/select_compiler_config.hpp
+ParticleEmitter.o: /usr/include/boost/config/compiler/gcc.hpp
+ParticleEmitter.o: /usr/include/boost/config/select_stdlib_config.hpp
+ParticleEmitter.o: /usr/include/boost/config/no_tr1/utility.hpp
+ParticleEmitter.o: /usr/include/boost/config/select_platform_config.hpp
+ParticleEmitter.o: /usr/include/boost/config/posix_features.hpp
+ParticleEmitter.o: /usr/include/unistd.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/unistd.h
+ParticleEmitter.o: /usr/include/bits/posix_opt.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+ParticleEmitter.o: /usr/include/bits/types.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+ParticleEmitter.o: /usr/include/bits/typesizes.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+ParticleEmitter.o: /usr/include/bits/confname.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+ParticleEmitter.o: /usr/include/getopt.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/getopt.h
+ParticleEmitter.o: /usr/include/boost/config/suffix.hpp
+ParticleEmitter.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/assert.h
+ParticleEmitter.o: /usr/include/boost/checked_delete.hpp
+ParticleEmitter.o: /usr/include/boost/throw_exception.hpp
+ParticleEmitter.o: /usr/include/boost/config.hpp
+ParticleEmitter.o: /usr/include/boost/detail/shared_count.hpp
+ParticleEmitter.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ParticleEmitter.o: /usr/include/boost/detail/sp_counted_base.hpp
+ParticleEmitter.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+ParticleEmitter.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ParticleEmitter.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ParticleEmitter.o: Material.h TextureManager.h IniReader.h Shader.h
+ParticleEmitter.o: ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h
+ParticleEmitter.o: util.h Timer.h
 PlayerData.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
 PlayerData.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/math.h
@@ -2541,10 +2178,9 @@ PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 PlayerData.o: /usr/include/bits/mathdef.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 PlayerData.o: /usr/include/bits/mathcalls.h
-PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-PlayerData.o: DynamicObject.h Mesh.h Triangle.h types.h GraphicMatrix.h
-PlayerData.o: Material.h TextureManager.h IniReader.h Shader.h
-PlayerData.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Mesh.h
+PlayerData.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+PlayerData.o: /usr/include/boost/config.hpp
 PlayerData.o: /usr/include/boost/config/user.hpp
 PlayerData.o: /usr/include/boost/config/select_compiler_config.hpp
 PlayerData.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -2575,12 +2211,13 @@ PlayerData.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_base.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_impl.hpp
-PlayerData.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
-PlayerData.o: Quad.h MeshNode.h FBO.h TextureHandler.h Hit.h
+PlayerData.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+PlayerData.o: Material.h TextureManager.h IniReader.h Shader.h
+PlayerData.o: ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h
+PlayerData.o: util.h Hit.h Weapon.h Item.h
 PrimitiveOctree.o: PrimitiveOctree.h glinc.h /usr/include/GL/glew.h
-PrimitiveOctree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-PrimitiveOctree.o: GenericPrimitive.h Material.h TextureManager.h types.h
-PrimitiveOctree.o: Vector3.h /usr/include/math.h
+PrimitiveOctree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h Vector3.h
+PrimitiveOctree.o: /usr/include/math.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/math.h
 PrimitiveOctree.o: /usr/include/features.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/features.h
@@ -2598,39 +2235,6 @@ PrimitiveOctree.o: /usr/include/bits/mathdef.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 PrimitiveOctree.o: /usr/include/bits/mathcalls.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-PrimitiveOctree.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
-PrimitiveOctree.o: /usr/include/boost/config.hpp
-PrimitiveOctree.o: /usr/include/boost/config/user.hpp
-PrimitiveOctree.o: /usr/include/boost/config/select_compiler_config.hpp
-PrimitiveOctree.o: /usr/include/boost/config/compiler/gcc.hpp
-PrimitiveOctree.o: /usr/include/boost/config/select_stdlib_config.hpp
-PrimitiveOctree.o: /usr/include/boost/config/no_tr1/utility.hpp
-PrimitiveOctree.o: /usr/include/boost/config/select_platform_config.hpp
-PrimitiveOctree.o: /usr/include/boost/config/posix_features.hpp
-PrimitiveOctree.o: /usr/include/unistd.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/unistd.h
-PrimitiveOctree.o: /usr/include/bits/posix_opt.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-PrimitiveOctree.o: /usr/include/bits/types.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-PrimitiveOctree.o: /usr/include/bits/typesizes.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-PrimitiveOctree.o: /usr/include/bits/confname.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-PrimitiveOctree.o: /usr/include/getopt.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/getopt.h
-PrimitiveOctree.o: /usr/include/boost/config/suffix.hpp
-PrimitiveOctree.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/assert.h
-PrimitiveOctree.o: /usr/include/boost/checked_delete.hpp
-PrimitiveOctree.o: /usr/include/boost/throw_exception.hpp
-PrimitiveOctree.o: /usr/include/boost/config.hpp
-PrimitiveOctree.o: /usr/include/boost/detail/shared_count.hpp
-PrimitiveOctree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-PrimitiveOctree.o: /usr/include/boost/detail/sp_counted_base.hpp
-PrimitiveOctree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-PrimitiveOctree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-PrimitiveOctree.o: /usr/include/boost/detail/workaround.hpp
 ProceduralTree.o: ProceduralTree.h /usr/include/math.h
 ProceduralTree.o: /usr/include/gentoo-multilib/amd64/math.h
 ProceduralTree.o: /usr/include/features.h
@@ -2651,8 +2255,8 @@ ProceduralTree.o: /usr/include/bits/mathcalls.h
 ProceduralTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 ProceduralTree.o: GraphicMatrix.h glinc.h /usr/include/GL/glew.h
 ProceduralTree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h Vector3.h
-ProceduralTree.o: IniReader.h Mesh.h Triangle.h types.h Material.h
-ProceduralTree.o: TextureManager.h Shader.h /usr/include/boost/shared_ptr.hpp
+ProceduralTree.o: IniReader.h Mesh.h Triangle.h Vertex.h types.h
+ProceduralTree.o: /usr/include/boost/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
 ProceduralTree.o: /usr/include/boost/config/user.hpp
 ProceduralTree.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2684,9 +2288,10 @@ ProceduralTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ProceduralTree.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
-ProceduralTree.o: Quad.h MeshNode.h FBO.h TextureHandler.h
-Quad.o: Quad.h Triangle.h Vector3.h glinc.h /usr/include/GL/glew.h
+ProceduralTree.o: /usr/include/boost/detail/workaround.hpp Material.h
+ProceduralTree.o: TextureManager.h Shader.h ResourceManager.h Quad.h
+ProceduralTree.o: MeshNode.h FBO.h TextureHandler.h util.h StableRandom.h
+Quad.o: Quad.h Triangle.h Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quad.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 Quad.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
 Quad.o: /usr/include/gentoo-multilib/amd64/features.h
@@ -2704,7 +2309,6 @@ Quad.o: /usr/include/bits/mathdef.h
 Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Quad.o: /usr/include/bits/mathcalls.h
 Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
-Quad.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
 Quad.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 Quad.o: /usr/include/boost/config/user.hpp
 Quad.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2732,7 +2336,8 @@ Quad.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Quad.o: /usr/include/boost/detail/sp_counted_base.hpp
 Quad.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Quad.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Quad.o: /usr/include/boost/detail/workaround.hpp
+Quad.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+Quad.o: TextureManager.h IniReader.h Shader.h
 Quaternion.o: Quaternion.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quaternion.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 Quaternion.o: /usr/include/gentoo-multilib/amd64/math.h
@@ -2753,9 +2358,8 @@ Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Quaternion.o: /usr/include/bits/mathcalls.h
 Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 Quaternion.o: GraphicMatrix.h
-render.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h
-render.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-render.o: /usr/include/GL/gl.h /usr/include/math.h
+render.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
+render.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 render.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
 render.o: /usr/include/gentoo-multilib/amd64/features.h
 render.o: /usr/include/sys/cdefs.h
@@ -2772,8 +2376,7 @@ render.o: /usr/include/bits/mathdef.h
 render.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 render.o: /usr/include/bits/mathcalls.h
 render.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-render.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-render.o: Shader.h /usr/include/boost/shared_ptr.hpp
+render.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 render.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 render.o: /usr/include/boost/config/select_compiler_config.hpp
 render.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -2801,10 +2404,10 @@ render.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 render.o: /usr/include/boost/detail/sp_counted_base.hpp
 render.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 render.o: /usr/include/boost/detail/sp_counted_impl.hpp
-render.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-render.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-render.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-render.o: Quaternion.h PrimitiveOctree.h ServerInfo.h gui/GUI.h
+render.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+render.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
+render.o: MeshNode.h FBO.h TextureHandler.h util.h Particle.h
+render.o: CollisionDetection.h ObjectKDTree.h Timer.h ServerInfo.h gui/GUI.h
 render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2957,12 +2560,13 @@ render.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-render.o: gui/XSWrapper.h PlayerData.h Hit.h renderdefs.h Light.h
-render.o: gui/ProgressBar.h gui/GUI.h
+render.o: gui/XSWrapper.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+render.o: gui/TextArea.h gui/GUI.h gui/Table.h renderdefs.h Light.h
+render.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+render.o: ParticleEmitter.h
 renderdefs.o: renderdefs.h glinc.h /usr/include/GL/glew.h
-renderdefs.o: /usr/include/GL/glu.h /usr/include/GL/gl.h WorldObjects.h
-renderdefs.o: WorldPrimitives.h GenericPrimitive.h Material.h
-renderdefs.o: TextureManager.h types.h Vector3.h /usr/include/math.h
+renderdefs.o: /usr/include/GL/glu.h /usr/include/GL/gl.h PlayerData.h
+renderdefs.o: Vector3.h /usr/include/math.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/math.h
 renderdefs.o: /usr/include/features.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/features.h
@@ -2979,8 +2583,8 @@ renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 renderdefs.o: /usr/include/bits/mathdef.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 renderdefs.o: /usr/include/bits/mathcalls.h
-renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h IniReader.h
-renderdefs.o: Shader.h /usr/include/boost/shared_ptr.hpp
+renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Mesh.h
+renderdefs.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 renderdefs.o: /usr/include/boost/config.hpp
 renderdefs.o: /usr/include/boost/config/user.hpp
 renderdefs.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3012,11 +2616,11 @@ renderdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
-renderdefs.o: /usr/include/boost/detail/workaround.hpp DynamicObject.h FBO.h
-renderdefs.o: TextureHandler.h PlayerData.h Mesh.h Triangle.h GraphicMatrix.h
-renderdefs.o: ResourceManager.h Quad.h MeshNode.h Hit.h PrimitiveOctree.h
-renderdefs.o: ObjectKDTree.h Timer.h CollisionDetection.h DynamicPrimitive.h
-renderdefs.o: Quaternion.h Light.h gui/GUI.h
+renderdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+renderdefs.o: Material.h TextureManager.h IniReader.h Shader.h
+renderdefs.o: ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h
+renderdefs.o: util.h Hit.h Weapon.h Item.h ObjectKDTree.h Timer.h
+renderdefs.o: CollisionDetection.h Light.h gui/GUI.h
 renderdefs.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -3172,7 +2776,7 @@ renderdefs.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-renderdefs.o: gui/XSWrapper.h gui/ProgressBar.h gui/GUI.h
+renderdefs.o: gui/XSWrapper.h gui/ProgressBar.h gui/GUI.h gui/Button.h
 ResourceManager.o: ResourceManager.h Material.h glinc.h
 ResourceManager.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ResourceManager.o: /usr/include/GL/gl.h TextureManager.h types.h Vector3.h
@@ -3246,8 +2850,7 @@ server.o: /usr/include/bits/mathdef.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 server.o: /usr/include/bits/mathcalls.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-server.o: types.h GraphicMatrix.h Material.h TextureManager.h IniReader.h
-server.o: Shader.h /usr/include/boost/shared_ptr.hpp
+server.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 server.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 server.o: /usr/include/boost/config/select_compiler_config.hpp
 server.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -3275,11 +2878,11 @@ server.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 server.o: /usr/include/boost/detail/sp_counted_base.hpp
 server.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 server.o: /usr/include/boost/detail/sp_counted_impl.hpp
-server.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h Quad.h
-server.o: MeshNode.h FBO.h TextureHandler.h WorldObjects.h WorldPrimitives.h
-server.o: GenericPrimitive.h DynamicObject.h Timer.h DynamicPrimitive.h
-server.o: Quaternion.h PrimitiveOctree.h PlayerData.h Hit.h Packet.h
-server.o: ProceduralTree.h globals.h ServerInfo.h gui/GUI.h
+server.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+server.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
+server.o: MeshNode.h FBO.h TextureHandler.h util.h Timer.h PlayerData.h Hit.h
+server.o: Weapon.h Item.h Packet.h ProceduralTree.h StableRandom.h globals.h
+server.o: ServerInfo.h gui/GUI.h
 server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 server.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 server.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -3432,14 +3035,9 @@ server.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-server.o: gui/XSWrapper.h netdefs.h ServerState.h /usr/include/linux/unistd.h
-server.o: /usr/include/asm/unistd.h /usr/include/asm-x86_64/unistd.h
-server.o: /usr/include/errno.h /usr/include/gentoo-multilib/amd64/errno.h
-server.o: /usr/include/bits/errno.h
-server.o: /usr/include/gentoo-multilib/amd64/bits/errno.h
-server.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
-server.o: /usr/include/asm-x86_64/errno.h /usr/include/asm-generic/errno.h
-server.o: /usr/include/asm-generic/errno-base.h
+server.o: gui/XSWrapper.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
+server.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+server.o: IDGen.h ParticleEmitter.h ServerState.h
 ServerInfo.o: ServerInfo.h
 ServerState.o: ServerState.h Vector3.h glinc.h /usr/include/GL/glew.h
 ServerState.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
@@ -3460,9 +3058,8 @@ ServerState.o: /usr/include/bits/mathdef.h
 ServerState.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ServerState.o: /usr/include/bits/mathcalls.h
 ServerState.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ServerState.o: PlayerData.h DynamicObject.h Mesh.h Triangle.h types.h
-ServerState.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h
-ServerState.o: Shader.h /usr/include/boost/shared_ptr.hpp
+ServerState.o: PlayerData.h Mesh.h Triangle.h Vertex.h types.h
+ServerState.o: /usr/include/boost/shared_ptr.hpp
 ServerState.o: /usr/include/boost/config.hpp
 ServerState.o: /usr/include/boost/config/user.hpp
 ServerState.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3494,15 +3091,18 @@ ServerState.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ServerState.o: /usr/include/boost/detail/sp_counted_base.hpp
 ServerState.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ServerState.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ServerState.o: /usr/include/boost/detail/workaround.hpp ResourceManager.h
-ServerState.o: Quad.h MeshNode.h FBO.h TextureHandler.h Hit.h
+ServerState.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ServerState.o: Material.h TextureManager.h IniReader.h Shader.h
+ServerState.o: ResourceManager.h Quad.h MeshNode.h FBO.h TextureHandler.h
+ServerState.o: util.h Hit.h Weapon.h Item.h
 Shader.o: Shader.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Shader.o: /usr/include/GL/gl.h
+StableRandom.o: StableRandom.h
 TextureHandler.o: TextureHandler.h glinc.h /usr/include/GL/glew.h
 TextureHandler.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 TextureManager.o: TextureManager.h
 Timer.o: Timer.h
-Triangle.o: Triangle.h Vector3.h glinc.h /usr/include/GL/glew.h
+Triangle.o: Triangle.h Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Triangle.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/features.h
@@ -3520,7 +3120,6 @@ Triangle.o: /usr/include/bits/mathdef.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Triangle.o: /usr/include/bits/mathcalls.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
-Triangle.o: GraphicMatrix.h Material.h TextureManager.h IniReader.h Shader.h
 Triangle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 Triangle.o: /usr/include/boost/config/user.hpp
 Triangle.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3550,7 +3149,26 @@ Triangle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Triangle.o: /usr/include/boost/detail/sp_counted_base.hpp
 Triangle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Triangle.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Triangle.o: /usr/include/boost/detail/workaround.hpp
+Triangle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Triangle.o: Material.h TextureManager.h IniReader.h Shader.h
+util.o: util.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+util.o: /usr/include/GL/gl.h /usr/include/math.h
+util.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
+util.o: /usr/include/gentoo-multilib/amd64/features.h
+util.o: /usr/include/sys/cdefs.h
+util.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+util.o: /usr/include/bits/wordsize.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+util.o: /usr/include/gnu/stubs.h
+util.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+util.o: /usr/include/gnu/stubs-64.h
+util.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+util.o: /usr/include/bits/huge_val.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+util.o: /usr/include/bits/mathdef.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+util.o: /usr/include/bits/mathcalls.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
 Vector3.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Vector3.o: /usr/include/GL/gl.h /usr/include/math.h
 Vector3.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
@@ -3569,438 +3187,54 @@ Vector3.o: /usr/include/bits/mathdef.h
 Vector3.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Vector3.o: /usr/include/bits/mathcalls.h
 Vector3.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-WorldObjects.o: WorldObjects.h glinc.h /usr/include/GL/glew.h
-WorldObjects.o: /usr/include/GL/glu.h /usr/include/GL/gl.h WorldPrimitives.h
-WorldObjects.o: GenericPrimitive.h Material.h TextureManager.h types.h
-WorldObjects.o: Vector3.h /usr/include/math.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/math.h
-WorldObjects.o: /usr/include/features.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/features.h
-WorldObjects.o: /usr/include/sys/cdefs.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-WorldObjects.o: /usr/include/bits/wordsize.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-WorldObjects.o: /usr/include/gnu/stubs.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-WorldObjects.o: /usr/include/gnu/stubs-64.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-WorldObjects.o: /usr/include/bits/huge_val.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-WorldObjects.o: /usr/include/bits/mathdef.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-WorldObjects.o: /usr/include/bits/mathcalls.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-WorldObjects.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
-WorldObjects.o: /usr/include/boost/config.hpp
-WorldObjects.o: /usr/include/boost/config/user.hpp
-WorldObjects.o: /usr/include/boost/config/select_compiler_config.hpp
-WorldObjects.o: /usr/include/boost/config/compiler/gcc.hpp
-WorldObjects.o: /usr/include/boost/config/select_stdlib_config.hpp
-WorldObjects.o: /usr/include/boost/config/no_tr1/utility.hpp
-WorldObjects.o: /usr/include/boost/config/select_platform_config.hpp
-WorldObjects.o: /usr/include/boost/config/posix_features.hpp
-WorldObjects.o: /usr/include/unistd.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/unistd.h
-WorldObjects.o: /usr/include/bits/posix_opt.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-WorldObjects.o: /usr/include/bits/types.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-WorldObjects.o: /usr/include/bits/typesizes.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-WorldObjects.o: /usr/include/bits/confname.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-WorldObjects.o: /usr/include/getopt.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/getopt.h
-WorldObjects.o: /usr/include/boost/config/suffix.hpp
-WorldObjects.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/assert.h
-WorldObjects.o: /usr/include/boost/checked_delete.hpp
-WorldObjects.o: /usr/include/boost/throw_exception.hpp
-WorldObjects.o: /usr/include/boost/config.hpp
-WorldObjects.o: /usr/include/boost/detail/shared_count.hpp
-WorldObjects.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-WorldObjects.o: /usr/include/boost/detail/sp_counted_base.hpp
-WorldObjects.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-WorldObjects.o: /usr/include/boost/detail/sp_counted_impl.hpp
-WorldObjects.o: /usr/include/boost/detail/workaround.hpp DynamicObject.h
-WorldObjects.o: FBO.h TextureHandler.h renderdefs.h PlayerData.h Mesh.h
-WorldObjects.o: Triangle.h GraphicMatrix.h ResourceManager.h Quad.h
-WorldObjects.o: MeshNode.h Hit.h PrimitiveOctree.h ObjectKDTree.h Timer.h
-WorldObjects.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h Light.h
-WorldObjects.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
-WorldObjects.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMDocument.hpp
-WorldObjects.o: /usr/include/xercesc/util/XercesDefs.hpp
-WorldObjects.o: /usr/include/xercesc/util/XercesVersion.hpp
-WorldObjects.o: /usr/include/xercesc/util/AutoSense.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMNode.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-WorldObjects.o: /usr/include/xercesc/util/RefVectorOf.hpp
-WorldObjects.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-WorldObjects.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-WorldObjects.o: /usr/include/xercesc/util/XMLException.hpp
-WorldObjects.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-WorldObjects.o: /usr/include/sys/types.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-WorldObjects.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
-WorldObjects.o: /usr/include/endian.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/endian.h
-WorldObjects.o: /usr/include/bits/endian.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-WorldObjects.o: /usr/include/sys/select.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-WorldObjects.o: /usr/include/bits/select.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-WorldObjects.o: /usr/include/bits/sigset.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-WorldObjects.o: /usr/include/bits/time.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-WorldObjects.o: /usr/include/sys/sysmacros.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-WorldObjects.o: /usr/include/bits/pthreadtypes.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-WorldObjects.o: /usr/include/alloca.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/alloca.h
-WorldObjects.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMError.hpp
-WorldObjects.o: /usr/include/xercesc/util/XMLUni.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-WorldObjects.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-WorldObjects.o: /usr/include/xercesc/util/PlatformUtils.hpp
-WorldObjects.o: /usr/include/xercesc/util/PanicHandler.hpp
-WorldObjects.o: /usr/include/xercesc/framework/MemoryManager.hpp
-WorldObjects.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-WorldObjects.o: /usr/include/xercesc/util/RefVectorOf.c
-WorldObjects.o: /usr/include/xercesc/framework/XMLAttr.hpp
-WorldObjects.o: /usr/include/xercesc/util/QName.hpp
-WorldObjects.o: /usr/include/xercesc/util/XMLString.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-WorldObjects.o: /usr/include/string.h
-WorldObjects.o: /usr/include/gentoo-multilib/amd64/string.h
-WorldObjects.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-WorldObjects.o: /usr/include/xercesc/internal/XSerializable.hpp
-WorldObjects.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-WorldObjects.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-WorldObjects.o: /usr/include/xercesc/util/HashBase.hpp
-WorldObjects.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-WorldObjects.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-WorldObjects.o: /usr/include/xercesc/util/RuntimeException.hpp
-WorldObjects.o: /usr/include/xercesc/util/HashXMLCh.hpp
-WorldObjects.o: /usr/include/xercesc/util/RefHashTableOf.c
-WorldObjects.o: /usr/include/xercesc/util/Janitor.hpp
-WorldObjects.o: /usr/include/xercesc/util/Janitor.c
-WorldObjects.o: /usr/include/xercesc/util/NullPointerException.hpp
-WorldObjects.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-WorldObjects.o: /usr/include/xercesc/util/ValueVectorOf.c
-WorldObjects.o: /usr/include/xercesc/internal/XSerializationException.hpp
-WorldObjects.o: /usr/include/xercesc/internal/XProtoType.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-WorldObjects.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-WorldObjects.o: /usr/include/xercesc/util/KVStringPair.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-WorldObjects.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-WorldObjects.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-WorldObjects.o: /usr/include/xercesc/util/regx/Op.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/Token.hpp
-WorldObjects.o: /usr/include/xercesc/util/Mutexes.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-WorldObjects.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-WorldObjects.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-WorldObjects.o: /usr/include/xercesc/framework/ValidationContext.hpp
-WorldObjects.o: /usr/include/xercesc/util/NameIdPool.hpp
-WorldObjects.o: /usr/include/xercesc/util/NameIdPool.c
-WorldObjects.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-WorldObjects.o: /usr/include/xercesc/util/SecurityManager.hpp
-WorldObjects.o: /usr/include/xercesc/util/ValueStackOf.hpp
-WorldObjects.o: /usr/include/xercesc/util/EmptyStackException.hpp
-WorldObjects.o: /usr/include/xercesc/util/ValueStackOf.c
-WorldObjects.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-WorldObjects.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-WorldObjects.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-WorldObjects.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-WorldObjects.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOM.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMAttr.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMText.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMComment.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMElement.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMEntity.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMException.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMNotation.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMRange.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMLocator.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMWriter.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-WorldObjects.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-WorldObjects.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-WorldObjects.o: TextureManager.h gui/XSWrapper.h gui/ProgressBar.h gui/GUI.h
-WorldPrimitives.o: WorldObjects.h glinc.h /usr/include/GL/glew.h
-WorldPrimitives.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-WorldPrimitives.o: WorldPrimitives.h GenericPrimitive.h Material.h
-WorldPrimitives.o: TextureManager.h types.h Vector3.h /usr/include/math.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/math.h
-WorldPrimitives.o: /usr/include/features.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/features.h
-WorldPrimitives.o: /usr/include/sys/cdefs.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-WorldPrimitives.o: /usr/include/bits/wordsize.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-WorldPrimitives.o: /usr/include/gnu/stubs.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-WorldPrimitives.o: /usr/include/gnu/stubs-64.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-WorldPrimitives.o: /usr/include/bits/huge_val.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-WorldPrimitives.o: /usr/include/bits/mathdef.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-WorldPrimitives.o: /usr/include/bits/mathcalls.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-WorldPrimitives.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
-WorldPrimitives.o: /usr/include/boost/config.hpp
-WorldPrimitives.o: /usr/include/boost/config/user.hpp
-WorldPrimitives.o: /usr/include/boost/config/select_compiler_config.hpp
-WorldPrimitives.o: /usr/include/boost/config/compiler/gcc.hpp
-WorldPrimitives.o: /usr/include/boost/config/select_stdlib_config.hpp
-WorldPrimitives.o: /usr/include/boost/config/no_tr1/utility.hpp
-WorldPrimitives.o: /usr/include/boost/config/select_platform_config.hpp
-WorldPrimitives.o: /usr/include/boost/config/posix_features.hpp
-WorldPrimitives.o: /usr/include/unistd.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/unistd.h
-WorldPrimitives.o: /usr/include/bits/posix_opt.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-WorldPrimitives.o: /usr/include/bits/types.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-WorldPrimitives.o: /usr/include/bits/typesizes.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-WorldPrimitives.o: /usr/include/bits/confname.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-WorldPrimitives.o: /usr/include/getopt.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/getopt.h
-WorldPrimitives.o: /usr/include/boost/config/suffix.hpp
-WorldPrimitives.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/assert.h
-WorldPrimitives.o: /usr/include/boost/checked_delete.hpp
-WorldPrimitives.o: /usr/include/boost/throw_exception.hpp
-WorldPrimitives.o: /usr/include/boost/config.hpp
-WorldPrimitives.o: /usr/include/boost/detail/shared_count.hpp
-WorldPrimitives.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-WorldPrimitives.o: /usr/include/boost/detail/sp_counted_base.hpp
-WorldPrimitives.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-WorldPrimitives.o: /usr/include/boost/detail/sp_counted_impl.hpp
-WorldPrimitives.o: /usr/include/boost/detail/workaround.hpp DynamicObject.h
-WorldPrimitives.o: FBO.h TextureHandler.h renderdefs.h PlayerData.h Mesh.h
-WorldPrimitives.o: Triangle.h GraphicMatrix.h ResourceManager.h Quad.h
-WorldPrimitives.o: MeshNode.h Hit.h PrimitiveOctree.h ObjectKDTree.h Timer.h
-WorldPrimitives.o: CollisionDetection.h DynamicPrimitive.h Quaternion.h
-WorldPrimitives.o: Light.h gui/GUI.h
-WorldPrimitives.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-WorldPrimitives.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMDocument.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XercesDefs.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XercesVersion.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/AutoSense.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMNode.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/RefVectorOf.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XMLException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XMemory.hpp
-WorldPrimitives.o: /usr/include/stdlib.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-WorldPrimitives.o: /usr/include/sys/types.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-WorldPrimitives.o: /usr/include/time.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/time.h
-WorldPrimitives.o: /usr/include/endian.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/endian.h
-WorldPrimitives.o: /usr/include/bits/endian.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-WorldPrimitives.o: /usr/include/sys/select.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-WorldPrimitives.o: /usr/include/bits/select.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-WorldPrimitives.o: /usr/include/bits/sigset.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-WorldPrimitives.o: /usr/include/bits/time.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-WorldPrimitives.o: /usr/include/sys/sysmacros.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-WorldPrimitives.o: /usr/include/bits/pthreadtypes.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-WorldPrimitives.o: /usr/include/alloca.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/alloca.h
-WorldPrimitives.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMError.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XMLUni.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/PlatformUtils.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/PanicHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/MemoryManager.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-WorldPrimitives.o: /usr/include/xercesc/util/RefVectorOf.c
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLAttr.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/QName.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/XMLString.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-WorldPrimitives.o: /usr/include/string.h
-WorldPrimitives.o: /usr/include/gentoo-multilib/amd64/string.h
-WorldPrimitives.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-WorldPrimitives.o: /usr/include/xercesc/internal/XSerializable.hpp
-WorldPrimitives.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/HashBase.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/RuntimeException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/HashXMLCh.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/RefHashTableOf.c
-WorldPrimitives.o: /usr/include/xercesc/util/Janitor.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/Janitor.c
-WorldPrimitives.o: /usr/include/xercesc/util/NullPointerException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/ValueVectorOf.c
-WorldPrimitives.o: /usr/include/xercesc/internal/XSerializationException.hpp
-WorldPrimitives.o: /usr/include/xercesc/internal/XProtoType.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-WorldPrimitives.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/KVStringPair.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-WorldPrimitives.o: /usr/include/xercesc/util/regx/Op.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/Token.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/Mutexes.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-WorldPrimitives.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/ValidationContext.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/NameIdPool.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/NameIdPool.c
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/SecurityManager.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/ValueStackOf.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/EmptyStackException.hpp
-WorldPrimitives.o: /usr/include/xercesc/util/ValueStackOf.c
-WorldPrimitives.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-WorldPrimitives.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-WorldPrimitives.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-WorldPrimitives.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOM.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMAttr.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMText.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMComment.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMElement.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMEntity.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMException.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMNotation.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMRange.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMBuilder.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMInputSource.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMLocator.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMWriter.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
-WorldPrimitives.o: /usr/include/xercesc/framework/XMLFormatter.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-WorldPrimitives.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-WorldPrimitives.o: TextureManager.h gui/XSWrapper.h gui/ProgressBar.h
-WorldPrimitives.o: gui/GUI.h
+Vertex.o: Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
+Vertex.o: /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/math.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/features.h
+Vertex.o: /usr/include/sys/cdefs.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Vertex.o: /usr/include/bits/wordsize.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Vertex.o: /usr/include/gnu/stubs.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Vertex.o: /usr/include/gnu/stubs-64.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Vertex.o: /usr/include/bits/huge_val.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Vertex.o: /usr/include/bits/mathdef.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Vertex.o: /usr/include/bits/mathcalls.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
+Vertex.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Vertex.o: /usr/include/boost/config/user.hpp
+Vertex.o: /usr/include/boost/config/select_compiler_config.hpp
+Vertex.o: /usr/include/boost/config/compiler/gcc.hpp
+Vertex.o: /usr/include/boost/config/select_stdlib_config.hpp
+Vertex.o: /usr/include/boost/config/no_tr1/utility.hpp
+Vertex.o: /usr/include/boost/config/select_platform_config.hpp
+Vertex.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/unistd.h
+Vertex.o: /usr/include/bits/posix_opt.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Vertex.o: /usr/include/bits/types.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Vertex.o: /usr/include/bits/typesizes.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Vertex.o: /usr/include/bits/confname.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Vertex.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Vertex.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Vertex.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Vertex.o: /usr/include/boost/checked_delete.hpp
+Vertex.o: /usr/include/boost/throw_exception.hpp
+Vertex.o: /usr/include/boost/config.hpp
+Vertex.o: /usr/include/boost/detail/shared_count.hpp
+Vertex.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Vertex.o: /usr/include/boost/detail/sp_counted_base.hpp
+Vertex.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Vertex.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Vertex.o: /usr/include/boost/detail/workaround.hpp
+Weapon.o: Weapon.h IniReader.h
 gui/Button.o: gui/Button.h gui/GUI.h
 gui/ComboBox.o: gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
 gui/ComboBox.o: gui/LineEdit.h gui/Button.h
