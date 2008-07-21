@@ -279,7 +279,7 @@ void RenderObjects(const PlayerData& localplayer)
    
    m.sort(meshptrcomp);
    
-   Mesh impostormesh("models/empty/base", resman);
+   MeshPtr impostormesh = meshcache->GetNewMesh("models/empty/base");
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
    float impmod = 1000.f;
@@ -324,7 +324,7 @@ void RenderObjects(const PlayerData& localplayer)
       {
          Uint32 ticks = SDL_GetTicks() - i->lastimpupdate;
          dist = i->dist;
-         i->RenderImpostor(impostormesh, impfbolist[i->impostorfbo], localplayer.pos);
+         i->RenderImpostor(*impostormesh, impfbolist[i->impostorfbo], localplayer.pos);
          if ((ticks * ticks) > dist / (impmod * impmod / dist) && !reflectionrender)
          {
             implist.insert(i);
@@ -349,9 +349,9 @@ void RenderObjects(const PlayerData& localplayer)
       }
    }
    
-   impostormesh.GenVbo();
-   impostormesh.Render(override);
-   trislastframe += impostormesh.Size();
+   impostormesh->GenVbo();
+   impostormesh->Render(override);
+   trislastframe += impostormesh->Size();
    
    glDepthMask(GL_TRUE); // Otherwise we may screw up rendering elsewhere
 }

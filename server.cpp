@@ -546,6 +546,7 @@ int ServerListen()
          {
             SDL_mutexP(servermutex);
             serverplayers[oppnum].spawned = false;
+            serverplayers[oppnum].Kill();
             SendKill(oppnum);
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
@@ -835,9 +836,9 @@ void ServerLoadMap()
    for (int i = 0; i < spawnpoints.size(); ++i)
    {
       Item newitem(Item::Base, servermeshes);
-      Mesh newmesh(newitem.ModelFile(), resman);
-      newmesh.Move(spawnpoints[i].position);
-      servermeshes.push_front(newmesh);
+      MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
+      newmesh->Move(spawnpoints[i].position);
+      servermeshes.push_front(*newmesh);
       serveritems.push_back(newitem);
       Item& curritem = serveritems.back();
       curritem.mesh = servermeshes.begin();
@@ -1139,10 +1140,10 @@ void AddItem(const Item& it, int oppnum)
 {
    if (it.Type() == Item::SpawnPoint)
    {
-      Mesh newmesh(it.ModelFile(), resman);
-      newmesh.Move(serverplayers[oppnum].pos);
-      newmesh.dynamic = true;
-      servermeshes.push_front(newmesh);
+      MeshPtr newmesh = meshcache->GetNewMesh(it.ModelFile());
+      newmesh->Move(serverplayers[oppnum].pos);
+      newmesh->dynamic = true;
+      servermeshes.push_front(*newmesh);
       serveritems.push_back(serverplayers[oppnum].item);
       Item& curritem = serveritems.back();
       curritem.mesh = servermeshes.begin();

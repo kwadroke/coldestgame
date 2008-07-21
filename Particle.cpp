@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "globals.h"
 
 
 Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0.f), accel(0.f),
@@ -22,7 +23,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 }
 
 
-Particle::Particle(const string& filename, ResourceManager& resman) : mesh(Mesh("models/empty/base", resman)), playernum(0), id(0),
+Particle::Particle(const string& filename, ResourceManager& resman) : mesh(meshcache->GetMesh("models/empty")), playernum(0), id(0),
                    velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
 {
@@ -44,9 +45,9 @@ Particle::Particle(const string& filename, ResourceManager& resman) : mesh(Mesh(
    
    string meshname;
    read.Read(meshname, "Mesh");
-   mesh.Load(IniReader(meshname));
-   t.start();
+   mesh = meshcache->GetMesh(meshname);
    mesh.dynamic = true;
+   t.start();
 }
 
 

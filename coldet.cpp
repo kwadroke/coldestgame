@@ -15,8 +15,7 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   CollisionDetection cd;
-   cd.UnitTest();
+   IniReader("models/spawn/frame0000");
    exit(0);
 }
 
@@ -115,6 +114,7 @@ void InitGlobals()
    weaponslots.push_back(Torso);
    weaponslots.push_back(LArm);
    weaponslots.push_back(RArm);
+   meshcache = MeshCachePtr(new MeshCache(resman));
    
 #ifndef DEDICATED
    standardshader = "shaders/standard";
@@ -522,6 +522,8 @@ static void MainLoop()
       }
       // update the screen
       Repaint();
+#else
+      SDL_Delay(1);
 #endif
    } // End of while(1)
 }  // End of MainLoop function
@@ -1298,16 +1300,16 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    if (p.mesh[Legs] == ml.end())
    {
-      Mesh newmesh("models/" + units[p.unit].file + "/legs/base", resman, IniReader(), gl);
-      newmesh.dynamic = true;
-      ml.push_front(newmesh);
+      MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/legs");
+      newmesh->dynamic = true;
+      ml.push_front(*newmesh);
       p.mesh[Legs] = ml.begin();
    }
    if (p.mesh[Torso] == ml.end())
    {
-      Mesh newmesh("models/" + units[p.unit].file + "/torso/base", resman, IniReader(), gl);
-      newmesh.dynamic = true;
-      ml.push_front(newmesh);
+      MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/torso");
+      newmesh->dynamic = true;
+      ml.push_front(*newmesh);
       p.mesh[Torso] = ml.begin();
    }
    
@@ -1319,18 +1321,18 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    
    if (p.mesh[LArm] == ml.end())
    {
-      Mesh newmesh("models/" + units[p.unit].file + "/larm/base", resman, IniReader(), gl);
-      newmesh.dynamic = true;
-      p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", newmesh);
-      ml.push_front(newmesh);
+      MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
+      newmesh->dynamic = true;
+      p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", *newmesh);
+      ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
    }
    if (p.mesh[RArm] == ml.end())
    {
-      Mesh newmesh("models/" + units[p.unit].file + "/rarm/base", resman, IniReader(), gl);
-      newmesh.dynamic = true;
-      p.mesh[Torso]->InsertIntoContainer("RightArmConnector", newmesh);
-      ml.push_front(newmesh);
+      MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/rarm");
+      newmesh->dynamic = true;
+      p.mesh[Torso]->InsertIntoContainer("RightArmConnector", *newmesh);
+      ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
    }
    p.size = units[p.unit].size;
@@ -1370,7 +1372,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
    {
       if (!particlemesh)
       {
-         particlemesh = MeshPtr(new Mesh("models/empty/base", resman));
+         particlemesh = meshcache->GetNewMesh("models/empty");
          particlemesh->dynamic = true;
       }
       particlemesh->Clear();
@@ -1577,8 +1579,8 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    float rad = weapon.Radius();
    bool exp = weapon.Explode();
    
-   Mesh weaponmesh("models/" + weapon.ModelFile() + "/base", resman);
-   Particle part(0, start, dir, vel, acc, w, rad, exp, SDL_GetTicks(), weaponmesh);
+   MeshPtr weaponmesh = meshcache->GetNewMesh("models/" + weapon.ModelFile() + "/base");
+   Particle part(0, start, dir, vel, acc, w, rad, exp, SDL_GetTicks(), *weaponmesh);
    part.origin = part.pos;
    part.playernum = pnum;
    part.weapid = weapon.Id();
@@ -1600,6 +1602,23 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    part.dir = Vector3(0, 0, -1);
    part.dir.transform(m);
    return part;
+}
+
+
+// Note that any meshes that don't significantly slow things down probably don't need to be cached here
+// (although using the cached loading mechanism for them is still a good idea)
+void CacheMeshes()
+{
+   vector<string> tocache;
+   
+   tocache.push_back("models/nemesis/legs");
+   tocache.push_back("models/nemesis/torso");
+   tocache.push_back("models/nemesis/larm");
+   tocache.push_back("models/nemesis/rarm");
+   //tocache.push_back("models/spawn");
+   
+   for (size_t i = 0; i < tocache.size(); ++i)
+      meshcache->GetNewMesh(tocache[i]);
 }
 
 

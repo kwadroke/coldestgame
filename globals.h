@@ -15,6 +15,7 @@
 #include "ObjectKDTree.h"
 #include "Console.h"
 #include "ParticleEmitter.h"
+#include "MeshCache.h"
 
 
 #define PI 3.14159265
@@ -57,6 +58,7 @@ extern bool serverhasmap;
 extern Console console;
 extern int winningteam;
 extern vector<BodyParts> weaponslots;
+extern MeshCachePtr meshcache;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
@@ -70,5 +72,6 @@ void ShowGUI(int);
 void ResetKeys();
 int CalculatePlayerWeight(const PlayerData&);
 Particle CreateShot(const Weapon&, const Vector3&, const Vector3&, Vector3, int pnum = 0);
+void CacheMeshes();
 
 #endif

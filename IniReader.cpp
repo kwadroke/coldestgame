@@ -17,21 +17,20 @@ IniReader::IniReader(string filename) : level(0), name(""), path(filename)
       contents += buffer + '\n';
    }
    
-   Parse(contents);
+   istringstream instr(contents);
+   Parse(instr);
 }
 
 
-string IniReader::Parse(string instr)
+void IniReader::Parse(istringstream& in)
 {
-   stringstream in;
-   in.str(instr);
-   
    string currline = "";
    int linelevel = level;
    string valname = "";
-   stringstream line;
-   int strpos = 0;
+   istringstream line;
    bool firstline = true;
+   size_t strpos = 0;
+   
    while(getline(in, currline))
    {
       linelevel = currline.find_first_not_of(" \t");
@@ -49,15 +48,14 @@ string IniReader::Parse(string instr)
       if (linelevel > level)
       {
          IniReader newreader(linelevel);
-         string currstr = in.str().substr(strpos);
-         currstr = newreader.Parse(currstr);
-         in.clear();
-         in.str(currstr);
+         in.seekg(strpos);
+         newreader.Parse(in);
          children.push_back(newreader);
       }
       else if (linelevel < level)
       {
-         return in.str().substr(strpos);
+         in.seekg(strpos);
+         return;
       }
       else // We need to read the value
       {
@@ -68,7 +66,8 @@ string IniReader::Parse(string instr)
       }
       strpos = in.tellg();
    }
-   return ""; // Means we reached the end of the file
+   // No need for a return statement here anymore, but the comment is useful.
+   return; // Means we reached the end of the file
 }
 
 
@@ -106,7 +105,7 @@ string IniReader::ReadLine(string& ret, const string name) const
    if (HaveValue(name, 0))
    {
       string tempret = "";
-      stringstream readval(values[name]);
+      istringstream readval(values[name]);
       readval >> tempret;
       readval.ignore();
       getline(readval, tempret);
@@ -117,9 +116,9 @@ string IniReader::ReadLine(string& ret, const string name) const
 }
 
 
-string IniReader::ReadVal(const string line, const int num) const
+string IniReader::ReadVal(const string& line, const int num) const
 {
-   stringstream readval(line);
+   istringstream readval(line);
    int i = -1; // Always need to read at least two values even if they pass in 0
    string retval;
    while (i <= num)
@@ -132,12 +131,12 @@ string IniReader::ReadVal(const string line, const int num) const
 }
 
 
-bool IniReader::HaveValue(const string name, const int num) const
+bool IniReader::HaveValue(const string& name, const int num) const
 {
    bool retval = values.find(name) != values.end();
    if (retval)
    {
-      stringstream readval(values[name]);
+      istringstream readval(values[name]);
       int i = -1;
       string dummy;
       while (readval >> dummy && i < num)
