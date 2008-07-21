@@ -12,7 +12,7 @@ using std::string;
 using std::map;
 using std::vector;
 using std::ifstream;
-using std::stringstream;
+using std::istringstream;
 using std::ios;
 using std::cout;
 using std::endl;
@@ -33,9 +33,9 @@ class IniReader
       string GetPath() const;
       
    private:
-      string Parse(string);
-      string ReadVal(const string, const int) const;
-      bool HaveValue(const string, const int) const;
+      void Parse(istringstream&);
+      string ReadVal(const string&, const int) const;
+      bool HaveValue(const string&, const int) const;
       
       vector<IniReader> children;
       /* This mutable is a workaround for the fact that operator[] on a map is non-const,
@@ -57,7 +57,7 @@ T IniReader::Read(T& ret, const string& name, const int num) const
 {
    if (HaveValue(name, num))
    {
-      stringstream convert(ReadVal(values[name], num));
+      istringstream convert(ReadVal(values[name], num));
       convert >> ret;
    }
    return ret;

@@ -573,8 +573,8 @@ int NetListen(void* dummy)
                partids.insert(id);
                get >> weapid;
                Weapon dummy(weapid);
-               Mesh tempmesh("models/" + dummy.ModelFile() + "/base", resman);
-               Particle temppart(tempmesh);
+               MeshPtr tempmesh = meshcache->GetNewMesh("models/" + dummy.ModelFile() + "/base");
+               Particle temppart(*tempmesh);
                temppart.id = id;
                temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
                get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
@@ -761,12 +761,12 @@ int NetListen(void* dummy)
                Item newitem(type, meshes);
                newitem.id = id;
                newitem.team = team;
-               Mesh newmesh(newitem.ModelFile(), resman);
-               newmesh.Move(itempos);
-               newmesh.SetGL();
-               newmesh.dynamic = true;
+               MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
+               newmesh->Move(itempos);
+               newmesh->SetGL();
+               newmesh->dynamic = true;
                SDL_mutexP(clientmutex);
-               meshes.push_front(newmesh);
+               meshes.push_front(*newmesh);
                items.push_back(newitem);
                Item& curritem = items.back();
                curritem.mesh = meshes.begin();

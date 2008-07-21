@@ -12,6 +12,7 @@
 #include "FBO.h"
 #include "util.h"
 #include <map>
+#include "Timer.h" // Debugging
 
 using std::map;
 
@@ -20,6 +21,7 @@ using std::map;
 */
 class Mesh
 {
+   friend class MeshCache;
    public:
       Mesh(const string&, ResourceManager&, IniReader read = IniReader(), bool gl = false);
       ~Mesh();

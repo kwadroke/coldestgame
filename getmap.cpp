@@ -101,7 +101,7 @@ void GetMap(string fn)
    // Load the textures themselves
    // Actually, the textures get loaded as Materials get loaded now, so this is really a bogus step
 #ifndef DEDICATED
-   progress->SetRange(0, 7);
+   progress->SetRange(0, 8);
    progress->value = 0;
    progtext->text = "Loading textures";
    Repaint();
@@ -730,7 +730,12 @@ void GetMap(string fn)
    }
    
    progress->value = 7;
-   progtext->text = "Entering game";
+   progtext->text = "Caching meshes";
+   Repaint();
+   CacheMeshes();
+   
+   progress->value = 8;
+   progtext->text = "Rendering maps";
    Repaint();
    
    // Render static shadow map

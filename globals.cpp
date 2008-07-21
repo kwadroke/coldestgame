@@ -27,3 +27,4 @@ bool serverhasmap;
 Console console;
 int winningteam;
 vector<BodyParts> weaponslots;
+MeshCachePtr meshcache;
