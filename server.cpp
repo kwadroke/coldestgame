@@ -1278,6 +1278,7 @@ void SendShot(const Particle& p)
          pack << p.weapid << eol;
          pack << p.pos.x << eol << p.pos.y << eol << p.pos.z << eol;
          pack << p.dir.x << eol << p.dir.y << eol << p.dir.z << eol;
+         pack << p.playernum << eol;
          
          servqueue.push_back(pack);
       }

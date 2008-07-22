@@ -569,7 +569,6 @@ int NetListen(void* dummy)
             get >> id;
             if (partids.find(id) == partids.end())
             {
-               cout << "Got particle " << id << endl;
                partids.insert(id);
                get >> weapid;
                Weapon dummy(weapid);
@@ -579,6 +578,7 @@ int NetListen(void* dummy)
                temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
                get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
                get >> temppart.dir.x >> temppart.dir.y >> temppart.dir.z;
+               get >> temppart.playernum;
                temppart.velocity = dummy.Velocity();
                temppart.accel = dummy.Acceleration();
                temppart.weight = dummy.ProjectileWeight();
