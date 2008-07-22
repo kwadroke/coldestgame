@@ -90,6 +90,7 @@ void InitGlobals()
    console.Parse("set zoomfactor 2", false);
    console.Parse("set weaponfocus 1000", false);
    console.Parse("set serverport 12010", false);
+   console.Parse("set hitindtime 1000", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -115,6 +116,7 @@ void InitGlobals()
    weaponslots.push_back(LArm);
    weaponslots.push_back(RArm);
    meshcache = MeshCachePtr(new MeshCache(resman));
+   lasthit = 0;
    
 #ifndef DEDICATED
    standardshader = "shaders/standard";
@@ -603,6 +605,13 @@ void GUIUpdate()
          spawnschanged = false;
       }
    }
+   static GUI* hitind = gui[hud]->GetWidget("hitind");
+   if (SDL_GetTicks() - lasthit < console.GetInt("hitindtime"))
+   {
+      hitind->visible = true;
+   }
+   else
+      hitind->visible = false;
    SDL_mutexV(clientmutex);
 #endif
 }
@@ -1302,6 +1311,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/legs");
       newmesh->dynamic = true;
+      if (gl)
+         newmesh->SetGL();
       ml.push_front(*newmesh);
       p.mesh[Legs] = ml.begin();
    }
@@ -1309,6 +1320,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/torso");
       newmesh->dynamic = true;
+      if (gl)
+         newmesh->SetGL();
       ml.push_front(*newmesh);
       p.mesh[Torso] = ml.begin();
    }
@@ -1323,6 +1336,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
       newmesh->dynamic = true;
+      if (gl)
+         newmesh->SetGL();
       p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
@@ -1331,6 +1346,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/rarm");
       newmesh->dynamic = true;
+      if (gl)
+         newmesh->SetGL();
       p.mesh[Torso]->InsertIntoContainer("RightArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
