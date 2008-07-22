@@ -18,4 +18,5 @@ vector<Meshlist::iterator> deletemeshes;
 set<unsigned long> itemsreceived;  // TODO: These need to be reset when loading new maps
 set<unsigned long> hitsreceived;
 unsigned long lastsyncpacket;
+Uint32 lasthit;
 

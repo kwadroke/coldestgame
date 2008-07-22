@@ -599,7 +599,7 @@ int NetListen(void* dummy)
             }
             Ack(packetnum);
          }
-         else if (packettype == "h")
+         else if (packettype == "h") // Hit
          {
             Vector3 hitpos;
             int type;
@@ -619,6 +619,11 @@ int NetListen(void* dummy)
                SDL_mutexV(clientmutex);
             }
             
+            Ack(packetnum);
+         }
+         else if (packettype == "D") // We were damaged
+         {
+            lasthit = SDL_GetTicks();
             Ack(packetnum);
          }
          else if (packettype == "i")  // Server info
@@ -689,7 +694,7 @@ int NetListen(void* dummy)
                   newchatplayers.push_back(oppnum);
                }
                // Ack it
-               Ack(packetnum);
+               Ack(packetnum); // Danger: this grabs the net mutex while we hold the clientmutex
             }
             SDL_mutexV(clientmutex);
          }

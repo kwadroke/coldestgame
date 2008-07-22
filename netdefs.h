@@ -32,6 +32,7 @@ extern vector<Meshlist::iterator> deletemeshes;
 extern set<unsigned long> itemsreceived;
 extern set<unsigned long> hitsreceived;
 extern unsigned long lastsyncpacket;
+extern Uint32 lasthit;
 
 void HandleAck(unsigned long);
 void SendPowerdown();

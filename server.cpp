@@ -41,6 +41,7 @@ void SendSyncPacket(PlayerData&);
 void SendGameOver(PlayerData&, int);
 void SendShot(const Particle&);
 void SendHit(const Vector3&, const Particle& p);
+void SendDamage(const int);
 string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
@@ -897,7 +898,6 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
    
    SendHit(hitpos, p);
    
-   
    if (floatzero(p.dmgrad))
    {
       ApplyDamage(curr, p.damage, p.playernum);
@@ -949,6 +949,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
             {
                cout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage);
+               SendDamage(i);
                if (serverplayers[i].hp[part] <= 0)
                   dead = true;
             }
@@ -1302,6 +1303,17 @@ void SendHit(const Vector3& hitpos, const Particle& p)
          servqueue.push_back(pack);
       }
    }
+}
+
+
+void SendDamage(const int i)
+{
+   Packet pack(&serverplayers[i].addr);
+   pack.ack = servsendpacketnum;
+   pack << "D\n";
+   pack << pack.ack << eol;
+   
+   servqueue.push_back(pack);
 }
 
 
