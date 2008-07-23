@@ -15,7 +15,8 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   IniReader("models/spawn/frame0000");
+   
+   
    exit(0);
 }
 
@@ -612,6 +613,9 @@ void GUIUpdate()
    }
    else
       hitind->visible = false;
+   
+   static GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
+   servfps->text = "Server FPS: " + ToString(serverfps);
    SDL_mutexV(clientmutex);
 #endif
 }
@@ -1380,7 +1384,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // and if the server thread tries to do GL it will crash
 // The server is also the only one to pass in Rewind
 void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, vector<PlayerData>& playervec, const Vector3& campos,
-                     void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&), void (*Rewind)(int))
+                     void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&),
+                     void (*Rewind)(int, const Vector3&, const Vector3&, const float))
 {
    list<Particle> newparts;
    int updint = console.GetInt("partupdateinterval");
@@ -1407,12 +1412,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          oldpos = j->Update();
          if (j->collide)
          {
+            if (Rewind)
+               Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            if (Rewind)
-               Rewind(j->rewind);
             partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, &hitmeshes);
-            if (Rewind)
-               Rewind(0);
          }
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
@@ -1463,6 +1466,8 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 #endif
    }
    else ++partupd;
+   if (Rewind)
+      Rewind(0, Vector3(), Vector3(), 10e38f); // Rewind all to 0
 }
 
 

@@ -19,6 +19,8 @@ class CollisionDetection
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&,
                              vector<Mesh*>* = NULL, const bool debug = false);
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&);
+      // Useful for external code too
+      float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&);
       bool UnitTest();
       
       int intmethod;
@@ -34,7 +36,6 @@ class CollisionDetection
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&, float&, Vector3&);
       float DistanceBetweenLines(const Vector3& start, const Vector3& dir, const Vector3& start1, const Vector3& dir1, float&, float&);
-      float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&);
       bool RaySphereCheck(const Vector3& raystart, const Vector3& rayend,
                      const Vector3& spherepos, const float radius, Vector3& adjust);
 };

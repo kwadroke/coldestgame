@@ -19,4 +19,5 @@ set<unsigned long> itemsreceived;  // TODO: These need to be reset when loading 
 set<unsigned long> hitsreceived;
 unsigned long lastsyncpacket;
 Uint32 lasthit;
+int serverfps;
 

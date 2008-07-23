@@ -484,11 +484,12 @@ int NetListen(void* dummy)
             {
                oppnum = 0;
                
+               get >> serverfps;
                get >> oppnum;
                short getunit, getteam;
                int getkills, getdeaths, getsalvage;
                vector<int> gethp(numbodyparts);
-               int getping;
+               int getping, getsvfps;
                bool getspawned;
                string getname;
                SDL_mutexP(clientmutex);
@@ -615,7 +616,7 @@ int NetListen(void* dummy)
                Particle newpart(dummy.ExpFile(), resman);
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 3);
                SDL_mutexP(clientmutex);
-               emitters.push_back(newemitter);
+               //emitters.push_back(newemitter);
                SDL_mutexV(clientmutex);
             }
             

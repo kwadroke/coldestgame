@@ -33,6 +33,7 @@ extern set<unsigned long> itemsreceived;
 extern set<unsigned long> hitsreceived;
 extern unsigned long lastsyncpacket;
 extern Uint32 lasthit;
+extern int serverfps;
 
 void HandleAck(unsigned long);
 void SendPowerdown();
