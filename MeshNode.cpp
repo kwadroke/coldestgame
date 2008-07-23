@@ -62,17 +62,18 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
    // Reset vertices then transform them to new positions
    for (size_t i = 0; i < vertices.size(); ++i)
    {
-      verts[vertices[i]->id]->pos = lerp(interpnode->vertices[i]->pos, vertices[i]->pos, interpval);
-      verts[vertices[i]->id]->norm = lerp(interpnode->vertices[i]->norm, vertices[i]->norm, interpval);
+      Vertex& currvert = *verts[vertices[i]->id];
+      currvert.pos = lerp(interpnode->vertices[i]->pos, vertices[i]->pos, interpval);
+      currvert.norm = lerp(interpnode->vertices[i]->norm, vertices[i]->norm, interpval);
       for (size_t j = 0; j < 4; ++j)
       {
-         verts[vertices[i]->id]->color[j] = 
+         currvert.color[j] = 
                static_cast<unsigned char>(lerp(float(interpnode->vertices[i]->color[j]), float(vertices[i]->color[j]), interpval));
       }
       
-      verts[vertices[i]->id]->pos.transform(m);
-      verts[vertices[i]->id]->norm.transform(normalm);
-      verts[vertices[i]->id]->norm.normalize();
+      currvert.pos.transform(m);
+      currvert.norm.transform(normalm);
+      currvert.norm.normalize();
    }
    
    // Recursively call this on our children

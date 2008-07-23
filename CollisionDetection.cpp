@@ -50,29 +50,32 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    for (int i = 0; i < objs.size(); i++)
    {
       current = objs[i];
-      current->Begin();
-      while (current->HasNext())
+      if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
       {
-         Triangle& currtri = current->Next();
-         if (currtri.collide)
+         current->Begin();
+         while (current->HasNext())
          {
-            if (currtri.maxdim < 0) currtri.CalcMaxDim();
-            
-            float localrad = radius + currtri.radmod;
-            float checkrad = currtri.maxdim + localrad;
-            
-            if (DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad)
+            Triangle& currtri = current->Next();
+            if (currtri.collide)
             {
-               temp = adjust;
-               adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad, temphitpos);
+               if (currtri.maxdim < 0) currtri.CalcMaxDim();
                
-               if (adjust.distance2(temp) > .00001)
+               float localrad = radius + currtri.radmod;
+               float checkrad = currtri.maxdim + localrad;
+               
+               if (DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad)
                {
-                  if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
-                     hitpos = temphitpos;
-                  adjusted++;
-                  if (retobjs)
-                     retobjs->push_back(current);
+                  temp = adjust;
+                  adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad, temphitpos);
+                  
+                  if (adjust.distance2(temp) > .00001)
+                  {
+                     if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
+                        hitpos = temphitpos;
+                     adjusted++;
+                     if (retobjs)
+                        retobjs->push_back(current);
+                  }
                }
             }
          }
@@ -118,27 +121,30 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       for (int i = 0; i < objs.size(); i++)
       {
          current = objs[i];
-         current->Begin();
-         while (current->HasNext())
+         if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
          {
-            Triangle& currtri = current->Next();
-            if (currtri.collide)
+            current->Begin();
+            while (current->HasNext())
             {
-               if (currtri.maxdim < 0) currtri.CalcMaxDim();
-               
-               float localrad = radius + currtri.radmod;
-               float checkrad = currtri.maxdim + localrad;
-            
-               if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
+               Triangle& currtri = current->Next();
+               if (currtri.collide)
                {
-                  temp = adjust;
-                  adjust += PlaneEdgeSphereCollision(currtri, newpos, localrad);
-                  if (adjust.distance2(temp) > .00001)
+                  if (currtri.maxdim < 0) currtri.CalcMaxDim();
+                  
+                  float localrad = radius + currtri.radmod;
+                  float checkrad = currtri.maxdim + localrad;
+               
+                  if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                   {
-                     hitpos = newpos;
-                     adjusted++;
-                     if (retobjs)
-                        retobjs->push_back(current);
+                     temp = adjust;
+                     adjust += PlaneEdgeSphereCollision(currtri, newpos, localrad);
+                     if (adjust.distance2(temp) > .00001)
+                     {
+                        hitpos = newpos;
+                        adjusted++;
+                        if (retobjs)
+                           retobjs->push_back(current);
+                     }
                   }
                }
             }
@@ -167,28 +173,31 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          for (int i = 0; i < objs.size(); i++)
          {
             current = objs[i];
-            current->Begin();
-            while (current->HasNext())
+            if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
             {
-               Triangle& currtri = current->Next();
-               if (currtri.collide)
+               current->Begin();
+               while (current->HasNext())
                {
-                  if (currtri.maxdim < 0) currtri.CalcMaxDim();
-                  
-                  float localrad = radius + currtri.radmod;
-                  float checkrad = currtri.maxdim + localrad;
-            
-                  if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
+                  Triangle& currtri = current->Next();
+                  if (currtri.collide)
                   {
-                     temp = adjust;
-                     adjust += VectorEdgeCheck(currtri, oldpos, newpos, localrad);
-                     if (adjust.distance2(temp) > .00001)
+                     if (currtri.maxdim < 0) currtri.CalcMaxDim();
+                     
+                     float localrad = radius + currtri.radmod;
+                     float checkrad = currtri.maxdim + localrad;
+               
+                     if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                      {
-                        if (oldpos.distance2(adjust) < oldpos.distance2(hitpos))
-                           hitpos = adjust;
-                        adjusted++;
-                        if (retobjs)
-                           retobjs->push_back(current);
+                        temp = adjust;
+                        adjust += VectorEdgeCheck(currtri, oldpos, newpos, localrad);
+                        if (adjust.distance2(temp) > .00001)
+                        {
+                           if (oldpos.distance2(adjust) < oldpos.distance2(hitpos))
+                              hitpos = adjust;
+                           adjusted++;
+                           if (retobjs)
+                              retobjs->push_back(current);
+                        }
                      }
                   }
                }
@@ -203,29 +212,32 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          for (int i = 0; i < objs.size(); i++)
          {
             current = objs[i];
-            current->Begin();
-            while (current->HasNext())
+            if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
             {
-               Triangle& currtri = current->Next();
-               if (currtri.collide)
+               current->Begin();
+               while (current->HasNext())
                {
-                  if (currtri.maxdim < 0) currtri.CalcMaxDim();
-                  
-                  float localrad = radius + currtri.radmod;
-                  float checkrad = currtri.maxdim + localrad;
-            
-                  if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
+                  Triangle& currtri = current->Next();
+                  if (currtri.collide)
                   {
-                     for (int j = 0; j < 3; ++j)
+                     if (currtri.maxdim < 0) currtri.CalcMaxDim();
+                     
+                     float localrad = radius + currtri.radmod;
+                     float checkrad = currtri.maxdim + localrad;
+               
+                     if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                      {
-                        if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, localrad, temp))
+                        for (int j = 0; j < 3; ++j)
                         {
-                           if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
-                              hitpos = currtri.v[j]->pos;
-                           adjust += temp;
-                           adjusted++;
-                           if (retobjs)
-                              retobjs->push_back(current);
+                           if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, localrad, temp))
+                           {
+                              if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+                                 hitpos = currtri.v[j]->pos;
+                              adjust += temp;
+                              adjusted++;
+                              if (retobjs)
+                                 retobjs->push_back(current);
+                           }
                         }
                      }
                   }

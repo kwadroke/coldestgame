@@ -32,7 +32,7 @@ class Mesh
       void CalcBounds();
       void Load(const IniReader&);
       void Move(const Vector3&);
-      const Vector3& GetPosition() const;
+      const Vector3 GetPosition() const;
       void Rotate(const Vector3&);
       void GenVbo();
       void BindAttribs();
@@ -52,8 +52,7 @@ class Mesh
       void ResetAnimation();
       void SetAnimation(const int);
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
-      void ReadState(Vector3&, Vector3&, int&, int&, float&);
-      Vector3 GetPosition(){return position;}
+      void ReadState(Vector3&, Vector3&, int&, int&, float&, float&);
       float GetWidth(){return width;}
       float GetHeight(){return height;}
       void SetGL(){glops = true;}

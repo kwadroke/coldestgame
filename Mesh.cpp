@@ -419,8 +419,15 @@ void Mesh::Move(const Vector3& v)
 }
 
 
-const Vector3& Mesh::GetPosition() const
+const Vector3 Mesh::GetPosition() const
 {
+   if (frameroot.size() && frameroot[currkeyframe]->parent)
+   {
+      GraphicMatrix m = frameroot[currkeyframe]->parent->m;
+      Vector3 p = position;
+      p.transform(m);
+      return p; 
+   }
    return position;
 }
 
@@ -780,19 +787,20 @@ void Mesh::CalcBounds()
    Vector3 min;
    Vector3 max;
    float temp;
+   Vector3 localpos = GetPosition();
    for (int i = 0; i < tris.size(); ++i)
    {
       for (int j = 0; j < 3; ++j)
       {
-         dist = tris[i]->v[j]->pos.distance(position) + tris[i]->radmod;
+         dist = tris[i]->v[j]->pos.distance(localpos) + tris[i]->radmod;
          if (dist > size) size = dist;
-         temp = tris[i]->v[j]->pos.x - position.x;
+         temp = tris[i]->v[j]->pos.x - localpos.x;
          if (temp + tris[i]->radmod > max.x) max.x = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.x) min.x = temp - tris[i]->radmod;
-         temp = tris[i]->v[j]->pos.y - position.y;
+         temp = tris[i]->v[j]->pos.y - localpos.y;
          if (temp + tris[i]->radmod > max.y) max.y = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.y) min.y = temp - tris[i]->radmod;
-         temp = tris[i]->v[j]->pos.z - position.z;
+         temp = tris[i]->v[j]->pos.z - localpos.z;
          if (temp + tris[i]->radmod > max.z) max.z = temp + tris[i]->radmod;
          if (temp - tris[i]->radmod < min.z) min.z = temp - tris[i]->radmod;
       }
@@ -807,24 +815,29 @@ void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, 
 {
    if (frameroot.size() < 1) return;
    
-   position = pos;
    rots = rot;
    currkeyframe = keyframe;
    animtime = atime;
    SetAnimSpeed(aspeed);
+   
+   if (!frameroot[currkeyframe]->parent) // If we're a child mesh our position should be set by the parent
+   {
+      position = pos;
+   }
    
    // campos is not important because this is only called by the server (at this time)
    UpdateTris(currkeyframe, Vector3());
 }
 
 
-void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, float& aspeed)
+void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, float& aspeed, float& getsize)
 {
-   pos = position;
+   pos = GetPosition();
    rot = rots;
    keyframe = currkeyframe;
    atime = animtime;
    aspeed = animspeed;
+   getsize = size;
 }
 
 

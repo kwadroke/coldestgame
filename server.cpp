@@ -30,7 +30,7 @@ void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
 void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
 void ApplyDamage(Mesh*, const float, const int, const bool teamdamage = false);
 void ServerUpdatePlayer(int);
-void Rewind(int);
+void Rewind(int, const Vector3&, const Vector3&, const float);
 void SaveState();
 void AddItem(const Item&, int);
 void SendItem(const Item&, const int);
@@ -69,6 +69,9 @@ vector<string> maplist;
 bool gameover;
 Uint32 nextmaptime;
 set<unsigned long> commandids;
+size_t framecount;
+Uint32 lastfpsupdate;
+int servfps;
 
 class SortableIPaddress
 {
@@ -145,6 +148,8 @@ int Server(void* dummy)
    nextservparticleid.next(); // 0 has special meaning
    servertickrate = 30;
    maxplayers = 32;
+   framecount = 0;
+   lastfpsupdate = SDL_GetTicks();
    if (console.GetString("map") == "")
       console.Parse("set map newtest");
    LoadMapList();
@@ -235,6 +240,17 @@ int ServerListen()
       // Update particles
       int updinterval = 100;
       UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
+      
+      // Update server FPS
+      ++framecount;
+      currtick = SDL_GetTicks();
+      if (currtick - lastfpsupdate > 1000)
+      {
+         servfps = int(float(framecount) * 1000.f / float(currtick - lastfpsupdate));
+         framecount = 0;
+         lastfpsupdate = currtick;
+      }
+      
       SDL_mutexV(servermutex);
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
@@ -748,6 +764,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             
             occup << "u\n";
             occup << servsendpacketnum << eol;
+            occup << servfps << eol;
             for (int i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
@@ -1055,7 +1072,7 @@ void ServerUpdatePlayer(int i)
    // Shots fired!
    int weaponslot = weaponslots[serverplayers[i].currweapon];
    Weapon& currplayerweapon = serverplayers[i].weapons[weaponslot];
-   if (serverplayers[i].firerequests && 
+   while (serverplayers[i].firerequests && 
        (SDL_GetTicks() - serverplayers[i].lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0))
    {
@@ -1086,7 +1103,9 @@ void ServerUpdatePlayer(int i)
 }
 
 
-void Rewind(int ticks)
+
+// Only rewinds meshes that fall within the cylinder defined by start, end, and radius
+void Rewind(int ticks, const Vector3& start, const Vector3& end, const float radius)
 {
    Uint32 currtick = SDL_GetTicks();
    size_t i;
@@ -1105,6 +1124,7 @@ void Rewind(int ticks)
       if (currtick - oldstate[i].tick >= ticks) break;
    }
    
+   size_t rewindcounter = 0;
    for (size_t j = 0; j < oldstate[i].index.size(); ++j)
    {
       size_t p = oldstate[i].index[j];
@@ -1112,9 +1132,13 @@ void Rewind(int ticks)
       {
          for (size_t k = 0; k < numbodyparts; ++k)
          {
-            serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
+            if (coldet.DistanceBetweenPointAndLine(oldstate[i].position[j][k], start, end) < radius + oldstate[i].size[j][k])
+            {
+               ++rewindcounter;
+               serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
                                              oldstate[i].frame[j][k], oldstate[i].animtime[j][k],
                                              oldstate[i].animspeed[j][k]);
+            }
          }
       }
    }

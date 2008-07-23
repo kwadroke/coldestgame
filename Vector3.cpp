@@ -2,18 +2,44 @@
 
 using namespace std;
 
-Vector3::Vector3()
+Vector3::Vector3() : x(0), y(0), z(0)
 {
-   x = y = z = 0;
 }
 
 
-Vector3::Vector3(const float& xin, const float& yin, const float& zin)
+Vector3::Vector3(const float& xin, const float& yin, const float& zin) : x(xin), y(yin), z(zin)
 {
-   x = xin;
-   y = yin;
-   z = zin;
 }
+
+
+// Previously inline
+float Vector3::dot(const Vector3& v) const
+{
+   return x * v.x + y * v.y + z * v.z;
+}
+
+Vector3 Vector3::cross(const Vector3& v) const
+{
+   return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+}
+
+void Vector3::normalize()
+{
+   float mag = sqrt(x * x + y * y + z * z);
+   if (mag > .000001f)
+   {
+      x /= mag;
+      y /= mag;
+      z /= mag;
+   }
+}
+
+float Vector3::magnitude() const
+{
+   return sqrt(x * x + y * y + z * z);
+}
+
+//End ex-inlines
 
 
 Vector3 Vector3::operator* (const float& i) const
@@ -47,6 +73,12 @@ void Vector3::operator+= (const Vector3& v)
    x += v.x;
    y += v.y;
    z += v.z;
+}
+
+
+Vector3 Vector3::operator- (const Vector3& v) const
+{
+   return Vector3(x - v.x, y - v.y, z - v.z);
 }
 
 

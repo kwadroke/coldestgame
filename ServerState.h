@@ -16,9 +16,10 @@ class ServerState
       
       vector<Vector3vec> position;
       vector<Vector3vec> rots;
-      vector<vector<int> > frame;
-      vector<vector<int> > animtime;
-      vector<vector<float> > animspeed;
+      vector<intvec> frame;
+      vector<intvec> animtime;
+      vector<floatvec> animspeed;
+      vector<floatvec> size;
       vector<size_t> index;
       Uint32 tick;
 };

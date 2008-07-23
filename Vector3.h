@@ -38,36 +38,9 @@ Vector3 operator*(const float, const Vector3&);
 Vector3 operator-(const Vector3&);
 
 
-inline float Vector3::dot(const Vector3& v) const
-{
-   return x * v.x + y * v.y + z * v.z;
-}
 
-inline Vector3 Vector3::cross(const Vector3& v) const
-{
-   return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
-}
 
-inline void Vector3::normalize()
-{
-   float mag = sqrt(x * x + y * y + z * z);
-   if (mag > .000001f)
-   {
-      x /= mag;
-      y /= mag;
-      z /= mag;
-   }
-}
 
-inline float Vector3::magnitude() const
-{
-   return sqrt(x * x + y * y + z * z);
-}
-
-inline Vector3 Vector3::operator- (const Vector3& v) const
-{
-   return Vector3(x - v.x, y - v.y, z - v.z);
-}
 
 
 #endif
