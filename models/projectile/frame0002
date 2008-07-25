@@ -1,6 +1,6 @@
 Version Version4
 NextID 29
-TimeToNextFrame 2500
+TimeToNextFrame 1000
 Container
    ID 0
    ParentID -1
@@ -19,28 +19,28 @@ Container
    Trans 0 0 0
    Vertex
       ID 2
-      Pos -10000 0 1000
+      Pos -60000 0 1000
       Norm -0.707107 -0.707107 0
       TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 3
-      Pos -10000 0 0
+      Pos -60000 0 0
       Norm -0.707107 -0.707107 0
       TC 0 0.495 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 4
-      Pos 10000 0 1000
+      Pos 60000 0 1000
       Norm -0.707107 -0.707107 0
       TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 5
-      Pos 10000 0 0
+      Pos 60000 0 0
       Norm -0.707107 -0.707107 0
       TC 1 0.495 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-      Color 255 255 255 255
+      Color 255 255 255 0
 Container
    ID 8
    ParentID 0
@@ -51,28 +51,28 @@ Container
    Trans 0 0 0
    Vertex
       ID 10
-      Pos -10000 0 0
+      Pos -60000 0 0
       Norm 0.707107 -0.707107 0
       TC 0 0.495 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 11
-      Pos 10000 0 1000
+      Pos 60000 0 1000
       Norm 0.707107 -0.707107 0
       TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 12
-      Pos 10000 0 0
+      Pos 60000 0 0
       Norm 0.707107 -0.707107 0
       TC 1 0.495 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 9
-      Pos -10000 0 1000
+      Pos -60000 0 1000
       Norm 0.707107 -0.707107 0
       TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-      Color 255 255 255 255
+      Color 255 255 255 0
 Container
    ID 15
    ParentID 0
@@ -83,28 +83,28 @@ Container
    Trans 0 0 1000
    Vertex
       ID 16
-      Pos -10000 10000 0
+      Pos -60000 60000 0
       Norm 0 0 1
       TC 0 0.505 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 17
-      Pos -10000 -10000 0
+      Pos -60000 -60000 0
       Norm 0 0 1
       TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 18
-      Pos 10000 10000 0
+      Pos 60000 60000 0
       Norm 0 0 1
       TC 1 0.505 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
-      Color 255 255 255 255
+      Color 255 255 255 0
    Vertex
       ID 19
-      Pos 10000 -10000 0
+      Pos 60000 -60000 0
       Norm 0 0 1
       TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-      Color 255 255 255 255
+      Color 255 255 255 0
 Node
    Triangles
    Tri
