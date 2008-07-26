@@ -616,7 +616,7 @@ int NetListen(void* dummy)
                Particle newpart(dummy.ExpFile(), resman);
                ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 3);
                SDL_mutexP(clientmutex);
-               //emitters.push_back(newemitter);
+               emitters.push_back(newemitter);
                SDL_mutexV(clientmutex);
             }
             
