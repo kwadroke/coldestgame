@@ -282,7 +282,7 @@ void RenderObjects(const PlayerData& localplayer)
    MeshPtr impostormesh = meshcache->GetNewMesh("models/empty/base");
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
-   float impmod = 1000.f;
+   float impmod = 1000.f;//10.f;
    
    int viewdist = console.GetInt("viewdist");
    int currdrawdist = viewdist;
@@ -967,7 +967,8 @@ void RenderHud(const PlayerData& localplayer)
       playerposlabel->y = player[i].pos.z / mapheight;
       playerposlabel->y *= minimaplabel->height;
       playerposlabel->y -= playerposlabel->height / 2.f;
-      minimaplabel->Add(playerposlabel);
+      if (player[i].spawned)
+         minimaplabel->Add(playerposlabel);
    }
    SDL_mutexV(clientmutex);
    
