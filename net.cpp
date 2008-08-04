@@ -856,7 +856,7 @@ int NetListen(void* dummy)
                {
                   cout << "Received announcement packet from ";
                   string dotteddec = AddressToDD(inpack->address.host);
-                  cout << dotteddec << endl;
+                  cout << dotteddec << ":" << serverport << endl;
                   addme.strip = dotteddec;
                   SDL_mutexP(clientmutex);
                   servers.push_back(addme);

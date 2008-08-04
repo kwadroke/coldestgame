@@ -1,5 +1,10 @@
-Weight 50
-Velocity 0
-Model explosion
+Weight 25
+Velocity 20
+Damage 20
+Radius 1
+ProjectileWeight .1
+Model empty
 Name Autocannon
 ReloadTime 200
+Tracer machinegun
+TracerTime 100

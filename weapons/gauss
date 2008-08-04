@@ -1,9 +1,9 @@
 ReloadTime 1000
-Velocity 10
+Velocity 20
 ProjectileWeight .25
-Weight 25
+Weight 35
 Radius 2
-Damage 50
+Damage 100
 Name Gauss Rifle
 Heat 10
 Ammo 5

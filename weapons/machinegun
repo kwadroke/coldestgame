@@ -1,6 +1,7 @@
-ReloadTime 20
+ReloadTime 50
 Velocity 20
 Radius 1
+Damage 1
 ProjectileWeight .1
 Weight 5
 Model empty
