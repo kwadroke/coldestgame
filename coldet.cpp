@@ -180,7 +180,7 @@ void InitUnits()
    dummy.file = "nemesis";
    dummy.turnspeed = 1.f;
    dummy.acceleration = .05f;
-   dummy.maxspeed = 2.f;
+   dummy.maxspeed = 3.f;
    dummy.size = 25.f;
    dummy.weight = 50;
    dummy.weaponoffset[Legs] = Vector3();
@@ -193,9 +193,22 @@ void InitUnits()
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
    
-   units[Nemesis].file = "nemesis";
    units[Ultra].file = "ultra";
+   units[Ultra].acceleration = .02f;
+   units[Ultra].maxspeed = 2.f;
+   units[Ultra].size = 40.f;
+   units[Ultra].weight = 80;
+   units[Ultra].viewoffset = Vector3(0, 20, 0);
+   for (size_t i = 0; i < numbodyparts; ++i)
+      units[Ultra].maxhp[i] = 500;
    units[Omega].file = "omega";
+   units[Omega].acceleration = .01f;
+   units[Omega].maxspeed = 1.f;
+   units[Omega].size = 60.f;
+   units[Omega].weight = 200;
+   units[Omega].viewoffset = Vector3(0, 30, 0);
+   for (size_t i = 0; i < numbodyparts; ++i)
+      units[Omega].maxhp[i] = 500;
 }
 
 
@@ -1016,8 +1029,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    mplayer.pos.x += d.x * step * mplayer.speed;
    mplayer.pos.z -= d.z * step * mplayer.speed;
    
-   static const float threshold = .2f;
-   static float gravity = .2f;
+   static const float threshold = .3f;
+   static float gravity = .15f;
    
    if (console.GetBool("fly"))
       mplayer.pos.y += d.y * step * mplayer.speed;
