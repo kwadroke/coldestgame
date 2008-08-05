@@ -92,6 +92,7 @@ void InitGlobals()
    console.Parse("set weaponfocus 1000", false);
    console.Parse("set serverport 12010", false);
    console.Parse("set hitindtime 1000", false);
+   console.Parse("set startsalvage 300", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -184,10 +185,10 @@ void InitUnits()
    dummy.size = 25.f;
    dummy.weight = 50;
    dummy.weaponoffset[Legs] = Vector3();
-   dummy.weaponoffset[Torso] = Vector3(0, 0, 0);
+   dummy.weaponoffset[Torso] = Vector3(0, -25, 0);
    dummy.weaponoffset[LArm] = Vector3(-25, 0, 0);
    dummy.weaponoffset[RArm] = Vector3(25, 0, 0);
-   dummy.viewoffset = Vector3(0, 15, 0);
+   dummy.viewoffset = Vector3(0, 0, 0);
    for (size_t i = 0; i < numbodyparts; ++i)
       dummy.maxhp[i] = 200;
    for (short i = 0; i < numunits; ++i)
@@ -208,7 +209,7 @@ void InitUnits()
    units[Omega].weight = 200;
    units[Omega].viewoffset = Vector3(0, 30, 0);
    for (size_t i = 0; i < numbodyparts; ++i)
-      units[Omega].maxhp[i] = 500;
+      units[Omega].maxhp[i] = 1000;
 }
 
 
@@ -1459,7 +1460,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          {
             if (HitHandler)
                HitHandler(*j, hitmeshes, hitpos);
-            else // This should probably be triggered by the server, but we'll see
+            else
             {
                if (j->tracer)
                {
@@ -1626,13 +1627,14 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    Vector3 rawoffset = offset;
    offset.transform(m);
    part.pos += offset;
+   part.lasttracer = part.pos;
       
    // Note: weaponfocus should actually be configurable per-player
    Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
    Vector3 difference = actualaim + rawoffset;
    Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
    m.identity();
-   m.rotatex(-rots.x - rot.x);
+   m.rotatex(-rots.x + rot.x);
    m.rotatey(rots.y + rot.y);
    part.dir = Vector3(0, 0, -1);
    part.dir.transform(m);

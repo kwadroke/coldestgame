@@ -71,7 +71,7 @@ void Repaint()
          
          Vector3 startpos = localplayer.pos;
          Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
-         Vector3 offset = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
+         Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
          Particle part = CreateShot(currplayerweapon, rot, startpos, offset);
          // Add tracer if necessary
          if (currplayerweapon.Tracer() != "")
@@ -148,7 +148,7 @@ void Repaint()
          glPushMatrix();
       }
       
-      glRotatef(localplayer.pitch + rot.x, 1, 0, 0);
+      glRotatef(localplayer.pitch - rot.x, 1, 0, 0);
       glRotatef(localplayer.facing + localplayer.rotation + rot.y, 0, 1, 0);
       glRotatef(localplayer.roll, 0, 0, 1);
    
