@@ -367,6 +367,7 @@ int ServerListen()
                temp.addr = inpack->address;
                temp.unit = unit;
                temp.acked.insert(packetnum);
+               temp.salvage = console.GetInt("startsalvage");
                UpdatePlayerModel(temp, servermeshes, false);
                
                serverplayers.push_back(temp);
