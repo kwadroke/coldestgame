@@ -149,7 +149,7 @@ void Repaint()
       }
       
       glRotatef(localplayer.pitch - rot.x, 1, 0, 0);
-      glRotatef(localplayer.facing + localplayer.rotation + rot.y, 0, 1, 0);
+      glRotatef(localplayer.facing + localplayer.rotation - rot.y, 0, 1, 0);
       glRotatef(localplayer.roll, 0, 0, 1);
    
       RenderSkybox();

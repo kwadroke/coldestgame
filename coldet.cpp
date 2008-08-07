@@ -1635,7 +1635,7 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
    m.identity();
    m.rotatex(-rots.x + rot.x);
-   m.rotatey(rots.y + rot.y);
+   m.rotatey(rots.y - rot.y);
    part.dir = Vector3(0, 0, -1);
    part.dir.transform(m);
    return part;

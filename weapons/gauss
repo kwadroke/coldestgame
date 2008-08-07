@@ -1,5 +1,5 @@
 ReloadTime 1000
-Velocity 20
+Velocity 100
 ProjectileWeight .25
 Weight 35
 Radius 2
