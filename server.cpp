@@ -894,8 +894,8 @@ void ServerLoadMap()
 void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
 {
    Mesh* curr;
-   // 10e38 is near the maximum representable value for a single precision float
-   float currmindist = 10e38f, currdist = 0.f;
+   // 1e38 is near the maximum representable value for a single precision float
+   float currmindist = 1e38f, currdist = 0.f;
    bool dead;
    // Should only hit each body part once per projectile
    sort(hitobjs.begin(), hitobjs.end());

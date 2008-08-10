@@ -41,8 +41,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    Vector3 midpoint = (oldpos + newpos) / 2.f;
    float maxdim, tempdim;
    int adjusted = 0;
-   // 10e38 is near the maximum representable value for a single precision float
-   hitpos = Vector3(10e38f, 10e38f, 10e38f);
+   // 1e38 is near the maximum representable value for a single precision float
+   hitpos = Vector3(1e38f, 1e38f, 1e38f);
    
    //cout << "Checking " << objs.size() << endl;
    
