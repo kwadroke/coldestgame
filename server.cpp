@@ -454,7 +454,7 @@ int ServerListen()
                serverplayers[oppnum].spawnpacketnum = packetnum;
                for (int i = 0; i < numbodyparts; ++i)
                {
-                  serverplayers[oppnum].hp[i] = 100;
+                  serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
                   serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
                }
             }

@@ -182,13 +182,14 @@ void InitUnits()
    dummy.turnspeed = 1.f;
    dummy.acceleration = .05f;
    dummy.maxspeed = 3.f;
-   dummy.size = 25.f;
+   dummy.size = 20.f;
+   dummy.scale = .68f;
    dummy.weight = 50;
    dummy.weaponoffset[Legs] = Vector3();
-   dummy.weaponoffset[Torso] = Vector3(0, -25, 0);
-   dummy.weaponoffset[LArm] = Vector3(-25, 0, 0);
-   dummy.weaponoffset[RArm] = Vector3(25, 0, 0);
-   dummy.viewoffset = Vector3(0, 0, 0);
+   dummy.weaponoffset[Torso] = Vector3(0, 0, 0);
+   dummy.weaponoffset[LArm] = Vector3(-10, 0, 0);
+   dummy.weaponoffset[RArm] = Vector3(10, 0, 0);
+   dummy.viewoffset = Vector3(0, 5, -5);
    for (size_t i = 0; i < numbodyparts; ++i)
       dummy.maxhp[i] = 200;
    for (short i = 0; i < numunits; ++i)
@@ -197,7 +198,8 @@ void InitUnits()
    units[Ultra].file = "ultra";
    units[Ultra].acceleration = .02f;
    units[Ultra].maxspeed = 2.f;
-   units[Ultra].size = 40.f;
+   units[Ultra].size = 25.f;
+   units[Ultra].scale = dummy.scale * units[Ultra].size / units[Nemesis].size;
    units[Ultra].weight = 80;
    units[Ultra].viewoffset = Vector3(0, 20, 0);
    for (size_t i = 0; i < numbodyparts; ++i)
@@ -205,7 +207,8 @@ void InitUnits()
    units[Omega].file = "omega";
    units[Omega].acceleration = .01f;
    units[Omega].maxspeed = 1.f;
-   units[Omega].size = 60.f;
+   units[Omega].size = 40.f;
+   units[Omega].scale = dummy.scale * units[Omega].size / units[Nemesis].size;
    units[Omega].weight = 200;
    units[Omega].viewoffset = Vector3(0, 30, 0);
    for (size_t i = 0; i < numbodyparts; ++i)
@@ -219,6 +222,13 @@ void ReadConfig()
    string buffer;
    
    ifstream getconf(conffile.c_str(), ios_base::in);
+   
+   if (getconf.bad())
+   {
+      cout << "Failed to open autoexec.cfg" << endl;
+      return;
+   }
+   
    while (!getconf.eof())
    {
       getline(getconf, buffer);
@@ -1069,16 +1079,17 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost"))
    {
-      Vector3 offsetold = old;
+      Vector3 offsetold = old + Vector3(0, mplayer.size, 0);
       Vector3 offset = old - mplayer.pos;
       offset.normalize();
       offset *= mplayer.size;
       offsetold += offset;
       Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
+      Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
       Vector3 oldleg = offsetold - Vector3(0, mplayer.size, 0);
       
-      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size);
-      Vector3 adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size * 2.f);
+      Vector3 adjust = coldet.CheckSphereHit(offsetold, mainoffset, mplayer.size, check);
       Vector3 legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
       if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
          adjust = (adjust + legadjust) / 2.f;
@@ -1088,9 +1099,9 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
-         mplayer.pos += adjust * (1 + count * slop);
+         mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         adjust = coldet.CheckSphereHit(offsetold, mplayer.pos, mplayer.size, check);
+         adjust = coldet.CheckSphereHit(offsetold, mainoffset, mplayer.size, check);
          legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
          if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
             adjust = (adjust + legadjust) / 2.f;
@@ -1104,6 +1115,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
             break;
          }
       }
+      mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
 }
 
@@ -1333,6 +1345,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          newmesh->SetGL();
       ml.push_front(*newmesh);
       p.mesh[Legs] = ml.begin();
+      p.mesh[Legs]->Scale(units[p.unit].scale);
    }
    if (p.mesh[Torso] == ml.end())
    {
@@ -1342,6 +1355,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          newmesh->SetGL();
       ml.push_front(*newmesh);
       p.mesh[Torso] = ml.begin();
+      p.mesh[Torso]->Scale(units[p.unit].scale);
    }
    
    p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
@@ -1359,6 +1373,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
+      p.mesh[LArm]->Scale(units[p.unit].scale);
    }
    if (p.mesh[RArm] == ml.end())
    {
@@ -1369,6 +1384,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[Torso]->InsertIntoContainer("RightArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
+      p.mesh[RArm]->Scale(units[p.unit].scale);
    }
    p.size = units[p.unit].size;
    

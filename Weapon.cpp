@@ -1,6 +1,6 @@
 #include "Weapon.h"
 
-Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), weight(0), radius(10.f), velocity(1.f), acceleration(0.f),
+Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(10), weight(0), radius(1.f), velocity(1.f), acceleration(0.f),
                splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50), explode(true), modelfile("projectile"),
                name("None"), tracerfile(""), tracertime(10000), expfile("particles/explosion")
 {
