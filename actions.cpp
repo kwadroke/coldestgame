@@ -55,7 +55,7 @@ void UpdateUnitSelection()
    weightbox->text = ToString(totalweight) + "/" + ToString(maxweight) + " tons";
    int sweight = CalculatePlayerWeight(player[0]);
    salvagebox->text = ToString(player[0].salvage - sweight) + " tons";
-   if (totalweight > maxweight &&  sweight > player[0].salvage)
+   if (totalweight > maxweight || sweight > player[0].salvage)
       spawnbutton->visible = false;
    else spawnbutton->visible = true;
    SDL_mutexV(clientmutex);

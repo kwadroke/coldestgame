@@ -10,8 +10,15 @@ void Shader::LoadShader(string file)
 {
    if (programs.find(file) != programs.end() || file == "none") return;
    
-   cout << "Loading " << file << endl;
+   cout << "Loading shader " << file << endl;
    ifstream in(file.c_str());
+   
+   if (in.bad())
+   {
+      cout << "Failed to open file " << file << endl;
+      return;
+   }
+   
    string buffer;
    GLhandleARB shader, program;
    
@@ -173,6 +180,12 @@ void Shader::InitShader(GLhandleARB handle, string filename)
    int lines = 0;
    const char** clines;
    ifstream s(filename.c_str());
+   
+   if (s.bad())
+   {
+      cout << "Failed to open file " << filename << endl;
+      return;
+   }
    
    buffer.push_back("");
    getline(s, buffer[lines]);
