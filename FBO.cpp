@@ -126,7 +126,7 @@ void FBO::Bind()
 {
    if (!valid)
    {
-      cout << "Warning: Attempted to bind invalid framebuffer object" << endl;
+      cout << "Warning: Attempted to bind invalid framebuffer object " << fboid << endl;
       return;
    }
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboid);

@@ -1386,6 +1386,9 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
    }
+   p.mesh[LArm]->Move(Vector3()); // Force reset of these meshes' geometry
+   p.mesh[RArm]->Move(Vector3());
+   
    p.size = units[p.unit].size;
    
    for (size_t i = 0; i < numbodyparts; ++i)
@@ -1497,7 +1500,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
    }
    else ++partupd;
    if (Rewind)
-      Rewind(0, Vector3(), Vector3(), 10e38f); // Rewind all to 0
+      Rewind(0, Vector3(), Vector3(), 1e38f); // Rewind all to 0
 }
 
 

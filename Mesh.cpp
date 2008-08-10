@@ -331,7 +331,7 @@ void Mesh::Load(const IniReader& reader)
                   curr.Read(tempid, "ID");
                }
                curr.Read(newtri->matname, "Material");
-               if (glops && newtri->matname != "")
+               if (glops)
                   newtri->material = &resman.LoadMaterial(newtri->matname);
                curr.Read(newtri->collide, "Collide");
                tris.push_back(newtri);
@@ -876,6 +876,8 @@ void Mesh::ScaleZ(const float& sval)
 
 
 // The insertion happens conceptually, but m remains a separate Mesh
+// Note: Any time you move a parent you must call Move(mesh.GetPosition()) on the
+// child mesh so that the geometry knows it needs to reset (mostly for collision detection).
 void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {
    if (frameroot.size() != m.frameroot.size())
