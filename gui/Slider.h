@@ -21,6 +21,7 @@ class Slider : public GUI
       virtual void WheelDown(SDL_Event*);
       virtual void WheelUp(SDL_Event*);
       virtual void GlobalLeftClick(SDL_Event*);
+      virtual void ReadNodeExtra(DOMNode*, GUI*);
       void RenderWidget();
       
       Button *button;

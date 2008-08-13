@@ -97,3 +97,14 @@ int Slider::GetMousePos(const SDL_Event* event)
    return retval;
 }
 
+
+void Slider::ReadNodeExtra(DOMNode* current, GUI* parentw)
+{
+   string val = ReadAttribute(current, XSWrapper("min"));
+   if (val != "")
+      minvalue = atoi(val.c_str());
+   val = ReadAttribute(current, XSWrapper("max"));
+   if (val != "")
+      maxvalue = atoi(val.c_str());
+}
+
