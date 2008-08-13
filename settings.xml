@@ -8,22 +8,44 @@
            buttonpressed="textures/buttonpressed.png"
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
-         <Slider x="10" y="30" width="180" height="30" name="partupdintslider"
+         
+         <Label x="10" y="10" width="180" height="30" text="Particles"/>
+         <Slider x="10" y="100" width="180" height="30" name="partupdintslider" min="0" max="10"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
                  hover="textures/buttonhover.png">
             <Label x="0" y="-20" width="200" height="20" text="Particle Update Freq"/>
          </Slider>
-         <Slider x="10" y="100" width="180" height="30" name="impdistslider"
+         <Slider x="10" y="170" width="180" height="30" name="partcountslider" min="0" max="10000"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="-20" width="200" height="20" text="Particle Update Freq"/>
+         </Slider>
+         
+         <Label x="230" y="10" width="180" height="30" text="View Distances"/>
+         <Slider x="230" y="100" width="180" height="30" name="viewdistslider" min="100" max="20000"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="-20" width="200" height="20" text="Max Draw"/>
+         </Slider>
+         <Slider x="230" y="170" width="180" height="30" name="grassdistslider" min="0" max="20000"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="-20" width="200" height="20" text="Grass Distance"/>
+         </Slider>
+         <Slider x="230" y="240" width="180" height="30" name="impdistslider" min="0" max="20000"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
                  hover="textures/buttonhover.png">
             <Label x="0" y="-20" width="200" height="20" text="Impostor Distance"/>
          </Slider>
-         <TextArea x="300" y="100" width="300" height="200" name="testmessage"
+         <!--<TextArea x="300" y="100" width="300" height="200" name="testmessage"
                    normal="textures/buttonnormsquare.png">
 The settings page is not functional at this time.  Use the console to change settings if necessary.
-         </TextArea>
+         </TextArea>-->
       </Tab>
       <Tab text="Sound" buttonwidth="120"
            buttonnormal="textures/buttonnorm.png"
