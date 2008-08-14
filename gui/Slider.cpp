@@ -5,8 +5,6 @@ Slider::Slider(GUI* p, TextureManager* tm) : value(5), minvalue(0),
 {
    Init(p, tm);
    button = new Button(this, tm);
-   maxvalue = 10;
-   minvalue = 5;
 }
 
 
@@ -39,6 +37,8 @@ void Slider::RenderWidget()
    button->height = sliderheight;
    button->state = Hover;
    button->Render();
+   
+   UpdateValueWidget();
 }
 
 
@@ -95,6 +95,18 @@ int Slider::GetMousePos(const SDL_Event* event)
    int retval = int((clampedx - xmargin - sliderwidth / 2.f) / (width - xmargin * 2.f - sliderwidth) * (maxvalue - minvalue));
    if (retval < 0 || retval > (maxvalue - minvalue)) return value - minvalue;
    return retval;
+}
+
+
+void Slider::UpdateValueWidget()
+{
+   for (guiiter i = children.begin(); i != children.end(); ++i)
+   {
+      if ((*i)->name == name + "value")
+      {
+         (*i)->text = ToString(value);
+      }
+   }
 }
 
 

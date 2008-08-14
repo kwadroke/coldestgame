@@ -23,6 +23,7 @@ class Slider : public GUI
       virtual void GlobalLeftClick(SDL_Event*);
       virtual void ReadNodeExtra(DOMNode*, GUI*);
       void RenderWidget();
+      void UpdateValueWidget();
       
       Button *button;
       int minvalue, maxvalue;

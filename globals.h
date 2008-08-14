@@ -74,5 +74,7 @@ void ResetKeys();
 int CalculatePlayerWeight(const PlayerData&);
 Particle CreateShot(const Weapon&, const Vector3&, const Vector3&, Vector3, int pnum = 0);
 void CacheMeshes();
+void UpdateSettings();
+void SaveSettings();
 
 #endif

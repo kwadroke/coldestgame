@@ -878,6 +878,7 @@ void Mesh::ScaleZ(const float& sval)
 // The insertion happens conceptually, but m remains a separate Mesh
 // Note: Any time you move a parent you must call Move(mesh.GetPosition()) on the
 // child mesh so that the geometry knows it needs to reset (mostly for collision detection).
+// Eventually this should probably be done automatically
 void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {
    if (frameroot.size() != m.frameroot.size())
