@@ -169,6 +169,7 @@ void ShowMain()
 
 void ShowSettings()
 {
+   UpdateSettings();
    ShowGUI(settings);
 }
 
@@ -217,6 +218,8 @@ void Action(const string& action)
       ShowMain();
    else if (action == "showsettings")
       ShowSettings();
+   else if (action == "savesettings")
+      SaveSettings();
    else if (action == "selectspawn")
       SelectSpawn();
    else if (action != "")

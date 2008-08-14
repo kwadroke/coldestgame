@@ -1065,7 +1065,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          mplayer.fallvelocity = 0.f;
          if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4))
          {
-            mplayer.pos.y -= step;
+            mplayer.pos.y -= step * 2.f;
          }
          else if (!floatzero(mplayer.speed)) mplayer.pos.y -= step * .1f;
       }
