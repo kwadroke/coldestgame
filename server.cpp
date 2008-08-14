@@ -429,7 +429,7 @@ int ServerListen()
          }
          else if (packettype == "S")
          {
-            bool accepted = true;
+            bool accepted = false;
             Vector3 spawnpointreq;
             if (packetnum > serverplayers[oppnum].spawnpacketnum)
             {
@@ -457,11 +457,24 @@ int ServerListen()
                   serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
                   serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
                }
+               // TODO: Make sure weight and salvage are legal
+               for (size_t i = 0; i < spawnpoints.size(); ++i)
+               {
+                  if (spawnpointreq.distance(spawnpoints[i].position) < 1.f)
+                  {
+                     accepted = true;
+                     break;
+                  }
+               }
+               if (!accepted)
+               {
+                  
+               }
             }
             
             Packet response(&inpack->address);
             response << "S\n";
-            response << 0 << eol;  // Not sure this is okay either...
+            response << 0 << eol;
             if (accepted)
                response << 1 << eol;
             else response << 0 << eol;
