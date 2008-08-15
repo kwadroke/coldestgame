@@ -379,7 +379,6 @@ int ServerListen()
             {
                serverplayers[respondto].lastupdate = SDL_GetTicks();
                serverplayers[respondto].recpacketnum = packetnum;
-               serverplayers[respondto].spawnpacketnum = 0;
                validaddrs.erase(SortableIPaddress(serverplayers[respondto].addr));
                serverplayers[respondto].addr = inpack->address;
                validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
@@ -431,44 +430,79 @@ int ServerListen()
          {
             bool accepted = false;
             Vector3 spawnpointreq;
-            if (packetnum > serverplayers[oppnum].spawnpacketnum)
+            
+            //cout << "Player " << oppnum << " is spawning" << endl;
+            SDL_mutexP(servermutex);
+            get >> serverplayers[oppnum].unit;
+            int weapid;
+            for (int i = 0; i < numbodyparts; ++i)
             {
-               cout << "Player " << oppnum << " is spawning" << endl;
-               SDL_mutexP(servermutex);
-               get >> serverplayers[oppnum].unit;
-               int weapid;
-               for (int i = 0; i < numbodyparts; ++i)
+               get >> weapid;
+               serverplayers[oppnum].weapons[i] = Weapon(weapid);
+            }
+            int itemtype;
+            get >> itemtype;
+            serverplayers[oppnum].item = Item(itemtype, servermeshes);
+            get >> spawnpointreq.x;
+            get >> spawnpointreq.y;
+            get >> spawnpointreq.z;
+            serverplayers[oppnum].pos = spawnpointreq;
+            serverplayers[oppnum].spawned = true;
+            serverplayers[oppnum].lastmovetick = SDL_GetTicks();
+            for (int i = 0; i < numbodyparts; ++i)
+            {
+               serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
+               serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
+            }
+            // TODO: Make sure weight and salvage are legal
+            vector<SpawnPointData> allspawns = spawnpoints;
+            for (int i = 0; i < serveritems.size(); ++i)
+            {
+               if (serveritems[i].Type() == Item::SpawnPoint && serveritems[i].team == serverplayers[oppnum].team)
                {
-                  get >> weapid;
-                  serverplayers[oppnum].weapons[i] = Weapon(weapid);
+                  string name = "Spawn " + ToString(i);
+                  SpawnPointData sp;
+                  sp.name = name;
+                  sp.position = serveritems[i].mesh->GetPosition();
+                  sp.team = serveritems[i].team;
+                  allspawns.push_back(sp);
                }
-               int itemtype;
-               get >> itemtype;
-               serverplayers[oppnum].item = Item(itemtype, servermeshes);
-               get >> spawnpointreq.x;
-               get >> spawnpointreq.y;
-               get >> spawnpointreq.z;
-               serverplayers[oppnum].pos = spawnpointreq;
-               serverplayers[oppnum].spawned = true;
-               serverplayers[oppnum].lastmovetick = SDL_GetTicks();
-               serverplayers[oppnum].spawnpacketnum = packetnum;
-               for (int i = 0; i < numbodyparts; ++i)
+            }
+            for (size_t i = 0; i < allspawns.size(); ++i)
+            {
+               if (spawnpointreq.distance(allspawns[i].position) < 1.f)
                {
-                  serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
-                  serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
+                  accepted = true;
+                  break;
                }
-               // TODO: Make sure weight and salvage are legal
-               for (size_t i = 0; i < spawnpoints.size(); ++i)
+            }
+            
+            vector<Mesh*> check;
+            check = serverkdtree.getmeshes(spawnpointreq, spawnpointreq, 450.f);
+            AppendDynamicMeshes(check, servermeshes);
+            Vector3 checkvec;
+            bool found = false;
+            if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 49.f, check).distance2() > 1e-4f)
+            {
+               for (float ycheck = spawnpointreq.y; ycheck <= 10000.f; ycheck += 100.f)
                {
-                  if (spawnpointreq.distance(spawnpoints[i].position) < 1.f)
+                  for (float xcheck = spawnpointreq.x - 100.f; xcheck <= spawnpointreq.x + 101.f; xcheck += 100.f)
                   {
-                     accepted = true;
-                     break;
+                     for (float zcheck = spawnpointreq.z - 100.f; zcheck <= spawnpointreq.z + 101.f; zcheck += 100.f)
+                     {
+                        checkvec = Vector3(xcheck, ycheck, zcheck);
+                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check).distance2() < 1e-4f)
+                        {
+                           spawnpointreq = checkvec;
+                           found = true;
+                           break;
+                        }
+                     }
+                     if (found)
+                        break;
                   }
-               }
-               if (!accepted)
-               {
-                  
+                  if (found)
+                     break;
                }
             }
             

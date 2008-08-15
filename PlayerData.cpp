@@ -1,6 +1,6 @@
 #include "PlayerData.h"
 
-PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), spawnpacketnum(0), mesh(numbodyparts, ml.end()),
+PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), mesh(numbodyparts, ml.end()),
                        item(Item::NoItem, ml), speed(0.f), turnspeed(0.f), needsync(true), salvage(100), powerdowntime(0),
                        healaccum(0.f), firerequests(0)
 {
