@@ -1,8 +1,11 @@
 Diffuse 1.5 1.5 1.5 1.5
 Ambient 1 1 1 1
 Specular 1 1 1 1
+   Texture0 textures/GreenGrass.png
+   Texture1 textures/GreenGrass.png
+   Texture2 textures/Rock1.png
 Texture0 textures/Grass1.png
-Texture1 textures/Grass.png
+Texture1 textures/Grass1.png
 Texture2 textures/Rockt.png
 Texture3 textures/dirt.png
    Texture0 textures/test.png
