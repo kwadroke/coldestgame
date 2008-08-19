@@ -1365,7 +1365,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    p.mesh[Torso]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
    p.mesh[Torso]->Move(p.pos);
    
-   if (p.mesh[LArm] == ml.end())
+   if (p.mesh[LArm] == ml.end() && p.hp[LArm] > 0)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
       newmesh->dynamic = true;
@@ -1376,7 +1376,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[LArm] = ml.begin();
       p.mesh[LArm]->Scale(units[p.unit].scale);
    }
-   if (p.mesh[RArm] == ml.end())
+   if (p.mesh[RArm] == ml.end() && p.hp[RArm] > 0)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/rarm");
       newmesh->dynamic = true;
@@ -1387,27 +1387,32 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
    }
-   p.mesh[LArm]->Move(Vector3()); // Force reset of these meshes' geometry
-   p.mesh[RArm]->Move(Vector3());
+   if (p.hp[LArm] > 0)
+      p.mesh[LArm]->Move(Vector3()); // Force reset of these meshes' geometry
+   if (p.hp[RArm] > 0)
+      p.mesh[RArm]->Move(Vector3());
    
    p.size = units[p.unit].size;
    
    for (size_t i = 0; i < numbodyparts; ++i)
    {
-      if (floatzero(p.speed))
+      if (p.hp[i] > 0)
       {
-         p.mesh[i]->SetAnimSpeed(1.f);
-         p.mesh[i]->SetAnimation(0);
-      }
-      else if (p.speed > 0.f)
-      {
-         p.mesh[i]->SetAnimSpeed(p.speed);
-         p.mesh[i]->SetAnimation(1);
-      }
-      else
-      {
-         p.mesh[i]->SetAnimSpeed(-p.speed);
-         p.mesh[i]->SetAnimation(2);
+         if (floatzero(p.speed))
+         {
+            p.mesh[i]->SetAnimSpeed(1.f);
+            p.mesh[i]->SetAnimation(0);
+         }
+         else if (p.speed > 0.f)
+         {
+            p.mesh[i]->SetAnimSpeed(p.speed);
+            p.mesh[i]->SetAnimation(1);
+         }
+         else
+         {
+            p.mesh[i]->SetAnimSpeed(-p.speed);
+            p.mesh[i]->SetAnimation(2);
+         }
       }
    }
 }

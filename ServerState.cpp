@@ -18,7 +18,8 @@ void ServerState::Add(const PlayerData& p, size_t pindex)
    size_t currindex = position.size() - 1;
    for (size_t i = 0; i < numbodyparts; ++i)
    {
-      p.mesh[i]->ReadState(position[currindex][i], rots[currindex][i], frame[currindex][i],
+      if (p.hp[i] > 0)
+         p.mesh[i]->ReadState(position[currindex][i], rots[currindex][i], frame[currindex][i],
                            animtime[currindex][i], animspeed[currindex][i], size[currindex][i]);
    }
 }
