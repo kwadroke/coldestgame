@@ -825,6 +825,19 @@ int NetListen(void* dummy)
             cout << "Team " << winningteam << " wins!" << endl;
             Ack(packetnum);
          }
+         else if (packettype == "r") // Remove body part
+         {
+            int num, part;
+            get >> num;
+            get >> part;
+            
+            SDL_mutexP(clientmutex);
+            deletemeshes.push_back(player[num].mesh[part]);
+            player[num].mesh[part] = meshes.end();
+            SDL_mutexV(clientmutex);
+            
+            Ack(packetnum);
+         }
          else if (packettype != "Y") // It's okay to get here on a Y packet
          {
             cout << "Warning: Unknown packet type received: " << packettype << endl;
