@@ -70,7 +70,7 @@ void Repaint()
       Weapon& currplayerweapon = localplayer.weapons[weaponslot];
       if (localplayer.leftclick && 
           (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
-          (currplayerweapon.ammo != 0))
+          (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0)
       {
          SendFire();
          SDL_mutexP(clientmutex);
