@@ -1415,6 +1415,7 @@ void SendRemove(PlayerData& p, const int i, const int part)
    Packet pack(&p.addr);
    pack.ack = servsendpacketnum;
    pack << "r\n";
+   pack << pack.ack << eol;
    pack << i << eol;
    pack << part << eol;
    

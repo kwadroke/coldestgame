@@ -837,6 +837,7 @@ int NetListen(void* dummy)
             SDL_mutexP(clientmutex);
             deletemeshes.push_back(player[num].mesh[part]);
             player[num].mesh[part] = meshes.end();
+            player[num].hp[part] = 0;
             SDL_mutexV(clientmutex);
             
             Ack(packetnum);
