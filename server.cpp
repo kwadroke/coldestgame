@@ -42,6 +42,7 @@ void SendGameOver(PlayerData&, int);
 void SendShot(const Particle&);
 void SendHit(const Vector3&, const Particle& p);
 void SendDamage(const int);
+void SendRemove(PlayerData&, const int, const int);
 string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
@@ -1016,7 +1017,19 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
                serverplayers[i].hp[part] -= int(damage);
                SendDamage(i);
                if (serverplayers[i].hp[part] <= 0)
-                  dead = true;
+               {
+                  if (part != LArm && part != RArm)
+                     dead = true;
+                  else
+                  {
+                     for (size_t j = 1; j < serverplayers.size(); ++j)
+                     {
+                        servermeshes.erase(serverplayers[i].mesh[part]);
+                        serverplayers[i].mesh[part] = servermeshes.end();
+                        SendRemove(serverplayers[j], i, part);
+                     }
+                  }
+               }
             }
          }
       }
@@ -1385,6 +1398,18 @@ void SendDamage(const int i)
    pack.ack = servsendpacketnum;
    pack << "D\n";
    pack << pack.ack << eol;
+   
+   servqueue.push_back(pack);
+}
+
+
+void SendRemove(PlayerData& p, const int i, const int part)
+{
+   Packet pack(&p.addr);
+   pack.ack = servsendpacketnum;
+   pack << "r\n";
+   pack << i << eol;
+   pack << part << eol;
    
    servqueue.push_back(pack);
 }

@@ -50,7 +50,8 @@ class PlayerData
       short currweapon;
       short pingtick;
       short ping;
-      short hp[numbodyparts];
+      intvec hp;
+      vector<bool> destroyed;
       short kills, deaths;
       short team;
       float temperature;

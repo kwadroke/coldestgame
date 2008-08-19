@@ -55,6 +55,15 @@ void Repaint()
       if (console.GetBool("serversync"))
          SynchronizePosition();
       localplayer = player[0];
+      
+      // Update the local model so there isn't a frame of lag.
+      UpdatePlayerModel(player[0], meshes);
+      for (size_t i = 0; i < numbodyparts; ++i)
+      {
+         if (player[0].mesh[i] != meshes.end())
+            player[0].mesh[i]->AdvanceAnimation();
+      }
+      
       SDL_mutexV(clientmutex);
       
       int weaponslot = weaponslots[localplayer.currweapon];
