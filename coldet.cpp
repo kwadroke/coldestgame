@@ -1275,7 +1275,8 @@ void Animate()
    // Delete meshes as requested by the net thread
    for (int i = 0; i < deletemeshes.size(); ++i)
    {
-      meshes.erase(deletemeshes[i]);
+      if (deletemeshes[i] != meshes.end())
+         meshes.erase(deletemeshes[i]);
    }
    deletemeshes.clear();
    
