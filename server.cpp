@@ -641,10 +641,13 @@ int ServerListen()
                serverplayers[oppnum].powerdowntime = 5000;
                for (int i = 0; i < numbodyparts; ++i)
                {
-                  int maxhp = units[serverplayers[oppnum].unit].maxhp[i];
-                  serverplayers[oppnum].hp[i] += maxhp * 3 / 4;
-                  if (serverplayers[oppnum].hp[i] > maxhp)
-                     serverplayers[oppnum].hp[i] = maxhp;
+                  if (serverplayers[oppnum].hp[i] > 0)
+                  {
+                     int maxhp = units[serverplayers[oppnum].unit].maxhp[i];
+                     serverplayers[oppnum].hp[i] += maxhp * 3 / 4;
+                     if (serverplayers[oppnum].hp[i] > maxhp)
+                        serverplayers[oppnum].hp[i] = maxhp;
+                  }
                }
             }
             SDL_mutexV(servermutex);
@@ -1022,10 +1025,10 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
                      dead = true;
                   else
                   {
+                     servermeshes.erase(serverplayers[i].mesh[part]);
+                     serverplayers[i].mesh[part] = servermeshes.end();
                      for (size_t j = 1; j < serverplayers.size(); ++j)
                      {
-                        servermeshes.erase(serverplayers[i].mesh[part]);
-                        serverplayers[i].mesh[part] = servermeshes.end();
                         SendRemove(serverplayers[j], i, part);
                      }
                   }
@@ -1104,10 +1107,13 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].healaccum -= addhp;
       for (size_t j = 0; j < numbodyparts; ++j)
       {
-         int maxhp = units[serverplayers[i].unit].maxhp[j];
-         serverplayers[i].hp[j] += addhp;
-         if (serverplayers[i].hp[j] > maxhp)
-            serverplayers[i].hp[j] = maxhp;
+         if (serverplayers[i].hp[j] > 0)
+         {
+            int maxhp = units[serverplayers[i].unit].maxhp[j];
+            serverplayers[i].hp[j] += addhp;
+            if (serverplayers[i].hp[j] > maxhp)
+               serverplayers[i].hp[j] = maxhp;
+         }
       }
    }
    
@@ -1135,7 +1141,7 @@ void ServerUpdatePlayer(int i)
    Weapon& currplayerweapon = serverplayers[i].weapons[weaponslot];
    while (serverplayers[i].firerequests && 
        (SDL_GetTicks() - serverplayers[i].lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
-       (currplayerweapon.ammo != 0))
+       (currplayerweapon.ammo != 0) && serverplayers[i].hp[weaponslot] > 0)
    {
       serverplayers[i].firerequests--;
       /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
@@ -1193,7 +1199,8 @@ void Rewind(int ticks, const Vector3& start, const Vector3& end, const float rad
       {
          for (size_t k = 0; k < numbodyparts; ++k)
          {
-            if (coldet.DistanceBetweenPointAndLine(oldstate[i].position[j][k], start, end) < radius + oldstate[i].size[j][k])
+            if (coldet.DistanceBetweenPointAndLine(oldstate[i].position[j][k], start, end) < radius + oldstate[i].size[j][k] &&
+               serverplayers[p].hp[k] > 0)
             {
                ++rewindcounter;
                serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
