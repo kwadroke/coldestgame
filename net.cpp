@@ -831,6 +831,9 @@ int NetListen(void* dummy)
             get >> num;
             get >> part;
             
+            if (num == servplayernum)
+               num = 0;
+            
             SDL_mutexP(clientmutex);
             deletemeshes.push_back(player[num].mesh[part]);
             player[num].mesh[part] = meshes.end();

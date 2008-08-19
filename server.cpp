@@ -1160,7 +1160,7 @@ void ServerUpdatePlayer(int i)
 
       serverplayers[i].lastfiretick[weaponslot] = SDL_GetTicks();
       serverplayers[i].temperature += currplayerweapon.Heat();
-      if (currplayerweapon.ammo > 0) // Negative ammo value indicated infinite ammo
+      if (currplayerweapon.ammo > 0) // Negative ammo value indicates infinite ammo
          currplayerweapon.ammo--;
       
       servparticles.push_back(part);
