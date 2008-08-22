@@ -489,19 +489,19 @@ vector<string> GUI::ReadTextures(DOMNode* current, const string& prefix)
          ret[Hover] = ret[Normal];
       if (ret[Clicked] == "")
          ret[Clicked] = ret[Normal];
-      texman->LoadTexture(ret[Normal]);
+      texman->LoadTexture(ret[Normal], false);
    }
    val = ReadAttribute(current, XSWrapper(prefix + "hover"));
    if (val != "")
    {
       ret[Hover] = val;
-      texman->LoadTexture(ret[Hover]);
+      texman->LoadTexture(ret[Hover], false);
    }
    val = ReadAttribute(current, XSWrapper(prefix + "pressed"));
    if (val != "")
    {
       ret[Clicked] = val;
-      texman->LoadTexture(ret[Clicked]);
+      texman->LoadTexture(ret[Clicked], false);
    }
    return ret;
 }
@@ -733,7 +733,7 @@ void GUI::SetTexture(int state, const string& file)
    if (textures[state] != "" && (state == Normal || textures[state] != textures[Normal]))
       cout << "Warning: Possible memory leak in GUI::SetTexture" << endl;
    textures[state] = file;
-   texman->LoadTexture(file);
+   texman->LoadTexture(file, false);
    if (state == Normal && textures[Hover] == "")
       textures[Hover] = textures[Normal];
    if (state == Normal && textures[Clicked] == "")
