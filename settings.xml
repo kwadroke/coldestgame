@@ -9,7 +9,7 @@
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
          
-         <ScrollView x="10" y="10" width="200" height="200">
+         <ScrollView x="10" y="10" width="300" height="200">
             <Label x="0" y="0" width="180" height="30" text="Particles"/>
             <Slider x="0" y="100" width="180" height="30" name="partupdintslider" min="0" max="10"
                   normal="textures/buttonnorm.png"
@@ -27,7 +27,7 @@
             </Slider>
          </ScrollView>
          
-         <ScrollView x="280" y="10" width="200" height="200">
+         <ScrollView x="280" y="10" width="300" height="200">
             <Label x="0" y="0" width="180" height="30" text="View Distances"/>
             <Slider x="0" y="100" width="180" height="30" name="viewdistslider" min="100" max="20000"
                   normal="textures/buttonnorm.png"
@@ -45,7 +45,7 @@
             </Slider>
          </ScrollView>
          
-         <ScrollView x="550" y="10" width="200" height="200">
+         <ScrollView x="550" y="10" width="300" height="200">
             <Label x="0" y="0" width="180" height="30" text="Grass"/>
             <Slider x="0" y="100" width="180" height="30" name="grassdensityslider" min="0" max="100"
                   normal="textures/buttonnorm.png"
@@ -61,6 +61,17 @@
                <Label x="0" y="-20" width="200" height="20" text="Grass Distance"/>
                <Label x="190" y="0" width="50" height="20" name="grassdistslidervalue"/>
             </Slider>
+         </ScrollView>
+         
+         <ScrollView x="10" y="400" width="300" height="200">
+            <Button x="0" y="0" width="180" height="30" text="Shadows" toggle="true" name="shadowsbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
+            <Button x="0" y="100" width="180" height="30" text="Reflection" toggle="true" name="reflectionbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
          </ScrollView>
          <!--<TextArea x="300" y="100" width="300" height="200" name="testmessage"
                    normal="textures/buttonnormsquare.png">
