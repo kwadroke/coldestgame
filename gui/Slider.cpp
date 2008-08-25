@@ -1,6 +1,6 @@
 #include "Slider.h"
 
-Slider::Slider(GUI* p, TextureManager* tm) : value(5), minvalue(0),
+Slider::Slider(GUI* p, TextureManager* tm) : value(0), minvalue(0),
                maxvalue(100), drag(false), sliderheight(30), sliderwidth(30), dragoffset(0.f)
 {
    Init(p, tm);
@@ -26,13 +26,25 @@ void Slider::RenderWidget()
    state = Normal;
    RenderBase();
    
-   float position = float(value - minvalue) / float(maxvalue - minvalue) * (width - xmargin * 2.f - sliderwidth) + xmargin + sliderwidth / 2.f;
+   CalculateSliderSize();
+   
+   float position;
+   if (orientation == Horizontal)
+   {
+      position = float(value - minvalue) / float(maxvalue - minvalue) * (width - xmargin * 2.f - sliderwidth) + xmargin + sliderwidth / 2.f;
+      button->x = position - sliderwidth / 2.f;
+      button->y = 0;
+   }
+   else
+   {
+      position = float(value - minvalue) / float(maxvalue - minvalue) * (height - ymargin * 2.f - sliderheight) + ymargin + sliderheight / 2.f;
+      button->x = 0;
+      button->y = position - sliderheight / 2.f;
+   }
    
    button->textures[Normal] = textures[Normal];
    button->textures[Hover] = textures[Hover];
    button->textures[Clicked] = textures[Clicked];
-   button->x = position - sliderwidth / 2.f;
-   button->y = 0;
    button->width = sliderwidth;
    button->height = sliderheight;
    button->state = Hover;
@@ -68,7 +80,14 @@ void Slider::LeftDown(SDL_Event* event)
    if (button->InWidget(event))
    {
       drag = true;
-      dragoffset = event->motion.x / wratio - (float(value - minvalue) / float(maxvalue - minvalue) * (width - xmargin * 2.f - sliderwidth) + xmargin + sliderwidth / 2.f + x + xoff);
+      if (orientation == Horizontal)
+      {
+         dragoffset = event->motion.x / wratio - (float(value - minvalue) / float(maxvalue - minvalue) * (width - xmargin * 2.f - sliderwidth) + xmargin + sliderwidth / 2.f + x + xoff);
+      }
+      else
+      {
+         dragoffset = event->motion.y / hratio - (float(value - minvalue) / float(maxvalue - minvalue) * (height - ymargin * 2.f - sliderheight) + ymargin + sliderheight / 2.f + y + yoff);
+      }
    }
 }
 
@@ -87,14 +106,39 @@ void Slider::WheelUp(SDL_Event* event)
 
 int Slider::GetMousePos(const SDL_Event* event)
 {
-   // const_cast is a kludge because EventInWidget is not const correct
-   if (!InWidget(const_cast<SDL_Event*>(event))) return value - minvalue;
+   float mousepos, localratio, localpos, localoff, localslidersize, localmargin, localsize;
+   mousepos = orientation == Vertical ? event->motion.y : event->motion.x;
+   localratio = orientation == Vertical ? hratio : wratio;
+   localpos = orientation == Vertical ? y : x;
+   localoff = orientation == Vertical ? yoff : xoff;
+   localslidersize = orientation == Vertical ? sliderheight : sliderwidth;
+   localmargin = orientation == Vertical ? ymargin : xmargin;
+   localsize = orientation == Vertical ? height : width;
    
-   float fx = event->motion.x / wratio;
-   float clampedx = fx - dragoffset - x - xoff;
-   int retval = int((clampedx - xmargin - sliderwidth / 2.f) / (width - xmargin * 2.f - sliderwidth) * (maxvalue - minvalue));
+   float fpos = mousepos / localratio;
+   float clamped = fpos - dragoffset - localpos - localoff + localslidersize / 2.f;
+   int retval = int((clamped - localmargin - localslidersize / 2.f) / (localsize - localmargin * 2.f - localslidersize) * (maxvalue - minvalue));
    if (retval < 0 || retval > (maxvalue - minvalue)) return value - minvalue;
    return retval;
+}
+
+
+void Slider::CalculateSliderSize()
+{
+   if (orientation == Vertical)
+   {
+      sliderwidth = width;
+      sliderheight = height / (maxvalue - minvalue + 1);
+      if (sliderheight < 10)
+         sliderheight = 10;
+   }
+   else
+   {
+      sliderwidth = width / (maxvalue - minvalue + 1);
+      sliderheight = height;
+      if (sliderwidth < 10)
+         sliderwidth = 10;
+   }
 }
 
 
@@ -118,5 +162,13 @@ void Slider::ReadNodeExtra(DOMNode* current, GUI* parentw)
    val = ReadAttribute(current, XSWrapper("max"));
    if (val != "")
       maxvalue = atoi(val.c_str());
+   val = ReadAttribute(current, XSWrapper("value"));
+   if (val != "")
+      value = atoi(val.c_str());
+   val = ReadAttribute(current, XSWrapper("orientation"));
+   if (val == "vertical")
+      orientation = Vertical;
+   else
+      orientation = Horizontal;
 }
 

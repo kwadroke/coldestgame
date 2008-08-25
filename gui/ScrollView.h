@@ -2,6 +2,7 @@
 #define __SCROLLVIEW_H
 
 #include "GUI.h"
+#include "Slider.h"
 
 class ScrollView : public GUI
 {
@@ -21,6 +22,8 @@ class ScrollView : public GUI
       float scrollbarsize;
       float scrollamount;
       bool drag;
+      SliderPtr vertbar;
+      SliderPtr horizbar;
       
       void RecalculateSize();
       void RenderWidget();

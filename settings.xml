@@ -116,10 +116,19 @@ The settings page is not functional at this time.  Use the console to change set
             Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
          </TextArea>
          
-         <Slider x="10" y="300" width="180" height="30" name="testslider"
+         <Slider x="10" y="300" width="180" height="30" name="testslider" min="4" max="10" value="5"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
-                 hover="textures/buttonhover.png"/>
+                 hover="textures/buttonhover.png">
+            <Label x="180" y="0" width="100" height="30" name="testslidervalue"/>
+         </Slider>
+         
+         <Slider x="300" y="10" width="30" height="180" name="testslidervert" min="4" max="6" value="5" orientation="vertical"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="180" width="100" height="30" name="testslidervertvalue"/>
+         </Slider>
          
          <Button x="10" y="400" width="200" height="40" text="Toggle" name="testtogglebutton" xmargin="3" ymargin="6" align="center" toggle="true"
                  normal="textures/buttonnorm.png"
