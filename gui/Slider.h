@@ -12,6 +12,8 @@ class Slider : public GUI
       ~Slider();
       void SetRange(int, int);
       int value;
+      int orientation;
+      enum Orientation{Horizontal, Vertical};
       
    protected:
       int GetMousePos(const SDL_Event*);
@@ -24,12 +26,15 @@ class Slider : public GUI
       virtual void ReadNodeExtra(DOMNode*, GUI*);
       void RenderWidget();
       void UpdateValueWidget();
+      void CalculateSliderSize();
       
       Button *button;
       int minvalue, maxvalue;
-      int sliderheight, sliderwidth;
+      float sliderheight, sliderwidth;
       bool drag;
       float dragoffset;
 };
+
+typedef shared_ptr<Slider> SliderPtr;
 
 #endif

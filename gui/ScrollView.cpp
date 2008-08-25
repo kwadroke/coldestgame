@@ -4,6 +4,11 @@ ScrollView::ScrollView(GUI* p, TextureManager* tm) : vpoffsetx(0), vpoffsety(0),
                        scrollbarwidth(10.f), scrollbarsize(10.f), drag(false)
 {
    Init(p, tm);
+   
+   vertbar = SliderPtr(new Slider(this, tm));
+   vertbar->visible = false;
+   horizbar = SliderPtr(new Slider(this, tm));
+   horizbar->visible = false;
 }
 
 
