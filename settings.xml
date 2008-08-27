@@ -73,10 +73,6 @@
                     pressed="textures/buttonpressed.png"
                     hover="textures/buttonhover.png"/>
          </ScrollView>
-         <!--<TextArea x="300" y="100" width="300" height="200" name="testmessage"
-                   normal="textures/buttonnormsquare.png">
-The settings page is not functional at this time.  Use the console to change settings if necessary.
-         </TextArea>-->
       </Tab>
       <Tab text="Sound" buttonwidth="120"
            buttonnormal="textures/buttonnorm.png"
@@ -111,8 +107,19 @@ The settings page is not functional at this time.  Use the console to change set
             <ComboBoxItem>Fuck!</ComboBoxItem>
          </ComboBox>
          
+         <ScrollView x="400" y="10" width="100" height="100" 
+                     vnormal="textures/buttonnorm.png"
+                     hnormal="textures/buttonnorm.png">
+            <Button x="10" y="155" width="200" height="50" text="Back" align="center"
+                    normal="textures/buttonnorm.png"
+                    hover="textures/buttonhover.png"
+                    pressed="textures/buttonpressed.png"
+                    leftclick="showmain"/>
+         </ScrollView>
+         
          <TextArea x="10" y="100" width="200" height="100" name="testta"
-                   normal="textures/buttonnormsquare.png">
+                   normal="textures/buttonnormsquare.png"
+                   vnormal="textures/buttonnormsquare.png">
             Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
          </TextArea>
          
@@ -123,7 +130,7 @@ The settings page is not functional at this time.  Use the console to change set
             <Label x="180" y="0" width="100" height="30" name="testslidervalue"/>
          </Slider>
          
-         <Slider x="300" y="10" width="30" height="180" name="testslidervert" min="4" max="6" value="5" orientation="vertical"
+         <Slider x="300" y="10" width="30" height="180" name="testslidervert" min="4" max="6000" value="5" orientation="vertical"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
                  hover="textures/buttonhover.png">

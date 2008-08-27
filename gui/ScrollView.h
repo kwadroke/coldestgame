@@ -19,7 +19,6 @@ class ScrollView : public GUI
    protected:
       float vpoffsetx, vpoffsety;
       float canvasx, canvasy;
-      float scrollbarsize;
       float scrollamount;
       bool drag;
       SliderPtr vertbar;
@@ -35,6 +34,7 @@ class ScrollView : public GUI
       virtual void WheelUp(SDL_Event*);
       virtual void KeyDown(SDL_Event*);
       virtual void GlobalLeftClick(SDL_Event*);
+      virtual void ReadNodeExtra(DOMNode*, GUI*);
 };
 
 typedef shared_ptr<ScrollView> ScrollViewPtr;

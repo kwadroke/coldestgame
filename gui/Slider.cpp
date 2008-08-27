@@ -1,7 +1,7 @@
 #include "Slider.h"
 
-Slider::Slider(GUI* p, TextureManager* tm) : value(0), minvalue(0),
-               maxvalue(100), drag(false), sliderheight(30), sliderwidth(30), dragoffset(0.f)
+Slider::Slider(GUI* p, TextureManager* tm) : value(0), orientation(Horizontal), minvalue(0),
+               maxvalue(100), forceslidersize(-1.f), drag(false), sliderheight(30), sliderwidth(30), dragoffset(0.f)
 {
    Init(p, tm);
    button = new Button(this, tm);
@@ -116,7 +116,7 @@ int Slider::GetMousePos(const SDL_Event* event)
    localsize = orientation == Vertical ? height : width;
    
    float fpos = mousepos / localratio;
-   float clamped = fpos - dragoffset - localpos - localoff + localslidersize / 2.f;
+   float clamped = fpos - dragoffset - localpos - localoff;
    int retval = int((clamped - localmargin - localslidersize / 2.f) / (localsize - localmargin * 2.f - localslidersize) * (maxvalue - minvalue));
    if (retval < 0 || retval > (maxvalue - minvalue)) return value - minvalue;
    return retval;
@@ -129,15 +129,19 @@ void Slider::CalculateSliderSize()
    {
       sliderwidth = width;
       sliderheight = height / (maxvalue - minvalue + 1);
-      if (sliderheight < 10)
-         sliderheight = 10;
+      if (sliderheight < 30)
+         sliderheight = 30;
+      if (forceslidersize > 0.f)
+         sliderheight = forceslidersize;
    }
    else
    {
       sliderwidth = width / (maxvalue - minvalue + 1);
       sliderheight = height;
-      if (sliderwidth < 10)
-         sliderwidth = 10;
+      if (sliderwidth < 30)
+         sliderwidth = 30;
+      if (forceslidersize > 0.f)
+         sliderwidth = forceslidersize;
    }
 }
 

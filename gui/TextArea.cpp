@@ -23,6 +23,7 @@ void TextArea::ReadNodeExtra(DOMNode *current, GUI* parentw)
    string newval = ReadStringTag(current, XSWrapper("TextArea"));
    if (newval.find_first_not_of(" \n\t") != string::npos)
       Append(newval);
+   table->ReadNodeExtra(current, this);
 }
 
 

@@ -37,8 +37,8 @@ void GUI::Init(GUI* p, TextureManager* tm)
 {
    visible = true;
    x = y = 0.f;
-   width = p->width;
-   height = p->height;
+   width = 20.f;//p->width;
+   height = 20.f;//p->height;
    xoff = p->x + p->xoff;
    yoff = p->y + p->yoff;
    name = "";
