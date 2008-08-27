@@ -24,6 +24,7 @@ void Table::ReadNodeExtra(DOMNode *current, GUI* parentw)
 {
    colwidths = ReadAttribute(current, XSWrapper("colwidths"));
    rowheight = atof(ReadAttribute(current, XSWrapper("rowheight")).c_str());
+   scrollview->ReadNodeExtra(current, this);
 }
       
       

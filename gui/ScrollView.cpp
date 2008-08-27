@@ -1,14 +1,15 @@
 #include "ScrollView.h"
 
 ScrollView::ScrollView(GUI* p, TextureManager* tm) : vpoffsetx(0), vpoffsety(0),
-                       scrollbarwidth(10.f), scrollbarsize(10.f), drag(false)
+                       scrollbarwidth(20.f), drag(false)
 {
    Init(p, tm);
    
    vertbar = SliderPtr(new Slider(this, tm));
-   vertbar->visible = false;
+   vertbar->visible = true;
+   vertbar->orientation = Slider::Vertical;
    horizbar = SliderPtr(new Slider(this, tm));
-   horizbar->visible = false;
+   horizbar->visible = true;
 }
 
 
@@ -20,25 +21,27 @@ ScrollView::~ScrollView()
 
 void ScrollView::RenderWidget()
 {
-   RenderBase();
+   //RenderBase();
+   
+   vertbar->width = scrollbarwidth;
+   vertbar->height = height;
+   vertbar->x = width - vertbar->width;
+   vertbar->y = 0.f;
+   horizbar->width = width;
+   horizbar->height = scrollbarwidth;
+   horizbar->x = 0.f;
+   horizbar->y = height - horizbar->height;
+   
+   vertbar->Render();
+   horizbar->Render();
+   
+   vpoffsetx = horizbar->value;
+   vpoffsety = vertbar->value;
+   
    // xoff and yoff are slightly different for scrollviews, the rest of the class expects
    // xoff - vpoffsetx as the value for xoff (same for yoff)
    xoff -= vpoffsetx;
    yoff -= vpoffsety;
-   
-   // Render scrollbar
-   float scrollbarpos = vpoffsety / scrollamount / hratio;
-   texman->BindTexture(textures[0]);
-   glBegin(GL_TRIANGLE_STRIP);
-   glTexCoord2i(0, 0);
-   glVertex2f((x + xoff + vpoffsetx + width - scrollbarwidth) * wratio, (y + yoff + vpoffsety + scrollbarpos) * hratio);
-   glTexCoord2i(0, 1);
-   glVertex2f((x + xoff + vpoffsetx + width - scrollbarwidth) * wratio, (y + yoff + scrollbarsize + vpoffsety + scrollbarpos) * hratio);
-   glTexCoord2i(1, 0);
-   glVertex2f((x + xoff + vpoffsetx + width) * wratio, (y + yoff + vpoffsety + scrollbarpos) * hratio);
-   glTexCoord2i(1, 1);
-   glVertex2f((x + xoff + vpoffsetx + width) * wratio, (y + yoff + scrollbarsize + vpoffsety + scrollbarpos) * hratio);
-   glEnd();
    
    // Children are now rendered by the base Render function, we just need to turn on scissoring
    glEnable(GL_SCISSOR_TEST);
@@ -61,41 +64,22 @@ void ScrollView::PostRender()
 void ScrollView::CustomProcessEvent(SDL_Event* event)
 {
    RecalculateSize();
+   vertbar->ProcessEvent(event);
+   horizbar->ProcessEvent(event);
 }
 
 
 void ScrollView::MouseMotion(SDL_Event* event)
 {
-   if (drag)
-   {
-      vpoffsety += event->motion.yrel * scrollamount;
-      yoff -= event->motion.yrel * scrollamount;
-      if (vpoffsety < 0)
-      {
-         yoff += vpoffsety;
-         vpoffsety = 0;
-      }
-      else if (vpoffsety + height > canvasy)
-      {
-         yoff += (vpoffsety + height - canvasy);
-         vpoffsety = canvasy - height;
-      }
-   }
 }
 
 
 void ScrollView::LeftDown(SDL_Event* event)
 {
-   if (event->motion.x / wratio >= x + xoff + width - scrollbarwidth &&
-       event->motion.x / wratio <= x + xoff + width &&
-       canvasy > height && event->button.button == SDL_BUTTON_LEFT)
-      drag = true;
 }
-
 
 void ScrollView::GlobalLeftClick(SDL_Event* event)
 {
-   drag = false;
 }
 
 
@@ -108,6 +92,7 @@ void ScrollView::WheelDown(SDL_Event* event)
       yoff += (vpoffsety + height - canvasy);
       vpoffsety = canvasy - height;
    }
+   vertbar->value = int(vpoffsety);
 }
 
 
@@ -120,6 +105,7 @@ void ScrollView::WheelUp(SDL_Event* event)
       yoff += vpoffsety;
       vpoffsety = 0;
    }
+   vertbar->value = int(vpoffsety);
 }
 
 
@@ -162,15 +148,22 @@ void ScrollView::RecalculateSize()
       if (iptr->x + iptr->width > canvasx) canvasx = iptr->x + iptr->width;
       if (iptr->y + iptr->height > canvasy) canvasy = iptr->y + iptr->height;
    }
-   scrollbarsize = canvasy < .00001f ? 0 : height * (height / canvasy);
-   //if (scrollbarsize < 10.f) scrollbarsize = 10.f;
-   float availablebar = height - scrollbarsize;
-   if (availablebar < .00001) 
+   if (canvasx - 1e-4f > width)
    {
-      scrollamount = 1.f;
-      return;
+      horizbar->visible = true;
+      horizbar->forceslidersize = width * (width / canvasx);
+      horizbar->SetRange(0, int(canvasx - width) + 1);
    }
-   scrollamount = (canvasy - height) / availablebar / hratio;
+   else
+      horizbar->visible = false;
+   if (canvasy - 1e-4f > height)
+   {
+      vertbar->visible = true;
+      vertbar->forceslidersize = height * (height / canvasy);
+      vertbar->SetRange(0, int(canvasy - height) + 1);
+   }
+   else
+      vertbar->visible = false;
 }
 
 
@@ -189,4 +182,11 @@ void ScrollView::ScrollToBottom()
 {
    RecalculateSize();
    vpoffsety = canvasy - height;
+}
+
+
+void ScrollView::ReadNodeExtra(DOMNode* current, GUI* parentw)
+{
+   vertbar->textures = ReadTextures(current, "v");
+   horizbar->textures = ReadTextures(current, "h");
 }

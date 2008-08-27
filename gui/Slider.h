@@ -13,6 +13,7 @@ class Slider : public GUI
       void SetRange(int, int);
       int value;
       int orientation;
+      float forceslidersize;
       enum Orientation{Horizontal, Vertical};
       
    protected:
