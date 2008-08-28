@@ -559,7 +559,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localpla
    kdtree.setfrustum(p + center, rots, Light::infinity - 5000, Light::infinity + 5000, lightfov, 1);
    
    glEnable(GL_POLYGON_OFFSET_FILL);
-   glPolygonOffset(2.0f, 2.0f);
+   glPolygonOffset(5.0f, 5.0f);
    
    // Render objects to depth map
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

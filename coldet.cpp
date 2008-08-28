@@ -190,7 +190,7 @@ void InitUnits()
    dummy.weaponoffset[Torso] = Vector3(0, 0, 0);
    dummy.weaponoffset[LArm] = Vector3(-10, 0, 0);
    dummy.weaponoffset[RArm] = Vector3(10, 0, 0);
-   dummy.viewoffset = Vector3(0, 10, 10);
+   dummy.viewoffset = Vector3(0, 10, -10);
    for (size_t i = 0; i < numbodyparts; ++i)
       dummy.maxhp[i] = 200;
    for (short i = 0; i < numunits; ++i)

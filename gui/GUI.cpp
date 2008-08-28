@@ -56,7 +56,7 @@ void GUI::Init(GUI* p, TextureManager* tm)
    align = Left;
    xmargin = 6.f;
    ymargin = 2.f;
-   basefontsize = 24.f; // Font is rendered at this pt size and scaled
+   basefontsize = 12.f; // Font is rendered at this pt size and scaled
    fontscale = 12.f / basefontsize; // Default font size is 12
    text = oldtext = "";
    for (int i = 0; i < 3; ++i)
