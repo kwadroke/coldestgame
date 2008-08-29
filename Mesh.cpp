@@ -749,12 +749,24 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
       LoadMaterials(); // Need to do this before Transform
    else if (index < startframe[curranimation] || index >= startframe[curranimation] + numframes[curranimation]) return;
    
-   GraphicMatrix m;
+   GraphicMatrix m, nm;
    
    m.rotatex(rots.x);
    m.rotatey(rots.y);
    m.rotatez(rots.z);
-   GraphicMatrix nm = m;
+   
+   if (frameroot[index]->parent)
+   {
+      nm = frameroot[index]->parent->m;
+      nm.members[12] = 0.f;
+      nm.members[13] = 0.f;
+      nm.members[14] = 0.f;
+   }
+   else
+   {
+      nm = m;
+   }
+   
    m.translate(position);
    
    if (curranimation != nextanimation)
