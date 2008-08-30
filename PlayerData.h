@@ -59,6 +59,10 @@ class PlayerData
       int salvage;
       int powerdowntime;
       float healaccum;
+      // weight can be set to negative to cause a player to fall up, such as when ejecting
+      // Note that it is not replicated to the server, so 
+      float weight;
+      bool spectate;
       
    private:
       Meshlist* meshes;
