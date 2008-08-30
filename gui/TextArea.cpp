@@ -8,6 +8,8 @@ TextArea::TextArea(GUI* p, TextureManager* tm)
    table->colwidths = ToString(width);
    table->x = 0;
    table->y = 0;
+   table->width = width;
+   table->height = height;
    maxlines = 100;
 }
 

@@ -22,8 +22,12 @@ Table::~Table()
 
 void Table::ReadNodeExtra(DOMNode *current, GUI* parentw)
 {
-   colwidths = ReadAttribute(current, XSWrapper("colwidths"));
-   rowheight = atof(ReadAttribute(current, XSWrapper("rowheight")).c_str());
+   string currval = ReadAttribute(current, XSWrapper("colwidths"));
+   if (currval != "")
+      colwidths = currval;
+   currval = ReadAttribute(current, XSWrapper("rowheight"));
+   if (currval != "")
+      rowheight = atof(currval.c_str());
    scrollview->ReadNodeExtra(current, this);
 }
       
@@ -67,10 +71,7 @@ void Table::CustomProcessEvent(SDL_Event* event)
 
 void Table::Clear()
 {
-   delete scrollview;  // Leaking memory like a sieve is fun for the whole family!!!
-                       // Ah, learned something about virtual destructors from this...
-                       // (i.e. it no longer leaks, but I'm leaving the comment because it amuses me:-)
-   scrollview = new ScrollView(this, texman);
+   scrollview->children.clear();
 }
 
 
