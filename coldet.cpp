@@ -1066,7 +1066,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       if (groundcheck.magnitude() > .00001f || mplayer.weight < .99f) // They were on the ground
       {
-         cout << "Doing " << mplayer.weight << endl;
          if (mplayer.fallvelocity > .00001f)
          {
             // Eventually this might do damage if they fall too far
