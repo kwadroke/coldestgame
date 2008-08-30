@@ -38,8 +38,7 @@ void Repaint()
    localplayer = player[0];
    SDL_mutexV(clientmutex);
    
-   if (!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
-      !gui[settings]->visible && !gui[endgame]->visible)
+   if (!PrimaryGUIVisible())
    {
       // So a bunch of this stuff doesn't belong here (not rendering related), but it's not
       // causing problems ATM so it stays.
@@ -52,7 +51,7 @@ void Repaint()
       SDL_mutexP(clientmutex);
       
       Move(player[0], meshes, kdtree);
-      if (console.GetBool("serversync"))
+      if (console.GetBool("serversync") && !player[0].spectate)
          SynchronizePosition();
       localplayer = player[0];
       
@@ -70,7 +69,7 @@ void Repaint()
       Weapon& currplayerweapon = localplayer.weapons[weaponslot];
       if (localplayer.leftclick && 
           (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
-          (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0)
+          (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
       {
          SendFire();
          SDL_mutexP(clientmutex);

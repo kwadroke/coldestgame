@@ -171,6 +171,7 @@ void InitGUI()
    gui[chat] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "chat.xml"));
    gui[settings] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "settings.xml"));
    gui[endgame] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "endgame.xml"));
+   gui[loadoutmessage] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "loadoutmessage.xml"));
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
 #endif
@@ -631,7 +632,15 @@ void GUIUpdate()
          }
          spawnschanged = false;
       }
+      gui[loadoutmessage]->visible = false;
    }
+   else if (!player[0].spawned && !PrimaryGUIVisible())
+   {
+      gui[loadoutmessage]->visible = true;
+   }
+   else
+      gui[loadoutmessage]->visible = false;
+   
    static GUI* hitind = gui[hud]->GetWidget("hitind");
    if (SDL_GetTicks() - lasthit < console.GetInt("hitindtime"))
    {
@@ -1034,8 +1043,11 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       }
    }
    
-   mplayer.pos.x += d.x * step * mplayer.speed;
-   mplayer.pos.z -= d.z * step * mplayer.speed;
+   if (mplayer.spawned)
+   {
+      mplayer.pos.x += d.x * step * mplayer.speed;
+      mplayer.pos.z -= d.z * step * mplayer.speed;
+   }
    
    static const float threshold = .3f;
    static float gravity = .15f;
@@ -1052,8 +1064,9 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
       groundcheck = coldet.CheckSphereHit(old, groundcheck, .01f, check);
       
-      if (groundcheck.magnitude() > .00001f) // They were on the ground
+      if (groundcheck.magnitude() > .00001f || mplayer.weight < .99f) // They were on the ground
       {
+         cout << "Doing " << mplayer.weight << endl;
          if (mplayer.fallvelocity > .00001f)
          {
             // Eventually this might do damage if they fall too far
@@ -1064,7 +1077,14 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          {
             mplayer.pos.y -= step * 2.f;
          }
-         else if (!floatzero(mplayer.speed)) mplayer.pos.y -= step * .1f;
+         else if (!floatzero(mplayer.speed))
+         {
+            mplayer.pos.y -= step * .1f;
+         }
+         else if (mplayer.weight < .99f)
+         {
+            mplayer.pos.y -= step * 30.f * mplayer.weight;
+         }
       }
       else
       {
@@ -1072,6 +1092,12 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          mplayer.pos.y -= mplayer.fallvelocity * step;
       }
    }
+   
+   if (mplayer.weight < 0.f)
+   {
+      mplayer.weight += step * .01f;
+   }
+   else mplayer.weight = 1.f;
    
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost"))
@@ -1678,6 +1704,14 @@ void CacheMeshes()
    
    for (size_t i = 0; i < tocache.size(); ++i)
       meshcache->GetNewMesh(tocache[i]);
+}
+
+
+bool PrimaryGUIVisible()
+{
+   // A bit counterintuitive...
+   return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
+         !gui[settings]->visible && !gui[endgame]->visible);
 }
 
 

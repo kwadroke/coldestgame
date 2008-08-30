@@ -140,13 +140,17 @@ void LoadoutToMain()
 
 void Spawn()
 {
+   SDL_mutexP(clientmutex);
    if (player[servplayernum].spawned)
    {
       gui[loadoutmenu]->visible = false;
       gui[hud]->visible = true;
    }
    else
+   {
       spawnrequest = true;
+   }
+   SDL_mutexV(clientmutex);
 }
 
 

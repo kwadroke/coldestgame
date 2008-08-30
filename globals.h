@@ -28,7 +28,7 @@ using std::set;
 
 const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
 
-enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, endgame, numguis};
+enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, endgame, loadoutmessage, numguis};
 
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
@@ -76,5 +76,6 @@ Particle CreateShot(const Weapon&, const Vector3&, const Vector3&, Vector3, int 
 void CacheMeshes();
 void UpdateSettings();
 void SaveSettings();
+bool PrimaryGUIVisible();
 
 #endif
