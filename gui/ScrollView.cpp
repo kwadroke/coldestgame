@@ -21,7 +21,7 @@ ScrollView::~ScrollView()
 
 void ScrollView::RenderWidget()
 {
-   //RenderBase();
+   RenderBase();
    
    vertbar->width = scrollbarwidth;
    vertbar->height = height;
@@ -77,6 +77,7 @@ void ScrollView::MouseMotion(SDL_Event* event)
 void ScrollView::LeftDown(SDL_Event* event)
 {
 }
+
 
 void ScrollView::GlobalLeftClick(SDL_Event* event)
 {
@@ -182,11 +183,14 @@ void ScrollView::ScrollToBottom()
 {
    RecalculateSize();
    vpoffsety = canvasy - height;
+   vertbar->value = int(vpoffsety);
 }
 
 
 void ScrollView::ReadNodeExtra(DOMNode* current, GUI* parentw)
 {
    vertbar->textures = ReadTextures(current, "v");
+   if (parent->parent->name == "consoleoutput")
+      cout << "Texture***********************************************" << vertbar->textures[Normal] << endl;
    horizbar->textures = ReadTextures(current, "h");
 }

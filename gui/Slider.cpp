@@ -42,9 +42,7 @@ void Slider::RenderWidget()
       button->y = position - sliderheight / 2.f;
    }
    
-   button->textures[Normal] = textures[Normal];
-   button->textures[Hover] = textures[Hover];
-   button->textures[Clicked] = textures[Clicked];
+   button->textures = textures;
    button->width = sliderwidth;
    button->height = sliderheight;
    button->state = Hover;
