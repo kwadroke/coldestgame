@@ -143,6 +143,13 @@ void Material::UseTextureOnly() const
       texman.BindTexture(texfilename[0]);
    else
       texman.texhand->BindTexture(texid[0]);
+   
+   // Also do face culling so we can render only back faces for shadowing
+   if (cullface)
+   {
+      glEnable(GL_CULL_FACE);
+   }
+   else glDisable(GL_CULL_FACE);
 #endif
 }
 

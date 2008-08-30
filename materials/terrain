@@ -13,4 +13,4 @@ Texture3 textures/dirt.png
    Texture2 textures/test.png
    Texture3 textures/test.png
 Shader shaders/terrain
-CullFace 1
+CullFace 0
