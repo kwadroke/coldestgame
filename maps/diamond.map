@@ -4,7 +4,7 @@ ZeroHeight 10
 Stretch 8
 
 LightData
-Direction 1 .8 1
+Direction 1 1.1 1
 Diffuse 1 1 1 1
 Specular 1 1 1 1
 Ambient .2 .2 .2 1

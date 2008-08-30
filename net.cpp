@@ -528,7 +528,6 @@ int NetListen(void* dummy)
                      player[0].hp[i] = player[servplayernum].hp[i];
                   player[0].ping = player[servplayernum].ping;
                   player[0].salvage = player[servplayernum].salvage;
-                  player[0].spawned = player[servplayernum].spawned;
                   Action("updateunitselection");
                }
                SDL_mutexV(clientmutex);
@@ -666,8 +665,8 @@ int NetListen(void* dummy)
                   player[0].pos = newpos;
                   player[0].size = units[player[0].unit].size;
                   player[0].lastmovetick = SDL_GetTicks();
-                  if (player[0].team != 0)
-                     player[0].spectate = false;
+                  player[0].spectate = false;
+                  player[0].spawned = true;
                }
                else
                {
@@ -751,6 +750,7 @@ int NetListen(void* dummy)
          {
             player[0].weight = -1.f;
             player[0].spectate = true;
+            player[0].spawned = false;
             ResetKeys();
             // Ack it
             Ack(packetnum);

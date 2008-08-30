@@ -218,6 +218,7 @@ void GetMap(string fn)
       for (int x = 0; x < mapw; ++x)
       {
          int offset = y * mapw + x;
+         offset *= loadmap->format->BytesPerPixel;
          maparray[y][x] = data[offset] * heightscale - zeroheight;
          
          if (maparray[y][x] > maxworldheight)
@@ -790,6 +791,18 @@ void GetMap(string fn)
    glPushMatrix();
    glLoadIdentity();
    glOrtho(-mapwidth / 2.f, mapwidth / 2.f, -mapheight / 2.f, mapheight / 2.f, 10, minimapheight * 2.f);
+   GUI* minimaplabel = gui[hud]->GetWidget("minimap");
+   float ratio;
+   if (mapwidth > mapheight)
+   {
+      ratio = mapheight / mapwidth;
+      minimaplabel->height *= ratio;
+   }
+   else
+   {
+      ratio = mapwidth / mapheight;
+      minimaplabel->width *= ratio;
+   }
    
    glMatrixMode(GL_MODELVIEW);
    Vector3 cam = center;
