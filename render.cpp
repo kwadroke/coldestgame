@@ -131,7 +131,7 @@ void Repaint()
       Vector3 viewoff;
       if (!guncam)
       {
-         viewoff = units[localplayer.unit].viewoffset;
+         viewoff = units[localplayer.unit].viewoffset + Vector3(0, 0, console.GetFloat("viewoffset"));
          gluLookAt(viewoff.x, viewoff.y, viewoff.z + .01f, viewoff.x, viewoff.y, viewoff.z, 0, 1, 0);
       }
       else
@@ -544,8 +544,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localpla
    
    glShadeModel(GL_FLAT);
 #ifndef DEBUGSMT
-   //glCullFace(GL_FRONT); // Breaks tree shadows
-   //glEnable(GL_CULL_FACE);
+   glCullFace(GL_FRONT);
    glColorMask(0, 0, 0, 0);
 #endif
    
@@ -559,7 +558,7 @@ void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localpla
    kdtree.setfrustum(p + center, rots, Light::infinity - 5000, Light::infinity + 5000, lightfov, 1);
    
    glEnable(GL_POLYGON_OFFSET_FILL);
-   glPolygonOffset(5.0f, 5.0f);
+   glPolygonOffset(2.0f, 2.0f);
    
    // Render objects to depth map
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -570,9 +569,8 @@ void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localpla
    
    // Reset globals
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
-   //glCullFace(GL_BACK);
+   glCullFace(GL_BACK);
    glShadeModel(GL_SMOOTH);
-   //glDisable(GL_CULL_FACE);
    glColorMask(1, 1, 1, 1);
    
    glEnable(GL_FOG);

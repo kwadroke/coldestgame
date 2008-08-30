@@ -140,7 +140,13 @@ void LoadoutToMain()
 
 void Spawn()
 {
-   spawnrequest = true;
+   if (player[servplayernum].spawned)
+   {
+      gui[loadoutmenu]->visible = false;
+      gui[hud]->visible = true;
+   }
+   else
+      spawnrequest = true;
 }
 
 

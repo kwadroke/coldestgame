@@ -93,6 +93,7 @@ void InitGlobals()
    console.Parse("set serverport 12010", false);
    console.Parse("set hitindtime 1000", false);
    console.Parse("set startsalvage 300", false);
+   console.Parse("set viewoffset 0", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -808,15 +809,10 @@ void GameEventHandler(SDL_Event &event)
                   case SDLK_s:
                      player[0].moveback = true;
                      break;
-                  /* Doesn't currently work, most likely due to using Euler angles for player
-                     rotation, but this probably doesn't make sense in this type of game
-                     anyway so Euler angles it is!:-)
-                  case SDLK_e:
-                     player[0].roll = 45;
+                  case SDLK_l:
+                     gui[loadoutmenu]->visible = true;
+                     gui[hud]->visible = false;
                      break;
-                  case SDLK_q:
-                     player[0].roll = -45;
-                     break;*/
                   case SDLK_LSHIFT:
                   case SDLK_RSHIFT:
                      player[0].run = true;
