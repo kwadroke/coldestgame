@@ -26,8 +26,10 @@ Mesh::~Mesh()
 {
    if (hasvbo)
    {
+#ifndef DEDICATED
       glDeleteBuffers(1, &vbo);
       glDeleteBuffers(1, &ibo);
+#endif
    }
 }
 
@@ -441,6 +443,7 @@ void Mesh::Rotate(const Vector3& v)
 
 void Mesh::GenVbo()
 {
+#ifndef DEDICATED
    if (tris.size() || childmeshes.size())
    {
       vbosteps.clear();
@@ -509,7 +512,6 @@ void Mesh::GenVbo()
          ++counter;
       }
       vbosteps.push_back(counter);
-      
       glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
       if (!hasvbo || (vbodata.size() * sizeof(VBOData) > vbosize) || (indexdata.size() * sizeof(unsigned short) > ibosize))
@@ -543,11 +545,13 @@ void Mesh::GenVbo()
       hasvbo = true;
    }
    glops = true;
+#endif
 }
 
 
 void Mesh::BindVbo()
 {
+#ifndef DEDICATED
    if (!hasvbo)
    {
       cout << "Hey dummy, you have to call GenVbo first" << endl;
@@ -585,6 +589,7 @@ void Mesh::BindVbo()
    glVertexPointer(3, GL_FLOAT, sizeof(VBOData), 0); // Apparently putting this last helps performance somewhat
    
    glClientActiveTextureARB(GL_TEXTURE0_ARB);
+#endif
 }
 
 

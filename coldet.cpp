@@ -1774,6 +1774,7 @@ void SDL_GL_Exit2dMode()
 
 void GLError()
 {
+#ifndef DEDICATED
    GLenum error = glGetError();
    if (error == GL_NO_ERROR)
    {
@@ -1807,6 +1808,7 @@ void GLError()
    {
       cout << "GL_TABLE_TOO_LARGE" << endl;
    }
+#endif
 }
 
 
