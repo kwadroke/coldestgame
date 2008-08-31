@@ -1224,6 +1224,9 @@ void SynchronizePosition()
       smoothserverpos += i->pos;
    smoothserverpos /= recentservinfo.size();
    
+   while (oldpos.size() > 500)
+      oldpos.pop_front();
+   
    int currindex = oldpos.size() / 2;
    int upper = oldpos.size();
    int lower = 0;
