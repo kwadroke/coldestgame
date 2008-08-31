@@ -76,6 +76,10 @@
           normal="textures/buttonnorm.png"/>
    <Label x="700" y="400" width="200" height="40" name="Salvage" text="0 tons"
           normal="textures/buttonnorm.png"/>
+   <Label x="700" y="900" width="200" height="50" name="SpawnTimer" text="Spawn in" align="center"
+          normal="textures/buttonnorm.png"
+          hover="textures/buttonhover.png"
+          pressed="textures/buttonpressed.png"/>
    <Button x="700" y="900" width="200" height="50" name="Spawn" text="Spawn" align="center"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"

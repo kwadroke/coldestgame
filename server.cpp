@@ -223,7 +223,7 @@ int ServerListen()
             serverplayers[i].Disconnect();
             cout << "Player " << i << " timed out.\n" << flush;
          }
-         else if (serverplayers[i].spawned)
+         else
          {
             ServerUpdatePlayer(i);
          }
@@ -447,14 +447,7 @@ int ServerListen()
             get >> spawnpointreq.x;
             get >> spawnpointreq.y;
             get >> spawnpointreq.z;
-            serverplayers[oppnum].pos = spawnpointreq;
-            serverplayers[oppnum].spawned = true;
-            serverplayers[oppnum].lastmovetick = SDL_GetTicks();
-            for (int i = 0; i < numbodyparts; ++i)
-            {
-               serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
-               serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
-            }
+            
             // TODO: Make sure weight and salvage are legal
             vector<SpawnPointData> allspawns = spawnpoints;
             for (int i = 0; i < serveritems.size(); ++i)
@@ -504,6 +497,21 @@ int ServerListen()
                   }
                   if (found)
                      break;
+               }
+            }
+            
+            if (serverplayers[oppnum].spawntimer)
+               accepted = false;
+            
+            if (accepted)
+            {
+               serverplayers[oppnum].pos = spawnpointreq;
+               serverplayers[oppnum].spawned = true;
+               serverplayers[oppnum].lastmovetick = SDL_GetTicks();
+               for (int i = 0; i < numbodyparts; ++i)
+               {
+                  serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
+                  serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
                }
             }
             
@@ -832,6 +840,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                   occup << serverplayers[i].spawned << eol;
                   occup << serverplayers[i].name << eol;
                   occup << serverplayers[i].salvage << eol;
+                  occup << serverplayers[i].spawntimer << eol;
                }
             }
             occup << 0 << eol;
@@ -1092,6 +1101,7 @@ void ServerUpdatePlayer(int i)
    if (serverplayers[i].temperature < 0)
       serverplayers[i].temperature = 0;
    
+   // Powered down?
    serverplayers[i].powerdowntime -= ticks; // Reuse lastcoolingtick
    if (serverplayers[i].powerdowntime <= 0)
    {
@@ -1100,6 +1110,15 @@ void ServerUpdatePlayer(int i)
    
    if (serverplayers[i].powerdowntime) return;
    
+   // Update spawn timer
+   serverplayers[i].spawntimer -= ticks;
+   if (serverplayers[i].spawntimer < 0)
+      serverplayers[i].spawntimer = 0;
+   
+   if (!serverplayers[i].spawned)
+      return;
+   
+   // Healing
    serverplayers[i].healaccum += float(ticks) * .0005f;
    if (serverplayers[i].healaccum > 1)
    {

@@ -40,6 +40,7 @@ class PlayerData
       Uint32 lastmovetick;
       vector<Uint32> lastfiretick;
       Uint32 lastcoolingtick;
+      int spawntimer;
       float size;
       float fallvelocity;
       short id;
