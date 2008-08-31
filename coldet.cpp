@@ -633,6 +633,20 @@ void GUIUpdate()
          spawnschanged = false;
       }
       gui[loadoutmessage]->visible = false;
+      GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
+      GUI* spawntimer = gui[loadoutmenu]->GetWidget("SpawnTimer");
+      if (player[0].spawntimer)
+      {
+         GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
+         GUI* spawntimer = gui[loadoutmenu]->GetWidget("SpawnTimer");
+         spawnbutton->visible = false;
+         spawntimer->visible = true;
+         spawntimer->text = "Spawn in " + ToString(player[0].spawntimer / 1000);
+      }
+      else
+      {
+         spawntimer->visible = false;
+      }
    }
    else if (!player[0].spawned && !PrimaryGUIVisible())
    {
@@ -1702,6 +1716,7 @@ void CacheMeshes()
    tocache.push_back("models/nemesis/torso");
    tocache.push_back("models/nemesis/larm");
    tocache.push_back("models/nemesis/rarm");
+   tocache.push_back("models/explosion");
    //tocache.push_back("models/spawn");
    
    for (size_t i = 0; i < tocache.size(); ++i)

@@ -487,7 +487,7 @@ int NetListen(void* dummy)
                get >> serverfps;
                get >> oppnum;
                short getunit, getteam;
-               int getkills, getdeaths, getsalvage;
+               int getkills, getdeaths, getsalvage, getspawntimer;
                vector<int> gethp(numbodyparts);
                int getping, getsvfps;
                bool getspawned;
@@ -505,6 +505,7 @@ int NetListen(void* dummy)
                   get >> getspawned;
                   get >> getname;
                   get >> getsalvage;
+                  get >> getspawntimer;
                   if (oppnum < player.size())
                   {
                      player[oppnum].team = getteam;
@@ -517,6 +518,7 @@ int NetListen(void* dummy)
                      player[oppnum].spawned = getspawned;
                      player[oppnum].name = getname;
                      player[oppnum].salvage = getsalvage;
+                     player[oppnum].spawntimer = getspawntimer;
                   }
                   get >> oppnum;
                }
@@ -528,6 +530,7 @@ int NetListen(void* dummy)
                      player[0].hp[i] = player[servplayernum].hp[i];
                   player[0].ping = player[servplayernum].ping;
                   player[0].salvage = player[servplayernum].salvage;
+                  player[0].spawntimer = player[servplayernum].spawntimer;
                   Action("updateunitselection");
                }
                SDL_mutexV(clientmutex);

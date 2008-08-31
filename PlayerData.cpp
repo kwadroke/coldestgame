@@ -3,7 +3,7 @@
 PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), mesh(numbodyparts, ml.end()),
                        item(Item::NoItem, ml), speed(0.f), turnspeed(0.f), needsync(true), salvage(100), powerdowntime(0),
                        healaccum(0.f), firerequests(0), hp(intvec(numbodyparts, 100)), destroyed(numbodyparts, false), weight(1.f),
-                       spectate(false)
+                       spectate(false), spawntimer(0)
 {
    Uint32 ticks = 0;
    if (SDL_WasInit(SDL_INIT_TIMER))
@@ -58,4 +58,5 @@ void PlayerData::Kill()
          mesh[part] = meshes->end();
       }
    }
+   spawntimer = 15000;
 }
