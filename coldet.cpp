@@ -1017,7 +1017,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       maxspeed *= 2.f;
       acceleration *= 2.f;
    }
-   if (mplayer.pos.y < 0)
+   if (mplayer.pos.y < mplayer.size)
    {
       maxspeed /= 2.f;
       acceleration /= 2.f;
@@ -1711,9 +1711,11 @@ void CacheMeshes()
 
 bool PrimaryGUIVisible()
 {
+#ifndef DEDICATED
    // A bit counterintuitive...
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
          !gui[settings]->visible && !gui[endgame]->visible);
+#endif
 }
 
 
