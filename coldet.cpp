@@ -34,6 +34,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    //Debug();
    setsighandler();
    initialized = false;
+   OutputDiagnosticData();
    InitGlobals();
    initialized = true;
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
@@ -53,6 +54,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    MainLoop();
 
    return 0;
+}
+
+
+void OutputDiagnosticData()
+{
+   cout << "Initializing Coldest\n";
+   cout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
+#ifdef linux
+   cout << "GCC version: " << __VERSION__ << endl;
+#endif
 }
 
 

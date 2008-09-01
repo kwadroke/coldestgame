@@ -146,7 +146,7 @@ void GUI::RenderBase()
    else
    {
       texman->texhand->BindTexture(texids[state]);
-#ifdef LINUX
+#ifdef linux
       // Linux requires flipped texcoords for FBO textures, which is what this is used for
       glBegin(GL_QUADS);
       glTexCoord2i(0, 1);

@@ -8,7 +8,7 @@
 #include <set>
 #include "SDL_thread.h"
 #include "Timer.h"
-#ifdef LINUX
+#ifdef linux
 #include <ext/hash_set>
 #else
 #include <hash_set>
@@ -30,7 +30,7 @@ struct eqptr
    }
 };
 
-#ifdef LINUX
+#ifdef linux
 typedef __gnu_cxx::hash_set<Mesh*, eqptr, eqptr> MeshSet;
 //typedef set<Mesh*> MeshSet;
 #else

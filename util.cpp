@@ -88,11 +88,12 @@ void setsighandler()
 // This maybe shouldn't return an int...
 int gettid()
 {
-#ifdef LINUX
-   if (bitcount() == 32)
+#ifdef linux
+#ifndef __amd64__
       return syscall(224);
-   else if (bitcount() == 64)
+#else
       return syscall(186);
+#endif
 #endif
    return 0;
 }
