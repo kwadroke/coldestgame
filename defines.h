@@ -55,6 +55,7 @@ using std::flush;*/
 using namespace std;
 
 // Function definitions
+void OutputDiagnosticData();
 void SetupSDL();
 void SetupOpenGL();
 void InitNoise();
