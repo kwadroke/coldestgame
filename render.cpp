@@ -95,6 +95,14 @@ void Repaint()
       {
          Vector3 rots = lights.GetRots(0);
          float detailmapsize = console.GetFloat("detailmapsize");
+         // Not sure whether I actually like this.  It's really just a cheap version of frustum warping, and if I'm going
+         // to do that I should probably use a real warping technique.
+         /*if (localplayer.pitch > 30.f)
+         {
+            detailmapsize = 75.f + detailmapsize * (1.f - localplayer.pitch / 90.f);
+            cout << detailmapsize << endl;
+         }*/
+         resman.shaderman.GlobalSetUniform1f("detailmapsize", detailmapsize);
          float shadowres = console.GetFloat("shadowres");
          float shadowmapsizeworld = detailmapsize * 1.42;
          float worldperoneshadow = shadowmapsizeworld / shadowres;
@@ -587,7 +595,6 @@ void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localpla
    
    // These calls don't need to be made for generating shadows, but it makes sure that they'll be
    // set before we try to use the shadow map
-   resman.shaderman.GlobalSetUniform1f("detailmapsize", console.GetFloat("detailmapsize"));
    resman.shaderman.GlobalSetUniform1f("shadowres", console.GetFloat("shadowres"));
 }
 
