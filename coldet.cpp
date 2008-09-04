@@ -1041,6 +1041,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    {
       maxspeed *= 2.f;
       acceleration *= 2.f;
+      mplayer.temperature += float(numticks) * .03f;
    }
    if (mplayer.pos.y < mplayer.size)
    {
