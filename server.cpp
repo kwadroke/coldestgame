@@ -46,6 +46,7 @@ void SendRemove(PlayerData&, const int, const int);
 string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
+void KillPlayer(const int);
 
 SDL_Thread* serversend;
 UDPsocket servsock;
@@ -1047,14 +1048,11 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
       }
       if (dead)
       {
-         serverplayers[i].deaths++;
          serverplayers[i].salvage += 100;
          serverplayers[playernum].kills++;
          serverplayers[playernum].salvage += CalculatePlayerWeight(serverplayers[i]) / 2;
          cout << "Player " << i << " was killed by Player " << playernum << endl;
-         serverplayers[i].Kill();
-         SendKill(i);
-         SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
+         KillPlayer(i);
       }
    }
    bool doremove;
@@ -1100,6 +1098,12 @@ void ServerUpdatePlayer(int i)
    serverplayers[i].temperature -= ticks * coolrate;
    if (serverplayers[i].temperature < 0)
       serverplayers[i].temperature = 0;
+   
+   // Give them the benefit of the doubt and cool them before calculating overheating
+   if (serverplayers[i].temperature > 100.f)
+   {
+      KillPlayer(i);
+   }
    
    // Powered down?
    serverplayers[i].powerdowntime -= ticks; // Reuse lastcoolingtick
@@ -1465,5 +1469,14 @@ void Ack(unsigned long acknum, UDPpacket* inpack)
    SDL_mutexP(servermutex);
    servqueue.push_back(response);
    SDL_mutexV(servermutex);
+}
+
+
+void KillPlayer(const int i)
+{
+   serverplayers[i].deaths++;
+   serverplayers[i].Kill();
+   SendKill(i);
+   SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
 }
 
