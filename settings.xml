@@ -36,7 +36,7 @@
                <Label x="0" y="-20" width="200" height="20" text="Max Draw"/>
                <Label x="190" y="0" width="50" height="20" name="viewdistslidervalue"/>
             </Slider>
-            <Slider x="0" y="170" width="180" height="30" name="impdistslider" min="0" max="20000"
+            <Slider x="0" y="170" width="180" height="30" name="impdistslider" min="1" max="100"
                   normal="textures/buttonnorm.png"
                   pressed="textures/buttonpressed.png"
                   hover="textures/buttonhover.png">
@@ -63,12 +63,21 @@
             </Slider>
          </ScrollView>
          
-         <ScrollView x="10" y="400" width="300" height="200">
-            <Button x="0" y="0" width="180" height="30" text="Shadows" toggle="true" name="shadowsbutton"
+         <ScrollView x="10" y="400" width="300" height="300">
+            <Label x="0" y="0" width="180" height="30" text="Rendering"/>
+            <ComboBox x="0" y="50" width="180" height="30" name="resolutionbox"
+                      normal="textures/buttonnorm.png"
+                      pressed="textures/buttonpressed.png"
+                      hover="textures/buttonhover.png"/>
+            <Button x="0" y="100" width="180" height="30" text="Fullscreen" toggle="true" name="fullscreenbutton"
                     normal="textures/buttonnorm.png"
                     pressed="textures/buttonpressed.png"
                     hover="textures/buttonhover.png"/>
-            <Button x="0" y="100" width="180" height="30" text="Reflection" toggle="true" name="reflectionbutton"
+            <Button x="0" y="150" width="180" height="30" text="Shadows" toggle="true" name="shadowsbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
+            <Button x="0" y="200" width="180" height="30" text="Reflection" toggle="true" name="reflectionbutton"
                     normal="textures/buttonnorm.png"
                     pressed="textures/buttonpressed.png"
                     hover="textures/buttonhover.png"/>
@@ -85,6 +94,29 @@
            buttonpressed="textures/buttonpressed.png"
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
+         <Slider x="0" y="0" width="180" height="30" name="turnsmoothslider" min="1" max="100"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="-20" width="200" height="20" text="Turn Smoothing"/>
+            <Label x="190" y="0" width="50" height="20" name="turnsmoothslidervalue"/>
+         </Slider>
+         
+         <Slider x="0" y="50" width="180" height="30" name="mousespeedslider" min="1" max="1000"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="-20" width="200" height="20" text="Mouse Speed"/>
+            <Label x="190" y="0" width="50" height="20" name="mousespeedslidervalue"/>
+         </Slider>
+         
+         <Slider x="0" y="100" width="180" height="30" name="weaponfocusslider" min="0" max="10000"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="-20" width="200" height="20" text="Weapon Focus"/>
+            <Label x="190" y="0" width="50" height="20" name="weaponfocusslidervalue"/>
+         </Slider>
       </Tab>
       <Tab text="Test" buttonwidth="100"
            buttonnormal="textures/buttonnorm.png"

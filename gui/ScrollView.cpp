@@ -190,7 +190,5 @@ void ScrollView::ScrollToBottom()
 void ScrollView::ReadNodeExtra(DOMNode* current, GUI* parentw)
 {
    vertbar->textures = ReadTextures(current, "v");
-   if (parent->parent->name == "consoleoutput")
-      cout << "Texture***********************************************" << vertbar->textures[Normal] << endl;
    horizbar->textures = ReadTextures(current, "h");
 }

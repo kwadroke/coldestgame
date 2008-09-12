@@ -47,6 +47,7 @@ string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
 void KillPlayer(const int);
+int CountPlayers();
 
 SDL_Thread* serversend;
 UDPsocket servsock;
@@ -148,8 +149,8 @@ int Server(void* dummy)
    }
    cout << "Chose name " << servername << " which is #" << choosename << endl;
    nextservparticleid.next(); // 0 has special meaning
-   servertickrate = 30;
-   maxplayers = 32;
+   servertickrate = console.GetInt("tickrate");
+   maxplayers = console.GetInt("maxplayers");
    framecount = 0;
    lastfpsupdate = SDL_GetTicks();
    if (console.GetString("map") == "")
@@ -182,6 +183,8 @@ int ServerListen()
    float dummy;
    unsigned short oppnum;
    Uint32 currtick;
+   Timer frametimer;
+   frametimer.start();
    
    setsighandler();
    
@@ -201,6 +204,12 @@ int ServerListen()
    {
       ++runtimes;
       SDL_Delay(1); // Prevent CPU hogging
+      if (console.GetBool("limitserverrate"))
+      {
+         while (frametimer.elapsed() < 1000 / servertickrate - 1)
+            SDL_Delay(1);
+      }
+      frametimer.start();
       
       currtick = SDL_GetTicks();
       SDL_mutexP(servermutex);
@@ -355,56 +364,67 @@ int ServerListen()
             bool add = true;
             int respondto = 0;
             SDL_mutexP(servermutex);
-            for (int i = 1; i < serverplayers.size(); ++i)
+            
+            if (CountPlayers() < maxplayers)
             {
-               if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].addr.port == inpack->address.port)
+               for (int i = 1; i < serverplayers.size(); ++i)
                {
-                  respondto = i;
-                  add = false;
+                  if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].addr.port == inpack->address.port)
+                  {
+                     respondto = i;
+                     add = false;
+                  }
                }
-            }
-            if (add)
-            {
-               PlayerData temp(servermeshes);
-               temp.addr = inpack->address;
-               temp.unit = unit;
-               temp.acked.insert(packetnum);
-               temp.salvage = console.GetInt("startsalvage");
-               UpdatePlayerModel(temp, servermeshes, false);
+               if (add)
+               {
+                  PlayerData temp(servermeshes);
+                  temp.addr = inpack->address;
+                  temp.unit = unit;
+                  temp.acked.insert(packetnum);
+                  temp.salvage = console.GetInt("startsalvage");
+                  UpdatePlayerModel(temp, servermeshes, false);
+                  
+                  serverplayers.push_back(temp);
+                  respondto = serverplayers.size() - 1;
+                  validaddrs.insert(SortableIPaddress(inpack->address));
+               }
                
-               serverplayers.push_back(temp);
-               respondto = serverplayers.size() - 1;
-               validaddrs.insert(SortableIPaddress(inpack->address));
+               if (!serverplayers[respondto].connected)
+               {
+                  serverplayers[respondto].lastupdate = SDL_GetTicks();
+                  serverplayers[respondto].recpacketnum = packetnum;
+                  validaddrs.erase(SortableIPaddress(serverplayers[respondto].addr));
+                  serverplayers[respondto].addr = inpack->address;
+                  validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
+                  serverplayers[respondto].needsync = true;
+                  cout << "Player " << respondto << " connected\n" << flush;
+               }
+               serverplayers[respondto].connected = true;
+               serverplayers[respondto].name = name;
+               
+               Packet fill;
+               fill << "c\n";
+               fill << packetnum << eol;
+               fill << respondto << eol;
+               fill << console.GetString("map") << eol;
+               vector<int> teamcount(2, 0);
+               for (size_t i = 1; i < serverplayers.size(); ++i)
+               {
+                  if (serverplayers[i].team != 0 && serverplayers[i].connected)
+                     ++teamcount[serverplayers[i].team - 1];
+               }
+               fill << (teamcount[0] > teamcount[1] ? 2 : 1) << eol;
+               
+               fill.addr = serverplayers[respondto].addr;
+               servqueue.push_back(fill);
             }
-            
-            if (!serverplayers[respondto].connected)
+            else
             {
-               serverplayers[respondto].lastupdate = SDL_GetTicks();
-               serverplayers[respondto].recpacketnum = packetnum;
-               validaddrs.erase(SortableIPaddress(serverplayers[respondto].addr));
-               serverplayers[respondto].addr = inpack->address;
-               validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
-               serverplayers[respondto].needsync = true;
-               cout << "Player " << respondto << " connected\n" << flush;
+               Packet respond(&inpack->address);
+               respond << "f\n";
+               respond << packetnum << eol;
+               servqueue.push_back(respond);
             }
-            serverplayers[respondto].connected = true;
-            serverplayers[respondto].name = name;
-            
-            Packet fill;
-            fill << "c\n";
-            fill << packetnum << eol;
-            fill << respondto << eol;
-            fill << console.GetString("map") << eol;
-            vector<int> teamcount(2, 0);
-            for (size_t i = 1; i < serverplayers.size(); ++i)
-            {
-               if (serverplayers[i].team != 0 && serverplayers[i].connected)
-                  ++teamcount[serverplayers[i].team - 1];
-            }
-            fill << (teamcount[0] > teamcount[1] ? 2 : 1) << eol;
-            
-            fill.addr = serverplayers[respondto].addr;
-            servqueue.push_back(fill);
             
             SDL_mutexV(servermutex);
          }
@@ -712,6 +732,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
    Uint32 currnettick = 0;
    short int pingtick = 0;
    UDPsocket broadcastsock;
+   Timer frametimer;
+   frametimer.start();
    
    setsighandler();
    
@@ -738,8 +760,12 @@ int ServerSend(void* dummy)  // Thread for sending updates
       ++runtimes;
       //t.start();
       SDL_Delay(1);  // Keep the loop from eating too much CPU
-      //while (gameover) // Just to be safe, stop this thread while loading the next map
-      //   SDL_Delay(1);
+      if (console.GetBool("limitserverrate"))
+      {
+         while (frametimer.elapsed() < 1000 / servertickrate - 1)
+            SDL_Delay(1);
+      }
+      frametimer.start();
       
       currnettick = SDL_GetTicks();
       if (currnettick - lastnettick >= 1000 / servertickrate)
@@ -1478,5 +1504,17 @@ void KillPlayer(const int i)
    serverplayers[i].Kill();
    SendKill(i);
    SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
+}
+
+
+int CountPlayers()
+{
+   int retval = 0;
+   for (size_t i = 0; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected)
+         ++retval;
+   }
+   return retval;
 }
 

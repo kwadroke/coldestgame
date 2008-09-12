@@ -1,0 +1,4 @@
+Particle particles/default
+EmitterTime 1000
+Density 100
+Count 3

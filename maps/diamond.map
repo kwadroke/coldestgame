@@ -10,7 +10,7 @@ Specular 1 1 1 1
 Ambient .4 .4 .4 1
 
 SkyBox materials/sky
-
+Water materials/water
 TerrainMaterial materials/terrain
 Node
    TerrainParams
@@ -57,7 +57,7 @@ Node
    SpawnPoints
    Node
       Team 1
-      Location 2940 275 540
+      Location 2940 275 600
       Name Base1
    Node
       Team 2
@@ -66,6 +66,196 @@ Node
       
 Node
    Objects
+   Node
+      Type proctree
+      Materials materials/bark materials/leaves
+      seed 11
+      numlevels 2
+      numslices 3
+      numbranches0 12
+      numbranches1 3
+      numbranches2 3
+      numbranches3 2
+      numsegs 6
+      numleaves 1
+      maxangle 70
+      minangle 2
+      maxbranchangle 15
+      initrad 8
+      radreductionperc .2
+      initheight 50
+      heightreductionperc .8
+      firstleaflevel 2
+      leafsize 30
+      trunkrad 10
+      trunknumslices 10
+      trunktaper .8
+      trunknumsegs 5
+      branchevery 999
+      sidebranches 999
+      maxsidebranchangle 10
+      split 1
+      continuebranch 0
+      multitrunk 0
+      branchwithleaves 0
+      curvecoeff .02
+      endopts
+      ImpostorDistance 150
+      size 160
+      Position 2700 150 700
+      Rotations 0 0 0
+   Node
+      Type proctree
+      Materials materials/bark materials/leaves
+      seed 24
+      numlevels 2
+      numslices 3
+      numbranches0 12
+      numbranches1 3
+      numbranches2 3
+      numbranches3 2
+      numsegs 6
+      numleaves 1
+      maxangle 70
+      minangle 2
+      maxbranchangle 15
+      initrad 8
+      radreductionperc .2
+      initheight 60
+      heightreductionperc .8
+      firstleaflevel 2
+      leafsize 30
+      trunkrad 10
+      trunknumslices 10
+      trunktaper .8
+      trunknumsegs 5
+      branchevery 999
+      sidebranches 999
+      maxsidebranchangle 10
+      split 1
+      continuebranch 0
+      multitrunk 0
+      branchwithleaves 0
+      curvecoeff .02
+      endopts
+      ImpostorDistance 150
+      size 160
+      Position 3180 150 830
+      Rotations 0 0 0
+   Node
+      Type proctree
+      Materials materials/bark materials/leaves
+      seed 110
+      numlevels 2
+      numslices 3
+      numbranches0 12
+      numbranches1 3
+      numbranches2 3
+      numbranches3 2
+      numsegs 6
+      numleaves 1
+      maxangle 70
+      minangle 2
+      maxbranchangle 15
+      initrad 8
+      radreductionperc .2
+      initheight 35
+      heightreductionperc .8
+      firstleaflevel 2
+      leafsize 30
+      trunkrad 10
+      trunknumslices 10
+      trunktaper .8
+      trunknumsegs 5
+      branchevery 999
+      sidebranches 999
+      maxsidebranchangle 10
+      split 1
+      continuebranch 0
+      multitrunk 0
+      branchwithleaves 0
+      curvecoeff .02
+      endopts
+      ImpostorDistance 150
+      size 160
+      Position 3000 150 860
+      Rotations 0 0 0
+   Node
+      Type proctree
+      Materials materials/bark materials/leaves
+      seed 101
+      numlevels 2
+      numslices 3
+      numbranches0 12
+      numbranches1 3
+      numbranches2 3
+      numbranches3 2
+      numsegs 6
+      numleaves 1
+      maxangle 70
+      minangle 2
+      maxbranchangle 15
+      initrad 8
+      radreductionperc .2
+      initheight 50
+      heightreductionperc .8
+      firstleaflevel 2
+      leafsize 30
+      trunkrad 10
+      trunknumslices 10
+      trunktaper .8
+      trunknumsegs 5
+      branchevery 999
+      sidebranches 999
+      maxsidebranchangle 10
+      split 1
+      continuebranch 0
+      multitrunk 0
+      branchwithleaves 0
+      curvecoeff .02
+      endopts
+      ImpostorDistance 150
+      size 160
+      Position 3200 150 500
+      Rotations 0 0 0
+   Node
+      Type proctree
+      Materials materials/bark materials/leaves
+      seed 24
+      numlevels 2
+      numslices 3
+      numbranches0 12
+      numbranches1 3
+      numbranches2 3
+      numbranches3 2
+      numsegs 6
+      numleaves 1
+      maxangle 70
+      minangle 2
+      maxbranchangle 15
+      initrad 8
+      radreductionperc .2
+      initheight 60
+      heightreductionperc .8
+      firstleaflevel 2
+      leafsize 30
+      trunkrad 10
+      trunknumslices 10
+      trunktaper .8
+      trunknumsegs 5
+      branchevery 999
+      sidebranches 999
+      maxsidebranchangle 10
+      split 1
+      continuebranch 0
+      multitrunk 0
+      branchwithleaves 0
+      curvecoeff .02
+      endopts
+      ImpostorDistance 150
+      size 160
+      Position 1200 45 1350
+      Rotations 0 0 0
    
 Disabled now
 Node

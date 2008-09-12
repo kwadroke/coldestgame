@@ -11,10 +11,11 @@ class ParticleEmitter
 {
    public:
       ParticleEmitter(const Vector3&, Particle&, Uint32, float, int);
+      ParticleEmitter(const string&, ResourceManager&);
       bool Update(list<Particle>&);
+      Vector3 position;
       
    private:
-      Vector3 position;
       Particle particle;
       Uint32 emittertime;
       Uint32 lastupdate;

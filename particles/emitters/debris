@@ -1,0 +1,4 @@
+Particle particles/debris
+EmitterTime 1000
+Density 100
+Count 10

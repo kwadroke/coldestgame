@@ -956,7 +956,6 @@ void RenderHud(const PlayerData& localplayer)
    
    tempbar->SetRange(0, 100);
    tempbar->value = (int)localplayer.temperature;
-   rotbar->SetRange(-90, 90);
    rotbar->value = (int)localplayer.rotation;
    
    minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());

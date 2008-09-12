@@ -311,4 +311,8 @@ void Console::Action(const string& action)
    {
       sendkill = true;
    }
+   else if (action == "exit" || action == "quit")
+   {
+      Quit();
+   }
 }

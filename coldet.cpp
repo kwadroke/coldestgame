@@ -105,6 +105,9 @@ void InitGlobals()
    console.Parse("set hitindtime 1000", false);
    console.Parse("set startsalvage 300", false);
    console.Parse("set viewoffset 0", false);
+   console.Parse("set limitserverrate 1", false);
+   console.Parse("set maxplayers 32", false);
+   console.Parse("set mousespeed 400", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -823,77 +826,70 @@ void GameEventHandler(SDL_Event &event)
       switch(event.type) 
       {
          case SDL_KEYDOWN:
-            if (!gui[consolegui]->visible)
+            if (event.key.keysym.sym == SDLK_ESCAPE)
             {
-               switch (event.key.keysym.sym) 
-               {
-                  case SDLK_ESCAPE:
-                     gui[mainmenu]->visible = !gui[mainmenu]->visible;
-                     gui[hud]->visible = !gui[hud]->visible;
-                     break;
-                  case SDLK_a:
-                     player[0].moveleft = true;
-                     break;
-                  case SDLK_d:
-                     player[0].moveright = true;
-                     break;
-                  case SDLK_w:
-                     player[0].moveforward = true;
-                     break;
-                  case SDLK_s:
-                     player[0].moveback = true;
-                     break;
-                  case SDLK_l:
-                     gui[loadoutmenu]->visible = true;
-                     gui[hud]->visible = false;
-                     break;
-                  case SDLK_LSHIFT:
-                  case SDLK_RSHIFT:
-                     player[0].run = true;
-                     break;
-                  case SDLK_SPACE:
-                     player[0].pos.x = 200;
-                     player[0].pos.y = 200;
-                     player[0].pos.z = 200;
-                     break;
-                  case SDLK_TAB:
-                     gui[ingamestatus]->visible = true;
-                     break;
-                  case SDLK_p:
-                     SendPowerdown();
-                     break;
-               }
+               gui[mainmenu]->visible = !gui[mainmenu]->visible;
+               gui[hud]->visible = !gui[hud]->visible;
+            }
+            else if (event.key.keysym.sym == SDLK_a)
+            {
+               player[0].moveleft = true;
+            }
+            else if (event.key.keysym.sym == SDLK_d)
+            {
+               player[0].moveright = true;
+            }
+            else if (event.key.keysym.sym == SDLK_w)
+            {
+               player[0].moveforward = true;
+            }
+            else if (event.key.keysym.sym == SDLK_s)
+            {
+               player[0].moveback = true;
+            }
+            else if (event.key.keysym.sym == SDLK_l)
+            {
+               gui[loadoutmenu]->visible = true;
+               gui[hud]->visible = false;
+            }
+            else if (event.key.keysym.sym == SDLK_LSHIFT)
+            {
+               player[0].run = true;
+            }
+            else if (event.key.keysym.sym == SDLK_TAB)
+            {
+               gui[ingamestatus]->visible = true;
+            }
+            else if (event.key.keysym.sym == SDLK_p)
+            {
+               SendPowerdown();
             }
             break;
             
          case SDL_KEYUP:
-            switch (event.key.keysym.sym)
+            if (event.key.keysym.sym == SDLK_a)
             {
-               case SDLK_a:
-                  player[0].moveleft = false;
-                  break;
-               case SDLK_d:
-                  player[0].moveright = false;
-                  break;
-               case SDLK_w:
-                  player[0].moveforward = false;
-                  break;
-               case SDLK_s:
-                  player[0].moveback = false;
-                  break;
-               case SDLK_e:
-                  player[0].roll = 0;
-                  break;
-               case SDLK_q:
-                  player[0].roll = 0;
-                  break;
-               case SDLK_LSHIFT:
-               case SDLK_RSHIFT:
-                  player[0].run = false;
-                  break;
-               case SDLK_TAB:
-                  gui[ingamestatus]->visible = false;
-                  break;
+               player[0].moveleft = false;
+            }
+            else if (event.key.keysym.sym == SDLK_d)
+            {
+               player[0].moveright = false;
+            }
+            else if (event.key.keysym.sym == SDLK_w)
+            {
+               player[0].moveforward = false;
+            }
+            else if (event.key.keysym.sym == SDLK_s)
+            {
+               player[0].moveback = false;
+            }
+            else if (event.key.keysym.sym == SDLK_LSHIFT)
+            {
+               player[0].run = false;
+            }
+            else if (event.key.keysym.sym == SDLK_TAB)
+            {
+               gui[ingamestatus]->visible = false;
             }
             break;
             
@@ -902,14 +898,15 @@ void GameEventHandler(SDL_Event &event)
                event.motion.y != screenheight / 2) && !gui[consolegui]->visible)
             {
                float zoomfactor = console.GetFloat("zoomfactor");
+               float mousespeed = console.GetFloat("mousespeed") / 100.f;
                if (!guncam) 
                   zoomfactor = 1.f;
                
-               player[0].pitch += event.motion.yrel / 4. / zoomfactor;
+               player[0].pitch += event.motion.yrel / mousespeed / zoomfactor;
                if (player[0].pitch < -90) player[0].pitch = -90;
                if (player[0].pitch > 90) player[0].pitch = 90;
                
-               player[0].rotation += event.motion.xrel / 4. / zoomfactor;
+               player[0].rotation += event.motion.xrel / mousespeed / zoomfactor;
                if (player[0].rotation < -90) player[0].rotation = -90;
                if (player[0].rotation > 90) player[0].rotation = 90;
                SDL_WarpMouse(screenwidth / 2, screenheight / 2);
