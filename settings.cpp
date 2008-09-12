@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "gui/Slider.h"
+#include "gui/ComboBox.h"
 
 void UpdateSettings()
 {
@@ -11,6 +12,11 @@ void UpdateSettings()
    Slider* impdistslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("impdistslider"));
    Button* shadowsbutton = dynamic_cast<Button*>(gui[settings]->GetWidget("shadowsbutton"));
    Button* reflectionbutton = dynamic_cast<Button*>(gui[settings]->GetWidget("reflectionbutton"));
+   Button* fullscreenbutton = dynamic_cast<Button*>(gui[settings]->GetWidget("fullscreenbutton"));
+   ComboBox* resolutionbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("resolutionbox"));
+   Slider* turnsmoothslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("turnsmoothslider"));
+   Slider* mousespeedslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("mousespeedslider"));
+   Slider* weaponfocusslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("weaponfocusslider"));
    
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -20,6 +26,21 @@ void UpdateSettings()
    impdistslider->value = console.GetInt("impdistmulti");
    shadowsbutton->togglestate = console.GetBool("shadows") ? 1 : 0;
    reflectionbutton->togglestate = console.GetBool("reflection") ? 1 : 0;
+   fullscreenbutton->togglestate = console.GetBool("fullscreen") ? 1 : 0;
+   turnsmoothslider->value = console.GetInt("turnsmooth");
+   mousespeedslider->value = console.GetInt("mousespeed");
+   weaponfocusslider->value = console.GetInt("weaponfocus");
+   
+   // List available resolutions
+   Uint32 flags = SDL_OPENGL | SDL_FULLSCREEN;
+   SDL_Rect** modes = SDL_ListModes(NULL, flags);
+   for (int i = 0; modes[i]; ++i)
+   {
+      resolutionbox->Add(ToString(modes[i]->w) + " x " + ToString(modes[i]->h));
+      if (modes[i]->w == console.GetInt("screenwidth") &&
+          modes[i]->h == console.GetInt("screenheight"))
+         resolutionbox->Select(i);
+   }
 }
 
 
@@ -33,6 +54,11 @@ void SaveSettings()
    Slider* impdistslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("impdistslider"));
    Button* shadowsbutton = dynamic_cast<Button*>(gui[settings]->GetWidget("shadowsbutton"));
    Button* reflectionbutton = dynamic_cast<Button*>(gui[settings]->GetWidget("reflectionbutton"));
+   Button* fullscreenbutton = dynamic_cast<Button*>(gui[settings]->GetWidget("fullscreenbutton"));
+   ComboBox* resolutionbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("resolutionbox"));
+   Slider* turnsmoothslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("turnsmoothslider"));
+   Slider* mousespeedslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("mousespeedslider"));
+   Slider* weaponfocusslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("weaponfocusslider"));
    
    console.Parse("setsave partupdint " + ToString(partupdintslider->value), false);
    // Not implemented yet
@@ -43,4 +69,17 @@ void SaveSettings()
    console.Parse("setsave impdistmulti " + ToString(impdistslider->value), false);
    console.Parse("setsave shadows " + ToString(shadowsbutton->togglestate), false);
    console.Parse("setsave reflection " + ToString(reflectionbutton->togglestate), false);
+   console.Parse("setsave fullscreen " + ToString(fullscreenbutton->togglestate), false);
+   console.Parse("setsave turnsmooth " + ToString(turnsmoothslider->value), false);
+   console.Parse("setsave mousespeed " + ToString(mousespeedslider->value), false);
+   console.Parse("setsave weaponfocus " + ToString(weaponfocusslider->value), false);
+   
+   stringstream selectedres(resolutionbox->SelectedText());
+   int newwidth, newheight;
+   selectedres >> newwidth;
+   selectedres.ignore();
+   selectedres.ignore();
+   selectedres >> newheight;
+   console.Parse("setsave screenwidth " + ToString(newwidth), false);
+   console.Parse("setsave screenheight " + ToString(newheight), false);
 }

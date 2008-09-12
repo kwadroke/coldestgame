@@ -7,6 +7,19 @@ ParticleEmitter::ParticleEmitter(const Vector3& pos, Particle& p, Uint32 etime, 
 }
 
 
+ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman) : 
+                                 lastupdate(SDL_GetTicks()), particle("particles/explosion", resman)
+{
+   IniReader read(filename);
+   string partfile;
+   read.Read(partfile, "Particle");
+   particle = Particle(partfile, resman);
+   read.Read(emittertime, "EmitterTime");
+   read.Read(density, "Density");
+   read.Read(count, "Count");
+}
+
+
 // Returns true if it is done emitting
 bool ParticleEmitter::Update(list<Particle>& partlist)
 {

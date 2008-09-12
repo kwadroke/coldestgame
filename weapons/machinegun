@@ -6,6 +6,6 @@ ProjectileWeight .1
 Weight 5
 Model empty
 Name Machine Gun
-ExplosionParticle particles/debris
+ExplosionEmitter particles/emitter/debris
 Tracer machinegun
 TracerTime 100

@@ -7,6 +7,6 @@ Acceleration .01
 Velocity 1
 ReloadTime 600
 Model projectile
-ExplosionParticle particles/explosion
+ExplosionParticle particles/emitter/explosion
 Tracer smoke
 TracerTime 1000

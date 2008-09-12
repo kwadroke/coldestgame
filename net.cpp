@@ -557,6 +557,14 @@ int NetListen(void* dummy)
             }
             HandleAck(packetnum);
          }
+         else if (packettype == "f") // Server was full
+         {
+            cout << "Server is full\n";
+            SDL_mutexP(clientmutex);
+            ShowGUI(mainmenu);
+            SDL_mutexV(clientmutex);
+            HandleAck(packetnum);
+         }
          else if (packettype == "P") // Ping
          {
             Packet p(&addr);
@@ -616,8 +624,8 @@ int NetListen(void* dummy)
                get >> type;
                
                Weapon dummy(type);
-               Particle newpart(dummy.ExpFile(), resman);
-               ParticleEmitter newemitter(hitpos, newpart, 1000, 100.f, 3);
+               ParticleEmitter newemitter(dummy.ExpFile(), resman);
+               newemitter.position = hitpos;
                SDL_mutexP(clientmutex);
                emitters.push_back(newemitter);
                SDL_mutexV(clientmutex);
@@ -754,6 +762,7 @@ int NetListen(void* dummy)
             player[0].weight = -1.f;
             player[0].spectate = true;
             player[0].spawned = false;
+            player[0].size = 5.f;
             ResetKeys();
             // Ack it
             Ack(packetnum);

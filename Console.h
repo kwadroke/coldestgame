@@ -47,5 +47,6 @@ class Console
 
 void SetupSDL();
 void SetupOpenGL();
+void Quit();
 
 #endif

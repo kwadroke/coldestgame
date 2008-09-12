@@ -112,6 +112,12 @@ int ComboBox::Selected()
 }
 
 
+string ComboBox::SelectedText()
+{
+   return button->text;
+}
+
+
 void ComboBox::Select(int i, bool doaction)
 {
    table->Select(i);

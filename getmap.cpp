@@ -53,6 +53,7 @@ void GetMap(string fn)
    string dataname = fn + ".map";
    string heightmapname = fn + ".png";
    string lightmapname = fn + "light.png";
+   string waterfile = "materials/water";
    vector<floatvec> maparray;  // Heightmap data scaled by heightscale
 #ifndef DEDICATED
    ProgressBar* progress = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
@@ -132,6 +133,8 @@ void GetMap(string fn)
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
    skyboxmat = &resman.LoadMaterial(readskybox);
+   
+   mapdata.Read(waterfile, "Water");
    
    // Read terrain parameters
    TerrainParams dummytp;
@@ -575,7 +578,7 @@ void GetMap(string fn)
          
          for (int k = 0; k < 4; ++k)
             tempquad.SetNormal(k, Vector3(0, 1, 0));
-         Material* watermat = &resman.LoadMaterial("materials/water");
+         Material* watermat = &resman.LoadMaterial(waterfile);
          watermat->SetTexture(0, reflectionfbo.GetTexture());
          watermat->SetTexture(1, noisefbo.GetTexture());
          tempquad.SetMaterial(watermat);
