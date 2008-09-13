@@ -1,4 +1,4 @@
-Particle particles/default
+Particle particles/explosion
 EmitterTime 1000
 Density 100
-Count 3
+Count 1
