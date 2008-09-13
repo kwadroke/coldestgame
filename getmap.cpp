@@ -119,7 +119,7 @@ void GetMap(string fn)
 #endif
    particles.clear();
    deletemeshes.clear(); // Also a problem if not empty when we load a new map
-   for (size_t i = 0; i < numbodyparts; ++i)
+   for (size_t i = 0; i < numbodyparts; ++i) // We deleted all the meshes, so we need to clear these iterators
    {
       player[0].mesh[i] = meshes.end();
    }

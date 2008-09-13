@@ -131,12 +131,14 @@ Mesh& Mesh::operator=(const Mesh& m)
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
+   vertices.clear();
    VertexPtrvec localvert = m.vertices;
    for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
    {
       VertexPtr p(new Vertex(**i));
       vertices.push_back(p);
    }
+   tris.clear();
    for (size_t i = 0; i < m.tris.size(); ++i)
    {
       TrianglePtr p(new Triangle(*m.tris[i]));
@@ -146,6 +148,7 @@ Mesh& Mesh::operator=(const Mesh& m)
       }
       tris.push_back(p);
    }
+   frameroot.clear();
    for (size_t i = 0; i < m.frameroot.size(); ++i)
    {
       frameroot.push_back(m.frameroot[i]->Clone());
