@@ -77,14 +77,14 @@ void Connect()
       if (counter == currsel)
       {
          serveraddress = i->strip;
-         serverport = i->address.port;
+         serverport = SDLNet_Read16(&i->address.port);
          break;
       }
       ++counter;
    }
    SDL_mutexV(clientmutex);
    console.Parse("set serveraddr " + serveraddress, false);
-   console.Parse("set serverport " + serverport, false);
+   console.Parse("set serverport " + ToString(serverport), false);
    console.Parse("connect");
    UpdateUnitSelection();
 }

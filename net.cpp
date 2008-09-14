@@ -115,7 +115,7 @@ int NetSend(void* dummy)
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
          doconnect = false;
-         cout << "Sending connect" << endl;
+         cout << "Sending connect to " << console.GetString("serveraddr") << ":" << console.GetInt("serverport") << endl;
       }
       if (spawnrequest)
       {
