@@ -1,7 +1,8 @@
 Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
-Texture0 textures/leaves2.png
+   Texture0 textures/leaves2.png
+Texture0 textures/foliage/leaves.png
 Shader shaders/standard
 CullFace 0
 AlphaTest .5

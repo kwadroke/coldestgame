@@ -99,6 +99,8 @@ Node
       multitrunk 0
       branchwithleaves 0
       curvecoeff .02
+      leafsegs 2
+      leafcurve 15
       endopts
       ImpostorDistance 150
       size 160
@@ -137,6 +139,8 @@ Node
       multitrunk 0
       branchwithleaves 0
       curvecoeff .02
+      leafsegs 2
+      leafcurve 15
       endopts
       ImpostorDistance 150
       size 160
@@ -175,6 +179,8 @@ Node
       multitrunk 0
       branchwithleaves 0
       curvecoeff .02
+      leafsegs 2
+      leafcurve 15
       endopts
       ImpostorDistance 150
       size 160
@@ -213,6 +219,8 @@ Node
       multitrunk 0
       branchwithleaves 0
       curvecoeff .02
+      leafsegs 2
+      leafcurve 15
       endopts
       ImpostorDistance 150
       size 160
@@ -251,6 +259,8 @@ Node
       multitrunk 0
       branchwithleaves 0
       curvecoeff .02
+      leafsegs 2
+      leafcurve 15
       endopts
       ImpostorDistance 150
       size 160
