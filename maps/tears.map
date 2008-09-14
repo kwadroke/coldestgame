@@ -1,0 +1,69 @@
+TileSize 30
+HeightScale 5
+ZeroHeight 10
+Stretch 8
+
+LightData
+Direction 1 1.1 1
+Diffuse .8 .8 .8 1
+Specular 1 1 1 1
+Ambient .4 .4 .4 1
+
+SkyBox materials/sky
+Water materials/water
+TerrainMaterial materials/terrain
+Node
+   TerrainParams
+   Node
+      Texture0
+      HeightRange -10000 10000
+      SlopeRange 0 0
+      RandRange 0 10
+   Node
+      Texture1
+      HeightRange -10000 10000
+      SlopeRange 0 0
+      RandRange 0 10
+   Node
+      Texture2
+      HeightRange -10000 -10000
+      SlopeRange 0 .80
+      RandRange 500 500
+   Node
+      Texture3
+      HeightRange -10000 5
+      SlopeRange 0 0
+      RandRange 500 500
+   Node
+      Texture4
+      HeightRange -10000 -10000
+      SlopeRange 0 0
+      RandRange 0 10
+   Node
+      Texture5
+      HeightRange -10000 -10000
+      SlopeRange 0 0
+      RandRange 0 10
+      
+Node
+   GrassData
+   Node
+      File grass
+      Model models/grass/base
+      GroupSize 10
+      Density 75
+
+Node
+   SpawnPoints
+   Node
+      Team 1
+      Location 2940 275 600
+      Name Base1
+   Node
+      Team 2
+      Location 840 275 3180
+      Name Base2
+      
+Node
+   Objects
+   

@@ -1283,7 +1283,7 @@ void AddItem(const Item& it, int oppnum)
    if (it.Type() == Item::SpawnPoint)
    {
       MeshPtr newmesh = meshcache->GetNewMesh(it.ModelFile());
-      newmesh->Move(serverplayers[oppnum].pos);
+      newmesh->Move(serverplayers[oppnum].pos - Vector3(0, serverplayers[oppnum].size * 2.f, 0));
       newmesh->dynamic = true;
       servermeshes.push_front(*newmesh);
       serveritems.push_back(serverplayers[oppnum].item);

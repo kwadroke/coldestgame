@@ -714,7 +714,8 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 void Mesh::AdvanceAnimation(const Vector3& campos)
 {
    // Ideally this would be < 2, but it causes some problems ATM
-   if (frameroot.size() < 1 && !dynamic) return;
+   if (frameroot.size() < 1 && !dynamic)
+      return;
    
    Uint32 currtick = SDL_GetTicks();
    animtime += static_cast<int>(fabs(animspeed) * static_cast<float>(currtick - lastanimtick));
@@ -755,7 +756,8 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    
    if (glops && !hasvbo) // Means we set glops with SetGL
       LoadMaterials(); // Need to do this before Transform
-   else if (index < startframe[curranimation] || index >= startframe[curranimation] + numframes[curranimation]) return;
+   else if (index < startframe[curranimation] || index >= startframe[curranimation] + numframes[curranimation])
+      return;
    
    GraphicMatrix m, nm;
    
@@ -794,6 +796,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    }
    
    CalcBounds();
+   ResetTriMaxDims();
    
    if (glops)
       GenVbo();
