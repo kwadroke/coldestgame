@@ -36,15 +36,8 @@
            hover="textures/buttonhover.png"
            leftclick="exit"/>
    
-   <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="525|225|25" rowheight="25"
+   <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="475|195|35|35|35" rowheight="25"
           normal="textures/buttonnormsquare.png">
-      <!--<TableItem>test|10</TableItem>
-      <TableItem>another|20</TableItem>
-      <TableItem>Moar|30</TableItem>
-      <TableItem>Ican|40</TableItem>
-      <TableItem>Haz|50</TableItem>
-      <TableItem>Cheezburger|60</TableItem>
-      <TableItem>kthxbai|70</TableItem>-->
    </Table>
    
 </GUI>
