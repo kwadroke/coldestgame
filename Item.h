@@ -15,11 +15,12 @@ class Item
       int Uses() const{return usesleft;}
       float CoolMult() const{return coolmultiplier;}
       float AmmoMult() const{return ammomultiplier;}
+      float ArmorMult() const{return armormultiplier;}
       int Weight() const{return weight;}
       string Name() const{return name;}
       string ModelFile() const{return modelfile;}
       
-      enum Items{NoItem, SpawnPoint, HeatSink, AmmoCarrier, Radar, Base, numitems};
+      enum Items{NoItem, SpawnPoint, HeatSink, AmmoCarrier, Armor, Base, numitems};
       
       unsigned long id;
       int usesleft;
@@ -33,6 +34,7 @@ class Item
       int type;
       float coolmultiplier;
       float ammomultiplier;
+      float armormultiplier;
       int weight;
       string name;
       string modelfile;

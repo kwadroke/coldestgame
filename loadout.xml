@@ -70,7 +70,7 @@
       <ComboBoxItem>Spawn Point</ComboBoxItem>
       <ComboBoxItem>Heat Sink</ComboBoxItem>
       <ComboBoxItem>Ammo Carrier</ComboBoxItem>
-      <ComboBoxItem>Radar</ComboBoxItem>
+      <ComboBoxItem>Armor</ComboBoxItem>
    </ComboBox>
    <Label x="700" y="350" width="200" height="40" name="Weight" text="0 tons"
           normal="textures/buttonnorm.png"/>

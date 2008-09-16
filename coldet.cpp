@@ -980,7 +980,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    // Calculate how far to move based on time since last frame
    int numticks = SDL_GetTicks() - mplayer.lastmovetick;
    mplayer.lastmovetick = SDL_GetTicks();
-   if (numticks > 60) numticks = 60; // Yes this is a hack, it should be removed eventually
    float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
    
    bool onground = false;

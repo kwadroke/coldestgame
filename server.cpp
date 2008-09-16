@@ -1053,7 +1053,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
                 (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage))
             {
                cout << "Hit " << part << endl;
-               serverplayers[i].hp[part] -= int(damage);
+               serverplayers[i].hp[part] -= int(damage * serverplayers[i].item.ArmorMult());
                SendDamage(i);
                if (serverplayers[i].hp[part] <= 0)
                {
