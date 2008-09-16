@@ -1080,13 +1080,14 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    {
       float startheight = GetTerrainHeight(old.x, old.z);
       float endheight = GetTerrainHeight(mplayer.pos.x, mplayer.pos.z);
-      Vector3 groundcheck = old;
-      groundcheck.y -= mplayer.size * 2.f + mplayer.size * threshold;
+      Vector3 groundcheckpos = old;
+      groundcheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
-      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheck, .01f);
-      groundcheck = coldet.CheckSphereHit(old, groundcheck, .01f, check);
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheckpos, mplayer.size);
+      Vector3 slopecheck = coldet.CheckSphereHit(old, groundcheckpos, .01f, check);
+      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0, mplayer.size + .1f, 0), mplayer.size, check);
       
-      if (groundcheck.magnitude() > .00001f || mplayer.weight < .99f) // They were on the ground
+      if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
       {
          if (mplayer.fallvelocity > .00001f)
          {
@@ -1371,7 +1372,7 @@ void UpdateServerList()
    {
       if (!i->inlist && i->haveinfo)
       {
-         values = i->name + "|" + i->map + "|" + ToString(i->ping);
+         values = i->name + "|" + i->map + "|" + ToString(i->players) + "|" + ToString(i->maxplayers) + "|" + ToString(i->ping);
          serverlist->Add(values);
          i->inlist = true;
       }

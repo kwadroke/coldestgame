@@ -443,7 +443,7 @@ int ServerListen()
             SDL_mutexP(servermutex);
             response << servername << eol;
             response << console.GetString("map") << eol;
-            response << serverplayers.size() << eol;
+            response << CountPlayers() << eol;
             response << maxplayers << eol;
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
