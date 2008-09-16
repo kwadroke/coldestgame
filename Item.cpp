@@ -1,7 +1,7 @@
 #include "Item.h"
 
 Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(0), mesh(ml.end()), type(newtype), 
-           coolmultiplier(1.f), ammomultiplier(1.f), weight(0), name("None"), modelfile("models/empty/base")
+           coolmultiplier(1.f), ammomultiplier(1.f), armormultiplier(1.f), weight(0), name("None"), modelfile("models/empty/base")
            
 {
    switch (newtype)
@@ -17,8 +17,8 @@ Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(
       case Item::AmmoCarrier:
          LoadFromFile("items/ammocarrier");
          break;
-      case Item::Radar:
-         LoadFromFile("items/radar");
+      case Item::Armor:
+         LoadFromFile("items/armor");
          break;
       case Item::Base:
          LoadFromFile("items/base");
@@ -37,6 +37,7 @@ void Item::LoadFromFile(const string& file)
    read.Read(usesleft, "Uses");
    read.Read(coolmultiplier, "CoolMult");
    read.Read(ammomultiplier, "AmmoMult");
+   read.Read(armormultiplier, "ArmorMult");
    read.Read(weight, "Weight");
    read.ReadLine(name, "Name");
    read.Read(modelfile, "Model");
