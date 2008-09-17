@@ -44,7 +44,7 @@ class Material
 #endif
       int id;
       static int nummats;
-      bool cullface, doalphatest, alphatocoverage, additive, depthtest, depthwrite;
+      bool cullface, doalphatest, alphatocoverage, additive, depthtest, depthwrite, noshadowcull;
       float alphatest;
 };
 

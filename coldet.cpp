@@ -1281,7 +1281,7 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .2f;
+   float pingslop = .3f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
    
@@ -1294,12 +1294,12 @@ void SynchronizePosition()
    /* If we're way off, snap quite a bit because things are hopelessly out of sync and need
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
-   if (difference > 10.f)
+   if (difference > 10.f && difference < 30.f)
       posadj *= .7f;
    else if (floatzero(player[0].speed))
       posadj *= 0.f;
    else if (difference > .2f)
-      posadj *= .5f;
+      posadj *= .2f;
    // Note: If difference < .2f then we snap to the server location, but it's not noticeable
    // because the error is so small
    
