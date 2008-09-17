@@ -6,7 +6,7 @@ int Material::nummats = 0;
 #ifndef DEDICATED
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f), shininess(0.f),
                    texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
-                   shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true)
+                   shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true), noshadowcull(false)
 {
    ifstream check(filename.c_str());
    if (check.fail())
@@ -45,6 +45,7 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
    shaderhand.LoadShader(shader);
    
    reader.Read(cullface, "CullFace");
+   reader.Read(noshadowcull, "NoShadowCull");
    
    reader.Read(alphatest, "AlphaTest");
    if (alphatest > 1e-6)
@@ -145,7 +146,7 @@ void Material::UseTextureOnly() const
       texman.texhand->BindTexture(texid[0]);
    
    // Also do face culling so we can render only back faces for shadowing
-   if (cullface)
+   if (cullface && !noshadowcull)
    {
       glEnable(GL_CULL_FACE);
    }
