@@ -13,7 +13,7 @@ void Shader::LoadShader(string file)
    cout << "Loading shader " << file << endl;
    ifstream in(file.c_str());
    
-   if (in.bad())
+   if (in.fail())
    {
       cout << "Failed to open file " << file << endl;
       return;
@@ -181,7 +181,7 @@ void Shader::InitShader(GLhandleARB handle, string filename)
    const char** clines;
    ifstream s(filename.c_str());
    
-   if (s.bad())
+   if (s.fail())
    {
       cout << "Failed to open file " << filename << endl;
       return;
