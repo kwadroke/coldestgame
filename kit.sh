@@ -8,7 +8,7 @@ fi
 
 mkdir -p $1
 
-cp -r fonts items lib maps materials models particles shaders textures weapons autoexec.cfg $1
+cp -r fonts items lib maps materials models particles shaders textures weapons autoexec.cfg *.xml *.glsl $1
 cp coldest $1/coldest.bin
 cp startscript $1/coldest
 
