@@ -240,10 +240,10 @@ void ReadConfig()
    
    ifstream getconf(conffile.c_str(), ios_base::in);
    
-   if (getconf.bad())
+   if (getconf.fail())
    {
       cout << "Failed to open autoexec.cfg" << endl;
-      return;
+      exit(-1);
    }
    
    while (!getconf.eof())

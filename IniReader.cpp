@@ -10,7 +10,7 @@ IniReader::IniReader(string filename) : level(0), name(""), path(filename)
    
    ifstream in(filename.c_str(), ios::in);
    
-   if (in.bad())
+   if (in.fail())
    {
       cout << "Failed to open file " << filename << endl;
       return;
