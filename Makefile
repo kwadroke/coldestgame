@@ -52,7 +52,7 @@ ifeq ($(DEDICATED),1)
    OBJS = $(DEDOBJS)
    DEFINES += -DDEDICATED
 else
-   OUT=coldest.bin
+   OUT=coldest
    OBJS = $(GENERAL) $(GUI)
    LDLIBS += -lGL -lGLU -lGLEW
 endif
