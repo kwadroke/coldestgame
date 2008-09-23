@@ -35,6 +35,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    setsighandler();
    initialized = false;
    OutputDiagnosticData();
+   cout << "Main " << gettid() << endl;
    InitGlobals();
    initialized = true;
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
@@ -108,6 +109,7 @@ void InitGlobals()
    console.Parse("set limitserverrate 1", false);
    console.Parse("set maxplayers 32", false);
    console.Parse("set mousespeed 400", false);
+   console.Parse("set terrainmulti 10", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -763,15 +765,6 @@ bool GUIEventHandler(SDL_Event &event)
                   teamlabel->visible = false;
                }
                eatevent = true;
-               
-            /*case SDLK_PAGEUP:
-               if (consolebottomline < consolebuffer.size())
-               consolebottomline++;
-               break;
-            case SDLK_PAGEDOWN:
-               if (consolebottomline > 0)
-               consolebottomline--;
-               break;*/
          }
       
    };
@@ -1085,7 +1078,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheckpos, mplayer.size);
       Vector3 slopecheck = coldet.CheckSphereHit(old, groundcheckpos, .01f, check);
-      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0, mplayer.size + .1f, 0), mplayer.size, check);
+      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0, mplayer.size + .1f, 0), mplayer.size * 1.1f, check);
       
       if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
       {
@@ -1121,21 +1114,23 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    }
    else mplayer.weight = 1.f;
    
+   
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost"))
    {
-      Vector3 offsetold = old + Vector3(0, mplayer.size, 0);
+      Vector3 offsetoldmain = old + Vector3(0, mplayer.size, 0);
+      // Check from slightly behind where they actually started to avoid float precision problems
       Vector3 offset = old - mplayer.pos;
       offset.normalize();
       offset *= mplayer.size;
-      offsetold += offset;
+      offsetoldmain += offset;
       Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
       Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
-      Vector3 oldleg = offsetold - Vector3(0, mplayer.size, 0);
+      Vector3 offsetoldleg = offsetoldmain - Vector3(0, mplayer.size * 2.f, 0);
       
-      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, offsetold, mplayer.pos, mplayer.size * 2.f);
-      Vector3 adjust = coldet.CheckSphereHit(offsetold, mainoffset, mplayer.size, check);
-      Vector3 legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old + offset, mplayer.pos, mplayer.size * 2.f);
+      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check);
+      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check);
       if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
          adjust = (adjust + legadjust) / 2.f;
       else adjust = adjust + legadjust;
@@ -1146,11 +1141,12 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       {
          mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         adjust = coldet.CheckSphereHit(offsetold, mainoffset, mplayer.size, check);
-         legadjust = coldet.CheckSphereHit(oldleg, legoffset, mplayer.size, check);
+         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check);
+         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check);
          if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
             adjust = (adjust + legadjust) / 2.f;
          else adjust = adjust + legadjust;
+         
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
@@ -1196,8 +1192,6 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
 
 
 // No mutex needed, only called from mutex'd code
-
-// TODO: Currently this code leaks memory because it never removes anything from oldpos
 void SynchronizePosition()
 {
 #if 0

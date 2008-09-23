@@ -63,7 +63,8 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                float localrad = radius + currtri.radmod;
                float checkrad = currtri.maxdim + localrad;
                
-               if (DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad)
+               if ((oldpos.distance2(newpos) > 1e-5f && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad) ||
+                   oldpos.distance(currtri.midpoint) < checkrad)
                {
                   temp = adjust;
                   adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad, temphitpos);

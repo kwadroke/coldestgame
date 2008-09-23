@@ -2,6 +2,8 @@
 #include "gui/Slider.h"
 #include "gui/ComboBox.h"
 
+void InitGUI();
+
 void UpdateSettings()
 {
    Slider* partupdintslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("partupdintslider"));
@@ -80,6 +82,15 @@ void SaveSettings()
    selectedres.ignore();
    selectedres.ignore();
    selectedres >> newheight;
+   bool dorestart = false;
+   if (newwidth != console.GetInt("screenwidth") || newheight != console.GetInt("screenheight"))
+      dorestart = true;
    console.Parse("setsave screenwidth " + ToString(newwidth), false);
    console.Parse("setsave screenheight " + ToString(newheight), false);
+   
+   if (dorestart)
+   {
+      console.Parse("restartgl");
+      //InitGUI(); // Can't call this here right now:-(
+   }
 }

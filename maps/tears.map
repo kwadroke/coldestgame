@@ -57,11 +57,11 @@ Node
    SpawnPoints
    Node
       Team 1
-      Location 2940 275 600
+      Location 600 1150 700
       Name Base1
    Node
       Team 2
-      Location 840 275 3180
+      Location 3100 125 3100
       Name Base2
       
 Node

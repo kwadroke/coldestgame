@@ -26,7 +26,7 @@ using std::list;
 using std::vector;
 using std::set;
 
-const int terrobjsize = 8; // Terrain objects are terrobjsize x terrobjsize tiles
+const int terrobjsize = 16; // Terrain objects are terrobjsize x terrobjsize tiles
 
 enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, endgame, loadoutmessage, numguis};
 
