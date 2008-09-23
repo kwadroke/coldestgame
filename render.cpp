@@ -29,7 +29,7 @@ void Repaint()
    
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   gluPerspective(fov, aspect, nearclip, console.GetFloat("viewdist"));
+   gluPerspective(fov, aspect, nearclip, console.GetFloat("viewdist") * 10.f);
    
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -174,7 +174,7 @@ void Repaint()
       
       localplayer.pos += viewoff;
       Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-      kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist"), fov, aspect);
+      kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), fov, aspect);
       
       // Place the light(s)
       lights.Place();
@@ -316,7 +316,8 @@ void RenderObjects(const PlayerData& localplayer)
       adjustedimpdist *= adjustedimpdist;
       if (i->drawdistmult > 0.f)
          localdrawdist = int(viewdist * i->drawdistmult);
-      else localdrawdist = viewdist;
+      else
+         localdrawdist = viewdist;
       
       if (i->dist > (localdrawdist + i->size) * (localdrawdist + i->size)
           && !staticdrawdist && !shadowrender)
@@ -839,7 +840,7 @@ void RenderSkybox()
    
    glPushMatrix();
    glRotatef(90, 1, 0, 0);
-   gluSphere(s, console.GetFloat("viewdist"), 10, 10);
+   gluSphere(s, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), 10, 10);
    glPopMatrix();
    
    gluDeleteQuadric(s);

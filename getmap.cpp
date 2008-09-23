@@ -411,6 +411,7 @@ void GetMap(string fn)
          tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
+         tempmesh.drawdistmult = console.GetFloat("terrainmulti");
          meshes.push_front(tempmesh);
          meshits.push_back(meshes.begin());
       }
@@ -522,8 +523,24 @@ void GetMap(string fn)
                
          }
          
+         // Need the mesh center to be somewhere near the actual center of the tris or the object
+         // ends up getting collision detected too often
+         Vector3 midpoint;
+         for (size_t i = 0; i < 4; ++i)
+            midpoint += tempquad.GetVertex(i);
+         midpoint /= 4.f;
+         
+         currmesh->Move(currmesh->GetPosition() + Vector3(0, midpoint.y, 0));
+         
          currmesh->Add(tempquad);
       }
+   }
+   
+   for (size_t i = 0; i < meshits.size(); ++i)
+   {
+      Vector3 currpos = meshits[i]->GetPosition();
+      currpos.y /= meshits[i]->Size() / 2.f;
+      meshits[i]->Move(currpos);
    }
    
    

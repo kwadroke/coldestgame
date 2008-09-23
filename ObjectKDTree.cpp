@@ -1,6 +1,6 @@
 #include "ObjectKDTree.h"
 
-int ObjectKDTree::maxlevels = 8;
+int ObjectKDTree::maxlevels = 7;
 
 ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : p(6, Quad()), vertices(v),
                            haschildren(false), root(true), retobjs(new MeshSet())

@@ -23,8 +23,9 @@
 #include "util.h"
 
 // Necessary declarations
+void ServerLoop();
 int ServerSend(void*);
-int ServerListen();
+int ServerListen(void*);
 void ServerLoadMap();
 void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
 void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
@@ -50,6 +51,7 @@ void KillPlayer(const int);
 int CountPlayers();
 
 SDL_Thread* serversend;
+SDL_Thread* serverlisten;
 UDPsocket servsock;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
@@ -164,27 +166,102 @@ int Server(void* dummy)
       return -1;
    }
    serversend = SDL_CreateThread(ServerSend, NULL);
+   serverlisten = SDL_CreateThread(ServerListen, NULL);
    
-   ServerListen();
+   ServerLoop();
    
    SDL_WaitThread(serversend, NULL);
+   SDL_WaitThread(serverlisten, NULL);
    SDLNet_UDP_Close(servsock);
    return 0;
 }
 
 
-int ServerListen()
+void ServerLoop()
+{
+   setsighandler();
+   
+   cout << "ServerLoop " << gettid() << endl;
+   
+   Uint32 currtick;
+   Timer frametimer;
+   frametimer.start();
+   
+   while (running)
+   {
+      if (console.GetBool("limitserverrate"))
+      {
+         while (frametimer.elapsed() < 1000 / servertickrate - 1)
+            SDL_Delay(1);
+      }
+      frametimer.start();
+         
+      SDL_mutexP(servermutex);
+      if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
+      {
+         if (gameover && SDL_GetTicks() > nextmaptime)
+         {
+            srand(time(0));
+            int choosemap = (int)Random(0, maplist.size());
+            SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
+            console.Parse("set map " + maplist[choosemap], false);
+            SDL_mutexV(clientmutex);
+         }
+         ServerLoadMap();
+      }
+      for (int i = 1; i < serverplayers.size(); ++i)
+      {
+         currtick = SDL_GetTicks();
+         if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + 10000)
+         {
+            cout << "***************" << serverplayers[i].lastupdate << "  " << currtick << endl;
+            validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
+            serverplayers[i].Disconnect();
+            cout << "Player " << i << " timed out.\n" << flush;
+         }
+         else if (serverplayers[i].connected)
+         {
+            ServerUpdatePlayer(i);
+         }
+      }
+         
+         // Update server meshes
+      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
+      {
+         i->AdvanceAnimation();
+      }
+         
+         // Save state so we can recall it for collision detection
+      SaveState();
+         
+         // Update particles
+      int updinterval = 100;
+      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
+         
+         // Update server FPS
+      ++framecount;
+      currtick = SDL_GetTicks();
+      if (currtick - lastfpsupdate > 1000)
+      {
+         servfps = int(float(framecount) * 1000.f / float(currtick - lastfpsupdate));
+         framecount = 0;
+         lastfpsupdate = currtick;
+      }
+         
+      SDL_mutexV(servermutex);
+   }
+}
+
+
+int ServerListen(void* dummy)
 {
    UDPpacket *inpack;
    unsigned long packetnum;
    string getdata;
    string packettype;
    float oppx, oppy, oppz;
-   float dummy;
+   //float dummy;
    unsigned short oppnum;
-   Uint32 currtick;
-   Timer frametimer;
-   frametimer.start();
    
    setsighandler();
    
@@ -204,65 +281,6 @@ int ServerListen()
    {
       ++runtimes;
       SDL_Delay(1); // Prevent CPU hogging
-      if (console.GetBool("limitserverrate"))
-      {
-         while (frametimer.elapsed() < 1000 / servertickrate - 1)
-            SDL_Delay(1);
-      }
-      frametimer.start();
-      
-      currtick = SDL_GetTicks();
-      SDL_mutexP(servermutex);
-      if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
-      {
-         if (gameover && SDL_GetTicks() > nextmaptime)
-         {
-            srand(time(0));
-            int choosemap = (int)Random(0, maplist.size());
-            SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
-            console.Parse("set map " + maplist[choosemap], false);
-            SDL_mutexV(clientmutex);
-         }
-         ServerLoadMap();
-      }
-      for (int i = 1; i < serverplayers.size(); ++i)
-      {
-         if (serverplayers[i].connected && currtick - serverplayers[i].lastupdate > 5000)
-         {
-            validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
-            serverplayers[i].Disconnect();
-            cout << "Player " << i << " timed out.\n" << flush;
-         }
-         else
-         {
-            ServerUpdatePlayer(i);
-         }
-      }
-      
-      // Update server meshes
-      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
-      {
-         i->AdvanceAnimation();
-      }
-      
-      // Save state so we can recall it for collision detection
-      SaveState();
-      
-      // Update particles
-      int updinterval = 100;
-      UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
-      
-      // Update server FPS
-      ++framecount;
-      currtick = SDL_GetTicks();
-      if (currtick - lastfpsupdate > 1000)
-      {
-         servfps = int(float(framecount) * 1000.f / float(currtick - lastfpsupdate));
-         framecount = 0;
-         lastfpsupdate = currtick;
-      }
-      
-      SDL_mutexV(servermutex);
       
       /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
          packet per outer loop, which meant it did the entire ~20 ms particle/player update
@@ -492,8 +510,9 @@ int ServerListen()
                }
             }
             
+            // Make sure we don't spawn some place invalid
             vector<Mesh*> check;
-            check = serverkdtree.getmeshes(spawnpointreq, spawnpointreq, 450.f);
+            check = serverkdtree.getmeshes(spawnpointreq, spawnpointreq, 150.f);
             AppendDynamicMeshes(check, servermeshes);
             Vector3 checkvec;
             bool found = false;
