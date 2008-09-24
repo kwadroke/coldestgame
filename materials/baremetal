@@ -1,6 +1,0 @@
-Diffuse 1 1 1 1
-Ambient 1 1 1 1
-Specular 1 1 1 1
-Texture0 textures/baremetal.png
-Shader shaders/standard
-CullFace 0
