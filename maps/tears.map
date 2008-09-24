@@ -11,7 +11,7 @@ Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 Water materials/water
-TerrainMaterial materials/terrain
+TerrainMaterial materials/terrain/tropical
 Node
    TerrainParams
    Node

@@ -214,7 +214,6 @@ void ServerLoop()
          currtick = SDL_GetTicks();
          if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + 10000)
          {
-            cout << "***************" << serverplayers[i].lastupdate << "  " << currtick << endl;
             validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
             serverplayers[i].Disconnect();
             cout << "Player " << i << " timed out.\n" << flush;
