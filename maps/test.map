@@ -12,7 +12,7 @@ Ambient .2 .2 .2 1
 
 SkyBox materials/sky
 
-TerrainMaterial materials/terrain
+TerrainMaterial materials/terrain/basic
 Node
    TerrainParams
    Node
