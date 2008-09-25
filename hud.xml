@@ -16,12 +16,12 @@
    <Label x="850" y="40" width="150" height="30" text="Left Arm" name="larmweapon"/>
    <Label x="850" y="70" width="150" height="30" text="Right Arm" name="rarmweapon"/>
    
-   <ProgressBar x="450" y="950" width="100" height="30" name="temperature"
+   <ProgressBar x="10" y="800" width="100" height="30" name="temperature"
                 normal="textures/buttonhover.png"
                 hover="textures/buttonpressed.png"/>
-   <Label x="485" y="900" width="30" height="20"
+   <Label x="485" y="800" width="30" height="20" name="facingcenter"
           normal="textures/buttonnorm.png"/>
-   <Slider x="400" y="900" width="200" height="30" name="facing" min="-90" max="90"
+   <Slider x="400" y="800" width="200" height="30" name="facing" min="-90" max="90"
                 normal="textures/buttonhover.png"
                 hover="textures/buttonpressed.png"/>
    
