@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
+   <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   
+   <TabWidget x="100" y="110" width="800" height="800" text="">
+      <Tab text="Graphics" buttonwidth="120"
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
+         
+         <ScrollView x="10" y="10" width="300" height="200">
+            <Label x="0" y="0" width="180" height="30" text="Particles"/>
+            <Slider x="0" y="100" width="180" height="30" name="partupdintslider" min="0" max="10"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Particle Update Freq"/>
+               <Label x="190" y="0" width="50" height="20" name="partupdintslidervalue"/>
+            </Slider>
+            <Slider x="0" y="170" width="180" height="30" name="partcountslider" min="0" max="10000"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Particle Count"/>
+               <Label x="190" y="0" width="50" height="20" name="partcountslidervalue"/>
+            </Slider>
+         </ScrollView>
+         
+         <ScrollView x="280" y="10" width="300" height="200">
+            <Label x="0" y="0" width="180" height="30" text="View Distances"/>
+            <Slider x="0" y="100" width="180" height="30" name="viewdistslider" min="100" max="20000"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Max Draw"/>
+               <Label x="190" y="0" width="50" height="20" name="viewdistslidervalue"/>
+            </Slider>
+            <Slider x="0" y="170" width="180" height="30" name="impdistslider" min="1" max="100"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Impostor Multiplier"/>
+               <Label x="190" y="0" width="50" height="20" name="impdistslidervalue"/>
+            </Slider>
+         </ScrollView>
+         
+         <ScrollView x="550" y="10" width="300" height="200">
+            <Label x="0" y="0" width="180" height="30" text="Grass"/>
+            <Slider x="0" y="100" width="180" height="30" name="grassdensityslider" min="0" max="100"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Grass Density"/>
+               <Label x="190" y="0" width="50" height="20" name="grassdensityslidervalue"/>
+            </Slider>
+            <Slider x="0" y="170" width="180" height="30" name="grassdistslider" min="0" max="20000"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Grass Distance"/>
+               <Label x="190" y="0" width="50" height="20" name="grassdistslidervalue"/>
+            </Slider>
+         </ScrollView>
+         
+         <ScrollView x="10" y="400" width="300" height="300">
+            <Label x="0" y="0" width="180" height="30" text="Rendering"/>
+            <ComboBox x="0" y="50" width="180" height="30" name="resolutionbox"
+                      normal="textures/buttonnorm.png"
+                      pressed="textures/buttonpressed.png"
+                      hover="textures/buttonhover.png"/>
+            <Button x="0" y="100" width="180" height="30" text="Fullscreen" toggle="true" name="fullscreenbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
+            <Button x="0" y="150" width="180" height="30" text="Shadows" toggle="true" name="shadowsbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
+            <Button x="0" y="200" width="180" height="30" text="Reflection" toggle="true" name="reflectionbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
+         </ScrollView>
+      </Tab>
+      <Tab text="Sound" buttonwidth="120"
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
+      </Tab>
+      <Tab text="Controls" buttonwidth="120"
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
+         <ScrollView x="10" y="10" width="300" height="300">
+            <Slider x="0" y="50" width="180" height="30" name="turnsmoothslider" min="1" max="100"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Turn Smoothing"/>
+               <Label x="190" y="0" width="50" height="20" name="turnsmoothslidervalue"/>
+            </Slider>
+            
+            <Slider x="0" y="100" width="180" height="30" name="mousespeedslider" min="1" max="1000"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Mouse Speed"/>
+               <Label x="190" y="0" width="50" height="20" name="mousespeedslidervalue"/>
+            </Slider>
+            
+            <Slider x="0" y="150" width="180" height="30" name="weaponfocusslider" min="0" max="10000"
+                  normal="textures/buttonnorm.png"
+                  pressed="textures/buttonpressed.png"
+                  hover="textures/buttonhover.png">
+               <Label x="0" y="-20" width="200" height="20" text="Weapon Focus"/>
+               <Label x="190" y="0" width="50" height="20" name="weaponfocusslidervalue"/>
+            </Slider>
+         </ScrollView>
+      </Tab>
+      <Tab text="Test" buttonwidth="100"
+           buttonnormal="textures/buttonnorm.png"
+           buttonpressed="textures/buttonpressed.png"
+           buttonhover="textures/buttonhover.png"
+           normal="textures/buttonnormsquare.png">
+         <ComboBox x="40" y="500" width="120" height="20" name="testcb" text="Test"
+                   normal="textures/buttonnorm.png">
+            <ComboBoxItem>Test</ComboBoxItem>
+            <ComboBoxItem>They have weapons</ComboBoxItem>
+            <ComboBoxItem>So what?</ComboBoxItem>
+            <ComboBoxItem>Fuck!</ComboBoxItem>
+            <ComboBoxItem>28 Days</ComboBoxItem>
+            <ComboBoxItem>Later</ComboBoxItem>
+            <ComboBoxItem>Mutated</ComboBoxItem>
+            <ComboBoxItem>Sheep</ComboBoxItem>
+            <ComboBoxItem>Test</ComboBoxItem>
+            <ComboBoxItem>They have weapons</ComboBoxItem>
+            <ComboBoxItem>So what?</ComboBoxItem>
+            <ComboBoxItem>Fuck!</ComboBoxItem>
+         </ComboBox>
+         
+         <ScrollView x="400" y="10" width="100" height="100" 
+                     vnormal="textures/buttonnorm.png"
+                     hnormal="textures/buttonnorm.png">
+            <Button x="10" y="155" width="200" height="50" text="Back" align="center"
+                    normal="textures/buttonnorm.png"
+                    hover="textures/buttonhover.png"
+                    pressed="textures/buttonpressed.png"
+                    leftclick="showmain"/>
+         </ScrollView>
+         
+         <TextArea x="10" y="100" width="200" height="100" name="testta"
+                   normal="textures/buttonnormsquare.png"
+                   vnormal="textures/buttonnormsquare.png">
+            Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
+         </TextArea>
+         
+         <Slider x="10" y="300" width="180" height="30" name="testslider" min="4" max="10" value="5"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="180" y="0" width="100" height="30" name="testslidervalue"/>
+         </Slider>
+         
+         <Slider x="300" y="10" width="30" height="180" name="testslidervert" min="4" max="6000" value="5" orientation="vertical"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png">
+            <Label x="0" y="180" width="100" height="30" name="testslidervertvalue"/>
+         </Slider>
+         
+         <Button x="10" y="400" width="200" height="40" text="Toggle" name="testtogglebutton" xmargin="3" ymargin="6" align="center" toggle="true"
+                 normal="textures/buttonnorm.png"
+                 pressed="textures/buttonpressed.png"
+                 hover="textures/buttonhover.png"/>
+         
+         <TabWidget x="300" y="300" width="250" height="300" name="testtw" text="">
+            <Tab buttonwidth="100" text="Test Tab"
+                 buttonnormal="textures/buttonnorm.png"
+                 buttonpressed="textures/buttonpressed.png"
+                 buttonhover="textures/buttonhover.png"
+                 normal="textures/buttonnormsquare.png">
+               <TextArea x="0" y="0" width="200" height="100" name="testta1"
+                         normal="textures/buttonnormsquare.png">
+                  Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
+               </TextArea>
+            </Tab>
+            <Tab buttonwidth="110" text="Test Tab 1"
+                 buttonnormal="textures/buttonnorm.png"
+                 buttonpressed="textures/buttonpressed.png"
+                 buttonhover="textures/buttonhover.png">
+               <TextArea x="0" y="0" width="200" height="100" name="testta2"
+                         normal="textures/buttonnormsquare.png">
+                  Another text area
+               </TextArea>
+            </Tab>
+            <Tab buttonwidth="110" text="Test Tab 2"
+                 buttonnormal="textures/buttonnorm.png"
+                 buttonpressed="textures/buttonpressed.png"
+                 buttonhover="textures/buttonhover.png"/>
+         </TabWidget>
+      </Tab>
+   </TabWidget>
+   
+   <Button x="400" y="925" width="200" height="50" text="Back" align="center"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="showmain">
+   </Button>
+   <Button x="100" y="925" width="200" height="50" text="Save" align="center"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="savesettings">
+   </Button>
+</GUI>

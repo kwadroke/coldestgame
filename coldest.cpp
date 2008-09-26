@@ -74,13 +74,14 @@ void InitGlobals()
    // Default cvars
    console.Parse("set screenwidth 640", false);
    console.Parse("set screenheight 480", false);
+   console.Parse("set fullscreen 0", false);
    console.Parse("set showfps 1", false);
    console.Parse("set quiet 1", false);
    console.Parse("set fly 0", false);
    console.Parse("set thirdperson 0", false);
    console.Parse("set camdist 100", false);
    console.Parse("set consoletrans 128", false);
-   console.Parse("set movestep 200", false);
+   console.Parse("set movestep 100", false);
    console.Parse("set ghost 0", false);
    console.Parse("set fov 60", false);
    console.Parse("set viewdist 1000", false);
@@ -110,6 +111,7 @@ void InitGlobals()
    console.Parse("set maxplayers 32", false);
    console.Parse("set mousespeed 400", false);
    console.Parse("set terrainmulti 10", false);
+   console.Parse("set map diamond", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -154,11 +156,11 @@ void InitGlobals()
    
    // These have to be done here because GL has to be initialized first
    if (console.GetInt("reflectionres") < 1)
-      console.Parse("set reflectionres 512");
+      console.Parse("set reflectionres 512", false);
    if (console.GetInt("cloudres") < 1)
-      console.Parse("set cloudres 1024");
+      console.Parse("set cloudres 1024", false);
    if (console.GetInt("shadowres") < 1)
-      console.Parse("set shadowres 1024");
+      console.Parse("set shadowres 1024", false);
    
    InitGUI();
    InitUnits();
@@ -177,17 +179,18 @@ void InitGUI()
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
    gui.reserve(numguis);
-   gui[mainmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "mainmenu.xml"));
-   gui[hud] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "hud.xml"));
-   gui[loadprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "loadprogress.xml"));
-   gui[loadoutmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "loadout.xml"));
-   gui[statsdisp] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "stats.xml"));
-   gui[consolegui] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "console.xml"));
-   gui[ingamestatus] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "ingamestatus.xml"));
-   gui[chat] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "chat.xml"));
-   gui[settings] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "settings.xml"));
-   gui[endgame] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "endgame.xml"));
-   gui[loadoutmessage] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "loadoutmessage.xml"));
+   gui[mainmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/mainmenu.xml"));
+   gui[hud] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/hud.xml"));
+   gui[loadprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadprogress.xml"));
+   gui[loadoutmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadout.xml"));
+   gui[statsdisp] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/stats.xml"));
+   gui[consolegui] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/console.xml"));
+   gui[ingamestatus] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/ingamestatus.xml"));
+   gui[chat] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/chat.xml"));
+   gui[settings] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/settings.xml"));
+   gui[endgame] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/endgame.xml"));
+   gui[loadoutmessage] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadoutmessage.xml"));
+   
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
 #endif
@@ -244,8 +247,9 @@ void ReadConfig()
    
    if (getconf.fail())
    {
-      cout << "Failed to open autoexec.cfg" << endl;
-      exit(-1);
+      console.SaveToFile(conffile, true);
+      console.Parse("restartgl");
+      return;
    }
    
    while (!getconf.eof())

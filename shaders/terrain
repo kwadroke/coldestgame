@@ -1,10 +1,10 @@
 Vertex:
-terrainvert.glsl
+shaders/terrainvert.glsl
 Pixel:
 $shadow
 $fog
 $basiclight
-terrainfrag.glsl
+shaders/terrainfrag.glsl
 Uniforms:
 int tex 0
 int tex1 1

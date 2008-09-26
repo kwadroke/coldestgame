@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
+   <TextArea x="10" y="10" width="980" height="600" name="consoleoutput" rowheight="20" colwidths="980"
+             normal="textures/buttonnormsquare.png"
+             vnormal="textures/buttonnormsquare.png">
+   </TextArea>
+   <LineEdit x="10" y="610" width="980" height="30" text="" name="consoleinput"
+             normal="textures/buttonnormsquare.png"
+             hover="textures/buttonhover.png"
+             pressed="textures/buttonpressed.png"/>
+</GUI>

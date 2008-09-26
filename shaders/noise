@@ -1,6 +1,6 @@
 Vertex:
-noisevert.glsl
+shaders/noisevert.glsl
 Pixel:
-noise.glsl
+shaders/noise.glsl
 Uniforms:
 int permTexture 0

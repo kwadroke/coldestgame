@@ -185,7 +185,7 @@ void Console::WriteToConsole(const string& line)
 }
 
 
-void Console::SaveToFile(const string& filename)
+void Console::SaveToFile(const string& filename, const bool forcesave)
 {
    ifstream read(filename.c_str());
    string buffer;
@@ -211,6 +211,14 @@ void Console::SaveToFile(const string& filename)
    }
    read.close();
    
+   if (forcesave)
+   {
+      for (map<string, string>::iterator i = values.begin(); i != values.end(); ++i)
+      {
+         saveval.insert(i->first);
+      }
+   }
+   
    ofstream save(filename.c_str());
    while (lines.size())
    {
@@ -222,6 +230,11 @@ void Console::SaveToFile(const string& filename)
    for (set<string>::iterator i = remaining.begin(); i != remaining.end(); ++i)
    {
       save << "set " << *i << " " << values[*i] << endl;
+   }
+   if (forcesave) // Then we're writing a new config file
+   {
+      save << "# restartgl must be included to initialize OpenGL\n";
+      save << "restartgl";
    }
    save.close();
 }
