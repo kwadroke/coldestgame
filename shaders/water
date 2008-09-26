@@ -1,8 +1,8 @@
 Vertex:
-watervert.glsl
+shaders/watervert.glsl
 Pixel:
 $shadow
-waterfrag.glsl
+shaders/waterfrag.glsl
 Uniforms:
 int tex 0
 int noisetex 1

@@ -1,11 +1,11 @@
 Vertex:
-bumpvert.glsl
+shaders/bumpvert.glsl
 Pixel:
 $fog
 $shadow
 $basiclight
 $specular
-bumpfrag.glsl
+shaders/bumpfrag.glsl
 Uniforms:
 int tex 0
 int bumptex 1

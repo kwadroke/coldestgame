@@ -1,4 +1,6 @@
 Vertex:
-shadowmapvert.glsl
+shaders/shadowmapvert.glsl
 Pixel:
-shadowmapfrag.glsl
+shaders/shadowmapfrag.glsl
+Uniforms:
+int tex 0

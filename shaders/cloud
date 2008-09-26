@@ -1,6 +1,6 @@
 Vertex:
-testvert.glsl
+shaders/testvert.glsl
 Pixel:
-testfrag.glsl
+shaders/testfrag.glsl
 Uniforms:
 int tex 0

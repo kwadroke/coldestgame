@@ -1,6 +1,6 @@
 Vertex:
-cloudgenvert.glsl
+shaders/cloudgenvert.glsl
 Pixel:
-cloudgenfrag.glsl
+shaders/cloudgenfrag.glsl
 Uniforms:
 int basenoise 0

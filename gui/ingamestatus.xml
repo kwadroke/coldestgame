@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
+   <Table x="100" y="100" width="800" height="600" name="playerlist" columns="4" colwidths="500|100|100|100" rowheight="25"
+          normal="textures/buttonnormsquare.png">
+      <TableItem>test|10|10|10</TableItem>
+      <TableItem>another|20|20|20</TableItem>
+      <TableItem>Moar|30|30|30</TableItem>
+      <TableItem>Ican|40|40|40</TableItem>
+      <TableItem>Haz|50|50|50</TableItem>
+      <TableItem>Cheezburger|60|60|60</TableItem>
+      <TableItem>kthxbai|70|70|70</TableItem>
+   </Table>
+</GUI>

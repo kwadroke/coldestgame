@@ -36,12 +36,22 @@ void UpdateSettings()
    // List available resolutions
    Uint32 flags = SDL_OPENGL | SDL_FULLSCREEN;
    SDL_Rect** modes = SDL_ListModes(NULL, flags);
-   for (int i = 0; modes[i]; ++i)
+   bool found = false;
+   int i;
+   for (i = 0; modes[i]; ++i)
    {
       resolutionbox->Add(ToString(modes[i]->w) + " x " + ToString(modes[i]->h));
       if (modes[i]->w == console.GetInt("screenwidth") &&
           modes[i]->h == console.GetInt("screenheight"))
+      {
          resolutionbox->Select(i);
+         found = true;
+      }
+   }
+   if (!found)
+   {
+      resolutionbox->Add(console.GetString("screenwidth") + " x " + console.GetString("screenheight"));
+      resolutionbox->Select(i);
    }
 }
 

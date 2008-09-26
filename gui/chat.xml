@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
+   <TextArea x="250" y="850" width="500" height="140" name="chatoutput"
+             normal="textures/transparent.png">
+   </TextArea>
+   <Label x="250" y="960" width="50" height="30" text="Team" name="chatteam" visible="false"
+          normal="textures/buttonnorm.png"/>
+   <LineEdit x="300" y="960" width="450" height="30" text="" name="chatinput" visible="false"
+             normal="textures/buttonnormsquare.png"
+             hover="textures/buttonhover.png"
+             pressed="textures/buttonpressed.png">
+   </LineEdit>
+</GUI>

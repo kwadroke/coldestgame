@@ -47,16 +47,16 @@ void Shader::LoadShader(string file)
       {
          if (shadows)
          {
-            buffer = softshadows ? "softshadowfrag.glsl" : "shadowfrag.glsl";
+            buffer = softshadows ? "shaders/softshadowfrag.glsl" : "shaders/shadowfrag.glsl";
          }
-         else buffer = "noshadowfrag.glsl";
+         else buffer = "shaders/noshadowfrag.glsl";
       }
       else if (buffer == "$fog")
-         buffer = "fogfrag.glsl"; // Currently no other available, may change though
+         buffer = "shaders/fogfrag.glsl"; // Currently no other available, may change though
       else if (buffer == "$basiclight")
-         buffer = "basiclighting.glsl"; // Ditto
+         buffer = "shaders/basiclighting.glsl"; // Ditto
       else if (buffer == "$specular")
-         buffer = "specularfrag.glsl";
+         buffer = "shaders/specularfrag.glsl";
       shader = CreatePixelShader();
       InitShader(shader, buffer);
       AttachShader(program, shader);

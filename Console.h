@@ -30,7 +30,7 @@ class Console
       void Parse(const string&, bool echo = true);
       void InitWidget(TextArea&);
       void WriteToConsole(const string&);
-      void SaveToFile(const string&);
+      void SaveToFile(const string&, const bool forcesave = false);
       
       
    private:
