@@ -270,6 +270,8 @@ void SetupSDL()
       exit(1);
    }
    
+   SDL_EnableUNICODE(1);
+   
    atexit(SDL_Quit);
    
 #ifndef DEDICATED
@@ -559,7 +561,12 @@ static void MainLoop()
       {
          if (!GUIEventHandler(event))
          {
+            SDL_EnableKeyRepeat(0, 0);
             GameEventHandler(event);
+         }
+         else
+         {
+            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
          }
       }
       
@@ -730,6 +737,7 @@ bool GUIEventHandler(SDL_Event &event)
                }
                break;
             case SDLK_RETURN:
+               player[0].run = false; // In case they pressed shift+Enter to team chat
                if (gui[consolegui]->visible)
                {
                   GUI* consolein = gui[consolegui]->GetWidget("consoleinput");
@@ -739,7 +747,7 @@ bool GUIEventHandler(SDL_Event &event)
                else if (!chatin->visible)
                {
                   GUI* teamlabel = gui[chat]->GetWidget("chatteam");
-                  if (event.key.keysym.mod & KMOD_LSHIFT || event.key.keysym.mod & KMOD_RSHIFT)
+                  if (event.key.keysym.mod & KMOD_SHIFT)
                   {
                      chatteam = true;
                      teamlabel->visible = true;
@@ -1034,7 +1042,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    {
       maxspeed *= 2.f;
       acceleration *= 2.f;
-      mplayer.temperature += float(numticks) * .03f;
+      if (mplayer.moveforward || mplayer.moveback)
+         mplayer.temperature += float(numticks) * .03f;
    }
    if (mplayer.pos.y < mplayer.size)
    {
