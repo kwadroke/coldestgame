@@ -64,6 +64,10 @@ void OutputDiagnosticData()
    cout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
 #ifdef linux
    cout << "GCC version: " << __VERSION__ << endl;
+   SDL_version v = *SDL_Linked_Version();
+   cout << "Linked SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
+   SDL_VERSION(&v);
+   cout << "Compiled SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
 #endif
 }
 
@@ -271,6 +275,7 @@ void SetupSDL()
    }
    
    SDL_EnableUNICODE(1);
+   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
    
    atexit(SDL_Quit);
    
@@ -533,8 +538,9 @@ void InitNoise()
 }
 
 
-static void MainLoop() 
+void MainLoop() 
 {
+   static bool repeat = true;
    SDL_Event event;
    while(1) 
    {
@@ -562,11 +568,13 @@ static void MainLoop()
          if (!GUIEventHandler(event))
          {
             SDL_EnableKeyRepeat(0, 0);
+            repeat = false;
             GameEventHandler(event);
          }
-         else
+         else if (!repeat)
          {
             SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+            repeat = true;
          }
       }
       

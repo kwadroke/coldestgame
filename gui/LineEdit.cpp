@@ -116,7 +116,6 @@ void LineEdit::KeyDown(SDL_Event* event)
             InsertChar(c);
          break;
    }
-   cout << event->key.keysym.unicode << endl;
 }
 
 
