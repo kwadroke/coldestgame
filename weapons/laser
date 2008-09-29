@@ -9,3 +9,4 @@ Heat 20
 Model empty
 Tracer laser
 TracerTime 100
+ExplosionParticle particles/emitter/explosion

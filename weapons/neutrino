@@ -1,8 +1,9 @@
 Velocity 1
-Weight 0
+Weight 35
 ProjectileWeight 0
 Name Neutrino Cannon
 Heat 40
 Radius 10
 ReloadTime 1000
 Damage 200
+ExplosionParticle particles/emitter/explosion

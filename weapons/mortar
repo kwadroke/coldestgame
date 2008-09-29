@@ -4,3 +4,4 @@ Weight 30
 Name Mortar
 Splash 100
 Damage 150
+ExplosionParticle particles/emitter/explosion
