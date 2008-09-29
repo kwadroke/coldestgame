@@ -109,7 +109,7 @@ void InitGlobals()
    console.Parse("set weaponfocus 1000", false);
    console.Parse("set serverport 12010", false);
    console.Parse("set hitindtime 1000", false);
-   console.Parse("set startsalvage 300", false);
+   console.Parse("set startsalvage 100", false);
    console.Parse("set viewoffset 0", false);
    console.Parse("set limitserverrate 1", false);
    console.Parse("set maxplayers 32", false);
@@ -1622,7 +1622,7 @@ void UpdatePlayerList()
    playerlist->Clear();
    playerlist->Add("Name|Kills|Deaths|Ping");
    lplayerlist->Clear();
-   lplayerlist->Add("Name|Kills|Deaths|Ping");
+   lplayerlist->Add("ID|Name|Kills|Deaths|Ping");
    
    string add;
    for (int i = 1; i < player.size(); ++i)
@@ -1632,7 +1632,7 @@ void UpdatePlayerList()
       add += ToString(player[i].deaths) + "|";
       add += ToString(player[i].ping);
       playerlist->Add(add);
-      lplayerlist->Add(add);
+      lplayerlist->Add(ToString(i) + "|" + add);
    }
    
    SDL_mutexV(clientmutex);

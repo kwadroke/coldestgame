@@ -8,3 +8,4 @@ Name Autocannon
 ReloadTime 200
 Tracer machinegun
 TracerTime 100
+ExplosionParticle particles/emitter/debris
