@@ -785,6 +785,45 @@ bool GUIEventHandler(SDL_Event &event)
                   teamlabel->visible = false;
                }
                eatevent = true;
+               break;
+            case SDLK_F12:
+               cout << "Saving screenshot" << endl;
+               glPixelStorei(GL_PACK_ALIGNMENT,1);
+               int screenwidth = console.GetInt("screenwidth");
+               int screenheight = console.GetInt("screenheight");
+               GLubytevec pixels(screenwidth * screenheight * 3);
+            
+               glReadPixels(0, 0, screenwidth, screenheight, GL_BGR, GL_UNSIGNED_BYTE, &pixels[0]);
+               vector<unsigned char> header(12, 0);
+               header[2] = 2;
+               header.push_back(screenwidth % 256);
+               header.push_back(screenwidth / 256);
+               header.push_back(screenheight % 256);
+               header.push_back(screenheight / 256);
+               header.push_back(24);
+               header.push_back(0);
+            
+               int num = 0;
+               string filename;
+               bool finished = false;
+               while (!finished)
+               {
+                  string padded = PadNum(num, 5);
+                  filename = "screenshot" + padded + ".tga";
+                  cout << "Checking " << filename << endl;
+                  ifstream test(filename.c_str());
+                  if (!test)
+                     finished = true;
+                  test.close();
+                  ++num;
+               }
+               ofstream screenshot(filename.c_str());
+               for (size_t i = 0; i < header.size(); ++i)
+                  screenshot << header[i];
+               for (size_t i = 0; i < pixels.size(); ++i)
+                  screenshot << pixels[i];
+               screenshot.close();
+               break;
          }
       
    };
