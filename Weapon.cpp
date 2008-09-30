@@ -1,7 +1,7 @@
 #include "Weapon.h"
 
 Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), radius(1.f), velocity(1.f), acceleration(0.f),
-               splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50000), explode(true), modelfile("projectile"),
+               splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50000), explode(true), modelfile("empty"),
                name("None"), tracerfile(""), tracertime(10000), expfile("particles/emitters/none")
 {
    switch (newid)
