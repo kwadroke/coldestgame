@@ -1267,14 +1267,6 @@ void SynchronizePosition()
    if (player.size() <= servplayernum || servplayernum <= 0)
       return;
    
-   if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object
-   {
-      temp.tick = currtick;
-      temp.pos = player[0].pos;
-   
-      oldpos.push_back(temp);
-   }
-   
    // Smooth out our ping so we don't get jumpy movement
    static deque<Uint32> pings;
    if (player[servplayernum].ping >= 0 && player[servplayernum].ping < 2000)
@@ -1302,6 +1294,16 @@ void SynchronizePosition()
    
    while (oldpos.size() > 500)
       oldpos.pop_front();
+   //while (oldpos.size() && oldpos.front().tick + 3000 < currtick) // Also remove very old oldpos's
+   //   oldpos.pop_front();
+   
+   if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object
+   {
+      temp.tick = currtick;
+      temp.pos = player[0].pos;
+   
+      oldpos.push_back(temp);
+   }
    
    int currindex = oldpos.size() / 2;
    int upper = oldpos.size();

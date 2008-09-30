@@ -6,3 +6,4 @@ Splash 100
 Damage 150
 Ammo 8
 ExplosionEmitter particles/emitters/explosion
+Model projectile

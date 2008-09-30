@@ -134,7 +134,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   
                   float localrad = radius + currtri.radmod;
                   float checkrad = currtri.maxdim + localrad;
-               
+                  
                   if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
                   {
                      temp = adjust;
