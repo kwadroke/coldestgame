@@ -8,3 +8,5 @@ Name Gauss Rifle
 Heat 10
 Ammo 5
 ExplosionEmitter particles/emitters/debris
+Tracer machinegun
+TracerTime 100

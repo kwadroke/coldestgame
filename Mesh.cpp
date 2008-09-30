@@ -405,6 +405,7 @@ void Mesh::Load(const IniReader& reader)
       reader.Read(barkmat, "Materials", 0);
       reader.Read(leafmat, "Materials", 1);
       size_t save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
+      collide = true;
       cout << "Tree primitives: " << save << endl;
    }
    else if (type == "Terrain" || type == "Empty"){} // No-op to avoid bogus warnings
