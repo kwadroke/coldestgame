@@ -249,6 +249,7 @@ void Console::Action(const string& action)
    }
    else if (action == "connect")
    {
+      connected = false;
       doconnect = true;
    }
    else if (action == "restartgl")

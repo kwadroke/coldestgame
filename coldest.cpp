@@ -161,11 +161,11 @@ void InitGlobals()
 #ifndef DEDICATED
    // These have to be done here because GL has to be initialized first
    if (console.GetInt("reflectionres") < 1)
-      console.Parse("set reflectionres 512", false);
+      console.Parse("setsave reflectionres 512", false);
    if (console.GetInt("cloudres") < 1)
-      console.Parse("set cloudres 1024", false);
+      console.Parse("setsave cloudres 1024", false);
    if (console.GetInt("shadowres") < 1)
-      console.Parse("set shadowres 1024", false);
+      console.Parse("setsave shadowres 1024", false);
    
    InitGUI();
 #endif

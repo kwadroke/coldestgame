@@ -96,60 +96,65 @@ set<SortableIPaddress> validaddrs;
 
 int Server(void* dummy)
 {
-   srand(time(0));
-   int choosename = (int)Random(0, 16);  // Just for fun:-)
-   switch (choosename)
+   if (console.GetString("servername") == "")
    {
-      case 0:
-         servername = "ORLY?";
-         break;
-      case 1:
-         servername = "Scoop!";
-         break;
-      case 2:
-         servername = "YARLY!";
-         break;
-      case 3:
-         servername = "Cybertron";
-         break;
-      case 4:
-         servername = "In ur server, pwnin ur cycles";
-         break;
-      case 5:
-         servername = "Nameless One";
-         break;
-      case 6:
-         servername = "Aimbots Anonymous";
-         break;
-      case 7:
-         servername = "Hax!";
-         break;
-      case 8:
-         servername = "Nooblet";
-         break;
-      case 9:
-         servername = "So yeah...and stuff";
-         break;
-      case 10:
-         servername = "<3 unnamed servers";
-         break;
-      case 11:
-         servername = "Candy Land";
-         break;
-      case 12:
-         servername = "[insert server name here]";
-         break;
-      case 13:
-         servername = "404: Server name not found";
-         break;
-      case 14:
-         servername = "I have a bad feeling about this...";
-         break;
-      case 15:
-         servername = "Indubitably";
-         break;
+      srand(time(0));
+      int choosename = (int)Random(0, 16);  // Just for fun:-)
+      switch (choosename)
+      {
+         case 0:
+            servername = "ORLY?";
+            break;
+         case 1:
+            servername = "Scoop!";
+            break;
+         case 2:
+            servername = "YARLY!";
+            break;
+         case 3:
+            servername = "Cybertron";
+            break;
+         case 4:
+            servername = "In ur server, pwnin ur cycles";
+            break;
+         case 5:
+            servername = "Nameless One";
+            break;
+         case 6:
+            servername = "Aimbots Anonymous";
+            break;
+         case 7:
+            servername = "Hax!";
+            break;
+         case 8:
+            servername = "Nooblet";
+            break;
+         case 9:
+            servername = "So yeah...and stuff";
+            break;
+         case 10:
+            servername = "<3 unnamed servers";
+            break;
+         case 11:
+            servername = "Candy Land";
+            break;
+         case 12:
+            servername = "[insert server name here]";
+            break;
+         case 13:
+            servername = "404: Server name not found";
+            break;
+         case 14:
+            servername = "I have a bad feeling about this...";
+            break;
+         case 15:
+            servername = "Indubitably";
+            break;
+      }
+      cout << "Chose name " << servername << " which is #" << choosename << endl;
    }
-   cout << "Chose name " << servername << " which is #" << choosename << endl;
+   else
+      servername = console.GetString("servername");
    nextservparticleid.next(); // 0 has special meaning
    servertickrate = console.GetInt("tickrate");
    maxplayers = console.GetInt("maxplayers");
@@ -863,9 +868,12 @@ int ServerSend(void* dummy)  // Thread for sending updates
             SDL_mutexP(servermutex);
             for (int i = 1; i < serverplayers.size(); ++i)
             {
-               pingpack.addr = serverplayers[i].addr;
-               servqueue.push_back(pingpack);
-               serverplayers[i].pingtick = SDL_GetTicks();
+               if (serverplayers[i].connected)
+               {
+                  pingpack.addr = serverplayers[i].addr;
+                  servqueue.push_back(pingpack);
+                  serverplayers[i].pingtick = SDL_GetTicks();
+               }
             }
             pingtick = 0;
             
@@ -896,8 +904,11 @@ int ServerSend(void* dummy)  // Thread for sending updates
             occup << 0 << eol;
             for (int i = 1; i < serverplayers.size(); ++i)
             {
-               occup.addr = serverplayers[i].addr;
-               servqueue.push_back(occup);
+               if (serverplayers[i].connected)
+               {
+                  occup.addr = serverplayers[i].addr;
+                  servqueue.push_back(occup);
+               }
             }
             
             // Broadcast announcement packets to the subnet for LAN servers

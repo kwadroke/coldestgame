@@ -271,6 +271,7 @@ string FillUpdatePacket()
 int NetListen(void* dummy)
 {
    UDPpacket *inpack;
+   IPaddress connectedaddr;
    unsigned int packetnum;
    float oppx, oppy, oppz;
    float opprot, opppitch, opproll, oppfacing;
@@ -334,6 +335,10 @@ int NetListen(void* dummy)
          
          if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
             continue;
+         if ((connectedaddr.host != inpack->address.host || connectedaddr.port != inpack->address.port) &&
+              packettype != "c" && packettype != "f" && packettype != "i")
+            continue;
+         
          if (packettype == "U") // Update packet
          {
             if (packetnum > recpacketnum) // Ignore older out of order packets
@@ -537,6 +542,7 @@ int NetListen(void* dummy)
          {
             if (!connected)
             {
+               connectedaddr = inpack->address;
                SDL_mutexP(clientmutex);
                get >> servplayernum;
                get >> nextmap;
