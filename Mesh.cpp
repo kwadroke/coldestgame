@@ -714,7 +714,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 void Mesh::AdvanceAnimation(const Vector3& campos)
 {
    // Ideally this would be < 2, but it causes some problems ATM
-   if (frameroot.size() < 1 && !dynamic)
+   if (frameroot.size() < 1) // || frameroot.size() < 2 && !dynamic
       return;
    
    Uint32 currtick = SDL_GetTicks();

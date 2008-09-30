@@ -7,4 +7,4 @@ Damage 100
 Name Gauss Rifle
 Heat 10
 Ammo 5
-ExplosionParticle particles/emitter/debris
+ExplosionEmitter particles/emitters/debris

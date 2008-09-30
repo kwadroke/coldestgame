@@ -6,4 +6,4 @@ Heat 40
 Radius 10
 ReloadTime 1000
 Damage 200
-ExplosionParticle particles/emitter/explosion
+ExplosionEmitter particles/emitters/explosion

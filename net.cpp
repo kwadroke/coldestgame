@@ -444,10 +444,8 @@ int NetListen(void* dummy)
                }
                
                // Indicate to main thread that models for unspawned players need to be removed
-               vector<PlayerData>::iterator i = player.begin();
-               ++i;  // Skip first element because that's local player
                bool addemitter;
-               for (; i != player.end(); ++i)
+               for (vector<PlayerData>::iterator i = player.begin(); i != player.end(); ++i)
                {
                   if (!i->spawned)
                   {
@@ -466,10 +464,8 @@ int NetListen(void* dummy)
                      if (addemitter)
                      {
                         SDL_mutexP(clientmutex);
-                        Mesh partmesh("models/projectile/base", resman);
-                        Particle newpart(0, Vector3(), Vector3(), .5f, 1.f, 2.f, 0.f, true, SDL_GetTicks(), partmesh);
-                        newpart.ttl = 500;
-                        ParticleEmitter newemitter(i->pos, newpart, 1000, 100.f, 10);
+                        ParticleEmitter newemitter("particles/emitters/explosion", resman);
+                        newemitter.position = i->pos;
                         emitters.push_back(newemitter);
                         SDL_mutexV(clientmutex);
                      }
@@ -531,7 +527,8 @@ int NetListen(void* dummy)
                   player[0].ping = player[servplayernum].ping;
                   player[0].salvage = player[servplayernum].salvage;
                   player[0].spawntimer = player[servplayernum].spawntimer;
-                  Action("updateunitselection");
+                  if (gui[loadoutmenu]->visible)
+                     Action("updateunitselection");
                }
                SDL_mutexV(clientmutex);
             }
