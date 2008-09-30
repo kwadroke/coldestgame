@@ -16,7 +16,7 @@
   </general>
   <kdevcustomproject>
     <run>
-      <mainprogram>/home/cybertron/source/coldest/coldet</mainprogram>
+      <mainprogram>/home/cybertron/source/coldest/coldest</mainprogram>
       <directoryradio>executable</directoryradio>
       <programargs></programargs>
       <globaldebugarguments></globaldebugarguments>
@@ -34,7 +34,7 @@
     </build>
     <make>
       <abortonerror>false</abortonerror>
-      <numberofjobs>3</numberofjobs>
+      <numberofjobs>6</numberofjobs>
       <prio>0</prio>
       <dontact>false</dontact>
       <makebin></makebin>
@@ -160,8 +160,8 @@
       <automaticCodeCompletion>true</automaticCodeCompletion>
       <automaticArgumentsHint>true</automaticArgumentsHint>
       <automaticHeaderCompletion>true</automaticHeaderCompletion>
-      <codeCompletionDelay>250</codeCompletionDelay>
-      <argumentsHintDelay>400</argumentsHintDelay>
+      <codeCompletionDelay>500</codeCompletionDelay>
+      <argumentsHintDelay>500</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
       <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
       <completionBoxItemOrder>0</completionBoxItemOrder>
@@ -195,7 +195,7 @@
       <orientation>Vertical</orientation>
     </splitheadersource>
     <references>
-      <pcs>Coldet</pcs>
+      <pcs>Coldest%20Autocomplete</pcs>
     </references>
   </kdevcppsupport>
   <cppsupportpart>
@@ -212,6 +212,7 @@
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
       <hidenonprojectfiles>false</hidenonprojectfiles>
+      <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>
 </kdevelop>

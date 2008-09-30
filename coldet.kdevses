@@ -1,34 +1,40 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="9" >
-  <Doc0 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/Makefile" >
-   <View0 Encoding="" line="15" Type="Source" />
+ <DocsAndViews NumberOfDocuments="11" >
+  <Doc0 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/Makefile" >
+   <View0 Encoding="" line="17" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/render.cpp" >
-   <View0 Encoding="" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/coldet.cpp" >
+   <View0 Encoding="" line="304" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/coldet.cpp" >
-   <View0 Encoding="" line="48" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/render.cpp" >
+   <View0 Encoding="" line="901" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/defines.h" >
-   <View0 Encoding="" line="121" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/todo" >
+   <View0 Encoding="" line="46" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/mainmenu.xml" >
-   <View0 Encoding="" line="2" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/server.cpp" >
+   <View0 Encoding="" line="1114" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/autoexec.cfg" >
-   <View0 Encoding="" line="0" Type="Source" />
+  <Doc5 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/net.cpp" >
+   <View0 Encoding="" line="533" Type="Source" />
   </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/loadout.xml" >
-   <View0 Encoding="" line="39" Type="Source" />
+  <Doc6 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/defines.h" >
+   <View0 Encoding="" line="57" Type="Source" />
   </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/server.cpp" >
-   <View0 Encoding="" line="15" Type="Source" />
+  <Doc7 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/util.cpp" >
+   <View0 Encoding="" line="90" Type="Source" />
   </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/cybertron/source/coldet/PlayerData.h" >
+  <Doc8 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/ObjectKDTree.h" >
    <View0 Encoding="" line="28" Type="Source" />
   </Doc8>
+  <Doc9 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/gui/GUI.cpp" >
+   <View0 Encoding="" line="148" Type="Source" />
+  </Doc9>
+  <Doc10 NumberOfViews="1" URL="file:///home/cybertron/source/coldest/maps/diamond.map" >
+   <View0 Encoding="" line="7" Type="Source" />
+  </Doc10>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
@@ -49,8 +55,14 @@
      <mark line="799" />
      <mark line="1452" />
     </bookmark>
+    <bookmark url="/home/cybertron/source/coldest/coldet.cpp" >
+     <mark line="201" />
+    </bookmark>
    </bookmarks>
   </kdevbookmarks>
+  <kdevsubversion>
+   <subversion base="" />
+  </kdevsubversion>
   <kdevvalgrind>
    <executable path="" params="" />
    <valgrind path="/usr/bin/valgrind" params=" --tool=memcheck --leak-check=yes" />

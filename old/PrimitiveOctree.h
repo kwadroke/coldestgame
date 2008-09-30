@@ -4,7 +4,7 @@
 #include <vector>
 #include "GenericPrimitive.h"
 #include "Vector3.h"
-#include "SDL_opengl.h"
+#include "glinc.h"
 
 using namespace std;
 
