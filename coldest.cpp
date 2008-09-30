@@ -227,7 +227,7 @@ void InitUnits()
    units[Ultra].size = 25.f;
    units[Ultra].scale = dummy.scale * units[Ultra].size / units[Nemesis].size;
    units[Ultra].weight = 80;
-   units[Ultra].viewoffset = Vector3(0, 20, 0);
+   units[Ultra].viewoffset = Vector3(0, 12, -12);
    for (size_t i = 0; i < numbodyparts; ++i)
       units[Ultra].maxhp[i] = 500;
    units[Omega].file = "omega";
@@ -236,7 +236,7 @@ void InitUnits()
    units[Omega].size = 40.f;
    units[Omega].scale = dummy.scale * units[Omega].size / units[Nemesis].size;
    units[Omega].weight = 200;
-   units[Omega].viewoffset = Vector3(0, 30, 0);
+   units[Omega].viewoffset = Vector3(0, 20, -20);
    for (size_t i = 0; i < numbodyparts; ++i)
       units[Omega].maxhp[i] = 1000;
 }
