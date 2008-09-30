@@ -76,8 +76,8 @@ void InitGlobals()
 {
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    // Default cvars
-   console.Parse("set screenwidth 640", false);
-   console.Parse("set screenheight 480", false);
+   console.Parse("set screenwidth 800", false);
+   console.Parse("set screenheight 600", false);
    console.Parse("set fullscreen 0", false);
    console.Parse("set showfps 1", false);
    console.Parse("set quiet 1", false);
@@ -88,7 +88,7 @@ void InitGlobals()
    console.Parse("set movestep 100", false);
    console.Parse("set ghost 0", false);
    console.Parse("set fov 60", false);
-   console.Parse("set viewdist 1000", false);
+   console.Parse("set viewdist 3000", false);
    console.Parse("set showkdtree 0", false);
    console.Parse("set tickrate 30", false);
    console.Parse("set serveraddr localhost", false);
