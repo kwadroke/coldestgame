@@ -1,5 +1,106 @@
-improve trees
-tree impostors
-object octree for frustum culling
+*Settings menu (other general menu cleanup?)
+*Make loading new maps safe (release materials only)
+*-Make server load next map after one team wins or loses
+*--Map rotation
+*Sync player animations with their movement (sort of done)
+*Grass
+*Particle emitters
+*-Shots only hit the nearest target
+*Fix that stupid bug with keys not resetting when a player dies
+*Fix multiple server state rewinding bugs
+*VSM - not unless I get really, really bored.  And maybe not even then.
+*Buttons on map for spawns
+*Players on minimap
+*Splash damage for exploding weapons
+*-Splash damage for exploding players
+*Vertex class
+*Smooth turning
+*Weight for weapons and items
+*End game screen
+*Salvage to purchase units
+*Allow editor to share vertices
+*-General graphical work (specular for more than just water, for instance)
+*Shader-based billboards // Not working
+*Bend leaves of trees
+*Stable random function
+*Grass draw distance
+*Better method of handling shots
+*-Hitscan weapons that stop where they should
+*-Alternately, have projectiles removed by server. (sort of done)
+*Weapons that fire from the proper locations (arms, torso)
+*Shutdown to restore HP
+*-Gradual HP restoration over time as well?
 
+*Dedicated server
+*-Ability to send remote commands to the server
+*Save specified cvars on shutdown
+*-setsave command
+*Wrap tree textures
+*Auto-assign teams
+*Server determines player number automatically
+*Different hit particle types per projectile
+*-Load particle from file?
+*Better shot system
+*Make Mesh assignable and destroyable
+*Allow changing of port on server
+*Multiple people spawning at the same location
+*Local player model so shots don't pass right through
+*Destructible arms
+*Team chat
+*Make water render on minimap
+*Hit indicator
+*Link widgets in GUI
+*Cache meshes to avoid slowdowns in-game
+*Fix leg model
+*Make scrollviews use slider
+*Allow both horizontal and vertical sliders
+*Fix stupidity with GUI textures and no AF
+*Eliminate memory leak in sync code
+*Fix console
+*Fix lighting of arms
+*Spawn point model
+*Eject on death
+*Spawn timers
+*Overheat == kaboom!
+*Running generates heat
+*Limit player count on server
+*Add Armor item
+Fix model scales
+*Show ammo
+*Explosions for player destruction
 
+Master Server
+Fix spawning under terrain
+Clean up GUI textures - started
+Add props to maps and cleanup layouts - layout cleanup done
+Allow connection to different servers
+Cheaper terrain (based on minimap texture?) - maybe
+Cockpit of some sort - maybe
+*Fix ugly water
+*-Configurable per map (maybe, or just different shaders)
+Minimap overlays
+*Load particle emitters from file
+Minigame to speed up spawn times
+Limit particle count
+
+Spectating
+-Free-fly mode
+-Follow
+-In cockpit
+
+Settings screen
+*-Particle count
+*-Particle update interval
+*-Impostor Distance
+*-Grass density
+*-Grass draw distance?
+*-Shadows
+*-Reflection
+*Resolution
+*Fullscreen
+*AA/AF
+*Soft Shadows
+-Control settings
+*--Mouse speed
+*--Turn smoothing
+--Key rebinding

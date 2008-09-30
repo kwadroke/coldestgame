@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
-   <Label x="100" y="400" width="800" height="30" text="Press L (default) to loadout" name="LoadOutText" align="center"/>
-</GUI>

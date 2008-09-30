@@ -177,6 +177,7 @@ int Server(void* dummy)
 }
 
 
+// Make sure to unlock the mutex in between long operations so the other threads don't end up waiting on us
 void ServerLoop()
 {
    setsighandler();
@@ -209,6 +210,9 @@ void ServerLoop()
          }
          ServerLoadMap();
       }
+      SDL_mutexV(servermutex);
+      
+      SDL_mutexP(servermutex);
       for (int i = 1; i < serverplayers.size(); ++i)
       {
          currtick = SDL_GetTicks();
@@ -223,21 +227,27 @@ void ServerLoop()
             ServerUpdatePlayer(i);
          }
       }
+      SDL_mutexV(servermutex);
          
-         // Update server meshes
+      // Update server meshes
+      SDL_mutexP(servermutex);
       for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
       {
          i->AdvanceAnimation();
       }
-         
-         // Save state so we can recall it for collision detection
+      SDL_mutexV(servermutex);
+      
+      SDL_mutexP(servermutex);
+      // Save state so we can recall it for collision detection
       SaveState();
+      SDL_mutexV(servermutex);
          
-         // Update particles
+      // Update particles
       int updinterval = 100;
+      SDL_mutexP(servermutex);
       UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
          
-         // Update server FPS
+      // Update server FPS
       ++framecount;
       currtick = SDL_GetTicks();
       if (currtick - lastfpsupdate > 1000)
@@ -776,13 +786,8 @@ int ServerSend(void* dummy)  // Thread for sending updates
    while (running)
    {
       ++runtimes;
-      //t.start();
+      t.start();
       SDL_Delay(1);  // Keep the loop from eating too much CPU
-      if (console.GetBool("limitserverrate"))
-      {
-         while (frametimer.elapsed() < 1000 / servertickrate - 1)
-            SDL_Delay(1);
-      }
       frametimer.start();
       
       currnettick = SDL_GetTicks();
