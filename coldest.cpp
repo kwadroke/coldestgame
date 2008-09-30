@@ -98,7 +98,7 @@ void InitGlobals()
    console.Parse("set serversync 1", false);
    console.Parse("set aa 0", false);
    console.Parse("set af 1", false);
-   console.Parse("set impdistmulti 1", false);
+   console.Parse("set impdistmulti 5", false);
    console.Parse("set detailmapsize 300", false);
    console.Parse("set softshadows 0", false);
    console.Parse("set turnsmooth 10", false);
@@ -114,7 +114,7 @@ void InitGlobals()
    console.Parse("set limitserverrate 1", false);
    console.Parse("set maxplayers 32", false);
    console.Parse("set mousespeed 400", false);
-   console.Parse("set terrainmulti 10", false);
+   console.Parse("set terrainmulti 3", false);
    console.Parse("set map diamond", false);
    
    // Variables that cannot be set from the console
@@ -158,6 +158,7 @@ void InitGlobals()
    
    ReadConfig();
    
+#ifndef DEDICATED
    // These have to be done here because GL has to be initialized first
    if (console.GetInt("reflectionres") < 1)
       console.Parse("set reflectionres 512", false);
@@ -167,6 +168,7 @@ void InitGlobals()
       console.Parse("set shadowres 1024", false);
    
    InitGUI();
+#endif
    InitUnits();
 }
 
