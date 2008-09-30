@@ -17,7 +17,7 @@
            pressed="textures/buttonpressed.png"
            hover="textures/buttonhover.png"
            leftclick="connectip"/>
-   <LineEdit x="400" y="400" width="200" height="24" text="localhost" name="servername"
+   <LineEdit x="400" y="400" width="200" height="24" text="www.nemebean.com:12012" name="servername"
              normal="textures/buttonnorm.png"
              hover="textures/buttonhover.png"/>
    <Button x="400" y="450" width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="6" align="center"

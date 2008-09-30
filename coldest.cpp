@@ -690,7 +690,7 @@ void GUIUpdate()
    else
       gui[loadoutmessage]->visible = false;
    
-   static GUI* hitind = gui[hud]->GetWidget("hitind");
+   GUI* hitind = gui[hud]->GetWidget("hitind");
    if (SDL_GetTicks() - lasthit < console.GetInt("hitindtime"))
    {
       hitind->visible = true;
@@ -698,7 +698,7 @@ void GUIUpdate()
    else
       hitind->visible = false;
    
-   static GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
+   GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
    servfps->text = "Server FPS: " + ToString(serverfps);
    SDL_mutexV(clientmutex);
 #endif
@@ -810,7 +810,6 @@ bool GUIEventHandler(SDL_Event &event)
                {
                   string padded = PadNum(num, 5);
                   filename = "screenshot" + padded + ".tga";
-                  cout << "Checking " << filename << endl;
                   ifstream test(filename.c_str());
                   if (!test)
                      finished = true;

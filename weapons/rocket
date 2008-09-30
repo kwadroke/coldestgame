@@ -2,11 +2,12 @@ Name Rocket
 Weight 35
 ProjectileWeight 0
 Damage 80
+Ammo 8
 Splash 50
 Acceleration .01
 Velocity 1
 ReloadTime 600
 Model projectile
-ExplosionParticle particles/emitter/explosion
+ExplosionEmitter particles/emitters/explosion
 Tracer smoke
 TracerTime 1000

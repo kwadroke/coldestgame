@@ -63,7 +63,7 @@
             </Slider>
          </ScrollView>
          
-         <ScrollView x="10" y="400" width="300" height="300">
+         <ScrollView x="10" y="400" width="500" height="300">
             <Label x="0" y="0" width="180" height="30" text="Rendering"/>
             <ComboBox x="0" y="50" width="180" height="30" name="resolutionbox"
                       normal="textures/buttonnorm.png"
@@ -77,10 +77,34 @@
                     normal="textures/buttonnorm.png"
                     pressed="textures/buttonpressed.png"
                     hover="textures/buttonhover.png"/>
-            <Button x="0" y="200" width="180" height="30" text="Reflection" toggle="true" name="reflectionbutton"
+            <Button x="0" y="200" width="180" height="30" text="Soft Shadows" toggle="true" name="softshadowsbutton"
                     normal="textures/buttonnorm.png"
                     pressed="textures/buttonpressed.png"
                     hover="textures/buttonhover.png"/>
+            <Button x="0" y="250" width="180" height="30" text="Reflection" toggle="true" name="reflectionbutton"
+                    normal="textures/buttonnorm.png"
+                    pressed="textures/buttonpressed.png"
+                    hover="textures/buttonhover.png"/>
+            <ComboBox x="200" y="50" width="180" height="30" name="aabox"
+                      normal="textures/buttonnorm.png"
+                      pressed="textures/buttonpressed.png"
+                      hover="textures/buttonhover.png">
+               <ComboBoxItem>0</ComboBoxItem>
+               <ComboBoxItem>2</ComboBoxItem>
+               <ComboBoxItem>4</ComboBoxItem>
+               <ComboBoxItem>8</ComboBoxItem>
+               <ComboBoxItem>16</ComboBoxItem>
+            </ComboBox>
+            <ComboBox x="200" y="100" width="180" height="30" name="afbox"
+                      normal="textures/buttonnorm.png"
+                      pressed="textures/buttonpressed.png"
+                      hover="textures/buttonhover.png">
+               <ComboBoxItem>1</ComboBoxItem>
+               <ComboBoxItem>2</ComboBoxItem>
+               <ComboBoxItem>4</ComboBoxItem>
+               <ComboBoxItem>8</ComboBoxItem>
+               <ComboBoxItem>16</ComboBoxItem>
+            </ComboBox>
          </ScrollView>
       </Tab>
       <Tab text="Sound" buttonwidth="120"

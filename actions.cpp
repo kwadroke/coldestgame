@@ -43,6 +43,9 @@ void UpdateUnitSelection()
    if (itemtype >= 0 && itemtype < Item::numitems)
       player[0].item = Item(itemtype, meshes);
    
+   for (size_t i = 0; i < numbodyparts; ++i)
+      player[0].weapons[i].ammo = int(float(player[0].weapons[i].ammo) * player[0].item.AmmoMult());
+   
    // Calculate weight
    int maxweight = units[player[0].unit].weight;
    int totalweight = 0;
