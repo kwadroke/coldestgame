@@ -1,0 +1,11 @@
+TurnSpeed 1
+Acceleration .01
+MaxSpeed 1
+Size 40
+Scale .68
+Weight 200
+TorsoOffset 0 0 0
+LArmOffset -10 0 0
+RArmOffset 10 0 0
+ViewOffset 0 20 -20
+HP 1000 1000 1000 1000

@@ -224,6 +224,36 @@ void InitUnits()
       units.push_back(dummy);
    
    units[Ultra].file = "ultra";
+   units[Omega].file = "omega";
+   for (size_t i = 0; i < numunits; ++i)
+   {
+      IniReader read("units/" + units[i].file);
+      read.Read(units[i].turnspeed, "TurnSpeed");
+      read.Read(units[i].acceleration, "Acceleration");
+      read.Read(units[i].maxspeed, "MaxSpeed");
+      read.Read(units[i].size, "Size");
+      read.Read(units[i].scale, "Scale");
+      read.Read(units[i].weight, "Weight");
+      read.Read(units[i].weaponoffset[Torso].x, "TorsoOffset", 0);
+      read.Read(units[i].weaponoffset[Torso].y, "TorsoOffset", 1);
+      read.Read(units[i].weaponoffset[Torso].z, "TorsoOffset", 2);
+      read.Read(units[i].weaponoffset[LArm].x, "LArmOffset", 0);
+      read.Read(units[i].weaponoffset[LArm].y, "LArmOffset", 1);
+      read.Read(units[i].weaponoffset[LArm].z, "LArmOffset", 2);
+      read.Read(units[i].weaponoffset[RArm].x, "RArmOffset", 0);
+      read.Read(units[i].weaponoffset[RArm].y, "RArmOffset", 1);
+      read.Read(units[i].weaponoffset[RArm].z, "RArmOffset", 2);
+      read.Read(units[i].viewoffset.x, "ViewOffset", 0);
+      read.Read(units[i].viewoffset.y, "ViewOffset", 1);
+      read.Read(units[i].viewoffset.z, "ViewOffset", 2);
+      for (size_t j = 0; j < numbodyparts; ++j)
+         read.Read(units[i].maxhp[j], "HP", j);
+   }
+   
+   units[Ultra].scale = dummy.scale * units[Ultra].size / units[Nemesis].size;
+   units[Omega].scale = dummy.scale * units[Omega].size / units[Nemesis].size;
+   
+   /*units[Ultra].file = "ultra";
    units[Ultra].acceleration = .02f;
    units[Ultra].maxspeed = 2.f;
    units[Ultra].size = 25.f;
@@ -240,7 +270,7 @@ void InitUnits()
    units[Omega].weight = 200;
    units[Omega].viewoffset = Vector3(0, 20, -20);
    for (size_t i = 0; i < numbodyparts; ++i)
-      units[Omega].maxhp[i] = 1000;
+      units[Omega].maxhp[i] = 1000;*/
 }
 
 
