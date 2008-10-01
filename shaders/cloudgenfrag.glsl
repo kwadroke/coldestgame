@@ -12,12 +12,12 @@ void main()
    
    for (int i = 0; i < 10; ++i)
    {
-      /* Need the noise value back in [-1, 1] rather than [0, 1] */
+      // Need the noise value back in [-1, 1] rather than [0, 1] 
       wval = texture2D(basenoise, gl_FragCoord.xy / frequency / noiseres).r;
       wval *= 2.;
       wval -= 1.;
       nval += wval * amplitude;
-      frequency /= 2.1;
+      frequency *= .45; // divided by ~2, but not exactly 2 to avoid potential artifacting
       amplitude *= persistence;
       ++octaves;
    }
