@@ -559,6 +559,8 @@ int ServerListen(void* dummy)
             
             if (accepted)
             {
+               if (!serverplayers[oppnum].spawned)
+                  serverplayers[oppnum].salvage -= CalculatePlayerWeight(serverplayers[oppnum]);
                serverplayers[oppnum].pos = spawnpointreq;
                serverplayers[oppnum].spawned = true;
                serverplayers[oppnum].lastmovetick = SDL_GetTicks();
