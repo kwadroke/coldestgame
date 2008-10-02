@@ -923,6 +923,10 @@ int ServerSend(void* dummy)  // Thread for sending updates
             bcpack << console.GetString("serverport") << eol;
             bcpack.Send(servoutpack, broadcastsock);
             
+            // Resend to just master server
+            SDLNet_ResolveHost(&bcpack.addr, "localhost", 12011); 
+            bcpack.Send(servoutpack, servsock);
+            
             SDL_mutexV(servermutex);
          }
       }

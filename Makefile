@@ -47,7 +47,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o Material.o
 		
-MASTER = master.o util.o Packet.o ServerInfo.o
+MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o
 
 ifeq ($(DEDICATED),1)
    OUT=server
@@ -65,6 +65,9 @@ all: coldest
 
 coldest: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(OUT) $(LDLIBS)
+	
+master: $(MASTER)
+	$(CXX) $(CXXFLAGS) $(MASTER) -o master $(LDLIBS)
 	
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $<
