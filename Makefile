@@ -20,6 +20,7 @@ endif
 # As it turns out static linking is a gigantic PITA, so I'm not going to bother
 #LDLIBS = -Wl,-v -Wl,-Bstatic -lSDL_ttf -lfreetype -lSDL_image -lSDL_net -L./lib -lxerces-c -lz -lGLEW `sdl-config --static-libs` -ldl -Wl,-Bdynamic -lGL -lGLU
 LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c `sdl-config --libs`
+MASTERLIBS = -lSDL_net `sdl-config --libs`
 CXX = g++
 CXXFLAGS=$(DEBUGOPTS) $(WARNINGS) $(DEFINES) `sdl-config --cflags`
 DEPEND = makedepend $(CXXFLAGS)
@@ -67,7 +68,7 @@ coldest: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(OUT) $(LDLIBS)
 	
 master: $(MASTER)
-	$(CXX) $(CXXFLAGS) $(MASTER) -o master $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(MASTER) -o master $(MASTERLIBS)
 	
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $<
