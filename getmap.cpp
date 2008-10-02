@@ -171,7 +171,8 @@ void GetMap(string fn)
       currnode.Read(spawntemp.name, "Name");
       spawnpoints.push_back(spawntemp);
    }
-   spawnschanged = true;
+   spawnschanged = true; 
+   player[0].team = 0;
    
    // Load objects
 #ifndef DEDICATED

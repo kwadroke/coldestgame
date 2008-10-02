@@ -130,8 +130,7 @@ void Host()
 
 void Resume()
 {
-   gui[mainmenu]->visible = false;
-   gui[hud]->visible = true;
+   ShowGUI(loadoutmenu);
 }
 
 
