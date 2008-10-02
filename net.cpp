@@ -315,6 +315,8 @@ int NetListen(void* dummy)
    netout = SDL_CreateThread(NetSend, NULL); // Start send thread
    cout << "NetListen " << gettid() << endl;
    
+   SendMasterListRequest();
+   
    while (running)
    {
       ++runtimes;
@@ -860,6 +862,26 @@ int NetListen(void* dummy)
             
             Ack(packetnum);
          }
+         else if (packettype == "a") // Master server announce packet
+         {
+            Uint32 serverhost;
+            Uint16 serverport;
+            get >> serverhost >> serverport;
+            ServerInfo addme;
+            addme.address.host = serverhost;
+            SDLNet_Write16(serverport, &addme.address.port);
+            if (knownservers.find(addme) == knownservers.end())
+            {
+               cout << "Received master server announcement for ";
+               string dotteddec = AddressToDD(addme.address.host);
+               cout << dotteddec << ":" << serverport << endl;
+               addme.strip = dotteddec;
+               SDL_mutexP(clientmutex);
+               servers.push_back(addme);
+               SDL_mutexV(clientmutex);
+               knownservers.insert(addme); // No need to wrap this, only used in this thread
+            }
+         }
          else if (packettype != "Y") // It's okay to get here on a Y packet
          {
             cout << "Warning: Unknown packet type received: " << packettype << endl;
@@ -871,7 +893,7 @@ int NetListen(void* dummy)
       
       // Have to listen on a specific port for server announcements.  Since this is only for LAN play
       // it doesn't matter that this won't work with NAT
-      if (annlisten)
+      if (0)//annlisten)
       {
          while (SDLNet_UDP_Recv(annsock, inpack))
          {
@@ -896,7 +918,7 @@ int NetListen(void* dummy)
                   SDL_mutexP(clientmutex);
                   servers.push_back(addme);
                   SDL_mutexV(clientmutex);
-                  knownservers.insert(addme); // No need to wrap this, only used here
+                  knownservers.insert(addme); // No need to wrap this, only used in this thread
                }
             }
          }
@@ -969,6 +991,18 @@ void SendFire()
    pack.ack = sendpacketnum;
    pack << "f\n";
    pack << pack.ack << eol;
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
+   SDL_mutexV(netmutex);
+}
+
+
+void SendMasterListRequest()
+{
+   IPaddress masteraddr;
+   SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011);
+   Packet pack(&masteraddr);
+   pack << "r\n0\n";
    SDL_mutexP(netmutex);
    sendqueue.push_back(pack);
    SDL_mutexV(netmutex);

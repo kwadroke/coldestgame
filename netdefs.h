@@ -39,5 +39,6 @@ void HandleAck(unsigned long);
 void SendPowerdown();
 void SendCommand(const string&);
 void SendFire();
+void SendMasterListRequest();
 
 #endif

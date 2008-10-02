@@ -45,7 +45,7 @@ int main()
    
    while (running)
    {
-      SDL_Delay(1);
+      SDL_Delay(50);
       
       // Receive
       Receive(socket);
@@ -126,11 +126,13 @@ void GetAnnounce(stringstream& get, UDPpacket* pack)
 
 void GetRequest(stringstream& get, UDPpacket* pack)
 {
+   cout << "Received request" << endl;
    for (size_t i = 0; i < servers.size(); ++i)
    {
       Packet response(&pack->address);
-      response << "a\n0\n"; // Problem: a packets assume the sending host is the server
-      response << SDLNet_Read16(servers[i].address.port) << eol;
+      response << "a\n0\n";
+      response << servers[i].address.host << eol;
+      response << SDLNet_Read16(&servers[i].address.port) << eol;
       queue.push_back(response);
    }
 }

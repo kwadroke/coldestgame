@@ -116,6 +116,7 @@ void InitGlobals()
    console.Parse("set mousespeed 400", false);
    console.Parse("set terrainmulti 3", false);
    console.Parse("set map diamond", false);
+   console.Parse("set master localhost", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
