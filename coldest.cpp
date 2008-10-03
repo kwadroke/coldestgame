@@ -1794,8 +1794,17 @@ void CacheMeshes()
    tocache.push_back("models/nemesis/torso");
    tocache.push_back("models/nemesis/larm");
    tocache.push_back("models/nemesis/rarm");
+   tocache.push_back("models/ultra/legs");
+   tocache.push_back("models/ultra/torso");
+   tocache.push_back("models/ultra/larm");
+   tocache.push_back("models/ultra/rarm");
+   tocache.push_back("models/omega/legs");
+   tocache.push_back("models/omega/torso");
+   tocache.push_back("models/omega/larm");
+   tocache.push_back("models/omega/rarm");
+   
    tocache.push_back("models/explosion");
-   //tocache.push_back("models/spawn");
+   tocache.push_back("models/spawn");
    
    for (size_t i = 0; i < tocache.size(); ++i)
       meshcache->GetNewMesh(tocache[i]);

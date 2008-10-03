@@ -295,14 +295,14 @@ int NetListen(void* dummy)
    // this port.  No, I didn't learn that the hard way, but I did almost forget.
    if (!(annsock = SDLNet_UDP_Open(12011)))
    {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      cout << "Announce port SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       annlisten = false;
       //return -1;
    }
    
    if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
    {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      cout << "Listen SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    
@@ -338,7 +338,7 @@ int NetListen(void* dummy)
          if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
             continue;
          if ((connectedaddr.host != inpack->address.host || connectedaddr.port != inpack->address.port) &&
-              packettype != "c" && packettype != "f" && packettype != "i")
+              packettype != "c" && packettype != "f" && packettype != "i" && packettype != "a")
             continue;
          
          if (packettype == "U") // Update packet
@@ -893,7 +893,7 @@ int NetListen(void* dummy)
       
       // Have to listen on a specific port for server announcements.  Since this is only for LAN play
       // it doesn't matter that this won't work with NAT
-      if (0)//annlisten)
+      if (annlisten)
       {
          while (SDLNet_UDP_Recv(annsock, inpack))
          {
