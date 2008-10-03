@@ -714,6 +714,15 @@ void GUIUpdate()
    
    GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
    servfps->text = "Server FPS: " + ToString(serverfps);
+   
+   if (gui[mainmenu]->visible)
+   {
+      GUI* resumebutton = gui[mainmenu]->GetWidget("resumebutton");
+      if (connected)
+         resumebutton->visible = true;
+      else
+         resumebutton->visible = false;
+   }
    SDL_mutexV(clientmutex);
 #endif
 }

@@ -38,6 +38,7 @@ float Max(float, float);
 Vector3 GetTerrainNormal(int, int, int, int);
 float GetSmoothedTerrain(int, int, int, int, vector< floatvec >&);
 float Random(float, float);
+Vector3 ChooseNormal(const Vector3&, const Vector3&);
 
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
@@ -430,10 +431,24 @@ void GetMap(string fn)
          tempquad.SetVertex(1, Vector3(x * tilesize, heightmap[x][y + 1], (y + 1) * tilesize));
          tempquad.SetVertex(2, Vector3((x + 1) * tilesize, heightmap[x + 1][y + 1], (y + 1) * tilesize));
          tempquad.SetVertex(3, Vector3((x + 1) * tilesize, heightmap[x + 1][y], y * tilesize));
-         tempquad.SetNormal(0, normals[x][y]);
-         tempquad.SetNormal(1, normals[x][y + 1]);
-         tempquad.SetNormal(2, normals[x + 1][y + 1]);
-         tempquad.SetNormal(3, normals[x + 1][y]);
+         
+         // Determine whether to use the smoothed normal or the actual normal
+         Vector3 actualnorm = tempquad.GetVertex(1) - tempquad.GetVertex(0);
+         actualnorm = actualnorm.cross(tempquad.GetVertex(3) - tempquad.GetVertex(0));
+         actualnorm.normalize();
+         if (actualnorm.y < 0)
+         {
+            actualnorm *= -1.f;
+            cout << "<0" << endl;
+         }
+         Vector3 tempnorm = ChooseNormal(actualnorm, normals[x][y]);
+         tempquad.SetNormal(0, tempnorm);
+         tempnorm = ChooseNormal(actualnorm, normals[x][y + 1]);
+         tempquad.SetNormal(1, tempnorm);
+         tempnorm = ChooseNormal(actualnorm, normals[x + 1][y + 1]);
+         tempquad.SetNormal(2, tempnorm);
+         tempnorm = ChooseNormal(actualnorm, normals[x + 1][y]);
+         tempquad.SetNormal(3, tempnorm);
 #ifndef DEDICATED
          tempquad.SetMaterial(&resman.LoadMaterial(terrainmaterial));
 #endif
@@ -951,4 +966,21 @@ float GetSmoothedTerrain(int x, int y, int mapw, int maph, vector<floatvec>& map
       ++count;
    }
    return total / (float)count;
+}
+
+
+// Currently this doesn't work well, so TBD whether it will go back in
+Vector3 ChooseNormal(const Vector3& actual, const Vector3& smooth)
+{
+   /*
+   float cliffcutoff = .5f;
+   Vector3 retval = smooth;
+   if (actual.distance(smooth) > .6f)
+   {
+      retval += actual * 2.f;
+      retval.normalize();
+      return retval;
+   }
+   */
+   return smooth;
 }
