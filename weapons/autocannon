@@ -8,5 +8,5 @@ Model projectile
 Name Autocannon
 ReloadTime 200
 Tracer machinegun
-TracerTime 100
+TracerTime 30
 ExplosionEmitter particles/emitters/debris

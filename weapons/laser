@@ -8,5 +8,5 @@ Name Laser
 Heat 20
 Model empty
 Tracer laser
-TracerTime 100
+TracerTime 30
 ExplosionEmitter particles/emitters/debris
