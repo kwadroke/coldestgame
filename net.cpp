@@ -559,6 +559,8 @@ int NetListen(void* dummy)
                cout << "We are server player " << servplayernum << endl;
                cout << "Map is: " << nextmap << endl;
                SDL_mutexV(clientmutex);
+               itemsreceived.clear();
+               hitsreceived.clear();
             }
             HandleAck(packetnum);
          }

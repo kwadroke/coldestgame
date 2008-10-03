@@ -9,4 +9,4 @@ Model empty
 Name Machine Gun
 ExplosionEmitter particles/emitters/debris
 Tracer machinegun
-TracerTime 100
+TracerTime 20
