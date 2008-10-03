@@ -251,6 +251,11 @@ void Console::Action(const string& action)
    {
       connected = false;
       doconnect = true;
+      // I think to avoid race conditions it's necessary to reset both of these here.  If we only
+      // set mapname, we risk reloading the current map, which may not be desirable.  If we only
+      // set nextmap, we risk loading the map "", which would obviously be bad.:-)
+      mapname = "";
+      nextmap = "";
    }
    else if (action == "restartgl")
    {
