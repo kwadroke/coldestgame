@@ -46,10 +46,6 @@ void ComboBox::RenderWidget()
 
 void ComboBox::LeftDown(SDL_Event* event)
 {
-   if (button->InWidget(event) && !table->visible)
-   {
-      table->visible = true;
-   }
 }
 
 
@@ -60,6 +56,12 @@ void ComboBox::LeftClick(SDL_Event* event)
       button->text = table->GetSelectedString(0);
       DoAction(valuechanged);
       table->visible = false;
+      event->type = SDL_USEREVENT; // ComboBox tables eat events, so make sure nobody else processes this
+   }
+   
+   if (button->InWidget(event) && !table->visible)
+   {
+      table->visible = true;
    }
 }
 
