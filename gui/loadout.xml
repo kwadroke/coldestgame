@@ -72,9 +72,13 @@
       <ComboBoxItem>Ammo Carrier</ComboBoxItem>
       <ComboBoxItem>Armor</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="350" width="200" height="40" name="Weight" text="0 tons"
+   <Label x="700" y="350" width="200" height="30" text="Weight"
           normal="textures/buttonnorm.png"/>
-   <Label x="700" y="400" width="200" height="40" name="Salvage" text="0 tons"
+   <Label x="700" y="385" width="200" height="30" name="Weight" text="0 tons"
+          normal="textures/buttonnorm.png"/>
+   <Label x="700" y="425" width="200" height="30" text="Salvage"
+          normal="textures/buttonnorm.png"/>
+   <Label x="700" y="460" width="200" height="30" name="Salvage" text="0 tons"
           normal="textures/buttonnorm.png"/>
    <Label x="700" y="900" width="200" height="50" name="SpawnTimer" text="Spawn in" align="center"
           normal="textures/buttonnorm.png"
