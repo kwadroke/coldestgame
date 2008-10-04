@@ -118,6 +118,7 @@ void InitGlobals()
    console.Parse("set terrainmulti 3", false);
    console.Parse("set map diamond", false);
    console.Parse("set master localhost", false);
+   console.Parse("set respawntime 15000", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -1155,7 +1156,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    static const float threshold = .3f;
    static float gravity = .15f;
    
-   if (console.GetBool("fly") || mplayer.spectate)
+   if (console.GetBool("fly") || (mplayer.spectate && mplayer.spawned))
       mplayer.pos.y += d.y * step * mplayer.speed;
    else
    {
@@ -1176,17 +1177,17 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
             //logout << "Hit ground " << mplayer.fallvelocity << endl;
          }
          mplayer.fallvelocity = 0.f;
-         if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4))
+         if (mplayer.weight < .99f)
+         {
+            mplayer.pos.y -= step * 30.f * mplayer.weight;
+         }
+         else if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4)) // Moving downhill
          {
             mplayer.pos.y -= step * 2.f;
          }
-         else if (!floatzero(mplayer.speed))
+         else if (!floatzero(mplayer.speed)) // Moving uphill
          {
-            mplayer.pos.y -= step * .1f;
-         }
-         else if (mplayer.weight < .99f)
-         {
-            mplayer.pos.y -= step * 30.f * mplayer.weight;
+            mplayer.pos.y -= step * 1.5f;
          }
       }
       else
@@ -1204,7 +1205,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    
    
    // Did we hit something?  If so, deal with it
-   if (!console.GetBool("ghost"))
+   if (!console.GetBool("ghost") && mplayer.weight > 0)
    {
       Vector3 offsetoldmain = old + Vector3(0, mplayer.size, 0);
       // Check from slightly behind where they actually started to avoid float precision problems

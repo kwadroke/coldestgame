@@ -687,6 +687,7 @@ int NetListen(void* dummy)
                   if (player[0].team != 0)
                      player[0].spectate = false;
                   player[0].spawned = true;
+                  player[0].Reset();
                }
                else
                {

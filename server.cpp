@@ -539,7 +539,7 @@ int ServerListen(void* dummy)
                      for (float zcheck = spawnpointreq.z - 100.f; zcheck <= spawnpointreq.z + 101.f; zcheck += 100.f)
                      {
                         checkvec = Vector3(xcheck, ycheck, zcheck);
-                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check).distance2() < 1e-4f)
+                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check).distance2() < 1e-4f && GetTerrainHeight(xcheck, zcheck) < ycheck)
                         {
                            spawnpointreq = checkvec;
                            found = true;
@@ -568,6 +568,7 @@ int ServerListen(void* dummy)
                   }
                   serverplayers[oppnum].pos = spawnpointreq;
                   serverplayers[oppnum].lastmovetick = SDL_GetTicks();
+                  serverplayers[oppnum].Reset();
                   for (int i = 0; i < numbodyparts; ++i)
                   {
                      serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
@@ -1547,6 +1548,7 @@ void KillPlayer(const int i)
 {
    serverplayers[i].deaths++;
    serverplayers[i].Kill();
+   serverplayers[i].spawntimer = console.GetInt("respawntime");
    SendKill(i);
    SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
 }

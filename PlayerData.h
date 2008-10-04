@@ -17,6 +17,7 @@ class PlayerData
       PlayerData(Meshlist&);
       void Disconnect();
       void Kill();
+      void Reset();
       
       Vector3 pos;
       Vector3 clientpos; // So server can keep track of both
