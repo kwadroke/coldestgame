@@ -151,7 +151,7 @@ int Server(void* dummy)
             servername = "Indubitably";
             break;
       }
-      cout << "Chose name " << servername << " which is #" << choosename << endl;
+      logout << "Chose name " << servername << " which is #" << choosename << endl;
    }
    else
       servername = console.GetString("servername");
@@ -167,7 +167,7 @@ int Server(void* dummy)
    servermutex = SDL_CreateMutex();
    if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    serversend = SDL_CreateThread(ServerSend, NULL);
@@ -187,7 +187,7 @@ void ServerLoop()
 {
    setsighandler();
    
-   cout << "ServerLoop " << gettid() << endl;
+   logout << "ServerLoop " << gettid() << endl;
    
    Uint32 currtick;
    Timer frametimer;
@@ -225,7 +225,7 @@ void ServerLoop()
          {
             validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
             serverplayers[i].Disconnect();
-            cout << "Player " << i << " timed out.\n" << flush;
+            logout << "Player " << i << " timed out.\n" << flush;
          }
          else if (serverplayers[i].connected)
          {
@@ -285,11 +285,11 @@ int ServerListen(void* dummy)
    
    if (!(inpack = SDLNet_AllocPacket(5000)))
    {
-      cout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       return -1;
    }
    
-   cout << "ServerListen " << gettid() << endl;
+   logout << "ServerListen " << gettid() << endl;
    
    while (running)
    {
@@ -363,7 +363,7 @@ int ServerListen(void* dummy)
                serverplayers[oppnum].clientpos.z = oppz;
                serverplayers[oppnum].lastupdate = SDL_GetTicks();
                
-               //cout << oppx << "  " << oppy << "  " << oppz << endl << flush;
+               //logout << oppx << "  " << oppy << "  " << oppz << endl << flush;
                
                // Freak out if we get a packet whose checksum isn't right
                unsigned long value = 0;
@@ -379,9 +379,9 @@ int ServerListen(void* dummy)
                get >> checksum;
                if (checksum != value)
                {
-                  cout << "Freaking out on packet " << packetnum << endl;
-                  cout << debug << endl;
-                  cout << checksum << "  " << value << endl;
+                  logout << "Freaking out on packet " << packetnum << endl;
+                  logout << debug << endl;
+                  logout << checksum << "  " << value << endl;
                }
             }
             SDL_mutexV(servermutex);
@@ -429,7 +429,7 @@ int ServerListen(void* dummy)
                   serverplayers[respondto].addr = inpack->address;
                   validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
                   serverplayers[respondto].needsync = true;
-                  cout << "Player " << respondto << " connected\n" << flush;
+                  logout << "Player " << respondto << " connected\n" << flush;
                }
                serverplayers[respondto].connected = true;
                serverplayers[respondto].name = name;
@@ -464,7 +464,7 @@ int ServerListen(void* dummy)
          {
             SDL_mutexP(servermutex);
             serverplayers[oppnum].ping = SDL_GetTicks() - serverplayers[oppnum].pingtick;
-            //cout << oppnum << " ping: " << serverplayers[oppnum].ping << endl;
+            //logout << oppnum << " ping: " << serverplayers[oppnum].ping << endl;
             SDL_mutexV(servermutex);
          }
          else if (packettype == "i")
@@ -485,7 +485,7 @@ int ServerListen(void* dummy)
             bool accepted = false;
             Vector3 spawnpointreq;
             
-            //cout << "Player " << oppnum << " is spawning" << endl;
+            //logout << "Player " << oppnum << " is spawning" << endl;
             SDL_mutexP(servermutex);
             get >> serverplayers[oppnum].unit;
             int weapid;
@@ -560,14 +560,17 @@ int ServerListen(void* dummy)
             if (accepted)
             {
                if (!serverplayers[oppnum].spawned)
-                  serverplayers[oppnum].salvage -= CalculatePlayerWeight(serverplayers[oppnum]);
-               serverplayers[oppnum].pos = spawnpointreq;
-               serverplayers[oppnum].spawned = true;
-               serverplayers[oppnum].lastmovetick = SDL_GetTicks();
-               for (int i = 0; i < numbodyparts; ++i)
                {
-                  serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
-                  serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
+                  if (serverplayers[oppnum].team != 0)
+                     serverplayers[oppnum].salvage -= CalculatePlayerWeight(serverplayers[oppnum]);
+                  serverplayers[oppnum].pos = spawnpointreq;
+                  serverplayers[oppnum].spawned = true;
+                  serverplayers[oppnum].lastmovetick = SDL_GetTicks();
+                  for (int i = 0; i < numbodyparts; ++i)
+                  {
+                     serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
+                     serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
+                  }
                }
             }
             
@@ -754,7 +757,7 @@ int ServerListen(void* dummy)
       //t.stop();
    }
    
-   cout << "Server Listen " << runtimes << endl;
+   logout << "Server Listen " << runtimes << endl;
    
    // Clean up
    SDLNet_FreePacket(inpack);
@@ -778,17 +781,17 @@ int ServerSend(void* dummy)  // Thread for sending updates
    
    if (!(servoutpack = SDLNet_AllocPacket(5000)))  // 5000 is arbitrary at this point
    {
-      cout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       return -1;
    }
    
    if (!(broadcastsock = SDLNet_UDP_Open(0)))
    {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    
-   cout << "ServerSend " << gettid() << endl;
+   logout << "ServerSend " << gettid() << endl;
    
    while (running)
    {
@@ -856,7 +859,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             }
             SDL_mutexV(servermutex);
          }
-         else cout << "Error: data too long\n" << flush;
+         else logout << "Error: data too long\n" << flush;
          
          // Send pings to monitor network performance
          // Also use this opportunity to send occasional updates
@@ -949,7 +952,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
       SDL_mutexV(servermutex);
       //t.stop();
    }
-   cout << "Server Send " << runtimes << endl;
+   logout << "Server Send " << runtimes << endl;
    return 0;
 }
 
@@ -1010,7 +1013,7 @@ void ServerLoadMap()
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
    
-   cout << "Map loaded" << endl;
+   logout << "Map loaded" << endl;
    serverhasmap = true;
    gameover = false;
    SDL_mutexV(servermutex);
@@ -1092,7 +1095,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
             if (curr == &(*serverplayers[i].mesh[part]) &&
                 (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage))
             {
-               cout << "Hit " << part << endl;
+               logout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage * serverplayers[i].item.ArmorMult());
                SendDamage(i);
                if (serverplayers[i].hp[part] <= 0)
@@ -1117,7 +1120,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
          serverplayers[i].salvage += 100;
          serverplayers[playernum].kills++;
          serverplayers[playernum].salvage += CalculatePlayerWeight(serverplayers[i]) / 2;
-         cout << "Player " << i << " was killed by Player " << playernum << endl;
+         logout << "Player " << i << " was killed by Player " << playernum << endl;
          KillPlayer(i);
       }
    }
@@ -1127,7 +1130,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
    {
       if (&(*i->mesh) == curr)
       {
-         cout << "Hit " << curr << endl;
+         logout << "Hit " << curr << endl;
          i->hp -= int(damage);
          if (i->hp < 0)
          {
@@ -1374,7 +1377,7 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
          p << p.ack << eol;
          p << it->id << eol;
          
-         cout << "Removing " << it->id << endl;
+         logout << "Removing " << it->id << endl;
             
          servqueue.push_back(p);
       }
@@ -1403,7 +1406,7 @@ void RemoveTeam(int num)
 {
    if (!gameover)
    {
-      cout << "Team " << num << " has been defeated" << endl;
+      logout << "Team " << num << " has been defeated" << endl;
       gameover = true;
       nextmaptime = SDL_GetTicks() + console.GetInt("endgametime") * 1000;
       for (size_t i = 0; i < serverplayers.size(); ++i)

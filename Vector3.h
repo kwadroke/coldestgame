@@ -4,6 +4,7 @@
 #include "glinc.h"
 #include <iostream>
 #include <math.h>
+#include "logout.h"
 
 class Vector3
 {

@@ -10,7 +10,7 @@ ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : p(6, Quad()), vertice
    {
       members.push_back(&(*i));
    }
-   cout << "KD-Tree Objects: " << members.size() << endl << flush;
+   logout << "KD-Tree Objects: " << members.size() << endl << flush;
    
    vertices[1].x = v[0].x;
    vertices[1].y = v[0].y;

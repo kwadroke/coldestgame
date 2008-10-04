@@ -69,7 +69,7 @@ void Quad::GetVertNums(const int num, int& firstv, int& secondv) const
          secondv = 2;
          break;
       default:
-         cout << "Warning, bogus vertex passed to GetVertNums" << endl;
+         logout << "Warning, bogus vertex passed to GetVertNums" << endl;
          break;
    };
 }

@@ -51,7 +51,9 @@ void Repaint()
       SDL_mutexP(clientmutex);
       
       Move(player[0], meshes, kdtree);
-      if (console.GetBool("serversync") && !player[0].spectate)
+      if (player[0].spectate)
+         UpdateSpectatePosition();
+      else if (console.GetBool("serversync"))
          SynchronizePosition();
       localplayer = player[0];
       
@@ -100,7 +102,7 @@ void Repaint()
          /*if (localplayer.pitch > 30.f)
          {
             detailmapsize = 75.f + detailmapsize * (1.f - localplayer.pitch / 90.f);
-            cout << detailmapsize << endl;
+            logout << detailmapsize << endl;
          }*/
          resman.shaderman.GlobalSetUniform1f("detailmapsize", detailmapsize);
          float shadowres = console.GetFloat("shadowres");
@@ -262,7 +264,7 @@ void Repaint()
    SDL_GL_SwapBuffers();
    if (t.elapsed() > (1000.f / fps) * 2.f)
    {
-      //cout << "Average ms/frame: " << (1000.f / fps) << endl;
+      //logout << "Average ms/frame: " << (1000.f / fps) << endl;
       //t.stop();
    }
    //sleep(1);
@@ -456,15 +458,15 @@ void UpdateFBO(const PlayerData& localplayer)
                if (sortedbyimpdim[current]->dist > toswap->dist)
                {
                   toswap = sortedbyimpdim[current];
-                  //cout << "Swapping " << counter << " for " << current << endl;
+                  //logout << "Swapping " << counter << " for " << current << endl;
                }
                --count;
                ++current;
             }
             
             // Do the swap and add the swapped object to our list of things to update (maybe)
-            //cout << "Swapping for " << impfbolist[toswap->impostorfbo].GetWidth() << endl;
-            //cout << desireddim << "  " << currfbo->GetWidth() << endl;
+            //logout << "Swapping for " << impfbolist[toswap->impostorfbo].GetWidth() << endl;
+            //logout << desireddim << "  " << currfbo->GetWidth() << endl;
             int tempfbo = i->impostorfbo;
             i->impostorfbo = toswap->impostorfbo;
             toswap->impostorfbo = tempfbo;

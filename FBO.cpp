@@ -10,7 +10,7 @@ FBO::FBO()
 // depth indicates whether color rendering should be enabled - primarily intended for shadow maps
 FBO::FBO(int widthin, int heightin, bool depthin, TextureHandler *texhandin)
 {
-   //cout << "Called constructor\n";
+   //logout << "Called constructor\n";
    width = widthin;
    height = heightin;
    depth = depthin;
@@ -21,7 +21,7 @@ FBO::FBO(int widthin, int heightin, bool depthin, TextureHandler *texhandin)
 
 FBO::~FBO()
 {
-   //cout << "Called destructor\n";
+   //logout << "Called destructor\n";
    if (!valid) return;
    glDeleteTextures(2, tex);
    glDeleteFramebuffersEXT(1, &fboid);
@@ -32,7 +32,7 @@ FBO::~FBO()
 
 FBO::FBO(const FBO &f)
 {
-   //cout << "Called copy constructor\n";
+   //logout << "Called copy constructor\n";
    width = f.width;
    height = f.height;
    depth = f.depth;
@@ -45,7 +45,7 @@ FBO& FBO::operator=(const FBO &f)
 {
    if (this == &f) return *this;
    
-   //cout << "Called operator=\n";
+   //logout << "Called operator=\n";
    width = f.width;
    height = f.height;
    depth = f.depth;
@@ -57,7 +57,7 @@ FBO& FBO::operator=(const FBO &f)
 void FBO::init()
 {
    glGenFramebuffersEXT(1, &fboid);
-   //cout << "Creating framebuffer object " << fboid << endl;
+   //logout << "Creating framebuffer object " << fboid << endl;
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboid);
    
    glGenTextures(2, tex);
@@ -97,7 +97,7 @@ void FBO::init()
    }
    
    if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
-      cout << "Failed to create framebuffer.\n" << hex << glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) << endl;
+      logout << "Failed to create framebuffer.\n" << hex << glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) << endl;
    
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
    valid = true;
@@ -126,7 +126,7 @@ void FBO::Bind()
 {
    if (!valid)
    {
-      cout << "Warning: Attempted to bind invalid framebuffer object " << fboid << endl;
+      logout << "Warning: Attempted to bind invalid framebuffer object " << fboid << endl;
       return;
    }
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboid);

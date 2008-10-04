@@ -32,7 +32,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Console.o server.o render.o IDGen.o Weapon.o Item.o util.o\
 		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
-		renderdefs.o globals.o netdefs.o PlayerData.o\
+		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o
       
@@ -44,7 +44,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		Console.o server.o IDGen.o Weapon.o Item.o util.o\
 		ObjectKDTree.o Packet.o MeshCache.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
-		renderdefs.o globals.o netdefs.o PlayerData.o\
+		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o Material.o
 		

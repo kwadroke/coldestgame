@@ -158,7 +158,7 @@ void Material::UseTextureOnly() const
 void Material::SetTexture(int texunit, GLuint tex)
 {
    if (texfilename[texunit] != "")
-      cout << "Warning: Possible memory leak in Material::SetTexture" << endl;
+      logout << "Warning: Possible memory leak in Material::SetTexture" << endl;
    texfilename[texunit] = "";
    texid[texunit] = tex;
 }

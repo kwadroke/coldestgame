@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <SDL_net.h>
-#include <iostream> // For debugging
+#include "logout.h"
 
 using namespace std;
 

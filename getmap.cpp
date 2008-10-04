@@ -43,7 +43,7 @@ Vector3 ChooseNormal(const Vector3&, const Vector3&);
 // This function is waaay too long, but I'm too lazy to split it up
 void GetMap(string fn)
 {
-   cout << "Loading " << fn << endl;
+   logout << "Loading " << fn << endl;
    int numtextures;
    int numobjects;
    int mapw, maph;
@@ -207,7 +207,7 @@ void GetMap(string fn)
    loadmap = IMG_Load(heightmapname.c_str());
    if (!loadmap)
    {
-      cout << "Error loading heightmap for file: " << heightmapname << endl;
+      logout << "Error loading heightmap for file: " << heightmapname << endl;
       exit(-1);
    }
    
@@ -290,7 +290,7 @@ void GetMap(string fn)
    loadmap = IMG_Load(lightmapname.c_str());
    if (!loadmap || loadmap->w != mapw || loadmap->h != maph)
    {
-      cout << "Error loading lightmap for file: " << heightmapname << endl;
+      logout << "Error loading lightmap for file: " << heightmapname << endl;
       exit(-1);
    }
    
@@ -439,7 +439,7 @@ void GetMap(string fn)
          if (actualnorm.y < 0)
          {
             actualnorm *= -1.f;
-            cout << "<0" << endl;
+            logout << "<0" << endl;
          }
          Vector3 tempnorm = ChooseNormal(actualnorm, normals[x][y]);
          tempquad.SetNormal(0, tempnorm);
@@ -577,7 +577,7 @@ void GetMap(string fn)
    watermaxy = maph * tilesize + 5000.f;
    int numwaterx = (int)(watermaxx - waterminx) / (int)waterchunksize;
    int numwatery = (int)(watermaxy - waterminy) / (int)waterchunksize;
-   cout << numwaterx << "  " << numwatery << endl;
+   logout << numwaterx << "  " << numwatery << endl;
    
    if (watermesh) delete watermesh;
    
@@ -648,7 +648,7 @@ void GetMap(string fn)
       loadgrass = IMG_Load(file.c_str());
       if (!loadgrass)
       {
-         cout << "Error loading grassmap for file: " << file << endl;
+         logout << "Error loading grassmap for file: " << file << endl;
          exit(-1);
       }
       
@@ -663,7 +663,7 @@ void GetMap(string fn)
       
       Mesh basemesh(model, resman); // Don't need GL because this is a temp mesh
       
-      cout << "Generating grass" << endl;
+      logout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
       for (int x = 0; x < grassw; x += groupsize)
       {
@@ -741,9 +741,9 @@ void GetMap(string fn)
       points[i + 4] = coldet.worldbounds[5].GetVertex(i);
    }
    kdtree = ObjectKDTree(&meshes, points);
-   cout << "Refining KD-Tree..." << flush;
+   logout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
-   cout << "Done\n" << flush;
+   logout << "Done\n" << flush;
    
    progress->value = 6;
    progtext->text = "Generating buffers";

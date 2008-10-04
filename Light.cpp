@@ -192,7 +192,7 @@ Vector3 Light::GetRots(int num)
    start.transform(rotm);
    start.print();
    dir.print();
-   cout << endl;*/
+   logout << endl;*/
    return rots;
 }
 

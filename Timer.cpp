@@ -13,7 +13,7 @@ void Timer::start()
 
 Uint32 Timer::stop()
 {
-   cout << "Time: " << (SDL_GetTicks() - starttick) << endl;
+   logout << "Time: " << (SDL_GetTicks() - starttick) << endl;
    return (SDL_GetTicks() - starttick);
 }
 

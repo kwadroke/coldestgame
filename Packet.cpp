@@ -16,7 +16,7 @@ void Packet::Send(UDPpacket* packet, UDPsocket& socket)
 {
    if (!packet)
    {
-      cout << "Send Error: null packet" << endl;
+      logout << "Send Error: null packet" << endl;
       return;
    }
    packet->address = addr;

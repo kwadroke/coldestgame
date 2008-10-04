@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "logout.h"
 
 using std::string;
 using std::map;
@@ -14,7 +15,6 @@ using std::vector;
 using std::ifstream;
 using std::istringstream;
 using std::ios;
-using std::cout;
 using std::endl;
 
 class IniReader

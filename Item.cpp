@@ -24,7 +24,7 @@ Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(
          LoadFromFile("items/base");
          break;
       default:
-         cout << "Warning: attempted to create non-existent item " << newtype << "." << endl;
+         logout << "Warning: attempted to create non-existent item " << newtype << "." << endl;
          break;
    };
 }

@@ -16,6 +16,7 @@
 #include "Console.h"
 #include "ParticleEmitter.h"
 #include "MeshCache.h"
+#include "logout.h"
 
 
 #define PI 3.14159265
@@ -59,6 +60,7 @@ extern Console console;
 extern int winningteam;
 extern vector<BodyParts> weaponslots;
 extern MeshCachePtr meshcache;
+extern int spectateplayer;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
@@ -77,5 +79,7 @@ void CacheMeshes();
 void UpdateSettings();
 void SaveSettings();
 bool PrimaryGUIVisible();
+void SpectateNext();
+void SpectatePrev();
 
 #endif

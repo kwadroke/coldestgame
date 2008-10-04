@@ -45,7 +45,8 @@ void UpdateClouds();
 void SetReflection(bool);
 void UpdateNoise();
 void UpdateReflection(const PlayerData&);
-void SynchronizePosition();
+void SynchronizePosition(); // These two do not really belong here
+void UpdateSpectatePosition();
 void LoadMaterials();
 void InitShaders();
 

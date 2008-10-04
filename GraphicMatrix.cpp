@@ -170,17 +170,6 @@ GLfloat * GraphicMatrix::row(int num, GLfloat *temp)
 }
 
 
-void  GraphicMatrix::print()
-{
-   for (int i = 0; i < 4; ++i)
-   {
-      cout << members[i] << " ";
-      cout << members[i + 4] << " ";
-      cout << members[i + 8] << " ";
-      cout << members[i + 12] << endl;
-   }
-}
-
 void GraphicMatrix::identity()
 {
    for (int i = 0; i < 16; ++i)

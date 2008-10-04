@@ -36,7 +36,7 @@ void PrimitiveOctree::refine(int level)
    bool allempty = true;
    for (int i = 0; i < 8; ++i)
    {
-      //cout << "Child: " << i << endl;
+      //logout << "Child: " << i << endl;
       if (!haschildren)
       {
          vector<GenericPrimitive> temp;
@@ -136,11 +136,11 @@ void PrimitiveOctree::refine(int level)
       it = prims.begin();  // Reset in case we loop again
       if (!child[i]->empty())
          allempty = false;
-      //cout << size() << endl;
+      //logout << size() << endl;
       if (child[i]->size() > 40 && level < 10)
       {
          child[i]->refine(level + 1);
-         //cout << "Returned\n";
+         //logout << "Returned\n";
       }
    }
    it = prims.begin();

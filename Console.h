@@ -14,7 +14,6 @@
 using std::map;
 using std::string;
 using std::endl;
-using std::cout;
 using std::deque;
 using std::set;
 using std::inserter;

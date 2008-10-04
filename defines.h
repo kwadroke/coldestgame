@@ -49,7 +49,6 @@
 #include "gui/ComboBox.h"
 
 /* Sorry bwkaz, the hassle just isn't worth it :-)
-using std::cout;
 using std::endl;
 using std::flush;*/
 using namespace std;
