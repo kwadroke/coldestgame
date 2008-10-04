@@ -2,6 +2,7 @@
 #define __WEAPON_H
 
 #include "IniReader.h"
+#include "logout.h"
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>

@@ -6,7 +6,6 @@
 #include <iostream>
 #include "Vector3.h"
 
-using std::cout;
 using std::endl;
 
 class GraphicMatrix
@@ -26,7 +25,6 @@ class GraphicMatrix
       void operator*= (GraphicMatrix);
       void rotateq(Vector3, float);
       GLfloat* array(GLfloat*);
-      void print();
       void identity();
       GLfloat* row(int, GLfloat*);
       

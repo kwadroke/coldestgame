@@ -21,6 +21,7 @@ int gettid();
 int bitcount();
 void setsighandler();
 extern bool running;
+extern Log logout;
 
 template <typename T>
 string ToString(const T &input)

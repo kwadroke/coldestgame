@@ -43,7 +43,7 @@ int NetSend(void* dummy)
    Uint32 lastnettick = SDL_GetTicks();
    Uint32 currnettick = 0;
    Uint32 occpacketcounter = 0;
-   changeteam = 0;
+   changeteam = -1;
    lastsyncpacket = 0;
    
    setsighandler();
@@ -54,11 +54,11 @@ int NetSend(void* dummy)
    
    if (!(outpack = SDLNet_AllocPacket(5000))) // 65000 probably won't work
    {
-      cout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       return -1;
    }
    
-   cout << "NetSend " << gettid() << endl;
+   logout << "NetSend " << gettid() << endl;
    
    while (running)
    {
@@ -115,7 +115,7 @@ int NetSend(void* dummy)
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
          doconnect = false;
-         cout << "Sending connect to " << console.GetString("serveraddr") << ":" << console.GetInt("serverport") << endl;
+         logout << "Sending connect to " << console.GetString("serveraddr") << ":" << console.GetInt("serverport") << endl;
       }
       if (spawnrequest)
       {
@@ -159,9 +159,9 @@ int NetSend(void* dummy)
       }
       SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see (so far so good)
       
-      if (changeteam)
+      if (changeteam != -1)
       {
-         cout << "Changing team " << endl;
+         logout << "Changing team " << endl;
          Packet p(&addr);
          p.ack = sendpacketnum;
          p << "M\n";
@@ -170,7 +170,7 @@ int NetSend(void* dummy)
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
-         changeteam = 0;
+         changeteam = -1;
       }
       if (useitem)
       {
@@ -224,7 +224,7 @@ int NetSend(void* dummy)
       //t.stop();
    }
    
-   cout << "NetSend " << runtimes << endl;
+   logout << "NetSend " << runtimes << endl;
    SDLNet_FreePacket(outpack);
    return 0;
 }
@@ -295,25 +295,25 @@ int NetListen(void* dummy)
    // this port.  No, I didn't learn that the hard way, but I did almost forget.
    if (!(annsock = SDLNet_UDP_Open(12011)))
    {
-      cout << "Announce port SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "Announce port SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       annlisten = false;
       //return -1;
    }
    
    if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
    {
-      cout << "Listen SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "Listen SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    
    if (!(inpack = SDLNet_AllocPacket(5000)))
    {
-      cout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       return -1;
    }
    
    netout = SDL_CreateThread(NetSend, NULL); // Start send thread
-   cout << "NetListen " << gettid() << endl;
+   logout << "NetListen " << gettid() << endl;
    
    SendMasterListRequest();
    
@@ -366,7 +366,7 @@ int NetListen(void* dummy)
                   {
                      PlayerData dummy(meshes);
                      player.push_back(dummy);
-                     cout << "Adding player " << (player.size() - 1) << endl;
+                     logout << "Adding player " << (player.size() - 1) << endl;
                   }
                   get >> player[oppnum].spawned;
                   if (player[oppnum].spawned)
@@ -392,13 +392,13 @@ int NetListen(void* dummy)
                      get >> player[oppnum].speed;
                      get >> player[oppnum].powerdowntime;
                      
-                     /*cout << "Player " << oppnum << endl;
+                     /*logout << "Player " << oppnum << endl;
                      //if (player[oppnum].unit != "unittest")
-                     //   cout << "Died on packet " << packetnum << endl;*/
-                     /*cout << oppnum << ": " << oppx << "  " << oppy << "  " << oppz << endl << flush;
-                     cout << oppfacing << "  ";
-                     cout << opppitch << "  ";
-                     cout << opproll << "  \n\n";*/
+                     //   logout << "Died on packet " << packetnum << endl;*/
+                     /*logout << oppnum << ": " << oppx << "  " << oppy << "  " << oppz << endl << flush;
+                     logout << oppfacing << "  ";
+                     logout << opppitch << "  ";
+                     logout << opproll << "  \n\n";*/
                      
                      player[oppnum].pos.x = oppx;
                      player[oppnum].pos.y = oppy;
@@ -445,9 +445,9 @@ int NetListen(void* dummy)
                get >> checksum;
                if (checksum != value)
                {
-                  cout << "Client freaking out on packet " << packetnum << endl;
-                  cout << checksum << endl << value << endl << dummy << endl;
-                  cout << debug << endl;
+                  logout << "Client freaking out on packet " << packetnum << endl;
+                  logout << checksum << endl << value << endl << dummy << endl;
+                  logout << debug << endl;
                }
                
                // Indicate to main thread that models for unspawned players need to be removed
@@ -556,8 +556,8 @@ int NetListen(void* dummy)
                connected = true;
                needsync = false; // Set to true after map is loaded
                winningteam = 0;
-               cout << "We are server player " << servplayernum << endl;
-               cout << "Map is: " << nextmap << endl;
+               logout << "We are server player " << servplayernum << endl;
+               logout << "Map is: " << nextmap << endl;
                SDL_mutexV(clientmutex);
                itemsreceived.clear();
                hitsreceived.clear();
@@ -566,7 +566,7 @@ int NetListen(void* dummy)
          }
          else if (packettype == "f") // Server was full
          {
-            cout << "Server is full\n";
+            logout << "Server is full\n";
             SDL_mutexP(clientmutex);
             ShowGUI(mainmenu);
             SDL_mutexV(clientmutex);
@@ -674,6 +674,7 @@ int NetListen(void* dummy)
             get >> acknum;
             get >> newpos.x >> newpos.y >> newpos.z;
             
+            SDL_mutexP(clientmutex);
             if (gui[loadoutmenu]->visible)
             {
                if (accepted)
@@ -688,9 +689,10 @@ int NetListen(void* dummy)
                }
                else
                {
-                  cout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
+                  logout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
                }
             }
+            SDL_mutexV(clientmutex);
             HandleAck(acknum);
          }
          else if (packettype == "A") // Ack packet
@@ -733,7 +735,7 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                if (player[0].team != newteam)
                {
-                  cout << "Joined team " << newteam << endl;
+                  logout << "Joined team " << newteam << endl;
                   player[0].team = newteam;
                   
                   mapspawns.clear();
@@ -749,17 +751,26 @@ int NetListen(void* dummy)
                   spawnschanged = true;
                }
                
-               static Button* team1button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team1"));
-               static Button* team2button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team2"));
+               Button* team1button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team1"));
+               Button* team2button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team2"));
+               Button* specbutton = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Spectate"));
                if (player[0].team == 1)
                {
                   team1button->togglestate = 1;
                   team2button->togglestate = 0;
+                  specbutton->togglestate = 0;
                }
-               else
+               else if (player[0].team == 2)
                {
                   team1button->togglestate = 0;
                   team2button->togglestate = 1;
+                  specbutton->togglestate = 0;
+               }
+               else if (player[0].team == 0)
+               {
+                  team1button->togglestate = 0;
+                  team2button->togglestate = 0;
+                  specbutton->togglestate = 1;
                }
                SDL_mutexV(clientmutex);
             }
@@ -824,7 +835,7 @@ int NetListen(void* dummy)
          }
          else if (packettype == "Y" && packetnum > lastsyncpacket) // Sync packet
          {
-            cout << "Got sync packet " << packetnum << endl;
+            logout << "Got sync packet " << packetnum << endl;
             lastsyncpacket = packetnum;
             string buffer;
             SDL_mutexP(clientmutex);
@@ -844,7 +855,7 @@ int NetListen(void* dummy)
          else if (packettype == "O") // Game over man, game over
          {
             get >> winningteam;
-            cout << "Team " << winningteam << " wins!" << endl;
+            logout << "Team " << winningteam << " wins!" << endl;
             Ack(packetnum);
          }
          else if (packettype == "r") // Remove body part
@@ -874,9 +885,9 @@ int NetListen(void* dummy)
             SDLNet_Write16(serverport, &addme.address.port);
             if (knownservers.find(addme) == knownservers.end())
             {
-               cout << "Received master server announcement for ";
+               logout << "Received master server announcement for ";
                string dotteddec = AddressToDD(addme.address.host);
-               cout << dotteddec << ":" << serverport << endl;
+               logout << dotteddec << ":" << serverport << endl;
                addme.strip = dotteddec;
                SDL_mutexP(clientmutex);
                servers.push_back(addme);
@@ -886,7 +897,7 @@ int NetListen(void* dummy)
          }
          else if (packettype != "Y") // It's okay to get here on a Y packet
          {
-            cout << "Warning: Unknown packet type received: " << packettype << endl;
+            logout << "Warning: Unknown packet type received: " << packettype << endl;
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before
@@ -913,9 +924,9 @@ int NetListen(void* dummy)
                SDLNet_Write16(serverport, &addme.address.port);
                if (knownservers.find(addme) == knownservers.end())
                {
-                  cout << "Received announcement packet from ";
+                  logout << "Received announcement packet from ";
                   string dotteddec = AddressToDD(inpack->address.host);
-                  cout << dotteddec << ":" << serverport << endl;
+                  logout << dotteddec << ":" << serverport << endl;
                   addme.strip = dotteddec;
                   SDL_mutexP(clientmutex);
                   servers.push_back(addme);
@@ -927,7 +938,7 @@ int NetListen(void* dummy)
       }
    }
    
-   cout << "NetListen " << runtimes << endl;
+   logout << "NetListen " << runtimes << endl;
    SDLNet_FreePacket(inpack);
    SDLNet_UDP_Close(socket);
    return 0;

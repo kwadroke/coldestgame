@@ -12,7 +12,7 @@ IniReader::IniReader(string filename) : level(0), name(""), path(filename)
    
    if (in.fail())
    {
-      cout << "Failed to open file " << filename << endl;
+      logout << "Failed to open file " << filename << endl;
       return;
    }
    
@@ -150,7 +150,7 @@ bool IniReader::HaveValue(const string& name, const int num) const
       if (i != num) retval = false; // This may not work as intended, testing is needed
    }
    //if (!retval)
-   //   cout << "Warning: Attempt to read non-existent value " << name << endl;
+   //   logout << "Warning: Attempt to read non-existent value " << name << endl;
    return retval;
 }
 

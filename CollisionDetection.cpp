@@ -44,7 +44,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // 1e38 is near the maximum representable value for a single precision float
    hitpos = Vector3(1e38f, 1e38f, 1e38f);
    
-   //cout << "Checking " << objs.size() << endl;
+   //logout << "Checking " << objs.size() << endl;
    
    Mesh* current;
    for (int i = 0; i < objs.size(); i++)
@@ -303,25 +303,25 @@ Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector
       x = -(norm.dot(pos) + d) / denominator;
       intpoint = pos + move * x;
       if (endside < -.0000001)
-         cout << "Endside Okay" << endl;
+         logout << "Endside Okay" << endl;
       if (denominator != 0)
-         cout << "Den Okay" << endl;
+         logout << "Den Okay" << endl;
       if (x > -1e-4)
-         cout << "X > Okay" << endl;
-      else cout << x << endl;
+         logout << "X > Okay" << endl;
+      else logout << x << endl;
       if (x < move.magnitude() + radius)
-         cout << "X < Okay" << endl;
+         logout << "X < Okay" << endl;
       else
       {
-         cout << x << endl;
-         cout << (move.magnitude() + radius) << endl;
+         logout << x << endl;
+         logout << (move.magnitude() + radius) << endl;
       }
-      /*cout << "Startside: " << startside << endl;
-      cout << "Endside: " << endside << endl;
-      cout << "Den: " << denominator << endl;
-      cout << "X: " << x << endl;*/
+      /*logout << "Startside: " << startside << endl;
+      logout << "Endside: " << endside << endl;
+      logout << "Den: " << denominator << endl;
+      logout << "X: " << x << endl;*/
       if (x < -1e-4)
-         cout << "A big WTF to that....................\n";
+         logout << "A big WTF to that....................\n";
       //intpoint.print();
    }
 #endif

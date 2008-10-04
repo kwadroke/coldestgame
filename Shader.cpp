@@ -10,12 +10,12 @@ void Shader::LoadShader(string file)
 {
    if (programs.find(file) != programs.end() || file == "none") return;
    
-   cout << "Loading shader " << file << endl;
+   logout << "Loading shader " << file << endl;
    ifstream in(file.c_str());
    
    if (in.fail())
    {
-      cout << "Failed to open file " << file << endl;
+      logout << "Failed to open file " << file << endl;
       return;
    }
    
@@ -71,7 +71,7 @@ void Shader::LoadShader(string file)
    glGetProgramiv(program, GL_LINK_STATUS, &getstatus);
    if (getstatus != GL_TRUE)
    {
-      cout << "program: Shader program link failed.  Exiting" << endl;
+      logout << "program: Shader program link failed.  Exiting" << endl;
       
       int infologLength = 0;
       int charsWritten  = 0;
@@ -183,7 +183,7 @@ void Shader::InitShader(GLhandleARB handle, string filename)
    
    if (s.fail())
    {
-      cout << "Failed to open file " << filename << endl;
+      logout << "Failed to open file " << filename << endl;
       return;
    }
    

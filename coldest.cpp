@@ -35,7 +35,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    setsighandler();
    initialized = false;
    OutputDiagnosticData();
-   cout << "Main " << gettid() << endl;
+   logout << "Main " << gettid() << endl;
    InitGlobals();
    initialized = true;
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
@@ -60,14 +60,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 void OutputDiagnosticData()
 {
-   cout << "Initializing Coldest\n";
-   cout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
+   logout.SetFile("console.log");
+   logout << "Initializing Coldest\n";
+   logout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
 #ifdef linux
-   cout << "GCC version: " << __VERSION__ << endl;
+   logout << "GCC version: " << __VERSION__ << endl;
    SDL_version v = *SDL_Linked_Version();
-   cout << "Linked SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
+   logout << "Linked SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
    SDL_VERSION(&v);
-   cout << "Compiled SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
+   logout << "Compiled SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
 #endif
 }
 
@@ -180,7 +181,7 @@ void InitGUI()
    // SDL_ttf must be initialized before GUI's are built
    if (TTF_Init() == -1)
    {
-      cout << "Failed to initialize font system: " << TTF_GetError() << endl;
+      logout << "Failed to initialize font system: " << TTF_GetError() << endl;
       exit(1);
    }
    int screenwidth = console.GetInt("screenwidth");
@@ -284,7 +285,7 @@ void SetupSDL()
    
    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) 
    {
-      cout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
+      logout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
       exit(1);
    }
    
@@ -298,7 +299,7 @@ void SetupSDL()
    
    if (!video) 
    {
-      cout << "Couldn't get video information: " << SDL_GetError() << endl;
+      logout << "Couldn't get video information: " << SDL_GetError() << endl;
       exit(1);
    }
    
@@ -328,7 +329,7 @@ void SetupSDL()
       flags |= SDL_FULLSCREEN;
    if( SDL_SetVideoMode(console.GetInt("screenwidth"), console.GetInt("screenheight"), video->vfmt->BitsPerPixel, flags) == 0 ) 
    {
-      cout << "Couldn't set video mode: " << SDL_GetError() << endl;
+      logout << "Couldn't set video mode: " << SDL_GetError() << endl;
       exit(1);
    }
    
@@ -339,7 +340,7 @@ void SetupSDL()
    
    if (SDLNet_Init() == -1)
    {
-      cout << "SDLNet_Init: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_Init: " << SDLNet_GetError() << endl;
       exit(1);
    }
    
@@ -410,38 +411,38 @@ void SetupOpenGL()
    GLenum err = glewInit();
    if (err != GLEW_OK)
    {
-      cout << "Failed to init glew: " << glewGetErrorString(err) << endl << flush;
+      logout << "Failed to init glew: " << glewGetErrorString(err) << endl << flush;
       exit(-2);
    }
-   cout << "Glew init successful, using version: " << glewGetString(GLEW_VERSION) << endl << flush;
+   logout << "Glew init successful, using version: " << glewGetString(GLEW_VERSION) << endl << flush;
    if (!GLEW_EXT_framebuffer_object)
    {
-      cout << "We don't have EXT_framebuffer_object.  This is fatal.\n" << flush;
+      logout << "We don't have EXT_framebuffer_object.  This is fatal.\n" << flush;
       exit(-3);
    }
    if (!GLEW_ARB_vertex_buffer_object)
    {
-      cout << "We don't have ARB_vertex_buffer_object.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_vertex_buffer_object.  This is fatal.\n" << flush;
       exit(-4);
    }
    if (!GLEW_ARB_depth_texture)
    {
-      cout << "We don't have ARB_depth_texture.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_depth_texture.  This is fatal.\n" << flush;
       exit(-5);
    }
    if (!GLEW_ARB_shadow)
    {
-      cout << "We don't have ARB_shadow.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_shadow.  This is fatal.\n" << flush;
       exit(-6);
    }
    if (!GLEW_ARB_fragment_shader)
    {
-      cout << "We don't have ARB_fragment_shader.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_fragment_shader.  This is fatal.\n" << flush;
       exit(-7);
    }
    if (!GLEW_ARB_multitexture)
    {
-      cout << "We don't have ARB_multitexture.  This is fatal." << endl;
+      logout << "We don't have ARB_multitexture.  This is fatal." << endl;
       exit(-8);
    }
    
@@ -736,7 +737,7 @@ bool GUIEventHandler(SDL_Event &event)
    GUI* chatin = gui[chat]->GetWidget("chatinput");
    if (!chatin)
    {
-      cout << "Error getting chat input widget" << endl;
+      logout << "Error getting chat input widget" << endl;
       return false;
    }
    switch (event.type)
@@ -795,7 +796,7 @@ bool GUIEventHandler(SDL_Event &event)
                   GUI *chatin = gui[chat]->GetWidget("chatinput");
                   if (!chatin)
                   {
-                     cout << "Error getting chat input widget" << endl;
+                     logout << "Error getting chat input widget" << endl;
                      break;
                   }
                   SDL_mutexP(clientmutex);
@@ -810,7 +811,7 @@ bool GUIEventHandler(SDL_Event &event)
                eatevent = true;
                break;
             case SDLK_F12:
-               cout << "Saving screenshot" << endl;
+               logout << "Saving screenshot" << endl;
                glPixelStorei(GL_PACK_ALIGNMENT,1);
                int screenwidth = console.GetInt("screenwidth");
                int screenheight = console.GetInt("screenheight");
@@ -991,6 +992,8 @@ void GameEventHandler(SDL_Event &event)
             if (event.button.button == SDL_BUTTON_LEFT)
             {
                player[0].leftclick = true;
+               if (player[0].spectate)
+                  SpectateNext();
             }
             else if (event.button.button == SDL_BUTTON_WHEELDOWN)
             {
@@ -1007,6 +1010,8 @@ void GameEventHandler(SDL_Event &event)
             else if (event.button.button == SDL_BUTTON_RIGHT)
             {
                guncam = !guncam;
+               if (player[0].spectate)
+                  SpectatePrev();
             }
             break;
          case SDL_MOUSEBUTTONUP:
@@ -1034,12 +1039,12 @@ void Cleanup()
 {
    running = false;
 #ifndef DEDICATED
-   cout << "Waiting for netout thread to end" << endl;
+   logout << "Waiting for netout thread to end" << endl;
    SDL_WaitThread(netout, NULL);
-   cout << "Waiting for netin thread to end" << endl;
+   logout << "Waiting for netin thread to end" << endl;
    SDL_WaitThread(netin, NULL);
 #endif
-   cout << "Waiting for server to end" << endl;
+   logout << "Waiting for server to end" << endl;
    SDL_WaitThread(serverthread, NULL);
    SDL_DestroyMutex(clientmutex);
    console.SaveToFile("autoexec.cfg");
@@ -1167,7 +1172,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          if (mplayer.fallvelocity > .00001f)
          {
             // Eventually this might do damage if they fall too far
-            //cout << "Hit ground " << mplayer.fallvelocity << endl;
+            //logout << "Hit ground " << mplayer.fallvelocity << endl;
          }
          mplayer.fallvelocity = 0.f;
          if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4))
@@ -1232,7 +1237,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          ++count;
          if (count > 25) // Damage control in case something goes wrong
          {
-            cout << "Collision Detection Error " << adjust.distance() << endl;
+            logout << "Collision Detection Error " << adjust.distance() << endl;
             // Simply don't allow the movement at all
             mplayer.pos = old;
             break;
@@ -1394,6 +1399,50 @@ void SynchronizePosition()
 }
 
 
+void UpdateSpectatePosition()
+{
+   if (player[spectateplayer].spawned)
+   {
+      player[0].pos = player[spectateplayer].pos;
+      player[0].facing = player[spectateplayer].facing;
+      player[0].pitch = player[spectateplayer].pitch;
+   }
+}
+
+
+void SpectateNext()
+{
+   int lastplayer = spectateplayer;
+   if (!lastplayer)
+      lastplayer = player.size() - 1;
+   ++spectateplayer;
+   while (spectateplayer != lastplayer)
+   {
+      if (spectateplayer > player.size() - 1)
+         spectateplayer = 1;
+      if (player[spectateplayer].spawned)
+         break;
+      ++spectateplayer;
+   }
+}
+
+void SpectatePrev()
+{
+   int lastplayer = spectateplayer;
+   if (!lastplayer)
+      lastplayer = 1;
+   --spectateplayer;
+   while (spectateplayer != lastplayer)
+   {
+      if (spectateplayer < 1)
+         spectateplayer = player.size() - 1;
+      if (player[spectateplayer].spawned)
+         break;
+      --spectateplayer;
+   }
+}
+
+
 void Animate()
 {
    SDL_mutexP(clientmutex);
@@ -1441,7 +1490,7 @@ void UpdateServerList()
    vector<ServerInfo>::iterator i;
    if (!serverlist)
    {
-      cout << "Failed to get pointer to serverlist" << endl;
+      logout << "Failed to get pointer to serverlist" << endl;
       exit(-10);
    }
    SDL_mutexP(clientmutex);
@@ -1710,7 +1759,7 @@ void AppendToChat(int playernum, string line)
    TextArea *chatout = (TextArea*)gui[chat]->GetWidget("chatoutput");
    if (!chatout)
    {
-      cout << "Error getting chat output widget" << endl;
+      logout << "Error getting chat output widget" << endl;
       return;
    }
    if (chatteam)
@@ -1889,35 +1938,35 @@ void GLError()
    GLenum error = glGetError();
    if (error == GL_NO_ERROR)
    {
-      cout << "No errors" << endl;
+      logout << "No errors" << endl;
    }
    else if (error == GL_INVALID_ENUM)
    {
-      cout << "GL_INVALID_ENUM" << endl;
+      logout << "GL_INVALID_ENUM" << endl;
    }
    else if (error == GL_INVALID_VALUE)
    {
-      cout << "GL_INVALID_VALUE" << endl;
+      logout << "GL_INVALID_VALUE" << endl;
    }
    else if (error == GL_INVALID_OPERATION)
    {
-      cout << "GL_INVALID_OPERATION" << endl;
+      logout << "GL_INVALID_OPERATION" << endl;
    }
    else if (error == GL_STACK_OVERFLOW)
    {
-      cout << "GL_STACK_OVERFLOW" << endl;
+      logout << "GL_STACK_OVERFLOW" << endl;
    }
    else if (error == GL_STACK_UNDERFLOW)
    {
-      cout << "GL_STACK_UNDERFLOW" << endl;
+      logout << "GL_STACK_UNDERFLOW" << endl;
    }
    else if (error == GL_OUT_OF_MEMORY)
    {
-      cout << "GL_OUT_OF_MEMORY" << endl;
+      logout << "GL_OUT_OF_MEMORY" << endl;
    }
    else if (error == GL_TABLE_TOO_LARGE)
    {
-      cout << "GL_TABLE_TOO_LARGE" << endl;
+      logout << "GL_TABLE_TOO_LARGE" << endl;
    }
 #endif
 }

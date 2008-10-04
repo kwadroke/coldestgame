@@ -30,7 +30,7 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), rad
          LoadFromFile("weapons/rocket");
          break;
       default:
-         cout << "Warning: attempted to create non-existent weapon." << endl;
+         logout << "Warning: attempted to create non-existent weapon." << endl;
          break;
    };
 }

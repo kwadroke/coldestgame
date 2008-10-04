@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include "logout.h"
 
 using namespace std;
 

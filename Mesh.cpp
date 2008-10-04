@@ -214,7 +214,7 @@ void Mesh::Load(const IniReader& reader)
       }
       basepath = basepath.substr(0, basepath.length() - 5);
       
-      //cout << "Loading " << basepath << endl;
+      //logout << "Loading " << basepath << endl;
       
       map<size_t, size_t> vertmap;
       for (int i = 0; i < numkeyframes; ++i)
@@ -226,8 +226,8 @@ void Mesh::Load(const IniReader& reader)
          currframe.Read(currver, "Version");
          if (currver != objectfilever)
          {
-            cout << "Object file version mismatch for file: " << currfile << endl << flush;
-            cout << currver << endl;
+            logout << "Object file version mismatch for file: " << currfile << endl << flush;
+            logout << currver << endl;
             return;
          }
          
@@ -309,7 +309,7 @@ void Mesh::Load(const IniReader& reader)
                }
                else
                {
-                  cout << "Error building tree for:  " << currfile << endl;
+                  logout << "Error building tree for:  " << currfile << endl;
                }
             }
             else
@@ -406,13 +406,13 @@ void Mesh::Load(const IniReader& reader)
       reader.Read(leafmat, "Materials", 1);
       size_t save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
       collide = true;
-      cout << "Tree primitives: " << save << endl;
+      logout << "Tree primitives: " << save << endl;
    }
    else if (type == "Terrain" || type == "Empty"){} // No-op to avoid bogus warnings
    else
    {
-      cout << "Warning: Attempted to load unknown object type " << type;
-	  cout << " from file " << reader.GetPath() << endl;
+      logout << "Warning: Attempted to load unknown object type " << type;
+	  logout << " from file " << reader.GetPath() << endl;
    }
    CalcBounds();
 }
@@ -558,7 +558,7 @@ void Mesh::BindVbo()
 #ifndef DEDICATED
    if (!hasvbo)
    {
-      cout << "Hey dummy, you have to call GenVbo first" << endl;
+      logout << "Hey dummy, you have to call GenVbo first" << endl;
       return;
    }
    VBOData dummy;
@@ -907,7 +907,7 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
 {
    if (frameroot.size() != m.frameroot.size())
    {
-      cout << "Warning: Not inserting mesh.  Keyframe mismatch." << endl;
+      logout << "Warning: Not inserting mesh.  Keyframe mismatch." << endl;
       return;
    }
    

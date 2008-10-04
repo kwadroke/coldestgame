@@ -158,7 +158,7 @@ void Spawn()
 
 void SubmitCommand()
 {
-   cout << "Submitting command" << endl;
+   logout << "Submitting command" << endl;
    LineEdit* currcommand = (LineEdit*)gui[consolegui]->GetWidget("consoleinput");
    TextArea* consoleout = (TextArea*)gui[consolegui]->GetWidget("consoleoutput");
    console.Parse(currcommand->text);
@@ -171,6 +171,17 @@ void SubmitCommand()
 void SelectTeam(int team)
 {
    changeteam = team;
+}
+
+
+void Spectate()
+{
+   SDL_mutexP(clientmutex);
+   player[0].spectate = true;
+   SDL_mutexV(clientmutex);
+   changeteam = 0;
+   spectateplayer = 0;
+   SpectateNext();
 }
 
 
@@ -226,6 +237,8 @@ void Action(const string& action)
       SelectTeam(1);
    else if (action == "selectteam2")
       SelectTeam(2);
+   else if (action == "spectate")
+      Spectate();
    else if (action == "showmain")
       ShowMain();
    else if (action == "showsettings")
@@ -235,5 +248,5 @@ void Action(const string& action)
    else if (action == "selectspawn")
       SelectSpawn();
    else if (action != "")
-      cout << "Warning: Attempted to do undefined action " << action << endl;
+      logout << "Warning: Attempted to do undefined action " << action << endl;
 }

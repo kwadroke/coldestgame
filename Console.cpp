@@ -10,7 +10,7 @@ int Console::GetInt(const string& key)
 {
    if (values.find(key) != values.end())
       return atoi(values[key].c_str());
-   cout << "Console Warning: Key not found " << key << endl;
+   logout << "Console Warning: Key not found " << key << endl;
    return 0;
 }
 
@@ -19,7 +19,7 @@ float Console::GetFloat(const string& key)
 {
    if (values.find(key) != values.end())
       return atof(values[key].c_str());
-   cout << "Console Warning: Key not found " << key << endl;
+   logout << "Console Warning: Key not found " << key << endl;
    return 0.f;
 }
 
@@ -28,7 +28,7 @@ string Console::GetString(const string& key)
 {
    if (values.find(key) != values.end())
       return values[key];
-   cout << "Console Warning: Key not found " << key << endl;
+   logout << "Console Warning: Key not found " << key << endl;
    return "";
 }
 
@@ -41,7 +41,7 @@ bool Console::GetBool(const string& key)
          return false;
       return true;
    }
-   cout << "Console Warning: Key not found " << key << endl;
+   logout << "Console Warning: Key not found " << key << endl;
    return false;
 }
 
@@ -173,7 +173,7 @@ void Console::InitWidget(TextArea& co)
 */
 void Console::WriteToConsole(const string& line)
 {
-   cout << line << endl;
+   logout << line << endl;
 #ifndef DEDICATED
    if (consoleout)
    {

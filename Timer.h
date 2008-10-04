@@ -3,8 +3,8 @@
 
 #include "SDL.h"
 #include <iostream>
+#include "logout.h"
 
-using std::cout;
 using std::endl;
 
 class Timer

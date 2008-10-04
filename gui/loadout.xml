@@ -102,6 +102,11 @@
            hover="textures/buttonhover.png"
            pressed="textures/buttonpressed.png"
            leftclick="selectteam2"/>
+   <Button x="700" y="610" width="180" height="40" name="Spectate" text="Spectate" toggle="true"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="spectate"/>
    
    <!-- Spawn points -->
    <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints"

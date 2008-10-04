@@ -25,7 +25,7 @@ void TextureHandler::LoadTexture(string filename, GLuint texnum, bool mipmap, bo
    loadtex = IMG_Load(filename.c_str());
    if (!loadtex)
    {
-      cout << "Error loading texture: " << filename << endl;
+      logout << "Error loading texture: " << filename << endl;
       return;
    }
    SDL_LockSurface(loadtex);
@@ -121,7 +121,7 @@ void TextureHandler::ActiveTexture(int num)
             glActiveTextureARB(GL_TEXTURE7_ARB);
             break;
          default:
-            cout << "Warning: Attempting to activate invalid texture" << endl;
+            logout << "Warning: Attempting to activate invalid texture" << endl;
             break;
       }
       curractive = num;

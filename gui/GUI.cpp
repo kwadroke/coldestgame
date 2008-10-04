@@ -322,13 +322,13 @@ void GUI::InitFromFile(string filename)
          DOMElement* element = doc->getDocumentElement();
          
          if (!element)
-            cout << "Warning: Attempted to parse empty XML file" << endl;
+            logout << "Warning: Attempted to parse empty XML file" << endl;
          else
             ReadNode(element, this);
       }
       else
       {
-         cout << "Error getting document object" << endl;
+         logout << "Error getting document object" << endl;
       }
       // Cleanup
       delete parser;
@@ -368,7 +368,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
          // Pretty sure this if is bogus...the parent is always this (do we even need to pass parent then?)
          if (parent != this)
          {
-            cout << "Warning, GUI element detected that is not the root node.\n";
+            logout << "Warning, GUI element detected that is not the root node.\n";
          }
          else
          {
@@ -382,13 +382,13 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             hratio = actualh / virtualh;
             string fontname = ReadAttribute(current, XSWrapper("font"));
             if (!TTF_WasInit())
-               cout << "Warning: GUI detected that SDL_ttf was not initialized" << endl;
+               logout << "Warning: GUI detected that SDL_ttf was not initialized" << endl;
             else
             {
                font = TTF_OpenFont(fontname.c_str(), 48);
                if (!font)
                {
-                  cout << "Failed to initialize font: " << TTF_GetError() << endl;
+                  logout << "Failed to initialize font: " << TTF_GetError() << endl;
                   exit(1);
                }
             }
@@ -581,7 +581,7 @@ void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
    SDL_Surface *t = TTF_RenderText_Solid(font, text.c_str(), col);
    if (!t)  // Had some problems with sdl-ttf at one point
    {        // At least this way it won't segfault
-      cout << "Error rendering text: " << text << endl;
+      logout << "Error rendering text: " << text << endl;
       exit(-10);
    }
    
@@ -613,7 +613,7 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
    SDL_Surface *t = TTF_RenderText_Solid(font, str.c_str(), col);
    if (!t)  // Had some problems with sdl-ttf at one point
    {        // At least this way it won't segfault
-      cout << "Error rendering text: " << str << endl;
+      logout << "Error rendering text: " << str << endl;
       exit(-11);
    }
    int neww = PowerOf2(t->w);
@@ -729,7 +729,7 @@ void GUI::SetTextureID(int state, GLuint id)
 void GUI::SetTexture(int state, const string& file)
 {
    if (textures[state] != "" && (state == Normal || textures[state] != textures[Normal]))
-      cout << "Warning: Possible memory leak in GUI::SetTexture" << endl;
+      logout << "Warning: Possible memory leak in GUI::SetTexture" << endl;
    textures[state] = file;
    texman->LoadTexture(file, false);
    if (state == Normal && textures[Hover] == "")
