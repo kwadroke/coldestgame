@@ -50,7 +50,7 @@ void Repaint()
       // Update player position
       SDL_mutexP(clientmutex);
       
-      if (player[0].spectate && spectateplayer != servplayernum)
+      if (player[0].spectate && spectateplayer != servplayernum && player[0].spawned)
          UpdateSpectatePosition();
       else
       {

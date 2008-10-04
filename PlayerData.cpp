@@ -58,5 +58,20 @@ void PlayerData::Kill()
          mesh[part] = meshes->end();
       }
    }
-   spawntimer = 15000;
+}
+
+
+void PlayerData::Reset()
+{
+   pitch = roll = rotation = facing = 0.f;
+   moveleft = moveright = moveforward = moveback = false;
+   leftclick = rightclick = run = false;
+   temperature = 0.f;
+   fallvelocity = 0.f;
+   currweapon = 0;
+   speed = turnspeed = 0.f;
+   destroyed = vector<bool>(numbodyparts, false);
+   healaccum = 0.f;
+   firerequests = 0;
+   weight = 1.f;
 }
