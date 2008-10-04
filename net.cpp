@@ -684,7 +684,8 @@ int NetListen(void* dummy)
                   player[0].pos = newpos;
                   player[0].size = units[player[0].unit].size;
                   player[0].lastmovetick = SDL_GetTicks();
-                  player[0].spectate = false;
+                  if (player[0].team != 0)
+                     player[0].spectate = false;
                   player[0].spawned = true;
                }
                else

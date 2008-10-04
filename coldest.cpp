@@ -1009,9 +1009,10 @@ void GameEventHandler(SDL_Event &event)
             }
             else if (event.button.button == SDL_BUTTON_RIGHT)
             {
-               guncam = !guncam;
                if (player[0].spectate)
                   SpectatePrev();
+               else
+                  guncam = !guncam;
             }
             break;
          case SDL_MOUSEBUTTONUP:
@@ -1103,7 +1104,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    else rot.rotatex(mplayer.pitch);
    rot.rotatey(-mplayer.facing);
    d.transform(rot);
-   if (!console.GetBool("fly"))
+   if (!console.GetBool("fly") && !mplayer.spectate)
       d.y = 0.f;
    d.normalize();
    
@@ -1154,7 +1155,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    static const float threshold = .3f;
    static float gravity = .15f;
    
-   if (console.GetBool("fly"))
+   if (console.GetBool("fly") || mplayer.spectate)
       mplayer.pos.y += d.y * step * mplayer.speed;
    else
    {
@@ -1401,11 +1402,12 @@ void SynchronizePosition()
 
 void UpdateSpectatePosition()
 {
-   if (player[spectateplayer].spawned)
+   if (player[spectateplayer].spawned && spectateplayer != servplayernum)
    {
       player[0].pos = player[spectateplayer].pos;
       player[0].facing = player[spectateplayer].facing;
       player[0].pitch = player[spectateplayer].pitch;
+      player[0].rotation = player[spectateplayer].rotation;
    }
 }
 
@@ -1739,12 +1741,15 @@ void UpdatePlayerList()
    string add;
    for (int i = 1; i < player.size(); ++i)
    {
-      add = player[i].name + "|";
-      add += ToString(player[i].kills) + "|";
-      add += ToString(player[i].deaths) + "|";
-      add += ToString(player[i].ping);
-      playerlist->Add(add);
-      lplayerlist->Add(ToString(i) + "|" + add);
+      if (player[i].connected)
+      {
+         add = player[i].name + "|";
+         add += ToString(player[i].kills) + "|";
+         add += ToString(player[i].deaths) + "|";
+         add += ToString(player[i].ping);
+         playerlist->Add(add);
+         lplayerlist->Add(ToString(i) + "|" + add);
+      }
    }
    
    SDL_mutexV(clientmutex);
