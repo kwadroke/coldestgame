@@ -50,19 +50,25 @@ void Repaint()
       // Update player position
       SDL_mutexP(clientmutex);
       
-      Move(player[0], meshes, kdtree);
-      if (player[0].spectate)
+      if (player[0].spectate && spectateplayer != servplayernum)
          UpdateSpectatePosition();
-      else if (console.GetBool("serversync"))
-         SynchronizePosition();
+      else
+      {
+         Move(player[0], meshes, kdtree);
+         if (console.GetBool("serversync") && !player[0].spectate)
+            SynchronizePosition();
+      }
       localplayer = player[0];
       
       // Update the local model so there isn't a frame of lag.
-      UpdatePlayerModel(player[0], meshes);
-      for (size_t i = 0; i < numbodyparts; ++i)
+      if (!player[0].spectate)
       {
-         if (player[0].mesh[i] != meshes.end())
-            player[0].mesh[i]->AdvanceAnimation();
+         UpdatePlayerModel(player[0], meshes);
+         for (size_t i = 0; i < numbodyparts; ++i)
+         {
+            if (player[0].mesh[i] != meshes.end())
+               player[0].mesh[i]->AdvanceAnimation();
+         }
       }
       
       SDL_mutexV(clientmutex);

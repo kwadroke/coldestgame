@@ -171,6 +171,7 @@ void SubmitCommand()
 void SelectTeam(int team)
 {
    changeteam = team;
+   player[0].spectate = false;
 }
 
 
@@ -181,6 +182,7 @@ void Spectate()
    SDL_mutexV(clientmutex);
    changeteam = 0;
    spectateplayer = 0;
+   player[0].spectate = true;
    SpectateNext();
 }
 
