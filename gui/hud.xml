@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false"
+     slidernormal="textures/sliderbuttonnorm.png"
+     sliderpressed="textures/sliderbuttonnorm.png"
+     sliderhover="textures/sliderbuttonnorm.png">
    <Label x="10" y="870" width="150" height="30" text="" name="torsohp"/>
    <Label x="10" y="900" width="150" height="30" text="" name="legshp"/>
    <Label x="10" y="930" width="150" height="30" text="" name="leftarmhp"/>
@@ -7,23 +10,22 @@
    
    <!-- The selection indicator labels need to be first so they don't get rendered over the text labels -->
    <Label x="850" y="10" width="150" height="30" text="" name="torsoselected"
-          normal="textures/buttonnorm.png"/>
+          normal="textures/hud/button.png"/>
    <Label x="850" y="40" width="150" height="30" text="" name="larmselected"
-          normal="textures/buttonnorm.png"/>
+          normal="textures/hud/button.png"/>
    <Label x="850" y="70" width="150" height="30" text="" name="rarmselected"
-          normal="textures/buttonnorm.png"/>
+          normal="textures/hud/button.png"/>
    <Label x="850" y="10" width="150" height="30" text="Torso" name="torsoweapon"/>
    <Label x="850" y="40" width="150" height="30" text="Left Arm" name="larmweapon"/>
    <Label x="850" y="70" width="150" height="30" text="Right Arm" name="rarmweapon"/>
    
    <ProgressBar x="10" y="800" width="100" height="30" name="temperature"
-                normal="textures/buttonhover.png"
-                hover="textures/buttonpressed.png"/>
-   <Label x="485" y="800" width="30" height="20" name="facingcenter"
-          normal="textures/buttonnorm.png"/>
+                normal="textures/hud/button.png"
+                hover="textures/hud/buttonred.png"/>
+   <Label x="485" y="800" width="30" height="30" name="facingcenter"
+          normal="textures/hud/buttonred.png"/>
    <Slider x="400" y="800" width="200" height="30" name="facing" min="-90" max="90"
-                normal="textures/buttonhover.png"
-                hover="textures/buttonpressed.png"/>
+                normal="textures/hud/button.png"/>
    
    <Label x="490" y="484" width="20" height="32" text="" name="reticle"
           normal="textures/reticle.png"/>

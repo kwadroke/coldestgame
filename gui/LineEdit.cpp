@@ -24,7 +24,7 @@ void LineEdit::RenderWidget()
       string textlen = text.substr(offset, cursorpos);
       StringDim(font, textlen, w, h);
       float fw = (float)w / wratio * fontscale;
-      texman->BindTexture(textures[Hover]);
+      texman->BindTexture(defaulttextures[CursorTex][Normal]);
       glBegin(GL_TRIANGLE_STRIP);
       glTexCoord2i(0, 0);
       glVertex2f((x + xoff + fw) * wratio, (y + yoff) * hratio);

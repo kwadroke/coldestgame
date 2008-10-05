@@ -1,0 +1,8 @@
+Diffuse 1 1 1 1
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Texture0 textures/tracers/autocannon.png
+Shader shaders/flat
+CullFace 0
+Additive 1
+DepthWrite 0

@@ -59,11 +59,17 @@ void GUI::Init(GUI* p, TextureManager* tm)
    basefontsize = 12.f; // Font is rendered at this pt size and scaled
    fontscale = 12.f / basefontsize; // Default font size is 12
    text = oldtext = "";
+   for (size_t i = 0; i < numdefaults; ++i)
+      defaulttextures.push_back(vector<string>());
    for (int i = 0; i < 3; ++i)
    {
-      textures.push_back("");
       texids.push_back(0);
+      for (size_t j = 0; j < numdefaults; ++j)
+         defaulttextures[j].push_back("");
    }
+   for (size_t j = 0; j < numdefaults; ++j)
+      defaulttextures[j] = p->defaulttextures[j];
+   textures = vector<string>(3, "");
    glGenTextures(1, &texttexture);
 }
 
@@ -395,6 +401,14 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             string val = ReadAttribute(current, XSWrapper("visible"));
             if (val == "false") visible = false; // Defaults to true
             
+            defaulttextures[BackgroundTex] = ReadTextures(current, "bg");
+            defaulttextures[ButtonTex] = ReadTextures(current, "button");
+            defaulttextures[GutterTex] = ReadTextures(current, "gutter");
+            defaulttextures[SliderTex] = ReadTextures(current, "slider");
+            defaulttextures[TableCellTex] = ReadTextures(current, "tablecell");
+            defaulttextures[TableRowTex] = ReadTextures(current, "tablerow");
+            defaulttextures[CursorTex] = ReadTextures(current, "cursor");
+            
             rootnode = true;
          }
          DOMNodeList* children = current->getChildNodes();
@@ -502,6 +516,13 @@ vector<string> GUI::ReadTextures(DOMNode* current, const string& prefix)
       texman->LoadTexture(ret[Clicked], false);
    }
    return ret;
+}
+
+
+void GUI::UseDefaultTextures(int index)
+{
+   if (textures[0] == "" && textures[1] == "" && textures[2] == "")
+      textures = defaulttextures[index];
 }
 
 

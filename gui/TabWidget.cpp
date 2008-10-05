@@ -42,6 +42,7 @@ void TabWidget::ReadSpecialNodes(DOMNode* current, GUI* parentw)
       if (!buttons.size())
          newbutton->togglestate = 1;
       newbutton->textures = ReadTextures(current, "button");
+      newbutton->UseDefaultTextures(ButtonTex);
       buttons.push_back(newbutton);
       
       ScrollViewPtr newsv = ScrollViewPtr(new ScrollView(this, texman));

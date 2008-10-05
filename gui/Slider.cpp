@@ -5,6 +5,7 @@ Slider::Slider(GUI* p, TextureManager* tm) : value(0), orientation(Horizontal), 
 {
    Init(p, tm);
    button = new Button(this, tm);
+   button->textures = defaulttextures[SliderTex];
 }
 
 
@@ -42,7 +43,6 @@ void Slider::RenderWidget()
       button->y = position - sliderheight / 2.f;
    }
    
-   button->textures = textures;
    button->width = sliderwidth;
    button->height = sliderheight;
    button->state = Hover;
@@ -172,5 +172,6 @@ void Slider::ReadNodeExtra(DOMNode* current, GUI* parentw)
       orientation = Vertical;
    else
       orientation = Horizontal;
+   UseDefaultTextures(GutterTex);
 }
 

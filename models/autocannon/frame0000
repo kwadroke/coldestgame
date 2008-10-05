@@ -1,0 +1,89 @@
+Version Version4
+NextID 15
+TimeToNextFrame 1000
+Container
+   ID 0
+   ParentID -1
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+Container
+   ID 1
+   ParentID 0
+   Name 
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 2
+      Pos -1000 0 1000
+      Norm 0 -1 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 3
+      Pos -1000 0 0
+      Norm 0 -1 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 4
+      Pos 1000 0 1000
+      Norm 0 -1 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 5
+      Pos 1000 0 0
+      Norm 0 -1 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Container
+   ID 8
+   ParentID 0
+   Name 
+   Facing 0
+   Rot1 0 0 90
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 10
+      Pos -1000 0 0
+      Norm 1 0 0
+      TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 11
+      Pos 1000 0 1000
+      Norm 1 0 0
+      TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 12
+      Pos 1000 0 0
+      Norm 1 0 0
+      TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+   Vertex
+      ID 9
+      Pos -1000 0 1000
+      Norm 1 0 0
+      TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Node
+   Triangles
+   Tri
+      ID 13
+      Verts 9 10 11
+      Material materials/tracers/autocannon
+      Collide 0
+   Tri
+      ID 14
+      Verts 11 10 12
+      Material materials/tracers/autocannon
+      Collide 0
+   Tri
+      ID 6
+      Verts 2 3 4
+      Material materials/tracers/autocannon
+      Collide 0
+   Tri
+      ID 7
+      Verts 4 3 5
+      Material materials/tracers/autocannon
+      Collide 0

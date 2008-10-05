@@ -29,6 +29,7 @@ void Table::ReadNodeExtra(DOMNode *current, GUI* parentw)
    if (currval != "")
       rowheight = atof(currval.c_str());
    scrollview->ReadNodeExtra(current, this);
+   UseDefaultTextures(BackgroundTex);
 }
       
       
