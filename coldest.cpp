@@ -1741,17 +1741,22 @@ void UpdatePlayerList()
    lplayerlist->Add("ID|Name|Kills|Deaths|Ping");
    
    string add;
-   for (int i = 1; i < player.size(); ++i)
+   for (size_t j = 0; j < 3; ++j)
    {
-      if (player[i].connected)
+      for (int i = 1; i < player.size(); ++i)
       {
-         add = player[i].name + "|";
-         add += ToString(player[i].kills) + "|";
-         add += ToString(player[i].deaths) + "|";
-         add += ToString(player[i].ping);
-         playerlist->Add(add);
-         lplayerlist->Add(ToString(i) + "|" + add);
+         if (player[i].connected && player[i].team == (j + 1) % 3)
+         {
+            add = player[i].name + "|";
+            add += ToString(player[i].kills) + "|";
+            add += ToString(player[i].deaths) + "|";
+            add += ToString(player[i].ping);
+            playerlist->Add(add);
+            lplayerlist->Add(ToString(i) + "|" + add);
+         }
       }
+      playerlist->Add("|||");
+      lplayerlist->Add("|||");
    }
    
    SDL_mutexV(clientmutex);
