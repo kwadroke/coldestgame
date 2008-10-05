@@ -15,8 +15,9 @@ class TableItem : public GUI
       string Text(int);
       
    protected:
-      void RenderWidget();
-      void LeftDown(SDL_Event*);
+      virtual void RenderWidget();
+      virtual void LeftDown(SDL_Event*);
+      virtual void ReadNodeExtra(DOMNode*, GUI*);
       
       GUI* tablep;
       bool selected;

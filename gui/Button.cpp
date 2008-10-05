@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(GUI* p, TextureManager* tm) : toggle(false), togglestate(0)//, children(list<GUIPtr>())
+Button::Button(GUI* p, TextureManager* tm) : toggle(false), togglestate(0)
 {
    Init(p, tm);
 }
@@ -45,6 +45,7 @@ void Button::ReadNodeExtra(DOMNode* current, GUI* parentw)
 {
    string val = ReadAttribute(current, XSWrapper("toggle"));
    if (val == "true") toggle = true;
+   UseDefaultTextures(ButtonTex);
 }
 
 

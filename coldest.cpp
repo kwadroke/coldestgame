@@ -119,6 +119,7 @@ void InitGlobals()
    console.Parse("set map diamond", false);
    console.Parse("set master localhost", false);
    console.Parse("set respawntime 15000", false);
+   console.Parse("set cache 1", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;

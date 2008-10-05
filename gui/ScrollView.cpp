@@ -6,10 +6,10 @@ ScrollView::ScrollView(GUI* p, TextureManager* tm) : vpoffsetx(0), vpoffsety(0),
    Init(p, tm);
    
    vertbar = SliderPtr(new Slider(this, tm));
-   vertbar->visible = true;
+   vertbar->visible = false;
    vertbar->orientation = Slider::Vertical;
    horizbar = SliderPtr(new Slider(this, tm));
-   horizbar->visible = true;
+   horizbar->visible = false;
 }
 
 
@@ -191,4 +191,5 @@ void ScrollView::ReadNodeExtra(DOMNode* current, GUI* parentw)
 {
    vertbar->textures = ReadTextures(current, "v");
    horizbar->textures = ReadTextures(current, "h");
+   //UseDefaultTextures(BackgroundTex);
 }

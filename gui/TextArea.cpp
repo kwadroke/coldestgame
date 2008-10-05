@@ -26,6 +26,7 @@ void TextArea::ReadNodeExtra(DOMNode *current, GUI* parentw)
    if (newval.find_first_not_of(" \n\t") != string::npos)
       Append(newval);
    table->ReadNodeExtra(current, this);
+   UseDefaultTextures(BackgroundTex);
 }
 
 

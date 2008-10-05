@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf">
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf"
+     buttonnormal="textures/buttonnorm.png"
+     buttonpressed="textures/buttonpressed.png"
+     buttonhover="textures/buttonhover.png"
+     gutternormal="textures/buttonnorm.png"
+     gutterpressed="textures/buttonnorm.png"
+     gutterhover="textures/buttonnorm.png"
+     slidernormal="textures/sliderbuttonnorm.png"
+     sliderpressed="textures/sliderbuttonpressed.png"
+     sliderhover="textures/sliderbuttonhover.png"
+     bgnormal="textures/buttonnormsquare.png"
+     bgpressed="textures/buttonnormsquare.png"
+     bghover="textures/buttonnormsquare.png"
+     tablecellnormal="textures/transparent.png"
+     tablecellpressed="textures/transparent.png"
+     tablecellhover="textures/transparent.png"
+     tablerownormal=""
+     tablerowpressed="textures/buttonnormsquare.png"
+     tablerowhover=""
+     cursornormal="textures/sliderbuttonnorm.png">
    <Label x="300" y="25" width="400" height="200" text="" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"
           normal="textures/logo.png"/>
    <Button x="400" y="300" width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="6" align="center"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png"
            leftclick="resume"/>
    <Button x="400" y="350" width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="6" align="center"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png"
            leftclick="host"/>
    <Button x="400" y="400" width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="6" align="center"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png"
            leftclick="showsettings"/>
    <Button x="400" y="450" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png"
            leftclick="exit"/>
    
    <Button x="100" y="550" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png"
            leftclick="connect"/>
    <Button x="320" y="550" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
-           normal="textures/buttonnorm.png"
-           pressed="textures/buttonpressed.png"
-           hover="textures/buttonhover.png"
            leftclick="connectip"/>
    <LineEdit x="520" y="566" width="380" height="24" text="www.nemebean.com:12012" name="servername"
              normal="textures/buttonnorm.png"
              hover="textures/buttonhover.png"/>
    <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="475|195|35|35|35" rowheight="25"
-          normal="textures/buttonnormsquare.png">
-   </Table>
+          normal="textures/buttonnormsquare.png"/>
    
 </GUI>

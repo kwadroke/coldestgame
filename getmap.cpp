@@ -773,7 +773,8 @@ void GetMap(string fn)
    progress->value = 7;
    progtext->text = "Caching meshes";
    Repaint();
-   CacheMeshes();
+   if (console.GetBool("cache"))
+      CacheMeshes();
    
    progress->value = 8;
    progtext->text = "Rendering maps";

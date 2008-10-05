@@ -38,6 +38,7 @@ using xercesc::XMLString;
 using boost::shared_ptr;
 
 enum {Normal, Hover, Clicked, numstates};
+enum {ButtonTex, GutterTex, SliderTex, BackgroundTex, TableCellTex, TableRowTex, CursorTex, numdefaults};
 enum Alignment {Left, Center, Right};
 
 class GUI
@@ -94,6 +95,7 @@ class GUI
       void StringDim(TTF_Font*, string, int&, int&);
       void RenderBase();
       vector<string> ReadTextures(DOMNode*, const string& prefix = "");
+      void UseDefaultTextures(int);
       
       // Event handlers
       virtual void CustomProcessEvent(SDL_Event*){}
@@ -117,6 +119,7 @@ class GUI
       GUI& operator=(const GUI&);
       
       list<shared_ptr<GUI> > children;
+      vector<vector<string> > defaulttextures;
       GUI* parent;
       float virtualw, virtualh;
       float actualw, actualh;

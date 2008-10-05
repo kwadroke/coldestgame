@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false"
+     buttonnormal="textures/buttonnorm.png"
+     buttonpressed="textures/buttonpressed.png"
+     buttonhover="textures/buttonhover.png"
+     gutternormal="textures/buttonnorm.png"
+     gutterpressed="textures/buttonnorm.png"
+     gutterhover="textures/buttonnorm.png"
+     slidernormal="textures/sliderbuttonnorm.png"
+     sliderpressed="textures/sliderbuttonnorm.png"
+     sliderhover="textures/sliderbuttonnorm.png"
+     bgnormal="textures/buttonnormsquare.png"
+     bgpressed="textures/buttonnormsquare.png"
+     bghover="textures/buttonnormsquare.png"
+     cursornormal="textures/sliderbuttonnorm.png">
    <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center"/>
    
    <TabWidget x="100" y="110" width="800" height="800" text="">
@@ -11,17 +24,11 @@
          
          <ScrollView x="10" y="10" width="300" height="200">
             <Label x="0" y="0" width="180" height="30" text="Particles"/>
-            <Slider x="0" y="100" width="180" height="30" name="partupdintslider" min="0" max="10"
-                  normal="textures/buttonnorm.png"
-                  pressed="textures/buttonpressed.png"
-                  hover="textures/buttonhover.png">
+            <Slider x="0" y="100" width="180" height="30" name="partupdintslider" min="0" max="10">
                <Label x="0" y="-20" width="200" height="20" text="Particle Update Freq"/>
                <Label x="190" y="0" width="50" height="20" name="partupdintslidervalue"/>
             </Slider>
-            <Slider x="0" y="170" width="180" height="30" name="partcountslider" min="0" max="10000"
-                  normal="textures/buttonnorm.png"
-                  pressed="textures/buttonpressed.png"
-                  hover="textures/buttonhover.png">
+            <Slider x="0" y="170" width="180" height="30" name="partcountslider" min="0" max="10000">
                <Label x="0" y="-20" width="200" height="20" text="Particle Count"/>
                <Label x="190" y="0" width="50" height="20" name="partcountslidervalue"/>
             </Slider>
@@ -29,17 +36,11 @@
          
          <ScrollView x="280" y="10" width="300" height="200">
             <Label x="0" y="0" width="180" height="30" text="View Distances"/>
-            <Slider x="0" y="100" width="180" height="30" name="viewdistslider" min="100" max="20000"
-                  normal="textures/buttonnorm.png"
-                  pressed="textures/buttonpressed.png"
-                  hover="textures/buttonhover.png">
+            <Slider x="0" y="100" width="180" height="30" name="viewdistslider" min="100" max="20000">
                <Label x="0" y="-20" width="200" height="20" text="Max Draw"/>
                <Label x="190" y="0" width="50" height="20" name="viewdistslidervalue"/>
             </Slider>
-            <Slider x="0" y="170" width="180" height="30" name="impdistslider" min="1" max="100"
-                  normal="textures/buttonnorm.png"
-                  pressed="textures/buttonpressed.png"
-                  hover="textures/buttonhover.png">
+            <Slider x="0" y="170" width="180" height="30" name="impdistslider" min="1" max="100">
                <Label x="0" y="-20" width="200" height="20" text="Impostor Multiplier"/>
                <Label x="190" y="0" width="50" height="20" name="impdistslidervalue"/>
             </Slider>
@@ -47,17 +48,11 @@
          
          <ScrollView x="550" y="10" width="300" height="200">
             <Label x="0" y="0" width="180" height="30" text="Grass"/>
-            <Slider x="0" y="100" width="180" height="30" name="grassdensityslider" min="0" max="100"
-                  normal="textures/buttonnorm.png"
-                  pressed="textures/buttonpressed.png"
-                  hover="textures/buttonhover.png">
+            <Slider x="0" y="100" width="180" height="30" name="grassdensityslider" min="0" max="100">
                <Label x="0" y="-20" width="200" height="20" text="Grass Density"/>
                <Label x="190" y="0" width="50" height="20" name="grassdensityslidervalue"/>
             </Slider>
-            <Slider x="0" y="170" width="180" height="30" name="grassdistslider" min="0" max="20000"
-                  normal="textures/buttonnorm.png"
-                  pressed="textures/buttonpressed.png"
-                  hover="textures/buttonhover.png">
+            <Slider x="0" y="170" width="180" height="30" name="grassdistslider" min="0" max="20000">
                <Label x="0" y="-20" width="200" height="20" text="Grass Distance"/>
                <Label x="190" y="0" width="50" height="20" name="grassdistslidervalue"/>
             </Slider>
@@ -144,6 +139,13 @@
             </Slider>
          </ScrollView>
       </Tab>
+      <Tab text="Game" buttonwidth="100">
+         <Label x="10" y="30" width="100" height="30" text="Name"/>
+         <LineEdit x="110" y="30" width="200" height="30" name="nameedit"
+                   normal="textures/buttonnorm.png"
+                   pressed="textures/buttonpressed.png"
+                   hover="textures/buttonhover.png"/>
+      </Tab>
       <Tab text="Test" buttonwidth="100"
            buttonnormal="textures/buttonnorm.png"
            buttonpressed="textures/buttonpressed.png"
@@ -154,7 +156,7 @@
             <ComboBoxItem>Test</ComboBoxItem>
             <ComboBoxItem>They have weapons</ComboBoxItem>
             <ComboBoxItem>So what?</ComboBoxItem>
-            <ComboBoxItem>Fuck!</ComboBoxItem>
+            <ComboBoxItem>****!</ComboBoxItem>
             <ComboBoxItem>28 Days</ComboBoxItem>
             <ComboBoxItem>Later</ComboBoxItem>
             <ComboBoxItem>Mutated</ComboBoxItem>
@@ -162,7 +164,7 @@
             <ComboBoxItem>Test</ComboBoxItem>
             <ComboBoxItem>They have weapons</ComboBoxItem>
             <ComboBoxItem>So what?</ComboBoxItem>
-            <ComboBoxItem>Fuck!</ComboBoxItem>
+            <ComboBoxItem>****!</ComboBoxItem>
          </ComboBox>
          
          <ScrollView x="400" y="10" width="100" height="100" 

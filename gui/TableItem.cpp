@@ -54,11 +54,13 @@ void TableItem::Build(string vals, GUI* parentw)
       newle->height = p->rowheight;
       newle->text = values[i];
       newle->readonly = true;
+      newle->textures = defaulttextures[TableCellTex];
       children.push_back(newle);
       pos += widths[i];
    }
    width = pos;
-   textures[Clicked] = parentw->textures[Clicked];
+   
+   UseDefaultTextures(TableRowTex);
 }
 
 
@@ -73,6 +75,12 @@ void TableItem::RenderWidget()
 void TableItem::LeftDown(SDL_Event* event)
 {
    selected = true;
+}
+
+
+void TableItem::ReadNodeExtra(DOMNode* current, GUI* parentw)
+{
+   UseDefaultTextures(TableRowTex);
 }
 
 

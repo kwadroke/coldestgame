@@ -6,7 +6,7 @@ Radius 1
 ProjectileWeight .1
 Model projectile
 Name Autocannon
-ReloadTime 200
-Tracer machinegun
+ReloadTime 300
+Tracer autocannon
 TracerTime 30
 ExplosionEmitter particles/emitters/debris
