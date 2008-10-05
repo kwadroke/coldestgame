@@ -772,7 +772,11 @@ bool GUIEventHandler(SDL_Event &event)
                break;
             case SDLK_RETURN:
                player[0].run = false; // In case they pressed shift+Enter to team chat
-               if (gui[consolegui]->visible)
+               if (PrimaryGUIVisible())
+               {
+                  // Do nothing
+               }
+               else if (gui[consolegui]->visible)
                {
                   GUI* consolein = gui[consolegui]->GetWidget("consoleinput");
                   console.Parse(consolein->text);
@@ -1743,6 +1747,8 @@ void UpdatePlayerList()
    string add;
    for (size_t j = 0; j < 3; ++j)
    {
+      playerlist->Add("Team " + ToString((j + 1) % 3) + "|||");
+      lplayerlist->Add("Team " + ToString((j + 1) % 3) + "|||");
       for (int i = 1; i < player.size(); ++i)
       {
          if (player[i].connected && player[i].team == (j + 1) % 3)
@@ -1755,8 +1761,6 @@ void UpdatePlayerList()
             lplayerlist->Add(ToString(i) + "|" + add);
          }
       }
-      playerlist->Add("|||");
-      lplayerlist->Add("|||");
    }
    
    SDL_mutexV(clientmutex);
