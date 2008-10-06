@@ -223,7 +223,7 @@ void Repaint()
          updateclouds = true;
       updcounter++;*/
       
-      RenderClouds();
+      //RenderClouds();
       
       lights.Place();
       
@@ -745,7 +745,7 @@ void UpdateReflection(const PlayerData& localplayer)
       }
       glPopMatrix();
       
-      RenderClouds();
+      //RenderClouds();
       
       if (console.GetBool("reflection"))
       {
@@ -807,11 +807,11 @@ void RenderClouds()
    glTexCoord2i(0, 0);
    glVertex3f(-10000, height, -10000);
    glTexCoord2i(1, 0);
-   glVertex3f(10000, height, -10000);
+   glVertex3f(30000, height, -10000);
    glTexCoord2i(0, 1);
-   glVertex3f(-10000, height, 10000);
+   glVertex3f(-10000, height, 30000);
    glTexCoord2i(1, 1);
-   glVertex3f(10000, height, 10000);
+   glVertex3f(30000, height, 30000);
    glEnd();
    
    glMatrixMode(GL_PROJECTION);
