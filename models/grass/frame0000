@@ -11,22 +11,22 @@ Container
    Trans 0 800 0
    Vertex
       ID 1
-      Pos -1000 1000 0
+      Pos -3000 1000 0
       Norm 0 0 1
       TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
    Vertex
       ID 2
-      Pos -1000 -1000 0
+      Pos -3000 -1000 0
       Norm 0 0 1
       TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
    Vertex
       ID 3
-      Pos 1000 1000 0
+      Pos 3000 1000 0
       Norm 0 0 1
       TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
    Vertex
       ID 4
-      Pos 1000 -1000 0
+      Pos 3000 -1000 0
       Norm 0 0 1
       TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
 Node
