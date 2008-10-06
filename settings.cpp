@@ -27,8 +27,8 @@ void UpdateSettings()
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
    viewdistslider->value = console.GetInt("viewdist");
-   grassdensityslider->value = console.GetInt("grassdensity");
-   grassdistslider->value = console.GetInt("grassdist");
+   grassdensityslider->value = console.GetInt("grassdensity") * 100;
+   grassdistslider->value = console.GetInt("grassdrawdist");
    impdistslider->value = console.GetInt("impdistmulti");
    shadowsbutton->togglestate = console.GetBool("shadows") ? 1 : 0;
    softshadowsbutton->togglestate = console.GetBool("softshadows") ? 1 : 0;
@@ -111,7 +111,7 @@ void SaveSettings()
    //console.Parse("set partcount " + ToString(partcountslider->value), false);
    console.Parse("setsave viewdist " + ToString(viewdistslider->value), false);
    console.Parse("setsave grassdensity " + ToString(float(grassdensityslider->value) / 100.f), false);
-   console.Parse("setsave grassdist " + ToString(grassdistslider->value), false);
+   console.Parse("setsave grassdrawdist " + ToString(grassdistslider->value), false);
    console.Parse("setsave impdistmulti " + ToString(impdistslider->value), false);
    console.Parse("setsave shadows " + ToString(shadowsbutton->togglestate), false);
    console.Parse("setsave softshadows " + ToString(softshadowsbutton->togglestate), false);
