@@ -51,7 +51,7 @@ Node
       File grass
       Model models/grass/base
       GroupSize 10
-      Density 30
+      Density 0
       MinTilt 5
       MaxTilt 25
 

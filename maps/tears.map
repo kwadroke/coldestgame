@@ -49,9 +49,11 @@ Node
    GrassData
    Node
       File grass
-      Model models/grass/base
+      Model models/tropicalplant/base
       GroupSize 10
-      Density 75
+      Density 1
+      MinTilt 0
+      MaxTilt 20
 
 Node
    SpawnPoints
