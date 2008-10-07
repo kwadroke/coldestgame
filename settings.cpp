@@ -27,7 +27,7 @@ void UpdateSettings()
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
    viewdistslider->value = console.GetInt("viewdist");
-   grassdensityslider->value = console.GetInt("grassdensity") * 100;
+   grassdensityslider->value = int(console.GetFloat("grassdensity") * 100);
    grassdistslider->value = console.GetInt("grassdrawdist");
    impdistslider->value = console.GetInt("impdistmulti");
    shadowsbutton->togglestate = console.GetBool("shadows") ? 1 : 0;

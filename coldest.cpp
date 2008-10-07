@@ -772,15 +772,15 @@ bool GUIEventHandler(SDL_Event &event)
                break;
             case SDLK_RETURN:
                player[0].run = false; // In case they pressed shift+Enter to team chat
-               if (PrimaryGUIVisible())
-               {
-                  // Do nothing
-               }
-               else if (gui[consolegui]->visible)
+               if (gui[consolegui]->visible)
                {
                   GUI* consolein = gui[consolegui]->GetWidget("consoleinput");
                   console.Parse(consolein->text);
                   consolein->text = "";
+               }
+               else if (PrimaryGUIVisible())
+               {
+                  // Do nothing
                }
                else if (!chatin->visible)
                {

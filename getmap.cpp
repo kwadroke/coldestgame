@@ -657,6 +657,7 @@ void GetMap(string fn)
       float grasssizex = mapwidth / float(grassw);
       float grasssizey = mapheight / float(grassh);
       float maxperpoint = 100;
+      float grassdensity = console.GetFloat("grassdensity");
    
       SDL_LockSurface(loadgrass);
       data = (unsigned char*)loadgrass->pixels;
@@ -677,8 +678,8 @@ void GetMap(string fn)
                {
                   int offset = (y + iy) * grassw + (x + ix);
                   offset *= loadgrass->format->BytesPerPixel;
-                  float d = static_cast<float>(data[offset]) / 255.f * density;
-                  d *= console.GetFloat("grassdensity");
+                  float d = static_cast<float>(data[offset]) / 255.f * density * grassdensity;
+                  d *= Random(0, 2.f);
                   int num = static_cast<int>(d);
                   
                   for (int j = 0; j < num; ++j)
