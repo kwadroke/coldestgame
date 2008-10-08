@@ -1121,7 +1121,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    float accmodifier = 1.f;
    if (mplayer.run)
    {
-      maxspeed *= 2.f;
+      maxspeed *= 1.5f;
       acceleration *= 2.f;
       if (mplayer.moveforward || mplayer.moveback)
          mplayer.temperature += float(numticks) * .03f;
@@ -1192,7 +1192,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          }
          else if (!floatzero(mplayer.speed)) // Moving uphill
          {
-            mplayer.pos.y -= step * 1.5f;
+            mplayer.pos.y -= step * 1.f;
          }
       }
       else
