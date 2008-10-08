@@ -1,4 +1,4 @@
-TileSize 30
+TileSize 40
 HeightScale 5
 ZeroHeight 10
 Stretch 8
@@ -54,20 +54,27 @@ Node
       Density 1
       MinTilt 0
       MaxTilt 20
+   Node
+      File grass
+      Model models/bush/base
+      GroupSize 10
+      Density 2
+      MinTilt 0
+      MaxTilt 360
 
 Node
    SpawnPoints
    Node
       Team 1
-      Location 600 1150 700
+      Location 800 1150 933
       Name Base1
    Node
       Team 2
-      Location 3100 125 3100
+      Location 4130 125 4130
       Name Base2
    Node
       Team 2
-      Location 2700 925 1800
+      Location 3600 925 2400
       Name Base2
       
 Node
