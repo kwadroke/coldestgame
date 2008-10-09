@@ -54,6 +54,7 @@ Node
       Density 5
       MinTilt 5
       MaxTilt 25
+      Scale 3
 
 Node
    SpawnPoints

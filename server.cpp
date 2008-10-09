@@ -517,7 +517,7 @@ int ServerListen(void* dummy)
             }
             for (size_t i = 0; i < allspawns.size(); ++i)
             {
-               if (spawnpointreq.distance(allspawns[i].position) < 1.f)
+               if (spawnpointreq.distance(allspawns[i].position) < 1.f && allspawns[i].team == serverplayers[oppnum].team)
                {
                   accepted = true;
                   break;
@@ -567,6 +567,7 @@ int ServerListen(void* dummy)
                      serverplayers[oppnum].spawned = true;
                   }
                   serverplayers[oppnum].pos = spawnpointreq;
+                  UpdatePlayerModel(serverplayers[oppnum], servermeshes, false);
                   serverplayers[oppnum].lastmovetick = SDL_GetTicks();
                   serverplayers[oppnum].Reset();
                   for (int i = 0; i < numbodyparts; ++i)

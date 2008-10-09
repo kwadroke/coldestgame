@@ -631,7 +631,7 @@ void GetMap(string fn)
    {
       string file, model;
       int grassw, grassh, groupsize = 10;
-      float density;
+      float density, gscale = 1.f;
       currnode = grassnode(i);
       float maxtilt = 50.f, mintilt = 25.f;
       
@@ -642,6 +642,7 @@ void GetMap(string fn)
       currnode.Read(density, "Density");
       currnode.Read(maxtilt, "MaxTilt");
       currnode.Read(mintilt, "MinTilt");
+      currnode.Read(gscale, "Scale");
       
       SDL_Surface *loadgrass;
    
@@ -696,7 +697,7 @@ void GetMap(string fn)
                      {
                         Mesh newmesh(basemesh);
                         Vector3 newpos(newx, GetTerrainHeight(newx, newy), newy);
-                        newmesh.Scale(sqrt(d / density));
+                        newmesh.Scale(sqrt(d / density) * gscale);
                         newmesh.Move(newpos);
                         newmesh.Rotate(rots);
                         newmesh.LoadMaterials();
