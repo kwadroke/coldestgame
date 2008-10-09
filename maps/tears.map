@@ -51,16 +51,18 @@ Node
       File grass
       Model models/tropicalplant/base
       GroupSize 10
-      Density 1
+      Density 2
       MinTilt 0
       MaxTilt 20
+      Scale 1
    Node
       File grass
       Model models/bush/base
       GroupSize 10
-      Density 2
+      Density 5
       MinTilt 0
       MaxTilt 360
+      Scale 3
 
 Node
    SpawnPoints

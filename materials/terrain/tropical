@@ -3,7 +3,7 @@ Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/grass/greengrass.png
 Texture1 textures/grass/greengrass.png
-   Texture0 textures/rock/rocksanddirt.png
+   Texture1 textures/rock/rocksanddirt.png
    Texture1 textures/dirt.png
 Texture2 textures/rock/mossyrock.png
 Texture3 textures/dirt.png
