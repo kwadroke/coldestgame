@@ -38,4 +38,12 @@ T lerp(T x, T y, float a)
    return (x * a + y * (1 - a));
 }
 
+template <typename T>
+T smoothstep(T x, T y, T a)
+{
+   if (a < x) return 0;
+   if (a > y) return 1;
+   return ((a - x) / (y - x));
+}
+
 #endif
