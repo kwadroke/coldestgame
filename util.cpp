@@ -99,6 +99,8 @@ int gettid()
 }
 
 
+// Don't think this is actually used since runtime bit counting is not very useful and we (royal we of course;-)
+// recently discovered the compiler defines that indicate bit count.
 int bitcount()
 {
    return sizeof(void*) * 8;

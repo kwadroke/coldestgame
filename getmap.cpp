@@ -27,6 +27,7 @@ struct TerrainParams
    float minheight, maxheight;
    float minslope, maxslope;
    float minrand, maxrand;
+   float blend;
 };
 
 vector<TerrainParams> terrparams;
@@ -154,6 +155,8 @@ void GetMap(string fn)
       currnode.Read(terrparams[i].maxslope, "SlopeRange", 1);
       currnode.Read(terrparams[i].minrand, "RandRange", 0);
       currnode.Read(terrparams[i].maxrand, "RandRange", 1);
+      terrparams[i].blend = 0;
+      currnode.Read(terrparams[i].blend, "Blend");
    }
 #endif
    
@@ -365,9 +368,13 @@ void GetMap(string fn)
          {
             texweights[i] = 0;
             if (heightmap[x][y] >= terrparams[i].minheight && heightmap[x][y] <= terrparams[i].maxheight)
-               texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand);
+               texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand) * 
+               smoothstep(terrparams[i].minheight, terrparams[i].minheight + terrparams[i].blend, heightmap[x][y]) *
+               (1.f - smoothstep(terrparams[i].maxheight - terrparams[i].blend, terrparams[i].maxheight, heightmap[x][y]));
             if (normals[x][y].y >= terrparams[i].minslope && normals[x][y].y <= terrparams[i].maxslope)
-               texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand);
+               texweights[i] += Random(terrparams[i].minrand, terrparams[i].maxrand) *
+               smoothstep(terrparams[i].minslope, terrparams[i].minslope + terrparams[i].blend, normals[x][y].y) *
+               (1 - smoothstep(terrparams[i].maxslope - terrparams[i].blend, terrparams[i].maxslope, normals[x][y].y));
          }
          
          textouse[0] = 0;
