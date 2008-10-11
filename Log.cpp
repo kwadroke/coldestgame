@@ -18,6 +18,7 @@ Log& Log::operator<<(ostream& (*s)(ostream&))
    cout << s;
    if (fileout)
       fileout << s;
+	return *this;
 }
 
 

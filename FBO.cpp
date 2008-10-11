@@ -51,6 +51,8 @@ FBO& FBO::operator=(const FBO &f)
    depth = f.depth;
    texhand = f.texhand;
    init();
+
+	return *this;
 }
 
 
