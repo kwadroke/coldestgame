@@ -7,8 +7,6 @@ Log::Log()
 
 void Log::SetFile(const string& filename)
 {
-   if (fileout)
-      fileout.close();
    fileout.open(filename.c_str());
 }
 
