@@ -280,6 +280,9 @@ int NetListen(void* dummy)
    string packettype;
    bool annlisten = true;
    
+   connectedaddr.host = INADDR_NONE;
+   connectedaddr.port = 0;
+   
    setsighandler();
    
    // Just for announcement packets
