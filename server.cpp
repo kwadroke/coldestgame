@@ -965,7 +965,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
 // Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
 void ServerLoadMap()
 {
-   serverhasmap = false;
+   serverhasmap = 0;
    SDL_mutexP(clientmutex);
    nextmap = "maps/" + console.GetString("map");
    mapname = "";
@@ -991,7 +991,6 @@ void ServerLoadMap()
    servparticles.clear();
    
    // Generate main base items
-   logout << "Generating base items " << spawnpoints.size() << "*******************************" << endl;
    for (int i = 0; i < spawnpoints.size(); ++i)
    {
       Item newitem(Item::Base, servermeshes);
@@ -1024,8 +1023,8 @@ void ServerLoadMap()
    serverkdtree.refine(0);
    
    logout << "Map loaded" << endl;
-   serverhasmap = true;
-   gameover = false;
+   serverhasmap = 1;
+   gameover = 0;
    SDL_mutexV(servermutex);
 }
 

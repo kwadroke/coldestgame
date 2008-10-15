@@ -12,13 +12,13 @@ string chatstring;
 bool chatteam;
 vector<string> newchatlines;
 vector<unsigned short> newchatplayers;
-short changeteam;
-bool useitem;
+tsint changeteam;
+tsint useitem;
 vector<Meshlist::iterator> deletemeshes;
 vector<Item> additems;
 set<unsigned long> itemsreceived;
 set<unsigned long> hitsreceived;
 unsigned long lastsyncpacket;
-Uint32 lasthit;
-int serverfps;
+tsint lasthit;
+tsint serverfps;
 

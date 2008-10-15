@@ -55,12 +55,12 @@ extern vector<SpawnPointData> availablespawns;
 extern vector<SpawnPointData> mapspawns;
 extern bool initialized;
 extern Meshlist meshes;
-extern bool serverhasmap;
+extern tsint serverhasmap;
 extern Console console;
-extern int winningteam;
+extern tsint winningteam;
 extern vector<BodyParts> weaponslots;
 extern MeshCachePtr meshcache;
-extern int spectateplayer;
+extern tsint spectateplayer;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

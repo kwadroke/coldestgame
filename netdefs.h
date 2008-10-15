@@ -11,6 +11,7 @@
 #include "Particle.h"
 #include "SDL.h"
 #include "IDGen.h"
+#include "tsint.h"
 
 const char eol = '\n';
 
@@ -26,15 +27,15 @@ extern string chatstring;
 extern bool chatteam;
 extern vector<string> newchatlines;
 extern vector<unsigned short> newchatplayers;
-extern short changeteam;
-extern bool useitem;
+extern tsint changeteam;
+extern tsint useitem;
 extern vector<Meshlist::iterator> deletemeshes;
 extern vector<Item> additems;
 extern set<unsigned long> itemsreceived;
 extern set<unsigned long> hitsreceived;
 extern unsigned long lastsyncpacket;
-extern Uint32 lasthit;
-extern int serverfps;
+extern tsint lasthit;
+extern tsint serverfps;
 
 void HandleAck(unsigned long);
 void SendPowerdown();
