@@ -1,5 +1,5 @@
 #`sdl-config --cflags`
-DEBUG=0
+DEBUG=1
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)

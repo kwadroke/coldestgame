@@ -27,6 +27,7 @@ class Item
       int hp;
       Meshlist::iterator mesh;
       int team;
+      Vector3 position; // Only used temporarily to store position - normally it is defined by the mesh
       
    private:
       void LoadFromFile(const string&);

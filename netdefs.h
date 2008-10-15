@@ -29,6 +29,7 @@ extern vector<unsigned short> newchatplayers;
 extern short changeteam;
 extern bool useitem;
 extern vector<Meshlist::iterator> deletemeshes;
+extern vector<Item> additems;
 extern set<unsigned long> itemsreceived;
 extern set<unsigned long> hitsreceived;
 extern unsigned long lastsyncpacket;
