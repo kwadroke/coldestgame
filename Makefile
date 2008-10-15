@@ -116,7 +116,7 @@ CollisionDetection.o: /usr/include/bits/mathdef.h
 CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 CollisionDetection.o: /usr/include/bits/mathcalls.h
 CollisionDetection.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-CollisionDetection.o: Triangle.h Vertex.h types.h /usr/include/SDL/SDL.h
+CollisionDetection.o: logout.h Log.h /usr/include/SDL/SDL.h
 CollisionDetection.o: /usr/include/SDL/SDL_main.h
 CollisionDetection.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 CollisionDetection.o: /usr/include/gentoo-multilib/amd64/sys/types.h
@@ -200,8 +200,8 @@ CollisionDetection.o: /usr/include/SDL/SDL_joystick.h
 CollisionDetection.o: /usr/include/SDL/SDL_quit.h
 CollisionDetection.o: /usr/include/SDL/SDL_loadso.h
 CollisionDetection.o: /usr/include/SDL/SDL_timer.h
-CollisionDetection.o: /usr/include/SDL/SDL_version.h
-CollisionDetection.o: /usr/include/boost/shared_ptr.hpp
+CollisionDetection.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h
+CollisionDetection.o: types.h /usr/include/boost/shared_ptr.hpp
 CollisionDetection.o: /usr/include/boost/config.hpp
 CollisionDetection.o: /usr/include/boost/config/user.hpp
 CollisionDetection.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -471,8 +471,8 @@ Console.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 Console.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
 Console.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Console.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-Console.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
-Console.o: /usr/include/gentoo-multilib/amd64/math.h
+Console.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
+Console.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
 Console.o: /usr/include/bits/huge_val.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 Console.o: /usr/include/bits/huge_valf.h
@@ -564,7 +564,8 @@ FBO.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 FBO.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 FBO.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 FBO.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-FBO.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_image.h
+FBO.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_image.h logout.h
+FBO.o: Log.h
 GraphicMatrix.o: GraphicMatrix.h glinc.h /usr/include/GL/glew.h
 GraphicMatrix.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 GraphicMatrix.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -594,7 +595,81 @@ GraphicMatrix.o: /usr/include/bits/mathdef.h
 GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 GraphicMatrix.o: /usr/include/bits/mathcalls.h
 GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-GraphicMatrix.o: Vector3.h
+GraphicMatrix.o: Vector3.h logout.h Log.h /usr/include/SDL/SDL.h
+GraphicMatrix.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+GraphicMatrix.o: /usr/include/sys/types.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+GraphicMatrix.o: /usr/include/bits/types.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+GraphicMatrix.o: /usr/include/bits/typesizes.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+GraphicMatrix.o: /usr/include/time.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/time.h
+GraphicMatrix.o: /usr/include/endian.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/endian.h
+GraphicMatrix.o: /usr/include/bits/endian.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+GraphicMatrix.o: /usr/include/sys/select.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+GraphicMatrix.o: /usr/include/bits/select.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+GraphicMatrix.o: /usr/include/bits/sigset.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+GraphicMatrix.o: /usr/include/bits/time.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+GraphicMatrix.o: /usr/include/sys/sysmacros.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+GraphicMatrix.o: /usr/include/bits/pthreadtypes.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+GraphicMatrix.o: /usr/include/stdio.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/stdio.h
+GraphicMatrix.o: /usr/include/libio.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/libio.h
+GraphicMatrix.o: /usr/include/_G_config.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+GraphicMatrix.o: /usr/include/wchar.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/wchar.h
+GraphicMatrix.o: /usr/include/bits/wchar.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+GraphicMatrix.o: /usr/include/gconv.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/gconv.h
+GraphicMatrix.o: /usr/include/bits/stdio_lim.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+GraphicMatrix.o: /usr/include/bits/sys_errlist.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+GraphicMatrix.o: /usr/include/stdlib.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+GraphicMatrix.o: /usr/include/bits/waitflags.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+GraphicMatrix.o: /usr/include/bits/waitstatus.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+GraphicMatrix.o: /usr/include/xlocale.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+GraphicMatrix.o: /usr/include/alloca.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/alloca.h
+GraphicMatrix.o: /usr/include/string.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/string.h
+GraphicMatrix.o: /usr/include/strings.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/strings.h
+GraphicMatrix.o: /usr/include/inttypes.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+GraphicMatrix.o: /usr/include/stdint.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/stdint.h
+GraphicMatrix.o: /usr/include/ctype.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/ctype.h
+GraphicMatrix.o: /usr/include/iconv.h
+GraphicMatrix.o: /usr/include/gentoo-multilib/amd64/iconv.h
+GraphicMatrix.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+GraphicMatrix.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+GraphicMatrix.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+GraphicMatrix.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+GraphicMatrix.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+GraphicMatrix.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+GraphicMatrix.o: /usr/include/SDL/SDL_keyboard.h
+GraphicMatrix.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+GraphicMatrix.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
+GraphicMatrix.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+GraphicMatrix.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 Hit.o: Hit.h
 IDGen.o: IDGen.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 IDGen.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -666,13 +741,91 @@ IDGen.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 IDGen.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 IDGen.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 IDGen.o: /usr/include/SDL/SDL_version.h
-IniReader.o: IniReader.h
-Item.o: Item.h IniReader.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
-Item.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-Item.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
-Item.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
-Item.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
-Item.o: /usr/include/gentoo-multilib/amd64/features.h
+IniReader.o: IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
+IniReader.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+IniReader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+IniReader.o: /usr/include/sys/types.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+IniReader.o: /usr/include/features.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/features.h
+IniReader.o: /usr/include/sys/cdefs.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+IniReader.o: /usr/include/bits/wordsize.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+IniReader.o: /usr/include/gnu/stubs.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+IniReader.o: /usr/include/gnu/stubs-64.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+IniReader.o: /usr/include/bits/types.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+IniReader.o: /usr/include/bits/typesizes.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+IniReader.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+IniReader.o: /usr/include/endian.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/endian.h
+IniReader.o: /usr/include/bits/endian.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+IniReader.o: /usr/include/sys/select.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+IniReader.o: /usr/include/bits/select.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+IniReader.o: /usr/include/bits/sigset.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+IniReader.o: /usr/include/bits/time.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+IniReader.o: /usr/include/sys/sysmacros.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+IniReader.o: /usr/include/bits/pthreadtypes.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+IniReader.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+IniReader.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+IniReader.o: /usr/include/_G_config.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+IniReader.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+IniReader.o: /usr/include/bits/wchar.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+IniReader.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+IniReader.o: /usr/include/bits/stdio_lim.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+IniReader.o: /usr/include/bits/sys_errlist.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+IniReader.o: /usr/include/stdlib.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+IniReader.o: /usr/include/bits/waitflags.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+IniReader.o: /usr/include/bits/waitstatus.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+IniReader.o: /usr/include/xlocale.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+IniReader.o: /usr/include/alloca.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/alloca.h
+IniReader.o: /usr/include/string.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/string.h
+IniReader.o: /usr/include/strings.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/strings.h
+IniReader.o: /usr/include/inttypes.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+IniReader.o: /usr/include/stdint.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/iconv.h
+IniReader.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+IniReader.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+IniReader.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+IniReader.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+IniReader.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+IniReader.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+IniReader.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+IniReader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+IniReader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+IniReader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+IniReader.o: /usr/include/SDL/SDL_version.h
+Item.o: Item.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
+Item.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+Item.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+Item.o: /usr/include/sys/types.h
+Item.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+Item.o: /usr/include/features.h /usr/include/gentoo-multilib/amd64/features.h
 Item.o: /usr/include/sys/cdefs.h
 Item.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
 Item.o: /usr/include/bits/wordsize.h
@@ -681,21 +834,6 @@ Item.o: /usr/include/gnu/stubs.h
 Item.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
 Item.o: /usr/include/gnu/stubs-64.h
 Item.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-Item.o: /usr/include/bits/huge_val.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-Item.o: /usr/include/bits/huge_valf.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-Item.o: /usr/include/bits/huge_vall.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-Item.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
-Item.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
-Item.o: /usr/include/bits/mathdef.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-Item.o: /usr/include/bits/mathcalls.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Item.o: Vertex.h types.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-Item.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
-Item.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 Item.o: /usr/include/bits/types.h
 Item.o: /usr/include/gentoo-multilib/amd64/bits/types.h
 Item.o: /usr/include/bits/typesizes.h
@@ -750,7 +888,23 @@ Item.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Item.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Item.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Item.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Item.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
+Item.o: /usr/include/SDL/SDL_version.h Mesh.h Vector3.h glinc.h
+Item.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Item.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Item.o: /usr/include/gentoo-multilib/amd64/math.h
+Item.o: /usr/include/bits/huge_val.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Item.o: /usr/include/bits/huge_valf.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+Item.o: /usr/include/bits/huge_vall.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+Item.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
+Item.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
+Item.o: /usr/include/bits/mathdef.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Item.o: /usr/include/bits/mathcalls.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
+Item.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 Item.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Item.o: /usr/include/boost/config/select_compiler_config.hpp
 Item.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -805,7 +959,133 @@ Light.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 Light.o: /usr/include/bits/mathdef.h
 Light.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Light.o: /usr/include/bits/mathcalls.h
-Light.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+Light.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Light.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
+Light.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+Light.o: /usr/include/bits/types.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Light.o: /usr/include/bits/typesizes.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Light.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+Light.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+Light.o: /usr/include/bits/endian.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Light.o: /usr/include/sys/select.h
+Light.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Light.o: /usr/include/bits/select.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Light.o: /usr/include/bits/sigset.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Light.o: /usr/include/bits/time.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Light.o: /usr/include/sys/sysmacros.h
+Light.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Light.o: /usr/include/bits/pthreadtypes.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Light.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Light.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Light.o: /usr/include/_G_config.h
+Light.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+Light.o: /usr/include/gentoo-multilib/amd64/wchar.h /usr/include/bits/wchar.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h /usr/include/gconv.h
+Light.o: /usr/include/gentoo-multilib/amd64/gconv.h
+Light.o: /usr/include/bits/stdio_lim.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Light.o: /usr/include/bits/sys_errlist.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Light.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Light.o: /usr/include/bits/waitflags.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Light.o: /usr/include/bits/waitstatus.h
+Light.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Light.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+Light.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+Light.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+Light.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+Light.o: /usr/include/inttypes.h
+Light.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+Light.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+Light.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+Light.o: /usr/include/gentoo-multilib/amd64/iconv.h
+Light.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Light.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Light.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Light.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Light.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Light.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Light.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Light.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Light.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Light.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Light.o: /usr/include/SDL/SDL_version.h GraphicMatrix.h
+Log.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Log.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+Log.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+Log.o: /usr/include/gentoo-multilib/amd64/sys/types.h /usr/include/features.h
+Log.o: /usr/include/gentoo-multilib/amd64/features.h /usr/include/sys/cdefs.h
+Log.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Log.o: /usr/include/bits/wordsize.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Log.o: /usr/include/gnu/stubs.h
+Log.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Log.o: /usr/include/gnu/stubs-64.h
+Log.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Log.o: /usr/include/bits/types.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Log.o: /usr/include/bits/typesizes.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Log.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+Log.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+Log.o: /usr/include/bits/endian.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Log.o: /usr/include/sys/select.h
+Log.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Log.o: /usr/include/bits/select.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Log.o: /usr/include/bits/sigset.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Log.o: /usr/include/bits/time.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Log.o: /usr/include/sys/sysmacros.h
+Log.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Log.o: /usr/include/bits/pthreadtypes.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Log.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Log.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Log.o: /usr/include/_G_config.h
+Log.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+Log.o: /usr/include/gentoo-multilib/amd64/wchar.h /usr/include/bits/wchar.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h /usr/include/gconv.h
+Log.o: /usr/include/gentoo-multilib/amd64/gconv.h
+Log.o: /usr/include/bits/stdio_lim.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Log.o: /usr/include/bits/sys_errlist.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Log.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Log.o: /usr/include/bits/waitflags.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Log.o: /usr/include/bits/waitstatus.h
+Log.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Log.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+Log.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+Log.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+Log.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+Log.o: /usr/include/inttypes.h /usr/include/gentoo-multilib/amd64/inttypes.h
+Log.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+Log.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+Log.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+Log.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Log.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Log.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Log.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Log.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Log.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Log.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Log.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Log.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Log.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Log.o: /usr/include/SDL/SDL_version.h
 Material.o: Material.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Material.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Material.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -882,7 +1162,7 @@ Material.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Material.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Material.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Material.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_image.h
-Material.o: types.h Vector3.h /usr/include/math.h
+Material.o: logout.h Log.h types.h Vector3.h /usr/include/math.h
 Material.o: /usr/include/gentoo-multilib/amd64/math.h
 Material.o: /usr/include/bits/huge_val.h
 Material.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -1090,8 +1370,8 @@ Mesh.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
 Mesh.o: /usr/include/bits/mathdef.h
 Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Mesh.o: /usr/include/bits/mathcalls.h
-Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Mesh.o: Vertex.h types.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Mesh.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+Mesh.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 Mesh.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 Mesh.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 Mesh.o: /usr/include/bits/types.h
@@ -1148,8 +1428,9 @@ Mesh.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Mesh.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Mesh.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Mesh.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Mesh.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Mesh.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Mesh.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+Mesh.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Mesh.o: /usr/include/boost/config/user.hpp
 Mesh.o: /usr/include/boost/config/select_compiler_config.hpp
 Mesh.o: /usr/include/boost/config/compiler/gcc.hpp
 Mesh.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -1238,10 +1519,9 @@ MeshCache.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 MeshCache.o: /usr/include/bits/mathdef.h
 MeshCache.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 MeshCache.o: /usr/include/bits/mathcalls.h
-MeshCache.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-MeshCache.o: Vertex.h types.h /usr/include/SDL/SDL.h
-MeshCache.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-MeshCache.o: /usr/include/sys/types.h
+MeshCache.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+MeshCache.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+MeshCache.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 MeshCache.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 MeshCache.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
 MeshCache.o: /usr/include/endian.h
@@ -1302,10 +1582,10 @@ MeshCache.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 MeshCache.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 MeshCache.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 MeshCache.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-MeshCache.o: /usr/include/SDL/SDL_version.h GraphicMatrix.h Material.h
-MeshCache.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-MeshCache.o: IniReader.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
-MeshCache.o: util.h Timer.h
+MeshCache.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+MeshCache.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+MeshCache.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+MeshCache.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
 MeshNode.o: MeshNode.h Triangle.h Vertex.h Vector3.h glinc.h
 MeshNode.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 MeshNode.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1333,8 +1613,8 @@ MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 MeshNode.o: /usr/include/bits/mathdef.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 MeshNode.o: /usr/include/bits/mathcalls.h
-MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
-MeshNode.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+MeshNode.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+MeshNode.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 MeshNode.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 MeshNode.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 MeshNode.o: /usr/include/bits/types.h
@@ -1395,8 +1675,9 @@ MeshNode.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 MeshNode.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 MeshNode.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 MeshNode.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-MeshNode.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-MeshNode.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+MeshNode.o: /usr/include/SDL/SDL_version.h types.h
+MeshNode.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+MeshNode.o: /usr/include/boost/config/user.hpp
 MeshNode.o: /usr/include/boost/config/select_compiler_config.hpp
 MeshNode.o: /usr/include/boost/config/compiler/gcc.hpp
 MeshNode.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -1593,10 +1874,9 @@ ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 ObjectKDTree.o: /usr/include/bits/mathdef.h
 ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ObjectKDTree.o: /usr/include/bits/mathcalls.h
-ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ObjectKDTree.o: Triangle.h Vertex.h types.h /usr/include/SDL/SDL.h
-ObjectKDTree.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-ObjectKDTree.o: /usr/include/sys/types.h
+ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+ObjectKDTree.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+ObjectKDTree.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 ObjectKDTree.o: /usr/include/bits/types.h
 ObjectKDTree.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -1667,7 +1947,7 @@ ObjectKDTree.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 ObjectKDTree.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 ObjectKDTree.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ObjectKDTree.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-ObjectKDTree.o: /usr/include/SDL/SDL_version.h
+ObjectKDTree.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
 ObjectKDTree.o: /usr/include/boost/shared_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/config.hpp
 ObjectKDTree.o: /usr/include/boost/config/user.hpp
@@ -1773,7 +2053,7 @@ Packet.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Packet.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Packet.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Packet.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Packet.o: /usr/include/SDL/SDL_version.h
+Packet.o: /usr/include/SDL/SDL_version.h logout.h Log.h
 Particle.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 Particle.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Particle.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -1802,10 +2082,9 @@ Particle.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 Particle.o: /usr/include/bits/mathdef.h
 Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Particle.o: /usr/include/bits/mathcalls.h
-Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Particle.o: Vertex.h types.h /usr/include/SDL/SDL.h
-Particle.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-Particle.o: /usr/include/sys/types.h
+Particle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+Particle.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Particle.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 Particle.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 Particle.o: /usr/include/bits/types.h
 Particle.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -1865,8 +2144,9 @@ Particle.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Particle.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Particle.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Particle.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Particle.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Particle.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Particle.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+Particle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Particle.o: /usr/include/boost/config/user.hpp
 Particle.o: /usr/include/boost/config/select_compiler_config.hpp
 Particle.o: /usr/include/boost/config/compiler/gcc.hpp
 Particle.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -2065,7 +2345,7 @@ ParticleEmitter.o: /usr/include/bits/mathdef.h
 ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ParticleEmitter.o: /usr/include/bits/mathcalls.h
 ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ParticleEmitter.o: Triangle.h Vertex.h types.h /usr/include/SDL/SDL.h
+ParticleEmitter.o: logout.h Log.h /usr/include/SDL/SDL.h
 ParticleEmitter.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 ParticleEmitter.o: /usr/include/sys/types.h
 ParticleEmitter.o: /usr/include/gentoo-multilib/amd64/sys/types.h
@@ -2143,7 +2423,7 @@ ParticleEmitter.o: /usr/include/SDL/SDL_video.h
 ParticleEmitter.o: /usr/include/SDL/SDL_joystick.h
 ParticleEmitter.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 ParticleEmitter.o: /usr/include/SDL/SDL_timer.h
-ParticleEmitter.o: /usr/include/SDL/SDL_version.h
+ParticleEmitter.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
 ParticleEmitter.o: /usr/include/boost/shared_ptr.hpp
 ParticleEmitter.o: /usr/include/boost/config.hpp
 ParticleEmitter.o: /usr/include/boost/config/user.hpp
@@ -2206,10 +2486,9 @@ PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 PlayerData.o: /usr/include/bits/mathdef.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 PlayerData.o: /usr/include/bits/mathcalls.h
-PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-PlayerData.o: /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
-PlayerData.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-PlayerData.o: /usr/include/sys/types.h
+PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+PlayerData.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+PlayerData.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 PlayerData.o: /usr/include/bits/types.h
 PlayerData.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -2274,9 +2553,9 @@ PlayerData.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 PlayerData.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 PlayerData.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 PlayerData.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-PlayerData.o: /usr/include/SDL/SDL_version.h Mesh.h Triangle.h Vertex.h
-PlayerData.o: types.h /usr/include/boost/shared_ptr.hpp
-PlayerData.o: /usr/include/boost/config.hpp
+PlayerData.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_net.h
+PlayerData.o: Mesh.h Triangle.h Vertex.h types.h
+PlayerData.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 PlayerData.o: /usr/include/boost/config/user.hpp
 PlayerData.o: /usr/include/boost/config/select_compiler_config.hpp
 PlayerData.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -2341,6 +2620,85 @@ PrimitiveOctree.o: /usr/include/bits/mathdef.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 PrimitiveOctree.o: /usr/include/bits/mathcalls.h
 PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
+PrimitiveOctree.o: logout.h Log.h /usr/include/SDL/SDL.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+PrimitiveOctree.o: /usr/include/sys/types.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+PrimitiveOctree.o: /usr/include/bits/types.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+PrimitiveOctree.o: /usr/include/bits/typesizes.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+PrimitiveOctree.o: /usr/include/time.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/time.h
+PrimitiveOctree.o: /usr/include/endian.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/endian.h
+PrimitiveOctree.o: /usr/include/bits/endian.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+PrimitiveOctree.o: /usr/include/sys/select.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+PrimitiveOctree.o: /usr/include/bits/select.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+PrimitiveOctree.o: /usr/include/bits/sigset.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+PrimitiveOctree.o: /usr/include/bits/time.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+PrimitiveOctree.o: /usr/include/sys/sysmacros.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+PrimitiveOctree.o: /usr/include/bits/pthreadtypes.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+PrimitiveOctree.o: /usr/include/stdio.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/stdio.h
+PrimitiveOctree.o: /usr/include/libio.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/libio.h
+PrimitiveOctree.o: /usr/include/_G_config.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+PrimitiveOctree.o: /usr/include/wchar.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/wchar.h
+PrimitiveOctree.o: /usr/include/bits/wchar.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+PrimitiveOctree.o: /usr/include/gconv.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/gconv.h
+PrimitiveOctree.o: /usr/include/bits/stdio_lim.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+PrimitiveOctree.o: /usr/include/bits/sys_errlist.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+PrimitiveOctree.o: /usr/include/stdlib.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+PrimitiveOctree.o: /usr/include/bits/waitflags.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+PrimitiveOctree.o: /usr/include/bits/waitstatus.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+PrimitiveOctree.o: /usr/include/xlocale.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+PrimitiveOctree.o: /usr/include/alloca.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/alloca.h
+PrimitiveOctree.o: /usr/include/string.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/string.h
+PrimitiveOctree.o: /usr/include/strings.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/strings.h
+PrimitiveOctree.o: /usr/include/inttypes.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+PrimitiveOctree.o: /usr/include/stdint.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/stdint.h
+PrimitiveOctree.o: /usr/include/ctype.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/ctype.h
+PrimitiveOctree.o: /usr/include/iconv.h
+PrimitiveOctree.o: /usr/include/gentoo-multilib/amd64/iconv.h
+PrimitiveOctree.o: /usr/include/SDL/begin_code.h
+PrimitiveOctree.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_cpuinfo.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_events.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_active.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_keyboard.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_video.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_joystick.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_timer.h
+PrimitiveOctree.o: /usr/include/SDL/SDL_version.h
 ProceduralTree.o: ProceduralTree.h /usr/include/math.h
 ProceduralTree.o: /usr/include/gentoo-multilib/amd64/math.h
 ProceduralTree.o: /usr/include/features.h
@@ -2370,10 +2728,9 @@ ProceduralTree.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 ProceduralTree.o: GraphicMatrix.h glinc.h /usr/include/GL/glew.h
 ProceduralTree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 ProceduralTree.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
-ProceduralTree.o: /usr/include/SDL/SDL_platform.h Vector3.h IniReader.h
-ProceduralTree.o: Mesh.h Triangle.h Vertex.h types.h /usr/include/SDL/SDL.h
-ProceduralTree.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-ProceduralTree.o: /usr/include/sys/types.h
+ProceduralTree.o: /usr/include/SDL/SDL_platform.h Vector3.h logout.h Log.h
+ProceduralTree.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+ProceduralTree.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 ProceduralTree.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 ProceduralTree.o: /usr/include/bits/types.h
 ProceduralTree.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -2446,7 +2803,8 @@ ProceduralTree.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
 ProceduralTree.o: /usr/include/SDL/SDL_video.h
 ProceduralTree.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ProceduralTree.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-ProceduralTree.o: /usr/include/SDL/SDL_version.h
+ProceduralTree.o: /usr/include/SDL/SDL_version.h IniReader.h Mesh.h
+ProceduralTree.o: Triangle.h Vertex.h types.h
 ProceduralTree.o: /usr/include/boost/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
 ProceduralTree.o: /usr/include/boost/config/user.hpp
@@ -2506,7 +2864,7 @@ Quad.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
 Quad.o: /usr/include/bits/mathdef.h
 Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Quad.o: /usr/include/bits/mathcalls.h
-Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
+Quad.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
 Quad.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 Quad.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 Quad.o: /usr/include/gentoo-multilib/amd64/sys/types.h
@@ -2564,8 +2922,9 @@ Quad.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Quad.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Quad.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Quad.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Quad.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Quad.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Quad.o: /usr/include/SDL/SDL_version.h types.h
+Quad.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Quad.o: /usr/include/boost/config/user.hpp
 Quad.o: /usr/include/boost/config/select_compiler_config.hpp
 Quad.o: /usr/include/boost/config/compiler/gcc.hpp
 Quad.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -2620,8 +2979,74 @@ Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 Quaternion.o: /usr/include/bits/mathdef.h
 Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Quaternion.o: /usr/include/bits/mathcalls.h
-Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-Quaternion.o: GraphicMatrix.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+Quaternion.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Quaternion.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+Quaternion.o: /usr/include/bits/types.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Quaternion.o: /usr/include/bits/typesizes.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Quaternion.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+Quaternion.o: /usr/include/endian.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/endian.h
+Quaternion.o: /usr/include/bits/endian.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Quaternion.o: /usr/include/sys/select.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Quaternion.o: /usr/include/bits/select.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Quaternion.o: /usr/include/bits/sigset.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Quaternion.o: /usr/include/bits/time.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Quaternion.o: /usr/include/sys/sysmacros.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Quaternion.o: /usr/include/bits/pthreadtypes.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Quaternion.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Quaternion.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Quaternion.o: /usr/include/_G_config.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+Quaternion.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+Quaternion.o: /usr/include/bits/wchar.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+Quaternion.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+Quaternion.o: /usr/include/bits/stdio_lim.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Quaternion.o: /usr/include/bits/sys_errlist.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Quaternion.o: /usr/include/stdlib.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+Quaternion.o: /usr/include/bits/waitflags.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Quaternion.o: /usr/include/bits/waitstatus.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Quaternion.o: /usr/include/xlocale.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+Quaternion.o: /usr/include/alloca.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/alloca.h
+Quaternion.o: /usr/include/string.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/string.h
+Quaternion.o: /usr/include/strings.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/strings.h
+Quaternion.o: /usr/include/inttypes.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+Quaternion.o: /usr/include/stdint.h
+Quaternion.o: /usr/include/gentoo-multilib/amd64/stdint.h
+Quaternion.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+Quaternion.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+Quaternion.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Quaternion.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Quaternion.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Quaternion.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Quaternion.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Quaternion.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Quaternion.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Quaternion.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Quaternion.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Quaternion.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Quaternion.o: /usr/include/SDL/SDL_version.h GraphicMatrix.h
 ResourceManager.o: ResourceManager.h Material.h glinc.h
 ResourceManager.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ResourceManager.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -2716,8 +3141,8 @@ ResourceManager.o: /usr/include/SDL/SDL_joystick.h
 ResourceManager.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 ResourceManager.o: /usr/include/SDL/SDL_timer.h
 ResourceManager.o: /usr/include/SDL/SDL_version.h
-ResourceManager.o: /usr/include/SDL/SDL_image.h types.h Vector3.h
-ResourceManager.o: /usr/include/math.h
+ResourceManager.o: /usr/include/SDL/SDL_image.h logout.h Log.h types.h
+ResourceManager.o: Vector3.h /usr/include/math.h
 ResourceManager.o: /usr/include/gentoo-multilib/amd64/math.h
 ResourceManager.o: /usr/include/bits/huge_val.h
 ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -2871,10 +3296,9 @@ ServerState.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 ServerState.o: /usr/include/bits/mathdef.h
 ServerState.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ServerState.o: /usr/include/bits/mathcalls.h
-ServerState.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ServerState.o: PlayerData.h /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
-ServerState.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-ServerState.o: /usr/include/sys/types.h
+ServerState.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+ServerState.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+ServerState.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 ServerState.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 ServerState.o: /usr/include/bits/types.h
 ServerState.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -2945,8 +3369,9 @@ ServerState.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 ServerState.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 ServerState.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ServerState.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-ServerState.o: /usr/include/SDL/SDL_version.h Mesh.h Triangle.h Vertex.h
-ServerState.o: types.h /usr/include/boost/shared_ptr.hpp
+ServerState.o: /usr/include/SDL/SDL_version.h PlayerData.h
+ServerState.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
+ServerState.o: /usr/include/boost/shared_ptr.hpp
 ServerState.o: /usr/include/boost/config.hpp
 ServerState.o: /usr/include/boost/config/user.hpp
 ServerState.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2984,6 +3409,76 @@ ServerState.o: Weapon.h Item.h
 Shader.o: Shader.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Shader.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Shader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+Shader.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Shader.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
+Shader.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+Shader.o: /usr/include/features.h
+Shader.o: /usr/include/gentoo-multilib/amd64/features.h
+Shader.o: /usr/include/sys/cdefs.h
+Shader.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Shader.o: /usr/include/bits/wordsize.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Shader.o: /usr/include/gnu/stubs.h
+Shader.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Shader.o: /usr/include/gnu/stubs-64.h
+Shader.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Shader.o: /usr/include/bits/types.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Shader.o: /usr/include/bits/typesizes.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Shader.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+Shader.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+Shader.o: /usr/include/bits/endian.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Shader.o: /usr/include/sys/select.h
+Shader.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Shader.o: /usr/include/bits/select.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Shader.o: /usr/include/bits/sigset.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Shader.o: /usr/include/bits/time.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Shader.o: /usr/include/sys/sysmacros.h
+Shader.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Shader.o: /usr/include/bits/pthreadtypes.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Shader.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Shader.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Shader.o: /usr/include/_G_config.h
+Shader.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+Shader.o: /usr/include/gentoo-multilib/amd64/wchar.h
+Shader.o: /usr/include/bits/wchar.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+Shader.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+Shader.o: /usr/include/bits/stdio_lim.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Shader.o: /usr/include/bits/sys_errlist.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Shader.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Shader.o: /usr/include/bits/waitflags.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Shader.o: /usr/include/bits/waitstatus.h
+Shader.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Shader.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+Shader.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+Shader.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+Shader.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+Shader.o: /usr/include/inttypes.h
+Shader.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+Shader.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+Shader.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+Shader.o: /usr/include/gentoo-multilib/amd64/iconv.h
+Shader.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Shader.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Shader.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Shader.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Shader.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Shader.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Shader.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Shader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Shader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Shader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Shader.o: /usr/include/SDL/SDL_version.h
 StableRandom.o: StableRandom.h
 TextureHandler.o: TextureHandler.h glinc.h /usr/include/GL/glew.h
 TextureHandler.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
@@ -3074,6 +3569,7 @@ TextureHandler.o: /usr/include/SDL/SDL_video.h
 TextureHandler.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 TextureHandler.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 TextureHandler.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_image.h
+TextureHandler.o: logout.h Log.h
 TextureManager.o: TextureManager.h TextureHandler.h glinc.h
 TextureManager.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 TextureManager.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -3164,6 +3660,7 @@ TextureManager.o: /usr/include/SDL/SDL_video.h
 TextureManager.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 TextureManager.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 TextureManager.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_image.h
+TextureManager.o: logout.h Log.h
 Timer.o: Timer.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 Timer.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 Timer.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -3233,7 +3730,7 @@ Timer.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Timer.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Timer.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Timer.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Timer.o: /usr/include/SDL/SDL_version.h
+Timer.o: /usr/include/SDL/SDL_version.h logout.h Log.h
 Triangle.o: Triangle.h Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Triangle.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Triangle.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -3261,8 +3758,8 @@ Triangle.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 Triangle.o: /usr/include/bits/mathdef.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Triangle.o: /usr/include/bits/mathcalls.h
-Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
-Triangle.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Triangle.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+Triangle.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 Triangle.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 Triangle.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 Triangle.o: /usr/include/bits/types.h
@@ -3323,8 +3820,9 @@ Triangle.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Triangle.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Triangle.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Triangle.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Triangle.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Triangle.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Triangle.o: /usr/include/SDL/SDL_version.h types.h
+Triangle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Triangle.o: /usr/include/boost/config/user.hpp
 Triangle.o: /usr/include/boost/config/select_compiler_config.hpp
 Triangle.o: /usr/include/boost/config/compiler/gcc.hpp
 Triangle.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -3380,7 +3878,68 @@ Vector3.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 Vector3.o: /usr/include/bits/mathdef.h
 Vector3.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Vector3.o: /usr/include/bits/mathcalls.h
-Vector3.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+Vector3.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Vector3.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+Vector3.o: /usr/include/bits/types.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Vector3.o: /usr/include/bits/typesizes.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Vector3.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+Vector3.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+Vector3.o: /usr/include/bits/endian.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Vector3.o: /usr/include/sys/select.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Vector3.o: /usr/include/bits/select.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Vector3.o: /usr/include/bits/sigset.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Vector3.o: /usr/include/bits/time.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Vector3.o: /usr/include/sys/sysmacros.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Vector3.o: /usr/include/bits/pthreadtypes.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Vector3.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Vector3.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Vector3.o: /usr/include/_G_config.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+Vector3.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+Vector3.o: /usr/include/bits/wchar.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+Vector3.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+Vector3.o: /usr/include/bits/stdio_lim.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Vector3.o: /usr/include/bits/sys_errlist.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Vector3.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Vector3.o: /usr/include/bits/waitflags.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Vector3.o: /usr/include/bits/waitstatus.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Vector3.o: /usr/include/xlocale.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/xlocale.h /usr/include/alloca.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/alloca.h /usr/include/string.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/string.h /usr/include/strings.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/strings.h
+Vector3.o: /usr/include/inttypes.h
+Vector3.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+Vector3.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+Vector3.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+Vector3.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+Vector3.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Vector3.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Vector3.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Vector3.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Vector3.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Vector3.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Vector3.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Vector3.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Vector3.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Vector3.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Vector3.o: /usr/include/SDL/SDL_version.h
 Vertex.o: Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Vertex.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Vertex.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -3408,7 +3967,7 @@ Vertex.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 Vertex.o: /usr/include/bits/mathdef.h
 Vertex.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Vertex.o: /usr/include/bits/mathcalls.h
-Vertex.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
+Vertex.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
 Vertex.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 Vertex.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 Vertex.o: /usr/include/gentoo-multilib/amd64/sys/types.h
@@ -3468,8 +4027,9 @@ Vertex.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Vertex.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Vertex.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Vertex.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Vertex.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Vertex.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Vertex.o: /usr/include/SDL/SDL_version.h types.h
+Vertex.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Vertex.o: /usr/include/boost/config/user.hpp
 Vertex.o: /usr/include/boost/config/select_compiler_config.hpp
 Vertex.o: /usr/include/boost/config/compiler/gcc.hpp
 Vertex.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -3495,7 +4055,78 @@ Vertex.o: /usr/include/boost/detail/sp_counted_base.hpp
 Vertex.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Vertex.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Vertex.o: /usr/include/boost/detail/workaround.hpp
-Weapon.o: Weapon.h IniReader.h
+Weapon.o: Weapon.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
+Weapon.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+Weapon.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+Weapon.o: /usr/include/sys/types.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+Weapon.o: /usr/include/features.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/features.h
+Weapon.o: /usr/include/sys/cdefs.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Weapon.o: /usr/include/bits/wordsize.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Weapon.o: /usr/include/gnu/stubs.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Weapon.o: /usr/include/gnu/stubs-64.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Weapon.o: /usr/include/bits/types.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Weapon.o: /usr/include/bits/typesizes.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Weapon.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+Weapon.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+Weapon.o: /usr/include/bits/endian.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Weapon.o: /usr/include/sys/select.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Weapon.o: /usr/include/bits/select.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Weapon.o: /usr/include/bits/sigset.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Weapon.o: /usr/include/bits/time.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Weapon.o: /usr/include/sys/sysmacros.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Weapon.o: /usr/include/bits/pthreadtypes.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Weapon.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Weapon.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Weapon.o: /usr/include/_G_config.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/wchar.h
+Weapon.o: /usr/include/bits/wchar.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+Weapon.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+Weapon.o: /usr/include/bits/stdio_lim.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Weapon.o: /usr/include/bits/sys_errlist.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Weapon.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Weapon.o: /usr/include/bits/waitflags.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Weapon.o: /usr/include/bits/waitstatus.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Weapon.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+Weapon.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+Weapon.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+Weapon.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+Weapon.o: /usr/include/inttypes.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/iconv.h
+Weapon.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Weapon.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Weapon.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Weapon.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Weapon.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Weapon.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Weapon.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Weapon.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Weapon.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Weapon.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Weapon.o: /usr/include/SDL/SDL_version.h
 actions.o: gui/GUI.h gui/ProgressBar.h gui/GUI.h
 actions.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 actions.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -3731,8 +4362,8 @@ actions.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 actions.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
 actions.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 actions.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-actions.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
-actions.o: /usr/include/gentoo-multilib/amd64/math.h
+actions.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
+actions.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
 actions.o: /usr/include/bits/huge_val.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 actions.o: /usr/include/bits/huge_valf.h
@@ -4033,9 +4664,10 @@ coldest.o: /usr/include/bits/mathdef.h
 coldest.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 coldest.o: /usr/include/bits/mathcalls.h
 coldest.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-coldest.o: TextureHandler.h Vector3.h GraphicMatrix.h ObjectKDTree.h Mesh.h
-coldest.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
-coldest.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+coldest.o: TextureHandler.h logout.h Log.h Vector3.h GraphicMatrix.h
+coldest.o: ObjectKDTree.h Mesh.h Triangle.h Vertex.h types.h
+coldest.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+coldest.o: /usr/include/boost/config/user.hpp
 coldest.o: /usr/include/boost/config/select_compiler_config.hpp
 coldest.o: /usr/include/boost/config/compiler/gcc.hpp
 coldest.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -4432,8 +5064,8 @@ getmap.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 getmap.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 getmap.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
 getmap.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-getmap.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-getmap.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
+getmap.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h logout.h
+getmap.o: Log.h gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
 getmap.o: /usr/include/gentoo-multilib/amd64/math.h
 getmap.o: /usr/include/bits/huge_val.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -4485,10 +5117,9 @@ globals.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 globals.o: /usr/include/bits/mathdef.h
 globals.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 globals.o: /usr/include/bits/mathcalls.h
-globals.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-globals.o: Vertex.h types.h /usr/include/SDL/SDL.h
-globals.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-globals.o: /usr/include/sys/types.h
+globals.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+globals.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+globals.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 globals.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 globals.o: /usr/include/bits/types.h
 globals.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -4547,8 +5178,9 @@ globals.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 globals.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 globals.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 globals.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-globals.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-globals.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+globals.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+globals.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+globals.o: /usr/include/boost/config/user.hpp
 globals.o: /usr/include/boost/config/select_compiler_config.hpp
 globals.o: /usr/include/boost/config/compiler/gcc.hpp
 globals.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -4716,6 +5348,167 @@ globals.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 globals.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
 globals.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
 globals.o: MeshCache.h
+logout.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+logout.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+logout.o: /usr/include/features.h
+logout.o: /usr/include/gentoo-multilib/amd64/features.h
+logout.o: /usr/include/sys/cdefs.h
+logout.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+logout.o: /usr/include/bits/wordsize.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+logout.o: /usr/include/gnu/stubs.h
+logout.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+logout.o: /usr/include/gnu/stubs-64.h
+logout.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+logout.o: /usr/include/bits/types.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+logout.o: /usr/include/bits/typesizes.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+logout.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+logout.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+logout.o: /usr/include/bits/endian.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+logout.o: /usr/include/sys/select.h
+logout.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+logout.o: /usr/include/bits/select.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+logout.o: /usr/include/bits/sigset.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+logout.o: /usr/include/bits/time.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+logout.o: /usr/include/sys/sysmacros.h
+logout.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+logout.o: /usr/include/bits/pthreadtypes.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+logout.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+logout.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+logout.o: /usr/include/_G_config.h
+logout.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+logout.o: /usr/include/gentoo-multilib/amd64/wchar.h
+logout.o: /usr/include/bits/wchar.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+logout.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+logout.o: /usr/include/bits/stdio_lim.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+logout.o: /usr/include/bits/sys_errlist.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+logout.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+logout.o: /usr/include/bits/waitflags.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+logout.o: /usr/include/bits/waitstatus.h
+logout.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+logout.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+logout.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+logout.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+logout.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+logout.o: /usr/include/inttypes.h
+logout.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+logout.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+logout.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+logout.o: /usr/include/gentoo-multilib/amd64/iconv.h
+logout.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+logout.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+logout.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+logout.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+logout.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+logout.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+logout.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+logout.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+logout.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+logout.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+logout.o: /usr/include/SDL/SDL_version.h
+master.o: /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
+master.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+master.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+master.o: /usr/include/sys/types.h
+master.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+master.o: /usr/include/features.h
+master.o: /usr/include/gentoo-multilib/amd64/features.h
+master.o: /usr/include/sys/cdefs.h
+master.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+master.o: /usr/include/bits/wordsize.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+master.o: /usr/include/gnu/stubs.h
+master.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+master.o: /usr/include/gnu/stubs-64.h
+master.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+master.o: /usr/include/bits/types.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+master.o: /usr/include/bits/typesizes.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+master.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+master.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+master.o: /usr/include/bits/endian.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+master.o: /usr/include/sys/select.h
+master.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+master.o: /usr/include/bits/select.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+master.o: /usr/include/bits/sigset.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+master.o: /usr/include/bits/time.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+master.o: /usr/include/sys/sysmacros.h
+master.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+master.o: /usr/include/bits/pthreadtypes.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+master.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+master.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+master.o: /usr/include/_G_config.h
+master.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+master.o: /usr/include/gentoo-multilib/amd64/wchar.h
+master.o: /usr/include/bits/wchar.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+master.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+master.o: /usr/include/bits/stdio_lim.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+master.o: /usr/include/bits/sys_errlist.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+master.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+master.o: /usr/include/bits/waitflags.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+master.o: /usr/include/bits/waitstatus.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+master.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+master.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+master.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+master.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+master.o: /usr/include/inttypes.h
+master.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+master.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+master.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+master.o: /usr/include/gentoo-multilib/amd64/iconv.h
+master.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+master.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+master.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+master.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+master.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+master.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+master.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+master.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+master.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+master.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+master.o: /usr/include/SDL/SDL_version.h Packet.h logout.h Log.h ServerInfo.h
+master.o: util.h Vector3.h glinc.h /usr/include/GL/glew.h
+master.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
+master.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+master.o: /usr/include/gentoo-multilib/amd64/math.h
+master.o: /usr/include/bits/huge_val.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+master.o: /usr/include/bits/huge_valf.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+master.o: /usr/include/bits/huge_vall.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+master.o: /usr/include/bits/inf.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
+master.o: /usr/include/bits/nan.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
+master.o: /usr/include/bits/mathdef.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+master.o: /usr/include/bits/mathcalls.h
+master.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
 net.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 net.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 net.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -4741,8 +5534,8 @@ net.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
 net.o: /usr/include/bits/mathdef.h
 net.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 net.o: /usr/include/bits/mathcalls.h
-net.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-net.o: Vertex.h types.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+net.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+net.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 net.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 net.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 net.o: /usr/include/bits/types.h
@@ -4799,8 +5592,9 @@ net.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 net.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 net.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 net.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-net.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-net.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+net.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+net.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+net.o: /usr/include/boost/config/user.hpp
 net.o: /usr/include/boost/config/select_compiler_config.hpp
 net.o: /usr/include/boost/config/compiler/gcc.hpp
 net.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -5054,8 +5848,8 @@ netdefs.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 netdefs.o: /usr/include/bits/mathdef.h
 netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 netdefs.o: /usr/include/bits/mathcalls.h
-netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-netdefs.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+netdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+netdefs.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
 netdefs.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 netdefs.o: /usr/include/boost/config/select_compiler_config.hpp
 netdefs.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -5113,8 +5907,8 @@ render.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 render.o: /usr/include/bits/mathdef.h
 render.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 render.o: /usr/include/bits/mathcalls.h
-render.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-render.o: Vertex.h types.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+render.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+render.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 render.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 render.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 render.o: /usr/include/bits/types.h
@@ -5173,8 +5967,9 @@ render.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 render.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 render.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 render.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-render.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-render.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+render.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+render.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+render.o: /usr/include/boost/config/user.hpp
 render.o: /usr/include/boost/config/select_compiler_config.hpp
 render.o: /usr/include/boost/config/compiler/gcc.hpp
 render.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -5369,10 +6164,9 @@ renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 renderdefs.o: /usr/include/bits/mathdef.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 renderdefs.o: /usr/include/bits/mathcalls.h
-renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-renderdefs.o: /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
-renderdefs.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-renderdefs.o: /usr/include/sys/types.h
+renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+renderdefs.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+renderdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 renderdefs.o: /usr/include/bits/types.h
 renderdefs.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -5437,9 +6231,9 @@ renderdefs.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 renderdefs.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 renderdefs.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 renderdefs.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-renderdefs.o: /usr/include/SDL/SDL_version.h Mesh.h Triangle.h Vertex.h
-renderdefs.o: types.h /usr/include/boost/shared_ptr.hpp
-renderdefs.o: /usr/include/boost/config.hpp
+renderdefs.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_net.h
+renderdefs.o: Mesh.h Triangle.h Vertex.h types.h
+renderdefs.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 renderdefs.o: /usr/include/boost/config/user.hpp
 renderdefs.o: /usr/include/boost/config/select_compiler_config.hpp
 renderdefs.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -5635,8 +6429,8 @@ server.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 server.o: /usr/include/bits/mathdef.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 server.o: /usr/include/bits/mathcalls.h
-server.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-server.o: Vertex.h types.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+server.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+server.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 server.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 server.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 server.o: /usr/include/bits/types.h
@@ -5695,8 +6489,9 @@ server.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 server.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 server.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 server.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-server.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-server.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+server.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+server.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+server.o: /usr/include/boost/config/user.hpp
 server.o: /usr/include/boost/config/select_compiler_config.hpp
 server.o: /usr/include/boost/config/compiler/gcc.hpp
 server.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -5890,10 +6685,9 @@ settings.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 settings.o: /usr/include/bits/mathdef.h
 settings.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 settings.o: /usr/include/bits/mathcalls.h
-settings.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-settings.o: Vertex.h types.h /usr/include/SDL/SDL.h
-settings.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-settings.o: /usr/include/sys/types.h
+settings.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+settings.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+settings.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 settings.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 settings.o: /usr/include/bits/types.h
 settings.o: /usr/include/gentoo-multilib/amd64/bits/types.h
@@ -5953,8 +6747,9 @@ settings.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 settings.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 settings.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 settings.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-settings.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-settings.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+settings.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
+settings.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+settings.o: /usr/include/boost/config/user.hpp
 settings.o: /usr/include/boost/config/select_compiler_config.hpp
 settings.o: /usr/include/boost/config/compiler/gcc.hpp
 settings.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -6123,10 +6918,10 @@ settings.o: util.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 settings.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 settings.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
 settings.o: ParticleEmitter.h MeshCache.h gui/Slider.h gui/ComboBox.h
-util.o: util.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-util.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-util.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-util.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+util.o: util.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+util.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+util.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+util.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 util.o: /usr/include/features.h /usr/include/gentoo-multilib/amd64/features.h
 util.o: /usr/include/sys/cdefs.h
 util.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
@@ -6136,21 +6931,6 @@ util.o: /usr/include/gnu/stubs.h
 util.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
 util.o: /usr/include/gnu/stubs-64.h
 util.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-util.o: /usr/include/bits/huge_val.h
-util.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-util.o: /usr/include/bits/huge_valf.h
-util.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-util.o: /usr/include/bits/huge_vall.h
-util.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-util.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
-util.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
-util.o: /usr/include/bits/mathdef.h
-util.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-util.o: /usr/include/bits/mathcalls.h
-util.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
-util.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-util.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
-util.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 util.o: /usr/include/bits/types.h
 util.o: /usr/include/gentoo-multilib/amd64/bits/types.h
 util.o: /usr/include/bits/typesizes.h
@@ -6205,7 +6985,23 @@ util.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 util.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 util.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 util.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-util.o: /usr/include/SDL/SDL_version.h
+util.o: /usr/include/SDL/SDL_version.h Vector3.h glinc.h
+util.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+util.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+util.o: /usr/include/gentoo-multilib/amd64/math.h
+util.o: /usr/include/bits/huge_val.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+util.o: /usr/include/bits/huge_valf.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+util.o: /usr/include/bits/huge_vall.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+util.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
+util.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
+util.o: /usr/include/bits/mathdef.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+util.o: /usr/include/bits/mathcalls.h
+util.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+util.o: GraphicMatrix.h
 gui/Button.o: gui/Button.h gui/GUI.h
 gui/Button.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/Button.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -6449,8 +7245,9 @@ gui/Button.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/Button.o: TextureManager.h TextureHandler.h glinc.h
 gui/Button.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/Button.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/Button.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h Vector3.h
-gui/Button.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+gui/Button.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/Button.o: util.h Vector3.h /usr/include/math.h
+gui/Button.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/Button.o: /usr/include/bits/huge_val.h
 gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/Button.o: /usr/include/bits/huge_valf.h
@@ -6716,8 +7513,9 @@ gui/ComboBox.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/ComboBox.o: TextureManager.h TextureHandler.h glinc.h
 gui/ComboBox.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/ComboBox.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/ComboBox.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h Vector3.h
-gui/ComboBox.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+gui/ComboBox.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/ComboBox.o: util.h Vector3.h /usr/include/math.h
+gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/ComboBox.o: /usr/include/bits/huge_val.h
 gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/ComboBox.o: /usr/include/bits/huge_valf.h
@@ -6968,8 +7766,8 @@ gui/GUI.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/GUI.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
 gui/GUI.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 gui/GUI.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-gui/GUI.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/math.h
+gui/GUI.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
+gui/GUI.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
 gui/GUI.o: /usr/include/bits/huge_val.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/GUI.o: /usr/include/bits/huge_valf.h
@@ -7237,8 +8035,9 @@ gui/LineEdit.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/LineEdit.o: TextureManager.h TextureHandler.h glinc.h
 gui/LineEdit.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/LineEdit.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/LineEdit.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h Vector3.h
-gui/LineEdit.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+gui/LineEdit.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/LineEdit.o: util.h Vector3.h /usr/include/math.h
+gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/LineEdit.o: /usr/include/bits/huge_val.h
 gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/LineEdit.o: /usr/include/bits/huge_valf.h
@@ -7511,8 +8310,8 @@ gui/ProgressBar.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/ProgressBar.o: TextureManager.h TextureHandler.h glinc.h
 gui/ProgressBar.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/ProgressBar.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h
-gui/ProgressBar.o: Vector3.h /usr/include/math.h
+gui/ProgressBar.o: /usr/include/SDL/SDL_image.h logout.h Log.h
+gui/ProgressBar.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
 gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/ProgressBar.o: /usr/include/bits/huge_val.h
 gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -7781,8 +8580,8 @@ gui/ScrollView.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/ScrollView.o: TextureManager.h TextureHandler.h glinc.h
 gui/ScrollView.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/ScrollView.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/ScrollView.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h
-gui/ScrollView.o: Vector3.h /usr/include/math.h
+gui/ScrollView.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/ScrollView.o: util.h Vector3.h /usr/include/math.h
 gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/ScrollView.o: /usr/include/bits/huge_val.h
 gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -8042,8 +8841,9 @@ gui/Slider.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/Slider.o: TextureManager.h TextureHandler.h glinc.h
 gui/Slider.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/Slider.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/Slider.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h Vector3.h
-gui/Slider.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+gui/Slider.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/Slider.o: util.h Vector3.h /usr/include/math.h
+gui/Slider.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/Slider.o: /usr/include/bits/huge_val.h
 gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/Slider.o: /usr/include/bits/huge_valf.h
@@ -8310,8 +9110,8 @@ gui/TabWidget.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 gui/TabWidget.o: /usr/include/SDL/SDL_ttf.h TextureManager.h TextureHandler.h
 gui/TabWidget.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/TabWidget.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/TabWidget.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h
-gui/TabWidget.o: Vector3.h /usr/include/math.h
+gui/TabWidget.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/TabWidget.o: util.h Vector3.h /usr/include/math.h
 gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/TabWidget.o: /usr/include/bits/huge_val.h
 gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -8571,8 +9371,8 @@ gui/Table.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/Table.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
 gui/Table.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 gui/Table.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-gui/Table.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/math.h
+gui/Table.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
+gui/Table.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
 gui/Table.o: /usr/include/bits/huge_val.h
 gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/Table.o: /usr/include/bits/huge_valf.h
@@ -8840,8 +9640,8 @@ gui/TableItem.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 gui/TableItem.o: /usr/include/SDL/SDL_ttf.h TextureManager.h TextureHandler.h
 gui/TableItem.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/TableItem.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/TableItem.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h
-gui/TableItem.o: Vector3.h /usr/include/math.h
+gui/TableItem.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/TableItem.o: util.h Vector3.h /usr/include/math.h
 gui/TableItem.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/TableItem.o: /usr/include/bits/huge_val.h
 gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -9109,8 +9909,9 @@ gui/TextArea.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
 gui/TextArea.o: TextureManager.h TextureHandler.h glinc.h
 gui/TextArea.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 gui/TextArea.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/TextArea.o: /usr/include/SDL/SDL_image.h gui/XSWrapper.h util.h Vector3.h
-gui/TextArea.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+gui/TextArea.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
+gui/TextArea.o: util.h Vector3.h /usr/include/math.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/math.h
 gui/TextArea.o: /usr/include/bits/huge_val.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 gui/TextArea.o: /usr/include/bits/huge_valf.h

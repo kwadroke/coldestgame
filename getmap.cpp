@@ -121,6 +121,7 @@ void GetMap(string fn)
 #endif
    particles.clear();
    deletemeshes.clear(); // Also a problem if not empty when we load a new map
+   SDL_mutexP(clientmutex);
    for (size_t i = 0; i < numbodyparts; ++i) // We deleted all the meshes, so we need to clear these iterators
    {
       player[0].mesh[i] = meshes.end();
@@ -128,6 +129,7 @@ void GetMap(string fn)
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);
+   SDL_mutexV(clientmutex);
    ResetKeys();
    
    IniReader currnode;
@@ -161,6 +163,7 @@ void GetMap(string fn)
 #endif
    
    // Read spawnpoints
+   SDL_mutexP(clientmutex);
    spawnpoints.clear();
    SpawnPointData spawntemp;
    IniReader spawnnode = mapdata.GetItemByName("SpawnPoints");
@@ -177,6 +180,7 @@ void GetMap(string fn)
    }
    spawnschanged = true; 
    player[0].team = 0;
+   SDL_mutexV(clientmutex);
    
    // Load objects
 #ifndef DEDICATED

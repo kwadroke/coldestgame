@@ -735,12 +735,14 @@ void GUIUpdate()
 bool GUIEventHandler(SDL_Event &event)
 {
 #ifndef DEDICATED
+   SDL_mutexP(clientmutex);
    // Mini keyboard handler to deal with the console and chat
    bool eatevent = false;
    GUI* chatin = gui[chat]->GetWidget("chatinput");
    if (!chatin)
    {
       logout << "Error getting chat input widget" << endl;
+      SDL_mutexV(clientmutex);
       return false;
    }
    switch (event.type)
@@ -857,9 +859,11 @@ bool GUIEventHandler(SDL_Event &event)
          }
       
    };
+   SDL_mutexV(clientmutex);
    
    if (eatevent) return eatevent;
    
+   SDL_mutexP(clientmutex);
    if (gui[consolegui]->visible)
    {
       SDL_ShowCursor(1);
@@ -889,6 +893,7 @@ bool GUIEventHandler(SDL_Event &event)
       gui[settings]->ProcessEvent(&event);
       eatevent = true;
    }
+   SDL_mutexV(clientmutex);
    
    
    return eatevent;
@@ -1038,6 +1043,7 @@ void GameEventHandler(SDL_Event &event)
 
 void Quit()
 {
+   SDL_mutexV(clientmutex); // This was probably grabbed by GUI update code before calling us
    Cleanup();
    exit(0);
 }
@@ -1790,11 +1796,13 @@ void AppendToChat(int playernum, string line)
 void ShowGUI(int toshow)
 {
 #ifndef DEDICATED
+   SDL_mutexP(clientmutex);
    for (size_t i = 0; i < gui.size(); ++i)
       gui[i]->visible = false;
    gui[toshow]->visible = true;
    if (console.GetBool("showfps"))
       gui[statsdisp]->visible = true;
+   SDL_mutexV(clientmutex);
 #endif
 }
 

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include "SDL.h"
 
 using std::vector;
 using std::ofstream;
@@ -33,24 +34,29 @@ class Log
       Log& operator=(const Log&);
       
       ofstream fileout;
+      SDL_mutex* mutex;
 };
 
 
 template <typename T>
 Log& Log::operator<<(const T& s)
 {
+   SDL_mutexP(mutex);
    cout << s;
    if (fileout)
       fileout << s;
+   SDL_mutexV(mutex);
    return *this;
 }
 
 template <typename T>
 Log& Log::operator<<(T& s)
 {
+   SDL_mutexP(mutex);
    cout << s;
    if (fileout)
       fileout << s;
+   SDL_mutexV(mutex);
    return *this;
 }
 

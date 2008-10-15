@@ -902,29 +902,30 @@ void RenderWater()
 
 void RenderHud(const PlayerData& localplayer)
 {
-   // These don't have to be static, but since we only ever create the GUI once
-   // and GetWidget could be a bit time-consuming, it's not a bad idea
-   static GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
-   static GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
-   static GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
-   static GUI* pinglabel = gui[statsdisp]->GetWidget("ping");
-   static GUI* mpflabel = gui[statsdisp]->GetWidget("msperframe");
-   static GUI* poslabel = gui[statsdisp]->GetWidget("position");
-   static GUI* partlabel = gui[statsdisp]->GetWidget("particles");
-   static GUI* torsohplabel = gui[hud]->GetWidget("torsohp");
-   static GUI* legshplabel = gui[hud]->GetWidget("legshp");
-   static GUI* leftarmhplabel = gui[hud]->GetWidget("leftarmhp");
-   static GUI* rightarmhplabel = gui[hud]->GetWidget("rightarmhp");
-   static GUI* torsoweaponlabel = gui[hud]->GetWidget("torsoweapon");
-   static GUI* larmweaponlabel = gui[hud]->GetWidget("larmweapon");
-   static GUI* rarmweaponlabel = gui[hud]->GetWidget("rarmweapon");
-   static GUI* torsoselectedlabel = gui[hud]->GetWidget("torsoselected");
-   static GUI* larmselectedlabel = gui[hud]->GetWidget("larmselected");
-   static GUI* rarmselectedlabel = gui[hud]->GetWidget("rarmselected");
-   static ProgressBar* tempbar = (ProgressBar*)gui[hud]->GetWidget("temperature");
-   static ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
-   static GUI* minimaplabel = gui[hud]->GetWidget("minimap");
-   static GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
+   // GetWidget can be time-consuming so it may make sense to cache these (note that making them static makes it
+   // impossible to reload the GUI).  As always profiling is the key.
+   SDL_mutexP(clientmutex);
+   GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
+   GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
+   GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
+   GUI* pinglabel = gui[statsdisp]->GetWidget("ping");
+   GUI* mpflabel = gui[statsdisp]->GetWidget("msperframe");
+   GUI* poslabel = gui[statsdisp]->GetWidget("position");
+   GUI* partlabel = gui[statsdisp]->GetWidget("particles");
+   GUI* torsohplabel = gui[hud]->GetWidget("torsohp");
+   GUI* legshplabel = gui[hud]->GetWidget("legshp");
+   GUI* leftarmhplabel = gui[hud]->GetWidget("leftarmhp");
+   GUI* rightarmhplabel = gui[hud]->GetWidget("rightarmhp");
+   GUI* torsoweaponlabel = gui[hud]->GetWidget("torsoweapon");
+   GUI* larmweaponlabel = gui[hud]->GetWidget("larmweapon");
+   GUI* rarmweaponlabel = gui[hud]->GetWidget("rarmweapon");
+   GUI* torsoselectedlabel = gui[hud]->GetWidget("torsoselected");
+   GUI* larmselectedlabel = gui[hud]->GetWidget("larmselected");
+   GUI* rarmselectedlabel = gui[hud]->GetWidget("rarmselected");
+   ProgressBar* tempbar = (ProgressBar*)gui[hud]->GetWidget("temperature");
+   ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
+   GUI* minimaplabel = gui[hud]->GetWidget("minimap");
+   GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
    
    if (frames >= 30) // Update FPS
    {
@@ -977,7 +978,6 @@ void RenderHud(const PlayerData& localplayer)
    minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    minimaplabel->ClearChildren();
    
-   SDL_mutexP(clientmutex);
    for (size_t i = 1; i < player.size(); ++i)
    {
       GUIPtr playerposlabel(new Button(minimaplabel, &resman.texman));
@@ -998,7 +998,6 @@ void RenderHud(const PlayerData& localplayer)
       if (player[i].spawned)
          minimaplabel->Add(playerposlabel);
    }
-   SDL_mutexV(clientmutex);
    
    loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    
@@ -1028,6 +1027,7 @@ void RenderHud(const PlayerData& localplayer)
       gui[i]->Render();
    }
    
+   SDL_mutexV(clientmutex);
    SDL_GL_Exit2dMode();
 }
 

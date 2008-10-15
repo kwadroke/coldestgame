@@ -37,11 +37,14 @@ class Console
       string Token(const string&, int);
       string SimplifyWhitespace(const string&);
       void Action(const string&);
+      void Lock() {SDL_mutexP(mutex);}
+      void Unlock() {SDL_mutexV(mutex);}
       
       map<string, string> values;
       set<string> saveval;
       deque<string> consolebuffer;
       TextArea* consoleout;
+      SDL_mutex* mutex;
 };
 
 void SetupSDL();
