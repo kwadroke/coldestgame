@@ -195,7 +195,6 @@ int NetSend(void* dummy)
       }
       if (needsync)
       {
-         logout << "Requestion*******************************************" << endl;
          Packet p(&addr);
          p.ack = sendpacketnum;
          p << "Y\n";
@@ -489,7 +488,9 @@ int NetListen(void* dummy)
             {
                oppnum = 0;
                
-               get >> serverfps;
+               long tempfps;
+               get >> tempfps;
+               serverfps = tempfps;
                get >> oppnum;
                short getunit, getteam;
                int getkills, getdeaths, getsalvage, getspawntimer;
@@ -550,7 +551,9 @@ int NetListen(void* dummy)
                SDL_mutexP(clientmutex);
                get >> servplayernum;
                get >> nextmap;
-               get >> changeteam;
+               long newteam;
+               get >> newteam;
+               changeteam = newteam;
                if (!server)
                   mapname = ""; // Force reload of the map even if same name
                nextmap = "maps/" + nextmap;
@@ -853,7 +856,9 @@ int NetListen(void* dummy)
          }
          else if (packettype == "O") // Game over man, game over
          {
-            get >> winningteam;
+            long getteam;
+            get >> getteam;
+            winningteam = getteam;
             logout << "Team " << winningteam << " wins!" << endl;
             Ack(packetnum);
          }
@@ -907,14 +912,15 @@ int NetListen(void* dummy)
       // it doesn't matter that this won't work with NAT
       if (annlisten)
       {
+         string anntype;
          while (SDLNet_UDP_Recv(annsock, inpack))
          {
             getdata = (char*)inpack->data;
             stringstream get(getdata);
             
-            get >> packettype;
+            get >> anntype;
             get >> packetnum;
-            if (packettype == "a")
+            if (anntype == "a")
             {
                Uint16 serverport;
                get >> serverport;

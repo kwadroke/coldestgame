@@ -34,7 +34,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o
+		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
@@ -46,7 +46,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o XSWrapper.o ServerState.o Material.o
+		MeshNode.o XSWrapper.o ServerState.o Material.o tsint.o
 		
 MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o
 
