@@ -651,6 +651,7 @@ int ServerListen(void* dummy)
             response << packetnum << eol;
             response << 1 << eol;
             response << newteam << eol;
+            SDL_mutexP(servermutex);
             serverplayers[oppnum].team = newteam;
             for (int i = 0; i < spawnpoints.size(); ++i)
             {
@@ -664,7 +665,7 @@ int ServerListen(void* dummy)
                }
             }
             response << 0 << eol; // No more spawn points
-            SDL_mutexP(servermutex);
+            
             servqueue.push_back(response);
             SDL_mutexV(servermutex);
          }

@@ -1,15 +1,23 @@
 #include "Console.h"
 #include "globals.h"
 
+// Ditto the comment in the Log class.  At this time Console is created once and destroyed only at exit,
+// so we're not properly handling copy/destruction for the mutex.
 Console::Console() : consoleout(NULL)
 {
+   mutex = SDL_CreateMutex();
 }
 
 
 int Console::GetInt(const string& key)
 {
+   Lock();
    if (values.find(key) != values.end())
+   {
+      Unlock();
       return atoi(values[key].c_str());
+   }
+   Unlock();
    logout << "Console Warning: Key not found " << key << endl;
    return 0;
 }
@@ -17,8 +25,13 @@ int Console::GetInt(const string& key)
 
 float Console::GetFloat(const string& key)
 {
+   Lock();
    if (values.find(key) != values.end())
+   {
+      Unlock();
       return atof(values[key].c_str());
+   }
+   Unlock();
    logout << "Console Warning: Key not found " << key << endl;
    return 0.f;
 }
@@ -26,8 +39,13 @@ float Console::GetFloat(const string& key)
 
 string Console::GetString(const string& key)
 {
+   Lock();
    if (values.find(key) != values.end())
+   {
+      Unlock();
       return values[key];
+   }
+   Unlock();
    logout << "Console Warning: Key not found " << key << endl;
    return "";
 }
@@ -35,12 +53,18 @@ string Console::GetString(const string& key)
 
 bool Console::GetBool(const string& key)
 {
+   Lock();
    if (values.find(key) != values.end())
    {
       if (values[key] == "0" || values[key] == "false")
+      {
+         Unlock();
          return false;
+      }
+      Unlock();
       return true;
    }
+   Unlock();
    logout << "Console Warning: Key not found " << key << endl;
    return false;
 }
@@ -60,13 +84,17 @@ void Console::Parse(const string& line, bool echo)
    
    if (Token(simple, 0) == "set" && NumTokens(simple) == 3)
    {
+      Lock();
       values[Token(simple, 1)] = Token(simple, 2);
+      Unlock();
       Action(Token(simple, 1) + " action");
    }
    if (Token(simple, 0) == "setsave" && NumTokens(simple) == 3)
    {
+      Lock();
       saveval.insert(Token(simple, 1));
       values[Token(simple, 1)] = Token(simple, 2);
+      Unlock();
       Action(Token(simple, 1) + " action");
    }
 #ifndef DEDICATED
@@ -156,6 +184,7 @@ string Console::SimplifyWhitespace(const string& str)
 #ifndef DEDICATED
 void Console::InitWidget(TextArea& co)
 {
+   Lock();
    consoleout = &co;
    deque<string>::iterator i = consolebuffer.begin();
    while (i != consolebuffer.end())
@@ -163,6 +192,7 @@ void Console::InitWidget(TextArea& co)
       consoleout->Append(*i);
       i = consolebuffer.erase(i);
    }
+   Unlock();
 }
 #endif
 
@@ -173,6 +203,7 @@ void Console::InitWidget(TextArea& co)
 */
 void Console::WriteToConsole(const string& line)
 {
+   Lock();
    logout << line << endl;
 #ifndef DEDICATED
    if (consoleout)
@@ -182,11 +213,13 @@ void Console::WriteToConsole(const string& line)
    }
 #endif
    consolebuffer.push_back(line + "\n");
+   Unlock();
 }
 
 
 void Console::SaveToFile(const string& filename, const bool forcesave)
 {
+   Lock();
    ifstream read(filename.c_str());
    string buffer;
    deque<string> lines;
@@ -237,6 +270,7 @@ void Console::SaveToFile(const string& filename, const bool forcesave)
       save << "restartgl";
    }
    save.close();
+   Unlock();
 }
 
 

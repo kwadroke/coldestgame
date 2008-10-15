@@ -44,7 +44,6 @@ int NetSend(void* dummy)
    Uint32 currnettick = 0;
    Uint32 occpacketcounter = 0;
    changeteam = -1;
-   lastsyncpacket = 0;
    
    setsighandler();
    
@@ -279,6 +278,7 @@ int NetListen(void* dummy)
    string getdata;
    string packettype;
    bool annlisten = true;
+   lastsyncpacket = 0;
    
    connectedaddr.host = INADDR_NONE;
    connectedaddr.port = 0;
@@ -464,20 +464,16 @@ int NetListen(void* dummy)
                      {
                         if (i->mesh[part] != meshes.end())
                         {
-                           SDL_mutexP(clientmutex);
                            deletemeshes.push_back(i->mesh[part]);
-                           SDL_mutexV(clientmutex);
                            i->mesh[part] = meshes.end();
                            addemitter = true;
                         }
                      }
                      if (addemitter)
                      {
-                        SDL_mutexP(clientmutex);
                         ParticleEmitter newemitter("particles/emitters/explosion", resman);
                         newemitter.position = i->pos;
                         emitters.push_back(newemitter);
-                        SDL_mutexV(clientmutex);
                      }
                   }
                }
