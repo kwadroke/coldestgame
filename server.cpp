@@ -38,7 +38,7 @@ void SendItem(const Item&, const int);
 vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
 void SendKill(int);
 void RemoveTeam(int);
-void SendSyncPacket(PlayerData&);
+void SendSyncPacket(PlayerData&, unsigned long);
 void SendGameOver(PlayerData&, int);
 void SendShot(const Particle&);
 void SendHit(const Vector3&, const Particle& p);
@@ -202,20 +202,20 @@ void ServerLoop()
       }
       frametimer.start();
          
-      SDL_mutexP(servermutex);
+      SDL_mutexP(clientmutex);
       if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
       {
          if (gameover && SDL_GetTicks() > nextmaptime)
          {
             srand(time(0));
             int choosemap = (int)Random(0, maplist.size());
-            SDL_mutexP(clientmutex); // I don't like doing this from the server, but it's necessary
             console.Parse("set map " + maplist[choosemap], false);
-            SDL_mutexV(clientmutex);
          }
+         SDL_mutexV(clientmutex);
          ServerLoadMap();
+         SDL_mutexP(clientmutex); // Avoid double unlock.  Necessary?  Eh.
       }
-      SDL_mutexV(servermutex);
+      SDL_mutexV(clientmutex);
       
       SDL_mutexP(servermutex);
       for (int i = 1; i < serverplayers.size(); ++i)
@@ -694,7 +694,7 @@ int ServerListen(void* dummy)
             SDL_mutexP(servermutex);
             if (serverplayers[oppnum].needsync)
             {
-               SendSyncPacket(serverplayers[oppnum]);
+               SendSyncPacket(serverplayers[oppnum], packetnum);
                for (size_t i = 0; i < serveritems.size(); ++i)
                   SendItem(serveritems[i], oppnum);
                serverplayers[oppnum].needsync = false;
@@ -741,7 +741,7 @@ int ServerListen(void* dummy)
                SDL_mutexV(clientmutex);
                SDL_mutexP(servermutex);
                for (size_t i = 0; i < serverplayers.size(); ++i)
-                  SendSyncPacket(serverplayers[i]);
+                  SendSyncPacket(serverplayers[i], 0);
                
             }
             SDL_mutexV(servermutex);
@@ -965,16 +965,20 @@ int ServerSend(void* dummy)  // Thread for sending updates
 // Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
 void ServerLoadMap()
 {
-   SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
    serverhasmap = false;
+   SDL_mutexP(clientmutex);
    nextmap = "maps/" + console.GetString("map");
    mapname = "";
-   while (mapname != nextmap)
+   SDL_mutexV(clientmutex);
+   // I suspect that this while loop is no longer necessary because getmap locks the clientmutex
+   // until it's done running, so waiting on that is sufficient.
+   while ((SDL_mutexP(clientmutex) == 0) && mapname != nextmap && (SDL_mutexV(clientmutex) == 0))
    {
       SDL_Delay(1); // Wait for main thread to load map
    }
+   SDL_mutexV(clientmutex);
    
-   servermeshes.clear(); // This is just because right now operator= is not safe on Meshes
+   SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
    servermeshes = meshes;
    
    serveritems.clear();
@@ -987,6 +991,7 @@ void ServerLoadMap()
    servparticles.clear();
    
    // Generate main base items
+   logout << "Generating base items " << spawnpoints.size() << "*******************************" << endl;
    for (int i = 0; i < spawnpoints.size(); ++i)
    {
       Item newitem(Item::Base, servermeshes);
@@ -1425,12 +1430,13 @@ void RemoveTeam(int num)
 }
 
 
-void SendSyncPacket(PlayerData& p)
+void SendSyncPacket(PlayerData& p, unsigned long packetnum)
 {
    Packet pack(&p.addr);
    pack.ack = servsendpacketnum;
    pack << "Y\n";
    pack << pack.ack << eol;
+   pack << packetnum << eol;
    pack << "set movestep " << console.GetInt("movestep") << eol;
    pack << "set ghost " << console.GetBool("ghost") << eol;
    pack << "set fly " << console.GetBool("fly") << eol;

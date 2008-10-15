@@ -564,18 +564,25 @@ void MainLoop()
    {
       if (!running)
          Quit();
+      SDL_mutexP(clientmutex);
       if (nextmap != mapname)
       {
+         SDL_mutexV(clientmutex);
 #ifndef DEDICATED
          GUI* progress = gui[loadprogress]->GetWidget("loadingprogress");
          ShowGUI(loadprogress);
          Repaint();
 #endif
+         SDL_mutexP(clientmutex);
          GetMap(nextmap);
+         SDL_mutexV(clientmutex);
 #ifndef DEDICATED
          ShowGUI(loadoutmenu);
 #endif
+         SDL_mutexP(clientmutex); // Prevent double unlock, not sure it's necessary
       }
+      SDL_mutexV(clientmutex);
+      
       
 #ifndef DEDICATED
       GUIUpdate();
@@ -618,6 +625,7 @@ void GUIUpdate()
    static Uint32 servupdatecounter = SDL_GetTicks();
    static Uint32 statupdatecounter = SDL_GetTicks();
    Uint32 currtick;
+   SDL_mutexP(clientmutex);
    if (gui[mainmenu]->visible)
    {
       currtick = SDL_GetTicks();
@@ -636,7 +644,7 @@ void GUIUpdate()
          statupdatecounter = currtick;
       }
    }
-   SDL_mutexP(clientmutex);
+   
    for (int i = 0; i < newchatlines.size(); ++i)
       AppendToChat(newchatplayers[i], newchatlines[i]);
    newchatlines.clear();
@@ -1468,6 +1476,22 @@ void Animate()
          meshes.erase(deletemeshes[i]);
    }
    deletemeshes.clear();
+   
+   for (size_t i = 0; i < additems.size(); ++i)
+   {
+      Item& newitem = additems[i];
+      MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
+      newmesh->Move(newitem.position);
+      newmesh->SetGL();
+      newmesh->dynamic = true;
+      meshes.push_front(*newmesh);
+      items.push_back(newitem);
+      Item& curritem = items.back();
+      curritem.mesh = meshes.begin();
+      SDL_mutexV(clientmutex);
+      spawnschanged = true;
+   }
+   additems.clear();
    
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)

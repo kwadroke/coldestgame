@@ -195,12 +195,15 @@ int NetSend(void* dummy)
       }
       if (needsync)
       {
+         logout << "Requestion*******************************************" << endl;
          Packet p(&addr);
+         p.ack = sendpacketnum;
          p << "Y\n";
-         p << sendpacketnum << eol;
+         p << p.ack << eol;
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
+         needsync = false;
       }
       
       
@@ -553,7 +556,6 @@ int NetListen(void* dummy)
                nextmap = "maps/" + nextmap;
                doconnect = false;
                connected = true;
-               needsync = false; // Set to true after map is loaded
                winningteam = 0;
                logout << "We are server player " << servplayernum << endl;
                logout << "Map is: " << nextmap << endl;
@@ -801,18 +803,11 @@ int NetListen(void* dummy)
                Item newitem(type, meshes);
                newitem.id = id;
                newitem.team = team;
-               MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
-               newmesh->Move(itempos);
-               newmesh->SetGL();
-               newmesh->dynamic = true;
+               newitem.position = itempos;
                SDL_mutexP(clientmutex);
-               meshes.push_front(*newmesh);
-               items.push_back(newitem);
-               Item& curritem = items.back();
-               curritem.mesh = meshes.begin();
+               additems.push_back(newitem);
                SDL_mutexV(clientmutex);
                itemsreceived.insert(id);
-               spawnschanged = true;
             }
             Ack(packetnum);
          }
@@ -836,7 +831,10 @@ int NetListen(void* dummy)
          }
          else if (packettype == "Y" && packetnum > lastsyncpacket) // Sync packet
          {
+            unsigned long acknum;
             logout << "Got sync packet " << packetnum << endl;
+            get >> acknum;
+            HandleAck(acknum);
             lastsyncpacket = packetnum;
             string buffer;
             SDL_mutexP(clientmutex);

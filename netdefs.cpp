@@ -15,6 +15,7 @@ vector<unsigned short> newchatplayers;
 short changeteam;
 bool useitem;
 vector<Meshlist::iterator> deletemeshes;
+vector<Item> additems;
 set<unsigned long> itemsreceived;
 set<unsigned long> hitsreceived;
 unsigned long lastsyncpacket;

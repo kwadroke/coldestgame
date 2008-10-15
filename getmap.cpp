@@ -42,6 +42,7 @@ float Random(float, float);
 Vector3 ChooseNormal(const Vector3&, const Vector3&);
 
 // This function is waaay too long, but I'm too lazy to split it up
+// Make sure you have clientmutex before calling this.
 void GetMap(string fn)
 {
    logout << "Loading " << fn << endl;
@@ -121,7 +122,6 @@ void GetMap(string fn)
 #endif
    particles.clear();
    deletemeshes.clear(); // Also a problem if not empty when we load a new map
-   SDL_mutexP(clientmutex);
    for (size_t i = 0; i < numbodyparts; ++i) // We deleted all the meshes, so we need to clear these iterators
    {
       player[0].mesh[i] = meshes.end();
@@ -129,7 +129,6 @@ void GetMap(string fn)
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);
-   SDL_mutexV(clientmutex);
    ResetKeys();
    
    IniReader currnode;
@@ -163,7 +162,6 @@ void GetMap(string fn)
 #endif
    
    // Read spawnpoints
-   SDL_mutexP(clientmutex);
    spawnpoints.clear();
    SpawnPointData spawntemp;
    IniReader spawnnode = mapdata.GetItemByName("SpawnPoints");
@@ -180,7 +178,6 @@ void GetMap(string fn)
    }
    spawnschanged = true; 
    player[0].team = 0;
-   SDL_mutexV(clientmutex);
    
    // Load objects
 #ifndef DEDICATED
@@ -450,7 +447,6 @@ void GetMap(string fn)
          if (actualnorm.y < 0)
          {
             actualnorm *= -1.f;
-            logout << "<0" << endl;
          }
          Vector3 tempnorm = ChooseNormal(actualnorm, normals[x][y]);
          tempquad.SetNormal(0, tempnorm);
@@ -574,8 +570,10 @@ void GetMap(string fn)
    // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
    // copies the meshes they cannot have had GenVbo run on them yet
    mapname = fn; // Signal server that the map data is available
+   SDL_mutexV(clientmutex);
    if (server)   // Then wait for the server to copy the data before generating buffers
       while (!serverhasmap) SDL_Delay(1);
+   SDL_mutexP(clientmutex);
    
 #ifndef DEDICATED
    // All meshes added from here on out will not be present on the server
