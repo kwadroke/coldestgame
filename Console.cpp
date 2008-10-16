@@ -209,6 +209,7 @@ void Console::WriteToConsole(const string& line)
    if (consoleout)
    {
       consoleout->Append(line + "\n");
+      Unlock();
       return;
    }
 #endif
@@ -300,7 +301,9 @@ void Console::Action(const string& action)
    }
    else if (action == "reloadres")
    {
+      SDL_mutexP(clientmutex);
       mapname = "";
+      SDL_mutexV(clientmutex);
    }
    else if (action == "laghax action")
    {
