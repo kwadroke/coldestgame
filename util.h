@@ -7,6 +7,7 @@
 #include "SDL.h"
 #include "Vector3.h"
 #include "GraphicMatrix.h"
+#include "tsint.h"
 
 using std::string;
 using std::stringstream;
@@ -20,7 +21,7 @@ Vector3 RotateBetweenVectors(Vector3, const Vector3&);
 int gettid();
 int bitcount();
 void setsighandler();
-extern bool running;
+extern tsint running;
 extern Log logout;
 
 template <typename T>
