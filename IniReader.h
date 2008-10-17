@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include "logout.h"
+#include <boost/shared_ptr.hpp>
 
 using std::string;
 using std::map;
@@ -16,6 +17,7 @@ using std::ifstream;
 using std::istringstream;
 using std::ios;
 using std::endl;
+using boost::shared_ptr;
 
 class IniReader
 {
@@ -31,13 +33,13 @@ class IniReader
       string ReadLine(string&, const string) const;
       int NumChildren() const;
       string GetPath() const;
-      
+
    private:
       void Parse(istringstream&);
       string ReadVal(const string&, const int) const;
       bool HaveValue(const string&, const int) const;
-      
-      vector<IniReader> children;
+
+      vector<shared_ptr<IniReader> > children;
       /* This mutable is a workaround for the fact that operator[] on a map is non-const,
          yet we want to be able to use it in const functions (after ensuring that the
          key actually exists in the map, so we know that it will in fact not make any
@@ -50,6 +52,8 @@ class IniReader
       string name;
       string path;
 };
+
+typedef shared_ptr<IniReader> IniReaderPtr;
 
 
 template <typename T>

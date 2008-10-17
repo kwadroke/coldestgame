@@ -8,7 +8,8 @@
 #include <set>
 #include "SDL_thread.h"
 #include "Timer.h"
-#ifdef linux
+#include <boost/shared_ptr.hpp>
+#ifdef __GNUG__
 #include <ext/hash_set>
 #else
 #include <hash_set>
@@ -55,7 +56,7 @@ class ObjectKDTree
       vector<Mesh*> getmeshes(const Vector3&, const Vector3&, const float);
       list<Mesh*> getmeshes();
       void visualize();
-      
+
    private:
       int size();
       bool innode(Vector3, float);
@@ -64,9 +65,9 @@ class ObjectKDTree
       void setretobjs(MeshSet*);
       void getmeshes(const Vector3&, const float, vector<Mesh*>&);
       void getmeshes(list<Mesh*>&);
-      
-      
-      vector<ObjectKDTree> children;
+
+
+      vector<shared_ptr<ObjectKDTree> > children;
       list<Mesh*> members;
       bool haschildren;
       Vector3vec vertices;
@@ -76,5 +77,7 @@ class ObjectKDTree
       Quadvec* frustum; // Pointer to root's p
       static int maxlevels;
 };
+
+typedef shared_ptr<ObjectKDTree> ObjectKDTreePtr;
 
 #endif

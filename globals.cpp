@@ -13,7 +13,7 @@ string mapname;         // The name of the current map
 ResourceManager resman; // Handles loading and organizing different resources
 vector<PlayerData> player;
 vector<UnitData> units;
-bool server;            // Determines whether to start a server
+bool server;            // Indicates whether we're running a server
 int servplayernum;
 SDL_Thread* serverthread;
 ObjectKDTree kdtree;

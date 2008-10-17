@@ -5,25 +5,25 @@ int Material::nummats = 0;
 
 #ifndef DEDICATED
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f), shininess(0.f),
-                   texid(8, 0), texfilename(8, ""), texman(tm), shaderhand(s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
+                   texid(8, 0), texfilename(8, ""), texman(&tm), shaderhand(&s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
                    shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true), noshadowcull(false)
 {
    ifstream check(filename.c_str());
    if (check.fail())
       filename = "materials/default";
    IniReader reader(filename);
-   
+
    for (int i = 0; i < 4; ++i)
       reader.Read(diffuse[i], "Diffuse", i);
-   
+
    for (int i = 0; i < 4; ++i)
       reader.Read(ambient[i], "Ambient", i);
-   
+
    for (int i = 0; i < 4; ++i)
       reader.Read(specular[i], "Specular", i);
-   
+
    reader.Read(shininess, "Shininess");
-   
+
    bool repeat = false;
    reader.Read(repeat, "Repeat");
    for (int i = 0; i < 8; ++i)
@@ -32,33 +32,33 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
       name += ToString(i);
       reader.Read(texfilename[i], name);
       if (texfilename[i] != "")
-         texid[i] = texman.LoadTexture(texfilename[i]);
-      
+         texid[i] = texman->LoadTexture(texfilename[i]);
+
       if (repeat)
       {
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
       }
    }
-   
+
    reader.Read(shader, "Shader");
-   shaderhand.LoadShader(shader);
-   
+   shaderhand->LoadShader(shader);
+
    reader.Read(cullface, "CullFace");
    reader.Read(noshadowcull, "NoShadowCull");
-   
+
    reader.Read(alphatest, "AlphaTest");
    if (alphatest > 1e-6)
       doalphatest = true;
-   
+
    reader.Read(additive, "Additive");
-   
+
    reader.Read(alphatocoverage, "AlphaToCoverage");
-   
+
    reader.Read(depthtest, "DepthTest");
-   
+
    reader.Read(depthwrite, "DepthWrite");
-   
+
    ++nummats;
 }
 #else
@@ -73,35 +73,35 @@ void Material::Use() const
 #ifndef DEDICATED
    for (int i = 0; i < 6; ++i) // At this time, textures 7 and 8 are reserved for shadowmaps
    {
-      texman.texhand->ActiveTexture(i);
+      texman->texhand->ActiveTexture(i);
       if (texfilename[i] != "")
-         texman.BindTexture(texfilename[i]);
+         texman->BindTexture(texfilename[i]);
       else
-         texman.texhand->BindTexture(texid[i]);
+         texman->texhand->BindTexture(texid[i]);
    }
-   
-   texman.texhand->ActiveTexture(0);
-   shaderhand.UseShader(shader);
-   
+
+   texman->texhand->ActiveTexture(0);
+   shaderhand->UseShader(shader);
+
    if (cullface)
    {
       glEnable(GL_CULL_FACE);
       glCullFace(GL_BACK);
    }
    else glDisable(GL_CULL_FACE);
-   
+
    /*if (depthtest)
       glEnable(GL_DEPTH_TEST);
    else glDisable(GL_DEPTH_TEST);*/
-   
+
    if (depthwrite)
       glDepthMask(GL_TRUE);
    else glDepthMask(GL_FALSE);
-   
+
    if (doalphatest)
    {
       glAlphaFunc(GL_GREATER, alphatest);
-      
+
       glEnable(GL_ALPHA_TEST);
       glEnable(GL_BLEND);
       glBlendFunc(GL_ONE, GL_ZERO);
@@ -114,7 +114,7 @@ void Material::Use() const
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glDisable(GL_ALPHA_TEST);
    }
-   
+
    if (alphatocoverage)
    {
       // Not entirely happy with the way this looks, but it could be worse
@@ -127,7 +127,7 @@ void Material::Use() const
       glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
       glEnable(GL_BLEND);
    }
-   
+
    glDisable(GL_COLOR_MATERIAL); // TODO: This should probably be removed at some point
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &ambient[0]);
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &diffuse[0]);
@@ -141,10 +141,10 @@ void Material::UseTextureOnly() const
 {
 #ifndef DEDICATED
    if (texfilename[0] != "")
-      texman.BindTexture(texfilename[0]);
+      texman->BindTexture(texfilename[0]);
    else
-      texman.texhand->BindTexture(texid[0]);
-   
+      texman->texhand->BindTexture(texid[0]);
+
    // Also do face culling so we can render only back faces for shadowing
    if (cullface && !noshadowcull)
    {
@@ -183,7 +183,7 @@ void Material::Release()
    for (int i = 0; i < 6; ++i)
    {
       if (texfilename[i] != "")
-         texman.DeleteTexture(texfilename[i]);
+         texman->DeleteTexture(texfilename[i]);
       // Textures in texid are not our problem because they should come from FBO's.
    }
 #endif

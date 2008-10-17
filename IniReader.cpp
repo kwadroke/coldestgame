@@ -7,22 +7,22 @@ IniReader::IniReader(int lev) : level(lev), name(""), path("")
 IniReader::IniReader(string filename) : level(0), name(""), path(filename)
 {
    if (filename == "") return; // Don't think this is necessary anymore, but it doesn't hurt
-   
-   ifstream in(filename.c_str(), ios::in);
-   
+
+   ifstream in(filename.c_str(), ios::in|ios::binary);
+
    if (in.fail())
    {
       logout << "Failed to open file " << filename << endl;
       return;
    }
-   
+
    string contents = "";
    string buffer;
    while (getline(in, buffer))
    {
       contents += buffer + '\n';
    }
-   
+
    istringstream instr(contents);
    Parse(instr);
 }
@@ -36,7 +36,7 @@ void IniReader::Parse(istringstream& in)
    istringstream line;
    bool firstline = true;
    size_t strpos = 0;
-   
+
    while(getline(in, currline))
    {
       linelevel = currline.find_first_not_of(" \t");
@@ -44,18 +44,18 @@ void IniReader::Parse(istringstream& in)
       {
          continue;
       }
-      
+
       if (firstline)
       {
          name = currline.substr(linelevel);
          firstline = false;
       }
-      
+
       if (linelevel > level)
       {
-         IniReader newreader(linelevel);
+         IniReaderPtr newreader(new IniReader(linelevel));
          in.seekg(strpos);
-         newreader.Parse(in);
+         newreader->Parse(in);
          children.push_back(newreader);
       }
       else if (linelevel < level)
@@ -79,7 +79,7 @@ void IniReader::Parse(istringstream& in)
 
 const IniReader& IniReader::GetItem(const int num) const
 {
-   return children.at(num);
+   return *children.at(num);
 }
 
 
@@ -99,7 +99,7 @@ int IniReader::GetItemIndex(const string name) const
 {
    for (int i = 0; i < children.size(); ++i)
    {
-      if (children[i].name == name)
+      if (children[i]->name == name)
          return i;
    }
    return -1;
