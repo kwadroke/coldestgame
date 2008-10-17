@@ -28,19 +28,19 @@ class Material
       GLuint GetTexture(int);
       bool operator<(const Material&) const;
       void Release();
-      
+
       floatvec diffuse;
       floatvec ambient;
       floatvec specular;
       float shininess;
-      
+
    private:
       vector<GLuint> texid;
       vector<string> texfilename;
       string shader;
 #ifndef DEDICATED
-      TextureManager& texman;
-      Shader& shaderhand;
+      TextureManager* texman;
+      Shader* shaderhand;
 #endif
       int id;
       static int nummats;

@@ -11,31 +11,31 @@ ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : p(6, Quad()), vertice
       members.push_back(&(*i));
    }
    logout << "KD-Tree Objects: " << members.size() << endl << flush;
-   
+
    vertices[1].x = v[0].x;
    vertices[1].y = v[0].y;
    vertices[1].z = v[6].z;
-   
+
    vertices[2].x = v[6].x;
    vertices[2].y = v[0].y;
    vertices[2].z = v[6].z;
-   
+
    vertices[3].x = v[6].x;
    vertices[3].y = v[0].y;
    vertices[3].z = v[0].z;
-   
+
    vertices[4].x = v[0].x;
    vertices[4].y = v[6].y;
    vertices[4].z = v[0].z;
-   
+
    vertices[5].x = v[6].x;
    vertices[5].y = v[6].y;
    vertices[5].z = v[0].z;
-   
+
    /*vertices[6].x = v[6].x;
    vertices[6].y = v[6].y;
    vertices[6].z = v[6].z;*/
-   
+
    vertices[7].x = v[0].x;
    vertices[7].y = v[6].y;
    vertices[7].z = v[6].z;
@@ -59,8 +59,8 @@ ObjectKDTree& ObjectKDTree::operator=(const ObjectKDTree& o)
    haschildren = o.haschildren;
    if (haschildren && root)
    {
-      children[0].setfrustum(frustum);
-      children[1].setfrustum(frustum);
+      children[0]->setfrustum(frustum);
+      children[1]->setfrustum(frustum);
    }
    if (root)
    {
@@ -82,8 +82,8 @@ ObjectKDTree::ObjectKDTree(const ObjectKDTree& o)
    haschildren = o.haschildren;
    if (haschildren && root)
    {
-      children[0].setfrustum(frustum);
-      children[1].setfrustum(frustum);
+      children[0]->setfrustum(frustum);
+      children[1]->setfrustum(frustum);
    }
    if (root)
    {
@@ -105,7 +105,7 @@ void ObjectKDTree::refine(int level)
    int curraxis = level % 2;
    int iterations = 0;
    float currsplit, minsplit, maxsplit;
-   
+
    switch(curraxis)
    {
       case 0:
@@ -124,12 +124,14 @@ void ObjectKDTree::refine(int level)
          currsplit = (vertices[0].y + vertices[6].y) / 2;
          break;
    };
-      
+
    Vector3vec v(8, Vector3());
-   children.push_back(ObjectKDTree());
-   children.push_back(ObjectKDTree());
+   ObjectKDTreePtr newnode(new ObjectKDTree());
+   children.push_back(newnode);
+   newnode = ObjectKDTreePtr(new ObjectKDTree());
+   children.push_back(newnode);
    haschildren = true;
-   
+
    while (true)
    {
       // Set children vertices
@@ -147,8 +149,8 @@ void ObjectKDTree::refine(int level)
             v[0].y = currsplit;
             break;
       };
-      children[0].setvertices(v);
-      
+      children[0]->setvertices(v);
+
       v[0] = vertices[0];
       v[6] = vertices[6];
       switch(curraxis)
@@ -163,8 +165,8 @@ void ObjectKDTree::refine(int level)
             v[6].y = currsplit;
             break;
       }
-      children[1].setvertices(v);
-      
+      children[1]->setvertices(v);
+
       // Attempt to insert each object into the children, every object should be
       // successfully inserted into at least one of the children
       list<Mesh*>::iterator j;
@@ -172,21 +174,21 @@ void ObjectKDTree::refine(int level)
       {
          for (j = members.begin(); j != members.end(); ++j)
          {
-            children[i].insert(*j);
+            children[i]->insert(*j);
          }
       }
-      
+
       // If we've successfully split approx. in half, or have tried enough
-      int size0 = children[0].size() + 1; // +1 to avoid div by zero
-      int size1 = children[1].size() + 1;
-      if (((float)size0 / (float)size1 > .9 && 
+      int size0 = children[0]->size() + 1; // +1 to avoid div by zero
+      int size1 = children[1]->size() + 1;
+      if (((float)size0 / (float)size1 > .9 &&
            (float)size0 / (float)size1 < 1.1) || true)//iterations >= 5) // Try skipping best-fit, since it doesn't work well in some situations
       {
-         if ((children[0].size() >= 1 || children[1].size() >= 1) &&
+         if ((children[0]->size() >= 1 || children[1]->size() >= 1) &&
             (level + 1 < maxlevels))
          {
-            children[0].refine(level + 1);
-            children[1].refine(level + 1);
+            children[0]->refine(level + 1);
+            children[1]->refine(level + 1);
             // All members should be in a child now, so don't keep a copy
             members.clear();
          }
@@ -195,19 +197,19 @@ void ObjectKDTree::refine(int level)
             children.clear();
             haschildren = false;
          }
-         
+
          if (root && haschildren)
          {
             setretobjs(retobjs);
-            children[0].setfrustum(frustum);
-            children[1].setfrustum(frustum);
+            children[0]->setfrustum(frustum);
+            children[1]->setfrustum(frustum);
          }
          return;
       }
-      /* children[0] is actually the top half of the split, so 
+      /* children[0] is actually the top half of the split, so
          average curr and max, curr and min for children[1].
       */
-      else if (children[0].size() > children[1].size())
+      else if (children[0]->size() > children[1]->size())
       {
          minsplit = currsplit;
          switch(curraxis)
@@ -239,9 +241,9 @@ void ObjectKDTree::refine(int level)
                break;
          };
       }
-      
-      children[0].members.clear();
-      children[1].members.clear();
+
+      children[0]->members.clear();
+      children[1]->members.clear();
       ++iterations;
    }
 }
@@ -288,18 +290,18 @@ vector<Mesh*> ObjectKDTree::getmeshes(const Vector3& oldpos, const Vector3& newp
 void ObjectKDTree::getmeshes(const Vector3& pos, const float size, vector<Mesh*>& ret)
 {
    Timer t;
-   
+
    if (root)
    {
       retobjs->clear();
    }
-   
+
    if (innode(pos, size))
    {
       if (haschildren)
       {
-         children[0].getmeshes(pos, size, ret);
-         children[1].getmeshes(pos, size, ret);
+         children[0]->getmeshes(pos, size, ret);
+         children[1]->getmeshes(pos, size, ret);
       }
       else
       {
@@ -331,18 +333,18 @@ list<Mesh*> ObjectKDTree::getmeshes()
 void ObjectKDTree::getmeshes(list<Mesh*>& ret)
 {
    list<Mesh*> temp;
-   
+
    if (root)
    {
       retobjs->clear();
    }
-   
+
    if (infrustum())
    {
       if (haschildren)
       {
-         children[0].getmeshes(ret);
-         children[1].getmeshes(ret);
+         children[0]->getmeshes(ret);
+         children[1]->getmeshes(ret);
       }
       else
       {
@@ -368,7 +370,7 @@ bool ObjectKDTree::infrustum()
    Vector3 v, s, t, u, norm;
    float d, startside;
    int hitcount;
-   
+
    for (int i = 0; i < 6; ++i)
    {
       hitcount = 0;
@@ -379,11 +381,11 @@ bool ObjectKDTree::infrustum()
       norm = (t - v).cross(s - v);
       norm.normalize();
       d = -norm.dot(s);
-      
+
       for (int j = 0; j < 8; ++j)
       {
          startside = norm.dot(vertices[j]) + d;
-         
+
          if (startside > -.0001)
          {
             ++hitcount;
@@ -403,7 +405,7 @@ bool ObjectKDTree::infrustum(Mesh* obj)
 {
    Vector3 v, s, t, u, norm;
    float d, startside;
-   
+
    for (int i = 0; i < 6; ++i)
    {
       v = (*frustum)[i].GetVertex(0);
@@ -412,14 +414,14 @@ bool ObjectKDTree::infrustum(Mesh* obj)
       u = (*frustum)[i].GetVertex(3);
       norm = (t - v).cross(s - v);
       norm.normalize();
-      
+
       d = -norm.dot(s);
-      
+
       startside = norm.dot(obj->GetPosition()) + d;
       startside = -startside;
-      
+
       if (startside > obj->size) return false;
-      
+
    }
    return true;
 }
@@ -441,7 +443,7 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
    nearx = neary * aspect;
    fary = 2 * tan(radfov / 2) * farz / 2;
    farx = fary * aspect;
-   
+
 #ifdef OLDKD
    currpoint.x = nearx;
    currpoint.y = neary;
@@ -449,44 +451,44 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
    p[0].SetVertex(0, currpoint);
    p[2].SetVertex(1, currpoint);
    p[3].SetVertex(3, currpoint);
-   
+
    currpoint.x = nearx;
    currpoint.y = -neary;
    p[0].SetVertex(1, currpoint);
    p[3].SetVertex(1, currpoint);
    p[4].SetVertex(3, currpoint);
-   
+
    currpoint.x = -nearx;
    currpoint.y = neary;
    p[0].SetVertex(2, currpoint);
    p[2].SetVertex(3, currpoint);
    p[5].SetVertex(1, currpoint);
-   
+
    currpoint.x = -nearx;
    currpoint.y = -neary;
    p[0].SetVertex(3, currpoint);
    p[4].SetVertex(1, currpoint);
    p[5].SetVertex(3, currpoint);
-   
+
    currpoint.x = -farx;
    currpoint.y = fary;
    currpoint.z = far;
    p[1].SetVertex(0, currpoint);
    p[2].SetVertex(2, currpoint);
    p[5].SetVertex(0, currpoint);
-   
+
    currpoint.x = -farx;
    currpoint.y = -fary;
    p[1].SetVertex(1, currpoint);
    p[4].SetVertex(0, currpoint);
    p[5].SetVertex(2, currpoint);
-   
+
    currpoint.x = farx;
    currpoint.y = fary;
    p[1].SetVertex(2, currpoint);
    p[2].SetVertex(0, currpoint);
    p[3].SetVertex(2, currpoint);
-   
+
    currpoint.x = farx;
    currpoint.y = -fary;
    p[1].SetVertex(3, currpoint);
@@ -499,57 +501,57 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
    p[0].SetVertex(0, currpoint);
    p[2].SetVertex(3, currpoint);
    p[3].SetVertex(2, currpoint);
-   
+
    currpoint.x = nearx;
    currpoint.y = -neary;
    p[0].SetVertex(3, currpoint);
    p[3].SetVertex(3, currpoint);
    p[4].SetVertex(2, currpoint);
-   
+
    currpoint.x = -nearx;
    currpoint.y = neary;
    p[0].SetVertex(1, currpoint);
    p[2].SetVertex(2, currpoint);
    p[5].SetVertex(3, currpoint);
-   
+
    currpoint.x = -nearx;
    currpoint.y = -neary;
    p[0].SetVertex(2, currpoint);
    p[4].SetVertex(3, currpoint);
    p[5].SetVertex(2, currpoint);
-   
+
    currpoint.x = -farx;
    currpoint.y = fary;
    currpoint.z = farz;
    p[1].SetVertex(0, currpoint);
    p[2].SetVertex(1, currpoint);
    p[5].SetVertex(0, currpoint);
-   
+
    currpoint.x = -farx;
    currpoint.y = -fary;
    p[1].SetVertex(3, currpoint);
    p[4].SetVertex(0, currpoint);
    p[5].SetVertex(1, currpoint);
-   
+
    currpoint.x = farx;
    currpoint.y = fary;
    p[1].SetVertex(1, currpoint);
    p[2].SetVertex(0, currpoint);
    p[3].SetVertex(1, currpoint);
-   
+
    currpoint.x = farx;
    currpoint.y = -fary;
    p[1].SetVertex(2, currpoint);
    p[3].SetVertex(0, currpoint);
    p[4].SetVertex(1, currpoint);
-   
+
    GraphicMatrix m;
-   
+
    m.rotatex(-rots.x);
    m.rotatey(rots.y);
    //m.rotatez(rots.z);
    m.translate(pos);
-   
+
    Vector3 currv;
    for (int i = 0; i < 6; ++i)
    {
@@ -568,8 +570,8 @@ void ObjectKDTree::setfrustum(Quadvec* newp)
    frustum = newp;
    if (haschildren)
    {
-      children[0].setfrustum(frustum);
-      children[1].setfrustum(frustum);
+      children[0]->setfrustum(frustum);
+      children[1]->setfrustum(frustum);
    }
 }
 
@@ -577,31 +579,31 @@ void ObjectKDTree::setfrustum(Quadvec* newp)
 void ObjectKDTree::setvertices(Vector3vec v)
 {
    vertices = v;
-   
+
    vertices[1].x = v[0].x;
    vertices[1].y = v[0].y;
    vertices[1].z = v[6].z;
-   
+
    vertices[2].x = v[6].x;
    vertices[2].y = v[0].y;
    vertices[2].z = v[6].z;
-   
+
    vertices[3].x = v[6].x;
    vertices[3].y = v[0].y;
    vertices[3].z = v[0].z;
-   
+
    vertices[4].x = v[0].x;
    vertices[4].y = v[6].y;
    vertices[4].z = v[0].z;
-   
+
    vertices[5].x = v[6].x;
    vertices[5].y = v[6].y;
    vertices[5].z = v[0].z;
-   
+
    /*vertices[6].x = v[6].x;
    vertices[6].y = v[6].y;
    vertices[6].z = v[6].z;*/
-   
+
    vertices[7].x = v[0].x;
    vertices[7].y = v[6].y;
    vertices[7].z = v[6].z;
@@ -619,8 +621,8 @@ void ObjectKDTree::setretobjs(MeshSet* in)
    retobjs = in;
    if (haschildren)
    {
-      children[0].setretobjs(retobjs);
-      children[1].setretobjs(retobjs);
+      children[0]->setretobjs(retobjs);
+      children[1]->setretobjs(retobjs);
    }
 }
 
@@ -638,14 +640,14 @@ void ObjectKDTree::visualize()
    skyboxmat->Use();
    glColor4f(0, 0, 1, alpha);
    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-   
+
    glBegin(GL_QUADS);
    glVertex3f(vertices[0].x - 1, vertices[0].y - 1, vertices[0].z - 1);
    glVertex3f(vertices[0].x, vertices[6].y, vertices[0].z);
    glVertex3f(vertices[6].x, vertices[6].y, vertices[0].z);
    glVertex3f(vertices[6].x - 1, vertices[0].y - 1, vertices[0].z - 1);
    glEnd();
-   
+
    glColor4f(1, 0, 1, alpha);
    glBegin(GL_QUADS);
    glVertex3f(vertices[0].x - 1, vertices[0].y - 1, vertices[0].z - 1);
@@ -653,7 +655,7 @@ void ObjectKDTree::visualize()
    glVertex3f(vertices[6].x, vertices[0].y, vertices[6].z);
    glVertex3f(vertices[6].x - 1, vertices[0].y - 1, vertices[0].z - 1);
    glEnd();
-   
+
    glColor4f(1, 1, 1, alpha);
    glBegin(GL_QUADS);
    glVertex3f(vertices[0].x, vertices[0].y, vertices[6].z);
@@ -661,7 +663,7 @@ void ObjectKDTree::visualize()
    glVertex3f(vertices[6].x, vertices[6].y, vertices[6].z);
    glVertex3f(vertices[6].x, vertices[0].y, vertices[6].z);
    glEnd();
-   
+
    glColor4f(1, 0, 0, alpha);
    glBegin(GL_QUADS);
    glVertex3f(vertices[0].x - 1, vertices[0].y - 1, vertices[0].z - 1);
@@ -669,7 +671,7 @@ void ObjectKDTree::visualize()
    glVertex3f(vertices[0].x, vertices[6].y, vertices[6].z);
    glVertex3f(vertices[0].x - 1, vertices[0].y - 1, vertices[6].z - 1);
    glEnd();
-   
+
    glColor4f(1, 1, 0, alpha);
    glBegin(GL_QUADS);
    glVertex3f(vertices[6].x, vertices[0].y, vertices[0].z);
@@ -677,7 +679,7 @@ void ObjectKDTree::visualize()
    glVertex3f(vertices[6].x, vertices[6].y, vertices[6].z);
    glVertex3f(vertices[6].x, vertices[0].y, vertices[6].z);
    glEnd();
-   
+
    glColor4f(0, 0, 0, alpha);
    glBegin(GL_QUADS);
    glVertex3f(vertices[0].x, vertices[6].y, vertices[0].z);
@@ -685,14 +687,14 @@ void ObjectKDTree::visualize()
    glVertex3f(vertices[6].x, vertices[6].y, vertices[6].z);
    glVertex3f(vertices[6].x, vertices[6].y, vertices[0].z);
    glEnd();
-   
+
    glColor4f(1, 1, 1, 1);
    glEnable(GL_TEXTURE_2D);
    glEnable(GL_FOG);
    glDisable(GL_COLOR_MATERIAL);
-   
+
    if (!haschildren) return;
    for (int i = 0; i < 2; ++i)
-      children[i].visualize();
+      children[i]->visualize();
 #endif
 }
