@@ -6,7 +6,7 @@
 #include "renderdefs.h"
 #include "netdefs.h"
 
-#ifdef WINDOWS
+#ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -21,7 +21,7 @@ void Debug()
 }
 
 
-#ifndef WINDOWS
+#ifndef WIN32
 int main(int argc, char* argv[])
 #else
 int APIENTRY WinMain(HINSTANCE hInstance,
