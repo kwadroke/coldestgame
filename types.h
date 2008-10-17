@@ -24,7 +24,7 @@ typedef vector<int> intvec;
 typedef vector<unsigned short> ushortvec;
 typedef vector<Vector3> Vector3vec;
 typedef vector<GLubyte> GLubytevec;
-#ifdef WINDOWS
+#ifndef __GNUC__
 typedef ptrdiff_t ssize_t; // Already exists in GCC
 #endif
 
