@@ -15,7 +15,14 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
+   /*
+   alutInit(NULL, NULL);
+   SoundManager m;
+   ALBufferPtr p = m.GetBuffer("sounds/scifi005.wav");
+   ALSource s;
+   s.Play(*p);
    
+   SDL_Delay(1000);*/
    
    exit(0);
 }
@@ -63,13 +70,13 @@ void OutputDiagnosticData()
    logout.SetFile("console.log");
    logout << "Initializing Coldest\n";
    logout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
-#ifdef linux
+#ifdef __GNUC__
    logout << "GCC version: " << __VERSION__ << endl;
+#endif
    SDL_version v = *SDL_Linked_Version();
    logout << "Linked SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
    SDL_VERSION(&v);
    logout << "Compiled SDL version: " << int(v.major) << "." << int(v.minor) << "." << int(v.patch) << endl;
-#endif
 }
 
 
@@ -118,7 +125,7 @@ void InitGlobals()
    console.Parse("set mousespeed 400", false);
    console.Parse("set terrainmulti 3", false);
    console.Parse("set map diamond", false);
-   console.Parse("set master localhost", false);
+   console.Parse("set master www.nemebean.com", false);
    console.Parse("set respawntime 15000", false);
    console.Parse("set cache 1", false);
    
@@ -162,6 +169,8 @@ void InitGlobals()
 #endif
    
    ReadConfig();
+   
+   SetupOpenAL();
    
 #ifndef DEDICATED
    // These have to be done here because GL has to be initialized first
@@ -459,6 +468,18 @@ void SetupOpenGL()
    // Need different tex params for this texture
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+#endif
+}
+
+
+void SetupOpenAL()
+{
+#ifndef DEDICATED
+   if (!alutInit(NULL, NULL))
+   {
+      logout << "Error initializing OpenAL: " << alGetError() << endl;
+      exit(-1);
+   }
 #endif
 }
 

@@ -1,5 +1,5 @@
 #`sdl-config --cflags`
-DEBUG=1
+DEBUG=0
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
@@ -7,7 +7,7 @@ else ifeq ($(DEBUG),0)
 else ifeq ($(DEBUG), 2)
    DEBUGOPTS=-ggdb3 -O0 -D_GLIBCXX_DEBUG
 else
-   DEBUGOPTS=-ggdb3
+   DEBUGOPTS=-ggdb3 -O0
 endif
 
 ifeq ($(WARN),1)
@@ -19,7 +19,7 @@ endif
 
 # As it turns out static linking is a gigantic PITA, so I'm not going to bother
 #LDLIBS = -Wl,-v -Wl,-Bstatic -lSDL_ttf -lfreetype -lSDL_image -lSDL_net -L./lib -lxerces-c -lz -lGLEW `sdl-config --static-libs` -ldl -Wl,-Bdynamic -lGL -lGLU
-LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c `sdl-config --libs`
+LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c -lalut -lvorbisfile `sdl-config --libs`
 MASTERLIBS = -lSDL_net `sdl-config --libs`
 CXX = g++
 CXXFLAGS=$(DEBUGOPTS) $(WARNINGS) $(DEFINES) `sdl-config --cflags`
@@ -34,7 +34,8 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o
+		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
+		SoundManager.o ALBuffer.o ALSource.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o

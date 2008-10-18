@@ -57,6 +57,7 @@ using namespace std;
 void OutputDiagnosticData();
 void SetupSDL();
 void SetupOpenGL();
+void SetupOpenAL();
 void InitNoise();
 static void MainLoop();
 void GetMap(string);
