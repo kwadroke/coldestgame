@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "TextureManager.h"
 #include "Shader.h"
+#include "SoundManager.h"
 
 using std::map;
 using std::string;
@@ -23,6 +24,7 @@ class ResourceManager
       TextureHandler texhand;
       TextureManager texman;
       Shader shaderman;
+      SoundManager soundman;
 #endif
       
    private:

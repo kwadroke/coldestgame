@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
+<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false"
+     leftclicksound="sounds/beep-3.ogg">
    <Label x="400" y="50" width="200" height="50" text="Loadout" readonly="true" xmargin="0" ymargin="0" align="center"/>
    
    <TabWidget x="50" y="110" width="550" height="700" text="">

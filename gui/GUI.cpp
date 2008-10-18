@@ -10,6 +10,7 @@
 #include "TextArea.h"
 #include "Slider.h"
 #include "TabWidget.h"
+#include "../globals.h"
 
 
 GUI::GUI(float aw, float ah, TextureManager* texm, const string file)
@@ -71,6 +72,9 @@ void GUI::Init(GUI* p, TextureManager* tm)
       defaulttextures[j] = p->defaulttextures[j];
    textures = vector<string>(3, "");
    glGenTextures(1, &texttexture);
+   
+   sounds = vector<string>(2, "");
+   sounds = p->sounds;
 }
 
 
@@ -219,12 +223,16 @@ void GUI::ProcessEvent(SDL_Event* event)
             state = Hover;
             if (event->button.button == SDL_BUTTON_LEFT)
             {
+               if (sounds[LeftSound] != "")
+                  soundsource.Play(resman.soundman.GetBuffer(sounds[LeftSound]));
                LeftClick(event);
                GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
                DoAction(leftclickaction);
             }
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
+               if (sounds[RightSound] != "")
+                  soundsource.Play(resman.soundman.GetBuffer(sounds[RightSound]));
                RightClick(event);
                GlobalRightClick(event);
                DoAction(rightclickaction);
@@ -371,7 +379,6 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
       // passing in their child nodes.  
       if (XMLString::equals(current->getNodeName(), XSWrapper("GUI")))
       {
-         // Pretty sure this if is bogus...the parent is always this (do we even need to pass parent then?)
          if (parent != this)
          {
             logout << "Warning, GUI element detected that is not the root node.\n";
@@ -398,6 +405,8 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
                   exit(1);
                }
             }
+            sounds[LeftSound] = ReadAttribute(current, XSWrapper("leftclicksound"));
+            sounds[RightSound] = ReadAttribute(current, XSWrapper("rightclicksound"));
             string val = ReadAttribute(current, XSWrapper("visible"));
             if (val == "false") visible = false; // Defaults to true
             
@@ -471,6 +480,13 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             newwidget->align = Center;
          else if (val == "right")
             newwidget->align = Right;
+         
+         val = ReadAttribute(current, XSWrapper("leftclicksound"));
+         if (val != "")
+            newwidget->sounds[LeftSound] = val;
+         val = ReadAttribute(current, XSWrapper("rightclicksound"));
+         if (val != "")
+            newwidget->sounds[RightSound] = val;
          
          // Load textures
          newwidget->textures = ReadTextures(current);

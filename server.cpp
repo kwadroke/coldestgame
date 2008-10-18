@@ -202,7 +202,7 @@ void ServerLoop()
       }
       frametimer.start();
          
-      SDL_mutexP(clientmutex);
+      SDL_mutexP(clientmutex); // Have to have clientmutex before touching mapname
       if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
       {
          if (gameover && SDL_GetTicks() > nextmaptime)

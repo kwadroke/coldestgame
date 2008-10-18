@@ -24,6 +24,7 @@
 #include "../TextureManager.h"
 #include "XSWrapper.h"
 #include "../util.h"
+#include "../ALSource.h"
 
 using namespace std;
 using xercesc::DOMElement;
@@ -40,6 +41,7 @@ using boost::shared_ptr;
 enum {Normal, Hover, Clicked, numstates};
 enum {ButtonTex, GutterTex, SliderTex, BackgroundTex, TableCellTex, TableRowTex, CursorTex, numdefaults};
 enum Alignment {Left, Center, Right};
+enum {LeftSound, RightSound, numsounds};
 
 class GUI
 {
@@ -52,6 +54,7 @@ class GUI
    friend class TextArea;
    friend class Slider;
    public:
+      // The TextureManager can be removed if you alter all references to it to use global resman
       GUI(float aw = 640.f, float ah = 480.f, TextureManager* texm = NULL, const string file = "");
       virtual ~GUI();
       void Render();
@@ -132,6 +135,8 @@ class GUI
       string name;
       string oldtext;
       GLuint texttexture;
+      vector<string> sounds;
+      ALSource soundsource;
       vector<string> textures;
       vector<GLuint> texids;
       TextureManager *texman;

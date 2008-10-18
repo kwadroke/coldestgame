@@ -59,6 +59,7 @@ void Repaint()
             SynchronizePosition();
       }
       localplayer = player[0];
+      resman.soundman.SetListenPos(localplayer.pos);
       
       // Update the local model so there isn't a frame of lag.
       if (!player[0].spectate)
@@ -247,6 +248,8 @@ void Repaint()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       resman.shaderman.UseShader("none");
       gui[chat]->visible = false;
+      Vector3 dummy;
+      resman.soundman.SetListenPos(dummy);
    }
    
    RenderHud(localplayer);
