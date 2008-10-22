@@ -55,7 +55,8 @@ class GUI
    friend class Slider;
    public:
       // The TextureManager can be removed if you alter all references to it to use global resman
-      GUI(float aw = 640.f, float ah = 480.f, TextureManager* texm = NULL, const string file = "");
+      GUI() {} // So inheriting classes don't call the other constructor
+      GUI(float, float, TextureManager* texm = NULL, const string file = "");
       virtual ~GUI();
       void Render();
       virtual void ProcessEvent(SDL_Event*);
@@ -136,7 +137,7 @@ class GUI
       string oldtext;
       GLuint texttexture;
       vector<string> sounds;
-      ALSource soundsource;
+      ALSourcePtr soundsource;
       vector<string> textures;
       vector<GLuint> texids;
       TextureManager *texman;

@@ -1525,7 +1525,9 @@ void Animate()
    while (i != emitters.end())
    {
       if (i->Update(particles))
+      {
          i = emitters.erase(i);
+      }
       else ++i;
    }
    static int partupd = 100;

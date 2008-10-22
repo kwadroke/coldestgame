@@ -1,26 +1,52 @@
 #include "ALSource.h"
 
 ALSource::ALSource() : position(floatvec(3, 0.f)), velocity(floatvec(3, 0.f)),
-                   pitch(1.f), gain(1.f), loop(0)
+                   pitch(1.f), gain(1.f), loop(0), refdist(200.f), maxdist(15000.f)
 {
+   alGenSources(1, &id);
+}
+
+
+ALSource::ALSource(const ALSource& s) : position(s.position), velocity(s.velocity),
+                   pitch(s.pitch), gain(s.gain), loop(s.loop)
+{
+   alGenSources(1, &id);
+}
+
+ALSource& ALSource::operator=(const ALSource& s)
+{
+   position = s.position;
+   velocity = s.velocity;
+   pitch = s.pitch;
+   gain = s.gain;
+   loop = s.loop;
    alGenSources(1, &id);
 }
 
 
 ALSource::~ALSource()
 {
+   alSourceStop(id);
+   alSourcei(id, AL_BUFFER, AL_NONE);
    alDeleteSources(1, &id);
 }
 
 
 void ALSource::Play(const ALBuffer& buffer)
 {
-   alSourcei(id, AL_BUFFER, buffer.id);
+   ALenum state;
+   alGetSourcei(id, AL_SOURCE_STATE, &state);
+   if (state == AL_PLAYING)
+      return;
+   if (state != AL_PAUSED)
+      alSourcei(id, AL_BUFFER, buffer.id);
    alSourcef(id, AL_PITCH, pitch);
    alSourcef(id, AL_GAIN, gain);
    alSourcefv(id, AL_POSITION, &position[0]);
    alSourcefv(id, AL_VELOCITY, &velocity[0]);
    alSourcei(id, AL_LOOPING, loop);
+   alSourcef(id, AL_MAX_DISTANCE, maxdist);
+   alSourcef(id, AL_REFERENCE_DISTANCE, refdist);
    alSourcePlay(id);
 }
 
@@ -28,6 +54,44 @@ void ALSource::Play(const ALBuffer& buffer)
 void ALSource::Play(const ALBufferPtr& buffer)
 {
    Play(*buffer);
+}
+
+
+void ALSource::SetPosition(const Vector3& newpos)
+{
+   position[0] = newpos.x;
+   position[1] = newpos.y;
+   position[2] = newpos.z;
+}
+
+
+void ALSource::CheckError()
+{
+   ALenum err = alGetError();
+   if (err == AL_NO_ERROR)
+   {
+      //logout << "AL_NO_ERROR" << endl;
+   }
+   else if (err == AL_INVALID_NAME)
+   {
+      logout << "AL_INVALID_NAME" << endl;
+   }
+   else if (err == AL_INVALID_ENUM)
+   {
+      logout << "AL_INVALID_ENUM" << endl;
+   }
+   else if (err == AL_INVALID_VALUE)
+   {
+      logout << "AL_INVALID_VALUE" << endl;
+   }
+   else if (err == AL_INVALID_OPERATION)
+   {
+      logout << "AL_INVALID_OPERATION" << endl;
+   }
+   else if (err == AL_OUT_OF_MEMORY)
+   {
+      logout << "AL_OUT_OF_MEMORY" << endl;
+   }
 }
 
 
