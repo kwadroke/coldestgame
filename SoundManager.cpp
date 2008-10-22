@@ -24,3 +24,14 @@ void SoundManager::SetListenPos(Vector3& v)
 }
 
 
+void SoundManager::SetListenDir(Vector3& v)
+{
+   floatvec temp(6, 0.f);
+   temp[0] = v.x;
+   temp[1] = v.y;
+   temp[2] = v.z;
+   temp[4] = 1.f;
+   alListenerfv(AL_ORIENTATION, &temp[0]);
+}
+
+

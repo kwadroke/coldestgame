@@ -75,6 +75,11 @@ void GUI::Init(GUI* p, TextureManager* tm)
    
    sounds = vector<string>(2, "");
    sounds = p->sounds;
+   if (p == this)
+   {
+      soundsource = ALSourcePtr(new ALSource());
+   }
+   soundsource = p->soundsource;
 }
 
 
@@ -224,7 +229,7 @@ void GUI::ProcessEvent(SDL_Event* event)
             if (event->button.button == SDL_BUTTON_LEFT)
             {
                if (sounds[LeftSound] != "")
-                  soundsource.Play(resman.soundman.GetBuffer(sounds[LeftSound]));
+                  soundsource->Play(resman.soundman.GetBuffer(sounds[LeftSound]));
                LeftClick(event);
                GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
                DoAction(leftclickaction);
@@ -232,7 +237,7 @@ void GUI::ProcessEvent(SDL_Event* event)
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
                if (sounds[RightSound] != "")
-                  soundsource.Play(resman.soundman.GetBuffer(sounds[RightSound]));
+                  soundsource->Play(resman.soundman.GetBuffer(sounds[RightSound]));
                RightClick(event);
                GlobalRightClick(event);
                DoAction(rightclickaction);

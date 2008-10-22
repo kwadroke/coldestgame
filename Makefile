@@ -1,5 +1,5 @@
 #`sdl-config --cflags`
-DEBUG=0
+DEBUG=1
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
@@ -87,6 +87,232 @@ depend:
 	$(DEPEND) *.cpp gui/*.cpp
 # DO NOT DELETE
 
+ALBuffer.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
+ALBuffer.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+ALBuffer.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+ALBuffer.o: /usr/include/features.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/features.h
+ALBuffer.o: /usr/include/sys/cdefs.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+ALBuffer.o: /usr/include/bits/wordsize.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+ALBuffer.o: /usr/include/gnu/stubs.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+ALBuffer.o: /usr/include/gnu/stubs-64.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+ALBuffer.o: /usr/include/bits/types.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+ALBuffer.o: /usr/include/bits/typesizes.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+ALBuffer.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+ALBuffer.o: /usr/include/_G_config.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+ALBuffer.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+ALBuffer.o: /usr/include/bits/wchar.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+ALBuffer.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+ALBuffer.o: /usr/include/bits/stdio_lim.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+ALBuffer.o: /usr/include/bits/sys_errlist.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+ALBuffer.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+ALBuffer.o: /usr/include/ogg/os_types.h /usr/include/sys/types.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+ALBuffer.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+ALBuffer.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+ALBuffer.o: /usr/include/bits/endian.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+ALBuffer.o: /usr/include/sys/select.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+ALBuffer.o: /usr/include/bits/select.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+ALBuffer.o: /usr/include/bits/sigset.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+ALBuffer.o: /usr/include/bits/time.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+ALBuffer.o: /usr/include/sys/sysmacros.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+ALBuffer.o: /usr/include/bits/pthreadtypes.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+ALBuffer.o: /usr/include/ogg/config_types.h /usr/include/boost/shared_ptr.hpp
+ALBuffer.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+ALBuffer.o: /usr/include/boost/config/select_compiler_config.hpp
+ALBuffer.o: /usr/include/boost/config/compiler/gcc.hpp
+ALBuffer.o: /usr/include/boost/config/select_stdlib_config.hpp
+ALBuffer.o: /usr/include/boost/config/no_tr1/utility.hpp
+ALBuffer.o: /usr/include/boost/config/select_platform_config.hpp
+ALBuffer.o: /usr/include/boost/config/posix_features.hpp
+ALBuffer.o: /usr/include/unistd.h /usr/include/gentoo-multilib/amd64/unistd.h
+ALBuffer.o: /usr/include/bits/posix_opt.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+ALBuffer.o: /usr/include/bits/environments.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+ALBuffer.o: /usr/include/bits/confname.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+ALBuffer.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+ALBuffer.o: /usr/include/boost/config/suffix.hpp
+ALBuffer.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/assert.h
+ALBuffer.o: /usr/include/boost/checked_delete.hpp
+ALBuffer.o: /usr/include/boost/throw_exception.hpp
+ALBuffer.o: /usr/include/boost/config.hpp
+ALBuffer.o: /usr/include/boost/detail/shared_count.hpp
+ALBuffer.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ALBuffer.o: /usr/include/boost/detail/sp_counted_base.hpp
+ALBuffer.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+ALBuffer.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ALBuffer.o: /usr/include/boost/detail/workaround.hpp logout.h Log.h
+ALBuffer.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+ALBuffer.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+ALBuffer.o: /usr/include/SDL/SDL_platform.h /usr/include/stdlib.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+ALBuffer.o: /usr/include/bits/waitflags.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+ALBuffer.o: /usr/include/bits/waitstatus.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+ALBuffer.o: /usr/include/xlocale.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+ALBuffer.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+ALBuffer.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+ALBuffer.o: /usr/include/strings.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/strings.h
+ALBuffer.o: /usr/include/inttypes.h
+ALBuffer.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+ALBuffer.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+ALBuffer.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+ALBuffer.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+ALBuffer.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+ALBuffer.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+ALBuffer.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+ALBuffer.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+ALBuffer.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+ALBuffer.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+ALBuffer.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+ALBuffer.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+ALBuffer.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+ALBuffer.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+ALBuffer.o: /usr/include/SDL/SDL_version.h
+ALSource.o: ALSource.h types.h Vector3.h glinc.h /usr/include/GL/glew.h
+ALSource.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
+ALSource.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
+ALSource.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/features.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/features.h
+ALSource.o: /usr/include/sys/cdefs.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+ALSource.o: /usr/include/bits/wordsize.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+ALSource.o: /usr/include/gnu/stubs.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+ALSource.o: /usr/include/gnu/stubs-64.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+ALSource.o: /usr/include/bits/huge_val.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+ALSource.o: /usr/include/bits/huge_valf.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+ALSource.o: /usr/include/bits/huge_vall.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+ALSource.o: /usr/include/bits/inf.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
+ALSource.o: /usr/include/bits/nan.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
+ALSource.o: /usr/include/bits/mathdef.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+ALSource.o: /usr/include/bits/mathcalls.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h
+ALSource.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+ALSource.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+ALSource.o: /usr/include/bits/types.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+ALSource.o: /usr/include/bits/typesizes.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+ALSource.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+ALSource.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+ALSource.o: /usr/include/bits/endian.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+ALSource.o: /usr/include/sys/select.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+ALSource.o: /usr/include/bits/select.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+ALSource.o: /usr/include/bits/sigset.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+ALSource.o: /usr/include/bits/time.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+ALSource.o: /usr/include/sys/sysmacros.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+ALSource.o: /usr/include/bits/pthreadtypes.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+ALSource.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+ALSource.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+ALSource.o: /usr/include/_G_config.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+ALSource.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+ALSource.o: /usr/include/bits/wchar.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+ALSource.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+ALSource.o: /usr/include/bits/stdio_lim.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+ALSource.o: /usr/include/bits/sys_errlist.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+ALSource.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+ALSource.o: /usr/include/bits/waitflags.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+ALSource.o: /usr/include/bits/waitstatus.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+ALSource.o: /usr/include/xlocale.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+ALSource.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+ALSource.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+ALSource.o: /usr/include/strings.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/strings.h
+ALSource.o: /usr/include/inttypes.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+ALSource.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+ALSource.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+ALSource.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+ALSource.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+ALSource.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+ALSource.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+ALSource.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+ALSource.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+ALSource.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+ALSource.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+ALSource.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+ALSource.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+ALSource.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+ALSource.o: /usr/include/SDL/SDL_version.h ALBuffer.h /usr/include/AL/al.h
+ALSource.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+ALSource.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+ALSource.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+ALSource.o: /usr/include/ogg/config_types.h /usr/include/boost/shared_ptr.hpp
+ALSource.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+ALSource.o: /usr/include/boost/config/select_compiler_config.hpp
+ALSource.o: /usr/include/boost/config/compiler/gcc.hpp
+ALSource.o: /usr/include/boost/config/select_stdlib_config.hpp
+ALSource.o: /usr/include/boost/config/no_tr1/utility.hpp
+ALSource.o: /usr/include/boost/config/select_platform_config.hpp
+ALSource.o: /usr/include/boost/config/posix_features.hpp
+ALSource.o: /usr/include/unistd.h /usr/include/gentoo-multilib/amd64/unistd.h
+ALSource.o: /usr/include/bits/posix_opt.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+ALSource.o: /usr/include/bits/environments.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+ALSource.o: /usr/include/bits/confname.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+ALSource.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+ALSource.o: /usr/include/boost/config/suffix.hpp
+ALSource.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+ALSource.o: /usr/include/gentoo-multilib/amd64/assert.h
+ALSource.o: /usr/include/boost/checked_delete.hpp
+ALSource.o: /usr/include/boost/throw_exception.hpp
+ALSource.o: /usr/include/boost/config.hpp
+ALSource.o: /usr/include/boost/detail/shared_count.hpp
+ALSource.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ALSource.o: /usr/include/boost/detail/sp_counted_base.hpp
+ALSource.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+ALSource.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ALSource.o: /usr/include/boost/detail/workaround.hpp
 CollisionDetection.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 CollisionDetection.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 CollisionDetection.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -235,8 +461,13 @@ CollisionDetection.o: /usr/include/boost/detail/sp_counted_impl.hpp
 CollisionDetection.o: /usr/include/boost/detail/workaround.hpp
 CollisionDetection.o: GraphicMatrix.h Material.h TextureManager.h
 CollisionDetection.o: TextureHandler.h /usr/include/SDL/SDL_image.h
-CollisionDetection.o: IniReader.h Shader.h ResourceManager.h Quad.h
-CollisionDetection.o: MeshNode.h FBO.h util.h Timer.h
+CollisionDetection.o: IniReader.h Shader.h ResourceManager.h SoundManager.h
+CollisionDetection.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
+CollisionDetection.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+CollisionDetection.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+CollisionDetection.o: /usr/include/ogg/os_types.h
+CollisionDetection.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h
+CollisionDetection.o: util.h tsint.h Timer.h
 Console.o: Console.h gui/TextArea.h gui/GUI.h
 Console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -488,15 +719,19 @@ Console.o: /usr/include/bits/mathdef.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Console.o: /usr/include/bits/mathcalls.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-Console.o: GraphicMatrix.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-Console.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h
-Console.o: PlayerData.h /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h
-Console.o: types.h Material.h TextureManager.h IniReader.h Shader.h
-Console.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h Hit.h
-Console.o: Weapon.h Item.h ObjectKDTree.h CollisionDetection.h Light.h
-Console.o: gui/GUI.h gui/ProgressBar.h gui/Button.h netdefs.h ServerInfo.h
-Console.o: Particle.h IDGen.h Packet.h globals.h ParticleEmitter.h
-Console.o: MeshCache.h
+Console.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+Console.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+Console.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Console.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Console.o: /usr/include/ogg/config_types.h gui/Table.h gui/TableItem.h
+Console.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+Console.o: renderdefs.h PlayerData.h /usr/include/SDL/SDL_net.h Mesh.h
+Console.o: Triangle.h Vertex.h Material.h TextureManager.h IniReader.h
+Console.o: Shader.h ResourceManager.h SoundManager.h Quad.h MeshNode.h FBO.h
+Console.o: util.h Timer.h Hit.h Weapon.h Item.h ObjectKDTree.h
+Console.o: CollisionDetection.h Light.h gui/GUI.h gui/ProgressBar.h
+Console.o: gui/Button.h netdefs.h ServerInfo.h Particle.h IDGen.h Packet.h
+Console.o: globals.h ParticleEmitter.h ALSource.h MeshCache.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 FBO.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -820,7 +1055,36 @@ IniReader.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 IniReader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 IniReader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 IniReader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-IniReader.o: /usr/include/SDL/SDL_version.h
+IniReader.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
+IniReader.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+IniReader.o: /usr/include/boost/config/select_compiler_config.hpp
+IniReader.o: /usr/include/boost/config/compiler/gcc.hpp
+IniReader.o: /usr/include/boost/config/select_stdlib_config.hpp
+IniReader.o: /usr/include/boost/config/no_tr1/utility.hpp
+IniReader.o: /usr/include/boost/config/select_platform_config.hpp
+IniReader.o: /usr/include/boost/config/posix_features.hpp
+IniReader.o: /usr/include/unistd.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/unistd.h
+IniReader.o: /usr/include/bits/posix_opt.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+IniReader.o: /usr/include/bits/environments.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+IniReader.o: /usr/include/bits/confname.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+IniReader.o: /usr/include/getopt.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/getopt.h
+IniReader.o: /usr/include/boost/config/suffix.hpp
+IniReader.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+IniReader.o: /usr/include/gentoo-multilib/amd64/assert.h
+IniReader.o: /usr/include/boost/checked_delete.hpp
+IniReader.o: /usr/include/boost/throw_exception.hpp
+IniReader.o: /usr/include/boost/config.hpp
+IniReader.o: /usr/include/boost/detail/shared_count.hpp
+IniReader.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+IniReader.o: /usr/include/boost/detail/sp_counted_base.hpp
+IniReader.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+IniReader.o: /usr/include/boost/detail/sp_counted_impl.hpp
+IniReader.o: /usr/include/boost/detail/workaround.hpp
 Item.o: Item.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
 Item.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Item.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -889,23 +1153,7 @@ Item.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Item.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Item.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Item.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Item.o: /usr/include/SDL/SDL_version.h Mesh.h Vector3.h glinc.h
-Item.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
-Item.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
-Item.o: /usr/include/gentoo-multilib/amd64/math.h
-Item.o: /usr/include/bits/huge_val.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-Item.o: /usr/include/bits/huge_valf.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-Item.o: /usr/include/bits/huge_vall.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-Item.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
-Item.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
-Item.o: /usr/include/bits/mathdef.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-Item.o: /usr/include/bits/mathcalls.h
-Item.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Item.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+Item.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
 Item.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Item.o: /usr/include/boost/config/select_compiler_config.hpp
 Item.o: /usr/include/boost/config/compiler/gcc.hpp
@@ -930,9 +1178,30 @@ Item.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Item.o: /usr/include/boost/detail/sp_counted_base.hpp
 Item.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Item.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Item.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
-Item.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-Item.o: Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
+Item.o: /usr/include/boost/detail/workaround.hpp Mesh.h Vector3.h glinc.h
+Item.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Item.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Item.o: /usr/include/gentoo-multilib/amd64/math.h
+Item.o: /usr/include/bits/huge_val.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Item.o: /usr/include/bits/huge_valf.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+Item.o: /usr/include/bits/huge_vall.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+Item.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
+Item.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
+Item.o: /usr/include/bits/mathdef.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Item.o: /usr/include/bits/mathcalls.h
+Item.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
+Item.o: Vertex.h types.h GraphicMatrix.h Material.h TextureManager.h
+Item.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
+Item.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Item.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Item.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Item.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Item.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+Item.o: tsint.h Timer.h
 Light.o: Light.h Vector3.h glinc.h /usr/include/GL/glew.h
 Light.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Light.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1179,8 +1448,8 @@ Material.o: /usr/include/bits/mathdef.h
 Material.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Material.o: /usr/include/bits/mathcalls.h
 Material.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h IniReader.h
-Material.o: Shader.h /usr/include/boost/shared_ptr.hpp
-Material.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Material.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Material.o: /usr/include/boost/config/user.hpp
 Material.o: /usr/include/boost/config/select_compiler_config.hpp
 Material.o: /usr/include/boost/config/compiler/gcc.hpp
 Material.o: /usr/include/boost/config/select_stdlib_config.hpp
@@ -1206,12 +1475,17 @@ Material.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Material.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Material.o: /usr/include/boost/detail/workaround.hpp globals.h Mesh.h
-Material.o: Triangle.h Vertex.h GraphicMatrix.h ResourceManager.h Quad.h
-Material.o: MeshNode.h FBO.h util.h Timer.h Particle.h CollisionDetection.h
-Material.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-Material.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-Material.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Material.o: /usr/include/boost/detail/workaround.hpp Shader.h globals.h
+Material.o: Mesh.h Triangle.h Vertex.h GraphicMatrix.h ResourceManager.h
+Material.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Material.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Material.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Material.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Material.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+Material.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
+Material.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
+Material.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
+Material.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Material.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Material.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1343,10 +1617,10 @@ Material.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Material.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-Material.o: util.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+Material.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 Material.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 Material.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-Material.o: ParticleEmitter.h MeshCache.h
+Material.o: ParticleEmitter.h ALSource.h MeshCache.h
 Mesh.o: Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Mesh.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Mesh.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1457,8 +1731,12 @@ Mesh.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Mesh.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
 Mesh.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-Mesh.o: IniReader.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h util.h
-Mesh.o: Timer.h ProceduralTree.h StableRandom.h
+Mesh.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+Mesh.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+Mesh.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Mesh.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Mesh.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+Mesh.o: tsint.h Timer.h ProceduralTree.h StableRandom.h
 MeshCache.o: MeshCache.h /usr/include/boost/shared_ptr.hpp
 MeshCache.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 MeshCache.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -1586,7 +1864,12 @@ MeshCache.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 MeshCache.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
 MeshCache.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
 MeshCache.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-MeshCache.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
+MeshCache.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+MeshCache.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+MeshCache.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+MeshCache.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+MeshCache.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+MeshCache.o: tsint.h Timer.h
 MeshNode.o: MeshNode.h Triangle.h Vertex.h Vector3.h glinc.h
 MeshNode.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 MeshNode.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1707,11 +1990,15 @@ MeshNode.o: /usr/include/boost/detail/sp_counted_impl.hpp
 MeshNode.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 MeshNode.o: Material.h TextureManager.h TextureHandler.h
 MeshNode.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-MeshNode.o: ResourceManager.h globals.h Mesh.h Quad.h FBO.h util.h Timer.h
-MeshNode.o: Particle.h CollisionDetection.h ObjectKDTree.h ServerInfo.h
-MeshNode.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
-MeshNode.o: Item.h Console.h gui/TextArea.h gui/GUI.h
-MeshNode.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+MeshNode.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+MeshNode.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+MeshNode.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+MeshNode.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+MeshNode.o: /usr/include/ogg/config_types.h globals.h Mesh.h Quad.h FBO.h
+MeshNode.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
+MeshNode.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+MeshNode.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+MeshNode.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocument.hpp
 MeshNode.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1843,10 +2130,10 @@ MeshNode.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 MeshNode.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-MeshNode.o: util.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+MeshNode.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 MeshNode.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 MeshNode.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-MeshNode.o: ParticleEmitter.h MeshCache.h
+MeshNode.o: ParticleEmitter.h ALSource.h MeshCache.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -1982,7 +2269,12 @@ ObjectKDTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
 ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 ObjectKDTree.o: Material.h TextureManager.h TextureHandler.h
 ObjectKDTree.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-ObjectKDTree.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
+ObjectKDTree.o: ResourceManager.h SoundManager.h ALBuffer.h
+ObjectKDTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+ObjectKDTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+ObjectKDTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+ObjectKDTree.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+ObjectKDTree.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
 Packet.o: Packet.h /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
 Packet.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Packet.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -2176,10 +2468,15 @@ Particle.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Particle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 Particle.o: Material.h TextureManager.h TextureHandler.h
 Particle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-Particle.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
-Particle.o: globals.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-Particle.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-Particle.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Particle.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Particle.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Particle.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Particle.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Particle.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+Particle.o: tsint.h Timer.h globals.h ServerInfo.h /usr/include/SDL/SDL_net.h
+Particle.o: gui/GUI.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+Particle.o: gui/TextArea.h gui/GUI.h
+Particle.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Particle.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Particle.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -2311,10 +2608,10 @@ Particle.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Particle.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-Particle.o: util.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+Particle.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 Particle.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 Particle.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-Particle.o: ParticleEmitter.h MeshCache.h
+Particle.o: ParticleEmitter.h ALSource.h MeshCache.h
 ParticleEmitter.o: ParticleEmitter.h Particle.h CollisionDetection.h
 ParticleEmitter.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ParticleEmitter.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
@@ -2458,7 +2755,152 @@ ParticleEmitter.o: /usr/include/boost/detail/sp_counted_impl.hpp
 ParticleEmitter.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 ParticleEmitter.o: Material.h TextureManager.h TextureHandler.h
 ParticleEmitter.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-ParticleEmitter.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
+ParticleEmitter.o: ResourceManager.h SoundManager.h ALBuffer.h
+ParticleEmitter.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+ParticleEmitter.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+ParticleEmitter.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+ParticleEmitter.o: /usr/include/ogg/os_types.h
+ParticleEmitter.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h
+ParticleEmitter.o: util.h tsint.h Timer.h ALSource.h globals.h ServerInfo.h
+ParticleEmitter.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h
+ParticleEmitter.o: Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
+ParticleEmitter.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+ParticleEmitter.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocument.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XercesDefs.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XercesVersion.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/AutoSense.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNode.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/RefVectorOf.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMLException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMemory.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMError.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMLUni.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/PlatformUtils.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/PanicHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/MemoryManager.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+ParticleEmitter.o: /usr/include/xercesc/util/RefVectorOf.c
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLAttr.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/QName.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMLString.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+ParticleEmitter.o: /usr/include/xercesc/internal/XSerializable.hpp
+ParticleEmitter.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/HashBase.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/RuntimeException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/HashXMLCh.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/RefHashTableOf.c
+ParticleEmitter.o: /usr/include/xercesc/util/Janitor.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/Janitor.c
+ParticleEmitter.o: /usr/include/xercesc/util/NullPointerException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/ValueVectorOf.c
+ParticleEmitter.o: /usr/include/xercesc/internal/XSerializationException.hpp
+ParticleEmitter.o: /usr/include/xercesc/internal/XProtoType.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+ParticleEmitter.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/KVStringPair.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+ParticleEmitter.o: /usr/include/xercesc/util/regx/Op.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/Token.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/Mutexes.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+ParticleEmitter.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/ValidationContext.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/NameIdPool.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/NameIdPool.c
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/SecurityManager.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/ValueStackOf.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/EmptyStackException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/ValueStackOf.c
+ParticleEmitter.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+ParticleEmitter.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+ParticleEmitter.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+ParticleEmitter.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOM.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMAttr.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMText.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMComment.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMElement.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMEntity.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMException.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNotation.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMRange.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMBuilder.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMInputSource.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMLocator.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMWriter.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLFormatter.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
+ParticleEmitter.o: /usr/include/SDL/SDL_ttf.h TextureManager.h
+ParticleEmitter.o: gui/XSWrapper.h util.h ALSource.h gui/Table.h
+ParticleEmitter.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+ParticleEmitter.o: gui/Slider.h gui/Button.h renderdefs.h Light.h
+ParticleEmitter.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+ParticleEmitter.o: MeshCache.h
 PlayerData.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
 PlayerData.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PlayerData.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -2588,8 +3030,13 @@ PlayerData.o: /usr/include/boost/detail/sp_counted_impl.hpp
 PlayerData.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 PlayerData.o: Material.h TextureManager.h TextureHandler.h
 PlayerData.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-PlayerData.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h Hit.h
-PlayerData.o: Weapon.h Item.h
+PlayerData.o: ResourceManager.h SoundManager.h ALBuffer.h
+PlayerData.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+PlayerData.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+PlayerData.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+PlayerData.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+PlayerData.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h Weapon.h
+PlayerData.o: Item.h
 PrimitiveOctree.o: PrimitiveOctree.h glinc.h /usr/include/GL/glew.h
 PrimitiveOctree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PrimitiveOctree.o: /usr/include/SDL/SDL_opengl.h
@@ -2804,8 +3251,7 @@ ProceduralTree.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
 ProceduralTree.o: /usr/include/SDL/SDL_video.h
 ProceduralTree.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ProceduralTree.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-ProceduralTree.o: /usr/include/SDL/SDL_version.h IniReader.h Mesh.h
-ProceduralTree.o: Triangle.h Vertex.h types.h
+ProceduralTree.o: /usr/include/SDL/SDL_version.h IniReader.h
 ProceduralTree.o: /usr/include/boost/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
 ProceduralTree.o: /usr/include/boost/config/user.hpp
@@ -2836,10 +3282,16 @@ ProceduralTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ProceduralTree.o: /usr/include/boost/detail/workaround.hpp Material.h
-ProceduralTree.o: TextureManager.h TextureHandler.h
-ProceduralTree.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
-ProceduralTree.o: Quad.h MeshNode.h FBO.h util.h Timer.h StableRandom.h
+ProceduralTree.o: /usr/include/boost/detail/workaround.hpp Mesh.h Triangle.h
+ProceduralTree.o: Vertex.h types.h Material.h TextureManager.h
+ProceduralTree.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
+ProceduralTree.o: ResourceManager.h SoundManager.h ALBuffer.h
+ProceduralTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+ProceduralTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+ProceduralTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+ProceduralTree.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+ProceduralTree.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
+ProceduralTree.o: StableRandom.h
 Quad.o: Quad.h Triangle.h Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quad.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Quad.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -3159,7 +3611,7 @@ ResourceManager.o: /usr/include/bits/mathdef.h
 ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 ResourceManager.o: /usr/include/bits/mathcalls.h
 ResourceManager.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-ResourceManager.o: IniReader.h Shader.h /usr/include/boost/shared_ptr.hpp
+ResourceManager.o: IniReader.h /usr/include/boost/shared_ptr.hpp
 ResourceManager.o: /usr/include/boost/config.hpp
 ResourceManager.o: /usr/include/boost/config/user.hpp
 ResourceManager.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3189,7 +3641,13 @@ ResourceManager.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ResourceManager.o: /usr/include/boost/detail/sp_counted_base.hpp
 ResourceManager.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ResourceManager.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ResourceManager.o: /usr/include/boost/detail/workaround.hpp
+ResourceManager.o: /usr/include/boost/detail/workaround.hpp Shader.h
+ResourceManager.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+ResourceManager.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+ResourceManager.o: /usr/include/vorbis/vorbisfile.h
+ResourceManager.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+ResourceManager.o: /usr/include/ogg/os_types.h
+ResourceManager.o: /usr/include/ogg/config_types.h
 ServerInfo.o: ServerInfo.h /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
 ServerInfo.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 ServerInfo.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -3405,8 +3863,13 @@ ServerState.o: /usr/include/boost/detail/sp_counted_impl.hpp
 ServerState.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 ServerState.o: Material.h TextureManager.h TextureHandler.h
 ServerState.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-ServerState.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h Hit.h
-ServerState.o: Weapon.h Item.h
+ServerState.o: ResourceManager.h SoundManager.h ALBuffer.h
+ServerState.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+ServerState.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+ServerState.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+ServerState.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+ServerState.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h Weapon.h
+ServerState.o: Item.h
 Shader.o: Shader.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Shader.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Shader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -3480,6 +3943,142 @@ Shader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Shader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Shader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Shader.o: /usr/include/SDL/SDL_version.h
+SoundManager.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+SoundManager.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+SoundManager.o: /usr/include/vorbis/vorbisfile.h /usr/include/stdio.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/stdio.h
+SoundManager.o: /usr/include/features.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/features.h
+SoundManager.o: /usr/include/sys/cdefs.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+SoundManager.o: /usr/include/bits/wordsize.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+SoundManager.o: /usr/include/gnu/stubs.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+SoundManager.o: /usr/include/gnu/stubs-64.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+SoundManager.o: /usr/include/bits/types.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+SoundManager.o: /usr/include/bits/typesizes.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+SoundManager.o: /usr/include/libio.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/libio.h
+SoundManager.o: /usr/include/_G_config.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+SoundManager.o: /usr/include/wchar.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/wchar.h
+SoundManager.o: /usr/include/bits/wchar.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+SoundManager.o: /usr/include/gconv.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/gconv.h
+SoundManager.o: /usr/include/bits/stdio_lim.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+SoundManager.o: /usr/include/bits/sys_errlist.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+SoundManager.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+SoundManager.o: /usr/include/ogg/os_types.h /usr/include/sys/types.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+SoundManager.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+SoundManager.o: /usr/include/endian.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/endian.h
+SoundManager.o: /usr/include/bits/endian.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+SoundManager.o: /usr/include/sys/select.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+SoundManager.o: /usr/include/bits/select.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+SoundManager.o: /usr/include/bits/sigset.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+SoundManager.o: /usr/include/bits/time.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+SoundManager.o: /usr/include/sys/sysmacros.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+SoundManager.o: /usr/include/bits/pthreadtypes.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+SoundManager.o: /usr/include/ogg/config_types.h
+SoundManager.o: /usr/include/boost/shared_ptr.hpp
+SoundManager.o: /usr/include/boost/config.hpp
+SoundManager.o: /usr/include/boost/config/user.hpp
+SoundManager.o: /usr/include/boost/config/select_compiler_config.hpp
+SoundManager.o: /usr/include/boost/config/compiler/gcc.hpp
+SoundManager.o: /usr/include/boost/config/select_stdlib_config.hpp
+SoundManager.o: /usr/include/boost/config/no_tr1/utility.hpp
+SoundManager.o: /usr/include/boost/config/select_platform_config.hpp
+SoundManager.o: /usr/include/boost/config/posix_features.hpp
+SoundManager.o: /usr/include/unistd.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/unistd.h
+SoundManager.o: /usr/include/bits/posix_opt.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+SoundManager.o: /usr/include/bits/environments.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+SoundManager.o: /usr/include/bits/confname.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+SoundManager.o: /usr/include/getopt.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/getopt.h
+SoundManager.o: /usr/include/boost/config/suffix.hpp
+SoundManager.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/assert.h
+SoundManager.o: /usr/include/boost/checked_delete.hpp
+SoundManager.o: /usr/include/boost/throw_exception.hpp
+SoundManager.o: /usr/include/boost/config.hpp
+SoundManager.o: /usr/include/boost/detail/shared_count.hpp
+SoundManager.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+SoundManager.o: /usr/include/boost/detail/sp_counted_base.hpp
+SoundManager.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+SoundManager.o: /usr/include/boost/detail/sp_counted_impl.hpp
+SoundManager.o: /usr/include/boost/detail/workaround.hpp logout.h Log.h
+SoundManager.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+SoundManager.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+SoundManager.o: /usr/include/SDL/SDL_platform.h /usr/include/stdlib.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/stdlib.h
+SoundManager.o: /usr/include/bits/waitflags.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+SoundManager.o: /usr/include/bits/waitstatus.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+SoundManager.o: /usr/include/xlocale.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/xlocale.h
+SoundManager.o: /usr/include/alloca.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/alloca.h
+SoundManager.o: /usr/include/string.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/string.h
+SoundManager.o: /usr/include/strings.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/strings.h
+SoundManager.o: /usr/include/inttypes.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+SoundManager.o: /usr/include/stdint.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/stdint.h
+SoundManager.o: /usr/include/ctype.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/ctype.h
+SoundManager.o: /usr/include/iconv.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/iconv.h
+SoundManager.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+SoundManager.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+SoundManager.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+SoundManager.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+SoundManager.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+SoundManager.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+SoundManager.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+SoundManager.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+SoundManager.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+SoundManager.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+SoundManager.o: /usr/include/SDL/SDL_version.h Vector3.h glinc.h
+SoundManager.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
+SoundManager.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
+SoundManager.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+SoundManager.o: /usr/include/bits/huge_val.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+SoundManager.o: /usr/include/bits/huge_valf.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+SoundManager.o: /usr/include/bits/huge_vall.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+SoundManager.o: /usr/include/bits/inf.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
+SoundManager.o: /usr/include/bits/nan.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
+SoundManager.o: /usr/include/bits/mathdef.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+SoundManager.o: /usr/include/bits/mathcalls.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
 StableRandom.o: StableRandom.h
 TextureHandler.o: TextureHandler.h glinc.h /usr/include/GL/glew.h
 TextureHandler.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
@@ -4127,7 +4726,33 @@ Weapon.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 Weapon.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Weapon.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Weapon.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Weapon.o: /usr/include/SDL/SDL_version.h
+Weapon.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
+Weapon.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Weapon.o: /usr/include/boost/config/select_compiler_config.hpp
+Weapon.o: /usr/include/boost/config/compiler/gcc.hpp
+Weapon.o: /usr/include/boost/config/select_stdlib_config.hpp
+Weapon.o: /usr/include/boost/config/no_tr1/utility.hpp
+Weapon.o: /usr/include/boost/config/select_platform_config.hpp
+Weapon.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/unistd.h
+Weapon.o: /usr/include/bits/posix_opt.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Weapon.o: /usr/include/bits/environments.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+Weapon.o: /usr/include/bits/confname.h
+Weapon.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Weapon.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Weapon.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Weapon.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Weapon.o: /usr/include/boost/checked_delete.hpp
+Weapon.o: /usr/include/boost/throw_exception.hpp
+Weapon.o: /usr/include/boost/config.hpp
+Weapon.o: /usr/include/boost/detail/shared_count.hpp
+Weapon.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Weapon.o: /usr/include/boost/detail/sp_counted_base.hpp
+Weapon.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Weapon.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Weapon.o: /usr/include/boost/detail/workaround.hpp
 actions.o: gui/GUI.h gui/ProgressBar.h gui/GUI.h
 actions.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 actions.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -4379,15 +5004,20 @@ actions.o: /usr/include/bits/mathdef.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 actions.o: /usr/include/bits/mathcalls.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-actions.o: GraphicMatrix.h ServerInfo.h /usr/include/SDL/SDL_net.h
-actions.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-actions.o: gui/Slider.h gui/Button.h gui/ComboBox.h gui/Table.h
-actions.o: gui/TextArea.h PlayerData.h Mesh.h Triangle.h Vertex.h types.h
-actions.o: Material.h TextureManager.h IniReader.h Shader.h ResourceManager.h
-actions.o: Quad.h MeshNode.h FBO.h util.h Timer.h Hit.h Weapon.h Item.h
-actions.o: globals.h Particle.h CollisionDetection.h ObjectKDTree.h Console.h
-actions.o: renderdefs.h Light.h gui/Button.h netdefs.h IDGen.h Packet.h
-actions.o: ParticleEmitter.h MeshCache.h /usr/include/boost/tokenizer.hpp
+actions.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+actions.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+actions.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+actions.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+actions.o: /usr/include/ogg/config_types.h ServerInfo.h
+actions.o: /usr/include/SDL/SDL_net.h gui/Table.h gui/TableItem.h
+actions.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+actions.o: gui/ComboBox.h gui/Table.h gui/TextArea.h PlayerData.h Mesh.h
+actions.o: Triangle.h Vertex.h Material.h TextureManager.h IniReader.h
+actions.o: Shader.h ResourceManager.h SoundManager.h Quad.h MeshNode.h FBO.h
+actions.o: util.h Timer.h Hit.h Weapon.h Item.h globals.h Particle.h
+actions.o: CollisionDetection.h ObjectKDTree.h Console.h renderdefs.h Light.h
+actions.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+actions.o: ALSource.h MeshCache.h /usr/include/boost/tokenizer.hpp
 actions.o: /usr/include/boost/token_iterator.hpp
 actions.o: /usr/include/boost/iterator/iterator_adaptor.hpp
 actions.o: /usr/include/boost/static_assert.hpp
@@ -4694,10 +5324,15 @@ coldest.o: /usr/include/boost/detail/sp_counted_base.hpp
 coldest.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 coldest.o: /usr/include/boost/detail/sp_counted_impl.hpp
 coldest.o: /usr/include/boost/detail/workaround.hpp Material.h
-coldest.o: TextureManager.h IniReader.h Shader.h ResourceManager.h Quad.h
-coldest.o: MeshNode.h FBO.h util.h Timer.h CollisionDetection.h
-coldest.o: ProceduralTree.h StableRandom.h Particle.h Hit.h PlayerData.h
-coldest.o: Weapon.h Item.h Light.h gui/GUI.h gui/ProgressBar.h gui/GUI.h
+coldest.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
+coldest.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+coldest.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+coldest.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+coldest.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+coldest.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+coldest.o: tsint.h Timer.h CollisionDetection.h ProceduralTree.h
+coldest.o: StableRandom.h Particle.h Hit.h PlayerData.h Weapon.h Item.h
+coldest.o: Light.h gui/GUI.h gui/ProgressBar.h gui/GUI.h
 coldest.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldest.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldest.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -4829,11 +5464,11 @@ coldest.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-coldest.o: gui/XSWrapper.h util.h ServerInfo.h gui/Table.h gui/TableItem.h
-coldest.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
-coldest.o: gui/TextArea.h gui/Table.h gui/ComboBox.h globals.h Console.h
-coldest.o: renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-coldest.o: ParticleEmitter.h MeshCache.h
+coldest.o: gui/XSWrapper.h util.h ALSource.h ServerInfo.h gui/Table.h
+coldest.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
+coldest.o: gui/Button.h gui/TextArea.h gui/Table.h gui/ComboBox.h globals.h
+coldest.o: Console.h renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
+coldest.o: ParticleEmitter.h ALSource.h MeshCache.h
 getmap.o: gui/ProgressBar.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -5082,15 +5717,20 @@ getmap.o: /usr/include/bits/mathdef.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 getmap.o: /usr/include/bits/mathcalls.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
-getmap.o: gui/GUI.h CollisionDetection.h ObjectKDTree.h Mesh.h Triangle.h
-getmap.o: Vertex.h types.h Material.h TextureManager.h IniReader.h Shader.h
-getmap.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
+getmap.o: tsint.h ALSource.h types.h ALBuffer.h /usr/include/AL/al.h
+getmap.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+getmap.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+getmap.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+getmap.o: /usr/include/ogg/config_types.h gui/GUI.h CollisionDetection.h
+getmap.o: ObjectKDTree.h Mesh.h Triangle.h Vertex.h Material.h
+getmap.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
+getmap.o: SoundManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
 getmap.o: ProceduralTree.h StableRandom.h Light.h globals.h Particle.h
 getmap.o: ServerInfo.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h
 getmap.o: Item.h Console.h gui/TextArea.h gui/Table.h gui/TableItem.h
 getmap.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 getmap.o: renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-getmap.o: ParticleEmitter.h MeshCache.h
+getmap.o: ParticleEmitter.h ALSource.h MeshCache.h
 globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 globals.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 globals.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -5209,10 +5849,14 @@ globals.o: /usr/include/boost/detail/sp_counted_impl.hpp
 globals.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 globals.o: Material.h TextureManager.h TextureHandler.h
 globals.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-globals.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
-globals.o: Particle.h CollisionDetection.h ObjectKDTree.h ServerInfo.h
-globals.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
-globals.o: Item.h Console.h gui/TextArea.h gui/GUI.h
+globals.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+globals.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+globals.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+globals.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+globals.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+globals.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
+globals.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
+globals.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
 globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -5345,10 +5989,10 @@ globals.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 globals.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-globals.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-globals.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
-globals.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-globals.o: MeshCache.h
+globals.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+globals.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
+globals.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+globals.o: ParticleEmitter.h ALSource.h MeshCache.h
 logout.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -5510,6 +6154,7 @@ master.o: /usr/include/bits/mathdef.h
 master.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 master.o: /usr/include/bits/mathcalls.h
 master.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
+master.o: tsint.h
 net.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 net.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 net.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -5621,7 +6266,11 @@ net.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 net.o: /usr/include/boost/detail/sp_counted_impl.hpp
 net.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
 net.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-net.o: IniReader.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h util.h
+net.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+net.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+net.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+net.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+net.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h tsint.h
 net.o: Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h Item.h
 net.o: Packet.h ServerInfo.h gui/ComboBox.h gui/GUI.h
 net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -5755,10 +6404,10 @@ net.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 net.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-net.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+net.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 net.o: gui/Slider.h gui/Button.h netdefs.h IDGen.h globals.h gui/GUI.h
 net.o: Console.h gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h
-net.o: gui/Button.h ParticleEmitter.h MeshCache.h
+net.o: gui/Button.h ParticleEmitter.h ALSource.h MeshCache.h
 netdefs.o: netdefs.h ServerInfo.h /usr/include/SDL/SDL_net.h
 netdefs.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 netdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -5879,8 +6528,13 @@ netdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
 netdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 netdefs.o: Material.h TextureManager.h TextureHandler.h
 netdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-netdefs.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
-netdefs.o: PlayerData.h Hit.h Weapon.h Item.h Particle.h IDGen.h
+netdefs.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+netdefs.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+netdefs.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+netdefs.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+netdefs.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+netdefs.o: tsint.h Timer.h PlayerData.h Hit.h Weapon.h Item.h Particle.h
+netdefs.o: IDGen.h
 render.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 render.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 render.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -5997,8 +6651,12 @@ render.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 render.o: /usr/include/boost/detail/sp_counted_impl.hpp
 render.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
 render.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-render.o: IniReader.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
-render.o: util.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
+render.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+render.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+render.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+render.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+render.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+render.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
 render.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
 render.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
 render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -6133,10 +6791,10 @@ render.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 render.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-render.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-render.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
-render.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-render.o: MeshCache.h
+render.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+render.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
+render.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+render.o: ParticleEmitter.h ALSource.h MeshCache.h
 renderdefs.o: renderdefs.h glinc.h /usr/include/GL/glew.h
 renderdefs.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 renderdefs.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -6266,9 +6924,14 @@ renderdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
 renderdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 renderdefs.o: Material.h TextureManager.h TextureHandler.h
 renderdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-renderdefs.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h Hit.h
-renderdefs.o: Weapon.h Item.h ObjectKDTree.h CollisionDetection.h Light.h
-renderdefs.o: gui/GUI.h gui/ProgressBar.h gui/GUI.h
+renderdefs.o: ResourceManager.h SoundManager.h ALBuffer.h
+renderdefs.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+renderdefs.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+renderdefs.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+renderdefs.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+renderdefs.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h Weapon.h
+renderdefs.o: Item.h ObjectKDTree.h CollisionDetection.h Light.h gui/GUI.h
+renderdefs.o: gui/ProgressBar.h gui/GUI.h
 renderdefs.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -6401,7 +7064,7 @@ renderdefs.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 renderdefs.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-renderdefs.o: util.h gui/Button.h
+renderdefs.o: util.h ALSource.h gui/Button.h
 server.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 server.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 server.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -6519,8 +7182,12 @@ server.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 server.o: /usr/include/boost/detail/sp_counted_impl.hpp
 server.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
 server.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-server.o: IniReader.h Shader.h ResourceManager.h Quad.h MeshNode.h FBO.h
-server.o: util.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h
+server.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+server.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+server.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+server.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+server.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+server.o: tsint.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h
 server.o: Weapon.h Item.h Packet.h ProceduralTree.h StableRandom.h globals.h
 server.o: ServerInfo.h gui/GUI.h Console.h gui/TextArea.h gui/GUI.h
 server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -6655,10 +7322,10 @@ server.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 server.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-server.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-server.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
-server.o: gui/Button.h netdefs.h IDGen.h ParticleEmitter.h MeshCache.h
-server.o: ServerState.h
+server.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+server.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
+server.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h ParticleEmitter.h
+server.o: ALSource.h MeshCache.h ServerState.h
 settings.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 settings.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 settings.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -6779,10 +7446,14 @@ settings.o: /usr/include/boost/detail/sp_counted_impl.hpp
 settings.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 settings.o: Material.h TextureManager.h TextureHandler.h
 settings.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-settings.o: ResourceManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
-settings.o: Particle.h CollisionDetection.h ObjectKDTree.h ServerInfo.h
-settings.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
-settings.o: Item.h Console.h gui/TextArea.h gui/GUI.h
+settings.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+settings.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+settings.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+settings.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+settings.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
+settings.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
+settings.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
+settings.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
 settings.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 settings.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -6915,10 +7586,81 @@ settings.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 settings.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-settings.o: util.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+settings.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 settings.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 settings.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-settings.o: ParticleEmitter.h MeshCache.h gui/Slider.h gui/ComboBox.h
+settings.o: ParticleEmitter.h ALSource.h MeshCache.h gui/Slider.h
+settings.o: gui/ComboBox.h
+tsint.o: tsint.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+tsint.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+tsint.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+tsint.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+tsint.o: /usr/include/features.h
+tsint.o: /usr/include/gentoo-multilib/amd64/features.h
+tsint.o: /usr/include/sys/cdefs.h
+tsint.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+tsint.o: /usr/include/bits/wordsize.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+tsint.o: /usr/include/gnu/stubs.h
+tsint.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+tsint.o: /usr/include/gnu/stubs-64.h
+tsint.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+tsint.o: /usr/include/bits/types.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+tsint.o: /usr/include/bits/typesizes.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+tsint.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+tsint.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+tsint.o: /usr/include/bits/endian.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+tsint.o: /usr/include/sys/select.h
+tsint.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+tsint.o: /usr/include/bits/select.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+tsint.o: /usr/include/bits/sigset.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+tsint.o: /usr/include/bits/time.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+tsint.o: /usr/include/sys/sysmacros.h
+tsint.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+tsint.o: /usr/include/bits/pthreadtypes.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+tsint.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+tsint.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+tsint.o: /usr/include/_G_config.h
+tsint.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+tsint.o: /usr/include/gentoo-multilib/amd64/wchar.h /usr/include/bits/wchar.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h /usr/include/gconv.h
+tsint.o: /usr/include/gentoo-multilib/amd64/gconv.h
+tsint.o: /usr/include/bits/stdio_lim.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+tsint.o: /usr/include/bits/sys_errlist.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+tsint.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+tsint.o: /usr/include/bits/waitflags.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+tsint.o: /usr/include/bits/waitstatus.h
+tsint.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+tsint.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+tsint.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+tsint.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+tsint.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+tsint.o: /usr/include/inttypes.h
+tsint.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+tsint.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+tsint.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+tsint.o: /usr/include/gentoo-multilib/amd64/iconv.h
+tsint.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+tsint.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+tsint.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+tsint.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+tsint.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+tsint.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+tsint.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+tsint.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+tsint.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+tsint.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+tsint.o: /usr/include/SDL/SDL_version.h
 util.o: util.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 util.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 util.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -7002,7 +7744,7 @@ util.o: /usr/include/bits/mathdef.h
 util.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 util.o: /usr/include/bits/mathcalls.h
 util.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
-util.o: GraphicMatrix.h
+util.o: GraphicMatrix.h tsint.h
 gui/Button.o: gui/Button.h gui/GUI.h
 gui/Button.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/Button.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -7263,7 +8005,11 @@ gui/Button.o: /usr/include/bits/mathdef.h
 gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/Button.o: /usr/include/bits/mathcalls.h
 gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/Button.o: GraphicMatrix.h
+gui/Button.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/Button.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/Button.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/Button.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/Button.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
 gui/ComboBox.o: gui/ComboBox.h gui/GUI.h
 gui/ComboBox.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/ComboBox.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -7531,8 +8277,13 @@ gui/ComboBox.o: /usr/include/bits/mathdef.h
 gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/ComboBox.o: /usr/include/bits/mathcalls.h
 gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/ComboBox.o: GraphicMatrix.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-gui/ComboBox.o: gui/ScrollView.h gui/Slider.h gui/Button.h
+gui/ComboBox.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/ComboBox.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/ComboBox.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/ComboBox.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/ComboBox.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/ComboBox.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+gui/ComboBox.o: gui/Slider.h gui/Button.h
 gui/GUI.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/GUI.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -7783,9 +8534,20 @@ gui/GUI.o: /usr/include/bits/mathdef.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/GUI.o: /usr/include/bits/mathcalls.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/GUI.o: GraphicMatrix.h gui/Button.h gui/LineEdit.h gui/ScrollView.h
-gui/GUI.o: gui/Slider.h gui/ProgressBar.h gui/Table.h gui/TableItem.h
-gui/GUI.o: gui/ComboBox.h gui/TextArea.h gui/TabWidget.h
+gui/GUI.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/GUI.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+gui/GUI.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+gui/GUI.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+gui/GUI.o: /usr/include/ogg/config_types.h gui/Button.h gui/LineEdit.h
+gui/GUI.o: gui/ScrollView.h gui/Slider.h gui/ProgressBar.h gui/Table.h
+gui/GUI.o: gui/TableItem.h gui/ComboBox.h gui/TextArea.h gui/TabWidget.h
+gui/GUI.o: globals.h Mesh.h Triangle.h Vertex.h Material.h TextureManager.h
+gui/GUI.o: IniReader.h Shader.h ResourceManager.h SoundManager.h Quad.h
+gui/GUI.o: MeshNode.h FBO.h util.h Timer.h Particle.h CollisionDetection.h
+gui/GUI.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+gui/GUI.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+gui/GUI.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+gui/GUI.o: IDGen.h Packet.h ParticleEmitter.h ALSource.h MeshCache.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
 gui/LineEdit.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/LineEdit.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -8053,7 +8815,11 @@ gui/LineEdit.o: /usr/include/bits/mathdef.h
 gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/LineEdit.o: /usr/include/bits/mathcalls.h
 gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/LineEdit.o: GraphicMatrix.h
+gui/LineEdit.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/LineEdit.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/LineEdit.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/LineEdit.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/LineEdit.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
 gui/ProgressBar.o: gui/ProgressBar.h gui/GUI.h
 gui/ProgressBar.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/ProgressBar.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -8328,7 +9094,12 @@ gui/ProgressBar.o: /usr/include/bits/mathdef.h
 gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/ProgressBar.o: /usr/include/bits/mathcalls.h
 gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/ProgressBar.o: GraphicMatrix.h
+gui/ProgressBar.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/ProgressBar.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/ProgressBar.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/ProgressBar.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/ProgressBar.o: /usr/include/ogg/os_types.h
+gui/ProgressBar.o: /usr/include/ogg/config_types.h
 gui/ScrollView.o: gui/ScrollView.h gui/GUI.h
 gui/ScrollView.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/ScrollView.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -8598,7 +9369,12 @@ gui/ScrollView.o: /usr/include/bits/mathdef.h
 gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/ScrollView.o: /usr/include/bits/mathcalls.h
 gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/ScrollView.o: GraphicMatrix.h gui/Slider.h gui/Button.h
+gui/ScrollView.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/ScrollView.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/ScrollView.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/ScrollView.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/ScrollView.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/ScrollView.o: gui/Slider.h gui/Button.h
 gui/Slider.o: gui/Slider.h gui/GUI.h
 gui/Slider.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/Slider.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -8859,7 +9635,12 @@ gui/Slider.o: /usr/include/bits/mathdef.h
 gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/Slider.o: /usr/include/bits/mathcalls.h
 gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/Slider.o: GraphicMatrix.h gui/Button.h
+gui/Slider.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/Slider.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/Slider.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/Slider.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/Slider.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/Slider.o: gui/Button.h
 gui/TabWidget.o: gui/TabWidget.h gui/GUI.h
 gui/TabWidget.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/TabWidget.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -9128,7 +9909,12 @@ gui/TabWidget.o: /usr/include/bits/mathdef.h
 gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/TabWidget.o: /usr/include/bits/mathcalls.h
 gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/TabWidget.o: GraphicMatrix.h gui/Button.h gui/ScrollView.h gui/Slider.h
+gui/TabWidget.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/TabWidget.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/TabWidget.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/TabWidget.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/TabWidget.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/TabWidget.o: gui/Button.h gui/ScrollView.h gui/Slider.h
 gui/Table.o: gui/Table.h gui/GUI.h
 gui/Table.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/Table.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -9388,8 +10174,13 @@ gui/Table.o: /usr/include/bits/mathdef.h
 gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/Table.o: /usr/include/bits/mathcalls.h
 gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/Table.o: GraphicMatrix.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-gui/Table.o: gui/Slider.h gui/Button.h
+gui/Table.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/Table.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/Table.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/Table.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/Table.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/Table.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
+gui/Table.o: gui/Button.h
 gui/TableItem.o: gui/TableItem.h gui/GUI.h
 gui/TableItem.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/TableItem.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -9658,8 +10449,13 @@ gui/TableItem.o: /usr/include/bits/mathdef.h
 gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/TableItem.o: /usr/include/bits/mathcalls.h
 gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/TableItem.o: GraphicMatrix.h gui/LineEdit.h gui/Table.h gui/ScrollView.h
-gui/TableItem.o: gui/Slider.h gui/Button.h
+gui/TableItem.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/TableItem.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/TableItem.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/TableItem.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/TableItem.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/TableItem.o: gui/LineEdit.h gui/Table.h gui/ScrollView.h gui/Slider.h
+gui/TableItem.o: gui/Button.h
 gui/TextArea.o: gui/TextArea.h gui/GUI.h
 gui/TextArea.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/TextArea.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -9927,8 +10723,13 @@ gui/TextArea.o: /usr/include/bits/mathdef.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 gui/TextArea.o: /usr/include/bits/mathcalls.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/TextArea.o: GraphicMatrix.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-gui/TextArea.o: gui/ScrollView.h gui/Slider.h gui/Button.h
+gui/TextArea.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+gui/TextArea.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+gui/TextArea.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+gui/TextArea.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+gui/TextArea.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+gui/TextArea.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+gui/TextArea.o: gui/Slider.h gui/Button.h
 gui/XSWrapper.o: gui/XSWrapper.h /usr/include/xercesc/util/XMLString.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp

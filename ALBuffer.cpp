@@ -59,3 +59,33 @@ ALBuffer::~ALBuffer()
 }
 
 
+void ALBuffer::CheckError()
+{
+   ALenum err = alGetError();
+   if (err == AL_NO_ERROR)
+   {
+      //logout << "AL_NO_ERROR" << endl;
+   }
+   else if (err == AL_INVALID_NAME)
+   {
+      logout << "AL_INVALID_NAME" << endl;
+   }
+   else if (err == AL_INVALID_ENUM)
+   {
+      logout << "AL_INVALID_ENUM" << endl;
+   }
+   else if (err == AL_INVALID_VALUE)
+   {
+      logout << "AL_INVALID_VALUE" << endl;
+   }
+   else if (err == AL_INVALID_OPERATION)
+   {
+      logout << "AL_INVALID_OPERATION" << endl;
+   }
+   else if (err == AL_OUT_OF_MEMORY)
+   {
+      logout << "AL_OUT_OF_MEMORY" << endl;
+   }
+}
+
+

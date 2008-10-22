@@ -3,6 +3,7 @@
 
 #include "Particle.h"
 #include "util.h"
+#include "ALSource.h"
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
@@ -21,6 +22,9 @@ class ParticleEmitter
       Uint32 lastupdate;
       float density;
       int count;
+      ALSourcePtr soundsource;
+      string soundfile;
+      bool firstupdate;
 
 };
 

@@ -5,6 +5,7 @@
 #include <string>
 #include "ALBuffer.h"
 #include "Vector3.h"
+#include "types.h"
 
 using std::map;
 using std::string;
@@ -18,6 +19,7 @@ class SoundManager
       SoundManager();
       ALBufferPtr GetBuffer(const string&);
       void SetListenPos(Vector3&);
+      void SetListenDir(Vector3&);
       
    private:
       map<string, ALBufferPtr> buffers;

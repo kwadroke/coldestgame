@@ -22,8 +22,12 @@ class ALBuffer
    public:
       ALBuffer(const string&);
       ~ALBuffer();
+      static void CheckError();
       
    private:
+      ALBuffer(const ALBuffer&); // No copying allowed
+      ALBuffer& operator=(const ALBuffer&);
+      
       ALuint id;
       ALenum format;
       ALsizei size;

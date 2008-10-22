@@ -59,6 +59,14 @@ void Repaint()
             SynchronizePosition();
       }
       localplayer = player[0];
+      
+      // Set position for sound listener
+      GraphicMatrix r;
+      r.rotatex(-localplayer.pitch);
+      r.rotatey(localplayer.facing + localplayer.rotation);
+      Vector3 slook(0, 0, -1.f);
+      slook.transform(r);
+      resman.soundman.SetListenDir(slook);
       resman.soundman.SetListenPos(localplayer.pos);
       
       // Update the local model so there isn't a frame of lag.
