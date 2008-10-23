@@ -90,6 +90,7 @@ void Repaint()
       {
          SendFire();
          SDL_mutexP(clientmutex);
+         player[0].PlayFireSound(resman.soundman.GetBuffer(currplayerweapon.FireSound()));
          player[0].lastfiretick[weaponslot] = SDL_GetTicks();
          if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicated infinite ammo
             player[0].weapons[weaponslot].ammo--;

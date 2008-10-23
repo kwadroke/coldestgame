@@ -49,7 +49,8 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o Material.o tsint.o
 		
-MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o
+MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o tsint.o\
+			logout.o Log.o
 
 ifeq ($(DEDICATED),1)
    OUT=server
