@@ -20,7 +20,7 @@ void Send(UDPsocket&);
 void GetAnnounce(stringstream&, UDPpacket*);
 void GetRequest(stringstream&, UDPpacket*);
 
-bool running;
+tsint running;
 list<Packet> queue;
 vector<ServerInfo> servers;
 set<ServerInfo> knownservers;
@@ -34,18 +34,18 @@ int main()
    
    if (!(socket = SDLNet_UDP_Open(12011)))
    {
-      cout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    
    running = true;
    setsighandler();
    
-   cout << "Coldest master server started successfully" << endl;
+   logout << "Coldest master server started successfully" << endl;
    
    while (running)
    {
-      SDL_Delay(50);
+      SDL_Delay(500);
       
       // Receive
       Receive(socket);
@@ -53,7 +53,7 @@ int main()
       // Send
       Send(socket);
    }
-   cout << "Coldest master server ending" << endl;
+   logout << "Coldest master server ending" << endl;
 }
 
 
@@ -61,14 +61,14 @@ void InitSDL()
 {
    if (SDL_Init(SDL_INIT_TIMER) < 0) 
    {
-      cout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
+      logout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
       exit(1);
    }
    atexit(SDL_Quit);
    
    if (SDLNet_Init() == -1)
    {
-      cout << "SDLNet_Init: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_Init: " << SDLNet_GetError() << endl;
       exit(1);
    }
    atexit(SDLNet_Quit);
@@ -80,7 +80,7 @@ void Receive(UDPsocket& socket)
    UDPpacket *pack;
    if (!(pack = SDLNet_AllocPacket(5000)))
    {
-      cout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       return;
    }
    
@@ -102,6 +102,7 @@ void Receive(UDPsocket& socket)
          GetRequest(get, pack);
       }
    }
+   SDLNet_FreePacket(pack);
 }
 
 
@@ -114,7 +115,7 @@ void GetAnnounce(stringstream& get, UDPpacket* pack)
    SDLNet_Write16(serverport, &addme.address.port);
    if (knownservers.find(addme) == knownservers.end())
    {
-      cout << "Received announcement packet from ";
+      logout << "Received announcement packet from ";
       string dotteddec = AddressToDD(pack->address.host);
       cout << dotteddec << ":" << serverport << endl;
       addme.strip = dotteddec;
@@ -143,7 +144,7 @@ void Send(UDPsocket& socket)
    UDPpacket *pack;
    if (!(pack = SDLNet_AllocPacket(5000)))
    {
-      cout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       return;
    }
    
@@ -158,4 +159,5 @@ void Send(UDPsocket& socket)
       }
       ++i;
    }
+   SDLNet_FreePacket(pack);
 }

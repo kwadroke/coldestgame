@@ -75,3 +75,13 @@ void PlayerData::Reset()
    firerequests = 0;
    weight = 1.f;
 }
+
+
+void PlayerData::PlayFireSound(ALBufferPtr buffer)
+{
+   if (!firesound)
+      firesound = ALSourcePtr(new ALSource());
+   logout << "Playing" << endl;
+   firesound->SetPosition(pos);
+   firesound->Play(buffer);
+}

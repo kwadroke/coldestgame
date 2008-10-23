@@ -10,6 +10,7 @@
 #include "types.h"
 #include "Weapon.h"
 #include "Item.h"
+#include "ALSource.h"
 
 class PlayerData
 {
@@ -18,6 +19,7 @@ class PlayerData
       void Disconnect();
       void Kill();
       void Reset();
+      void PlayFireSound(ALBufferPtr);
       
       Vector3 pos;
       Vector3 clientpos; // So server can keep track of both
@@ -68,5 +70,6 @@ class PlayerData
       
    private:
       Meshlist* meshes;
+      ALSourcePtr firesound;
 };
 #endif
