@@ -21,6 +21,7 @@ class ALSource
       void Play(const ALBufferPtr&);
       void SetPosition(const Vector3&);
       static void CheckError();
+      bool Playing();
       
    private:
       ALuint id;

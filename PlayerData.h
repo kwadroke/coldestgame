@@ -70,6 +70,5 @@ class PlayerData
       
    private:
       Meshlist* meshes;
-      ALSourcePtr firesound;
 };
 #endif

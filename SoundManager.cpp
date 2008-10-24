@@ -35,3 +35,26 @@ void SoundManager::SetListenDir(Vector3& v)
 }
 
 
+void SoundManager::PlaySound(const string& filename, const Vector3& pos)
+{
+   ALSourcePtr newsource(new ALSource());
+   newsource->SetPosition(pos);
+   newsource->Play(GetBuffer(filename));
+   sources.push_back(newsource);
+}
+
+
+void SoundManager::Update()
+{
+   vector<list<ALSourcePtr>::iterator> remove;
+   for (list<ALSourcePtr>::iterator i = sources.begin(); i != sources.end(); ++i)
+   {
+      ALSourcePtr p = *i;
+      if (!p->Playing())
+         remove.push_back(i);
+   }
+   for (size_t i = 0; i < remove.size(); ++i)
+      sources.erase(remove[i]);
+}
+
+

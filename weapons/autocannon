@@ -10,3 +10,4 @@ ReloadTime 300
 Tracer autocannon
 TracerTime 30
 ExplosionEmitter particles/emitters/debris
+FireSound sounds/acshot.ogg
