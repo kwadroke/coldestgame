@@ -6,7 +6,9 @@
 #include "Material.h"
 #include "TextureManager.h"
 #include "Shader.h"
+#ifndef DEDICATED
 #include "SoundManager.h"
+#endif
 
 using std::map;
 using std::string;

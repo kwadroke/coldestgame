@@ -19,7 +19,7 @@ endif
 
 # As it turns out static linking is a gigantic PITA, so I'm not going to bother
 #LDLIBS = -Wl,-v -Wl,-Bstatic -lSDL_ttf -lfreetype -lSDL_image -lSDL_net -L./lib -lxerces-c -lz -lGLEW `sdl-config --static-libs` -ldl -Wl,-Bdynamic -lGL -lGLU
-LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c -lalut -lvorbisfile `sdl-config --libs`
+LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c `sdl-config --libs`
 MASTERLIBS = -lSDL_net `sdl-config --libs`
 CXX = g++
 CXXFLAGS=$(DEBUGOPTS) $(WARNINGS) $(DEFINES) `sdl-config --cflags`
@@ -47,7 +47,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o XSWrapper.o ServerState.o Material.o tsint.o
+		MeshNode.o ServerState.o Material.o tsint.o
 		
 MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o tsint.o\
 			logout.o Log.o
@@ -59,7 +59,7 @@ ifeq ($(DEDICATED),1)
 else
    OUT=coldest
    OBJS = $(GENERAL) $(GUI)
-   LDLIBS += -lGL -lGLU -lGLEW
+   LDLIBS += -lGL -lGLU -lGLEW -lalut -lvorbisfile
 endif
 
 #all:

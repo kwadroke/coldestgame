@@ -25,6 +25,7 @@ ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman
 // Returns true if it is done emitting
 bool ParticleEmitter::Update(list<Particle>& partlist)
 {
+#ifndef DEDICATED
    if (firstupdate && soundfile != "")
    {
       soundsource = ALSourcePtr(new ALSource());
@@ -32,6 +33,7 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
       soundsource->Play(resman.soundman.GetBuffer(soundfile));
       firstupdate = false;
    }
+#endif
    
    Uint32 currtick = SDL_GetTicks();
    Uint32 numticks = currtick - lastupdate;

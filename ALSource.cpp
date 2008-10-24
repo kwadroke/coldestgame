@@ -65,6 +65,16 @@ void ALSource::SetPosition(const Vector3& newpos)
 }
 
 
+bool ALSource::Playing()
+{
+   ALenum state;
+   alGetSourcei(id, AL_SOURCE_STATE, &state);
+   if (state == AL_PLAYING)
+      return true;
+   return false;
+}
+
+
 void ALSource::CheckError()
 {
    ALenum err = alGetError();

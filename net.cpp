@@ -617,8 +617,9 @@ int NetListen(void* dummy)
                   temppart.tracertime = dummy.TracerTime();
                }
                SDL_mutexP(clientmutex);
-               player[temppart.playernum].PlayFireSound(resman.soundman.GetBuffer(dummy.FireSound()));
-               ALSource::CheckError();
+#ifndef DEDICATED
+               resman.soundman.PlaySound(dummy.FireSound(), player[temppart.playernum].pos);
+#endif
                particles.push_back(temppart);
                SDL_mutexV(clientmutex);
             }
