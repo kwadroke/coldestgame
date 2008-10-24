@@ -932,7 +932,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             bcpack.Send(servoutpack, broadcastsock);
             
             // Resend to just master server
-            SDLNet_ResolveHost(&bcpack.addr, "localhost", 12011); 
+            SDLNet_ResolveHost(&bcpack.addr, console.GetString("master").c_str(), 12011); 
             bcpack.Send(servoutpack, servsock);
             
             SDL_mutexV(servermutex);
