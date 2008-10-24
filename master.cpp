@@ -29,6 +29,7 @@ const char eol = '\n';
 
 int main()
 {
+   logout.SetFile("console.log");
    InitSDL();
    UDPsocket socket;
    
@@ -127,7 +128,7 @@ void GetAnnounce(stringstream& get, UDPpacket* pack)
 
 void GetRequest(stringstream& get, UDPpacket* pack)
 {
-   cout << "Sending list to " << AddressToDD(pack->address.host) << ":" << SDLNet_Read16(&pack->address.port) << endl;
+   logout << "Sending list to " << AddressToDD(pack->address.host) << ":" << SDLNet_Read16(&pack->address.port) << endl;
    for (size_t i = 0; i < servers.size(); ++i)
    {
       Packet response(&pack->address);
