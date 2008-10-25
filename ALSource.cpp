@@ -21,6 +21,7 @@ ALSource& ALSource::operator=(const ALSource& s)
    gain = s.gain;
    loop = s.loop;
    alGenSources(1, &id);
+   return *this;
 }
 
 
