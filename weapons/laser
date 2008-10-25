@@ -10,3 +10,4 @@ Model empty
 Tracer laser
 TracerTime 30
 ExplosionEmitter particles/emitters/debris
+FireSound sounds/lasershot.ogg

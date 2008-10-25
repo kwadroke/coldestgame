@@ -83,5 +83,6 @@ void GUIUpdate();
 bool GUIEventHandler(SDL_Event&);
 void GameEventHandler(SDL_Event&);
 void AddTracer(const Particle&);
+void StartBGMusic();
 
 #endif

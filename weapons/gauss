@@ -10,3 +10,4 @@ Ammo 5
 ExplosionEmitter particles/emitters/debris
 Tracer gauss
 TracerTime 10
+FireSound sounds/gaussshot.ogg

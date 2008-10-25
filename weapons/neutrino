@@ -8,3 +8,4 @@ ReloadTime 1000
 Damage 200
 ExplosionEmitter particles/emitters/explosion
 Model projectile
+FireSound sounds/neutrinoshot.ogg

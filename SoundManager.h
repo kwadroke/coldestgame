@@ -26,6 +26,7 @@ class SoundManager
       void SetListenPos(Vector3&);
       void SetListenDir(Vector3&);
       void PlaySound(const string&, const Vector3&);
+      void PlaySound(const string&, ALSourcePtr&);
       void Update();
       
    private:
