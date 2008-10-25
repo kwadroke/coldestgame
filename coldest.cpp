@@ -45,6 +45,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    logout << "Main " << gettid() << endl;
    InitGlobals();
    initialized = true;
+   StartBGMusic();
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
    //SetupSDL();
    //SetupOpenGL();
@@ -128,6 +129,7 @@ void InitGlobals()
    console.Parse("set master www.coldestgame.com", false);
    console.Parse("set respawntime 15000", false);
    console.Parse("set cache 1", false);
+   console.Parse("set musicvol 40", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
@@ -1947,6 +1949,19 @@ bool PrimaryGUIVisible()
    // A bit counterintuitive...
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
          !gui[settings]->visible && !gui[endgame]->visible);
+#endif
+}
+
+
+void StartBGMusic()
+{
+#ifndef DEDICATED
+   ALSourcePtr source(new ALSource());
+   source->loop = AL_TRUE;
+   source->rolloff = 0.f;
+   source->relative = AL_TRUE;
+   source->gain = console.GetFloat("musicvol") / 100.f;
+   resman.soundman.PlaySound("sounds/bgmusic.ogg", source);
 #endif
 }
 

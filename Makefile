@@ -1,5 +1,5 @@
 #`sdl-config --cflags`
-DEBUG=1
+DEBUG=0
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
@@ -467,8 +467,8 @@ CollisionDetection.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 CollisionDetection.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 CollisionDetection.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 CollisionDetection.o: /usr/include/ogg/os_types.h
-CollisionDetection.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h
-CollisionDetection.o: util.h tsint.h Timer.h
+CollisionDetection.o: /usr/include/ogg/config_types.h ALSource.h Quad.h
+CollisionDetection.o: MeshNode.h FBO.h util.h tsint.h Timer.h
 Console.o: Console.h gui/TextArea.h gui/GUI.h
 Console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -728,11 +728,11 @@ Console.o: /usr/include/ogg/config_types.h gui/Table.h gui/TableItem.h
 Console.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 Console.o: renderdefs.h PlayerData.h /usr/include/SDL/SDL_net.h Mesh.h
 Console.o: Triangle.h Vertex.h Material.h TextureManager.h IniReader.h
-Console.o: Shader.h ResourceManager.h SoundManager.h Quad.h MeshNode.h FBO.h
-Console.o: util.h Timer.h Hit.h Weapon.h Item.h ObjectKDTree.h
-Console.o: CollisionDetection.h Light.h gui/GUI.h gui/ProgressBar.h
-Console.o: gui/Button.h netdefs.h ServerInfo.h Particle.h IDGen.h Packet.h
-Console.o: globals.h ParticleEmitter.h ALSource.h MeshCache.h
+Console.o: Shader.h ResourceManager.h SoundManager.h ALSource.h Quad.h
+Console.o: MeshNode.h FBO.h util.h Timer.h Hit.h Weapon.h Item.h
+Console.o: ObjectKDTree.h CollisionDetection.h Light.h gui/GUI.h
+Console.o: gui/ProgressBar.h gui/Button.h netdefs.h ServerInfo.h Particle.h
+Console.o: IDGen.h Packet.h globals.h ParticleEmitter.h MeshCache.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 FBO.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1201,8 +1201,8 @@ Item.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Item.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Item.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Item.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Item.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-Item.o: tsint.h Timer.h
+Item.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+Item.o: util.h tsint.h Timer.h
 Light.o: Light.h Vector3.h glinc.h /usr/include/GL/glew.h
 Light.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Light.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1482,11 +1482,11 @@ Material.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Material.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Material.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Material.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Material.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-Material.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
-Material.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
-Material.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
-Material.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Material.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
+Material.o: FBO.h util.h tsint.h Timer.h Particle.h CollisionDetection.h
+Material.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+Material.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+Material.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Material.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Material.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1621,7 +1621,7 @@ Material.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 Material.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 Material.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 Material.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-Material.o: ParticleEmitter.h ALSource.h MeshCache.h
+Material.o: ParticleEmitter.h MeshCache.h
 Mesh.o: Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Mesh.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Mesh.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1736,8 +1736,8 @@ Mesh.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 Mesh.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 Mesh.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Mesh.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Mesh.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-Mesh.o: tsint.h Timer.h ProceduralTree.h StableRandom.h
+Mesh.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+Mesh.o: util.h tsint.h Timer.h ProceduralTree.h StableRandom.h
 MeshCache.o: MeshCache.h /usr/include/boost/shared_ptr.hpp
 MeshCache.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 MeshCache.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -1869,8 +1869,8 @@ MeshCache.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 MeshCache.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 MeshCache.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 MeshCache.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-MeshCache.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-MeshCache.o: tsint.h Timer.h
+MeshCache.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
+MeshCache.o: FBO.h util.h tsint.h Timer.h
 MeshNode.o: MeshNode.h Triangle.h Vertex.h Vector3.h glinc.h
 MeshNode.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 MeshNode.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1995,11 +1995,12 @@ MeshNode.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 MeshNode.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 MeshNode.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 MeshNode.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-MeshNode.o: /usr/include/ogg/config_types.h globals.h Mesh.h Quad.h FBO.h
-MeshNode.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
-MeshNode.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-MeshNode.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-MeshNode.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+MeshNode.o: /usr/include/ogg/config_types.h ALSource.h globals.h Mesh.h
+MeshNode.o: Quad.h FBO.h util.h tsint.h Timer.h Particle.h
+MeshNode.o: CollisionDetection.h ObjectKDTree.h ServerInfo.h
+MeshNode.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
+MeshNode.o: Item.h Console.h gui/TextArea.h gui/GUI.h
+MeshNode.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocument.hpp
 MeshNode.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -2134,7 +2135,7 @@ MeshNode.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 MeshNode.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 MeshNode.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 MeshNode.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-MeshNode.o: ParticleEmitter.h ALSource.h MeshCache.h
+MeshNode.o: ParticleEmitter.h MeshCache.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -2275,7 +2276,7 @@ ObjectKDTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ObjectKDTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ObjectKDTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ObjectKDTree.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-ObjectKDTree.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
+ObjectKDTree.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
 Packet.o: Packet.h /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
 Packet.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Packet.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -2473,10 +2474,10 @@ Particle.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Particle.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Particle.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Particle.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Particle.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-Particle.o: tsint.h Timer.h globals.h ServerInfo.h /usr/include/SDL/SDL_net.h
-Particle.o: gui/GUI.h PlayerData.h Hit.h Weapon.h Item.h Console.h
-Particle.o: gui/TextArea.h gui/GUI.h
+Particle.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
+Particle.o: FBO.h util.h tsint.h Timer.h globals.h ServerInfo.h
+Particle.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
+Particle.o: Item.h Console.h gui/TextArea.h gui/GUI.h
 Particle.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Particle.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2612,7 +2613,7 @@ Particle.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 Particle.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 Particle.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 Particle.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-Particle.o: ParticleEmitter.h ALSource.h MeshCache.h
+Particle.o: ParticleEmitter.h MeshCache.h
 ParticleEmitter.o: ParticleEmitter.h Particle.h CollisionDetection.h
 ParticleEmitter.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ParticleEmitter.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
@@ -2761,10 +2762,11 @@ ParticleEmitter.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ParticleEmitter.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ParticleEmitter.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ParticleEmitter.o: /usr/include/ogg/os_types.h
-ParticleEmitter.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h
-ParticleEmitter.o: util.h tsint.h Timer.h ALSource.h globals.h ServerInfo.h
-ParticleEmitter.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h
-ParticleEmitter.o: Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
+ParticleEmitter.o: /usr/include/ogg/config_types.h ALSource.h Quad.h
+ParticleEmitter.o: MeshNode.h FBO.h util.h tsint.h Timer.h globals.h
+ParticleEmitter.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+ParticleEmitter.o: PlayerData.h Hit.h Weapon.h Item.h Console.h
+ParticleEmitter.o: gui/TextArea.h gui/GUI.h
 ParticleEmitter.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ParticleEmitter.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -3036,8 +3038,8 @@ PlayerData.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 PlayerData.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 PlayerData.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 PlayerData.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-PlayerData.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h Weapon.h
-PlayerData.o: Item.h
+PlayerData.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h
+PlayerData.o: Weapon.h Item.h
 PrimitiveOctree.o: PrimitiveOctree.h glinc.h /usr/include/GL/glew.h
 PrimitiveOctree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PrimitiveOctree.o: /usr/include/SDL/SDL_opengl.h
@@ -3291,7 +3293,7 @@ ProceduralTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ProceduralTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ProceduralTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ProceduralTree.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-ProceduralTree.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
+ProceduralTree.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
 ProceduralTree.o: StableRandom.h
 Quad.o: Quad.h Triangle.h Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quad.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
@@ -3648,7 +3650,7 @@ ResourceManager.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 ResourceManager.o: /usr/include/vorbis/vorbisfile.h
 ResourceManager.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ResourceManager.o: /usr/include/ogg/os_types.h
-ResourceManager.o: /usr/include/ogg/config_types.h
+ResourceManager.o: /usr/include/ogg/config_types.h ALSource.h
 ServerInfo.o: ServerInfo.h /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
 ServerInfo.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 ServerInfo.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -3869,8 +3871,8 @@ ServerState.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ServerState.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ServerState.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ServerState.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-ServerState.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h Weapon.h
-ServerState.o: Item.h
+ServerState.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
+ServerState.o: Hit.h Weapon.h Item.h
 Shader.o: Shader.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Shader.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Shader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -4062,8 +4064,8 @@ SoundManager.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 SoundManager.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 SoundManager.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 SoundManager.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-SoundManager.o: /usr/include/SDL/SDL_version.h Vector3.h glinc.h
-SoundManager.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
+SoundManager.o: /usr/include/SDL/SDL_version.h ALSource.h types.h Vector3.h
+SoundManager.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 SoundManager.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 SoundManager.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
 SoundManager.o: /usr/include/bits/huge_val.h
@@ -4079,7 +4081,7 @@ SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 SoundManager.o: /usr/include/bits/mathdef.h
 SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 SoundManager.o: /usr/include/bits/mathcalls.h
-SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h types.h
+SoundManager.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
 StableRandom.o: StableRandom.h
 TextureHandler.o: TextureHandler.h glinc.h /usr/include/GL/glew.h
 TextureHandler.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
@@ -5014,11 +5016,11 @@ actions.o: /usr/include/SDL/SDL_net.h gui/Table.h gui/TableItem.h
 actions.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 actions.o: gui/ComboBox.h gui/Table.h gui/TextArea.h PlayerData.h Mesh.h
 actions.o: Triangle.h Vertex.h Material.h TextureManager.h IniReader.h
-actions.o: Shader.h ResourceManager.h SoundManager.h Quad.h MeshNode.h FBO.h
-actions.o: util.h Timer.h Hit.h Weapon.h Item.h globals.h Particle.h
-actions.o: CollisionDetection.h ObjectKDTree.h Console.h renderdefs.h Light.h
-actions.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-actions.o: ALSource.h MeshCache.h /usr/include/boost/tokenizer.hpp
+actions.o: Shader.h ResourceManager.h SoundManager.h ALSource.h Quad.h
+actions.o: MeshNode.h FBO.h util.h Timer.h Hit.h Weapon.h Item.h globals.h
+actions.o: Particle.h CollisionDetection.h ObjectKDTree.h Console.h
+actions.o: renderdefs.h Light.h gui/Button.h netdefs.h IDGen.h Packet.h
+actions.o: ParticleEmitter.h MeshCache.h /usr/include/boost/tokenizer.hpp
 actions.o: /usr/include/boost/token_iterator.hpp
 actions.o: /usr/include/boost/iterator/iterator_adaptor.hpp
 actions.o: /usr/include/boost/static_assert.hpp
@@ -5330,8 +5332,8 @@ coldest.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 coldest.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 coldest.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 coldest.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-coldest.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-coldest.o: tsint.h Timer.h CollisionDetection.h ProceduralTree.h
+coldest.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+coldest.o: util.h tsint.h Timer.h CollisionDetection.h ProceduralTree.h
 coldest.o: StableRandom.h Particle.h Hit.h PlayerData.h Weapon.h Item.h
 coldest.o: Light.h gui/GUI.h gui/ProgressBar.h gui/GUI.h
 coldest.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
@@ -5469,7 +5471,7 @@ coldest.o: gui/XSWrapper.h util.h ALSource.h ServerInfo.h gui/Table.h
 coldest.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
 coldest.o: gui/Button.h gui/TextArea.h gui/Table.h gui/ComboBox.h globals.h
 coldest.o: Console.h renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-coldest.o: ParticleEmitter.h ALSource.h MeshCache.h
+coldest.o: ParticleEmitter.h MeshCache.h
 getmap.o: gui/ProgressBar.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -5725,13 +5727,13 @@ getmap.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 getmap.o: /usr/include/ogg/config_types.h gui/GUI.h CollisionDetection.h
 getmap.o: ObjectKDTree.h Mesh.h Triangle.h Vertex.h Material.h
 getmap.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
-getmap.o: SoundManager.h Quad.h MeshNode.h FBO.h util.h Timer.h
+getmap.o: SoundManager.h ALSource.h Quad.h MeshNode.h FBO.h util.h Timer.h
 getmap.o: ProceduralTree.h StableRandom.h Light.h globals.h Particle.h
 getmap.o: ServerInfo.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h
 getmap.o: Item.h Console.h gui/TextArea.h gui/Table.h gui/TableItem.h
 getmap.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 getmap.o: renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-getmap.o: ParticleEmitter.h ALSource.h MeshCache.h
+getmap.o: ParticleEmitter.h MeshCache.h
 globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 globals.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 globals.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -5854,11 +5856,11 @@ globals.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 globals.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 globals.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 globals.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-globals.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-globals.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
-globals.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
-globals.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
-globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+globals.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+globals.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
+globals.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+globals.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+globals.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
 globals.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -5993,7 +5995,7 @@ globals.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 globals.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 globals.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 globals.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-globals.o: ParticleEmitter.h ALSource.h MeshCache.h
+globals.o: ParticleEmitter.h MeshCache.h
 logout.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -6271,9 +6273,9 @@ net.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 net.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 net.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 net.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-net.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h tsint.h
-net.o: Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h Item.h
-net.o: Packet.h ServerInfo.h gui/ComboBox.h gui/GUI.h
+net.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+net.o: util.h tsint.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h
+net.o: Weapon.h Item.h Packet.h ServerInfo.h gui/ComboBox.h gui/GUI.h
 net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -6408,7 +6410,7 @@ net.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 net.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 net.o: gui/Slider.h gui/Button.h netdefs.h IDGen.h globals.h gui/GUI.h
 net.o: Console.h gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h
-net.o: gui/Button.h ParticleEmitter.h ALSource.h MeshCache.h
+net.o: gui/Button.h ParticleEmitter.h MeshCache.h
 netdefs.o: netdefs.h ServerInfo.h /usr/include/SDL/SDL_net.h
 netdefs.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 netdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -6533,9 +6535,9 @@ netdefs.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 netdefs.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 netdefs.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 netdefs.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-netdefs.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-netdefs.o: tsint.h Timer.h PlayerData.h Hit.h Weapon.h Item.h Particle.h
-netdefs.o: IDGen.h
+netdefs.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+netdefs.o: util.h tsint.h Timer.h PlayerData.h Hit.h Weapon.h Item.h
+netdefs.o: Particle.h IDGen.h
 render.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 render.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 render.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -6656,11 +6658,11 @@ render.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 render.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 render.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 render.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-render.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-render.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
-render.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
-render.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
-render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+render.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+render.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
+render.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+render.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+render.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
 render.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -6795,7 +6797,7 @@ render.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 render.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 render.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 render.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-render.o: ParticleEmitter.h ALSource.h MeshCache.h
+render.o: ParticleEmitter.h MeshCache.h
 renderdefs.o: renderdefs.h glinc.h /usr/include/GL/glew.h
 renderdefs.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 renderdefs.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -6930,9 +6932,9 @@ renderdefs.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 renderdefs.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 renderdefs.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 renderdefs.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-renderdefs.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h Weapon.h
-renderdefs.o: Item.h ObjectKDTree.h CollisionDetection.h Light.h gui/GUI.h
-renderdefs.o: gui/ProgressBar.h gui/GUI.h
+renderdefs.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h
+renderdefs.o: Weapon.h Item.h ObjectKDTree.h CollisionDetection.h Light.h
+renderdefs.o: gui/GUI.h gui/ProgressBar.h gui/GUI.h
 renderdefs.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -7187,10 +7189,10 @@ server.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 server.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 server.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 server.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-server.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-server.o: tsint.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h
-server.o: Weapon.h Item.h Packet.h ProceduralTree.h StableRandom.h globals.h
-server.o: ServerInfo.h gui/GUI.h Console.h gui/TextArea.h gui/GUI.h
+server.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+server.o: util.h tsint.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h
+server.o: Hit.h Weapon.h Item.h Packet.h ProceduralTree.h StableRandom.h
+server.o: globals.h ServerInfo.h gui/GUI.h Console.h gui/TextArea.h gui/GUI.h
 server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 server.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 server.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -7326,7 +7328,7 @@ server.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 server.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 server.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 server.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h ParticleEmitter.h
-server.o: ALSource.h MeshCache.h ServerState.h
+server.o: MeshCache.h ServerState.h
 settings.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 settings.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 settings.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -7451,11 +7453,11 @@ settings.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 settings.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 settings.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 settings.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-settings.o: /usr/include/ogg/config_types.h Quad.h MeshNode.h FBO.h util.h
-settings.o: tsint.h Timer.h Particle.h CollisionDetection.h ObjectKDTree.h
-settings.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h
-settings.o: Hit.h Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
-settings.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+settings.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
+settings.o: FBO.h util.h tsint.h Timer.h Particle.h CollisionDetection.h
+settings.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+settings.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+settings.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 settings.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocument.hpp
 settings.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -7590,8 +7592,7 @@ settings.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 settings.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 settings.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 settings.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-settings.o: ParticleEmitter.h ALSource.h MeshCache.h gui/Slider.h
-settings.o: gui/ComboBox.h
+settings.o: ParticleEmitter.h MeshCache.h gui/Slider.h gui/ComboBox.h
 tsint.o: tsint.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 tsint.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 tsint.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -8543,12 +8544,13 @@ gui/GUI.o: /usr/include/ogg/config_types.h gui/Button.h gui/LineEdit.h
 gui/GUI.o: gui/ScrollView.h gui/Slider.h gui/ProgressBar.h gui/Table.h
 gui/GUI.o: gui/TableItem.h gui/ComboBox.h gui/TextArea.h gui/TabWidget.h
 gui/GUI.o: globals.h Mesh.h Triangle.h Vertex.h Material.h TextureManager.h
-gui/GUI.o: IniReader.h Shader.h ResourceManager.h SoundManager.h Quad.h
-gui/GUI.o: MeshNode.h FBO.h util.h Timer.h Particle.h CollisionDetection.h
-gui/GUI.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-gui/GUI.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-gui/GUI.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
-gui/GUI.o: IDGen.h Packet.h ParticleEmitter.h ALSource.h MeshCache.h
+gui/GUI.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALSource.h
+gui/GUI.o: Quad.h MeshNode.h FBO.h util.h Timer.h Particle.h
+gui/GUI.o: CollisionDetection.h ObjectKDTree.h ServerInfo.h
+gui/GUI.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
+gui/GUI.o: Item.h Console.h gui/TextArea.h renderdefs.h Light.h
+gui/GUI.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+gui/GUI.o: ParticleEmitter.h MeshCache.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
 gui/LineEdit.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/LineEdit.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp

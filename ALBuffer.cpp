@@ -50,6 +50,7 @@ ALBuffer::ALBuffer(const string& filename)
    {
       logout << "Warning: Unknown file type in ALBuffer" << endl;
    }
+   CheckError();
 }
 
 

@@ -44,6 +44,13 @@ void SoundManager::PlaySound(const string& filename, const Vector3& pos)
 }
 
 
+void SoundManager::PlaySound(const string& filename, ALSourcePtr& newsource)
+{
+   newsource->Play(GetBuffer(filename));
+   sources.push_back(newsource);
+}
+
+
 void SoundManager::Update()
 {
    vector<list<ALSourcePtr>::iterator> remove;

@@ -1,9 +1,10 @@
 ReloadTime 1000
-Velocity .5
-Weight 30
+Velocity .8
+Weight 40
 Name Mortar
 Splash 100
 Damage 150
 Ammo 8
 ExplosionEmitter particles/emitters/explosion
 Model projectile
+FireSound sounds/bullethit.ogg

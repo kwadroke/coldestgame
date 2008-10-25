@@ -23,14 +23,17 @@ class ALSource
       static void CheckError();
       bool Playing();
       
+      ALfloat pitch, gain;
+      ALuint loop;
+      ALfloat refdist;
+      ALfloat maxdist;
+      ALfloat rolloff;
+      ALuint relative;
+      
    private:
       ALuint id;
       floatvec position;
       floatvec velocity;
-      float pitch, gain;
-      ALuint loop;
-      ALfloat refdist;
-      ALfloat maxdist;
 
 };
 

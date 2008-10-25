@@ -1,14 +1,16 @@
 #include "ALSource.h"
 
 ALSource::ALSource() : position(floatvec(3, 0.f)), velocity(floatvec(3, 0.f)),
-                   pitch(1.f), gain(1.f), loop(0), refdist(200.f), maxdist(15000.f)
+                   pitch(1.f), gain(1.f), loop(AL_FALSE), refdist(200.f), maxdist(5000.f),
+                   rolloff(1.f), relative(AL_FALSE)
 {
    alGenSources(1, &id);
 }
 
 
 ALSource::ALSource(const ALSource& s) : position(s.position), velocity(s.velocity),
-                   pitch(s.pitch), gain(s.gain), loop(s.loop)
+                   pitch(s.pitch), gain(s.gain), loop(s.loop), refdist(s.refdist), maxdist(s.maxdist),
+                   rolloff(s.rolloff), relative(s.relative)
 {
    alGenSources(1, &id);
 }
@@ -48,6 +50,8 @@ void ALSource::Play(const ALBuffer& buffer)
    alSourcei(id, AL_LOOPING, loop);
    alSourcef(id, AL_MAX_DISTANCE, maxdist);
    alSourcef(id, AL_REFERENCE_DISTANCE, refdist);
+   alSourcef(id, AL_ROLLOFF_FACTOR, rolloff);
+   alSourcei(id, AL_SOURCE_RELATIVE, relative);
    alSourcePlay(id);
 }
 
