@@ -42,5 +42,6 @@ void SendPowerdown();
 void SendCommand(const string&);
 void SendFire();
 void SendMasterListRequest();
+void SendPassword(const string&);
 
 #endif

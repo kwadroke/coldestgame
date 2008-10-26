@@ -1028,3 +1028,17 @@ void SendMasterListRequest()
    sendqueue.push_back(pack);
    SDL_mutexV(netmutex);
 }
+
+
+void SendPassword(const string& password)
+{
+   logout << "Sending password" << endl;
+   Packet pack(&addr);
+   pack.ack = sendpacketnum;
+   pack << "t\n";
+   pack << pack.ack << eol;
+   pack << password << eol;
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
+   SDL_mutexV(netmutex);
+}

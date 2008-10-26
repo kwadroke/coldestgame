@@ -130,6 +130,7 @@ void InitGlobals()
    console.Parse("set respawntime 15000", false);
    console.Parse("set cache 1", false);
    console.Parse("set musicvol 40", false);
+   console.Parse("set serverpwd password", false);
    
    // Variables that cannot be set from the console
    dummy.unit = Nemesis;
