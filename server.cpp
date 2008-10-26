@@ -624,7 +624,7 @@ int ServerListen(void* dummy)
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
          }
-         else if (packettype == "A")
+         else if (packettype == "A")  // Ack
          {
             unsigned long acknum;
             get >> acknum;
@@ -727,9 +727,8 @@ int ServerListen(void* dummy)
          }
          else if (packettype == "c") // Console command
          {
-            // TODO: Anyone is allowed to do this right now.  Need to authenticate only admins.
             SDL_mutexP(servermutex);
-            if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end())
+            if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end() && serverplayers[oppnum].admin)
             {
                serverplayers[oppnum].commandids.insert(packetnum);
                SDL_mutexV(servermutex); // Don't hold two mutexes at a time
@@ -744,6 +743,10 @@ int ServerListen(void* dummy)
                   SendSyncPacket(serverplayers[i], 0);
                
             }
+            else if (!serverplayers[oppnum].admin)
+            {
+               logout << "Command received from non-admin player" << endl;
+            }
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
          }
@@ -754,6 +757,24 @@ int ServerListen(void* dummy)
             {
                serverplayers[oppnum].fireids.insert(packetnum);
                serverplayers[oppnum].firerequests++;
+            }
+            SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
+         }
+         else if (packettype == "t") // Authenticate admin
+         {
+            string password;
+            get >> password;
+            SDL_mutexP(servermutex);
+            if (password == console.GetString("serverpwd"))
+            {
+               if (!serverplayers[oppnum].admin)
+                  logout << "Player " << oppnum << " authenticated from " << AddressToDD(inpack->address.host) << endl;
+               serverplayers[oppnum].admin = true;
+            }
+            else
+            {
+               logout << "Password incorrect" << endl;
             }
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);

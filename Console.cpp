@@ -109,6 +109,10 @@ void Console::Parse(const string& line, bool echo)
       }
       SendCommand(remote);
    }
+   if (Token(simple, 0) == "auth")
+   {
+      SendPassword(Token(simple, 1));
+   }
 #endif
    else Action(Token(simple, 0));
 }

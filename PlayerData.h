@@ -67,6 +67,7 @@ class PlayerData
       // Note that it is not replicated to the server, so 
       float weight;
       bool spectate;
+      bool admin;
       
    private:
       Meshlist* meshes;
