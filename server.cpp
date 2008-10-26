@@ -557,6 +557,16 @@ int ServerListen(void* dummy)
             if (serverplayers[oppnum].spawntimer)
                accepted = false;
             
+            // Weight of weapons and items
+            int maxweight = units[serverplayers[oppnum].unit].weight;
+            int totalweight = 0;
+            for (size_t i = 0; i < numbodyparts; ++i)
+               totalweight += serverplayers[oppnum].weapons[i].Weight();
+            totalweight += serverplayers[oppnum].item.Weight();
+            
+            if (totalweight > maxweight || CalculatePlayerWeight(serverplayers[oppnum]) > serverplayers[oppnum].salvage)
+               accepted = false;
+            
             if (accepted)
             {
                if (!serverplayers[oppnum].spawned)
