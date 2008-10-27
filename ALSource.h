@@ -19,10 +19,11 @@ class ALSource
       ~ALSource();
       void Play(const ALBuffer&);
       void Play(const ALBufferPtr&);
-      void SetPosition(const Vector3&);
+      void Stop();
       static void CheckError();
       bool Playing();
       
+      Vector3 position;
       ALfloat pitch, gain;
       ALuint loop;
       ALfloat refdist;
@@ -32,7 +33,6 @@ class ALSource
       
    private:
       ALuint id;
-      floatvec position;
       floatvec velocity;
 
 };

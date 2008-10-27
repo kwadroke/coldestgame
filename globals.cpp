@@ -29,3 +29,4 @@ tsint winningteam;
 vector<BodyParts> weaponslots;
 MeshCachePtr meshcache;
 tsint spectateplayer;
+ALSourcePtr musicsource;

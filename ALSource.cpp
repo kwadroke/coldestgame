@@ -1,6 +1,6 @@
 #include "ALSource.h"
 
-ALSource::ALSource() : position(floatvec(3, 0.f)), velocity(floatvec(3, 0.f)),
+ALSource::ALSource() : position(Vector3()), velocity(floatvec(3, 0.f)),
                    pitch(1.f), gain(1.f), loop(AL_FALSE), refdist(200.f), maxdist(5000.f),
                    rolloff(1.f), relative(AL_FALSE)
 {
@@ -45,7 +45,11 @@ void ALSource::Play(const ALBuffer& buffer)
       alSourcei(id, AL_BUFFER, buffer.id);
    alSourcef(id, AL_PITCH, pitch);
    alSourcef(id, AL_GAIN, gain);
-   alSourcefv(id, AL_POSITION, &position[0]);
+   floatvec arrpos(3);
+   arrpos[0] = position.x;
+   arrpos[1] = position.y;
+   arrpos[2] = position.z;
+   alSourcefv(id, AL_POSITION, &arrpos[0]);
    alSourcefv(id, AL_VELOCITY, &velocity[0]);
    alSourcei(id, AL_LOOPING, loop);
    alSourcef(id, AL_MAX_DISTANCE, maxdist);
@@ -62,11 +66,9 @@ void ALSource::Play(const ALBufferPtr& buffer)
 }
 
 
-void ALSource::SetPosition(const Vector3& newpos)
+void ALSource::Stop()
 {
-   position[0] = newpos.x;
-   position[1] = newpos.y;
-   position[2] = newpos.z;
+   alSourceStop(id);
 }
 
 

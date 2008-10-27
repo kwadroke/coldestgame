@@ -21,6 +21,7 @@ void SoundManager::SetListenPos(Vector3& v)
    float temp[3];
    v.array(temp);
    alListenerfv(AL_POSITION, temp);
+   listenpos = v;
 }
 
 
@@ -37,17 +38,33 @@ void SoundManager::SetListenDir(Vector3& v)
 
 void SoundManager::PlaySound(const string& filename, const Vector3& pos)
 {
-   ALSourcePtr newsource(new ALSource());
-   newsource->SetPosition(pos);
-   newsource->Play(GetBuffer(filename));
-   sources.push_back(newsource);
+   ALSourcePtr selected;
+   selected = SelectSource(pos);
+   if (selected)
+   {
+      selected->Stop();
+      selected->position = pos;
+      selected->Play(GetBuffer(filename));
+   }
 }
 
 
-void SoundManager::PlaySound(const string& filename, ALSourcePtr& newsource)
+ALSourcePtr SoundManager::SelectSource(const Vector3& pos)
 {
-   newsource->Play(GetBuffer(filename));
-   sources.push_back(newsource);
+   SourceList::iterator i;
+   for (i = sources.begin(); i != sources.end(); ++i)
+   {
+      ALSourcePtr p = *i;
+      if (!p->Playing())
+         return p;
+   }
+   for (i = sources.begin(); i != sources.end(); ++i)
+   {
+      ALSourcePtr p = *i;
+      if (p->position.distance2(listenpos) < pos.distance2(listenpos))
+         return p;
+   }
+   return ALSourcePtr();
 }
 
 
@@ -62,6 +79,16 @@ void SoundManager::Update()
    }
    for (size_t i = 0; i < remove.size(); ++i)
       sources.erase(remove[i]);
+}
+
+
+void SoundManager::SetMaxSources(const size_t num)
+{
+   while (sources.size() < num)
+   {
+      ALSourcePtr newsource(new ALSource());
+      sources.push_back(newsource);
+   }
 }
 
 

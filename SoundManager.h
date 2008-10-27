@@ -15,6 +15,8 @@ using std::string;
 using std::list;
 using std::vector;
 
+typedef list<ALSourcePtr> SourceList;
+
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
 */
@@ -26,12 +28,14 @@ class SoundManager
       void SetListenPos(Vector3&);
       void SetListenDir(Vector3&);
       void PlaySound(const string&, const Vector3&);
-      void PlaySound(const string&, ALSourcePtr&);
       void Update();
+      ALSourcePtr SelectSource(const Vector3&);
+      void SetMaxSources(const size_t);
       
    private:
       map<string, ALBufferPtr> buffers;
-      list<ALSourcePtr> sources;
+      SourceList sources;
+      Vector3 listenpos;
 
 };
 

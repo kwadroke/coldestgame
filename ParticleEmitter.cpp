@@ -28,9 +28,7 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
 #ifndef DEDICATED
    if (firstupdate && soundfile != "")
    {
-      soundsource = ALSourcePtr(new ALSource());
-      soundsource->SetPosition(position);
-      soundsource->Play(resman.soundman.GetBuffer(soundfile));
+      resman.soundman.PlaySound(soundfile, position);
       firstupdate = false;
    }
 #endif
