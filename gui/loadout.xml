@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false"
      leftclicksound="sounds/beep-3.ogg">
-   <Label x="400" y="50" width="200" height="50" text="Loadout" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   <Label x="400" y="20" width="200" height="50" text="Loadout" readonly="true" xmargin="0" ymargin="0" align="center"/>
    
    <TabWidget x="50" y="110" width="550" height="700" text="">
       <Tab text="Map" buttonwidth="80"
@@ -21,14 +21,16 @@
       </Tab>
    </TabWidget>
    
-   <ComboBox x="700"  y="100" width="200" height="40" name="Unit" selected="0" menuheight="200"
+   <Label x="700" y="100" width="200" height="20" text="Unit"/>
+   <ComboBox x="700"  y="120" width="200" height="40" name="Unit" selected="0" menuheight="200"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>Nemesis</ComboBoxItem>
       <ComboBoxItem>Ultra</ComboBoxItem>
       <ComboBoxItem>Omega</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="150" width="200" height="40" name="Torso" selected="0"
+   <Label x="700" y="170" width="200" height="20" text="Torso"/>
+   <ComboBox x="700"  y="190" width="200" height="40" name="Torso" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -40,7 +42,8 @@
       <ComboBoxItem>Mortar</ComboBoxItem>
       <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="200" width="200" height="40" name="Left Arm" selected="0"
+   <Label x="700" y="240" width="200" height="20" text="Left Arm"/>
+   <ComboBox x="700"  y="260" width="200" height="40" name="Left Arm" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -52,7 +55,8 @@
       <ComboBoxItem>Mortar</ComboBoxItem>
       <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="250" width="200" height="40" name="Right Arm" selected="0"
+   <Label x="700" y="310" width="200" height="20" text="Right Arm"/>
+   <ComboBox x="700"  y="330" width="200" height="40" name="Right Arm" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -64,7 +68,8 @@
       <ComboBoxItem>Mortar</ComboBoxItem>
       <ComboBoxItem>Rocket</ComboBoxItem>
    </ComboBox>
-   <ComboBox x="700"  y="300" width="200" height="40" name="Item" text="Item" selected="0"
+   <Label x="700" y="380" width="200" height="20" text="Item"/>
+   <ComboBox x="700"  y="400" width="200" height="40" name="Item" text="Item" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
       <ComboBoxItem>None</ComboBoxItem>
@@ -73,13 +78,13 @@
       <ComboBoxItem>Ammo Carrier</ComboBoxItem>
       <ComboBoxItem>Armor</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="350" width="200" height="30" text="Weight"
+   <Label x="700" y="460" width="200" height="20" text="Weight"
+          normal=""/>
+   <Label x="700" y="485" width="200" height="30" name="Weight" text="0 tons"
           normal="textures/buttonnorm.png"/>
-   <Label x="700" y="385" width="200" height="30" name="Weight" text="0 tons"
-          normal="textures/buttonnorm.png"/>
-   <Label x="700" y="425" width="200" height="30" text="Salvage"
-          normal="textures/buttonnorm.png"/>
-   <Label x="700" y="460" width="200" height="30" name="Salvage" text="0 tons"
+   <Label x="700" y="535" width="200" height="20" text="Salvage"
+          normal=""/>
+   <Label x="700" y="560" width="200" height="30" name="Salvage" text="0 tons"
           normal="textures/buttonnorm.png"/>
    <Label x="700" y="900" width="200" height="50" name="SpawnTimer" text="Spawn in" align="center"
           normal="textures/buttonnorm.png"
@@ -97,17 +102,17 @@
            leftclick="loadouttomain"/>
    
    <!-- Team display and selection -->
-   <Button x="700" y="550" width="90" height="50" name="Team1" text="Team 1" toggle="true"
+   <Button x="400" y="850" width="90" height="50" name="Team1" text="Team 1" toggle="true"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"
            pressed="textures/buttonpressed.png"
            leftclick="selectteam1"/>
-   <Button x="800" y="550" width="90" height="50" name="Team2" text="Team 2" toggle="true"
+   <Button x="500" y="850" width="90" height="50" name="Team2" text="Team 2" toggle="true"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"
            pressed="textures/buttonpressed.png"
            leftclick="selectteam2"/>
-   <Button x="700" y="610" width="180" height="40" name="Spectate" text="Spectate" toggle="true"
+   <Button x="400" y="910" width="180" height="40" name="Spectate" text="Spectate" toggle="true"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"
            pressed="textures/buttonpressed.png"

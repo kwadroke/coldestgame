@@ -61,6 +61,7 @@ extern tsint winningteam;
 extern vector<BodyParts> weaponslots;
 extern MeshCachePtr meshcache;
 extern tsint spectateplayer;
+extern ALSourcePtr musicsource;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

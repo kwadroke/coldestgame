@@ -483,6 +483,7 @@ void SetupOpenAL()
       logout << "Error initializing OpenAL: " << alGetError() << endl;
       exit(-1);
    }
+   resman.soundman.SetMaxSources(16);
 #endif
 }
 
@@ -1957,12 +1958,13 @@ bool PrimaryGUIVisible()
 void StartBGMusic()
 {
 #ifndef DEDICATED
-   ALSourcePtr source(new ALSource());
-   source->loop = AL_TRUE;
-   source->rolloff = 0.f;
-   source->relative = AL_TRUE;
-   source->gain = console.GetFloat("musicvol") / 100.f;
-   resman.soundman.PlaySound("sounds/bgmusic.ogg", source);
+   if (!musicsource)
+      musicsource = ALSourcePtr(new ALSource());
+   musicsource->loop = AL_TRUE;
+   musicsource->rolloff = 0.f;
+   musicsource->relative = AL_TRUE;
+   musicsource->gain = console.GetFloat("musicvol") / 100.f;
+   musicsource->Play(resman.soundman.GetBuffer("sounds/bgmusic.ogg"));
 #endif
 }
 
