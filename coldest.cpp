@@ -1462,7 +1462,11 @@ void SpectateNext()
 {
    int lastplayer = spectateplayer;
    if (!lastplayer)
+   {
+      if (player.size() < 3) // Only one player, will result in an infinite loop
+         return;
       lastplayer = player.size() - 1;
+   }
    ++spectateplayer;
    while (spectateplayer != lastplayer)
    {
