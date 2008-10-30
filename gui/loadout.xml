@@ -21,70 +21,70 @@
       </Tab>
    </TabWidget>
    
-   <Label x="700" y="100" width="200" height="20" text="Unit"/>
-   <ComboBox x="700"  y="120" width="200" height="40" name="Unit" selected="0" menuheight="200"
+   <ComboBox x="650"  y="120" width="250" height="40" name="Unit" selected="0" menuheight="200"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
+      <Label x="0" y="-20" width="250" height="20" text="Unit"/>
       <ComboBoxItem>Nemesis</ComboBoxItem>
       <ComboBoxItem>Ultra</ComboBoxItem>
       <ComboBoxItem>Omega</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="170" width="200" height="20" text="Torso"/>
-   <ComboBox x="700"  y="190" width="200" height="40" name="Torso" selected="0"
+   <ComboBox x="650"  y="190" width="250" height="40" name="Torso" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
-      <ComboBoxItem>None</ComboBoxItem>
-      <ComboBoxItem>Machine Gun</ComboBoxItem>
-      <ComboBoxItem>Laser</ComboBoxItem>
-      <ComboBoxItem>Autocannon</ComboBoxItem>
-      <ComboBoxItem>Gauss Rifle</ComboBoxItem>
-      <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
-      <ComboBoxItem>Mortar</ComboBoxItem>
-      <ComboBoxItem>Rocket</ComboBoxItem>
+      <Label x="0" y="-20" width="250" height="20" text="Torso"/>
+      <ComboBoxItem>None(0)</ComboBoxItem>
+      <ComboBoxItem>Machine Gun(5)</ComboBoxItem>
+      <ComboBoxItem>Laser(25)</ComboBoxItem>
+      <ComboBoxItem>Autocannon(25)</ComboBoxItem>
+      <ComboBoxItem>Gauss Rifle(35)</ComboBoxItem>
+      <ComboBoxItem>Neutrino Cannon(35)</ComboBoxItem>
+      <ComboBoxItem>Mortar(40)</ComboBoxItem>
+      <ComboBoxItem>Rocket(35)</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="240" width="200" height="20" text="Left Arm"/>
-   <ComboBox x="700"  y="260" width="200" height="40" name="Left Arm" selected="0"
+   <ComboBox x="650"  y="260" width="250" height="40" name="Left Arm" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
-      <ComboBoxItem>None</ComboBoxItem>
-      <ComboBoxItem>Machine Gun</ComboBoxItem>
-      <ComboBoxItem>Laser</ComboBoxItem>
-      <ComboBoxItem>Autocannon</ComboBoxItem>
-      <ComboBoxItem>Gauss Rifle</ComboBoxItem>
-      <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
-      <ComboBoxItem>Mortar</ComboBoxItem>
-      <ComboBoxItem>Rocket</ComboBoxItem>
+      <Label x="0" y="-20" width="250" height="20" text="Left Arm"/>
+      <ComboBoxItem>None(0)</ComboBoxItem>
+      <ComboBoxItem>Machine Gun(5)</ComboBoxItem>
+      <ComboBoxItem>Laser(25)</ComboBoxItem>
+      <ComboBoxItem>Autocannon(25)</ComboBoxItem>
+      <ComboBoxItem>Gauss Rifle(35)</ComboBoxItem>
+      <ComboBoxItem>Neutrino Cannon(35)</ComboBoxItem>
+      <ComboBoxItem>Mortar(40)</ComboBoxItem>
+      <ComboBoxItem>Rocket(35)</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="310" width="200" height="20" text="Right Arm"/>
-   <ComboBox x="700"  y="330" width="200" height="40" name="Right Arm" selected="0"
+   <ComboBox x="650"  y="330" width="250" height="40" name="Right Arm" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
-      <ComboBoxItem>None</ComboBoxItem>
-      <ComboBoxItem>Machine Gun</ComboBoxItem>
-      <ComboBoxItem>Laser</ComboBoxItem>
-      <ComboBoxItem>Autocannon</ComboBoxItem>
-      <ComboBoxItem>Gauss Rifle</ComboBoxItem>
-      <ComboBoxItem>Neutrino Cannon</ComboBoxItem>
-      <ComboBoxItem>Mortar</ComboBoxItem>
-      <ComboBoxItem>Rocket</ComboBoxItem>
+      <Label x="0" y="-20" width="250" height="20" text="Right Arm"/>
+      <ComboBoxItem>None(0)</ComboBoxItem>
+      <ComboBoxItem>Machine Gun(5)</ComboBoxItem>
+      <ComboBoxItem>Laser(25)</ComboBoxItem>
+      <ComboBoxItem>Autocannon(25)</ComboBoxItem>
+      <ComboBoxItem>Gauss Rifle(35)</ComboBoxItem>
+      <ComboBoxItem>Neutrino Cannon(35)</ComboBoxItem>
+      <ComboBoxItem>Mortar(40)</ComboBoxItem>
+      <ComboBoxItem>Rocket(35)</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="380" width="200" height="20" text="Item"/>
-   <ComboBox x="700"  y="400" width="200" height="40" name="Item" text="Item" selected="0"
+   <ComboBox x="650"  y="400" width="250" height="40" name="Item" text="Item" selected="0"
              normal="textures/buttonnorm.png"
              valuechanged="updateunitselection">
+      <Label x="0" y="-20" width="250" height="20" text="Item"/>
       <ComboBoxItem>None</ComboBoxItem>
-      <ComboBoxItem>Spawn Point</ComboBoxItem>
-      <ComboBoxItem>Heat Sink</ComboBoxItem>
-      <ComboBoxItem>Ammo Carrier</ComboBoxItem>
-      <ComboBoxItem>Armor</ComboBoxItem>
+      <ComboBoxItem>Spawn Point(25)</ComboBoxItem>
+      <ComboBoxItem>Heat Sink(10)</ComboBoxItem>
+      <ComboBoxItem>Ammo Carrier(10)</ComboBoxItem>
+      <ComboBoxItem>Armor(10)</ComboBoxItem>
    </ComboBox>
-   <Label x="700" y="460" width="200" height="20" text="Weight"
+   <Label x="700" y="760" width="200" height="20" text="Weight"
           normal=""/>
-   <Label x="700" y="485" width="200" height="30" name="Weight" text="0 tons"
+   <Label x="700" y="785" width="200" height="30" name="Weight" text="0 tons"
           normal="textures/buttonnorm.png"/>
-   <Label x="700" y="535" width="200" height="20" text="Salvage"
+   <Label x="700" y="835" width="200" height="20" text="Salvage"
           normal=""/>
-   <Label x="700" y="560" width="200" height="30" name="Salvage" text="0 tons"
+   <Label x="700" y="860" width="200" height="30" name="Salvage" text="0 tons"
           normal="textures/buttonnorm.png"/>
    <Label x="700" y="900" width="200" height="50" name="SpawnTimer" text="Spawn in" align="center"
           normal="textures/buttonnorm.png"
@@ -119,7 +119,8 @@
            leftclick="spectate"/>
    
    <!-- Spawn points -->
-   <ComboBox x="700" y="800" width="200" height="40" name="SpawnPoints"
+   <ComboBox x="650" y="500" width="250" height="40" name="SpawnPoints"
              normal="textures/buttonnorm.png">
+      <Label x="0" y="-20" width="250" height="20" text="Spawn Points"/>
    </ComboBox>
 </GUI>

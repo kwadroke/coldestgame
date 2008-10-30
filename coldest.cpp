@@ -601,6 +601,7 @@ void MainLoop()
          SDL_mutexP(clientmutex);
          GetMap(nextmap);
          SDL_mutexV(clientmutex);
+         winningteam = 0;
 #ifndef DEDICATED
          ShowGUI(loadoutmenu);
 #endif
@@ -948,8 +949,7 @@ void GameEventHandler(SDL_Event &event)
          case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE)
             {
-               gui[mainmenu]->visible = !gui[mainmenu]->visible;
-               gui[hud]->visible = !gui[hud]->visible;
+               ShowGUI(mainmenu);
             }
             else if (event.key.keysym.sym == SDLK_a)
             {

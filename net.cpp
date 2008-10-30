@@ -559,7 +559,6 @@ int NetListen(void* dummy)
                nextmap = "maps/" + nextmap;
                doconnect = false;
                connected = true;
-               winningteam = 0;
                logout << "We are server player " << servplayernum << endl;
                logout << "Map is: " << nextmap << endl;
                SDL_mutexV(clientmutex);
