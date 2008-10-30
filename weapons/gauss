@@ -1,7 +1,7 @@
 ReloadTime 1000
 Velocity 100
 ProjectileWeight .25
-Weight 35
+Weight 30
 Radius 2
 Damage 100
 Name Gauss Rifle
