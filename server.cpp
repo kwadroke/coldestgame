@@ -390,14 +390,16 @@ int ServerListen(void* dummy)
          {
             short unit;
             string name;
+            int clientver;
             get >> unit;
             get.ignore();
             getline(get, name);
+            get >> clientver;
             bool add = true;
             int respondto = 0;
             SDL_mutexP(servermutex);
             
-            if (CountPlayers() < maxplayers)
+            if (CountPlayers() < maxplayers && clientver == netver)
             {
                for (int i = 1; i < serverplayers.size(); ++i)
                {
