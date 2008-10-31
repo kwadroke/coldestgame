@@ -1211,7 +1211,7 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Give them the benefit of the doubt and cool them before calculating overheating
-   if (serverplayers[i].temperature > 100.f)
+   if (serverplayers[i].temperature > 100.f && serverplayers[i].spawned)
    {
       KillPlayer(i, i);
    }

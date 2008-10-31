@@ -1824,8 +1824,16 @@ void UpdatePlayerList()
    string add;
    for (size_t j = 0; j < 3; ++j)
    {
-      playerlist->Add("Team " + ToString((j + 1) % 3) + "|||");
-      lplayerlist->Add("Team " + ToString((j + 1) % 3) + "|||");
+      if (j < 2)
+      {
+         playerlist->Add("Team " + ToString((j + 1) % 3) + "|||");
+         lplayerlist->Add("Team " + ToString((j + 1) % 3) + "||||");
+      }
+      else
+      {
+         playerlist->Add(string("Spectators") + "|||");
+         lplayerlist->Add(string("Spectators") + "||||");
+      }
       for (int i = 1; i < player.size(); ++i)
       {
          if (player[i].connected && player[i].team == (j + 1) % 3)
