@@ -1482,7 +1482,11 @@ void SpectatePrev()
 {
    int lastplayer = spectateplayer;
    if (!lastplayer)
+   {
+      if (player.size() < 3)
+         return;
       lastplayer = 1;
+   }
    --spectateplayer;
    while (spectateplayer != lastplayer)
    {
