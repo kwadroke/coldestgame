@@ -374,6 +374,7 @@ int NetListen(void* dummy)
                      player.push_back(dummy);
                      logout << "Adding player " << (player.size() - 1) << endl;
                   }
+                  player[oppnum].connected = true;
                   get >> player[oppnum].spawned;
                   if (player[oppnum].spawned)
                   {
@@ -410,7 +411,6 @@ int NetListen(void* dummy)
                      player[oppnum].pos.y = oppy;
                      player[oppnum].pos.z = oppz;
                      
-                     player[oppnum].connected = true;
                   }
 #if 0 // This probably doesn't need to go back in, but we'll see
                   if (oppnum != servplayernum)// && player[oppnum].unit != 0)
