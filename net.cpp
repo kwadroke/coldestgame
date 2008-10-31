@@ -784,7 +784,7 @@ int NetListen(void* dummy)
                SDL_mutexV(clientmutex);
             }
          }
-         else if (packettype == "d") // We died:-(
+         else if (packettype == "d") // Somebody died
          {
             if (killsreceived.find(packetnum) == killsreceived.end())
             {

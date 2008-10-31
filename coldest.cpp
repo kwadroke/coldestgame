@@ -84,11 +84,12 @@ void OutputDiagnosticData()
 void InitGlobals()
 {
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
+   
    // Default cvars
    console.Parse("set screenwidth 800", false);
    console.Parse("set screenheight 600", false);
    console.Parse("set fullscreen 0", false);
-   console.Parse("set showfps 1", false);
+   console.Parse("set showfps 0", false);
    console.Parse("set quiet 1", false);
    console.Parse("set fly 0", false);
    console.Parse("set thirdperson 0", false);
@@ -132,11 +133,14 @@ void InitGlobals()
    console.Parse("set musicvol 40", false);
    console.Parse("set serverpwd password", false);
    
-   // Variables that cannot be set from the console
+   // I'm not entirely sure why this is separated from the declaration of dummy above,
+   // but I'm not inclined to potentially break something by moving it either.
    dummy.unit = Nemesis;
    dummy.spawned = true;
    player.push_back(dummy);
+   console.Parse("set name Nooblet", false); // player[0] must exist before this is set
    
+   // Variables that cannot be set from the console
 #ifndef DEDICATED
    lasttick = SDL_GetTicks();
    frames = 0;
