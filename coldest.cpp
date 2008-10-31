@@ -761,6 +761,17 @@ void GUIUpdate()
       else
          resumebutton->visible = false;
    }
+   
+   if (!PrimaryGUIVisible())
+   {
+      while (killmessages.size() > 6)
+         killmessages.pop_front();
+      
+      Table* killtable = dynamic_cast<Table*>(gui[hud]->GetWidget("killmessages"));
+      killtable->Clear();
+      for (size_t i = 0; i < killmessages.size(); ++i)
+         killtable->Add(killmessages[i]);
+   }
    SDL_mutexV(clientmutex);
 #endif
 }

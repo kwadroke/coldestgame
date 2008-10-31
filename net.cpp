@@ -785,11 +785,25 @@ int NetListen(void* dummy)
          }
          else if (packettype == "d") // We died:-(
          {
-            player[0].weight = -1.f;
-            player[0].spectate = true;
-            player[0].spawned = false;
-            player[0].size = 5.f;
-            ResetKeys();
+            if (killsreceived.find(packetnum) == killsreceived.end())
+            {
+               killsreceived.insert(packetnum);
+               size_t killed, killer;
+               get >> killed >> killer;
+               
+               SDL_mutexP(clientmutex);
+               if (killed = servplayernum)
+               {
+                  player[0].weight = -1.f;
+                  player[0].spectate = true;
+                  player[0].spawned = false;
+                  player[0].size = 5.f;
+                  ResetKeys();
+               }
+               string message = player[killer].name + " killed " + player[killed].name;
+               killmessages.push_back(message);
+               SDL_mutexV(clientmutex);
+            }
             // Ack it
             Ack(packetnum);
          }

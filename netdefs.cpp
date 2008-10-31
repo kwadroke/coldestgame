@@ -18,7 +18,9 @@ vector<Meshlist::iterator> deletemeshes;
 vector<Item> additems;
 set<unsigned long> itemsreceived;
 set<unsigned long> hitsreceived;
+set<unsigned long> killsreceived;
 unsigned long lastsyncpacket;
 tsint lasthit;
 tsint serverfps;
+deque<string> killmessages;
 
