@@ -15,6 +15,7 @@
 #include "tsint.h"
 
 const char eol = '\n';
+const int netver = 1;
 
 extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync;
 extern unsigned long recpacketnum, ackpack;
