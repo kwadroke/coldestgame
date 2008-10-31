@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include <set>
+#include <deque>
 #include "ServerInfo.h"
 #include "CollisionDetection.h"
 #include "PlayerData.h"
@@ -33,9 +34,11 @@ extern vector<Meshlist::iterator> deletemeshes;
 extern vector<Item> additems;
 extern set<unsigned long> itemsreceived;
 extern set<unsigned long> hitsreceived;
+extern set<unsigned long> killsreceived;
 extern unsigned long lastsyncpacket;
 extern tsint lasthit;
 extern tsint serverfps;
+extern deque<string> killmessages;
 
 void HandleAck(unsigned long);
 void SendPowerdown();

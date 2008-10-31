@@ -36,7 +36,7 @@ void SaveState();
 void AddItem(const Item&, int);
 void SendItem(const Item&, const int);
 vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
-void SendKill(int);
+void SendKill(size_t, size_t);
 void RemoveTeam(int);
 void SendSyncPacket(PlayerData&, unsigned long);
 void SendGameOver(PlayerData&, int);
@@ -47,7 +47,7 @@ void SendRemove(PlayerData&, const int, const int);
 string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
-void KillPlayer(const int);
+void KillPlayer(const int, const int);
 int CountPlayers();
 
 SDL_Thread* serversend;
@@ -695,7 +695,7 @@ int ServerListen(void* dummy)
             SDL_mutexP(servermutex);
             serverplayers[oppnum].spawned = false;
             serverplayers[oppnum].Kill();
-            SendKill(oppnum);
+            SendKill(oppnum, oppnum);
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
          }
@@ -1161,7 +1161,7 @@ void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool
          serverplayers[playernum].kills++;
          serverplayers[playernum].salvage += CalculatePlayerWeight(serverplayers[i]) / 2;
          logout << "Player " << i << " was killed by Player " << playernum << endl;
-         KillPlayer(i);
+         KillPlayer(i, playernum);
       }
    }
    bool doremove;
@@ -1211,7 +1211,7 @@ void ServerUpdatePlayer(int i)
    // Give them the benefit of the doubt and cool them before calculating overheating
    if (serverplayers[i].temperature > 100.f)
    {
-      KillPlayer(i);
+      KillPlayer(i, i);
    }
    
    // Powered down?
@@ -1417,8 +1417,6 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
          p << p.ack << eol;
          p << it->id << eol;
          
-         logout << "Removing " << it->id << endl;
-            
          servqueue.push_back(p);
       }
    }
@@ -1428,15 +1426,23 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
 
 
 // Note: Must grab mutex first
-void SendKill(int num)
+void SendKill(size_t killed, size_t killer)
 {
-   Packet deadpacket;
-   deadpacket.ack = servsendpacketnum;
-   deadpacket.addr = serverplayers[num].addr;
-            
-   deadpacket << "d\n";
-   deadpacket << deadpacket.ack << eol; // This line is kind of strange looking, but it's okay
-   servqueue.push_back(deadpacket);
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected)
+      {
+         Packet deadpacket;
+         deadpacket.ack = servsendpacketnum;
+         deadpacket.addr = serverplayers[i].addr;
+                  
+         deadpacket << "d\n";
+         deadpacket << deadpacket.ack << eol; // This line is kind of strange looking, but it's okay
+         deadpacket << killed << eol;
+         deadpacket << killer << eol;
+         servqueue.push_back(deadpacket);
+      }
+   }
 }
 
 
@@ -1582,12 +1588,12 @@ void Ack(unsigned long acknum, UDPpacket* inpack)
 }
 
 
-void KillPlayer(const int i)
+void KillPlayer(const int i, const int killer)
 {
    serverplayers[i].deaths++;
    serverplayers[i].Kill();
    serverplayers[i].spawntimer = console.GetInt("respawntime");
-   SendKill(i);
+   SendKill(i, killer);
    SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
 }
 
