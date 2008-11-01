@@ -85,7 +85,7 @@ Mesh& Mesh::operator=(const Mesh& m)
    if (this == &m)
       return *this;
    
-   resman = m.resman;
+   //resman = m.resman; Reference, can't be reseated.  Should be okay to leave it since it has to be set though.
    vbosteps = m.vbosteps;
    impdist = m.impdist;
    render = m.render;
