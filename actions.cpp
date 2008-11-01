@@ -77,13 +77,16 @@ void Connect()
    SDL_mutexP(clientmutex);
    for (i = servers.begin(); i != servers.end(); ++i)
    {
-      if (counter == currsel)
+      if (i->inlist)
       {
-         serveraddress = i->strip;
-         serverport = SDLNet_Read16(&i->address.port);
-         break;
+         if (counter == currsel)
+         {
+            serveraddress = i->strip;
+            serverport = SDLNet_Read16(&i->address.port);
+            break;
+         }
+         ++counter;
       }
-      ++counter;
    }
    SDL_mutexV(clientmutex);
    console.Parse("set serveraddr " + serveraddress, false);
