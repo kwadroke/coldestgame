@@ -766,7 +766,9 @@ void GUIUpdate()
          resumebutton->visible = false;
    }
    
-   if (!PrimaryGUIVisible())
+   // For some reason killtable->Clear() is extremely slow (2-5 ms), so we can't do this every
+   // time through.  Hence the killschanged flag.
+   if (!PrimaryGUIVisible() && killschanged)
    {
       while (killmessages.size() > 6)
          killmessages.pop_front();
@@ -775,6 +777,7 @@ void GUIUpdate()
       killtable->Clear();
       for (size_t i = 0; i < killmessages.size(); ++i)
          killtable->Add(killmessages[i]);
+      killschanged = 0;
    }
    SDL_mutexV(clientmutex);
 #endif

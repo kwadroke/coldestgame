@@ -695,9 +695,12 @@ int ServerListen(void* dummy)
          else if (packettype == "K")
          {
             SDL_mutexP(servermutex);
-            serverplayers[oppnum].spawned = false;
-            serverplayers[oppnum].Kill();
-            SendKill(oppnum, oppnum);
+            if (serverplayers[oppnum].spawned)
+            {
+               serverplayers[oppnum].spawned = false;
+               serverplayers[oppnum].Kill();
+               SendKill(oppnum, oppnum);
+            }
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
          }

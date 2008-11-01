@@ -40,6 +40,7 @@ extern unsigned long lastsyncpacket;
 extern tsint lasthit;
 extern tsint serverfps;
 extern deque<string> killmessages;
+extern tsint killschanged;
 
 void HandleAck(unsigned long);
 void SendPowerdown();

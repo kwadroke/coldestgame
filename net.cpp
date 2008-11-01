@@ -803,6 +803,7 @@ int NetListen(void* dummy)
                }
                string message = player[killer].name + " killed " + player[killed].name;
                killmessages.push_back(message);
+               killschanged = 1;
                SDL_mutexV(clientmutex);
             }
             // Ack it

@@ -23,4 +23,4 @@ unsigned long lastsyncpacket;
 tsint lasthit;
 tsint serverfps;
 deque<string> killmessages;
-
+tsint killschanged;
