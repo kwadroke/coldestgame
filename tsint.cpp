@@ -1,6 +1,6 @@
 #include "tsint.h"
 
-tsint::tsint()
+tsint::tsint() : value(0)
 {
    mutex = SDL_CreateMutex();
 }
