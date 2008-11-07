@@ -8,7 +8,7 @@ fi
 
 mkdir -p $1
 
-cp -r fonts items lib maps materials models particles shaders textures weapons units $1
+cp -r fonts items lib maps materials models particles shaders textures weapons units sounds $1
 cp coldest $1/coldest.bin
 cp startscript $1/coldest
 mkdir $1/gui
