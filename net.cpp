@@ -600,6 +600,8 @@ int NetListen(void* dummy)
                temppart.id = id;
                temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
                get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
+               temppart.origin = temppart.pos;
+               temppart.lasttracer = temppart.pos;
                get >> temppart.dir.x >> temppart.dir.y >> temppart.dir.z;
                get >> temppart.playernum;
                temppart.velocity = dummy.Velocity();
@@ -618,8 +620,11 @@ int NetListen(void* dummy)
                }
                SDL_mutexP(clientmutex);
 #ifndef DEDICATED
-               resman.soundman.PlaySound(dummy.FireSound(), player[temppart.playernum].pos);
+               // Add sound
+               if (dummy.Id() != Weapon::NoWeapon)
+                  resman.soundman.PlaySound(dummy.FireSound(), player[temppart.playernum].pos);
 #endif
+               
                particles.push_back(temppart);
                SDL_mutexV(clientmutex);
             }
@@ -793,7 +798,7 @@ int NetListen(void* dummy)
                get >> killed >> killer;
                
                SDL_mutexP(clientmutex);
-               if (killed = servplayernum)
+               if (killed == servplayernum)
                {
                   player[0].weight = -1.f;
                   player[0].spectate = true;
