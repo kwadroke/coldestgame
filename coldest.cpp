@@ -1726,8 +1726,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
          {
-            if (j->pos.distance2(j->origin) < .1f)
-               j->lasttracer = j->pos;
             if (!HitHandler && j->tracer && j->lasttracer.distance2(j->pos) > 10000.f)
             {
                AddTracer(*j);

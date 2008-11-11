@@ -221,7 +221,7 @@ void ServerLoop()
       for (int i = 1; i < serverplayers.size(); ++i)
       {
          currtick = SDL_GetTicks();
-         if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + 10000)
+         if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + 30000)
          {
             validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
             serverplayers[i].Disconnect();
