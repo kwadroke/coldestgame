@@ -108,6 +108,13 @@
            buttonpressed="textures/buttonpressed.png"
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
+         <ScrollView x="10" y="10" width="300" height="200">
+            <Label x="0" y="0" width="180" height="30" text="Volume"/>
+            <Slider x="0" y="100" width="180" height="30" name="musicvolslider" min="0" max="100">
+               <Label x="0" y="-20" width="200" height="20" text="Music"/>
+               <Label x="190" y="0" width="50" height="20" name="musicvolslidervalue"/>
+            </Slider>
+         </ScrollView>
       </Tab>
       <Tab text="Controls" buttonwidth="120"
            buttonnormal="textures/buttonnorm.png"

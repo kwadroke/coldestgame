@@ -23,6 +23,7 @@ void UpdateSettings()
    ComboBox* aabox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("aabox"));
    ComboBox* afbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("afbox"));
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
+   Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
    
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -38,6 +39,7 @@ void UpdateSettings()
    mousespeedslider->value = console.GetInt("mousespeed");
    weaponfocusslider->value = console.GetInt("weaponfocus");
    nameedit->text = console.GetString("name");
+   musicvolslider->value = console.GetInt("musicvol");
    
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");
@@ -105,6 +107,7 @@ void SaveSettings()
    ComboBox* aabox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("aabox"));
    ComboBox* afbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("afbox"));
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
+   Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
    
    console.Parse("setsave partupdint " + ToString(partupdintslider->value), false);
    // Not implemented yet
@@ -123,6 +126,7 @@ void SaveSettings()
    console.Parse("setsave aa " + ToString(aabox->SelectedText()), false);
    console.Parse("setsave af " + ToString(afbox->SelectedText()), false);
    console.Parse("setsave name " + nameedit->text, false);
+   console.Parse("setsave musicvol " + ToString(musicvolslider->value), false);
    
    stringstream selectedres(resolutionbox->SelectedText());
    int newwidth, newheight;
