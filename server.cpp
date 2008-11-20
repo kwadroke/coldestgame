@@ -1115,7 +1115,8 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
       check = serverkdtree.getmeshes(hitpos, hitpos, dmgrad);
       AppendDynamicMeshes(check, servermeshes);
       
-      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, &hitmeshes);
+      Mesh* dummymesh = NULL;
+      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, dummymesh, &hitmeshes);
       sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
       

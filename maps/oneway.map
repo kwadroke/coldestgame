@@ -74,3 +74,10 @@ Node
       
 Node
    Objects
+   Node
+      Type External
+      BaseFile models/nemesis/torso/base
+      Position 3010 500 2985
+      Rotations 0 0 0
+      AnimSpeed 5
+      Scale 0.013

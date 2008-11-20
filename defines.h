@@ -64,7 +64,6 @@ void GetMap(string);
 void InitGlobals();
 void InitGUI();
 void InitUnits();
-vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData*, Meshlist&, ObjectKDTree&, const Vector3&, const Vector3&, const float);
 void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
 void GenShadows(Vector3, float, FBO&);
@@ -84,5 +83,6 @@ bool GUIEventHandler(SDL_Event&);
 void GameEventHandler(SDL_Event&);
 void AddTracer(const Particle&);
 void StartBGMusic();
+void UpdatePlayer();
 
 #endif

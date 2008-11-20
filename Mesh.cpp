@@ -5,8 +5,8 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
             lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
-            currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), dist(0.f), 
-            animspeed(1.f), curranimation(0), nextanimation(0)
+            currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), terrain(false), dist(0.f), 
+            animspeed(1.f), curranimation(0), nextanimation(0), scale(.01f)
 {
 #ifndef DEDICATED
    if (gl)
@@ -39,8 +39,9 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          size(m.size), drawdistmult(m.drawdistmult), debug(m.debug), width(m.width), height(m.height),
          impostortex(m.impostortex), vbo(0), ibo(0), next(m.next), hasvbo(false),
          childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
-         dynamic(m.dynamic), collide(m.collide), dist(m.dist), animspeed(m.animspeed), curranimation(m.curranimation),
-         nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe)
+         basefile(m.basefile), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), dist(m.dist), animspeed(m.animspeed),
+         curranimation(m.curranimation), nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe),
+         scale(m.scale)
 {
 #ifndef DEDICATED
    if (m.impmat)
@@ -108,14 +109,17 @@ Mesh& Mesh::operator=(const Mesh& m)
    frametime = m.frametime;
    glops = m.glops;
    havemats = m.havemats;
+   basefile = m.basefile;
    dynamic = m.dynamic;
    collide = m.collide;
+   terrain = m.terrain;
    dist = m.dist;
    animspeed = m.animspeed;
    curranimation = m.curranimation;
    nextanimation = m.nextanimation;
    numframes = m.numframes;
    startframe = m.startframe;
+   scale = m.scale;
    
 #ifndef DEDICATED
    if (m.impmat)
@@ -162,7 +166,6 @@ Mesh& Mesh::operator=(const Mesh& m)
 void Mesh::Load(const IniReader& reader)
 {
    string material;
-   float scale = .01f;
    
    string type("");
    reader.Read(type, "Type");
@@ -179,12 +182,10 @@ void Mesh::Load(const IniReader& reader)
    
    if (type == "External")
    {
-      string basepath;
-      string currfile;
+      string currfile, basepath;
       numframes = intvec(10, 0);
       startframe = intvec(10, 0);
       
-      string basefile;
       reader.Read(basefile, "BaseFile");
       int numkeyframes = 0;
       if (basefile != "")
@@ -203,6 +204,7 @@ void Mesh::Load(const IniReader& reader)
       else
       {
          basepath = reader.GetPath();
+         basefile = basepath;
          for (size_t i = 0; i < 10; ++i)
          {
             reader.Read(numframes[i], "NumFrames", i);

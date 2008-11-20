@@ -62,6 +62,7 @@ extern vector<BodyParts> weaponslots;
 extern MeshCachePtr meshcache;
 extern tsint spectateplayer;
 extern ALSourcePtr musicsource;
+extern bool editor;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
@@ -82,5 +83,7 @@ void SaveSettings();
 bool PrimaryGUIVisible();
 void SpectateNext();
 void SpectatePrev();
+void EditorLoop(const string);
+vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData*, Meshlist&, ObjectKDTree&, const Vector3&, const Vector3&, const float);
 
 #endif

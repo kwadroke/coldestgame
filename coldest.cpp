@@ -39,19 +39,29 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #endif
 {
    //Debug();
+   
    setsighandler();
    initialized = false;
    OutputDiagnosticData();
    logout << "Main " << gettid() << endl;
    InitGlobals();
    initialized = true;
-   StartBGMusic();
+   
+   if (argc < 2)
+      StartBGMusic();
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
    //SetupSDL();
    //SetupOpenGL();
    LoadMaterials();
    InitShaders();
    InitNoise();
+   
+   if (argc > 1)
+   {
+      logout << "Editing " << argv[1] << endl;
+      EditorLoop(argv[1]);
+      return 0;
+   }
    
    // Start network threads
 #ifndef DEDICATED
@@ -640,6 +650,12 @@ void MainLoop()
          gotext->text = "Team " + ToString(winningteam) + " wins!";
          ShowGUI(endgame);
       }
+      
+      SDL_mutexP(clientmutex);
+      if (!PrimaryGUIVisible())
+         UpdatePlayer();
+      SDL_mutexV(clientmutex);
+      
       // update the screen
       Repaint();
 #else
@@ -1721,7 +1737,8 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             if (Rewind)
                Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, &hitmeshes);
+            Mesh* hitmesh = NULL;
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, &hitmeshes);
          }
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything
@@ -1974,6 +1991,73 @@ void CacheMeshes()
    
    for (size_t i = 0; i < tocache.size(); ++i)
       meshcache->GetNewMesh(tocache[i]);
+}
+
+
+void UpdatePlayer()
+{
+   // Update player position
+   SDL_mutexP(clientmutex);
+      
+   if (player[0].spectate && spectateplayer != servplayernum && player[0].spawned)
+      UpdateSpectatePosition();
+   else
+   {
+      Move(player[0], meshes, kdtree);
+      if (console.GetBool("serversync") && !player[0].spectate)
+         SynchronizePosition();
+   }
+   PlayerData localplayer = player[0];
+      
+      // Set position for sound listener
+   GraphicMatrix r;
+   r.rotatex(-localplayer.pitch);
+   r.rotatey(localplayer.facing + localplayer.rotation);
+   Vector3 slook(0, 0, -1.f);
+   slook.transform(r);
+   resman.soundman.SetListenDir(slook);
+   resman.soundman.SetListenPos(localplayer.pos);
+      
+      // Update the local model so there isn't a frame of lag.
+   if (!player[0].spectate)
+   {
+      UpdatePlayerModel(player[0], meshes);
+      for (size_t i = 0; i < numbodyparts; ++i)
+      {
+         if (player[0].mesh[i] != meshes.end())
+            player[0].mesh[i]->AdvanceAnimation();
+      }
+   }
+      
+   SDL_mutexV(clientmutex);
+      
+   int weaponslot = weaponslots[localplayer.currweapon];
+   Weapon& currplayerweapon = localplayer.weapons[weaponslot];
+   if (localplayer.leftclick && 
+       (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
+       (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
+   {
+      SendFire();
+      SDL_mutexP(clientmutex);
+      if (currplayerweapon.Id() != Weapon::NoWeapon)
+         resman.soundman.PlaySound(currplayerweapon.FireSound(), player[0].pos);
+      player[0].lastfiretick[weaponslot] = SDL_GetTicks();
+      if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
+         player[0].weapons[weaponslot].ammo--;
+         
+      Vector3 startpos = localplayer.pos;
+      Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
+      Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
+      Particle part = CreateShot(currplayerweapon, rot, startpos, offset);
+         // Add tracer if necessary
+      if (currplayerweapon.Tracer() != "")
+      {
+         part.tracer = MeshPtr(new Mesh("models/" + currplayerweapon.Tracer() + "/base", resman));
+         part.tracertime = currplayerweapon.TracerTime();
+      }
+      particles.push_back(part);
+      SDL_mutexV(clientmutex);
+   }
 }
 
 
