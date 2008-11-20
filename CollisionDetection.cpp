@@ -22,7 +22,8 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs)
 {
    Vector3 dummy;
-   return CheckSphereHit(oldpos, newpos, radius, objs, dummy);
+   Mesh* dummymesh = NULL;
+   return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh);
 }
 
 
@@ -34,7 +35,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
-                                           Vector3& hitpos, vector<Mesh*>* retobjs, bool debug)
+                                           Vector3& hitpos, Mesh*& hitobj, vector<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
    Vector3 temp, temphitpos;
@@ -72,7 +73,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   if (adjust.distance2(temp) > .00001)
                   {
                      if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
+                     {
+                        hitobj = current;
                         hitpos = temphitpos;
+                     }
                      adjusted++;
                      if (retobjs)
                         retobjs->push_back(current);
@@ -141,6 +145,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                      adjust += PlaneEdgeSphereCollision(currtri, newpos, localrad);
                      if (adjust.distance2(temp) > .00001)
                      {
+                        hitobj = current;
                         hitpos = newpos;
                         adjusted++;
                         if (retobjs)
@@ -157,7 +162,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // If we moved a fairly long distance we're probably a projectile and need to do the following
    // These aren't useful for player movement though so we shouldn't do them in that case.
    
-   // TODO: This doesn't work well.  Need to pass in a parameter to indicate when we want this done.
+   // Still not sure how well this is working, but for the moment it isn't causing serious problems
    if (oldpos.distance2(newpos) > radius * radius * 9)
    {
       // Do another edge check that checks the entire movement path, not just the ending position.
@@ -194,7 +199,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                         if (adjust.distance2(temp) > .00001)
                         {
                            if (oldpos.distance2(adjust) < oldpos.distance2(hitpos))
+                           {
+                              hitobj = current;
                               hitpos = adjust;
+                           }
                            adjusted++;
                            if (retobjs)
                               retobjs->push_back(current);
@@ -233,7 +241,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                            if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, localrad, temp))
                            {
                               if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+                              {
+                                 hitobj = current;
                                  hitpos = currtri.v[j]->pos;
+                              }
                               adjust += temp;
                               adjusted++;
                               if (retobjs)

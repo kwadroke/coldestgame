@@ -60,6 +60,7 @@ class ProceduralTree
       bool split;
       bool branchwithleaves;
       Mesh* mesh;
+      string barkfile, leavesfile;
       
    private:
       void GenBranch(GraphicMatrix, int, int, vector<Vector3>, bool, int);

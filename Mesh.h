@@ -34,6 +34,7 @@ class Mesh
       void Move(const Vector3&);
       const Vector3 GetPosition() const;
       void Rotate(const Vector3&);
+      const Vector3 GetRotation() const {return rots;}
       void GenVbo();
       void BindAttribs();
       void UnbindAttribs();
@@ -56,6 +57,9 @@ class Mesh
       float GetWidth(){return width;}
       float GetHeight(){return height;}
       void SetGL(){glops = true;}
+      string GetFile() const{return basefile;}
+      float GetAnimSpeed() const{return animspeed;}
+      float GetScale() const{return scale;}
       
       void Begin();
       bool HasNext() const;
@@ -67,6 +71,7 @@ class Mesh
       bool render;
       bool dynamic;
       bool collide;
+      bool terrain;
       float size; // I'm not sure this should be public, but for the moment we'll go with it
       float drawdistmult;
       
@@ -120,6 +125,8 @@ class Mesh
       int next;
       
       bool havemats;
+      string basefile;
+      float scale;
 };
 
 typedef list<Mesh> Meshlist;

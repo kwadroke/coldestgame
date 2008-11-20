@@ -35,7 +35,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
-		SoundManager.o ALBuffer.o ALSource.o
+		SoundManager.o ALBuffer.o ALSource.o editor.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
@@ -5472,6 +5472,268 @@ coldest.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
 coldest.o: gui/Button.h gui/TextArea.h gui/Table.h gui/ComboBox.h globals.h
 coldest.o: Console.h renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
 coldest.o: ParticleEmitter.h MeshCache.h
+editor.o: editor.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+editor.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+editor.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+editor.o: /usr/include/gentoo-multilib/amd64/sys/types.h
+editor.o: /usr/include/features.h
+editor.o: /usr/include/gentoo-multilib/amd64/features.h
+editor.o: /usr/include/sys/cdefs.h
+editor.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+editor.o: /usr/include/bits/wordsize.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+editor.o: /usr/include/gnu/stubs.h
+editor.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+editor.o: /usr/include/gnu/stubs-64.h
+editor.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+editor.o: /usr/include/bits/types.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+editor.o: /usr/include/bits/typesizes.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+editor.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+editor.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
+editor.o: /usr/include/bits/endian.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+editor.o: /usr/include/sys/select.h
+editor.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+editor.o: /usr/include/bits/select.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+editor.o: /usr/include/bits/sigset.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+editor.o: /usr/include/bits/time.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+editor.o: /usr/include/sys/sysmacros.h
+editor.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+editor.o: /usr/include/bits/pthreadtypes.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+editor.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+editor.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+editor.o: /usr/include/_G_config.h
+editor.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+editor.o: /usr/include/gentoo-multilib/amd64/wchar.h
+editor.o: /usr/include/bits/wchar.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+editor.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+editor.o: /usr/include/bits/stdio_lim.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+editor.o: /usr/include/bits/sys_errlist.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+editor.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+editor.o: /usr/include/bits/waitflags.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+editor.o: /usr/include/bits/waitstatus.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+editor.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+editor.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+editor.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+editor.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+editor.o: /usr/include/inttypes.h
+editor.o: /usr/include/gentoo-multilib/amd64/inttypes.h /usr/include/stdint.h
+editor.o: /usr/include/gentoo-multilib/amd64/stdint.h /usr/include/ctype.h
+editor.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
+editor.o: /usr/include/gentoo-multilib/amd64/iconv.h
+editor.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+editor.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+editor.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+editor.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+editor.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+editor.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+editor.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+editor.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+editor.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+editor.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+editor.o: /usr/include/SDL/SDL_version.h ProceduralTree.h /usr/include/math.h
+editor.o: /usr/include/gentoo-multilib/amd64/math.h
+editor.o: /usr/include/bits/huge_val.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+editor.o: /usr/include/bits/huge_valf.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+editor.o: /usr/include/bits/huge_vall.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+editor.o: /usr/include/bits/inf.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
+editor.o: /usr/include/bits/nan.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
+editor.o: /usr/include/bits/mathdef.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+editor.o: /usr/include/bits/mathcalls.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
+editor.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+editor.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h Vector3.h
+editor.o: logout.h Log.h IniReader.h /usr/include/boost/shared_ptr.hpp
+editor.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+editor.o: /usr/include/boost/config/select_compiler_config.hpp
+editor.o: /usr/include/boost/config/compiler/gcc.hpp
+editor.o: /usr/include/boost/config/select_stdlib_config.hpp
+editor.o: /usr/include/boost/config/no_tr1/utility.hpp
+editor.o: /usr/include/boost/config/select_platform_config.hpp
+editor.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+editor.o: /usr/include/gentoo-multilib/amd64/unistd.h
+editor.o: /usr/include/bits/posix_opt.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+editor.o: /usr/include/bits/environments.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+editor.o: /usr/include/bits/confname.h
+editor.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+editor.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+editor.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+editor.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+editor.o: /usr/include/boost/checked_delete.hpp
+editor.o: /usr/include/boost/throw_exception.hpp
+editor.o: /usr/include/boost/config.hpp
+editor.o: /usr/include/boost/detail/shared_count.hpp
+editor.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+editor.o: /usr/include/boost/detail/sp_counted_base.hpp
+editor.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+editor.o: /usr/include/boost/detail/sp_counted_impl.hpp
+editor.o: /usr/include/boost/detail/workaround.hpp Mesh.h Triangle.h Vertex.h
+editor.o: types.h Material.h TextureManager.h TextureHandler.h
+editor.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
+editor.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+editor.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+editor.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+editor.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+editor.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+editor.o: util.h tsint.h Timer.h StableRandom.h globals.h Particle.h
+editor.o: CollisionDetection.h ObjectKDTree.h ServerInfo.h
+editor.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
+editor.o: Item.h Console.h gui/TextArea.h gui/GUI.h
+editor.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+editor.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+editor.o: /usr/include/xercesc/dom/DOMDocument.hpp
+editor.o: /usr/include/xercesc/util/XercesDefs.hpp
+editor.o: /usr/include/xercesc/util/XercesVersion.hpp
+editor.o: /usr/include/xercesc/util/AutoSense.hpp
+editor.o: /usr/include/xercesc/dom/DOMNode.hpp
+editor.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+editor.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+editor.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+editor.o: /usr/include/xercesc/util/RefVectorOf.hpp
+editor.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+editor.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+editor.o: /usr/include/xercesc/util/XMLException.hpp
+editor.o: /usr/include/xercesc/util/XMemory.hpp
+editor.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+editor.o: /usr/include/xercesc/dom/DOMError.hpp
+editor.o: /usr/include/xercesc/util/XMLUni.hpp
+editor.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+editor.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+editor.o: /usr/include/xercesc/util/PlatformUtils.hpp
+editor.o: /usr/include/xercesc/util/PanicHandler.hpp
+editor.o: /usr/include/xercesc/framework/MemoryManager.hpp
+editor.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+editor.o: /usr/include/xercesc/util/RefVectorOf.c
+editor.o: /usr/include/xercesc/framework/XMLAttr.hpp
+editor.o: /usr/include/xercesc/util/QName.hpp
+editor.o: /usr/include/xercesc/util/XMLString.hpp
+editor.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+editor.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+editor.o: /usr/include/xercesc/internal/XSerializable.hpp
+editor.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+editor.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+editor.o: /usr/include/xercesc/util/HashBase.hpp
+editor.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+editor.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+editor.o: /usr/include/xercesc/util/RuntimeException.hpp
+editor.o: /usr/include/xercesc/util/HashXMLCh.hpp
+editor.o: /usr/include/xercesc/util/RefHashTableOf.c
+editor.o: /usr/include/xercesc/util/Janitor.hpp
+editor.o: /usr/include/xercesc/util/Janitor.c
+editor.o: /usr/include/xercesc/util/NullPointerException.hpp
+editor.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+editor.o: /usr/include/xercesc/util/ValueVectorOf.c
+editor.o: /usr/include/xercesc/internal/XSerializationException.hpp
+editor.o: /usr/include/xercesc/internal/XProtoType.hpp
+editor.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+editor.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+editor.o: /usr/include/xercesc/util/KVStringPair.hpp
+editor.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+editor.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+editor.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+editor.o: /usr/include/xercesc/util/regx/Op.hpp
+editor.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+editor.o: /usr/include/xercesc/util/regx/Token.hpp
+editor.o: /usr/include/xercesc/util/Mutexes.hpp
+editor.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+editor.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+editor.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
+editor.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+editor.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+editor.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+editor.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+editor.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+editor.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+editor.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+editor.o: /usr/include/xercesc/framework/ValidationContext.hpp
+editor.o: /usr/include/xercesc/util/NameIdPool.hpp
+editor.o: /usr/include/xercesc/util/NameIdPool.c
+editor.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+editor.o: /usr/include/xercesc/util/SecurityManager.hpp
+editor.o: /usr/include/xercesc/util/ValueStackOf.hpp
+editor.o: /usr/include/xercesc/util/EmptyStackException.hpp
+editor.o: /usr/include/xercesc/util/ValueStackOf.c
+editor.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+editor.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+editor.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+editor.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+editor.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+editor.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+editor.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+editor.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+editor.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+editor.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+editor.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
+editor.o: /usr/include/xercesc/dom/DOM.hpp
+editor.o: /usr/include/xercesc/dom/DOMAttr.hpp
+editor.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+editor.o: /usr/include/xercesc/dom/DOMText.hpp
+editor.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+editor.o: /usr/include/xercesc/dom/DOMComment.hpp
+editor.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+editor.o: /usr/include/xercesc/dom/DOMElement.hpp
+editor.o: /usr/include/xercesc/dom/DOMEntity.hpp
+editor.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+editor.o: /usr/include/xercesc/dom/DOMException.hpp
+editor.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+editor.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+editor.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+editor.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+editor.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+editor.o: /usr/include/xercesc/dom/DOMNotation.hpp
+editor.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+editor.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+editor.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+editor.o: /usr/include/xercesc/dom/DOMRange.hpp
+editor.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+editor.o: /usr/include/xercesc/dom/DOMBuilder.hpp
+editor.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+editor.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
+editor.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+editor.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+editor.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+editor.o: /usr/include/xercesc/dom/DOMInputSource.hpp
+editor.o: /usr/include/xercesc/dom/DOMLocator.hpp
+editor.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+editor.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+editor.o: /usr/include/xercesc/dom/DOMWriter.hpp
+editor.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+editor.o: /usr/include/xercesc/framework/XMLFormatter.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
+editor.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
+editor.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+editor.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
+editor.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
+editor.o: ParticleEmitter.h MeshCache.h
 getmap.o: gui/ProgressBar.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -5733,7 +5995,7 @@ getmap.o: ServerInfo.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h
 getmap.o: Item.h Console.h gui/TextArea.h gui/Table.h gui/TableItem.h
 getmap.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 getmap.o: renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-getmap.o: ParticleEmitter.h MeshCache.h
+getmap.o: ParticleEmitter.h MeshCache.h editor.h
 globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 globals.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 globals.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h

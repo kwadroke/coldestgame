@@ -16,7 +16,7 @@ class CollisionDetection
    public:
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&,
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&, Mesh*&,
                              vector<Mesh*>* = NULL, const bool debug = false);
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&);
       // Useful for external code too

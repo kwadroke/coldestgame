@@ -30,3 +30,4 @@ vector<BodyParts> weaponslots;
 MeshCachePtr meshcache;
 tsint spectateplayer;
 ALSourcePtr musicsource;
+bool editor;

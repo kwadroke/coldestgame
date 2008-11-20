@@ -13,6 +13,7 @@
 #include "types.h"
 #include "globals.h"
 #include "renderdefs.h"
+#include "editor.h"
 #include "IniReader.h"
 #include "Quad.h"
 #include "Mesh.h"
@@ -193,6 +194,18 @@ void GetMap(string fn)
       currnode = objectlist(i);
       Mesh currmesh("", resman, currnode);
       meshes.push_back(currmesh);
+      if (editor)
+      {
+         string type;
+         currnode.Read(type, "Type");
+         if (type == "proctree")
+         {
+            ProceduralTree t;
+            t.ReadParams(currnode);
+            t.mesh = &meshes.back();
+            treemap[&meshes.back()] = t;
+         }
+      }
    }
    
 #ifndef DEDICATED
@@ -422,6 +435,7 @@ void GetMap(string fn)
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
          tempmesh.drawdistmult = console.GetFloat("terrainmulti");
+         tempmesh.terrain = true;
          meshes.push_front(tempmesh);
          meshits.push_back(meshes.begin());
       }
