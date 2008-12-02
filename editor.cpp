@@ -81,6 +81,13 @@ void EditorEventHandler(SDL_Event event)
          {
             player[0].run = true;
          }
+         else if (event.key.keysym.sym == SDLK_TAB)
+         {
+            if (!gui[editobject]->visible)
+               ShowGUI(editobject);
+            else
+               gui[editobject]->visible = false;
+         }
          else if (event.key.keysym.sym == SDLK_ESCAPE)
          {
             Quit();

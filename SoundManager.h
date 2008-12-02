@@ -33,6 +33,8 @@ class SoundManager
       void SetMaxSources(const size_t);
       
    private:
+      SoundManager(const SoundManager&);
+      SoundManager& operator=(const SoundManager&);
       map<string, ALBufferPtr> buffers;
       SourceList sources;
       Vector3 listenpos;

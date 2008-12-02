@@ -2,6 +2,7 @@
 
 SoundManager::SoundManager()
 {
+   sources = list<ALSourcePtr>(16, ALSourcePtr());
 }
 
 

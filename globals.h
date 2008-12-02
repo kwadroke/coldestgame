@@ -29,7 +29,7 @@ using std::set;
 
 const int terrobjsize = 16; // Terrain objects are terrobjsize x terrobjsize tiles
 
-enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, endgame, loadoutmessage, numguis};
+enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, ingamestatus, chat, endgame, loadoutmessage, editobject, numguis};
 
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
