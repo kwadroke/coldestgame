@@ -227,6 +227,7 @@ void InitGUI()
    gui[settings] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/settings.xml"));
    gui[endgame] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/endgame.xml"));
    gui[loadoutmessage] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadoutmessage.xml"));
+   gui[editobject] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editobject.xml"));
    
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
