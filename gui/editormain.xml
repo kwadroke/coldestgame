@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false"
+     buttonnormal="textures/hud/button.png"
+     buttonpressed="textures/hud/buttonred.png"
+     buttonhover="textures/hud/buttonhover.png"
+     slidernormal="textures/sliderbuttonnorm.png"
+     sliderpressed="textures/sliderbuttonnorm.png"
+     sliderhover="textures/sliderbuttonnorm.png"
+     bgnormal="textures/hud/button.png"
+     bgpressed="textures/hud/button.png"
+     bghover="textures/hud/button.png"
+     cursornormal="textures/sliderbuttonnorm.png">
+   
+</GUI>
