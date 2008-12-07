@@ -49,6 +49,7 @@ class ObjectKDTree
       ~ObjectKDTree();
       void refine(int);
       bool insert(Mesh*);
+      void erase(Mesh*);
       void setvertices(Vector3vec);
       void setfrustum(Vector3, Vector3, float, float, float, float);
       void setfrustum(Quadvec*);

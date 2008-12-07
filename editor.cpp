@@ -5,9 +5,11 @@
 using std::vector;
 
 map<Mesh*, ProceduralTree> treemap;
+set<Mesh*> spawnmeshes;
 
 Mesh* selected = NULL;
 bool clicked = false;
+bool rotating = false;
 
 void EditorLoop(const string editmap)
 {
@@ -34,7 +36,10 @@ void EditorLoop(const string editmap)
       
       while(SDL_PollEvent(&event)) 
       {
-         EditorEventHandler(event);
+         if (!EditorGUIEventHandler(event))
+         {
+            EditorEventHandler(event);
+         }
       }
       
       EditorMove();
@@ -77,6 +82,10 @@ void EditorEventHandler(SDL_Event event)
             else
                player[0].moveback = true;
          }
+         else if (event.key.keysym.sym == SDLK_r)
+         {
+            rotating = true;
+         }
          else if (event.key.keysym.sym == SDLK_LSHIFT)
          {
             player[0].run = true;
@@ -111,6 +120,10 @@ void EditorEventHandler(SDL_Event event)
          {
             player[0].moveback = false;
          }
+         else if (event.key.keysym.sym == SDLK_r)
+         {
+            rotating = false;
+         }
          else if (event.key.keysym.sym == SDLK_LSHIFT)
          {
             player[0].run = false;
@@ -141,10 +154,22 @@ void EditorEventHandler(SDL_Event event)
          {
             if (clicked && selected)
             {
-               float modifier = 1.f;
-               if (player[0].run)
-                  modifier = 5.f;
-               selected->Move(selected->GetPosition() + Vector3(event.motion.xrel * modifier, 0, event.motion.yrel * modifier));
+               if (!rotating)
+               {
+                  float modifier = 1.f;
+                  if (player[0].run)
+                     modifier = 5.f;
+                  if (SDL_GetModState() & KMOD_CTRL)
+                     selected->Move(selected->GetPosition() + Vector3(0.f, event.motion.yrel * modifier, 0.f));
+                  else
+                     selected->Move(selected->GetPosition() + Vector3(event.motion.xrel * modifier, 0.f, event.motion.yrel * modifier));
+                  UpdateEditorGUI();
+               }
+               else
+               {
+                  float modifier = 1.f;
+                  selected->Rotate(selected->GetRotation() + Vector3(event.motion.xrel * modifier, event.motion.yrel * modifier, 0.f));
+               }
             }
          }
          break;
@@ -166,6 +191,98 @@ void EditorEventHandler(SDL_Event event)
       default:
          break;
    }
+}
+
+
+// Returns whether the GUI ate the event (IOW should the event not be passed to the engine)
+bool EditorGUIEventHandler(SDL_Event event)
+{
+   switch(event.type)
+   {
+      case SDL_KEYDOWN:
+         if (event.key.keysym.sym == SDLK_r) // Right now rotation and translation are not allowed while GUI shown
+         {
+            rotating = true;
+         }
+         else if (event.key.keysym.sym == SDLK_LSHIFT)
+         {
+            player[0].run = true;
+         }
+         if (event.key.keysym.sym == SDLK_TAB)
+         {
+            if (!gui[editobject]->visible)
+               ShowGUI(editobject);
+            else
+               gui[editobject]->visible = false;
+            return true;
+         }
+         else if (event.key.keysym.sym == SDLK_ESCAPE)
+         {
+            Quit();
+         }
+         break;
+      case SDL_KEYUP:
+         if (event.key.keysym.sym == SDLK_r)
+         {
+            rotating = false;
+         }
+         else if (event.key.keysym.sym == SDLK_LSHIFT)
+         {
+            player[0].run = false;
+         }
+         break;
+      case SDL_MOUSEMOTION:
+         if (clicked && selected)
+         {
+            if (!rotating)
+            {
+               float modifier = 1.f;
+               if (player[0].run)
+                  modifier = 5.f;
+               if (SDL_GetModState() & KMOD_CTRL)
+                  selected->Move(selected->GetPosition() + Vector3(0.f, event.motion.yrel * modifier, 0.f));
+               else
+                  selected->Move(selected->GetPosition() + Vector3(event.motion.xrel * modifier, 0.f, event.motion.yrel * modifier));
+               UpdateEditorGUI();
+            }
+            else
+            {
+               float modifier = 1.f;
+               selected->Rotate(selected->GetRotation() + Vector3(event.motion.xrel * modifier, event.motion.yrel * modifier, 0.f));
+            }
+            return true;
+         }
+         break;
+      case SDL_MOUSEBUTTONDOWN:
+         {
+            GUI* sv = gui[editobject]->GetWidget("Base");
+            if (event.button.button == SDL_BUTTON_LEFT && !sv->InWidget(&event))
+            {
+               GetSelectedMesh(event);
+               clicked = true;
+               return true;
+            }
+         }
+         break;
+      case SDL_MOUSEBUTTONUP:
+         {
+            GUI* sv = gui[editobject]->GetWidget("Base");
+            if (event.button.button == SDL_BUTTON_LEFT && !sv->InWidget(&event))
+            {
+               clicked = false;
+               return true;
+            }
+         }
+         break;
+   };
+   
+   if (gui[editobject]->visible)
+   {
+      SDL_ShowCursor(SDL_ENABLE);
+      gui[editobject]->ProcessEvent(&event);
+      return true;
+   }
+   return false;
 }
 
 
@@ -242,6 +359,35 @@ void GetSelectedMesh(SDL_Event event)
    
    Vector3 dummy;
    coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected);
+   
+   UpdateEditorGUI();
+}
+
+
+void UpdateEditorGUI()
+{
+   GUI* objectname = gui[editobject]->GetWidget("ObjectName");
+   GUI* objectx = gui[editobject]->GetWidget("ObjectX");
+   GUI* objecty = gui[editobject]->GetWidget("ObjectY");
+   GUI* objectz = gui[editobject]->GetWidget("ObjectZ");
+   GUI* rotx = gui[editobject]->GetWidget("ObjectRotX");
+   GUI* roty = gui[editobject]->GetWidget("ObjectRotY");
+   GUI* rotz = gui[editobject]->GetWidget("ObjectRotZ");
+   GUI* scale = gui[editobject]->GetWidget("ObjectScale");
+   GUI* file = gui[editobject]->GetWidget("ObjectFile");
+   
+   if (selected)
+   {
+      objectname->text = selected->name;
+      objectx->text = ToString(selected->GetPosition().x);
+      objecty->text = ToString(selected->GetPosition().y);
+      objectz->text = ToString(selected->GetPosition().z);
+      rotx->text = ToString(selected->GetRotation().x);
+      roty->text = ToString(selected->GetRotation().y);
+      rotz->text = ToString(selected->GetRotation().z);
+      scale->text = ToString(selected->GetScale());
+      file->text = selected->GetFile();
+   }
 }
 
 
@@ -270,16 +416,18 @@ void SaveMap()
    oldmap.close();
    bakmap.close();
    
+   // Output new map
    ofstream newmap(saveto.c_str(), ios::trunc);
    newmap << olddata;
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      if (!i->terrain)
+      if (!i->terrain && spawnmeshes.find(&(*i)) == spawnmeshes.end())
       {
          newmap << "   Node\n";
          if (treemap.find(&(*i)) == treemap.end()) // Not a proctree
          {
             newmap << "      Type External\n";
+            newmap << "      Name " << i->name << endl;
             newmap << "      BaseFile " << i->GetFile() << endl;
             Vector3 temp = i->GetPosition();
             newmap << "      Position " << temp.x << " " << temp.y << " " << temp.z << endl;
@@ -295,4 +443,46 @@ void SaveMap()
       }
    }
    newmap.close();
+}
+
+
+void SaveObject()
+{
+   GUI* objectname = gui[editobject]->GetWidget("ObjectName");
+   GUI* objectx = gui[editobject]->GetWidget("ObjectX");
+   GUI* objecty = gui[editobject]->GetWidget("ObjectY");
+   GUI* objectz = gui[editobject]->GetWidget("ObjectZ");
+   GUI* rotx = gui[editobject]->GetWidget("ObjectRotX");
+   GUI* roty = gui[editobject]->GetWidget("ObjectRotY");
+   GUI* rotz = gui[editobject]->GetWidget("ObjectRotZ");
+   GUI* scale = gui[editobject]->GetWidget("ObjectScale");
+   GUI* file = gui[editobject]->GetWidget("ObjectFile");
+   
+   if (selected && !selected->terrain)
+   {
+      MeshPtr newmesh = meshcache->GetNewMesh(file->text);
+      Vector3 pos(atof(objectx->text.c_str()), atof(objecty->text.c_str()), atof(objectz->text.c_str()));
+      Vector3 rot(atof(rotx->text.c_str()), atof(roty->text.c_str()), atof(rotz->text.c_str()));
+      
+      newmesh->Move(pos);
+      newmesh->Rotate(rot);
+      if (newmesh->GetFile() == selected->GetFile()) // If we changed models then just use the new model's scale
+         newmesh->Scale(atof(scale->text.c_str()) / newmesh->GetScale());
+      newmesh->name = objectname->text;
+      newmesh->dynamic = true;
+      newmesh->GenVbo();
+      
+      meshes.push_back(*newmesh);
+      kdtree.erase(selected);
+      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+      {
+         if (&(*i) == selected)
+         {
+            meshes.erase(i);
+            break;
+         }
+      }
+      selected = &meshes.back();
+   }
+   UpdateEditorGUI();
 }

@@ -260,6 +260,24 @@ bool ObjectKDTree::insert(Mesh *obj)
 }
 
 
+void ObjectKDTree::erase(Mesh *m)
+{
+   for (list<Mesh*>::iterator i = members.begin(); i != members.end(); ++i)
+   {
+      if (*i == m)
+      {
+         members.erase(i);
+         break;
+      }
+   }
+   if (haschildren)
+   {
+      children[0]->erase(m);
+      children[1]->erase(m);
+   }
+}
+
+
 bool ObjectKDTree::innode(Vector3 v, float size)
 {
    return (v.x >= vertices[0].x - size &&

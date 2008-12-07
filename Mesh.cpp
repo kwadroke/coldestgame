@@ -36,7 +36,7 @@ Mesh::~Mesh()
 
 Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
          animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
-         size(m.size), drawdistmult(m.drawdistmult), debug(m.debug), width(m.width), height(m.height),
+         size(m.size), drawdistmult(m.drawdistmult), name(m.name), debug(m.debug), width(m.width), height(m.height),
          impostortex(m.impostortex), vbo(0), ibo(0), next(m.next), hasvbo(false),
          childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          basefile(m.basefile), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), dist(m.dist), animspeed(m.animspeed),
@@ -96,6 +96,7 @@ Mesh& Mesh::operator=(const Mesh& m)
    rots = m.rots;
    size = m.size;
    drawdistmult = m.drawdistmult;
+   name = m.name;
    debug = m.debug;
    width = m.width;
    height = m.height;
@@ -169,6 +170,7 @@ void Mesh::Load(const IniReader& reader)
    
    string type("");
    reader.Read(type, "Type");
+   reader.Read(name, "Name");
    reader.Read(position.x, "Position", 0);
    reader.Read(position.y, "Position", 1);
    reader.Read(position.z, "Position", 2);
@@ -414,7 +416,7 @@ void Mesh::Load(const IniReader& reader)
    else
    {
       logout << "Warning: Attempted to load unknown object type " << type;
-	  logout << " from file " << reader.GetPath() << endl;
+	   logout << " from file " << reader.GetPath() << endl;
    }
    CalcBounds();
 }
@@ -890,6 +892,7 @@ void Mesh::Scale(const float& sval)
    for (int i = 0; i < frameroot.size(); ++i)
       frameroot[i]->Scale(sval);
    ResetTriMaxDims();
+   scale *= sval;
 }
 
 

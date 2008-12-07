@@ -21,12 +21,13 @@ class LineEdit : public GUI
       virtual void LeftClick(SDL_Event*);
       virtual void LeftDown(SDL_Event*);
       virtual void KeyDown(SDL_Event*);
+      virtual void ReadNodeExtra(DOMNode*, GUI*);
       
       int cursorpos;
       int offset;
       int dragstart, dragend;
       
-      // Copying not allowed
+      // Copying not allowed - this may not be necessary anymore
       LineEdit(const LineEdit&);
       LineEdit& operator=(const LineEdit&);
 };

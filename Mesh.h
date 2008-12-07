@@ -74,6 +74,7 @@ class Mesh
       bool terrain;
       float size; // I'm not sure this should be public, but for the moment we'll go with it
       float drawdistmult;
+      string name;
       
       float impdist;
       float dist;

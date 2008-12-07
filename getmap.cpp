@@ -176,6 +176,15 @@ void GetMap(string fn)
       currnode.Read(spawntemp.position.z, "Location", 2);
       currnode.Read(spawntemp.name, "Name");
       spawnpoints.push_back(spawntemp);
+      if (editor)
+      {
+         MeshPtr newmesh = meshcache->GetNewMesh("models/base/base");
+         newmesh->Move(spawntemp.position);
+         newmesh->dynamic = true;
+         newmesh->GenVbo();
+         meshes.push_back(*newmesh);
+         spawnmeshes.insert(&meshes.back());
+      }
    }
    spawnschanged = true; 
    player[0].team = 0;
