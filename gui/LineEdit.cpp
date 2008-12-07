@@ -191,3 +191,9 @@ string LineEdit::GetVisible()
    return available.substr(0, counter);
 }
 
+
+void LineEdit::ReadNodeExtra(DOMNode* current, GUI* parentw)
+{
+   UseDefaultTextures(ButtonTex);
+}
+

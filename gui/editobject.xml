@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false"
+     buttonnormal="textures/hud/button.png"
+     buttonpressed="textures/hud/button.png"
+     buttonhover="textures/hud/button.png"
      slidernormal="textures/sliderbuttonnorm.png"
      sliderpressed="textures/sliderbuttonnorm.png"
      sliderhover="textures/sliderbuttonnorm.png"
@@ -7,10 +10,10 @@
      bgpressed="textures/hud/button.png"
      bghover="textures/hud/button.png"
      cursornormal="textures/sliderbuttonnorm.png">
-   <ScrollView x="5" y="5" width="500" height="800"
+   <ScrollView x="5" y="5" width="500" height="800" name="Base"
                normal="textures/hud/button.png">
       <Label x="10" y="10" width="150" height="30" text="Name">
-         <TextEdit x="150" y="0" width="300" height="30" name="ObjectName"/>
+         <LineEdit x="150" y="0" width="300" height="30" name="ObjectName"/>
       </Label>
       <Label x="10" y="50" width="150" height="30" text="Position">
          <Label x="0" y="30" width="150" height="30" name="ObjectX"/>
@@ -18,20 +21,21 @@
          <Label x="300" y="30" width="150" height="30" name="ObjectZ"/>
       </Label>
       
-      <Label x="10" y="90" width="150" height="30" text="Rotation">
+      <Label x="10" y="130" width="150" height="30" text="Rotation">
          <Label x="0" y="30" width="150" height="30" name="ObjectRotX"/>
          <Label x="150" y="30" width="150" height="30" name="ObjectRotY"/>
          <Label x="300" y="30" width="150" height="30" name="ObjectRotZ"/>
       </Label>
       
-      <Label x="10" y="130" width="150" height="30" text="Scale">
-         <TextEdit x="150" y="0" width="150" height="30" name="ObjectScale"/>
+      <Label x="10" y="210" width="150" height="30" text="Scale">
+         <LineEdit x="150" y="0" width="150" height="30" name="ObjectScale"/>
       </Label>
       
       <Label x="10" y="600" width="150" height="30" text="File">
-         <TextEdit x="0" y="30" width="450" height="30" name="ObjectFile"/>
+         <LineEdit x="0" y="30" width="450" height="30" name="ObjectFile"/>
       </Label>
       
-      <Button x="10" y="700" width="100" height="30" text="SaveObject"/>
+      <Button x="10" y="700" width="100" height="30" text="SaveObject"
+              leftclick="saveobject"/>
    </ScrollView>
 </GUI>

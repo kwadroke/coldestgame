@@ -10,6 +10,7 @@
 #include "globals.h"
 #include "netdefs.h"
 #include "renderdefs.h"
+#include "editor.h" // Editor actions are defined here
 #include <boost/tokenizer.hpp>
 
 using boost::tokenizer;
@@ -252,6 +253,8 @@ void Action(const string& action)
       SaveSettings();
    else if (action == "selectspawn")
       SelectSpawn();
+   else if (action == "saveobject")
+      SaveObject();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }

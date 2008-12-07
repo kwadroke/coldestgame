@@ -2,5 +2,5 @@ Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/test.png
-Shader shaders/flat
+Shader shaders/standard
 CullFace 0
