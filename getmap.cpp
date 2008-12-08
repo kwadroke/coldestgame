@@ -183,7 +183,7 @@ void GetMap(string fn)
          newmesh->dynamic = true;
          newmesh->GenVbo();
          meshes.push_back(*newmesh);
-         spawnmeshes.insert(&meshes.back());
+         spawnmeshes.push_back(&meshes.back());
       }
    }
    spawnschanged = true; 
@@ -807,7 +807,7 @@ void GetMap(string fn)
    progress->value = 7;
    progtext->text = "Caching meshes";
    Repaint();
-   if (console.GetBool("cache"))
+   if (console.GetBool("cache") && !editor)
       CacheMeshes();
    
    progress->value = 8;

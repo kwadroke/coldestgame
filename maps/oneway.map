@@ -57,7 +57,7 @@ Node
    SpawnPoints
    Node
       Team 1
-      Location 480 100 480
+      Location 521 139 536
       Name Base1
    Node
       Team 1
@@ -71,7 +71,7 @@ Node
       Team 2
       Location 3360 100 3360
       Name Base2
-      
+
 Node
    Objects
    Node

@@ -9,7 +9,6 @@
 
 using std::vector;
 using std::string;
-using std::set;
 
 void EditorEventHandler(SDL_Event);
 bool EditorGUIEventHandler(SDL_Event);
@@ -21,8 +20,9 @@ void UpdateEditorGUI();
 
 // Actions called from action.cpp
 void SaveObject();
+void AddObject();
 
 extern map<Mesh*, ProceduralTree> treemap;
-extern set<Mesh*> spawnmeshes;
+extern vector<Mesh*> spawnmeshes;
 
 #endif

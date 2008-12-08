@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false"
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="true"
      buttonnormal="textures/hud/button.png"
      buttonpressed="textures/hud/buttonred.png"
      buttonhover="textures/hud/buttonhover.png"
@@ -10,5 +10,7 @@
      bgpressed="textures/hud/button.png"
      bghover="textures/hud/button.png"
      cursornormal="textures/sliderbuttonnorm.png">
-   
+   <ScrollView x="10" y="950" width="980" height="50" name="EditorMain">
+      <Button x="0" y="0" width="50" height="40" text="Add" leftclick="addobject"/>
+   </ScrollView>
 </GUI>

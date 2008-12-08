@@ -5,7 +5,7 @@
 using std::vector;
 
 map<Mesh*, ProceduralTree> treemap;
-set<Mesh*> spawnmeshes;
+vector<Mesh*> spawnmeshes;
 
 Mesh* selected = NULL;
 bool clicked = false;
@@ -43,6 +43,8 @@ void EditorLoop(const string editmap)
       }
       
       EditorMove();
+      
+      gui[editormain]->visible = true;
       
       Repaint();
    }
@@ -169,6 +171,7 @@ void EditorEventHandler(SDL_Event event)
                {
                   float modifier = 1.f;
                   selected->Rotate(selected->GetRotation() + Vector3(event.motion.xrel * modifier, event.motion.yrel * modifier, 0.f));
+                  UpdateEditorGUI();
                }
             }
          }
@@ -249,6 +252,7 @@ bool EditorGUIEventHandler(SDL_Event event)
             {
                float modifier = 1.f;
                selected->Rotate(selected->GetRotation() + Vector3(event.motion.xrel * modifier, event.motion.yrel * modifier, 0.f));
+               UpdateEditorGUI();
             }
             return true;
          }
@@ -256,18 +260,21 @@ bool EditorGUIEventHandler(SDL_Event event)
       case SDL_MOUSEBUTTONDOWN:
          {
             GUI* sv = gui[editobject]->GetWidget("Base");
-            if (event.button.button == SDL_BUTTON_LEFT && !sv->InWidget(&event))
+            GUI* mainsv = gui[editormain]->GetWidget("EditorMain");
+            if (event.button.button == SDL_BUTTON_LEFT &&  
+                !sv->InWidget(&event) && !mainsv->InWidget(&event))
             {
                GetSelectedMesh(event);
                clicked = true;
-               return true;
             }
          }
          break;
       case SDL_MOUSEBUTTONUP:
          {
             GUI* sv = gui[editobject]->GetWidget("Base");
-            if (event.button.button == SDL_BUTTON_LEFT && !sv->InWidget(&event))
+            GUI* mainsv = gui[editormain]->GetWidget("EditorMain");
+            if (event.button.button == SDL_BUTTON_LEFT && 
+                !sv->InWidget(&event) && !mainsv->InWidget(&event))
             {
                clicked = false;
                return true;
@@ -281,6 +288,10 @@ bool EditorGUIEventHandler(SDL_Event event)
       SDL_ShowCursor(SDL_ENABLE);
       gui[editobject]->ProcessEvent(&event);
       return true;
+   }
+   if (SDL_ShowCursor(SDL_QUERY) == SDL_ENABLE)
+   {
+      gui[editormain]->ProcessEvent(&event);
    }
    return false;
 }
@@ -401,7 +412,7 @@ void SaveMap()
    while(getline(oldmap, getdata))
    {
       olddata += getdata + '\n';
-      if (getdata.find("Objects") != string::npos)
+      if (getdata.find("SpawnPoints") != string::npos)
          break;
    }
    oldmap.close();
@@ -419,9 +430,24 @@ void SaveMap()
    // Output new map
    ofstream newmap(saveto.c_str(), ios::trunc);
    newmap << olddata;
+   
+   // Write spawn points
+   for (size_t i = 0; i < spawnmeshes.size(); ++i)
+   {
+      Vector3 pos = spawnmeshes[i]->GetPosition();
+      newmap << "   Node\n";
+      newmap << "      Team " << spawnpoints[i].team << endl;
+      newmap << "      Location " << pos.x << " " << pos.y << " " << pos.z << endl;
+      newmap << "      Name " << spawnpoints[i].name << endl;
+   }
+   
+   // Write objects
+   newmap << "\nNode\n";
+   newmap << "   Objects\n";
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      if (!i->terrain && spawnmeshes.find(&(*i)) == spawnmeshes.end())
+      if (!i->terrain && 
+           find(spawnmeshes.begin(), spawnmeshes.end(), &(*i)) == spawnmeshes.end())
       {
          newmap << "   Node\n";
          if (treemap.find(&(*i)) == treemap.end()) // Not a proctree
@@ -485,4 +511,44 @@ void SaveObject()
       selected = &meshes.back();
    }
    UpdateEditorGUI();
+}
+
+
+void AddObject()
+{
+   GLdouble x, y, z;
+   GLdouble modelview[16];
+   GLdouble projection[16];
+   GLint view[4];
+   Vector3 start, end;
+   
+   // Get world coordinates from screen coordinates
+   glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+   glGetDoublev(GL_PROJECTION_MATRIX, projection);
+   glGetIntegerv(GL_VIEWPORT, view);
+   
+   gluUnProject(console.GetInt("screenwidth") / 2, 
+                console.GetInt("screenheight") / 2, 0.f,
+                modelview, projection, view,
+                &x, &y, &z);
+   
+   start.x = x, start.y = y, start.z = z;
+   
+   gluUnProject(console.GetInt("screenwidth") / 2,
+                console.GetInt("screenheight") / 2, .99f,
+                modelview, projection, view,
+                &x, &y, &z);
+   end.x = x, end.y = y, end.z = z;
+   
+   Vector3 v = end - start;
+   v.normalize();
+   v *= 300.f;
+   end = start + v;
+   
+   MeshPtr newmesh = meshcache->GetNewMesh("models/teapot");
+   newmesh->name = "Unnamed";
+   newmesh->dynamic = true;
+   newmesh->GenVbo();
+   newmesh->Move(end);
+   meshes.push_back(*newmesh);
 }

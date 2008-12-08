@@ -255,6 +255,8 @@ void Action(const string& action)
       SelectSpawn();
    else if (action == "saveobject")
       SaveObject();
+   else if (action == "addobject")
+      AddObject();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }
