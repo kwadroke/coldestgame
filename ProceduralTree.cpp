@@ -7,8 +7,8 @@ Ideas:
 
 ProceduralTree::ProceduralTree()
 {
-   numlevels = 3;
-   numslices = 4;
+   numlevels = 2;
+   numslices = 3;
    numbranches[0] = 5;
    numbranches[1] = 2;
    numbranches[2] = 3;
@@ -36,10 +36,10 @@ ProceduralTree::ProceduralTree()
    maxheightvar = 1.25;
    sidetaper = .7;
    curvecoeff = 0.f;
-   split = false;
-   continuebranch = true;
+   split = true;
+   continuebranch = false;
    multitrunk = false;
-   branchwithleaves = true;
+   branchwithleaves = false;
    leafsegs = 2;
    leafcurve = 3.f;
    seed = 0;

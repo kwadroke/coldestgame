@@ -61,15 +61,15 @@ Node
       Name Base1
    Node
       Team 1
-      Location 3360 100 480
+      Location 3279 143 523
       Name Base1
    Node
       Team 2
-      Location 480 100 3360
+      Location 554 145 3261
       Name Base2
    Node
       Team 2
-      Location 3360 100 3360
+      Location 3301 129 3235
       Name Base2
 
 Node

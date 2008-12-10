@@ -257,6 +257,10 @@ void Action(const string& action)
       SaveObject();
    else if (action == "addobject")
       AddObject();
+   else if (action == "addtree")
+      AddTree();
+   else if (action == "savemap")
+      SaveMap();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }

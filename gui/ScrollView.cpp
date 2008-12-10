@@ -146,8 +146,10 @@ void ScrollView::RecalculateSize()
    for (i = children.begin(); i != children.end(); ++i)
    {
       GUIPtr iptr = *i;
-      if (iptr->x + iptr->width > canvasx) canvasx = iptr->x + iptr->width;
-      if (iptr->y + iptr->height > canvasy) canvasy = iptr->y + iptr->height;
+      float maxx = iptr->MaxX();
+      float maxy = iptr->MaxY();
+      if (maxx > canvasx) canvasx = maxx;
+      if (maxy > canvasy) canvasy = maxy;
    }
    if (canvasx - 1e-4f > width)
    {

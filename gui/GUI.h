@@ -75,6 +75,8 @@ class GUI
       void SetActive(bool act = true);
       void SetTextureID(int, GLuint);
       void SetTexture(int, const string&);
+      float MaxX();
+      float MaxY();
       
       bool visible;
       bool readonly;
