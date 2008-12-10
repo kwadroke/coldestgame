@@ -10,7 +10,10 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
 {
    ifstream check(filename.c_str());
    if (check.fail())
+   {
+      logout << "Failed to load material " << filename << endl;
       filename = "materials/default";
+   }
    IniReader reader(filename);
 
    for (int i = 0; i < 4; ++i)

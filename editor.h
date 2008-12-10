@@ -21,6 +21,7 @@ void UpdateEditorGUI();
 // Actions called from action.cpp
 void SaveObject();
 void AddObject();
+void AddTree();
 
 extern map<Mesh*, ProceduralTree> treemap;
 extern vector<Mesh*> spawnmeshes;

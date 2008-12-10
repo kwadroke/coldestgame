@@ -215,6 +215,7 @@ void GUI::ProcessEvent(SDL_Event* event)
          else 
          {
             state = Normal;
+            active = false;
             if (event->button.button == SDL_BUTTON_LEFT)
                GlobalLeftDown(event);
             else if (event->button.button == SDL_BUTTON_RIGHT)
@@ -778,5 +779,32 @@ void GUI::SetTexture(int state, const string& file)
       textures[Hover] = textures[Normal];
    if (state == Normal && textures[Clicked] == "")
       textures[Clicked] = textures[Normal];
+}
+
+
+float GUI::MaxX()
+{
+   float retval = x + width;
+   float tempval = 0.f;
+   for (guiiter i = children.begin(); i != children.end(); ++i)
+   {
+      tempval = (*i)->MaxX() + x;
+      if (tempval > retval)
+         retval = tempval;
+   }
+   return retval;
+}
+
+float GUI::MaxY()
+{
+   float retval = y + height;
+   float tempval = 0.f;
+   for (guiiter i = children.begin(); i != children.end(); ++i)
+   {
+      tempval = (*i)->MaxY() + y;
+      if (tempval > retval)
+         retval = tempval;
+   }
+   return retval;
 }
 

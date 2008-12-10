@@ -259,22 +259,23 @@ bool EditorGUIEventHandler(SDL_Event event)
          break;
       case SDL_MOUSEBUTTONDOWN:
          {
-            GUI* sv = gui[editobject]->GetWidget("Base");
+            GUI* eobase = gui[editobject]->GetWidget("Base");
             GUI* mainsv = gui[editormain]->GetWidget("EditorMain");
             if (event.button.button == SDL_BUTTON_LEFT &&  
-                !sv->InWidget(&event) && !mainsv->InWidget(&event))
+                !eobase->InWidget(&event) && !mainsv->InWidget(&event))
             {
                GetSelectedMesh(event);
                clicked = true;
+               return true;
             }
          }
          break;
       case SDL_MOUSEBUTTONUP:
          {
-            GUI* sv = gui[editobject]->GetWidget("Base");
+            GUI* eobase = gui[editobject]->GetWidget("Base");
             GUI* mainsv = gui[editormain]->GetWidget("EditorMain");
             if (event.button.button == SDL_BUTTON_LEFT && 
-                !sv->InWidget(&event) && !mainsv->InWidget(&event))
+                !eobase->InWidget(&event) && !mainsv->InWidget(&event))
             {
                clicked = false;
                return true;
@@ -299,6 +300,8 @@ bool EditorGUIEventHandler(SDL_Event event)
 
 void EditorMove()
 {
+   static Uint32 lasttick = SDL_GetTicks();
+   
    Vector3 d = Vector3(0, 0, 1);
    GraphicMatrix rot;
    if (player[0].pitch > 89.99)
@@ -313,9 +316,17 @@ void EditorMove()
    Vector3 sideways = d.cross(Vector3(0, 1, 0));
    sideways.normalize();
    
+   Uint32 currtick = SDL_GetTicks();
+   if (currtick != lasttick)
+   {
+      d *= float(currtick - lasttick) * .1f;
+      sideways *= float(currtick - lasttick) * .1f;
+   }
+   lasttick = currtick;
+   
    float movespeed = 5.f;
    if (player[0].run)
-      movespeed *= 2.f;
+      movespeed *= 3.f;
    
    if (player[0].moveforward)
    {
@@ -387,6 +398,32 @@ void UpdateEditorGUI()
    GUI* scale = gui[editobject]->GetWidget("ObjectScale");
    GUI* file = gui[editobject]->GetWidget("ObjectFile");
    
+   // Tree GUI elements
+   GUI* seed = gui[editobject]->GetWidget("Seed");
+   GUI* impdist = gui[editobject]->GetWidget("ImpostorDistance");
+   GUI* trunkradius = gui[editobject]->GetWidget("TrunkRadius");
+   GUI* trunksegments = gui[editobject]->GetWidget("TrunkSegments");
+   GUI* trunkslices = gui[editobject]->GetWidget("TrunkSlices");
+   GUI* trunktaper = gui[editobject]->GetWidget("TrunkTaper");
+   
+   GUI* maxbranchangle = gui[editobject]->GetWidget("MaxBranchAngle");
+   GUI* initialheight = gui[editobject]->GetWidget("InitialHeight");
+   GUI* heightreduction = gui[editobject]->GetWidget("HeightReduction");
+   GUI* initialradius = gui[editobject]->GetWidget("InitialRadius");
+   GUI* radiustaper = gui[editobject]->GetWidget("RadiusTaper");
+   GUI* numlevels = gui[editobject]->GetWidget("NumLevels");
+   GUI* numslices = gui[editobject]->GetWidget("NumSlices");
+   GUI* numsegments = gui[editobject]->GetWidget("NumSegments");
+   GUI* numbranches0 = gui[editobject]->GetWidget("NumBranches0");
+   GUI* numbranches1 = gui[editobject]->GetWidget("NumBranches1");
+   GUI* curvecoeff = gui[editobject]->GetWidget("CurveCoeff");
+   
+   GUI* numleaves = gui[editobject]->GetWidget("NumLeaves");
+   GUI* leafsize = gui[editobject]->GetWidget("LeafSize");
+   GUI* leafsegs = gui[editobject]->GetWidget("LeafSegs");
+   GUI* leafcurve = gui[editobject]->GetWidget("LeafCurve");
+   GUI* firstleaflevel = gui[editobject]->GetWidget("FirstLeafLevel");
+   
    if (selected)
    {
       objectname->text = selected->name;
@@ -398,6 +435,35 @@ void UpdateEditorGUI()
       rotz->text = ToString(selected->GetRotation().z);
       scale->text = ToString(selected->GetScale());
       file->text = selected->GetFile();
+      
+      if (treemap.find(selected) != treemap.end())
+      {
+         ProceduralTree& tree = treemap[selected];
+         seed->text = ToString(tree.seed);
+         impdist->text = ToString(selected->impdist);
+         trunkradius->text = ToString(tree.trunkrad);
+         trunksegments->text = ToString(tree.trunknumsegs);
+         trunkslices->text = ToString(tree.trunknumslices);
+         trunktaper->text = ToString(tree.trunktaper);
+         
+         maxbranchangle->text = ToString(tree.maxbranchangle);
+         initialheight->text = ToString(tree.initheight);
+         heightreduction->text = ToString(tree.heightreductionperc);
+         initialradius->text = ToString(tree.initrad);
+         radiustaper->text = ToString(tree.radreductionperc);
+         numlevels->text = ToString(tree.numlevels);
+         numslices->text = ToString(tree.numslices);
+         numsegments->text = ToString(tree.numsegs);
+         numbranches0->text = ToString(tree.numbranches[0]);
+         numbranches1->text = ToString(tree.numbranches[1]);
+         curvecoeff->text = ToString(tree.curvecoeff);
+         
+         numleaves->text = ToString(tree.numleaves);
+         leafsize->text = ToString(tree.leafsize);
+         leafsegs->text = ToString(tree.leafsegs);
+         leafcurve->text = ToString(tree.leafcurve);
+         firstleaflevel->text = ToString(tree.firstleaflevel);
+      }
    }
 }
 
@@ -484,21 +550,91 @@ void SaveObject()
    GUI* scale = gui[editobject]->GetWidget("ObjectScale");
    GUI* file = gui[editobject]->GetWidget("ObjectFile");
    
+   // Tree GUI elements
+   GUI* seed = gui[editobject]->GetWidget("Seed");
+   GUI* impdist = gui[editobject]->GetWidget("ImpostorDistance");
+   GUI* trunkradius = gui[editobject]->GetWidget("TrunkRadius");
+   GUI* trunksegments = gui[editobject]->GetWidget("TrunkSegments");
+   GUI* trunkslices = gui[editobject]->GetWidget("TrunkSlices");
+   GUI* trunktaper = gui[editobject]->GetWidget("TrunkTaper");
+   
+   GUI* maxbranchangle = gui[editobject]->GetWidget("MaxBranchAngle");
+   GUI* initialheight = gui[editobject]->GetWidget("InitialHeight");
+   GUI* heightreduction = gui[editobject]->GetWidget("HeightReduction");
+   GUI* initialradius = gui[editobject]->GetWidget("InitialRadius");
+   GUI* radiustaper = gui[editobject]->GetWidget("RadiusTaper");
+   GUI* numlevels = gui[editobject]->GetWidget("NumLevels");
+   GUI* numslices = gui[editobject]->GetWidget("NumSlices");
+   GUI* numsegments = gui[editobject]->GetWidget("NumSegments");
+   GUI* numbranches0 = gui[editobject]->GetWidget("NumBranches0");
+   GUI* numbranches1 = gui[editobject]->GetWidget("NumBranches1");
+   GUI* curvecoeff = gui[editobject]->GetWidget("CurveCoeff");
+   
+   GUI* numleaves = gui[editobject]->GetWidget("NumLeaves");
+   GUI* leafsize = gui[editobject]->GetWidget("LeafSize");
+   GUI* leafsegs = gui[editobject]->GetWidget("LeafSegs");
+   GUI* leafcurve = gui[editobject]->GetWidget("LeafCurve");
+   GUI* firstleaflevel = gui[editobject]->GetWidget("FirstLeafLevel");
+   
    if (selected && !selected->terrain)
    {
-      MeshPtr newmesh = meshcache->GetNewMesh(file->text);
       Vector3 pos(atof(objectx->text.c_str()), atof(objecty->text.c_str()), atof(objectz->text.c_str()));
       Vector3 rot(atof(rotx->text.c_str()), atof(roty->text.c_str()), atof(rotz->text.c_str()));
-      
-      newmesh->Move(pos);
-      newmesh->Rotate(rot);
-      if (newmesh->GetFile() == selected->GetFile()) // If we changed models then just use the new model's scale
-         newmesh->Scale(atof(scale->text.c_str()) / newmesh->GetScale());
-      newmesh->name = objectname->text;
-      newmesh->dynamic = true;
-      newmesh->GenVbo();
-      
-      meshes.push_back(*newmesh);
+      if (treemap.find(selected) != treemap.end())
+      {
+         MeshPtr newmesh = meshcache->GetNewMesh("models/empty");
+         
+         newmesh->Move(pos);
+         newmesh->Rotate(rot);
+         newmesh->name = objectname->text;
+         newmesh->dynamic = true;
+         
+         ProceduralTree t;
+         t.seed = atoi(seed->text.c_str());
+         newmesh->impdist = atoi(impdist->text.c_str());
+         t.trunkrad = atof(trunkradius->text.c_str());
+         t.trunknumsegs = atoi(trunksegments->text.c_str());
+         t.trunknumslices = atoi(trunkslices->text.c_str());
+         t.trunktaper = atof(trunktaper->text.c_str());
+         
+         t.maxbranchangle = atoi(maxbranchangle->text.c_str());
+         t.initheight = atof(initialheight->text.c_str());
+         t.heightreductionperc = atof(heightreduction->text.c_str());
+         t.initrad = atof(initialradius->text.c_str());
+         t.radreductionperc = atof(radiustaper->text.c_str());
+         t.numlevels = atoi(numlevels->text.c_str());
+         t.numslices = atoi(numslices->text.c_str());
+         t.numsegs = atoi(numsegments->text.c_str());
+         t.numbranches[0] = atoi(numbranches0->text.c_str());
+         t.numbranches[1] = atoi(numbranches1->text.c_str());
+         t.curvecoeff = atof(curvecoeff->text.c_str());
+         
+         t.numleaves = atoi(numleaves->text.c_str());
+         t.leafsize = atof(leafsize->text.c_str());
+         t.leafsegs = atoi(leafsegs->text.c_str());
+         t.leafcurve = atof(leafcurve->text.c_str());
+         t.firstleaflevel = atoi(firstleaflevel->text.c_str());
+         
+         t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
+         
+         meshes.push_back(*newmesh);
+         meshes.back().GenVbo();
+         treemap[&meshes.back()] = t;
+      }
+      else
+      {
+         MeshPtr newmesh = meshcache->GetNewMesh(file->text);
+         
+         newmesh->Move(pos);
+         newmesh->Rotate(rot);
+         if (newmesh->GetFile() == selected->GetFile()) // If we changed models then just use the new model's scale
+            newmesh->Scale(atof(scale->text.c_str()) / newmesh->GetScale());
+         newmesh->name = objectname->text;
+         newmesh->dynamic = true;
+         newmesh->GenVbo();
+         
+         meshes.push_back(*newmesh);
+      }
       kdtree.erase(selected);
       for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
       {
@@ -551,4 +687,50 @@ void AddObject()
    newmesh->GenVbo();
    newmesh->Move(end);
    meshes.push_back(*newmesh);
+}
+
+
+void AddTree()
+{
+   GLdouble x, y, z;
+   GLdouble modelview[16];
+   GLdouble projection[16];
+   GLint view[4];
+   Vector3 start, end;
+   
+   // Get world coordinates from screen coordinates
+   glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+   glGetDoublev(GL_PROJECTION_MATRIX, projection);
+   glGetIntegerv(GL_VIEWPORT, view);
+   
+   gluUnProject(console.GetInt("screenwidth") / 2, 
+                console.GetInt("screenheight") / 2, 0.f,
+                               modelview, projection, view,
+                               &x, &y, &z);
+   
+   start.x = x, start.y = y, start.z = z;
+   
+   gluUnProject(console.GetInt("screenwidth") / 2,
+                console.GetInt("screenheight") / 2, .99f,
+                               modelview, projection, view,
+                               &x, &y, &z);
+   end.x = x, end.y = y, end.z = z;
+   
+   Vector3 v = end - start;
+   v.normalize();
+   v *= 300.f;
+   end = start + v;
+   
+   MeshPtr newmesh = meshcache->GetNewMesh("models/empty");
+   newmesh->name = "Unnamed";
+   newmesh->dynamic = true;
+   newmesh->Move(end);
+   ProceduralTree t;
+   
+   size_t prims = t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
+   newmesh->CalcBounds();
+   
+   meshes.push_back(*newmesh);
+   meshes.back().GenVbo();
+   treemap[&meshes.back()] = t;
 }
