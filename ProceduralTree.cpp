@@ -17,16 +17,16 @@ ProceduralTree::ProceduralTree()
    maxbranchangle = 5;
    maxtrunkangle = 5.f;
    initrad = 5;
-   radreductionperc = .3;
+   radreductionperc = .2;
    initheight = 20;
    heightreductionperc = .7;
    firstleaflevel = 2;
-   leafsize = 5;
+   leafsize = 10;
    numsegs = 3;
    numleaves = 2;
    trunkrad = 5;
    trunknumslices = 10;
-   trunktaper = .8;
+   trunktaper = .9;
    trunknumsegs = 8;
    branchevery = 8;
    sidebranches = 12;
@@ -424,8 +424,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
 // Reads tree parameters from the designated IniReader
 void ProceduralTree::ReadParams(const IniReader &get)
 {
-   get.Read(barkfile, "Material", 0);
-   get.Read(leavesfile, "Material", 1);
+   get.Read(barkfile, "Materials", 0);
+   get.Read(leavesfile, "Materials", 1);
    get.Read(numlevels, "numlevels");
    get.Read(numslices, "numslices");
    get.Read(numbranches[0], "numbranches0");

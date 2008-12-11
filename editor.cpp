@@ -416,13 +416,19 @@ void UpdateEditorGUI()
    GUI* numsegments = gui[editobject]->GetWidget("NumSegments");
    GUI* numbranches0 = gui[editobject]->GetWidget("NumBranches0");
    GUI* numbranches1 = gui[editobject]->GetWidget("NumBranches1");
+   GUI* numbranches2 = gui[editobject]->GetWidget("NumBranches2");
    GUI* curvecoeff = gui[editobject]->GetWidget("CurveCoeff");
+   GUI* maxangle = gui[editobject]->GetWidget("MaxAngle");
+   GUI* minangle = gui[editobject]->GetWidget("MinAngle");
    
    GUI* numleaves = gui[editobject]->GetWidget("NumLeaves");
    GUI* leafsize = gui[editobject]->GetWidget("LeafSize");
    GUI* leafsegs = gui[editobject]->GetWidget("LeafSegs");
    GUI* leafcurve = gui[editobject]->GetWidget("LeafCurve");
    GUI* firstleaflevel = gui[editobject]->GetWidget("FirstLeafLevel");
+   
+   GUI* barkmat = gui[editobject]->GetWidget("BarkMat");
+   GUI* leavesmat = gui[editobject]->GetWidget("LeavesMat");
    
    if (selected)
    {
@@ -456,13 +462,19 @@ void UpdateEditorGUI()
          numsegments->text = ToString(tree.numsegs);
          numbranches0->text = ToString(tree.numbranches[0]);
          numbranches1->text = ToString(tree.numbranches[1]);
+         numbranches2->text = ToString(tree.numbranches[2]);
          curvecoeff->text = ToString(tree.curvecoeff);
+         maxangle->text = ToString(tree.maxangle);
+         minangle->text = ToString(tree.minangle);
          
          numleaves->text = ToString(tree.numleaves);
          leafsize->text = ToString(tree.leafsize);
          leafsegs->text = ToString(tree.leafsegs);
          leafcurve->text = ToString(tree.leafcurve);
          firstleaflevel->text = ToString(tree.firstleaflevel);
+         
+         barkmat->text = ToString(tree.barkfile);
+         leavesmat->text = ToString(tree.leavesfile);
       }
    }
 }
@@ -530,7 +542,41 @@ void SaveMap()
          }
          else
          {
-            logout << "Trees not supported at this time" << endl;
+            ProceduralTree t = treemap[&(*i)];
+            Vector3 currpos = i->GetPosition();
+            Vector3 currrot = i->GetRotation();
+            newmap << "      Type proctree\n";
+            newmap << "      Position " << currpos.x << " " << currpos.y << " " << currpos.z << endl;
+            newmap << "      Rotations " << currrot.x << " " << currrot.y << " " << currrot.z << endl;
+            newmap << "      Name " << i->name << endl;
+            newmap << "      Materials " << t.barkfile << " " << t.leavesfile << endl;
+            newmap << "      seed " << t.seed << endl;
+            newmap << "      ImpostorDistance " << i->impdist << endl;
+            newmap << "      trunkrad " << t.trunkrad << endl;
+            newmap << "      trunknumsegs " << t.trunknumsegs << endl;
+            newmap << "      trunknumslices " << t.trunknumslices << endl;
+            newmap << "      trunktaper " << t.trunktaper << endl;
+            
+            newmap << "      maxbranchangle " << t.maxbranchangle << endl;
+            newmap << "      initheight " << t.initheight << endl;
+            newmap << "      heightreductionperc " << t.heightreductionperc << endl;
+            newmap << "      initrad " << t.initrad << endl;
+            newmap << "      radreductionperc " << t.radreductionperc << endl;
+            newmap << "      numlevels " << t.numlevels << endl;
+            newmap << "      numslices " << t.numslices << endl;
+            newmap << "      numsegs " << t.numsegs << endl;
+            newmap << "      numbranches0 " << t.numbranches[0] << endl;
+            newmap << "      numbranches1 " << t.numbranches[1] << endl;
+            newmap << "      numbranches2 " << t.numbranches[2] << endl;
+            newmap << "      curvecoeff " << t.curvecoeff << endl;
+            newmap << "      maxangle " << t.maxangle << endl;
+            newmap << "      minangle " << t.minangle << endl;
+            
+            newmap << "      numleaves " << t.numleaves << endl;
+            newmap << "      leafsize " << t.leafsize << endl;
+            newmap << "      leafsegs " << t.leafsegs << endl;
+            newmap << "      leafcurve " << t.leafcurve << endl;
+            newmap << "      firstleaflevel " << t.firstleaflevel << endl;
          }
       }
    }
@@ -568,13 +614,19 @@ void SaveObject()
    GUI* numsegments = gui[editobject]->GetWidget("NumSegments");
    GUI* numbranches0 = gui[editobject]->GetWidget("NumBranches0");
    GUI* numbranches1 = gui[editobject]->GetWidget("NumBranches1");
+   GUI* numbranches2 = gui[editobject]->GetWidget("NumBranches2");
    GUI* curvecoeff = gui[editobject]->GetWidget("CurveCoeff");
+   GUI* maxangle = gui[editobject]->GetWidget("MaxAngle");
+   GUI* minangle = gui[editobject]->GetWidget("MinAngle");
    
    GUI* numleaves = gui[editobject]->GetWidget("NumLeaves");
    GUI* leafsize = gui[editobject]->GetWidget("LeafSize");
    GUI* leafsegs = gui[editobject]->GetWidget("LeafSegs");
    GUI* leafcurve = gui[editobject]->GetWidget("LeafCurve");
    GUI* firstleaflevel = gui[editobject]->GetWidget("FirstLeafLevel");
+   
+   GUI* barkmat = gui[editobject]->GetWidget("BarkMat");
+   GUI* leavesmat = gui[editobject]->GetWidget("LeavesMat");
    
    if (selected && !selected->terrain)
    {
@@ -591,6 +643,8 @@ void SaveObject()
          
          ProceduralTree t;
          t.seed = atoi(seed->text.c_str());
+         t.barkfile = treemap[selected].barkfile;
+         t.leavesfile = treemap[selected].leavesfile;
          newmesh->impdist = atoi(impdist->text.c_str());
          t.trunkrad = atof(trunkradius->text.c_str());
          t.trunknumsegs = atoi(trunksegments->text.c_str());
@@ -607,7 +661,10 @@ void SaveObject()
          t.numsegs = atoi(numsegments->text.c_str());
          t.numbranches[0] = atoi(numbranches0->text.c_str());
          t.numbranches[1] = atoi(numbranches1->text.c_str());
+         t.numbranches[2] = atoi(numbranches2->text.c_str());
          t.curvecoeff = atof(curvecoeff->text.c_str());
+         t.maxangle = atof(maxangle->text.c_str());
+         t.minangle = atof(minangle->text.c_str());
          
          t.numleaves = atoi(numleaves->text.c_str());
          t.leafsize = atof(leafsize->text.c_str());
@@ -615,7 +672,10 @@ void SaveObject()
          t.leafcurve = atof(leafcurve->text.c_str());
          t.firstleaflevel = atoi(firstleaflevel->text.c_str());
          
-         t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
+         t.barkfile = barkmat->text;
+         t.leavesfile = leavesmat->text;
+         
+         t.GenTree(newmesh.get(), &resman.LoadMaterial(t.barkfile), &resman.LoadMaterial(t.leavesfile));
          
          meshes.push_back(*newmesh);
          meshes.back().GenVbo();
@@ -726,6 +786,8 @@ void AddTree()
    newmesh->dynamic = true;
    newmesh->Move(end);
    ProceduralTree t;
+   t.barkfile = "materials/bark";
+   t.leavesfile = "materials/leaves";
    
    size_t prims = t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
    newmesh->CalcBounds();
