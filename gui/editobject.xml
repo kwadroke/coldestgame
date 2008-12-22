@@ -13,7 +13,7 @@
    <ScrollView x="0" y="0" width="500" height="800" name="Base"
                normal="textures/hud/button.png">
       
-      <Button x="10" y="750" width="100" height="30" text="SaveObject"
+      <Button x="10" y="750" width="120" height="30" text="Save Object"
                   leftclick="saveobject"/>
       
       <TabWidget x="5" y="5" width="475" height="700">
@@ -40,6 +40,10 @@
             <Label x="10" y="600" width="150" height="30" text="File">
                <LineEdit x="0" y="30" width="450" height="30" name="ObjectFile"/>
             </Label>
+            
+            <Label x="10" y="290" width="150" height="30" text="Tris">
+               <Label x="150" y="0" width="150" height="30" name="ObjectTris"/>
+            </Label>
          </Tab>
          <Tab text="Tree" buttonwidth="100">
             <Label x="10" y="10" width="150" height="30" text="Seed">
@@ -62,9 +66,12 @@
                <Label x="0" y="120" width="150" height="30" text="Trunk Taper">
                   <LineEdit x="150" y="0" width="150" height="30" name="TrunkTaper"/>
                </Label>
+               <Label x="0" y="150" width="150" height="30" text="Max Angle">
+                  <LineEdit x="150" y="0" width="150" height="30" name="MaxTrunkAngle"/>
+               </Label>
             </Label>
             
-            <Label x="10" y="220" width="450" height="30" text="Branches" align="center"
+            <Label x="10" y="250" width="450" height="30" text="Branches" align="center"
                   normal="textures/sliderbuttonnorm.png">
                <Label x="0" y="30" width="150" height="30" text="Max Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MaxBranchAngle"/>
@@ -110,7 +117,29 @@
                </Label>
             </Label>
             
-            <Label x="10" y="670" width="450" height="30" text="Leaves" align="center"
+            <Label x="10" y="700" width="450" height="30" text="Side Branches" align="center"
+                   normal="textures/sliderbuttonnorm.png">
+               <Label x="0" y="30" width="150" height="30" text="Number">
+                  <LineEdit x="150" y="0" width="150" height="30" name="SideBranches"/>
+               </Label>
+               <Label x="0" y="60" width="150" height="30" text="Min Angle">
+                  <LineEdit x="150" y="0" width="150" height="30" name="MinSideAngle"/>
+               </Label>
+               <Label x="0" y="90" width="150" height="30" text="Max Angle">
+                  <LineEdit x="150" y="0" width="150" height="30" name="MaxSideAngle"/>
+               </Label>
+               <Label x="0" y="120" width="150" height="30" text="Branch After">
+                  <LineEdit x="150" y="0" width="150" height="30" name="BranchAfter"/>
+               </Label>
+               <Label x="0" y="150" width="150" height="30" text="Taper">
+                  <LineEdit x="150" y="0" width="150" height="30" name="SideTaper"/>
+               </Label>
+               <Label x="0" y="180" width="150" height="30" text="Size %">
+                  <LineEdit x="150" y="0" width="150" height="30" name="SideSizePerc"/>
+               </Label>
+            </Label>
+            
+            <Label x="10" y="910" width="450" height="30" text="Leaves" align="center"
                   normal="textures/sliderbuttonnorm.png">
                <Label x="0" y="30" width="150" height="30" text="Num Leaves">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumLeaves"/>
@@ -129,7 +158,7 @@
                </Label>
             </Label>
             
-            <Label x="10" y="850" width="450" height="30" text="Materials" align="center"
+            <Label x="10" y="1090" width="450" height="30" text="Materials" align="center"
                    normal="textures/sliderbuttonnorm.png">
                <Label x="0" y="30" width="150" height="30" text="Bark">
                   <LineEdit x="150" y="0" width="300" height="30" name="BarkMat"/>

@@ -422,8 +422,20 @@ void Mesh::Load(const IniReader& reader)
 }
 
 
-void Mesh::Move(const Vector3& v)
+void Mesh::Move(const Vector3& v, bool movetris)
 {
+   if (movetris)
+   {
+      Vector3 move = v - position;
+      
+      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      {
+         (*i)->pos += move;
+      }
+      GenVbo();
+      CalcBounds();
+   }
+   
    position = v;
    ResetTriMaxDims();
 }
@@ -442,8 +454,27 @@ const Vector3 Mesh::GetPosition() const
 }
 
 
-void Mesh::Rotate(const Vector3& v)
+void Mesh::Rotate(const Vector3& v, bool movetris)
 {
+   if (movetris)
+   {
+      Vector3 rotation = v - rots;
+      Vector3 pos = GetPosition();
+      GraphicMatrix m;
+      m.rotatex(rotation.x);
+      m.rotatey(rotation.y);
+      m.rotatez(rotation.z);
+      
+      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      {
+         (*i)->pos -= pos;
+         (*i)->pos.transform(m);
+         (*i)->pos += pos;
+      }
+      GenVbo();
+      CalcBounds();
+   }
+   
    rots = v;
    ResetTriMaxDims();
 }

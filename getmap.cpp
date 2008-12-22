@@ -782,27 +782,8 @@ void GetMap(string fn)
    progress->value = 6;
    progtext->text = "Generating buffers";
    Repaint();
-   int fbodim = fbodims[2];
-   int counter = 0;
-   FBO dummyfbo;
-   impmeshes.clear();
-   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
-   {
-      if (!floatzero(i->impdist))
-      {
-         if (counter >= fbostarts[2])
-            fbodim = fbodims[2];
-         else if (counter >= fbostarts[1])
-            fbodim = fbodims[1];
-         else fbodim = fbodims[0];
-         dummyfbo = FBO(fbodim, fbodim, false, &resman.texhand);
-         impfbolist.push_back(dummyfbo);
-         i->impostorfbo = counter;
-         impmeshes.push_back(&(*i));
-         ++counter;
-      }
-      i->GenVbo();
-   }
+   
+   RegenFBOList();
    
    progress->value = 7;
    progtext->text = "Caching meshes";

@@ -33,7 +33,7 @@ class ProceduralTree
       int randseed;
       int trunknumslices;
       int trunknumsegs;
-      int branchevery;
+      int branchafter;
       int sidebranches;
       int leafsegs;
       int seed;
@@ -50,6 +50,7 @@ class ProceduralTree
       float trunktaper;
       float minsidebranchangle;
       float maxsidebranchangle;
+      float sidesizeperc;
       float minheightvar;
       float maxheightvar;
       float sidetaper;

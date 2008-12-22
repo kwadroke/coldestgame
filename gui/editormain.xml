@@ -13,7 +13,8 @@
    <ScrollView x="10" y="950" width="980" height="50" name="EditorMain">
       <Button x="0" y="0" width="50" height="40" text="Add" leftclick="addobject" align="center"/>
       <Button x="60" y="0" width="120" height="40" text="Add Tree" leftclick="addtree" align="center"/>
-      <Button x="190" y="0" width="70" height="40" text="Save" leftclick="savemap" align="center"/>
+      <Button x="190" y="0" width="120" height="40" text="Delete" leftclick="deleteobject" align="center"/>
+      <Button x="320" y="0" width="70" height="40" text="Save" leftclick="savemap" align="center"/>
       <Button x="890" y="0" width="70" height="40" text="Exit" leftclick="exit" align="center"/>
    </ScrollView>
 </GUI>

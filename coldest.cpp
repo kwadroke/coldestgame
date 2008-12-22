@@ -2087,6 +2087,33 @@ void StartBGMusic()
 }
 
 
+void RegenFBOList()
+{
+   int fbodim = fbodims[2];
+   int counter = 0;
+   FBO dummyfbo;
+   impmeshes.clear();
+   impfbolist.clear();
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      if (!floatzero(i->impdist))
+      {
+         if (counter >= fbostarts[2])
+            fbodim = fbodims[2];
+         else if (counter >= fbostarts[1])
+            fbodim = fbodims[1];
+         else fbodim = fbodims[0];
+         dummyfbo = FBO(fbodim, fbodim, false, &resman.texhand);
+         impfbolist.push_back(dummyfbo);
+         i->impostorfbo = counter;
+         impmeshes.push_back(&(*i));
+         ++counter;
+      }
+      i->GenVbo();
+   }
+}
+
+
 /****************************************************************
 The following are all utility functions
 ****************************************************************/

@@ -259,6 +259,8 @@ void Action(const string& action)
       AddObject();
    else if (action == "addtree")
       AddTree();
+   else if (action == "deleteobject")
+      DeleteObject();
    else if (action == "savemap")
       SaveMap();
    else if (action != "")

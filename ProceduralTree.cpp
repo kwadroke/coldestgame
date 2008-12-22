@@ -18,20 +18,21 @@ ProceduralTree::ProceduralTree()
    maxtrunkangle = 5.f;
    initrad = 5;
    radreductionperc = .2;
-   initheight = 20;
+   initheight = 40;
    heightreductionperc = .7;
    firstleaflevel = 2;
-   leafsize = 10;
+   leafsize = 20;
    numsegs = 3;
-   numleaves = 2;
+   numleaves = 1;
    trunkrad = 5;
    trunknumslices = 10;
    trunktaper = .9;
    trunknumsegs = 8;
-   branchevery = 8;
-   sidebranches = 12;
+   branchafter = 1;
+   sidebranches = 0;
    minsidebranchangle = -10;
    maxsidebranchangle = 10;
+   sidesizeperc = .75f;
    minheightvar = .75;
    maxheightvar = 1.25;
    sidetaper = .7;
@@ -58,6 +59,7 @@ long ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leaves
    GraphicMatrix m;
    Vector3 temp;
    vector<Vector3> pts;
+   Vector3 mrot = mesh->GetRotation();
    
    float sliceangle = 360. / trunknumslices;
    for (int j = 0; j < trunknumslices; ++j)
@@ -66,17 +68,24 @@ long ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leaves
       temp = Vector3();
       m.translate(trunkrad, 0, 0);
       m.rotatey(-sliceangle * j);
+      
+      m.rotatex(mrot.x);
+      m.rotatey(mrot.y);
       m.translate(mesh->GetPosition());
-      temp.transform(m.members);
+      temp.transform(m);
       pts.push_back(temp);
    }
    m = GraphicMatrix();
+   m.rotatex(mrot.x);
+   m.rotatey(mrot.y);
    m.translate(mesh->GetPosition());
    int i = 0;
    if (!multitrunk)
       i = numbranches[0] - 1;
    for (; i < numbranches[0]; ++i)
       GenBranch(m, 0, 0, pts, true, 0);
+   // Force reset of dimensions
+   currmesh->Move(currmesh->GetPosition(), true);
    return totalprims;
 }
 
@@ -86,6 +95,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    if (lev > numlevels) return;
    vector<Vector3> newpts;
    vector<Vector3> normals;
+   vector<Vector3> oldnorms;
    
    float anglex, angley, anglez;
    float startrad, endrad;
@@ -102,8 +112,16 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    }
    else 
    {
-      startrad = initrad * pow(radreductionperc, lev);
-      endrad = initrad * pow(radreductionperc, lev + 1);
+      if (!side)
+      {
+         startrad = initrad * pow(radreductionperc, lev);
+         endrad = initrad * pow(radreductionperc, lev + 1);
+      }
+      else if (lev == 1) // Won't work for branches not off the trunk
+      {
+         startrad = trunkrad * pow(trunktaper, seg + 1);
+         endrad = trunkrad * pow(trunktaper, seg + 2);
+      }
    }
    float radius = ((locnumsegs - seg) * startrad + seg * endrad) / locnumsegs;
    
@@ -114,7 +132,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    
    if (side)
    {
-      //locnumsegs = side;
+      startrad = radius * sidesizeperc;
+      endrad = startrad * radreductionperc;
       radius = ((locnumsegs - side) * startrad + side * endrad) / locnumsegs;
       height *= pow(sidetaper, seg);
    }
@@ -179,6 +198,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatey(angley);
          m.rotatez(anglez);
          m *= trans;
+         if (lev != 0)
+            m.translate(0, curvecoeff * (float)(square * square) * height, 0);
          norm.transform(m);
          Vector3 tempn = temp - norm;
          tempn.normalize();
@@ -201,6 +222,15 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
             temp.transform(m.members);
             oldpts.push_back(temp);
          }
+      }
+      
+      for (int j = 0; j < oldpts.size(); ++j)
+      {
+         temp = Vector3();
+         temp.transform(trans);
+         Vector3 norm = oldpts[j] - temp;
+         norm.normalize();
+         oldnorms.push_back(norm);
       }
       
       // Generate primitives from our points
@@ -242,12 +272,12 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          tempq.SetVertex(3, newpts[newind1 % numslices]);
          
          tempq.SetNormal(0, normals[newind]);
-         tempq.SetNormal(1, normals[newind]);
-         tempq.SetNormal(2, normals[newind1 % numslices]);
+         tempq.SetNormal(1, oldnorms[j]);
+         tempq.SetNormal(2, oldnorms[(j + 1) % oldpts.size()]);
          tempq.SetNormal(3, normals[newind1 % numslices]);
          
          floatvec tc(2, 0.f);
-         int currseg = side ? side : seg;
+         int currseg = side ? side - 1 : seg;
          tc[0] = float(j) / float(oldpts.size());
          tc[1] = 1.f - float(currseg + 1) / float(locnumsegs);
          tempq.SetTexCoords(0, 0, tc);
@@ -389,6 +419,21 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       }
    }
    
+   if (seg && (seg >= branchafter))  // Side branches
+   {
+      for (int i = 0; i < sidebranches; ++i)
+      {
+         // Generate branches anywhere along the segment, not just the joint
+         m.identity();
+         m.translate(0, random.Random(0.f, height), 0);
+         m.rotatex(anglex);
+         m.rotatey(angley);
+         m.rotatez(anglez);
+         m *= trans;
+         GenBranch(m, lev + 1, seg - 1, newpts, false, 1);
+      }
+   }
+   
    // Regenerate matrix to point at center of the open end of the cylinder
    m.identity();
    m.translate(0, height, 0);
@@ -400,22 +445,20 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    if (lev != 0)
       m.translate(0, curvecoeff * (float)(square * square) * height, 0);
    
-   if (seg && (seg % branchevery == 0))  // Side branches
-   {
-      for (int i = 0; i < sidebranches; ++i)
-      {
-         GenBranch(m, lev + 1, seg - 1, newpts, false, 1);
-      }
-   }
    if (seg >= locnumsegs - 1 && split)  // Split ends:-)
    {
       for (int i = 0; i < locnumbranches; ++i)
          GenBranch(m, lev + 1, 0, newpts, false, 0);
    }
    else if (!side && seg < locnumsegs)  // This branch, next segment
-      GenBranch(m, lev, seg + 1, newpts, true, 0);
+      GenBranch(m, lev, seg + 1, newpts, false, 0);
    else if (side && side < locnumsegs)  // Side branch next segment (?)
-      GenBranch(m, lev, seg, newpts, true, side + 1);
+      GenBranch(m, lev, seg, newpts, false, side + 1);
+   else if (side && split)
+   {
+      for (int i = 0; i < locnumbranches; ++i)
+         GenBranch(m, lev + 1, 0, newpts, false, 0);
+   }
    if (continuebranch && seg >= locnumsegs)  // Continue, probably pretty useless
       GenBranch(m, lev + 1, 0, newpts, true, 0);
 }
@@ -449,10 +492,12 @@ void ProceduralTree::ReadParams(const IniReader &get)
    get.Read(trunknumslices, "trunknumslices");
    get.Read(trunktaper, "trunktaper");
    get.Read(trunknumsegs, "trunknumsegs");
-   get.Read(branchevery, "branchevery");
+   get.Read(maxtrunkangle, "maxtrunkangle");
+   get.Read(branchafter, "branchafter");
    get.Read(sidebranches, "sidebranches");
    get.Read(minsidebranchangle, "minsidebranchangle");
    get.Read(maxsidebranchangle, "maxsidebranchangle");
+   get.Read(sidesizeperc, "sidesizeperc");
    get.Read(split, "split");
    get.Read(continuebranch, "continuebranch");
    get.Read(multitrunk, "multitrunk");
