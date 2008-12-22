@@ -3,10 +3,12 @@ uniform sampler2DShadow worldshadowtex;
 
 varying vec4 shadowmappos, worldshadowmappos;
 
-void shadow(vec4 amb, vec4 diff, float d, inout vec4 col)
+void shadow(vec4 diff, vec4 spec, float d, inout vec4 col)
 {
    float alpha = col.a;
    
-   col.rgb -= diff.rgb * (1 - shadow2DProj(worldshadowtex, worldshadowmappos).r);
+   float shadowval = 1. - shadow2DProj(worldshadowtex, worldshadowmappos).r;
+   col.rgb -= diff.rgb * shadowval;
+   col.rgb -= spec.rgb * shadowval;
    col.a = alpha;
 }

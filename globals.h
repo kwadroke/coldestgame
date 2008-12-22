@@ -86,5 +86,6 @@ void SpectateNext();
 void SpectatePrev();
 void EditorLoop(const string);
 vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData*, Meshlist&, ObjectKDTree&, const Vector3&, const Vector3&, const float);
+void RegenFBOList();
 
 #endif

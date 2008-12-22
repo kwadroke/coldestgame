@@ -31,9 +31,9 @@ class Mesh
       bool operator>(const Mesh&) const;
       void CalcBounds();
       void Load(const IniReader&);
-      void Move(const Vector3&);
+      void Move(const Vector3&, bool movetris = false);
       const Vector3 GetPosition() const;
-      void Rotate(const Vector3&);
+      void Rotate(const Vector3&, bool movetris = false);
       const Vector3 GetRotation() const {return rots;}
       void GenVbo();
       void BindAttribs();
