@@ -119,6 +119,10 @@ void EditorEventHandler(SDL_Event event)
             else
                gui[editobject]->visible = false;
          }
+         else if (event.key.keysym.sym == SDLK_DELETE)
+         {
+            DeleteObject();
+         }
          else if (event.key.keysym.sym == SDLK_ESCAPE)
          {
             Quit();
@@ -187,6 +191,12 @@ void EditorEventHandler(SDL_Event event)
       case SDL_MOUSEBUTTONUP:
          if (event.button.button == SDL_BUTTON_LEFT)
          {
+            // Trees have a tendency to slide around while being rotated, this resets them
+            if (treemap.find(selected) != treemap.end())
+            {
+               selected->Clear();
+               treemap[selected].GenTree(selected, &resman.LoadMaterial(treemap[selected].barkfile), &resman.LoadMaterial(treemap[selected].leavesfile));
+            }
             clicked = false;
          }
          break;
@@ -261,6 +271,12 @@ bool EditorGUIEventHandler(SDL_Event event)
                if (event.button.button == SDL_BUTTON_LEFT && 
                   !eobase->InWidget(&event) && !mainsv->InWidget(&event))
                {
+                  // Trees have a tendency to slide around while being rotated, this resets them
+                  if (treemap.find(selected) != treemap.end())
+                  {
+                     selected->Clear();
+                     treemap[selected].GenTree(selected, &resman.LoadMaterial(treemap[selected].barkfile), &resman.LoadMaterial(treemap[selected].leavesfile));
+                  }
                   clicked = false;
                   return true;
                }
