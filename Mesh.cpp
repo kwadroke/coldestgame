@@ -458,18 +458,21 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
 {
    if (movetris)
    {
-      Vector3 rotation = v - rots;
       Vector3 pos = GetPosition();
       GraphicMatrix m;
-      m.rotatex(rotation.x);
-      m.rotatey(rotation.y);
-      m.rotatez(rotation.z);
+      
+      m.translate(-pos);
+      m.rotatez(-rots.z);
+      m.rotatey(-rots.y);
+      m.rotatex(-rots.x);
+      m.rotatex(v.x);
+      m.rotatey(v.y);
+      m.rotatez(v.z);
+      m.translate(pos);
       
       for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
       {
-         (*i)->pos -= pos;
          (*i)->pos.transform(m);
-         (*i)->pos += pos;
       }
       GenVbo();
       CalcBounds();
