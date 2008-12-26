@@ -1,6 +1,6 @@
-TileSize 30
-HeightScale 2.2
-ZeroHeight -1
+TileSize 60
+HeightScale 5
+ZeroHeight -10
 Stretch 8
 
 LightData
@@ -57,26 +57,26 @@ Node
    SpawnPoints
    Node
       Team 1
-      Location 521 139 536
+      Location 893.498 150 890.227
       Name Base1
    Node
       Team 1
-      Location 3279 143 523
+      Location 6706.3 143 897.741
       Name Base1
    Node
       Team 2
-      Location 554 145 3261
+      Location 943.999 145 6739.54
       Name Base2
    Node
       Team 2
-      Location 3301 129 3235
+      Location 6691.3 129 6602.89
       Name Base2
 
 Node
    Objects
    Node
       Type proctree
-      Position 1283.2 30.7566 1183.49
+      Position 2113.06 146.757 2678.24
       Rotations 0 0 0
       Name TestTree2
       Materials materials/bark materials/leaves
@@ -114,7 +114,7 @@ Node
       firstleaflevel 9
    Node
       Type proctree
-      Position 386.461 18.003 1040.5
+      Position 386.461 21.003 1040.5
       Rotations 717 -438 0
       Name TestTree
       Materials materials/bark materials/leaves
@@ -152,7 +152,7 @@ Node
       firstleaflevel 9
    Node
       Type proctree
-      Position 681.211 214.015 1533.76
+      Position 923.034 378.015 2808.54
       Rotations 0 0 0
       Name SideTest
       Materials materials/bark materials/leaves
@@ -190,7 +190,7 @@ Node
       firstleaflevel 2
    Node
       Type proctree
-      Position 747.81 92.166 1100.17
+      Position 916.191 302.166 2518.06
       Rotations 9 158 0
       Name SideTest
       Materials materials/bark materials/leaves
@@ -228,7 +228,7 @@ Node
       firstleaflevel 2
    Node
       Type proctree
-      Position 679.639 99.7882 1145.89
+      Position 844.618 340.788 2655.79
       Rotations 20 -186 0
       Name SideTest
       Materials materials/bark materials/leaves
@@ -266,7 +266,7 @@ Node
       firstleaflevel 2
    Node
       Type proctree
-      Position 1199.15 47.333 1206.28
+      Position 2222.87 123.333 2484.53
       Rotations 8 -683 0
       Name SideTest
       Materials materials/bark materials/leaves
@@ -304,8 +304,8 @@ Node
       firstleaflevel 2
    Node
       Type proctree
-      Position 598.156 175.238 1408.13
-      Rotations 10 266 0
+      Position 835.271 372.238 2801.12
+      Rotations -5 189 0
       Name SideTest
       Materials materials/bark materials/leaves
       seed 314
@@ -342,7 +342,7 @@ Node
       firstleaflevel 2
    Node
       Type proctree
-      Position 1093.32 57.03 1292.61
+      Position 2190.91 130.03 2581.85
       Rotations -336 285 0
       Name SideTest
       Materials materials/bark materials/leaves
@@ -411,6 +411,44 @@ Node
       branchafter 3
       sidetaper 0.9
       sidesizeperc 0.6
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1013.13 311.48 2573.43
+      Rotations 0 0 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 300
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
       numleaves 1
       leafsize 20
       leafsegs 2
