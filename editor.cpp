@@ -27,9 +27,10 @@ void EditorLoop(const string editmap)
    for (list<Mesh>::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain)
-         i->dynamic = true; // Because we could be moving anything around
+         i->dynamic = true; // Because we could be moving anything else around
    }
    gui[loadprogress]->visible = false;
+   gui[editormain]->visible = false;
    
    player[0].pos = Vector3(500, 500, 500);
    
@@ -433,9 +434,6 @@ void GetSelectedMesh(SDL_Event event)
    Vector3 dummy;
    coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected);
    
-   if (selected->terrain)
-      selected = NULL;
-   
    UpdateEditorGUI();
 }
 
@@ -833,7 +831,7 @@ void Copy()
 
 void Paste()
 {
-   if (selected)
+   if (copymesh)
    {
       // Okay, this is the third copy of this code, it should probably be a function...
       GLdouble x, y, z;

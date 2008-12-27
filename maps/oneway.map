@@ -61,11 +61,11 @@ Node
       Name Base1
    Node
       Team 1
-      Location 6706.3 143 897.741
+      Location 6446.91 158 783.071
       Name Base1
    Node
       Team 2
-      Location 943.999 145 6739.54
+      Location 1068.1 145 6780.88
       Name Base2
    Node
       Team 2
@@ -431,6 +431,690 @@ Node
       maxtrunkangle 15
       maxbranchangle 15
       initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1605.98 298.976 3055.61
+      Rotations -11 203 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 111
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 120
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1533.27 299.289 3131.31
+      Rotations -6 235 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 12
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1450.38 313.17 3225.85
+      Rotations 9 158 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 18
+      ImpostorDistance 0
+      trunkrad 8
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 120
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1481.4 313.264 2978.61
+      Rotations -16 166 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 33
+      ImpostorDistance 0
+      trunkrad 7
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 125
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1389.42 309.654 3038.07
+      Rotations -3 172 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 250
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 120
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1225.08 321.949 3023.26
+      Rotations 9 158 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 318
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 120
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1369.9 197.723 2046.67
+      Rotations 9 158 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 334
+      ImpostorDistance 0
+      trunkrad 8
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 120
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1493 182.67 2045.7
+      Rotations -11 162 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 328
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 90
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1238.59 172.72 1967.47
+      Rotations 9 158 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 400
+      ImpostorDistance 0
+      trunkrad 7
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 110
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 1915.68 131.917 5631.93
+      Rotations 0 0 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 313
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3197.61 399.19 6036.23
+      Rotations 23 63 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 316
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 2545.68 265.231 5305.88
+      Rotations 20 1 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 318
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3121.6 380.417 6074.94
+      Rotations 23 3 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 321
+      ImpostorDistance 0
+      trunkrad 8
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 130
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3118.82 360.144 6218.72
+      Rotations 5 88 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 314
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 80
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3207.97 367.875 6232.46
+      Rotations 2 178 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 322
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3202.26 388.968 6115.57
+      Rotations 0 0 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 324
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3267.49 359.904 6277.17
+      Rotations 0 0 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 313
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.8
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 1
+      numslices 3
+      numsegs 8
+      numbranches0 0
+      numbranches1 0
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 3
+      minsidebranchangle -50
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.65
+      numleaves 1
+      leafsize 20
+      leafsegs 2
+      leafcurve 3
+      firstleaflevel 2
+   Node
+      Type proctree
+      Position 3213.71 340.923 6321.33
+      Rotations 13 3 0
+      Name SideTest
+      Materials materials/bark materials/leaves
+      seed 326
+      ImpostorDistance 0
+      trunkrad 8
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.75
+      maxtrunkangle 15
+      maxbranchangle 15
+      initheight 120
       heightreductionperc 0.5
       initrad 5
       radreductionperc 0.2
