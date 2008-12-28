@@ -100,8 +100,6 @@ void GraphicMatrix::operator*= (GraphicMatrix m)
                    members[div + 1] * m.members[mod + 4] + 
                    members[div + 2] * m.members[mod + 8] + 
                    members[div + 3] * m.members[mod + 12];
-      if (mtemp[i] < .0001 && mtemp[i] > -.0001)  // Temporary hack to ease debugging
-         mtemp[i] = 0;
    }
    
    for (int i = 0; i < 16; ++i)
