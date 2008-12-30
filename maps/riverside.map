@@ -74,44 +74,6 @@ Node
    Objects
    Node
       Type proctree
-      Position 1014.37 296.05 2094.84
-      Rotations -3 -81 0
-      Name Unnamed
-      Materials materials/bark materials/leaves
-      seed 353
-      ImpostorDistance 0
-      trunkrad 5
-      trunknumsegs 8
-      trunknumslices 10
-      trunktaper 0.9
-      maxtrunkangle 5
-      maxbranchangle 25
-      initheight 100
-      heightreductionperc 0.5
-      initrad 5
-      radreductionperc 0.2
-      numlevels 2
-      numslices 3
-      numsegs 5
-      numbranches0 0
-      numbranches1 1
-      numbranches2 3
-      curvecoeff 0.01
-      maxangle 70
-      minangle 20
-      sidebranches 4
-      minsidebranchangle -40
-      maxsidebranchangle -20
-      branchafter 3
-      sidetaper 0.9
-      sidesizeperc 0.75
-      numleaves 1
-      leafsize 20
-      leafsegs 2
-      leafcurve 3
-      firstleaflevel 2
-   Node
-      Type proctree
       Position 1033.52 44.0874 2507.53
       Rotations 47 46 0
       Name Unnamed
@@ -185,4 +147,762 @@ Node
       leafsize 30
       leafsegs 2
       leafcurve 5
+      firstleaflevel 2
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 297.656 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 297.656 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 297.656 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 297.656 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 297.656 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 297.656 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 892.969 0 6846.09
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 1488.28 0 6846.09
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2083.59 0 6846.09
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2678.91 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2678.91 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2678.91 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2678.91 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2678.91 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 2678.91 0 6846.09
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3274.22 0 6846.09
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 3869.53 0 6846.09
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 2678.91
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 4464.84 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5060.16 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 3274.22
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 5655.47 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 3869.53
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 4464.84
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6250.78 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6846.09 0 892.969
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6846.09 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6846.09 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6846.09 0 5060.16
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6846.09 0 5655.47
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 6846.09 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 7441.41 0 1488.28
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 7441.41 0 2083.59
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name 
+      BaseFile 
+      Position 7441.41 0 6250.78
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type proctree
+      Position 1014.37 296.05 2094.84
+      Rotations -3 -81 0
+      Name Unnamed
+      Materials materials/bark materials/leaves
+      seed 353
+      ImpostorDistance 0
+      trunkrad 5
+      trunknumsegs 8
+      trunknumslices 10
+      trunktaper 0.9
+      maxtrunkangle 5
+      maxbranchangle 25
+      initheight 100
+      heightreductionperc 0.5
+      initrad 5
+      radreductionperc 0.2
+      numlevels 2
+      numslices 3
+      numsegs 5
+      numbranches0 0
+      numbranches1 1
+      numbranches2 3
+      curvecoeff 0.01
+      maxangle 70
+      minangle 20
+      sidebranches 4
+      minsidebranchangle -40
+      maxsidebranchangle -20
+      branchafter 3
+      sidetaper 0.9
+      sidesizeperc 0.75
+      numleaves 1
+      leafsize 30
+      leafsegs 2
+      leafcurve 7
       firstleaflevel 2
