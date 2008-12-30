@@ -118,7 +118,10 @@ void EditorEventHandler(SDL_Event event)
             if (!gui[editobject]->visible)
                ShowGUI(editobject);
             else
+            {
                gui[editobject]->visible = false;
+               SDL_ShowCursor(SDL_DISABLE);
+            }
          }
          else if (event.key.keysym.sym == SDLK_DELETE)
          {
@@ -217,9 +220,14 @@ bool EditorGUIEventHandler(SDL_Event event)
       switch(event.type)
       {
          case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_r) // Right now rotation and translation are not allowed while GUI shown
+            if (event.key.keysym.sym == SDLK_r)
             {
                rotating = true;
+            }
+            else if (event.key.keysym.sym == SDLK_o && (SDL_GetModState() & KMOD_LCTRL))
+            {
+               SaveObject();
+               return true;
             }
             else if (event.key.keysym.sym == SDLK_LSHIFT)
             {
@@ -230,7 +238,10 @@ bool EditorGUIEventHandler(SDL_Event event)
                if (!gui[editobject]->visible)
                   ShowGUI(editobject);
                else
+               {
                   gui[editobject]->visible = false;
+                  SDL_ShowCursor(SDL_DISABLE);
+               }
                return true;
             }
             else if (event.key.keysym.sym == SDLK_ESCAPE)

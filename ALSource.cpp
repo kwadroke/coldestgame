@@ -87,7 +87,7 @@ void ALSource::CheckError()
    ALenum err = alGetError();
    if (err == AL_NO_ERROR)
    {
-      //logout << "AL_NO_ERROR" << endl;
+      logout << "AL_NO_ERROR" << endl;
    }
    else if (err == AL_INVALID_NAME)
    {

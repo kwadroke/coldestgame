@@ -2,7 +2,7 @@
 
 SoundManager::SoundManager()
 {
-   sources = list<ALSourcePtr>(16, ALSourcePtr());
+   sources = list<ALSourcePtr>(16);
 }
 
 
@@ -55,6 +55,8 @@ ALSourcePtr SoundManager::SelectSource(const Vector3& pos)
    SourceList::iterator i;
    for (i = sources.begin(); i != sources.end(); ++i)
    {
+      if (!*i)
+         *i = ALSourcePtr(new ALSource());
       ALSourcePtr p = *i;
       if (!p->Playing())
          return p;

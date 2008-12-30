@@ -419,7 +419,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       }
    }
    
-   if (seg && (seg >= branchafter))  // Side branches
+   if (!side && seg && (seg >= branchafter))  // Side branches
    {
       for (int i = 0; i < sidebranches; ++i)
       {
@@ -430,7 +430,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatey(angley);
          m.rotatez(anglez);
          m *= trans;
-         GenBranch(m, lev + 1, seg - 1, newpts, false, 1);
+         GenBranch(m, lev + 1, seg, newpts, false, 1);
       }
    }
    
@@ -445,19 +445,25 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    if (lev != 0)
       m.translate(0, curvecoeff * (float)(square * square) * height, 0);
    
-   if (seg >= locnumsegs - 1 && split)  // Split ends:-)
+   if (!side)
    {
-      for (int i = 0; i < locnumbranches; ++i)
-         GenBranch(m, lev + 1, 0, newpts, false, 0);
+      if (seg >= locnumsegs - 1 && split)  // Split ends:-)
+      {
+         for (int i = 0; i < locnumbranches; ++i)
+            GenBranch(m, lev + 1, 0, newpts, false, 0);
+      }
+      else if (seg < locnumsegs)  // This branch, next segment
+         GenBranch(m, lev, seg + 1, newpts, false, 0);
    }
-   else if (!side && seg < locnumsegs)  // This branch, next segment
-      GenBranch(m, lev, seg + 1, newpts, false, 0);
-   else if (side && side < locnumsegs)  // Side branch next segment (?)
-      GenBranch(m, lev, seg, newpts, false, side + 1);
-   else if (side && split)
+   else
    {
-      for (int i = 0; i < locnumbranches; ++i)
-         GenBranch(m, lev + 1, 0, newpts, false, 0);
+      if (side < locnumsegs)  // Side branch next segment (?)
+         GenBranch(m, lev, seg, newpts, false, side + 1);
+      else if (split)
+      {
+         for (int i = 0; i < locnumbranches; ++i)
+            GenBranch(m, lev + 1, 0, newpts, false, 0);
+      }
    }
    if (continuebranch && seg >= locnumsegs)  // Continue, probably pretty useless
       GenBranch(m, lev + 1, 0, newpts, true, 0);
