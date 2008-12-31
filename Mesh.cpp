@@ -543,7 +543,7 @@ void Mesh::GenVbo()
       TrianglePtrvec::iterator last = tris.begin();
       for (TrianglePtrvec::iterator i = tris.begin(); i != tris.end(); ++i)
       {
-         if (**last < **i)
+         if ((*last)->material != (*i)->material)
          {
             vbosteps.push_back(counter);
             counter = 0;
@@ -973,7 +973,8 @@ void Mesh::ResetAnimation()
 
 void Mesh::ResetTriMaxDims()
 {
-   for (size_t i = 0; i < tris.size(); ++i)
+   size_t s = tris.size();
+   for (size_t i = 0; i < s; ++i)
       tris[i]->maxdim = -1.f;
 }
 
