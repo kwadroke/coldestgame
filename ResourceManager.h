@@ -18,6 +18,7 @@ class ResourceManager
    public:
       ResourceManager();
       Material& LoadMaterial(string);
+      void AddMaterial(string, Material);
       void LoadTexture(string);
       void ReleaseAll();
       

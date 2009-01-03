@@ -24,6 +24,15 @@ Material& ResourceManager::LoadMaterial(string filename)
 }
 
 
+void ResourceManager::AddMaterial(string filename, Material newmat)
+{
+#ifndef DEDICATED
+   if (materials.find(filename) == materials.end())
+      materials.insert(make_pair(filename, newmat));
+#endif
+}
+
+
 void ResourceManager::LoadTexture(string filename)
 {
 #ifndef DEDICATED

@@ -25,6 +25,7 @@ class Material
       void Use() const;
       void UseTextureOnly() const;
       void SetTexture(int, GLuint);
+      void SetTexture(int, string);
       GLuint GetTexture(int);
       bool operator<(const Material&) const;
       void Release();
