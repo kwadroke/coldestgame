@@ -24,6 +24,7 @@ vector<Vector3vec> lightmap; // Terrain lightmap
 
 struct TerrainParams
 {
+   string file;
    int texture;
    float minheight, maxheight;
    float minslope, maxslope;
@@ -151,6 +152,7 @@ void GetMap(string fn)
       terrparams.push_back(dummytp);
       currnode = texnode(i);
       
+      currnode.Read(terrparams[i].file, "File");
       currnode.Read(terrparams[i].minheight, "HeightRange", 0);
       currnode.Read(terrparams[i].maxheight, "HeightRange", 1);
       currnode.Read(terrparams[i].minslope, "SlopeRange", 0);
@@ -452,6 +454,7 @@ void GetMap(string fn)
    
    // Now build terrain triangles
    Meshlist::iterator currmesh;
+   map<set<int>, Material*> texmats;
    for (int x = 0; x < mapw - 1; ++x)
    {
       for (int y = 0; y < maph - 1; ++y)
@@ -480,36 +483,65 @@ void GetMap(string fn)
          tempnorm = ChooseNormal(actualnorm, normals[x + 1][y]);
          tempquad.SetNormal(3, tempnorm);
 #ifndef DEDICATED
-         tempquad.SetMaterial(&resman.LoadMaterial(terrainmaterial));
+         set<int> currtex;
+         currtex.insert(tex1[x][y]);
+         currtex.insert(tex2[x][y]);
+         currtex.insert(tex1[x][y + 1]);
+         currtex.insert(tex2[x][y + 1]);
+         currtex.insert(tex1[x + 1][y]);
+         currtex.insert(tex2[x + 1][y]);
+         currtex.insert(tex1[x + 1][y + 1]);
+         currtex.insert(tex2[x + 1][y + 1]);
+         
+         Material* currmat;
+         if (texmats.find(currtex) == texmats.end())
+         {
+            string matfile = "materials/terrain/base";
+            string currname;
+            matfile += ToString(currtex.size());
+            Material newmat(matfile, resman.texman, resman.shaderman);
+            int count = 0;
+            for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
+            {
+               newmat.SetTexture(count, terrparams[*i].file);
+               ++count;
+            }
+            currname = "terrain" + ToString(texmats.size());
+            resman.AddMaterial(currname, newmat);
+            texmats[currtex] = &resman.LoadMaterial(currname);
+         }
+         currmat = texmats[currtex];
+         tempquad.SetMaterial(currmat);
 #endif
          tempquad.SetCollide(true);
          
-         // Terrain texturing needs to be handled at some point, but I haven't decided how yet
-         for (int i = 0; i < 6; ++i)
+         int realtex = 0;
+         for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
          {
-            if (tex1[x][y] == i)
-               tempquad.SetTerrainWeight(0, i, texpercent[x][y]);
-            else if (tex2[x][y] == i)
-               tempquad.SetTerrainWeight(0, i, 1.f - texpercent[x][y]);
-            else tempquad.SetTerrainWeight(0, i, 0.f);
+            if (tex1[x][y] == *i)
+               tempquad.SetTerrainWeight(0, realtex, texpercent[x][y]);
+            else if (tex2[x][y] == *i)
+               tempquad.SetTerrainWeight(0, realtex, 1.f - texpercent[x][y]);
+            else tempquad.SetTerrainWeight(0, realtex, 0.f);
             
-            if (tex1[x][y + 1] == i)
-               tempquad.SetTerrainWeight(1, i, texpercent[x][y + 1]);
-            else if (tex2[x][y + 1] == i)
-               tempquad.SetTerrainWeight(1, i, 1.f - texpercent[x][y + 1]);
-            else tempquad.SetTerrainWeight(1, i, 0.f);
+            if (tex1[x][y + 1] == *i)
+               tempquad.SetTerrainWeight(1, realtex, texpercent[x][y + 1]);
+            else if (tex2[x][y + 1] == *i)
+               tempquad.SetTerrainWeight(1, realtex, 1.f - texpercent[x][y + 1]);
+            else tempquad.SetTerrainWeight(1, realtex, 0.f);
             
-            if (tex1[x + 1][y + 1] == i)
-               tempquad.SetTerrainWeight(2, i, texpercent[x + 1][y + 1]);
-            else if (tex2[x + 1][y + 1] == i)
-               tempquad.SetTerrainWeight(2, i, 1.f - texpercent[x + 1][y + 1]);
-            else tempquad.SetTerrainWeight(2, i, 0.f);
+            if (tex1[x + 1][y + 1] == *i)
+               tempquad.SetTerrainWeight(2, realtex, texpercent[x + 1][y + 1]);
+            else if (tex2[x + 1][y + 1] == *i)
+               tempquad.SetTerrainWeight(2, realtex, 1.f - texpercent[x + 1][y + 1]);
+            else tempquad.SetTerrainWeight(2, realtex, 0.f);
             
-            if (tex1[x + 1][y] == i)
-               tempquad.SetTerrainWeight(3, i, texpercent[x + 1][y]);
-            else if (tex2[x + 1][y] == i)
-               tempquad.SetTerrainWeight(3, i, 1.f - texpercent[x + 1][y]);
-            else tempquad.SetTerrainWeight(3, i, 0.f);
+            if (tex1[x + 1][y] == *i)
+               tempquad.SetTerrainWeight(3, realtex, texpercent[x + 1][y]);
+            else if (tex2[x + 1][y] == *i)
+               tempquad.SetTerrainWeight(3, realtex, 1.f - texpercent[x + 1][y]);
+            else tempquad.SetTerrainWeight(3, realtex, 0.f);
+            ++realtex;
          }
          
          GLubytevec tempcol(4, 255);

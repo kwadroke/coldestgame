@@ -16,37 +16,31 @@ Node
    TerrainParams
    Node
       Texture0
+      File textures/grass/mixedgrass.png
       HeightRange 5 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
+      File textures/rock/rocksanddirt.png
       HeightRange -10000 -10000
       SlopeRange .75 .94
       RandRange 20 100
       Blend .1
    Node
       Texture2
+      File textures/rock/smoothbrown.png
       HeightRange -10000 -10000
       SlopeRange 0 .82
       RandRange 500 500
       Blend .05
    Node
       Texture3
+      File textures/dirt.png
       HeightRange -10000 15
       SlopeRange 0 0
       RandRange 50 50
       Blend 10
-   Node
-      Texture4
-      HeightRange -10000 -10000
-      SlopeRange 0 0
-      RandRange 0 10
-   Node
-      Texture5
-      HeightRange -10000 -10000
-      SlopeRange 0 0
-      RandRange 0 10
       
 Node
    GrassData
@@ -54,10 +48,10 @@ Node
       File grass
       Model models/bush/base
       GroupSize 10
-      Density 4
-      MinTilt 5
-      MaxTilt 25
-      Scale 3
+      Density 5
+      MinTilt 0
+      MaxTilt 1
+      Scale 2
 
 Node
    SpawnPoints

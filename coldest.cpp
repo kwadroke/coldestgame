@@ -176,7 +176,6 @@ void InitGlobals()
 #ifndef DEDICATED
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
-   terrainshader = "shaders/terrain";
    cloudshader = "shaders/cloud";
    shadowshader = "shaders/shadowmap";
    watershader = "shaders/water";
@@ -523,8 +522,6 @@ void InitShaders()
    
    resman.shaderman.LoadShader(noiseshader);
    resman.shaderman.SetUniform1f(noiseshader, "time", SDL_GetTicks());
-   
-   resman.shaderman.LoadShader(terrainshader);
    
    resman.shaderman.LoadShader(cloudshader);
    

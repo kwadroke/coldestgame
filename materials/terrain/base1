@@ -1,0 +1,6 @@
+Diffuse 1.5 1.5 1.5 1.5
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Shader shaders/terrain1
+CullFace 1
+NoShadowCull 1

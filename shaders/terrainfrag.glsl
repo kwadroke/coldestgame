@@ -1,8 +1,9 @@
 void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
 void shadow(vec4, vec4, float, inout vec4);
 void fog(float dist, inout vec4 color);
+void texterrain(inout vec4, in vec3, in vec3, in float, in float);
 
-uniform sampler2D tex, tex1, tex2, tex3;
+uniform sampler2D tex, tex1, tex2, tex3, tex4, tex5;
 uniform float reflectval;
 
 varying vec3 texweight, texweight1;
@@ -28,17 +29,7 @@ void main()
    float normweight = smoothstep(-300., 600., dist) * .7;
    float detailweight = 1. - normweight;
    
-   color += texweight.r * texture2D(tex, gl_TexCoord[0].st) * detailweight;
-   color += texweight.r * texture2D(tex, gl_TexCoord[0].pq) * normweight;
-   
-   color += texweight.g * texture2D(tex1, gl_TexCoord[0].st) * detailweight;
-   color += texweight.g * texture2D(tex1, gl_TexCoord[0].pq) * normweight;
-   
-   color += texweight.b * texture2D(tex2, gl_TexCoord[0].st) * detailweight;
-   color += texweight.b * texture2D(tex2, gl_TexCoord[0].pq) * normweight;
-   
-   color += texweight1.r * texture2D(tex3, gl_TexCoord[0].st) * detailweight;
-   color += texweight1.r * texture2D(tex3, gl_TexCoord[0].pq) * normweight;
+   texterrain(color, texweight, texweight1, normweight, detailweight);
    
    color *= base;
    

@@ -167,6 +167,15 @@ void Material::SetTexture(int texunit, GLuint tex)
 }
 
 
+void Material::SetTexture(int texunit, string tex)
+{
+   if (texfilename[texunit] != "")
+      logout << "Warning: Possible memory leak in Material::SetTexture" << endl;
+   texfilename[texunit] = tex;
+   texid[texunit] = texman->LoadTexture(texfilename[texunit]);
+}
+
+
 GLuint Material::GetTexture(int texunit)
 {
    return texid[texunit];
