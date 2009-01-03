@@ -3,7 +3,6 @@ void shadow(vec4, vec4, float, inout vec4);
 void fog(float dist, inout vec4 color);
 void texterrain(inout vec4, in vec3, in vec3, in float, in float);
 
-uniform sampler2D tex, tex1, tex2, tex3, tex4, tex5;
 uniform float reflectval;
 
 varying vec3 texweight, texweight1;
