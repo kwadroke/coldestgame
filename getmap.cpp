@@ -51,7 +51,7 @@ void GetMap(string fn)
    int numtextures;
    int numobjects;
    int mapw, maph;
-   int maxterrainparams = 6;
+   int maxterrainparams = 0;
    float zeroheight;
    float heightscale;
    string dummy;
@@ -147,7 +147,8 @@ void GetMap(string fn)
    string terrainmaterial;
    mapdata.Read(terrainmaterial, "TerrainMaterial");
    IniReader texnode = mapdata.GetItemByName("TerrainParams");
-   for (int i = 0; i < texnode.NumChildren(); ++i)
+   maxterrainparams = texnode.NumChildren();
+   for (int i = 0; i < maxterrainparams; ++i)
    {
       terrparams.push_back(dummytp);
       currnode = texnode(i);
@@ -406,7 +407,7 @@ void GetMap(string fn)
          textouse[1] = 0;
          currweights[0] = 0; // The larger current weight
          currweights[1] = 0;
-         for (int i = 0; i < 6; ++i)
+         for (int i = 0; i < maxterrainparams; ++i)
          {
             if (texweights[i] > currweights[0])
             {
