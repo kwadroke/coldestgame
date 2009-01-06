@@ -48,10 +48,10 @@ Node
       File grass
       Model models/bush/base
       GroupSize 10
-      Density 5
+      Density 10
       MinTilt 0
       MaxTilt 1
-      Scale 2
+      Scale 1
 
 Node
    SpawnPoints
