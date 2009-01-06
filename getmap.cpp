@@ -495,23 +495,32 @@ void GetMap(string fn)
          currtex.insert(tex2[x + 1][y + 1]);
          
          Material* currmat;
-         if (texmats.find(currtex) == texmats.end())
+         if (currtex.size() > 6)
          {
-            string matfile = "materials/terrain/base";
-            string currname;
-            matfile += ToString(currtex.size());
-            Material newmat(matfile, resman.texman, resman.shaderman);
-            int count = 0;
-            for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
-            {
-               newmat.SetTexture(count, terrparams[*i].file);
-               ++count;
-            }
-            currname = "terrain" + ToString(texmats.size());
-            resman.AddMaterial(currname, newmat);
-            texmats[currtex] = &resman.LoadMaterial(currname);
+            logout << "Warning: Too many textures on terrain.\n";
+            logout << "Location : " << (x * tilesize) << " " << heightmap[x][y] << " " << (y * tilesize) << endl;
+            currmat = &resman.LoadMaterial("materials/default");
          }
-         currmat = texmats[currtex];
+         else
+         {
+            if (texmats.find(currtex) == texmats.end())
+            {
+               string matfile = "materials/terrain/base";
+               string currname;
+               matfile += ToString(currtex.size());
+               Material newmat(matfile, resman.texman, resman.shaderman);
+               int count = 0;
+               for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
+               {
+                  newmat.SetTexture(count, terrparams[*i].file);
+                  ++count;
+               }
+               currname = "terrain" + ToString(texmats.size());
+               resman.AddMaterial(currname, newmat);
+               texmats[currtex] = &resman.LoadMaterial(currname);
+            }
+            currmat = texmats[currtex];
+         }
          tempquad.SetMaterial(currmat);
 #endif
          tempquad.SetCollide(true);
