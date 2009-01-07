@@ -80,7 +80,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -120,7 +120,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -160,7 +160,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -200,7 +200,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -240,7 +240,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -282,7 +282,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -322,7 +322,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -362,7 +362,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -402,7 +402,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
@@ -442,7 +442,7 @@ Node
       trunktaper .8
       trunknumsegs 5
       branchevery 999
-      sidebranches 999
+      sidebranches 0
       maxsidebranchangle 10
       split 1
       continuebranch 0
