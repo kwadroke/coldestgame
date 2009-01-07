@@ -179,6 +179,7 @@ void GetMap(string fn)
       currnode.Read(spawntemp.position.z, "Location", 2);
       currnode.Read(spawntemp.name, "Name");
       spawnpoints.push_back(spawntemp);
+#ifndef DEDICATED
       if (editor)
       {
          MeshPtr newmesh = meshcache->GetNewMesh("models/base/base");
@@ -188,6 +189,7 @@ void GetMap(string fn)
          meshes.push_back(*newmesh);
          spawnmeshes.push_back(&meshes.back());
       }
+#endif
    }
    spawnschanged = true; 
    player[0].team = 0;
@@ -206,6 +208,7 @@ void GetMap(string fn)
       currnode = objectlist(i);
       Mesh currmesh("", resman, currnode);
       meshes.push_back(currmesh);
+#ifndef DEDICATED
       if (editor)
       {
          string type;
@@ -218,6 +221,7 @@ void GetMap(string fn)
             treemap[&meshes.back()] = t;
          }
       }
+#endif
    }
    
 #ifndef DEDICATED
@@ -522,8 +526,6 @@ void GetMap(string fn)
             currmat = texmats[currtex];
          }
          tempquad.SetMaterial(currmat);
-#endif
-         tempquad.SetCollide(true);
          
          int realtex = 0;
          for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
@@ -586,6 +588,8 @@ void GetMap(string fn)
          temptc[0] = ((x % terrainstretch) + 1) * texpiece;
          temptc[1] = (y % terrainstretch) * texpiece;
          tempquad.SetTexCoords(3, 1, temptc);
+#endif
+         tempquad.SetCollide(true);
          
          // Smooth things out a bit by intelligently splitting quads
          Vector3 mid1 = tempquad.GetVertex(0) + tempquad.GetVertex(2);
