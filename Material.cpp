@@ -169,10 +169,12 @@ void Material::SetTexture(int texunit, GLuint tex)
 
 void Material::SetTexture(int texunit, string tex)
 {
+#ifndef DEDICATED
    if (texfilename[texunit] != "")
       logout << "Warning: Possible memory leak in Material::SetTexture" << endl;
    texfilename[texunit] = tex;
    texid[texunit] = texman->LoadTexture(texfilename[texunit]);
+#endif
 }
 
 

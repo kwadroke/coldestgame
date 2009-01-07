@@ -56,12 +56,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    InitShaders();
    InitNoise();
    
+#ifndef DEDICATED
    if (argc > 1)
    {
       logout << "Editing " << argv[1] << endl;
       EditorLoop(argv[1]);
       return 0;
    }
+#endif
    
    // Start network threads
 #ifndef DEDICATED
@@ -2014,8 +2016,10 @@ void UpdatePlayer()
    r.rotatey(localplayer.facing + localplayer.rotation);
    Vector3 slook(0, 0, -1.f);
    slook.transform(r);
+#ifndef DEDICATED
    resman.soundman.SetListenDir(slook);
    resman.soundman.SetListenPos(localplayer.pos);
+#endif
       
       // Update the local model so there isn't a frame of lag.
    if (!player[0].spectate)
@@ -2036,10 +2040,14 @@ void UpdatePlayer()
        (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
    {
+#ifndef DEDICATED
       SendFire();
+#endif
       SDL_mutexP(clientmutex);
+#ifndef DEDICATED
       if (currplayerweapon.Id() != Weapon::NoWeapon)
          resman.soundman.PlaySound(currplayerweapon.FireSound(), player[0].pos);
+#endif
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
       if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
          player[0].weapons[weaponslot].ammo--;
@@ -2086,6 +2094,7 @@ void StartBGMusic()
 
 void RegenFBOList()
 {
+#ifndef DEDICATED
    int fbodim = fbodims[2];
    int counter = 0;
    FBO dummyfbo;
@@ -2108,6 +2117,7 @@ void RegenFBOList()
       }
       i->GenVbo();
    }
+#endif
 }
 
 
