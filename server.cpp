@@ -26,6 +26,7 @@
 void ServerLoop();
 int ServerSend(void*);
 int ServerListen(void*);
+int ServerInput(void*);
 void ServerLoadMap();
 void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
 void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
@@ -52,6 +53,7 @@ int CountPlayers();
 
 SDL_Thread* serversend;
 SDL_Thread* serverlisten;
+SDL_Thread* serverinput;
 UDPsocket servsock;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
@@ -172,11 +174,13 @@ int Server(void* dummy)
    }
    serversend = SDL_CreateThread(ServerSend, NULL);
    serverlisten = SDL_CreateThread(ServerListen, NULL);
+   serverinput = SDL_CreateThread(ServerInput, NULL);
    
    ServerLoop();
    
    SDL_WaitThread(serversend, NULL);
    SDL_WaitThread(serverlisten, NULL);
+   SDL_KillThread(serverinput);
    SDLNet_UDP_Close(servsock);
    return 0;
 }
@@ -1363,6 +1367,22 @@ void SaveState()
       }
    }
    oldstate.push_back(newstate);
+}
+
+
+int ServerInput(void* dummy)
+{
+#ifdef DEDICATED
+   setsighandler();
+   // Check for commands being input from stdin
+   string command;
+   char c;
+   while (running)
+   {
+      getline(cin, command);
+      console.Parse(command, false);
+   }
+#endif
 }
 
 
