@@ -1,2 +1,2 @@
 #!/bin/bash
-svn commit *.h *.cpp gui/*.xml *.sh maps textures/* models/ fonts/* shaders/* gui/*.cpp gui/*.h materials/* weapons/* items/* particles/* units/ sounds/* commitall Makefile startscript
+svn commit *.h *.cpp gui/*.xml *.sh *.py maps textures/* models/ fonts/* shaders/* gui/*.cpp gui/*.h materials/* weapons/* items/* particles/* units/ sounds/* commitall Makefile startscript
