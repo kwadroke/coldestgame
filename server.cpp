@@ -7,6 +7,11 @@
 #include <string>
 #include <vector>
 #include <deque>
+#ifndef WIN32
+#include <poll.h>
+#else
+#include <Winsock2.h>
+#endif
 #include "Particle.h"
 #include "SDL_net.h"
 #include "PlayerData.h"
@@ -180,7 +185,7 @@ int Server(void* dummy)
    
    SDL_WaitThread(serversend, NULL);
    SDL_WaitThread(serverlisten, NULL);
-   SDL_KillThread(serverinput);
+   SDL_WaitThread(serverinput, NULL);
    SDLNet_UDP_Close(servsock);
    return 0;
 }
@@ -1376,12 +1381,33 @@ int ServerInput(void* dummy)
    setsighandler();
    // Check for commands being input from stdin
    string command;
-   char c;
+#ifndef WIN32
+   pollfd cinfd[1];
+   // Theoretically this should always be 0, but one fileno call isn't going to hurt, and if
+   // we try to run somewhere that stdin isn't fd 0 then it will still just work
+   cinfd[0].fd = fileno(stdin);
+   cinfd[0].events = POLLIN;
+#else
+   fd_set readfds;
+   timeval timeout;
+   FD_ZERO(&readfds);
+   FD_SET(fileno(stdin), readfds);
+   timeout.tv_sec = 1;
+   timeout.tv_usec = 0;
+#endif
    while (running)
    {
-      getline(cin, command);
-      console.Parse(command, false);
+#ifndef WIN32
+      if (poll(cinfd, 1, 1000))
+#else
+      if (select(1, &readfds, NULL, NULL, timeout))
+#endif
+      {
+         getline(cin, command);
+         console.Parse(command, false);
+      }
    }
+   return 0;
 #endif
 }
 
