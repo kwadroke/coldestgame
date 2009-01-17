@@ -1,6 +1,6 @@
 #include "Vertex.h"
 
-Vertex::Vertex() : index(0), norm(Vector3(0, 0, 1))
+Vertex::Vertex() : index(0), norm(Vector3(0, 0, 1)), inited(false)
 {
    floatvec tc(2, 0.f);
    texcoords = vector<floatvec>(8, tc);
@@ -14,8 +14,27 @@ Vertex::Vertex() : index(0), norm(Vector3(0, 0, 1))
 }
 
 
+void Vertex::PopulateVboData()
+{
+   for (int i = 1; i < 8; ++i)
+   {
+      vbodata.tc[i][0] = texcoords[i][0];
+      vbodata.tc[i][1] = texcoords[i][1];
+   }
+   vbodata.terrainwt[0] = terrainwt[0];
+   vbodata.terrainwt[1] = terrainwt[1];
+   vbodata.terrainwt[2] = terrainwt[2];
+   vbodata.terrainwt1[0] = terrainwt[3];
+   vbodata.terrainwt1[1] = terrainwt[4];
+   vbodata.terrainwt1[2] = terrainwt[5];
+   inited = true;
+}
+
+
 VBOData& Vertex::GetVboData()
 {
+   if (!inited)
+      PopulateVboData();
    vbodata.x = pos.x;
    vbodata.y = pos.y;
    vbodata.z = pos.z;
@@ -27,23 +46,23 @@ VBOData& Vertex::GetVboData()
    vbodata.ty = tangent.y;
    vbodata.tz = tangent.z;
    
-   for (int i = 0; i < 8; ++i)
-   {
-      vbodata.tc[i][0] = texcoords[i][0];
-      vbodata.tc[i][1] = texcoords[i][1];
-   }
+//    for (int i = 0; i < 8; ++i)
+//    {
+//       vbodata.tc[i][0] = texcoords[i][0];
+//       vbodata.tc[i][1] = texcoords[i][1];
+//    }
+   // This will only allow a single texture coordinate to be animated, but that should be okay
+   vbodata.tc[0][0] = texcoords[0][0];
+   vbodata.tc[0][1] = texcoords[0][1];
    vbodata.r = color[0];
    vbodata.g = color[1];
    vbodata.b = color[2];
    vbodata.a = color[3];
-   vbodata.terrainwt[0] = terrainwt[0];
-   vbodata.terrainwt[1] = terrainwt[1];
-   vbodata.terrainwt[2] = terrainwt[2];
-   vbodata.terrainwt1[0] = terrainwt[3];
-   vbodata.terrainwt1[1] = terrainwt[4];
-   vbodata.terrainwt1[2] = terrainwt[5];
+//    vbodata.terrainwt[0] = terrainwt[0];
+//    vbodata.terrainwt[1] = terrainwt[1];
+//    vbodata.terrainwt[2] = terrainwt[2];
+//    vbodata.terrainwt1[0] = terrainwt[3];
+//    vbodata.terrainwt1[1] = terrainwt[4];
+//    vbodata.terrainwt1[2] = terrainwt[5];
    return vbodata;
 }
-
-
-

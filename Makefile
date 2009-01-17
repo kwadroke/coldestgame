@@ -35,7 +35,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
-		SoundManager.o ALBuffer.o ALSource.o editor.o
+		SoundManager.o ALBuffer.o ALSource.o editor.o Bot.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o
@@ -47,7 +47,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o ServerState.o Material.o tsint.o
+		MeshNode.o ServerState.o Material.o tsint.o Bot.o
 		
 MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o tsint.o\
 			logout.o Log.o
@@ -314,6 +314,265 @@ ALSource.o: /usr/include/boost/detail/sp_counted_base.hpp
 ALSource.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ALSource.o: /usr/include/boost/detail/sp_counted_impl.hpp
 ALSource.o: /usr/include/boost/detail/workaround.hpp
+Bot.o: Bot.h /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Bot.o: /usr/include/boost/config/user.hpp
+Bot.o: /usr/include/boost/config/select_compiler_config.hpp
+Bot.o: /usr/include/boost/config/compiler/gcc.hpp
+Bot.o: /usr/include/boost/config/select_stdlib_config.hpp
+Bot.o: /usr/include/boost/config/no_tr1/utility.hpp
+Bot.o: /usr/include/boost/config/select_platform_config.hpp
+Bot.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Bot.o: /usr/include/gentoo-multilib/amd64/unistd.h /usr/include/features.h
+Bot.o: /usr/include/gentoo-multilib/amd64/features.h /usr/include/sys/cdefs.h
+Bot.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
+Bot.o: /usr/include/bits/wordsize.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
+Bot.o: /usr/include/gnu/stubs.h
+Bot.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
+Bot.o: /usr/include/gnu/stubs-64.h
+Bot.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+Bot.o: /usr/include/bits/posix_opt.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Bot.o: /usr/include/bits/environments.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+Bot.o: /usr/include/bits/types.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+Bot.o: /usr/include/bits/typesizes.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
+Bot.o: /usr/include/bits/confname.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Bot.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Bot.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Bot.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Bot.o: /usr/include/boost/checked_delete.hpp
+Bot.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Bot.o: /usr/include/boost/detail/shared_count.hpp
+Bot.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Bot.o: /usr/include/boost/detail/sp_counted_base.hpp
+Bot.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Bot.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Bot.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL_net.h
+Bot.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Bot.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+Bot.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+Bot.o: /usr/include/gentoo-multilib/amd64/sys/types.h /usr/include/time.h
+Bot.o: /usr/include/gentoo-multilib/amd64/time.h /usr/include/endian.h
+Bot.o: /usr/include/gentoo-multilib/amd64/endian.h /usr/include/bits/endian.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
+Bot.o: /usr/include/sys/select.h
+Bot.o: /usr/include/gentoo-multilib/amd64/sys/select.h
+Bot.o: /usr/include/bits/select.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/select.h
+Bot.o: /usr/include/bits/sigset.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+Bot.o: /usr/include/bits/time.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/time.h
+Bot.o: /usr/include/sys/sysmacros.h
+Bot.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
+Bot.o: /usr/include/bits/pthreadtypes.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Bot.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Bot.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Bot.o: /usr/include/_G_config.h
+Bot.o: /usr/include/gentoo-multilib/amd64/_G_config.h /usr/include/wchar.h
+Bot.o: /usr/include/gentoo-multilib/amd64/wchar.h /usr/include/bits/wchar.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h /usr/include/gconv.h
+Bot.o: /usr/include/gentoo-multilib/amd64/gconv.h
+Bot.o: /usr/include/bits/stdio_lim.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Bot.o: /usr/include/bits/sys_errlist.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Bot.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Bot.o: /usr/include/bits/waitflags.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Bot.o: /usr/include/bits/waitstatus.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Bot.o: /usr/include/xlocale.h /usr/include/gentoo-multilib/amd64/xlocale.h
+Bot.o: /usr/include/alloca.h /usr/include/gentoo-multilib/amd64/alloca.h
+Bot.o: /usr/include/string.h /usr/include/gentoo-multilib/amd64/string.h
+Bot.o: /usr/include/strings.h /usr/include/gentoo-multilib/amd64/strings.h
+Bot.o: /usr/include/inttypes.h /usr/include/gentoo-multilib/amd64/inttypes.h
+Bot.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+Bot.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+Bot.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+Bot.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Bot.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Bot.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Bot.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Bot.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Bot.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Bot.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Bot.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Bot.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Bot.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Bot.o: /usr/include/SDL/SDL_version.h IDGen.h Packet.h logout.h Log.h util.h
+Bot.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+Bot.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Bot.o: /usr/include/gentoo-multilib/amd64/math.h /usr/include/bits/huge_val.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Bot.o: /usr/include/bits/huge_valf.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+Bot.o: /usr/include/bits/huge_vall.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+Bot.o: /usr/include/bits/inf.h /usr/include/gentoo-multilib/amd64/bits/inf.h
+Bot.o: /usr/include/bits/nan.h /usr/include/gentoo-multilib/amd64/bits/nan.h
+Bot.o: /usr/include/bits/mathdef.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Bot.o: /usr/include/bits/mathcalls.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
+Bot.o: tsint.h globals.h Mesh.h Triangle.h Vertex.h types.h Material.h
+Bot.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+Bot.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+Bot.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+Bot.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Bot.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Bot.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+Bot.o: Timer.h Particle.h CollisionDetection.h ObjectKDTree.h ServerInfo.h
+Bot.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Bot.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+Bot.o: /usr/include/xercesc/dom/DOMDocument.hpp
+Bot.o: /usr/include/xercesc/util/XercesDefs.hpp
+Bot.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
+Bot.o: /usr/include/xercesc/util/XercesVersion.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNode.hpp
+Bot.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+Bot.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+Bot.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+Bot.o: /usr/include/xercesc/util/RefVectorOf.hpp
+Bot.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+Bot.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+Bot.o: /usr/include/xercesc/util/XMLException.hpp
+Bot.o: /usr/include/xercesc/util/XMemory.hpp
+Bot.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+Bot.o: /usr/include/xercesc/dom/DOMError.hpp
+Bot.o: /usr/include/xercesc/util/XMLUni.hpp
+Bot.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+Bot.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+Bot.o: /usr/include/xercesc/util/PlatformUtils.hpp
+Bot.o: /usr/include/xercesc/util/PanicHandler.hpp
+Bot.o: /usr/include/xercesc/util/XMLFileMgr.hpp
+Bot.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
+Bot.o: /usr/include/xercesc/framework/MemoryManager.hpp
+Bot.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+Bot.o: /usr/include/xercesc/util/RefVectorOf.c
+Bot.o: /usr/include/xercesc/framework/XMLAttr.hpp
+Bot.o: /usr/include/xercesc/util/QName.hpp
+Bot.o: /usr/include/xercesc/util/XMLString.hpp
+Bot.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+Bot.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+Bot.o: /usr/include/xercesc/internal/XSerializable.hpp
+Bot.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+Bot.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+Bot.o: /usr/include/xercesc/util/Hashers.hpp
+Bot.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+Bot.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+Bot.o: /usr/include/xercesc/util/RuntimeException.hpp
+Bot.o: /usr/include/xercesc/util/RefHashTableOf.c
+Bot.o: /usr/include/xercesc/util/Janitor.hpp
+Bot.o: /usr/include/xercesc/util/Janitor.c
+Bot.o: /usr/include/xercesc/util/NullPointerException.hpp
+Bot.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+Bot.o: /usr/include/xercesc/util/ValueVectorOf.c
+Bot.o: /usr/include/xercesc/internal/XSerializationException.hpp
+Bot.o: /usr/include/xercesc/internal/XProtoType.hpp
+Bot.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+Bot.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+Bot.o: /usr/include/xercesc/util/KVStringPair.hpp
+Bot.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+Bot.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+Bot.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+Bot.o: /usr/include/xercesc/util/regx/Op.hpp
+Bot.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+Bot.o: /usr/include/xercesc/util/regx/Token.hpp
+Bot.o: /usr/include/xercesc/util/Mutexes.hpp
+Bot.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Bot.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+Bot.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+Bot.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+Bot.o: /usr/include/xercesc/framework/ValidationContext.hpp
+Bot.o: /usr/include/xercesc/util/NameIdPool.hpp
+Bot.o: /usr/include/xercesc/util/NameIdPool.c
+Bot.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+Bot.o: /usr/include/xercesc/util/SecurityManager.hpp
+Bot.o: /usr/include/xercesc/util/ValueStackOf.hpp
+Bot.o: /usr/include/xercesc/util/EmptyStackException.hpp
+Bot.o: /usr/include/xercesc/util/ValueStackOf.c
+Bot.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+Bot.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+Bot.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+Bot.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+Bot.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+Bot.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+Bot.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+Bot.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+Bot.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+Bot.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+Bot.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+Bot.o: /usr/include/xercesc/validators/common/Grammar.hpp
+Bot.o: /usr/include/limits.h /usr/include/gentoo-multilib/amd64/limits.h
+Bot.o: /usr/include/bits/posix1_lim.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
+Bot.o: /usr/include/bits/local_lim.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
+Bot.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
+Bot.o: /usr/include/bits/xopen_lim.h
+Bot.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
+Bot.o: /usr/include/xercesc/dom/DOM.hpp /usr/include/xercesc/dom/DOMAttr.hpp
+Bot.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+Bot.o: /usr/include/xercesc/dom/DOMText.hpp
+Bot.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+Bot.o: /usr/include/xercesc/dom/DOMComment.hpp
+Bot.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+Bot.o: /usr/include/xercesc/dom/DOMElement.hpp
+Bot.o: /usr/include/xercesc/dom/DOMEntity.hpp
+Bot.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+Bot.o: /usr/include/xercesc/dom/DOMException.hpp
+Bot.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+Bot.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSException.hpp
+Bot.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNotation.hpp
+Bot.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+Bot.o: /usr/include/xercesc/dom/DOMRange.hpp
+Bot.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Bot.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+Bot.o: /usr/include/xercesc/dom/DOMStringList.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Bot.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+Bot.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
+Bot.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+Bot.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSInput.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLocator.hpp
+Bot.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
+Bot.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+Bot.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
+Bot.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
+Bot.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
+Bot.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+Bot.o: gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+Bot.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
+Bot.o: gui/Button.h netdefs.h ParticleEmitter.h MeshCache.h
 CollisionDetection.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 CollisionDetection.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 CollisionDetection.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -469,14 +728,12 @@ CollisionDetection.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 CollisionDetection.o: /usr/include/ogg/os_types.h
 CollisionDetection.o: /usr/include/ogg/config_types.h ALSource.h Quad.h
 CollisionDetection.o: MeshNode.h FBO.h util.h tsint.h Timer.h
-Console.o: Console.h gui/TextArea.h gui/GUI.h
-Console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-Console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-Console.o: /usr/include/xercesc/dom/DOMDocument.hpp
-Console.o: /usr/include/xercesc/util/XercesDefs.hpp
-Console.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-Console.o: /usr/include/inttypes.h
-Console.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+Console.o: Console.h gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+Console.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+Console.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Console.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+Console.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+Console.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 Console.o: /usr/include/features.h
 Console.o: /usr/include/gentoo-multilib/amd64/features.h
 Console.o: /usr/include/sys/cdefs.h
@@ -487,11 +744,6 @@ Console.o: /usr/include/gnu/stubs.h
 Console.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
 Console.o: /usr/include/gnu/stubs-64.h
 Console.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-Console.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
-Console.o: /usr/include/bits/wchar.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-Console.o: /usr/include/sys/types.h
-Console.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 Console.o: /usr/include/bits/types.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/types.h
 Console.o: /usr/include/bits/typesizes.h
@@ -512,6 +764,103 @@ Console.o: /usr/include/sys/sysmacros.h
 Console.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
 Console.o: /usr/include/bits/pthreadtypes.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+Console.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+Console.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+Console.o: /usr/include/_G_config.h
+Console.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+Console.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+Console.o: /usr/include/bits/wchar.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+Console.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+Console.o: /usr/include/bits/stdio_lim.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+Console.o: /usr/include/bits/sys_errlist.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+Console.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+Console.o: /usr/include/bits/waitflags.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+Console.o: /usr/include/bits/waitstatus.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+Console.o: /usr/include/xlocale.h
+Console.o: /usr/include/gentoo-multilib/amd64/xlocale.h /usr/include/alloca.h
+Console.o: /usr/include/gentoo-multilib/amd64/alloca.h /usr/include/string.h
+Console.o: /usr/include/gentoo-multilib/amd64/string.h /usr/include/strings.h
+Console.o: /usr/include/gentoo-multilib/amd64/strings.h
+Console.o: /usr/include/inttypes.h
+Console.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+Console.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+Console.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+Console.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+Console.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Console.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Console.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Console.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Console.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Console.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Console.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Console.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Console.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Console.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Console.o: /usr/include/SDL/SDL_version.h renderdefs.h glinc.h
+Console.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Console.o: /usr/include/SDL/SDL_opengl.h PlayerData.h Vector3.h
+Console.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+Console.o: /usr/include/bits/huge_val.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+Console.o: /usr/include/bits/huge_valf.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+Console.o: /usr/include/bits/huge_vall.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+Console.o: /usr/include/bits/inf.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
+Console.o: /usr/include/bits/nan.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
+Console.o: /usr/include/bits/mathdef.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+Console.o: /usr/include/bits/mathcalls.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+Console.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
+Console.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Console.o: /usr/include/boost/config/user.hpp
+Console.o: /usr/include/boost/config/select_compiler_config.hpp
+Console.o: /usr/include/boost/config/compiler/gcc.hpp
+Console.o: /usr/include/boost/config/select_stdlib_config.hpp
+Console.o: /usr/include/boost/config/no_tr1/utility.hpp
+Console.o: /usr/include/boost/config/select_platform_config.hpp
+Console.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Console.o: /usr/include/gentoo-multilib/amd64/unistd.h
+Console.o: /usr/include/bits/posix_opt.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+Console.o: /usr/include/bits/environments.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+Console.o: /usr/include/bits/confname.h
+Console.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+Console.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+Console.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Console.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+Console.o: /usr/include/boost/checked_delete.hpp
+Console.o: /usr/include/boost/throw_exception.hpp
+Console.o: /usr/include/boost/config.hpp
+Console.o: /usr/include/boost/detail/shared_count.hpp
+Console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Console.o: /usr/include/boost/detail/sp_counted_base.hpp
+Console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Console.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Console.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Console.o: Material.h TextureManager.h TextureHandler.h
+Console.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Console.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Console.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Console.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Console.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Console.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+Console.o: util.h tsint.h Timer.h Hit.h Weapon.h Item.h ObjectKDTree.h
+Console.o: CollisionDetection.h Light.h gui/GUI.h
+Console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+Console.o: /usr/include/xercesc/dom/DOMDocument.hpp
+Console.o: /usr/include/xercesc/util/XercesDefs.hpp
+Console.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 Console.o: /usr/include/xercesc/util/XercesVersion.hpp
 Console.o: /usr/include/xercesc/dom/DOMNode.hpp
 Console.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
@@ -524,15 +873,7 @@ Console.o: /usr/include/xercesc/util/RefVectorOf.hpp
 Console.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
 Console.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
 Console.o: /usr/include/xercesc/util/XMLException.hpp
-Console.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-Console.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-Console.o: /usr/include/bits/waitflags.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-Console.o: /usr/include/bits/waitstatus.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-Console.o: /usr/include/xlocale.h
-Console.o: /usr/include/gentoo-multilib/amd64/xlocale.h /usr/include/alloca.h
-Console.o: /usr/include/gentoo-multilib/amd64/alloca.h
+Console.o: /usr/include/xercesc/util/XMemory.hpp
 Console.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
 Console.o: /usr/include/xercesc/dom/DOMError.hpp
 Console.o: /usr/include/xercesc/util/XMLUni.hpp
@@ -548,9 +889,7 @@ Console.o: /usr/include/xercesc/util/RefVectorOf.c
 Console.o: /usr/include/xercesc/framework/XMLAttr.hpp
 Console.o: /usr/include/xercesc/util/QName.hpp
 Console.o: /usr/include/xercesc/util/XMLString.hpp
-Console.o: /usr/include/xercesc/framework/XMLBuffer.hpp /usr/include/string.h
-Console.o: /usr/include/gentoo-multilib/amd64/string.h /usr/include/assert.h
-Console.o: /usr/include/gentoo-multilib/amd64/assert.h
+Console.o: /usr/include/xercesc/framework/XMLBuffer.hpp
 Console.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 Console.o: /usr/include/xercesc/internal/XSerializable.hpp
 Console.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
@@ -615,8 +954,6 @@ Console.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
 Console.o: /usr/include/bits/xopen_lim.h
 Console.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-Console.o: /usr/include/bits/stdio_lim.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
 Console.o: /usr/include/xercesc/dom/DOM.hpp
 Console.o: /usr/include/xercesc/dom/DOMAttr.hpp
 Console.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -660,89 +997,10 @@ Console.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-Console.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-Console.o: /usr/include/boost/config/user.hpp
-Console.o: /usr/include/boost/config/select_compiler_config.hpp
-Console.o: /usr/include/boost/config/compiler/gcc.hpp
-Console.o: /usr/include/boost/config/select_stdlib_config.hpp
-Console.o: /usr/include/boost/config/no_tr1/utility.hpp
-Console.o: /usr/include/boost/config/select_platform_config.hpp
-Console.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
-Console.o: /usr/include/gentoo-multilib/amd64/unistd.h
-Console.o: /usr/include/bits/posix_opt.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-Console.o: /usr/include/bits/environments.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-Console.o: /usr/include/bits/confname.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-Console.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
-Console.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
-Console.o: /usr/include/boost/checked_delete.hpp
-Console.o: /usr/include/boost/throw_exception.hpp
-Console.o: /usr/include/boost/config.hpp
-Console.o: /usr/include/boost/detail/shared_count.hpp
-Console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-Console.o: /usr/include/boost/detail/sp_counted_base.hpp
-Console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-Console.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Console.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
-Console.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-Console.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-Console.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
-Console.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
-Console.o: /usr/include/_G_config.h
-Console.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-Console.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
-Console.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
-Console.o: /usr/include/bits/sys_errlist.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-Console.o: /usr/include/strings.h
-Console.o: /usr/include/gentoo-multilib/amd64/strings.h /usr/include/ctype.h
-Console.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
-Console.o: /usr/include/gentoo-multilib/amd64/iconv.h
-Console.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-Console.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-Console.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-Console.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-Console.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-Console.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-Console.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-Console.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-Console.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-Console.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Console.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-Console.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
-Console.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-Console.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-Console.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
-Console.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
-Console.o: /usr/include/bits/huge_val.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-Console.o: /usr/include/bits/huge_valf.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-Console.o: /usr/include/bits/huge_vall.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-Console.o: /usr/include/bits/inf.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-Console.o: /usr/include/bits/nan.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-Console.o: /usr/include/bits/mathdef.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-Console.o: /usr/include/bits/mathcalls.h
-Console.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-Console.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-Console.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
-Console.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
-Console.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Console.o: /usr/include/ogg/config_types.h gui/Table.h gui/TableItem.h
-Console.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
-Console.o: renderdefs.h PlayerData.h /usr/include/SDL/SDL_net.h Mesh.h
-Console.o: Triangle.h Vertex.h Material.h TextureManager.h IniReader.h
-Console.o: Shader.h ResourceManager.h SoundManager.h ALSource.h Quad.h
-Console.o: MeshNode.h FBO.h util.h Timer.h Hit.h Weapon.h Item.h
-Console.o: ObjectKDTree.h CollisionDetection.h Light.h gui/GUI.h
-Console.o: gui/ProgressBar.h gui/Button.h netdefs.h ServerInfo.h Particle.h
-Console.o: IDGen.h Packet.h globals.h ParticleEmitter.h MeshCache.h
+Console.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
+Console.o: ALSource.h gui/ProgressBar.h gui/Button.h netdefs.h ServerInfo.h
+Console.o: Particle.h IDGen.h Packet.h globals.h ParticleEmitter.h
+Console.o: MeshCache.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 FBO.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1495,8 +1753,7 @@ Material.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Material.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
 Material.o: FBO.h util.h tsint.h Timer.h Particle.h CollisionDetection.h
 Material.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-Material.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-Material.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Material.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Material.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Material.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1638,10 +1895,11 @@ Material.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Material.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-Material.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-Material.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-Material.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-Material.o: ParticleEmitter.h MeshCache.h
+Material.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+Material.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+Material.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+Material.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+Material.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h
 Mesh.o: Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Mesh.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Mesh.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -2018,8 +2276,7 @@ MeshNode.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 MeshNode.o: /usr/include/ogg/config_types.h ALSource.h globals.h Mesh.h
 MeshNode.o: Quad.h FBO.h util.h tsint.h Timer.h Particle.h
 MeshNode.o: CollisionDetection.h ObjectKDTree.h ServerInfo.h
-MeshNode.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
-MeshNode.o: Item.h Console.h gui/TextArea.h gui/GUI.h
+MeshNode.o: /usr/include/SDL/SDL_net.h gui/GUI.h
 MeshNode.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2162,10 +2419,11 @@ MeshNode.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 MeshNode.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-MeshNode.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-MeshNode.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-MeshNode.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-MeshNode.o: ParticleEmitter.h MeshCache.h
+MeshNode.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+MeshNode.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+MeshNode.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+MeshNode.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+MeshNode.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -2506,8 +2764,7 @@ Particle.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Particle.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Particle.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
 Particle.o: FBO.h util.h tsint.h Timer.h globals.h ServerInfo.h
-Particle.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
-Particle.o: Item.h Console.h gui/TextArea.h gui/GUI.h
+Particle.o: /usr/include/SDL/SDL_net.h gui/GUI.h
 Particle.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Particle.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2650,10 +2907,11 @@ Particle.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Particle.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-Particle.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-Particle.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-Particle.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-Particle.o: ParticleEmitter.h MeshCache.h
+Particle.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+Particle.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+Particle.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+Particle.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+Particle.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h
 ParticleEmitter.o: ParticleEmitter.h Particle.h CollisionDetection.h
 ParticleEmitter.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ParticleEmitter.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
@@ -2805,8 +3063,6 @@ ParticleEmitter.o: /usr/include/ogg/os_types.h
 ParticleEmitter.o: /usr/include/ogg/config_types.h ALSource.h Quad.h
 ParticleEmitter.o: MeshNode.h FBO.h util.h tsint.h Timer.h globals.h
 ParticleEmitter.o: ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-ParticleEmitter.o: PlayerData.h Hit.h Weapon.h Item.h Console.h
-ParticleEmitter.o: gui/TextArea.h gui/GUI.h
 ParticleEmitter.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ParticleEmitter.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -2950,11 +3206,12 @@ ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 ParticleEmitter.o: /usr/include/SDL/SDL_ttf.h TextureManager.h
-ParticleEmitter.o: gui/XSWrapper.h util.h ALSource.h gui/Table.h
-ParticleEmitter.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-ParticleEmitter.o: gui/Slider.h gui/Button.h renderdefs.h Light.h
-ParticleEmitter.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-ParticleEmitter.o: MeshCache.h
+ParticleEmitter.o: gui/XSWrapper.h util.h ALSource.h PlayerData.h Hit.h
+ParticleEmitter.o: Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
+ParticleEmitter.o: gui/Table.h gui/TableItem.h gui/LineEdit.h
+ParticleEmitter.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h
+ParticleEmitter.o: Light.h gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h
+ParticleEmitter.o: Packet.h MeshCache.h
 PlayerData.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
 PlayerData.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PlayerData.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -4807,8 +5064,7 @@ Weapon.o: /usr/include/boost/detail/sp_counted_base.hpp
 Weapon.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Weapon.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Weapon.o: /usr/include/boost/detail/workaround.hpp
-actions.o: gui/GUI.h gui/ProgressBar.h gui/GUI.h
-actions.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+actions.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 actions.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocument.hpp
 actions.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -5049,10 +5305,13 @@ actions.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 actions.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 actions.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 actions.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-actions.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
-actions.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-actions.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-actions.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
+actions.o: TextureManager.h gui/XSWrapper.h util.h ALSource.h
+actions.o: gui/ProgressBar.h gui/GUI.h ServerInfo.h
+actions.o: /usr/include/SDL/SDL_net.h gui/Table.h gui/TableItem.h
+actions.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+actions.o: gui/ComboBox.h gui/Table.h gui/TextArea.h PlayerData.h Vector3.h
+actions.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+actions.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 actions.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
 actions.o: /usr/include/bits/huge_val.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -5067,22 +5326,19 @@ actions.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 actions.o: /usr/include/bits/mathdef.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 actions.o: /usr/include/bits/mathcalls.h
-actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-actions.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
+actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+actions.o: Mesh.h Triangle.h Vertex.h types.h GraphicMatrix.h Material.h
+actions.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+actions.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 actions.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 actions.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 actions.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-actions.o: /usr/include/ogg/config_types.h ServerInfo.h
-actions.o: /usr/include/SDL/SDL_net.h gui/Table.h gui/TableItem.h
-actions.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
-actions.o: gui/ComboBox.h gui/Table.h gui/TextArea.h PlayerData.h Mesh.h
-actions.o: Triangle.h Vertex.h Material.h TextureManager.h IniReader.h
-actions.o: Shader.h ResourceManager.h SoundManager.h ALSource.h Quad.h
-actions.o: MeshNode.h FBO.h util.h Timer.h Hit.h Weapon.h Item.h globals.h
-actions.o: Particle.h CollisionDetection.h ObjectKDTree.h Console.h
-actions.o: renderdefs.h Light.h gui/Button.h netdefs.h IDGen.h Packet.h
-actions.o: ParticleEmitter.h MeshCache.h editor.h ProceduralTree.h
-actions.o: StableRandom.h /usr/include/boost/tokenizer.hpp
+actions.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+actions.o: util.h tsint.h Timer.h Hit.h Weapon.h Item.h globals.h Particle.h
+actions.o: CollisionDetection.h ObjectKDTree.h Console.h renderdefs.h Light.h
+actions.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+actions.o: MeshCache.h editor.h ProceduralTree.h StableRandom.h
+actions.o: /usr/include/boost/tokenizer.hpp
 actions.o: /usr/include/boost/token_iterator.hpp
 actions.o: /usr/include/boost/iterator/iterator_adaptor.hpp
 actions.o: /usr/include/boost/static_assert.hpp
@@ -5397,8 +5653,7 @@ coldest.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 coldest.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 coldest.o: util.h tsint.h Timer.h CollisionDetection.h ProceduralTree.h
 coldest.o: StableRandom.h Particle.h Hit.h PlayerData.h Weapon.h Item.h
-coldest.o: Light.h gui/GUI.h gui/ProgressBar.h gui/GUI.h
-coldest.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+coldest.o: Light.h gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldest.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldest.o: /usr/include/xercesc/dom/DOMDocument.hpp
 coldest.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -5539,11 +5794,12 @@ coldest.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
-coldest.o: gui/XSWrapper.h util.h ALSource.h ServerInfo.h gui/Table.h
-coldest.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
-coldest.o: gui/Button.h gui/TextArea.h gui/Table.h gui/ComboBox.h globals.h
-coldest.o: Console.h renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-coldest.o: ParticleEmitter.h MeshCache.h
+coldest.o: gui/XSWrapper.h util.h ALSource.h gui/ProgressBar.h gui/GUI.h
+coldest.o: ServerInfo.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+coldest.o: gui/ScrollView.h gui/Slider.h gui/Button.h gui/TextArea.h
+coldest.o: gui/Table.h gui/ComboBox.h globals.h Console.h renderdefs.h
+coldest.o: gui/Button.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+coldest.o: MeshCache.h
 editor.o: editor.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 editor.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 editor.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -5666,10 +5922,7 @@ editor.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 editor.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 editor.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 editor.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
-editor.o: util.h tsint.h Timer.h StableRandom.h gui/GUI.h globals.h
-editor.o: Particle.h CollisionDetection.h ObjectKDTree.h ServerInfo.h
-editor.o: /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h Item.h
-editor.o: Console.h gui/TextArea.h gui/GUI.h
+editor.o: util.h tsint.h Timer.h StableRandom.h gui/GUI.h
 editor.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 editor.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 editor.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -5812,11 +6065,13 @@ editor.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 editor.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-editor.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-editor.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-editor.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-editor.o: ParticleEmitter.h MeshCache.h
-getmap.o: gui/ProgressBar.h gui/GUI.h
+editor.o: ALSource.h globals.h Particle.h CollisionDetection.h ObjectKDTree.h
+editor.o: ServerInfo.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h
+editor.o: Item.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
+editor.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
+editor.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
+editor.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h
+getmap.o: gui/ProgressBar.h gui/GUI.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 getmap.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -6056,10 +6311,10 @@ getmap.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 getmap.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 getmap.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 getmap.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-getmap.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
-getmap.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-getmap.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h logout.h
-getmap.o: Log.h gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
+getmap.o: TextureManager.h gui/XSWrapper.h util.h ALSource.h
+getmap.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h glinc.h
+getmap.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+getmap.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
 getmap.o: /usr/include/gentoo-multilib/amd64/math.h
 getmap.o: /usr/include/bits/huge_val.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
@@ -6074,21 +6329,20 @@ getmap.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
 getmap.o: /usr/include/bits/mathdef.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 getmap.o: /usr/include/bits/mathcalls.h
-getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
-getmap.o: tsint.h ALSource.h types.h ALBuffer.h /usr/include/AL/al.h
-getmap.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+getmap.o: Triangle.h Vertex.h types.h GraphicMatrix.h Material.h
+getmap.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+getmap.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+getmap.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 getmap.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 getmap.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-getmap.o: /usr/include/ogg/config_types.h gui/GUI.h CollisionDetection.h
-getmap.o: ObjectKDTree.h Mesh.h Triangle.h Vertex.h Material.h
-getmap.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
-getmap.o: SoundManager.h ALSource.h Quad.h MeshNode.h FBO.h util.h Timer.h
-getmap.o: ProceduralTree.h StableRandom.h Light.h globals.h Particle.h
-getmap.o: ServerInfo.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h
-getmap.o: Item.h Console.h gui/TextArea.h gui/Table.h gui/TableItem.h
-getmap.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
-getmap.o: renderdefs.h gui/Button.h netdefs.h IDGen.h Packet.h
-getmap.o: ParticleEmitter.h MeshCache.h editor.h
+getmap.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+getmap.o: util.h tsint.h Timer.h ProceduralTree.h StableRandom.h Light.h
+getmap.o: globals.h Particle.h ServerInfo.h /usr/include/SDL/SDL_net.h
+getmap.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
+getmap.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+getmap.o: gui/Slider.h gui/Button.h renderdefs.h gui/Button.h netdefs.h
+getmap.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h editor.h
 globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 globals.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 globals.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -6214,8 +6468,7 @@ globals.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 globals.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 globals.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
 globals.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-globals.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-globals.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
 globals.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -6357,10 +6610,11 @@ globals.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 globals.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-globals.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-globals.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-globals.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-globals.o: ParticleEmitter.h MeshCache.h
+globals.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+globals.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+globals.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+globals.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+globals.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h
 logout.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -6641,6 +6895,8 @@ net.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 net.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 net.o: util.h tsint.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h
 net.o: Weapon.h Item.h Packet.h ServerInfo.h gui/ComboBox.h gui/GUI.h
+net.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+net.o: gui/Slider.h gui/Button.h netdefs.h IDGen.h globals.h gui/GUI.h
 net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -6782,10 +7038,8 @@ net.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 net.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-net.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-net.o: gui/Slider.h gui/Button.h netdefs.h IDGen.h globals.h gui/GUI.h
-net.o: Console.h gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h
-net.o: gui/Button.h ParticleEmitter.h MeshCache.h
+net.o: ALSource.h Console.h gui/TextArea.h renderdefs.h Light.h
+net.o: gui/ProgressBar.h gui/Button.h ParticleEmitter.h MeshCache.h
 netdefs.o: netdefs.h ServerInfo.h /usr/include/SDL/SDL_net.h
 netdefs.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 netdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -7036,8 +7290,7 @@ render.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 render.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 render.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
 render.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-render.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-render.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
 render.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -7179,7 +7432,8 @@ render.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 render.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-render.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+render.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+render.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 render.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 render.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
 render.o: ParticleEmitter.h MeshCache.h
@@ -7319,8 +7573,7 @@ renderdefs.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 renderdefs.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
 renderdefs.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Hit.h
 renderdefs.o: Weapon.h Item.h ObjectKDTree.h CollisionDetection.h Light.h
-renderdefs.o: gui/GUI.h gui/ProgressBar.h gui/GUI.h
-renderdefs.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+renderdefs.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
 renderdefs.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -7463,12 +7716,10 @@ renderdefs.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 renderdefs.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-renderdefs.o: util.h ALSource.h gui/Button.h
-server.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
-server.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-server.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-server.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-server.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+renderdefs.o: util.h ALSource.h gui/ProgressBar.h gui/GUI.h gui/Button.h
+server.o: /usr/include/poll.h /usr/include/gentoo-multilib/amd64/poll.h
+server.o: /usr/include/sys/poll.h
+server.o: /usr/include/gentoo-multilib/amd64/sys/poll.h
 server.o: /usr/include/features.h
 server.o: /usr/include/gentoo-multilib/amd64/features.h
 server.o: /usr/include/sys/cdefs.h
@@ -7479,6 +7730,20 @@ server.o: /usr/include/gnu/stubs.h
 server.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
 server.o: /usr/include/gnu/stubs-64.h
 server.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
+server.o: /usr/include/bits/poll.h
+server.o: /usr/include/gentoo-multilib/amd64/bits/poll.h
+server.o: /usr/include/bits/sigset.h
+server.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
+server.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
+server.o: /usr/include/bits/types.h
+server.o: /usr/include/gentoo-multilib/amd64/bits/types.h
+server.o: /usr/include/bits/typesizes.h
+server.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h Particle.h
+server.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h glinc.h
+server.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+server.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
+server.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
+server.o: /usr/include/gentoo-multilib/amd64/math.h
 server.o: /usr/include/bits/huge_val.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
 server.o: /usr/include/bits/huge_valf.h
@@ -7496,11 +7761,6 @@ server.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
 server.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 server.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 server.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-server.o: /usr/include/bits/types.h
-server.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-server.o: /usr/include/bits/typesizes.h
-server.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-server.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
 server.o: /usr/include/endian.h /usr/include/gentoo-multilib/amd64/endian.h
 server.o: /usr/include/bits/endian.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
@@ -7508,8 +7768,6 @@ server.o: /usr/include/sys/select.h
 server.o: /usr/include/gentoo-multilib/amd64/sys/select.h
 server.o: /usr/include/bits/select.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-server.o: /usr/include/bits/sigset.h
-server.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
 server.o: /usr/include/bits/time.h
 server.o: /usr/include/gentoo-multilib/amd64/bits/time.h
 server.o: /usr/include/sys/sysmacros.h
@@ -7588,7 +7846,7 @@ server.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 server.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 server.o: util.h tsint.h Timer.h /usr/include/SDL/SDL_net.h PlayerData.h
 server.o: Hit.h Weapon.h Item.h Packet.h ProceduralTree.h StableRandom.h
-server.o: globals.h ServerInfo.h gui/GUI.h Console.h gui/TextArea.h gui/GUI.h
+server.o: globals.h ServerInfo.h gui/GUI.h
 server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 server.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 server.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -7731,10 +7989,10 @@ server.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 server.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-server.o: ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-server.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-server.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h ParticleEmitter.h
-server.o: MeshCache.h ServerState.h
+server.o: ALSource.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
+server.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
+server.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
+server.o: netdefs.h IDGen.h ParticleEmitter.h MeshCache.h ServerState.h Bot.h
 settings.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 settings.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 settings.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -7862,8 +8120,7 @@ settings.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 settings.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
 settings.o: FBO.h util.h tsint.h Timer.h Particle.h CollisionDetection.h
 settings.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
-settings.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
-settings.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+settings.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 settings.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocument.hpp
 settings.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -8005,10 +8262,12 @@ settings.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 settings.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
-settings.o: util.h ALSource.h gui/Table.h gui/TableItem.h gui/LineEdit.h
-settings.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-settings.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-settings.o: ParticleEmitter.h MeshCache.h gui/Slider.h gui/ComboBox.h
+settings.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+settings.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+settings.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+settings.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h netdefs.h
+settings.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h gui/Slider.h
+settings.o: gui/ComboBox.h
 tsint.o: tsint.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 tsint.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 tsint.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -8164,573 +8423,15 @@ util.o: /usr/include/bits/mathcalls.h
 util.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
 util.o: GraphicMatrix.h tsint.h
 gui/Button.o: gui/Button.h gui/GUI.h
-gui/Button.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/Button.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/Button.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/Button.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/Button.o: /usr/include/inttypes.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/Button.o: /usr/include/features.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/Button.o: /usr/include/sys/cdefs.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/Button.o: /usr/include/bits/wordsize.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/Button.o: /usr/include/gnu/stubs.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/Button.o: /usr/include/gnu/stubs-64.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/Button.o: /usr/include/stdint.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/Button.o: /usr/include/bits/wchar.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/Button.o: /usr/include/sys/types.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/Button.o: /usr/include/bits/types.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/Button.o: /usr/include/bits/typesizes.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/Button.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
-gui/Button.o: /usr/include/endian.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/Button.o: /usr/include/bits/endian.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/Button.o: /usr/include/sys/select.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/Button.o: /usr/include/bits/select.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/Button.o: /usr/include/bits/sigset.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/Button.o: /usr/include/bits/time.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/Button.o: /usr/include/sys/sysmacros.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/Button.o: /usr/include/bits/pthreadtypes.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/Button.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/Button.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/Button.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/Button.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/Button.o: /usr/include/xercesc/util/XMLException.hpp
-gui/Button.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/Button.o: /usr/include/bits/waitflags.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/Button.o: /usr/include/bits/waitstatus.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/Button.o: /usr/include/xlocale.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/Button.o: /usr/include/alloca.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/Button.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/Button.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/Button.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/Button.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/Button.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/Button.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/Button.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/Button.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/Button.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/Button.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/Button.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/Button.o: /usr/include/xercesc/util/QName.hpp
-gui/Button.o: /usr/include/xercesc/util/XMLString.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/Button.o: /usr/include/string.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/Button.o: /usr/include/assert.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/Button.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/Button.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/Button.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/Button.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/Button.o: /usr/include/xercesc/util/Hashers.hpp
-gui/Button.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/Button.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/Button.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/Button.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/Button.o: /usr/include/xercesc/util/Janitor.hpp
-gui/Button.o: /usr/include/xercesc/util/Janitor.c
-gui/Button.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/Button.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/Button.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/Button.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/Button.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/Button.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/Button.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/Button.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/Button.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/Button.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/Button.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/Button.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/Button.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/Button.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/Button.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/Button.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/Button.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/Button.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/Button.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/Button.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/Button.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/Button.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/Button.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/Button.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/Button.o: /usr/include/xercesc/util/NameIdPool.c
-gui/Button.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/Button.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/Button.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/Button.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/Button.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/Button.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/Button.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/Button.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/Button.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/Button.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/Button.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/Button.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/Button.o: /usr/include/limits.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/Button.o: /usr/include/bits/posix1_lim.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/Button.o: /usr/include/bits/local_lim.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/Button.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/Button.o: /usr/include/bits/xopen_lim.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/Button.o: /usr/include/bits/stdio_lim.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/Button.o: /usr/include/xercesc/dom/DOM.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/Button.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/Button.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-gui/Button.o: /usr/include/boost/config/user.hpp
-gui/Button.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/Button.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/Button.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/Button.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/Button.o: /usr/include/boost/config/select_platform_config.hpp
-gui/Button.o: /usr/include/boost/config/posix_features.hpp
-gui/Button.o: /usr/include/unistd.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/Button.o: /usr/include/bits/posix_opt.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/Button.o: /usr/include/bits/environments.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/Button.o: /usr/include/bits/confname.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/Button.o: /usr/include/getopt.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/Button.o: /usr/include/boost/config/suffix.hpp
-gui/Button.o: /usr/include/boost/assert.hpp
-gui/Button.o: /usr/include/boost/checked_delete.hpp
-gui/Button.o: /usr/include/boost/throw_exception.hpp
-gui/Button.o: /usr/include/boost/config.hpp
-gui/Button.o: /usr/include/boost/detail/shared_count.hpp
-gui/Button.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/Button.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/Button.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/Button.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/Button.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
-gui/Button.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-gui/Button.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-gui/Button.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
-gui/Button.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
-gui/Button.o: /usr/include/_G_config.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/Button.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
-gui/Button.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
-gui/Button.o: /usr/include/bits/sys_errlist.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/Button.o: /usr/include/strings.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/Button.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
-gui/Button.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
-gui/Button.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/Button.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/Button.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/Button.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/Button.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/Button.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/Button.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-gui/Button.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-gui/Button.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/Button.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/Button.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/Button.o: TextureManager.h TextureHandler.h glinc.h
-gui/Button.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/Button.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/Button.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/Button.o: util.h Vector3.h /usr/include/math.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/Button.o: /usr/include/bits/huge_val.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/Button.o: /usr/include/bits/huge_valf.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/Button.o: /usr/include/bits/huge_vall.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/Button.o: /usr/include/bits/inf.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/Button.o: /usr/include/bits/nan.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/Button.o: /usr/include/bits/mathdef.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/Button.o: /usr/include/bits/mathcalls.h
-gui/Button.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/Button.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/Button.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/Button.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/Button.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/Button.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/ComboBox.o: gui/ComboBox.h gui/GUI.h
-gui/ComboBox.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/ComboBox.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/ComboBox.o: /usr/include/inttypes.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/ComboBox.o: /usr/include/features.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/ComboBox.o: /usr/include/sys/cdefs.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/ComboBox.o: /usr/include/bits/wordsize.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/ComboBox.o: /usr/include/gnu/stubs.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/ComboBox.o: /usr/include/gnu/stubs-64.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/ComboBox.o: /usr/include/stdint.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/ComboBox.o: /usr/include/bits/wchar.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/ComboBox.o: /usr/include/sys/types.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/ComboBox.o: /usr/include/bits/types.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/ComboBox.o: /usr/include/bits/typesizes.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/ComboBox.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
-gui/ComboBox.o: /usr/include/endian.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/ComboBox.o: /usr/include/bits/endian.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/ComboBox.o: /usr/include/sys/select.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/ComboBox.o: /usr/include/bits/select.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/ComboBox.o: /usr/include/bits/sigset.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/ComboBox.o: /usr/include/bits/time.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/ComboBox.o: /usr/include/sys/sysmacros.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/ComboBox.o: /usr/include/bits/pthreadtypes.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/ComboBox.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMLException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/ComboBox.o: /usr/include/bits/waitflags.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/ComboBox.o: /usr/include/bits/waitstatus.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/ComboBox.o: /usr/include/xlocale.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/ComboBox.o: /usr/include/alloca.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/ComboBox.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/ComboBox.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/QName.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/XMLString.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/ComboBox.o: /usr/include/string.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/ComboBox.o: /usr/include/assert.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/ComboBox.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/ComboBox.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/ComboBox.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/Hashers.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/ComboBox.o: /usr/include/xercesc/util/Janitor.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/Janitor.c
-gui/ComboBox.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/ComboBox.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/ComboBox.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/ComboBox.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/ComboBox.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/ComboBox.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/NameIdPool.c
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/ComboBox.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/ComboBox.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/ComboBox.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/ComboBox.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/ComboBox.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/ComboBox.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/ComboBox.o: /usr/include/limits.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/ComboBox.o: /usr/include/bits/posix1_lim.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/ComboBox.o: /usr/include/bits/local_lim.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/ComboBox.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/ComboBox.o: /usr/include/bits/xopen_lim.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/ComboBox.o: /usr/include/bits/stdio_lim.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/ComboBox.o: /usr/include/xercesc/dom/DOM.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/ComboBox.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/ComboBox.o: /usr/include/boost/shared_ptr.hpp
-gui/ComboBox.o: /usr/include/boost/config.hpp
-gui/ComboBox.o: /usr/include/boost/config/user.hpp
-gui/ComboBox.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/ComboBox.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/ComboBox.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/ComboBox.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/ComboBox.o: /usr/include/boost/config/select_platform_config.hpp
-gui/ComboBox.o: /usr/include/boost/config/posix_features.hpp
-gui/ComboBox.o: /usr/include/unistd.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/ComboBox.o: /usr/include/bits/posix_opt.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/ComboBox.o: /usr/include/bits/environments.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/ComboBox.o: /usr/include/bits/confname.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/ComboBox.o: /usr/include/getopt.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/ComboBox.o: /usr/include/boost/config/suffix.hpp
-gui/ComboBox.o: /usr/include/boost/assert.hpp
-gui/ComboBox.o: /usr/include/boost/checked_delete.hpp
-gui/ComboBox.o: /usr/include/boost/throw_exception.hpp
-gui/ComboBox.o: /usr/include/boost/config.hpp
-gui/ComboBox.o: /usr/include/boost/detail/shared_count.hpp
-gui/ComboBox.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/ComboBox.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/ComboBox.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/ComboBox.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/ComboBox.o: /usr/include/boost/detail/workaround.hpp
-gui/ComboBox.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/ComboBox.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-gui/ComboBox.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/ComboBox.o: /usr/include/libio.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/ComboBox.o: /usr/include/_G_config.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/ComboBox.o: /usr/include/wchar.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/ComboBox.o: /usr/include/gconv.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/ComboBox.o: /usr/include/bits/sys_errlist.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/ComboBox.o: /usr/include/strings.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/ComboBox.o: /usr/include/ctype.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/ctype.h
-gui/ComboBox.o: /usr/include/iconv.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/ComboBox.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/ComboBox.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/ComboBox.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/ComboBox.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/ComboBox.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/ComboBox.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/ComboBox.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-gui/ComboBox.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-gui/ComboBox.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/ComboBox.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/ComboBox.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/ComboBox.o: TextureManager.h TextureHandler.h glinc.h
-gui/ComboBox.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/ComboBox.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/ComboBox.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/ComboBox.o: util.h Vector3.h /usr/include/math.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/ComboBox.o: /usr/include/bits/huge_val.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/ComboBox.o: /usr/include/bits/huge_valf.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/ComboBox.o: /usr/include/bits/huge_vall.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/ComboBox.o: /usr/include/bits/inf.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/ComboBox.o: /usr/include/bits/nan.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/ComboBox.o: /usr/include/bits/mathdef.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/ComboBox.o: /usr/include/bits/mathcalls.h
-gui/ComboBox.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/ComboBox.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/ComboBox.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/ComboBox.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/ComboBox.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/ComboBox.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/ComboBox.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-gui/ComboBox.o: gui/Slider.h gui/Button.h
-gui/GUI.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/GUI.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/GUI.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/GUI.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/GUI.o: /usr/include/inttypes.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+gui/ComboBox.o: gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
+gui/ComboBox.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+gui/GUI.o: gui/GUI.h gui/Button.h gui/LineEdit.h gui/ScrollView.h
+gui/GUI.o: gui/Slider.h gui/ProgressBar.h gui/Table.h gui/TableItem.h
+gui/GUI.o: gui/ComboBox.h gui/TextArea.h /usr/include/SDL/SDL.h
+gui/GUI.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+gui/GUI.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+gui/GUI.o: /usr/include/sys/types.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 gui/GUI.o: /usr/include/features.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/features.h
 gui/GUI.o: /usr/include/sys/cdefs.h
@@ -8741,11 +8442,6 @@ gui/GUI.o: /usr/include/gnu/stubs.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
 gui/GUI.o: /usr/include/gnu/stubs-64.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/GUI.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
-gui/GUI.o: /usr/include/bits/wchar.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/GUI.o: /usr/include/sys/types.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 gui/GUI.o: /usr/include/bits/types.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/types.h
 gui/GUI.o: /usr/include/bits/typesizes.h
@@ -8766,6 +8462,102 @@ gui/GUI.o: /usr/include/sys/sysmacros.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
 gui/GUI.o: /usr/include/bits/pthreadtypes.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
+gui/GUI.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
+gui/GUI.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
+gui/GUI.o: /usr/include/_G_config.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+gui/GUI.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
+gui/GUI.o: /usr/include/bits/wchar.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+gui/GUI.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
+gui/GUI.o: /usr/include/bits/stdio_lim.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+gui/GUI.o: /usr/include/bits/sys_errlist.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+gui/GUI.o: /usr/include/stdlib.h /usr/include/gentoo-multilib/amd64/stdlib.h
+gui/GUI.o: /usr/include/bits/waitflags.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
+gui/GUI.o: /usr/include/bits/waitstatus.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
+gui/GUI.o: /usr/include/xlocale.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/xlocale.h /usr/include/alloca.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/alloca.h /usr/include/string.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/string.h /usr/include/strings.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/strings.h
+gui/GUI.o: /usr/include/inttypes.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+gui/GUI.o: /usr/include/stdint.h /usr/include/gentoo-multilib/amd64/stdint.h
+gui/GUI.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
+gui/GUI.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
+gui/GUI.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+gui/GUI.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+gui/GUI.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+gui/GUI.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+gui/GUI.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+gui/GUI.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+gui/GUI.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+gui/GUI.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+gui/GUI.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+gui/GUI.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+gui/GUI.o: /usr/include/SDL/SDL_version.h gui/TabWidget.h globals.h Mesh.h
+gui/GUI.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+gui/GUI.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
+gui/GUI.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
+gui/GUI.o: /usr/include/bits/huge_val.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
+gui/GUI.o: /usr/include/bits/huge_valf.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
+gui/GUI.o: /usr/include/bits/huge_vall.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
+gui/GUI.o: /usr/include/bits/inf.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
+gui/GUI.o: /usr/include/bits/nan.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
+gui/GUI.o: /usr/include/bits/mathdef.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
+gui/GUI.o: /usr/include/bits/mathcalls.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
+gui/GUI.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
+gui/GUI.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+gui/GUI.o: /usr/include/boost/config/select_compiler_config.hpp
+gui/GUI.o: /usr/include/boost/config/compiler/gcc.hpp
+gui/GUI.o: /usr/include/boost/config/select_stdlib_config.hpp
+gui/GUI.o: /usr/include/boost/config/no_tr1/utility.hpp
+gui/GUI.o: /usr/include/boost/config/select_platform_config.hpp
+gui/GUI.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/unistd.h
+gui/GUI.o: /usr/include/bits/posix_opt.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
+gui/GUI.o: /usr/include/bits/environments.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
+gui/GUI.o: /usr/include/bits/confname.h
+gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
+gui/GUI.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
+gui/GUI.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+gui/GUI.o: /usr/include/assert.h /usr/include/gentoo-multilib/amd64/assert.h
+gui/GUI.o: /usr/include/boost/checked_delete.hpp
+gui/GUI.o: /usr/include/boost/throw_exception.hpp
+gui/GUI.o: /usr/include/boost/config.hpp
+gui/GUI.o: /usr/include/boost/detail/shared_count.hpp
+gui/GUI.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+gui/GUI.o: /usr/include/boost/detail/sp_counted_base.hpp
+gui/GUI.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+gui/GUI.o: /usr/include/boost/detail/sp_counted_impl.hpp
+gui/GUI.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+gui/GUI.o: Material.h TextureManager.h TextureHandler.h
+gui/GUI.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+gui/GUI.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+gui/GUI.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+gui/GUI.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+gui/GUI.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+gui/GUI.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+gui/GUI.o: util.h tsint.h Timer.h Particle.h CollisionDetection.h
+gui/GUI.o: ObjectKDTree.h ServerInfo.h /usr/include/SDL/SDL_net.h gui/GUI.h
+gui/GUI.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+gui/GUI.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMDocument.hpp
+gui/GUI.o: /usr/include/xercesc/util/XercesDefs.hpp
+gui/GUI.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 gui/GUI.o: /usr/include/xercesc/util/XercesVersion.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMNode.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
@@ -8778,15 +8570,7 @@ gui/GUI.o: /usr/include/xercesc/util/RefVectorOf.hpp
 gui/GUI.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
 gui/GUI.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
 gui/GUI.o: /usr/include/xercesc/util/XMLException.hpp
-gui/GUI.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/GUI.o: /usr/include/bits/waitflags.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/GUI.o: /usr/include/bits/waitstatus.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/GUI.o: /usr/include/xlocale.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/xlocale.h /usr/include/alloca.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/alloca.h
+gui/GUI.o: /usr/include/xercesc/util/XMemory.hpp
 gui/GUI.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMError.hpp
 gui/GUI.o: /usr/include/xercesc/util/XMLUni.hpp
@@ -8802,9 +8586,7 @@ gui/GUI.o: /usr/include/xercesc/util/RefVectorOf.c
 gui/GUI.o: /usr/include/xercesc/framework/XMLAttr.hpp
 gui/GUI.o: /usr/include/xercesc/util/QName.hpp
 gui/GUI.o: /usr/include/xercesc/util/XMLString.hpp
-gui/GUI.o: /usr/include/xercesc/framework/XMLBuffer.hpp /usr/include/string.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/string.h /usr/include/assert.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/assert.h
+gui/GUI.o: /usr/include/xercesc/framework/XMLBuffer.hpp
 gui/GUI.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 gui/GUI.o: /usr/include/xercesc/internal/XSerializable.hpp
 gui/GUI.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
@@ -8869,8 +8651,6 @@ gui/GUI.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
 gui/GUI.o: /usr/include/bits/xopen_lim.h
 gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/GUI.o: /usr/include/bits/stdio_lim.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
 gui/GUI.o: /usr/include/xercesc/dom/DOM.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMAttr.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -8914,2084 +8694,26 @@ gui/GUI.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/GUI.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-gui/GUI.o: /usr/include/boost/config/user.hpp
-gui/GUI.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/GUI.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/GUI.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/GUI.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/GUI.o: /usr/include/boost/config/select_platform_config.hpp
-gui/GUI.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/GUI.o: /usr/include/bits/posix_opt.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/GUI.o: /usr/include/bits/environments.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/GUI.o: /usr/include/bits/confname.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/GUI.o: /usr/include/getopt.h /usr/include/gentoo-multilib/amd64/getopt.h
-gui/GUI.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
-gui/GUI.o: /usr/include/boost/checked_delete.hpp
-gui/GUI.o: /usr/include/boost/throw_exception.hpp
-gui/GUI.o: /usr/include/boost/config.hpp
-gui/GUI.o: /usr/include/boost/detail/shared_count.hpp
-gui/GUI.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/GUI.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/GUI.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/GUI.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/GUI.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
-gui/GUI.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-gui/GUI.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-gui/GUI.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
-gui/GUI.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
-gui/GUI.o: /usr/include/_G_config.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/GUI.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
-gui/GUI.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
-gui/GUI.o: /usr/include/bits/sys_errlist.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/GUI.o: /usr/include/strings.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/strings.h /usr/include/ctype.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/ctype.h /usr/include/iconv.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/GUI.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/GUI.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/GUI.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/GUI.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/GUI.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/GUI.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/GUI.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-gui/GUI.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-gui/GUI.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/GUI.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/GUI.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/GUI.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
-gui/GUI.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-gui/GUI.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-gui/GUI.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
-gui/GUI.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
-gui/GUI.o: /usr/include/bits/huge_val.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/GUI.o: /usr/include/bits/huge_valf.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/GUI.o: /usr/include/bits/huge_vall.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/GUI.o: /usr/include/bits/inf.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/GUI.o: /usr/include/bits/nan.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/GUI.o: /usr/include/bits/mathdef.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/GUI.o: /usr/include/bits/mathcalls.h
-gui/GUI.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/GUI.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/GUI.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
-gui/GUI.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
-gui/GUI.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-gui/GUI.o: /usr/include/ogg/config_types.h gui/Button.h gui/LineEdit.h
-gui/GUI.o: gui/ScrollView.h gui/Slider.h gui/ProgressBar.h gui/Table.h
-gui/GUI.o: gui/TableItem.h gui/ComboBox.h gui/TextArea.h gui/TabWidget.h
-gui/GUI.o: globals.h Mesh.h Triangle.h Vertex.h Material.h TextureManager.h
-gui/GUI.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALSource.h
-gui/GUI.o: Quad.h MeshNode.h FBO.h util.h Timer.h Particle.h
-gui/GUI.o: CollisionDetection.h ObjectKDTree.h ServerInfo.h
-gui/GUI.o: /usr/include/SDL/SDL_net.h gui/GUI.h PlayerData.h Hit.h Weapon.h
-gui/GUI.o: Item.h Console.h gui/TextArea.h renderdefs.h Light.h
-gui/GUI.o: gui/ProgressBar.h gui/Button.h netdefs.h IDGen.h Packet.h
-gui/GUI.o: ParticleEmitter.h MeshCache.h
+gui/GUI.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
+gui/GUI.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
+gui/GUI.o: gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
+gui/GUI.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
-gui/LineEdit.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/LineEdit.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/LineEdit.o: /usr/include/inttypes.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/LineEdit.o: /usr/include/features.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/LineEdit.o: /usr/include/sys/cdefs.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/LineEdit.o: /usr/include/bits/wordsize.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/LineEdit.o: /usr/include/gnu/stubs.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/LineEdit.o: /usr/include/gnu/stubs-64.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/LineEdit.o: /usr/include/stdint.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/LineEdit.o: /usr/include/bits/wchar.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/LineEdit.o: /usr/include/sys/types.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/LineEdit.o: /usr/include/bits/types.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/LineEdit.o: /usr/include/bits/typesizes.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/LineEdit.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
-gui/LineEdit.o: /usr/include/endian.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/LineEdit.o: /usr/include/bits/endian.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/LineEdit.o: /usr/include/sys/select.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/LineEdit.o: /usr/include/bits/select.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/LineEdit.o: /usr/include/bits/sigset.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/LineEdit.o: /usr/include/bits/time.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/LineEdit.o: /usr/include/sys/sysmacros.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/LineEdit.o: /usr/include/bits/pthreadtypes.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/LineEdit.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMLException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/LineEdit.o: /usr/include/bits/waitflags.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/LineEdit.o: /usr/include/bits/waitstatus.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/LineEdit.o: /usr/include/xlocale.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/LineEdit.o: /usr/include/alloca.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/LineEdit.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/LineEdit.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/QName.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/XMLString.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/LineEdit.o: /usr/include/string.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/LineEdit.o: /usr/include/assert.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/LineEdit.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/LineEdit.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/LineEdit.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/Hashers.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/LineEdit.o: /usr/include/xercesc/util/Janitor.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/Janitor.c
-gui/LineEdit.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/LineEdit.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/LineEdit.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/LineEdit.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/LineEdit.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/LineEdit.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/NameIdPool.c
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/LineEdit.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/LineEdit.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/LineEdit.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/LineEdit.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/LineEdit.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/LineEdit.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/LineEdit.o: /usr/include/limits.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/LineEdit.o: /usr/include/bits/posix1_lim.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/LineEdit.o: /usr/include/bits/local_lim.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/LineEdit.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/LineEdit.o: /usr/include/bits/xopen_lim.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/LineEdit.o: /usr/include/bits/stdio_lim.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/LineEdit.o: /usr/include/xercesc/dom/DOM.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/LineEdit.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/LineEdit.o: /usr/include/boost/shared_ptr.hpp
-gui/LineEdit.o: /usr/include/boost/config.hpp
-gui/LineEdit.o: /usr/include/boost/config/user.hpp
-gui/LineEdit.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/LineEdit.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/LineEdit.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/LineEdit.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/LineEdit.o: /usr/include/boost/config/select_platform_config.hpp
-gui/LineEdit.o: /usr/include/boost/config/posix_features.hpp
-gui/LineEdit.o: /usr/include/unistd.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/LineEdit.o: /usr/include/bits/posix_opt.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/LineEdit.o: /usr/include/bits/environments.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/LineEdit.o: /usr/include/bits/confname.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/LineEdit.o: /usr/include/getopt.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/LineEdit.o: /usr/include/boost/config/suffix.hpp
-gui/LineEdit.o: /usr/include/boost/assert.hpp
-gui/LineEdit.o: /usr/include/boost/checked_delete.hpp
-gui/LineEdit.o: /usr/include/boost/throw_exception.hpp
-gui/LineEdit.o: /usr/include/boost/config.hpp
-gui/LineEdit.o: /usr/include/boost/detail/shared_count.hpp
-gui/LineEdit.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/LineEdit.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/LineEdit.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/LineEdit.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/LineEdit.o: /usr/include/boost/detail/workaround.hpp
-gui/LineEdit.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/LineEdit.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-gui/LineEdit.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/LineEdit.o: /usr/include/libio.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/LineEdit.o: /usr/include/_G_config.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/LineEdit.o: /usr/include/wchar.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/LineEdit.o: /usr/include/gconv.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/LineEdit.o: /usr/include/bits/sys_errlist.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/LineEdit.o: /usr/include/strings.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/LineEdit.o: /usr/include/ctype.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/ctype.h
-gui/LineEdit.o: /usr/include/iconv.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/LineEdit.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/LineEdit.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/LineEdit.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/LineEdit.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/LineEdit.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/LineEdit.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/LineEdit.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-gui/LineEdit.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-gui/LineEdit.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/LineEdit.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/LineEdit.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/LineEdit.o: TextureManager.h TextureHandler.h glinc.h
-gui/LineEdit.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/LineEdit.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/LineEdit.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/LineEdit.o: util.h Vector3.h /usr/include/math.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/LineEdit.o: /usr/include/bits/huge_val.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/LineEdit.o: /usr/include/bits/huge_valf.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/LineEdit.o: /usr/include/bits/huge_vall.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/LineEdit.o: /usr/include/bits/inf.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/LineEdit.o: /usr/include/bits/nan.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/LineEdit.o: /usr/include/bits/mathdef.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/LineEdit.o: /usr/include/bits/mathcalls.h
-gui/LineEdit.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/LineEdit.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/LineEdit.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/LineEdit.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/LineEdit.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/LineEdit.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
 gui/ProgressBar.o: gui/ProgressBar.h gui/GUI.h
-gui/ProgressBar.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/ProgressBar.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/ProgressBar.o: /usr/include/inttypes.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/ProgressBar.o: /usr/include/features.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/ProgressBar.o: /usr/include/sys/cdefs.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/ProgressBar.o: /usr/include/bits/wordsize.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/ProgressBar.o: /usr/include/gnu/stubs.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/ProgressBar.o: /usr/include/gnu/stubs-64.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/ProgressBar.o: /usr/include/stdint.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/ProgressBar.o: /usr/include/bits/wchar.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/ProgressBar.o: /usr/include/sys/types.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/ProgressBar.o: /usr/include/bits/types.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/ProgressBar.o: /usr/include/bits/typesizes.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/ProgressBar.o: /usr/include/time.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/time.h
-gui/ProgressBar.o: /usr/include/endian.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/ProgressBar.o: /usr/include/bits/endian.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/ProgressBar.o: /usr/include/sys/select.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/ProgressBar.o: /usr/include/bits/select.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/ProgressBar.o: /usr/include/bits/sigset.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/ProgressBar.o: /usr/include/bits/time.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/ProgressBar.o: /usr/include/sys/sysmacros.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/ProgressBar.o: /usr/include/bits/pthreadtypes.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/ProgressBar.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMemory.hpp
-gui/ProgressBar.o: /usr/include/stdlib.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/ProgressBar.o: /usr/include/bits/waitflags.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/ProgressBar.o: /usr/include/bits/waitstatus.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/ProgressBar.o: /usr/include/xlocale.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/ProgressBar.o: /usr/include/alloca.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/ProgressBar.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/QName.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLString.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/ProgressBar.o: /usr/include/string.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/ProgressBar.o: /usr/include/assert.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/ProgressBar.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/ProgressBar.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/ProgressBar.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/Hashers.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/ProgressBar.o: /usr/include/xercesc/util/Janitor.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/Janitor.c
-gui/ProgressBar.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/ProgressBar.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/ProgressBar.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/ProgressBar.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/NameIdPool.c
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/ProgressBar.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/ProgressBar.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/ProgressBar.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/ProgressBar.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/ProgressBar.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/ProgressBar.o: /usr/include/limits.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/ProgressBar.o: /usr/include/bits/posix1_lim.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/ProgressBar.o: /usr/include/bits/local_lim.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/ProgressBar.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/ProgressBar.o: /usr/include/bits/xopen_lim.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/ProgressBar.o: /usr/include/bits/stdio_lim.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOM.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/ProgressBar.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/ProgressBar.o: /usr/include/boost/shared_ptr.hpp
-gui/ProgressBar.o: /usr/include/boost/config.hpp
-gui/ProgressBar.o: /usr/include/boost/config/user.hpp
-gui/ProgressBar.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/ProgressBar.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/ProgressBar.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/ProgressBar.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/ProgressBar.o: /usr/include/boost/config/select_platform_config.hpp
-gui/ProgressBar.o: /usr/include/boost/config/posix_features.hpp
-gui/ProgressBar.o: /usr/include/unistd.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/ProgressBar.o: /usr/include/bits/posix_opt.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/ProgressBar.o: /usr/include/bits/environments.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/ProgressBar.o: /usr/include/bits/confname.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/ProgressBar.o: /usr/include/getopt.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/ProgressBar.o: /usr/include/boost/config/suffix.hpp
-gui/ProgressBar.o: /usr/include/boost/assert.hpp
-gui/ProgressBar.o: /usr/include/boost/checked_delete.hpp
-gui/ProgressBar.o: /usr/include/boost/throw_exception.hpp
-gui/ProgressBar.o: /usr/include/boost/config.hpp
-gui/ProgressBar.o: /usr/include/boost/detail/shared_count.hpp
-gui/ProgressBar.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/ProgressBar.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/ProgressBar.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/ProgressBar.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/ProgressBar.o: /usr/include/boost/detail/workaround.hpp
-gui/ProgressBar.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_stdinc.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_config.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/ProgressBar.o: /usr/include/libio.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/ProgressBar.o: /usr/include/_G_config.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/ProgressBar.o: /usr/include/wchar.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/ProgressBar.o: /usr/include/gconv.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/ProgressBar.o: /usr/include/bits/sys_errlist.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/ProgressBar.o: /usr/include/strings.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/ProgressBar.o: /usr/include/ctype.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/ctype.h
-gui/ProgressBar.o: /usr/include/iconv.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/ProgressBar.o: /usr/include/SDL/begin_code.h
-gui/ProgressBar.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_cpuinfo.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_events.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_active.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_keyboard.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_video.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_joystick.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_timer.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/ProgressBar.o: TextureManager.h TextureHandler.h glinc.h
-gui/ProgressBar.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/ProgressBar.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/ProgressBar.o: /usr/include/SDL/SDL_image.h logout.h Log.h
-gui/ProgressBar.o: gui/XSWrapper.h util.h Vector3.h /usr/include/math.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/ProgressBar.o: /usr/include/bits/huge_val.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/ProgressBar.o: /usr/include/bits/huge_valf.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/ProgressBar.o: /usr/include/bits/huge_vall.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/ProgressBar.o: /usr/include/bits/inf.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/ProgressBar.o: /usr/include/bits/nan.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/ProgressBar.o: /usr/include/bits/mathdef.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/ProgressBar.o: /usr/include/bits/mathcalls.h
-gui/ProgressBar.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/ProgressBar.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/ProgressBar.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/ProgressBar.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/ProgressBar.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/ProgressBar.o: /usr/include/ogg/os_types.h
-gui/ProgressBar.o: /usr/include/ogg/config_types.h
-gui/ScrollView.o: gui/ScrollView.h gui/GUI.h
-gui/ScrollView.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/ScrollView.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/ScrollView.o: /usr/include/inttypes.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/ScrollView.o: /usr/include/features.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/ScrollView.o: /usr/include/sys/cdefs.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/ScrollView.o: /usr/include/bits/wordsize.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/ScrollView.o: /usr/include/gnu/stubs.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/ScrollView.o: /usr/include/gnu/stubs-64.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/ScrollView.o: /usr/include/stdint.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/ScrollView.o: /usr/include/bits/wchar.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/ScrollView.o: /usr/include/sys/types.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/ScrollView.o: /usr/include/bits/types.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/ScrollView.o: /usr/include/bits/typesizes.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/ScrollView.o: /usr/include/time.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/time.h
-gui/ScrollView.o: /usr/include/endian.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/ScrollView.o: /usr/include/bits/endian.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/ScrollView.o: /usr/include/sys/select.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/ScrollView.o: /usr/include/bits/select.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/ScrollView.o: /usr/include/bits/sigset.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/ScrollView.o: /usr/include/bits/time.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/ScrollView.o: /usr/include/sys/sysmacros.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/ScrollView.o: /usr/include/bits/pthreadtypes.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/ScrollView.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMLException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/ScrollView.o: /usr/include/bits/waitflags.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/ScrollView.o: /usr/include/bits/waitstatus.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/ScrollView.o: /usr/include/xlocale.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/ScrollView.o: /usr/include/alloca.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/ScrollView.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/ScrollView.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/QName.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/XMLString.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/ScrollView.o: /usr/include/string.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/ScrollView.o: /usr/include/assert.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/ScrollView.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/ScrollView.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/ScrollView.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/Hashers.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/ScrollView.o: /usr/include/xercesc/util/Janitor.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/Janitor.c
-gui/ScrollView.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/ScrollView.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/ScrollView.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/ScrollView.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/ScrollView.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/ScrollView.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/NameIdPool.c
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/ScrollView.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/ScrollView.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/ScrollView.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/ScrollView.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/ScrollView.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/ScrollView.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/ScrollView.o: /usr/include/limits.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/ScrollView.o: /usr/include/bits/posix1_lim.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/ScrollView.o: /usr/include/bits/local_lim.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/ScrollView.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/ScrollView.o: /usr/include/bits/xopen_lim.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/ScrollView.o: /usr/include/bits/stdio_lim.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/ScrollView.o: /usr/include/xercesc/dom/DOM.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/ScrollView.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/ScrollView.o: /usr/include/boost/shared_ptr.hpp
-gui/ScrollView.o: /usr/include/boost/config.hpp
-gui/ScrollView.o: /usr/include/boost/config/user.hpp
-gui/ScrollView.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/ScrollView.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/ScrollView.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/ScrollView.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/ScrollView.o: /usr/include/boost/config/select_platform_config.hpp
-gui/ScrollView.o: /usr/include/boost/config/posix_features.hpp
-gui/ScrollView.o: /usr/include/unistd.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/ScrollView.o: /usr/include/bits/posix_opt.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/ScrollView.o: /usr/include/bits/environments.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/ScrollView.o: /usr/include/bits/confname.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/ScrollView.o: /usr/include/getopt.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/ScrollView.o: /usr/include/boost/config/suffix.hpp
-gui/ScrollView.o: /usr/include/boost/assert.hpp
-gui/ScrollView.o: /usr/include/boost/checked_delete.hpp
-gui/ScrollView.o: /usr/include/boost/throw_exception.hpp
-gui/ScrollView.o: /usr/include/boost/config.hpp
-gui/ScrollView.o: /usr/include/boost/detail/shared_count.hpp
-gui/ScrollView.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/ScrollView.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/ScrollView.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/ScrollView.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/ScrollView.o: /usr/include/boost/detail/workaround.hpp
-gui/ScrollView.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/ScrollView.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-gui/ScrollView.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/ScrollView.o: /usr/include/libio.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/ScrollView.o: /usr/include/_G_config.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/ScrollView.o: /usr/include/wchar.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/ScrollView.o: /usr/include/gconv.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/ScrollView.o: /usr/include/bits/sys_errlist.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/ScrollView.o: /usr/include/strings.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/ScrollView.o: /usr/include/ctype.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/ctype.h
-gui/ScrollView.o: /usr/include/iconv.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/ScrollView.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/ScrollView.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/ScrollView.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/ScrollView.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/ScrollView.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/ScrollView.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/ScrollView.o: /usr/include/SDL/SDL_keyboard.h
-gui/ScrollView.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
-gui/ScrollView.o: /usr/include/SDL/SDL_video.h
-gui/ScrollView.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/ScrollView.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/ScrollView.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/ScrollView.o: TextureManager.h TextureHandler.h glinc.h
-gui/ScrollView.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/ScrollView.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/ScrollView.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/ScrollView.o: util.h Vector3.h /usr/include/math.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/ScrollView.o: /usr/include/bits/huge_val.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/ScrollView.o: /usr/include/bits/huge_valf.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/ScrollView.o: /usr/include/bits/huge_vall.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/ScrollView.o: /usr/include/bits/inf.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/ScrollView.o: /usr/include/bits/nan.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/ScrollView.o: /usr/include/bits/mathdef.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/ScrollView.o: /usr/include/bits/mathcalls.h
-gui/ScrollView.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/ScrollView.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/ScrollView.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/ScrollView.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/ScrollView.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/ScrollView.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/ScrollView.o: gui/Slider.h gui/Button.h
-gui/Slider.o: gui/Slider.h gui/GUI.h
-gui/Slider.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/Slider.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/Slider.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/Slider.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/Slider.o: /usr/include/inttypes.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/Slider.o: /usr/include/features.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/Slider.o: /usr/include/sys/cdefs.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/Slider.o: /usr/include/bits/wordsize.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/Slider.o: /usr/include/gnu/stubs.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/Slider.o: /usr/include/gnu/stubs-64.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/Slider.o: /usr/include/stdint.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/Slider.o: /usr/include/bits/wchar.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/Slider.o: /usr/include/sys/types.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/Slider.o: /usr/include/bits/types.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/Slider.o: /usr/include/bits/typesizes.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/Slider.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
-gui/Slider.o: /usr/include/endian.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/Slider.o: /usr/include/bits/endian.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/Slider.o: /usr/include/sys/select.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/Slider.o: /usr/include/bits/select.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/Slider.o: /usr/include/bits/sigset.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/Slider.o: /usr/include/bits/time.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/Slider.o: /usr/include/sys/sysmacros.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/Slider.o: /usr/include/bits/pthreadtypes.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/Slider.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/Slider.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/Slider.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/Slider.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMLException.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/Slider.o: /usr/include/bits/waitflags.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/Slider.o: /usr/include/bits/waitstatus.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/Slider.o: /usr/include/xlocale.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/Slider.o: /usr/include/alloca.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/Slider.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/Slider.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/Slider.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/Slider.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/Slider.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/Slider.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/Slider.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/Slider.o: /usr/include/xercesc/util/QName.hpp
-gui/Slider.o: /usr/include/xercesc/util/XMLString.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/Slider.o: /usr/include/string.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/Slider.o: /usr/include/assert.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/Slider.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/Slider.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/Slider.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/Slider.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/Slider.o: /usr/include/xercesc/util/Hashers.hpp
-gui/Slider.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/Slider.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/Slider.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/Slider.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/Slider.o: /usr/include/xercesc/util/Janitor.hpp
-gui/Slider.o: /usr/include/xercesc/util/Janitor.c
-gui/Slider.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/Slider.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/Slider.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/Slider.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/Slider.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/Slider.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/Slider.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/Slider.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/Slider.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/Slider.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/Slider.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/Slider.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/Slider.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/Slider.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/Slider.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/Slider.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/Slider.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/Slider.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/Slider.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/Slider.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/Slider.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/Slider.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/Slider.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/Slider.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/Slider.o: /usr/include/xercesc/util/NameIdPool.c
-gui/Slider.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/Slider.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/Slider.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/Slider.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/Slider.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/Slider.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/Slider.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/Slider.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/Slider.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/Slider.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/Slider.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/Slider.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/Slider.o: /usr/include/limits.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/Slider.o: /usr/include/bits/posix1_lim.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/Slider.o: /usr/include/bits/local_lim.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/Slider.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/Slider.o: /usr/include/bits/xopen_lim.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/Slider.o: /usr/include/bits/stdio_lim.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/Slider.o: /usr/include/xercesc/dom/DOM.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/Slider.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/Slider.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-gui/Slider.o: /usr/include/boost/config/user.hpp
-gui/Slider.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/Slider.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/Slider.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/Slider.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/Slider.o: /usr/include/boost/config/select_platform_config.hpp
-gui/Slider.o: /usr/include/boost/config/posix_features.hpp
-gui/Slider.o: /usr/include/unistd.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/Slider.o: /usr/include/bits/posix_opt.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/Slider.o: /usr/include/bits/environments.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/Slider.o: /usr/include/bits/confname.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/Slider.o: /usr/include/getopt.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/Slider.o: /usr/include/boost/config/suffix.hpp
-gui/Slider.o: /usr/include/boost/assert.hpp
-gui/Slider.o: /usr/include/boost/checked_delete.hpp
-gui/Slider.o: /usr/include/boost/throw_exception.hpp
-gui/Slider.o: /usr/include/boost/config.hpp
-gui/Slider.o: /usr/include/boost/detail/shared_count.hpp
-gui/Slider.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/Slider.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/Slider.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/Slider.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/Slider.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
-gui/Slider.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-gui/Slider.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-gui/Slider.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
-gui/Slider.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
-gui/Slider.o: /usr/include/_G_config.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/Slider.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
-gui/Slider.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
-gui/Slider.o: /usr/include/bits/sys_errlist.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/Slider.o: /usr/include/strings.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/Slider.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
-gui/Slider.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
-gui/Slider.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/Slider.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/Slider.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/Slider.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/Slider.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/Slider.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/Slider.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-gui/Slider.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-gui/Slider.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/Slider.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/Slider.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/Slider.o: TextureManager.h TextureHandler.h glinc.h
-gui/Slider.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/Slider.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/Slider.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/Slider.o: util.h Vector3.h /usr/include/math.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/Slider.o: /usr/include/bits/huge_val.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/Slider.o: /usr/include/bits/huge_valf.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/Slider.o: /usr/include/bits/huge_vall.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/Slider.o: /usr/include/bits/inf.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/Slider.o: /usr/include/bits/nan.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/Slider.o: /usr/include/bits/mathdef.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/Slider.o: /usr/include/bits/mathcalls.h
-gui/Slider.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/Slider.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/Slider.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/Slider.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/Slider.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/Slider.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/Slider.o: gui/Button.h
-gui/TabWidget.o: gui/TabWidget.h gui/GUI.h
-gui/TabWidget.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/TabWidget.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/TabWidget.o: /usr/include/inttypes.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/TabWidget.o: /usr/include/features.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/TabWidget.o: /usr/include/sys/cdefs.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/TabWidget.o: /usr/include/bits/wordsize.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/TabWidget.o: /usr/include/gnu/stubs.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/TabWidget.o: /usr/include/gnu/stubs-64.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/TabWidget.o: /usr/include/stdint.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/TabWidget.o: /usr/include/bits/wchar.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/TabWidget.o: /usr/include/sys/types.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/TabWidget.o: /usr/include/bits/types.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/TabWidget.o: /usr/include/bits/typesizes.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/TabWidget.o: /usr/include/time.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/time.h
-gui/TabWidget.o: /usr/include/endian.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/TabWidget.o: /usr/include/bits/endian.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/TabWidget.o: /usr/include/sys/select.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/TabWidget.o: /usr/include/bits/select.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/TabWidget.o: /usr/include/bits/sigset.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/TabWidget.o: /usr/include/bits/time.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/TabWidget.o: /usr/include/sys/sysmacros.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/TabWidget.o: /usr/include/bits/pthreadtypes.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/TabWidget.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMLException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/TabWidget.o: /usr/include/bits/waitflags.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/TabWidget.o: /usr/include/bits/waitstatus.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/TabWidget.o: /usr/include/xlocale.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/TabWidget.o: /usr/include/alloca.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/TabWidget.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/TabWidget.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/QName.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/XMLString.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/TabWidget.o: /usr/include/string.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/TabWidget.o: /usr/include/assert.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/TabWidget.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/TabWidget.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/TabWidget.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/Hashers.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/TabWidget.o: /usr/include/xercesc/util/Janitor.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/Janitor.c
-gui/TabWidget.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/TabWidget.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/TabWidget.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/TabWidget.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/TabWidget.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/TabWidget.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/NameIdPool.c
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/TabWidget.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/TabWidget.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/TabWidget.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/TabWidget.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/TabWidget.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/TabWidget.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/TabWidget.o: /usr/include/limits.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/TabWidget.o: /usr/include/bits/posix1_lim.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/TabWidget.o: /usr/include/bits/local_lim.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/TabWidget.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/TabWidget.o: /usr/include/bits/xopen_lim.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/TabWidget.o: /usr/include/bits/stdio_lim.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/TabWidget.o: /usr/include/xercesc/dom/DOM.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/TabWidget.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/TabWidget.o: /usr/include/boost/shared_ptr.hpp
-gui/TabWidget.o: /usr/include/boost/config.hpp
-gui/TabWidget.o: /usr/include/boost/config/user.hpp
-gui/TabWidget.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/TabWidget.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/TabWidget.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/TabWidget.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/TabWidget.o: /usr/include/boost/config/select_platform_config.hpp
-gui/TabWidget.o: /usr/include/boost/config/posix_features.hpp
-gui/TabWidget.o: /usr/include/unistd.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/TabWidget.o: /usr/include/bits/posix_opt.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/TabWidget.o: /usr/include/bits/environments.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/TabWidget.o: /usr/include/bits/confname.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/TabWidget.o: /usr/include/getopt.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/TabWidget.o: /usr/include/boost/config/suffix.hpp
-gui/TabWidget.o: /usr/include/boost/assert.hpp
-gui/TabWidget.o: /usr/include/boost/checked_delete.hpp
-gui/TabWidget.o: /usr/include/boost/throw_exception.hpp
-gui/TabWidget.o: /usr/include/boost/config.hpp
-gui/TabWidget.o: /usr/include/boost/detail/shared_count.hpp
-gui/TabWidget.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/TabWidget.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/TabWidget.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/TabWidget.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/TabWidget.o: /usr/include/boost/detail/workaround.hpp
-gui/TabWidget.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/TabWidget.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-gui/TabWidget.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/TabWidget.o: /usr/include/libio.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/TabWidget.o: /usr/include/_G_config.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/TabWidget.o: /usr/include/wchar.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/TabWidget.o: /usr/include/gconv.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/TabWidget.o: /usr/include/bits/sys_errlist.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/TabWidget.o: /usr/include/strings.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/TabWidget.o: /usr/include/ctype.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/ctype.h
-gui/TabWidget.o: /usr/include/iconv.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/TabWidget.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/TabWidget.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/TabWidget.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/TabWidget.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/TabWidget.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/TabWidget.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/TabWidget.o: /usr/include/SDL/SDL_keyboard.h
-gui/TabWidget.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
-gui/TabWidget.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
-gui/TabWidget.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
-gui/TabWidget.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
-gui/TabWidget.o: /usr/include/SDL/SDL_ttf.h TextureManager.h TextureHandler.h
-gui/TabWidget.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/TabWidget.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/TabWidget.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/TabWidget.o: util.h Vector3.h /usr/include/math.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/TabWidget.o: /usr/include/bits/huge_val.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/TabWidget.o: /usr/include/bits/huge_valf.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/TabWidget.o: /usr/include/bits/huge_vall.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/TabWidget.o: /usr/include/bits/inf.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/TabWidget.o: /usr/include/bits/nan.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/TabWidget.o: /usr/include/bits/mathdef.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/TabWidget.o: /usr/include/bits/mathcalls.h
-gui/TabWidget.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/TabWidget.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/TabWidget.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/TabWidget.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/TabWidget.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/TabWidget.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/TabWidget.o: gui/Button.h gui/ScrollView.h gui/Slider.h
-gui/Table.o: gui/Table.h gui/GUI.h
-gui/Table.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/Table.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/Table.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/Table.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/Table.o: /usr/include/inttypes.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/Table.o: /usr/include/features.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/Table.o: /usr/include/sys/cdefs.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/Table.o: /usr/include/bits/wordsize.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/Table.o: /usr/include/gnu/stubs.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/Table.o: /usr/include/gnu/stubs-64.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/Table.o: /usr/include/stdint.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/Table.o: /usr/include/bits/wchar.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/Table.o: /usr/include/sys/types.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/Table.o: /usr/include/bits/types.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/Table.o: /usr/include/bits/typesizes.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/Table.o: /usr/include/time.h /usr/include/gentoo-multilib/amd64/time.h
-gui/Table.o: /usr/include/endian.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/Table.o: /usr/include/bits/endian.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/Table.o: /usr/include/sys/select.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/Table.o: /usr/include/bits/select.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/Table.o: /usr/include/bits/sigset.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/Table.o: /usr/include/bits/time.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/Table.o: /usr/include/sys/sysmacros.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/Table.o: /usr/include/bits/pthreadtypes.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/Table.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/Table.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/Table.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/Table.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/Table.o: /usr/include/xercesc/util/XMLException.hpp
-gui/Table.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/Table.o: /usr/include/bits/waitflags.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/Table.o: /usr/include/bits/waitstatus.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/Table.o: /usr/include/xlocale.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/Table.o: /usr/include/alloca.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/Table.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/Table.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/Table.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/Table.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/Table.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/Table.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/Table.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/Table.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/Table.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/Table.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/Table.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/Table.o: /usr/include/xercesc/util/QName.hpp
-gui/Table.o: /usr/include/xercesc/util/XMLString.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/Table.o: /usr/include/string.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/Table.o: /usr/include/assert.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/Table.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/Table.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/Table.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/Table.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/Table.o: /usr/include/xercesc/util/Hashers.hpp
-gui/Table.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/Table.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/Table.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/Table.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/Table.o: /usr/include/xercesc/util/Janitor.hpp
-gui/Table.o: /usr/include/xercesc/util/Janitor.c
-gui/Table.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/Table.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/Table.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/Table.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/Table.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/Table.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/Table.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/Table.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/Table.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/Table.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/Table.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/Table.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/Table.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/Table.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/Table.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/Table.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/Table.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/Table.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/Table.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/Table.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/Table.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/Table.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/Table.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/Table.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/Table.o: /usr/include/xercesc/util/NameIdPool.c
-gui/Table.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/Table.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/Table.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/Table.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/Table.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/Table.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/Table.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/Table.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/Table.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/Table.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/Table.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/Table.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/Table.o: /usr/include/limits.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/Table.o: /usr/include/bits/posix1_lim.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/Table.o: /usr/include/bits/local_lim.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/Table.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/Table.o: /usr/include/bits/xopen_lim.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/Table.o: /usr/include/bits/stdio_lim.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/Table.o: /usr/include/xercesc/dom/DOM.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/Table.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/Table.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
-gui/Table.o: /usr/include/boost/config/user.hpp
-gui/Table.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/Table.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/Table.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/Table.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/Table.o: /usr/include/boost/config/select_platform_config.hpp
-gui/Table.o: /usr/include/boost/config/posix_features.hpp
-gui/Table.o: /usr/include/unistd.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/Table.o: /usr/include/bits/posix_opt.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/Table.o: /usr/include/bits/environments.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/Table.o: /usr/include/bits/confname.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/Table.o: /usr/include/getopt.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/Table.o: /usr/include/boost/config/suffix.hpp
-gui/Table.o: /usr/include/boost/assert.hpp
-gui/Table.o: /usr/include/boost/checked_delete.hpp
-gui/Table.o: /usr/include/boost/throw_exception.hpp
-gui/Table.o: /usr/include/boost/config.hpp
-gui/Table.o: /usr/include/boost/detail/shared_count.hpp
-gui/Table.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/Table.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/Table.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/Table.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/Table.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
-gui/Table.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-gui/Table.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-gui/Table.o: /usr/include/stdio.h /usr/include/gentoo-multilib/amd64/stdio.h
-gui/Table.o: /usr/include/libio.h /usr/include/gentoo-multilib/amd64/libio.h
-gui/Table.o: /usr/include/_G_config.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/Table.o: /usr/include/wchar.h /usr/include/gentoo-multilib/amd64/wchar.h
-gui/Table.o: /usr/include/gconv.h /usr/include/gentoo-multilib/amd64/gconv.h
-gui/Table.o: /usr/include/bits/sys_errlist.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/Table.o: /usr/include/strings.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/Table.o: /usr/include/ctype.h /usr/include/gentoo-multilib/amd64/ctype.h
-gui/Table.o: /usr/include/iconv.h /usr/include/gentoo-multilib/amd64/iconv.h
-gui/Table.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/Table.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/Table.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/Table.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/Table.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/Table.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/Table.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-gui/Table.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-gui/Table.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-gui/Table.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/Table.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/Table.o: TextureManager.h TextureHandler.h glinc.h /usr/include/GL/glew.h
-gui/Table.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-gui/Table.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_image.h
-gui/Table.o: logout.h Log.h gui/XSWrapper.h util.h Vector3.h
-gui/Table.o: /usr/include/math.h /usr/include/gentoo-multilib/amd64/math.h
-gui/Table.o: /usr/include/bits/huge_val.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/Table.o: /usr/include/bits/huge_valf.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/Table.o: /usr/include/bits/huge_vall.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/Table.o: /usr/include/bits/inf.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/Table.o: /usr/include/bits/nan.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/Table.o: /usr/include/bits/mathdef.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/Table.o: /usr/include/bits/mathcalls.h
-gui/Table.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/Table.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/Table.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/Table.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/Table.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/Table.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/Table.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
-gui/Table.o: gui/Button.h
-gui/TableItem.o: gui/TableItem.h gui/GUI.h
-gui/TableItem.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/TableItem.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/TableItem.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/TableItem.o: /usr/include/inttypes.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/inttypes.h
-gui/TableItem.o: /usr/include/features.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/features.h
-gui/TableItem.o: /usr/include/sys/cdefs.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/sys/cdefs.h
-gui/TableItem.o: /usr/include/bits/wordsize.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/wordsize.h
-gui/TableItem.o: /usr/include/gnu/stubs.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
-gui/TableItem.o: /usr/include/gnu/stubs-64.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/TableItem.o: /usr/include/stdint.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/TableItem.o: /usr/include/bits/wchar.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/TableItem.o: /usr/include/sys/types.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/sys/types.h
-gui/TableItem.o: /usr/include/bits/types.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/types.h
-gui/TableItem.o: /usr/include/bits/typesizes.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/typesizes.h
-gui/TableItem.o: /usr/include/time.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/time.h
-gui/TableItem.o: /usr/include/endian.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/endian.h
-gui/TableItem.o: /usr/include/bits/endian.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/endian.h
-gui/TableItem.o: /usr/include/sys/select.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/sys/select.h
-gui/TableItem.o: /usr/include/bits/select.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/select.h
-gui/TableItem.o: /usr/include/bits/sigset.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/sigset.h
-gui/TableItem.o: /usr/include/bits/time.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/time.h
-gui/TableItem.o: /usr/include/sys/sysmacros.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
-gui/TableItem.o: /usr/include/bits/pthreadtypes.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/TableItem.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/TableItem.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/TableItem.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMLException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/stdlib.h
-gui/TableItem.o: /usr/include/bits/waitflags.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
-gui/TableItem.o: /usr/include/bits/waitstatus.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/waitstatus.h
-gui/TableItem.o: /usr/include/xlocale.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/xlocale.h
-gui/TableItem.o: /usr/include/alloca.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/TableItem.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/TableItem.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/TableItem.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/TableItem.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/TableItem.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/TableItem.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/TableItem.o: /usr/include/xercesc/util/QName.hpp
-gui/TableItem.o: /usr/include/xercesc/util/XMLString.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLBuffer.hpp
-gui/TableItem.o: /usr/include/string.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/TableItem.o: /usr/include/assert.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/TableItem.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/TableItem.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/TableItem.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/TableItem.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/TableItem.o: /usr/include/xercesc/util/Hashers.hpp
-gui/TableItem.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/TableItem.o: /usr/include/xercesc/util/Janitor.hpp
-gui/TableItem.o: /usr/include/xercesc/util/Janitor.c
-gui/TableItem.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/TableItem.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/TableItem.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/TableItem.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/TableItem.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/TableItem.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/TableItem.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/TableItem.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/TableItem.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/TableItem.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/TableItem.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/TableItem.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/TableItem.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/TableItem.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/TableItem.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/TableItem.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/TableItem.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/TableItem.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/TableItem.o: /usr/include/xercesc/util/NameIdPool.c
-gui/TableItem.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/TableItem.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/TableItem.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/TableItem.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/TableItem.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/TableItem.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/TableItem.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/TableItem.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/TableItem.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/TableItem.o: /usr/include/limits.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/TableItem.o: /usr/include/bits/posix1_lim.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/TableItem.o: /usr/include/bits/local_lim.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/TableItem.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/TableItem.o: /usr/include/bits/xopen_lim.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/TableItem.o: /usr/include/bits/stdio_lim.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/TableItem.o: /usr/include/xercesc/dom/DOM.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/TableItem.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/TableItem.o: /usr/include/boost/shared_ptr.hpp
-gui/TableItem.o: /usr/include/boost/config.hpp
-gui/TableItem.o: /usr/include/boost/config/user.hpp
-gui/TableItem.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/TableItem.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/TableItem.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/TableItem.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/TableItem.o: /usr/include/boost/config/select_platform_config.hpp
-gui/TableItem.o: /usr/include/boost/config/posix_features.hpp
-gui/TableItem.o: /usr/include/unistd.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/TableItem.o: /usr/include/bits/posix_opt.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/TableItem.o: /usr/include/bits/environments.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/TableItem.o: /usr/include/bits/confname.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/TableItem.o: /usr/include/getopt.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/TableItem.o: /usr/include/boost/config/suffix.hpp
-gui/TableItem.o: /usr/include/boost/assert.hpp
-gui/TableItem.o: /usr/include/boost/checked_delete.hpp
-gui/TableItem.o: /usr/include/boost/throw_exception.hpp
-gui/TableItem.o: /usr/include/boost/config.hpp
-gui/TableItem.o: /usr/include/boost/detail/shared_count.hpp
-gui/TableItem.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/TableItem.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/TableItem.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/TableItem.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/TableItem.o: /usr/include/boost/detail/workaround.hpp
-gui/TableItem.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/TableItem.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-gui/TableItem.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/TableItem.o: /usr/include/libio.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/TableItem.o: /usr/include/_G_config.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/TableItem.o: /usr/include/wchar.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/TableItem.o: /usr/include/gconv.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/TableItem.o: /usr/include/bits/sys_errlist.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
-gui/TableItem.o: /usr/include/strings.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/strings.h
-gui/TableItem.o: /usr/include/ctype.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/ctype.h
-gui/TableItem.o: /usr/include/iconv.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/iconv.h
-gui/TableItem.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-gui/TableItem.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-gui/TableItem.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-gui/TableItem.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-gui/TableItem.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-gui/TableItem.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-gui/TableItem.o: /usr/include/SDL/SDL_keyboard.h
-gui/TableItem.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
-gui/TableItem.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
-gui/TableItem.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
-gui/TableItem.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
-gui/TableItem.o: /usr/include/SDL/SDL_ttf.h TextureManager.h TextureHandler.h
-gui/TableItem.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/TableItem.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/TableItem.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/TableItem.o: util.h Vector3.h /usr/include/math.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/TableItem.o: /usr/include/bits/huge_val.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/TableItem.o: /usr/include/bits/huge_valf.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/TableItem.o: /usr/include/bits/huge_vall.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/TableItem.o: /usr/include/bits/inf.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/TableItem.o: /usr/include/bits/nan.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/TableItem.o: /usr/include/bits/mathdef.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/TableItem.o: /usr/include/bits/mathcalls.h
-gui/TableItem.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/TableItem.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/TableItem.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/TableItem.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/TableItem.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/TableItem.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/TableItem.o: gui/LineEdit.h gui/Table.h gui/ScrollView.h gui/Slider.h
-gui/TableItem.o: gui/Button.h
-gui/TextArea.o: gui/TextArea.h gui/GUI.h
-gui/TextArea.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
-gui/TextArea.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMDocument.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/TextArea.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/TextArea.o: /usr/include/inttypes.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+gui/ScrollView.o: gui/ScrollView.h gui/GUI.h gui/Slider.h gui/Button.h
+gui/Slider.o: gui/Slider.h gui/GUI.h gui/Button.h
+gui/TabWidget.o: gui/TabWidget.h gui/GUI.h gui/Button.h gui/ScrollView.h
+gui/TabWidget.o: gui/Slider.h
+gui/Table.o: gui/Table.h gui/GUI.h gui/TableItem.h gui/LineEdit.h
+gui/Table.o: gui/ScrollView.h gui/Slider.h gui/Button.h
+gui/TableItem.o: gui/TableItem.h gui/GUI.h gui/LineEdit.h gui/Table.h
+gui/TableItem.o: gui/ScrollView.h gui/Slider.h gui/Button.h
+gui/TextArea.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
+gui/TextArea.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
+gui/TextArea.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+gui/TextArea.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+gui/TextArea.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 gui/TextArea.o: /usr/include/features.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/features.h
 gui/TextArea.o: /usr/include/sys/cdefs.h
@@ -11002,12 +8724,6 @@ gui/TextArea.o: /usr/include/gnu/stubs.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/gnu/stubs.h
 gui/TextArea.o: /usr/include/gnu/stubs-64.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/gnu/stubs-64.h
-gui/TextArea.o: /usr/include/stdint.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/stdint.h
-gui/TextArea.o: /usr/include/bits/wchar.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
-gui/TextArea.o: /usr/include/sys/types.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/sys/types.h
 gui/TextArea.o: /usr/include/bits/types.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/types.h
 gui/TextArea.o: /usr/include/bits/typesizes.h
@@ -11029,19 +8745,23 @@ gui/TextArea.o: /usr/include/sys/sysmacros.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/sys/sysmacros.h
 gui/TextArea.o: /usr/include/bits/pthreadtypes.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/pthreadtypes.h
-gui/TextArea.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMNode.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/util/RefVectorOf.hpp
-gui/TextArea.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
-gui/TextArea.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMLException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
+gui/TextArea.o: /usr/include/stdio.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/stdio.h
+gui/TextArea.o: /usr/include/libio.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/libio.h
+gui/TextArea.o: /usr/include/_G_config.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/_G_config.h
+gui/TextArea.o: /usr/include/wchar.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/wchar.h
+gui/TextArea.o: /usr/include/bits/wchar.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/wchar.h
+gui/TextArea.o: /usr/include/gconv.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/gconv.h
+gui/TextArea.o: /usr/include/bits/stdio_lim.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
+gui/TextArea.o: /usr/include/bits/sys_errlist.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
+gui/TextArea.o: /usr/include/stdlib.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/stdlib.h
 gui/TextArea.o: /usr/include/bits/waitflags.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/waitflags.h
@@ -11051,182 +8771,14 @@ gui/TextArea.o: /usr/include/xlocale.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/xlocale.h
 gui/TextArea.o: /usr/include/alloca.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/alloca.h
-gui/TextArea.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMError.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMLUni.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMLEnumerator.hpp
-gui/TextArea.o: /usr/include/xercesc/util/PlatformUtils.hpp
-gui/TextArea.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/MemoryManager.hpp
-gui/TextArea.o: /usr/include/xercesc/util/BaseRefVectorOf.c
-gui/TextArea.o: /usr/include/xercesc/util/RefVectorOf.c
-gui/TextArea.o: /usr/include/xercesc/framework/XMLAttr.hpp
-gui/TextArea.o: /usr/include/xercesc/util/QName.hpp
-gui/TextArea.o: /usr/include/xercesc/util/XMLString.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLBuffer.hpp
 gui/TextArea.o: /usr/include/string.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/string.h
-gui/TextArea.o: /usr/include/assert.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/assert.h
-gui/TextArea.o: /usr/include/xercesc/util/XMLUniDefs.hpp
-gui/TextArea.o: /usr/include/xercesc/internal/XSerializable.hpp
-gui/TextArea.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
-gui/TextArea.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/TextArea.o: /usr/include/xercesc/util/Hashers.hpp
-gui/TextArea.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/NoSuchElementException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/RuntimeException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/RefHashTableOf.c
-gui/TextArea.o: /usr/include/xercesc/util/Janitor.hpp
-gui/TextArea.o: /usr/include/xercesc/util/Janitor.c
-gui/TextArea.o: /usr/include/xercesc/util/NullPointerException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/ValueVectorOf.hpp
-gui/TextArea.o: /usr/include/xercesc/util/ValueVectorOf.c
-gui/TextArea.o: /usr/include/xercesc/internal/XSerializationException.hpp
-gui/TextArea.o: /usr/include/xercesc/internal/XProtoType.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLAttDef.hpp
-gui/TextArea.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
-gui/TextArea.o: /usr/include/xercesc/util/KVStringPair.hpp
-gui/TextArea.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
-gui/TextArea.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
-gui/TextArea.o: /usr/include/xercesc/util/RefArrayVectorOf.c
-gui/TextArea.o: /usr/include/xercesc/util/regx/Op.hpp
-gui/TextArea.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
-gui/TextArea.o: /usr/include/xercesc/util/regx/Token.hpp
-gui/TextArea.o: /usr/include/xercesc/util/Mutexes.hpp
-gui/TextArea.o: /usr/include/xercesc/util/regx/BMPattern.hpp
-gui/TextArea.o: /usr/include/xercesc/util/regx/OpFactory.hpp
-gui/TextArea.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
-gui/TextArea.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/ValidationContext.hpp
-gui/TextArea.o: /usr/include/xercesc/util/NameIdPool.hpp
-gui/TextArea.o: /usr/include/xercesc/util/NameIdPool.c
-gui/TextArea.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/util/SecurityManager.hpp
-gui/TextArea.o: /usr/include/xercesc/util/ValueStackOf.hpp
-gui/TextArea.o: /usr/include/xercesc/util/EmptyStackException.hpp
-gui/TextArea.o: /usr/include/xercesc/util/ValueStackOf.c
-gui/TextArea.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
-gui/TextArea.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
-gui/TextArea.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLContentModel.hpp
-gui/TextArea.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
-gui/TextArea.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/TextArea.o: /usr/include/limits.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/limits.h
-gui/TextArea.o: /usr/include/bits/posix1_lim.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/posix1_lim.h
-gui/TextArea.o: /usr/include/bits/local_lim.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/local_lim.h
-gui/TextArea.o: /usr/include/linux/limits.h /usr/include/bits/posix2_lim.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/posix2_lim.h
-gui/TextArea.o: /usr/include/bits/xopen_lim.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/xopen_lim.h
-gui/TextArea.o: /usr/include/bits/stdio_lim.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/stdio_lim.h
-gui/TextArea.o: /usr/include/xercesc/dom/DOM.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMAttr.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMText.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMComment.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMElement.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMEntity.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMException.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMImplementation.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSException.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMRangeException.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMNodeList.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMNotation.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMRange.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSParser.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMXPathException.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
-gui/TextArea.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-gui/TextArea.o: /usr/include/boost/shared_ptr.hpp
-gui/TextArea.o: /usr/include/boost/config.hpp
-gui/TextArea.o: /usr/include/boost/config/user.hpp
-gui/TextArea.o: /usr/include/boost/config/select_compiler_config.hpp
-gui/TextArea.o: /usr/include/boost/config/compiler/gcc.hpp
-gui/TextArea.o: /usr/include/boost/config/select_stdlib_config.hpp
-gui/TextArea.o: /usr/include/boost/config/no_tr1/utility.hpp
-gui/TextArea.o: /usr/include/boost/config/select_platform_config.hpp
-gui/TextArea.o: /usr/include/boost/config/posix_features.hpp
-gui/TextArea.o: /usr/include/unistd.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/unistd.h
-gui/TextArea.o: /usr/include/bits/posix_opt.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/posix_opt.h
-gui/TextArea.o: /usr/include/bits/environments.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/environments.h
-gui/TextArea.o: /usr/include/bits/confname.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/confname.h
-gui/TextArea.o: /usr/include/getopt.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/getopt.h
-gui/TextArea.o: /usr/include/boost/config/suffix.hpp
-gui/TextArea.o: /usr/include/boost/assert.hpp
-gui/TextArea.o: /usr/include/boost/checked_delete.hpp
-gui/TextArea.o: /usr/include/boost/throw_exception.hpp
-gui/TextArea.o: /usr/include/boost/config.hpp
-gui/TextArea.o: /usr/include/boost/detail/shared_count.hpp
-gui/TextArea.o: /usr/include/boost/detail/bad_weak_ptr.hpp
-gui/TextArea.o: /usr/include/boost/detail/sp_counted_base.hpp
-gui/TextArea.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
-gui/TextArea.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/TextArea.o: /usr/include/boost/detail/workaround.hpp
-gui/TextArea.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-gui/TextArea.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-gui/TextArea.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/stdio.h
-gui/TextArea.o: /usr/include/libio.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/libio.h
-gui/TextArea.o: /usr/include/_G_config.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/_G_config.h
-gui/TextArea.o: /usr/include/wchar.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/wchar.h
-gui/TextArea.o: /usr/include/gconv.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/gconv.h
-gui/TextArea.o: /usr/include/bits/sys_errlist.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/sys_errlist.h
 gui/TextArea.o: /usr/include/strings.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/strings.h
+gui/TextArea.o: /usr/include/inttypes.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/inttypes.h
+gui/TextArea.o: /usr/include/stdint.h
+gui/TextArea.o: /usr/include/gentoo-multilib/amd64/stdint.h
 gui/TextArea.o: /usr/include/ctype.h
 gui/TextArea.o: /usr/include/gentoo-multilib/amd64/ctype.h
 gui/TextArea.o: /usr/include/iconv.h
@@ -11241,34 +8793,7 @@ gui/TextArea.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
 gui/TextArea.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 gui/TextArea.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 gui/TextArea.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-gui/TextArea.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-gui/TextArea.o: TextureManager.h TextureHandler.h glinc.h
-gui/TextArea.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
-gui/TextArea.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-gui/TextArea.o: /usr/include/SDL/SDL_image.h logout.h Log.h gui/XSWrapper.h
-gui/TextArea.o: util.h Vector3.h /usr/include/math.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/math.h
-gui/TextArea.o: /usr/include/bits/huge_val.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/huge_val.h
-gui/TextArea.o: /usr/include/bits/huge_valf.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/huge_valf.h
-gui/TextArea.o: /usr/include/bits/huge_vall.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/huge_vall.h
-gui/TextArea.o: /usr/include/bits/inf.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/inf.h
-gui/TextArea.o: /usr/include/bits/nan.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/nan.h
-gui/TextArea.o: /usr/include/bits/mathdef.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
-gui/TextArea.o: /usr/include/bits/mathcalls.h
-gui/TextArea.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h
-gui/TextArea.o: GraphicMatrix.h tsint.h ALSource.h types.h ALBuffer.h
-gui/TextArea.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-gui/TextArea.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-gui/TextArea.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-gui/TextArea.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-gui/TextArea.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
-gui/TextArea.o: gui/Slider.h gui/Button.h
+gui/TextArea.o: /usr/include/SDL/SDL_version.h
 gui/XSWrapper.o: gui/XSWrapper.h /usr/include/xercesc/util/XMLString.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp

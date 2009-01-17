@@ -56,7 +56,7 @@ class Mesh
       void ReadState(Vector3&, Vector3&, int&, int&, float&, float&);
       float GetWidth(){return width;}
       float GetHeight(){return height;}
-      void SetGL(){glops = true;}
+      void SetGL();
       string GetFile() const{return basefile;}
       float GetAnimSpeed() const{return animspeed;}
       float GetScale() const{return scale;}
@@ -112,6 +112,7 @@ class Mesh
       int curranimation, nextanimation;
       intvec numframes;
       intvec startframe;
+      bool newchildren;
       
       Vector3 position;
       Vector3 rots;

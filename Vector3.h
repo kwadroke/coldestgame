@@ -6,6 +6,13 @@
 #include <math.h>
 #include "logout.h"
 
+using std::endl;
+
+// Doesn't make a huge difference in performance, but can be useful for profiling
+// because it causes the time taken by Vector3 calls to be lumped into the calling
+// function's profile time
+#define INLINEME 1
+
 class Vector3
 {
    public:
@@ -38,7 +45,205 @@ class Vector3
 Vector3 operator*(const float, const Vector3&);
 Vector3 operator-(const Vector3&);
 
+#ifdef INLINEME
+inline float Vector3::dot(const Vector3& v) const
+{
+   return x * v.x + y * v.y + z * v.z;
+}
 
+inline Vector3 Vector3::cross(const Vector3& v) const
+{
+   return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+}
+
+inline void Vector3::normalize()
+{
+   float mag = sqrt(x * x + y * y + z * z);
+   if (mag > .000001f)
+   {
+      x /= mag;
+      y /= mag;
+      z /= mag;
+   }
+}
+
+inline float Vector3::magnitude() const
+{
+   return sqrt(x * x + y * y + z * z);
+}
+
+
+inline Vector3 Vector3::operator* (const float& i) const
+{
+   return Vector3(x * i, y * i, z * i);
+}
+ 
+ 
+inline void Vector3::operator*= (const float& i)
+{
+   x *= i;
+   y *= i;
+   z *= i;
+}
+
+
+inline Vector3 operator*(const float i, const Vector3& v)
+{
+   return (v * i);
+}
+
+
+inline Vector3 Vector3::operator+ (const Vector3& v) const
+{
+   return Vector3(x + v.x, y + v.y, z + v.z);
+}
+
+
+inline void Vector3::operator+= (const Vector3& v)
+{
+   x += v.x;
+   y += v.y;
+   z += v.z;
+}
+
+
+inline Vector3 Vector3::operator- (const Vector3& v) const
+{
+   return Vector3(x - v.x, y - v.y, z - v.z);
+}
+
+
+inline void Vector3::operator-= (const Vector3& v)
+{
+   x -= v.x;
+   y -= v.y;
+   z -= v.z;
+}
+
+
+inline Vector3 operator-(const Vector3& v)
+{
+   return -1 * v;
+}
+
+
+inline Vector3 Vector3::operator/ (const float& i) const
+{
+   return Vector3(x / i, y / i, z / i);
+}
+
+
+inline void Vector3::operator/= (const float& i)
+{
+   x /= i;
+   y /= i;
+   z /= i;
+}
+
+
+inline float Vector3::distance(const Vector3& v) const
+{
+   return sqrt((x - v.x) * (x - v.x) + 
+         (y - v.y) * (y - v.y) + 
+         (z - v.z) * (z - v.z));
+}
+
+
+// Return the distance ^ 2 because it's faster and may be sufficient
+inline float Vector3::distance2(const Vector3& v) const
+{
+   return (x - v.x) * (x - v.x) + 
+         (y - v.y) * (y - v.y) + 
+         (z - v.z) * (z - v.z);
+}
+
+
+inline float* Vector3::array(float *output)
+{
+   output[0] = x;
+   output[1] = y;
+   output[2] = z;
+   return output;
+}
+
+
+inline void Vector3::print() const
+{
+   logout << x << "  " << y << "  " << z << endl;
+}
+
+
+inline void Vector3::transform(const GLfloat matrix[16])
+{
+   float oldx, oldy, oldz;
+   oldx = x;
+   oldy = y;
+   oldz = z;
+   x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz + matrix[12];
+   y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz + matrix[13];
+   z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz + matrix[14];
+}
+
+
+inline void Vector3::rotate(float pitch, float rotation, float roll)
+{
+   float pi = 3.14159265;
+   float radrotation = rotation * pi / 180.;
+   float radpitch = pitch * pi / 180.;
+   float radroll = roll * pi / 180.;
+   
+   float dx, dy, dz;
+   float tempx = x;
+   float tempy = y;
+   float tempz = z;
+      
+   dx = tempx * cos(radroll) - tempy * sin(radroll);
+   dy = tempx * sin(radroll) + tempy * cos(radroll);
+   tempx = dx;
+   tempy = dy;
+   dy = tempy * cos(radpitch) - tempz * sin(radpitch);
+   dz = tempy * sin(radpitch) + tempz * cos(radpitch);
+   tempy = dy;
+   tempz = dz;
+   dz = tempz * cos(radrotation) - tempx * sin(radrotation);
+   dx = tempz * sin(radrotation) + tempx * cos(radrotation);
+   x = dx;
+   y = dy;
+   z = dz;
+}
+
+
+inline void Vector3::translate(float xt, float yt, float zt)
+{
+   x += xt;
+   y += yt;
+   z += zt;
+}
+
+
+inline void Vector3::transform4(const GLfloat matrix[16])
+{
+   float oldx, oldy, oldz, w;
+   oldx = x;
+   oldy = y;
+   oldz = z;
+   x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz;// + matrix[12];
+   y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz;// + matrix[13];
+   z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz;// + matrix[14];
+   w = matrix[3] * oldx + matrix[7] * oldy + matrix[11] * oldz;// + matrix[15];
+   
+   /*x = matrix[0] * oldx + matrix[1] * oldy + matrix[2] * oldz;// + matrix[12];
+   y = matrix[4] * oldx + matrix[5] * oldy + matrix[6] * oldz;// + matrix[13];
+   z = matrix[8] * oldx + matrix[9] * oldy + matrix[10] * oldz;// + matrix[14];
+   w = matrix[12] * oldx + matrix[13] * oldy + matrix[14] * oldz;// + matrix[15];*/
+   
+   if (w < .0001) return; // Div by zero bad:-)
+   x /= w;
+   y /= w;
+   z /= w;
+   
+}
+#endif
 
 
 

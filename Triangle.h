@@ -39,6 +39,7 @@ class Triangle
       GraphicMatrix matrix;
       float maxdim;
       Vector3 midpoint;
+      // NOT SUPPORTED at this time due to lack of need
       float radmod;
 
 };
