@@ -12,7 +12,7 @@ Vector3::Vector3(const float& xin, const float& yin, const float& zin) : x(xin),
 }
 
 
-// Previously inline
+#ifndef INLINEME
 float Vector3::dot(const Vector3& v) const
 {
    return x * v.x + y * v.y + z * v.z;
@@ -38,8 +38,6 @@ float Vector3::magnitude() const
 {
    return sqrt(x * x + y * y + z * z);
 }
-
-//End ex-inlines
 
 
 Vector3 Vector3::operator* (const float& i) const
@@ -110,6 +108,44 @@ void Vector3::operator/= (const float& i)
 }
 
 
+float Vector3::distance(const Vector3& v) const
+{
+   return sqrt((x - v.x) * (x - v.x) + 
+         (y - v.y) * (y - v.y) + 
+         (z - v.z) * (z - v.z));
+}
+
+
+// Return the distance ^ 2 because it's faster and may be sufficient
+float Vector3::distance2(const Vector3& v) const
+{
+   return (x - v.x) * (x - v.x) + 
+         (y - v.y) * (y - v.y) + 
+         (z - v.z) * (z - v.z);
+}
+
+
+float* Vector3::array(float *output)
+{
+   output[0] = x;
+   output[1] = y;
+   output[2] = z;
+   return output;
+}
+
+
+void Vector3::transform(const GLfloat matrix[16])
+{
+   float oldx, oldy, oldz;
+   oldx = x;
+   oldy = y;
+   oldz = z;
+   x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz + matrix[12];
+   y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz + matrix[13];
+   z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz + matrix[14];
+}
+
+
 void Vector3::print() const
 {
    logout << x << "  " << y << "  " << z << endl;
@@ -152,19 +188,6 @@ void Vector3::translate(float xt, float yt, float zt)
 }
 
 
-void Vector3::transform(const GLfloat matrix[16])
-{
-   float oldx, oldy, oldz;
-   oldx = x;
-   oldy = y;
-   oldz = z;
-   x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz + matrix[12];
-   y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz + matrix[13];
-   z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz + matrix[14];
-   
-}
-
-
 void Vector3::transform4(const GLfloat matrix[16])
 {
    float oldx, oldy, oldz, w;
@@ -187,30 +210,7 @@ void Vector3::transform4(const GLfloat matrix[16])
    z /= w;
    
 }
+#endif
 
 
-float Vector3::distance(const Vector3& v) const
-{
-   return sqrt((x - v.x) * (x - v.x) + 
-               (y - v.y) * (y - v.y) + 
-               (z - v.z) * (z - v.z));
-}
-
-
-// Return the distance ^ 2 because it's faster and may be sufficient
-float Vector3::distance2(const Vector3& v) const
-{
-   return (x - v.x) * (x - v.x) + 
-         (y - v.y) * (y - v.y) + 
-         (z - v.z) * (z - v.z);
-}
-
-
-float* Vector3::array(float *output)
-{
-   output[0] = x;
-   output[1] = y;
-   output[2] = z;
-   return output;
-}
 

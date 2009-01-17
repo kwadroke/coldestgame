@@ -754,7 +754,7 @@ int NetListen(void* dummy)
                   
                   mapspawns.clear();
                   bool morespawns;
-                  SpawnPointData read; // Come to think of it, I don't think this is strictly necessary
+                  SpawnPointData read;
                   while (get >> morespawns && morespawns)
                   {
                      get >> read.position.x >> read.position.y >> read.position.z;

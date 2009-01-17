@@ -116,6 +116,7 @@ void GetMap(string fn)
    // Release any previously allocated resources so we don't leak memory
    meshes.clear();
    items.clear();
+   mapspawns.clear(); 
 #ifndef DEDICATED
    resman.ReleaseAll();
    InitShaders();

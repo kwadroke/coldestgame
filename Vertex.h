@@ -12,7 +12,7 @@ using std::map;
 
 // We pass this structure directly to OpenGL, so it needs to be aligned on single bytes
 // Edit: Maybe.  It seems to work without doing that, but it may waste memory to align this
-// Performance subjectively appears to be the same either way
+// Performance appears to be about the same either way
 #pragma pack(push, 1)
 struct VBOData
 {
@@ -43,6 +43,7 @@ class Vertex
    public:
       Vertex();
       VBOData& GetVboData();
+      void PopulateVboData();
       
       Vector3 pos;
       Vector3 norm;
@@ -50,6 +51,7 @@ class Vertex
       vector<floatvec> texcoords; // [Texture unit][x/y]
       GLubytevec color;
       floatvec terrainwt;
+      
       unsigned short index;
 #ifdef EDITOR
       string id;
@@ -59,6 +61,7 @@ class Vertex
       
    private:
       VBOData vbodata;
+      bool inited;
 
 };
 
@@ -66,5 +69,8 @@ typedef vector<Vertex> Vertexvec;
 typedef boost::shared_ptr<Vertex> VertexPtr;
 typedef vector<VertexPtr> VertexPtrvec;
 typedef map<string, VertexPtr> VertMap;
+
+
+//inline 
 
 #endif

@@ -447,7 +447,6 @@ void UpdateFBO(const PlayerData& localplayer)
       
       Vector3 currpos = i->GetPosition();
       Vector3 center = currpos;
-      center.y += i->GetHeight() / 2.f;
       float dist = playerpos.distance(center);
          
       glPushAttrib(GL_VIEWPORT_BIT);

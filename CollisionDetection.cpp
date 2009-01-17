@@ -34,7 +34,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs,
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& allobjs,
                                            Vector3& hitpos, Mesh*& hitobj, vector<Mesh*>* retobjs, bool debug)
 {
    Vector3 adjust;
@@ -44,14 +44,31 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    int adjusted = 0;
    // 1e38 is near the maximum representable value for a single precision float
    hitpos = Vector3(1e38f, 1e38f, 1e38f);
+   vector<Mesh*> objs;
+   
+   for (size_t i = 0; i < allobjs.size(); ++i)
+   {
+      if (oldpos.distance2(newpos) > 1e-5f)
+      {
+         if (DistanceBetweenPointAndLine(allobjs[i]->GetPosition(), oldpos, newpos) <= allobjs[i]->size + radius)
+            objs.push_back(allobjs[i]);
+      }
+      else
+      {
+         if (allobjs[i]->GetPosition().distance(oldpos) <= allobjs[i]->size + radius)
+            objs.push_back(allobjs[i]);
+      }
+   }
    
    //logout << "Checking " << objs.size() << endl;
+   //logout << "Radius " << radius << endl;
+   //logout << "Dist " << oldpos.distance(newpos) << endl;
    
    Mesh* current;
    for (int i = 0; i < objs.size(); i++)
    {
       current = objs[i];
-      if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+      //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
       {
          current->Begin();
          while (current->HasNext())
@@ -126,7 +143,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       for (int i = 0; i < objs.size(); i++)
       {
          current = objs[i];
-         if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+         //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
          {
             current->Begin();
             while (current->HasNext())
@@ -179,7 +196,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          for (int i = 0; i < objs.size(); i++)
          {
             current = objs[i];
-            if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+            //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
             {
                current->Begin();
                while (current->HasNext())
@@ -221,7 +238,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          for (int i = 0; i < objs.size(); i++)
          {
             current = objs[i];
-            if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+            //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
             {
                current->Begin();
                while (current->HasNext())
@@ -557,7 +574,7 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
       if ((t < maxt && t > 0) ||
            (t1 < maxt && t1 > 0))
       {
-         adjust = spherepos - (intercept + intercept1) / 2;
+         adjust = spherepos - (intercept + intercept1) / 2.f;
          if (t1 < 0)
             adjust = spherepos - raystart;
          else if (t > maxt)
@@ -569,6 +586,12 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
          adjust *= radius - dist;
          return true;
       }
+   }
+   // Handles the case for when the poly is completely contained in the circle
+   if (raystart.distance(spherepos) < radius && rayend.distance(spherepos) < radius)
+   {
+      adjust = spherepos - (raystart + rayend) / 2.f;
+      return true;
    }
    return false;
 }

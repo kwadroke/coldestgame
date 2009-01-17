@@ -22,7 +22,8 @@ class Packet
       string data;
       unsigned long ack;
       int attempts;
-      Uint32 sendtick;
+      Uint32 sendtick, lastsent;
+      unsigned long sendinterval;
       static int laghax;
 };
 
@@ -47,5 +48,7 @@ Packet& Packet::operator<<(T& s)
    data += write.str();
    return *this;
 }
+
+const char eol = '\n';
 
 #endif

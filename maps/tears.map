@@ -39,18 +39,18 @@ Node
       File grass
       Model models/orangeflowers/base
       GroupSize 10
-      Density 8
+      Density 15
       MinTilt 0
       MaxTilt 5
-      Scale 1
+      Scale .5
    Node
       File grass
       Model models/purpleflowers/base
       GroupSize 10
-      Density 15
+      Density 25
       MinTilt 0
       MaxTilt 5
-      Scale 1
+      Scale .5
 
 Node
    SpawnPoints

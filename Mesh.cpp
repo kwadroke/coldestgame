@@ -6,7 +6,7 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
             currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), terrain(false), dist(0.f), 
-            animspeed(1.f), curranimation(0), nextanimation(0), scale(.01f)
+            animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false), scale(.01f)
 {
 #ifndef DEDICATED
    if (gl)
@@ -18,7 +18,6 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
       Load(reader);
    }
    else Load(read);
-   
 }
 
 
@@ -40,8 +39,8 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          impostortex(m.impostortex), vbo(0), ibo(0), next(m.next), hasvbo(false),
          childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          basefile(m.basefile), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), dist(m.dist), animspeed(m.animspeed),
-         curranimation(m.curranimation), nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe),
-         scale(m.scale)
+         curranimation(m.curranimation), nextanimation(m.nextanimation), newchildren(m.newchildren),
+         numframes(m.numframes), startframe(m.startframe), scale(m.scale)
 {
 #ifndef DEDICATED
    if (m.impmat)
@@ -118,6 +117,7 @@ Mesh& Mesh::operator=(const Mesh& m)
    animspeed = m.animspeed;
    curranimation = m.curranimation;
    nextanimation = m.nextanimation;
+   newchildren = m.newchildren;
    numframes = m.numframes;
    startframe = m.startframe;
    scale = m.scale;
@@ -419,6 +419,8 @@ void Mesh::Load(const IniReader& reader)
 	   logout << " from file " << reader.GetPath() << endl;
    }
    CalcBounds();
+   for (int i = 0; i < frameroot.size(); ++i)
+      frameroot[i]->SetGL(glops);
 }
 
 
@@ -488,11 +490,7 @@ void Mesh::GenVbo()
 #ifndef DEDICATED
    if (tris.size() || childmeshes.size())
    {
-      vbosteps.clear();
       vbodata.clear();
-      indexdata.clear();
-      if (childmeshes.size())
-         tris.clear();
       int currindex = 0;
       if (!hasvbo)
       {
@@ -507,53 +505,64 @@ void Mesh::GenVbo()
          else
             currmesh = childmeshes[m - 1];
          VertexPtrvec& currvertices = currmesh->vertices;
-         for (VertexPtrvec::iterator i = currvertices.begin(); i != currvertices.end(); ++i)
+         VertexPtrvec::iterator cvend = currvertices.end();
+         for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
          {
             (*i)->tangent = Vector3();
          }
          TrianglePtrvec& currtris = currmesh->tris;
-         for (size_t i = 0; i < currtris.size(); ++i)
+         size_t ctsize = currtris.size();
+         for (size_t i = 0; i < ctsize; ++i)
          {
             // Generate tangents for triangles
-            Vector3 one = currtris[i]->v[1]->pos - currtris[i]->v[0]->pos;
-            Vector3 two = currtris[i]->v[2]->pos - currtris[i]->v[0]->pos;
-            float tcone = currtris[i]->v[1]->texcoords[0][1] - currtris[i]->v[0]->texcoords[0][1];
-            float tctwo = currtris[i]->v[2]->texcoords[0][1] - currtris[i]->v[0]->texcoords[0][1];
+            Triangle& currtri = *currtris[i];
+            Vector3 one = currtri.v[1]->pos - currtri.v[0]->pos;
+            Vector3 two = currtri.v[2]->pos - currtri.v[0]->pos;
+            float tcone = currtri.v[1]->texcoords[0][1] - currtri.v[0]->texcoords[0][1];
+            float tctwo = currtri.v[2]->texcoords[0][1] - currtri.v[0]->texcoords[0][1];
             Vector3 tangent = one * -tctwo + two * tcone;
             for (size_t j = 0; j < 3; ++j)
-               currtris[i]->v[j]->tangent += tangent;
+               currtri.v[j]->tangent += tangent;
             
-            if (m > 0)
+            if (newchildren && m > 0)
                tris.push_back(currtris[i]);
          }
          
          // Build VBO
-         for (VertexPtrvec::iterator i = currvertices.begin(); i != currvertices.end(); ++i)
+         for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
          {
-            (*i)->tangent.normalize();
-            (*i)->index = currindex;
+            Vertex& currv = **i;
+            currv.tangent.normalize();
+            currv.index = currindex;
             ++currindex;
-            vbodata.push_back((*i)->GetVboData());
+            vbodata.push_back(currv.GetVboData());
          }
       }
+      newchildren = false;
       
       // Build IBO
-      sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
-      int counter = 0;
-      TrianglePtrvec::iterator last = tris.begin();
-      for (TrianglePtrvec::iterator i = tris.begin(); i != tris.end(); ++i)
+      if (vbodata.size() * sizeof(VBOData) != vbosize)
       {
-         if ((*last)->material != (*i)->material)
+         sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
+         indexdata.clear();
+         vbosteps.clear();
+         int counter = 0;
+         TrianglePtrvec::iterator last = tris.begin();
+         TrianglePtrvec::iterator tend = tris.end();
+         for (TrianglePtrvec::iterator i = tris.begin(); i != tend; ++i)
          {
-            vbosteps.push_back(counter);
-            counter = 0;
+            if ((*last)->material != (*i)->material)
+            {
+               vbosteps.push_back(counter);
+               counter = 0;
+            }
+            ushortvec ind = (*i)->GetIndices();
+            indexdata.insert(indexdata.end(), ind.begin(), ind.end());
+            last = i;
+            ++counter;
          }
-         ushortvec ind = (*i)->GetIndices();
-         indexdata.insert(indexdata.end(), ind.begin(), ind.end());
-         last = i;
-         ++counter;
+         vbosteps.push_back(counter);
       }
-      vbosteps.push_back(counter);
       glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
       if (!hasvbo || (vbodata.size() * sizeof(VBOData) > vbosize) || (indexdata.size() * sizeof(unsigned short) > ibosize))
@@ -561,24 +570,27 @@ void Mesh::GenVbo()
          if (frameroot.size() <= 1 && !dynamic)
          {
             glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                           0, GL_STATIC_DRAW_ARB);
+                           &indexdata[0], GL_STATIC_DRAW_ARB);
             glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                         vbodata.size() * sizeof(VBOData), 
-                        0, GL_STATIC_DRAW_ARB);
+                        &vbodata[0], GL_STATIC_DRAW_ARB);
          }
          else
          {
             glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                           0, GL_STREAM_DRAW_ARB);
+                           &indexdata[0], GL_STREAM_DRAW_ARB);
             glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
                            vbodata.size() * sizeof(VBOData), 
-                           0, GL_STREAM_DRAW_ARB);
+                           &vbodata[0], GL_STREAM_DRAW_ARB);
          }
+      }
+      else
+      {
+         glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
+         glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
       }
       vbosize = vbodata.size() * sizeof(VBOData);
       ibosize = indexdata.size() * sizeof(unsigned short);
-      glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
-      glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
       
       if (!glops)
       {
@@ -742,7 +754,6 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    impostor->frameroot[0]->vertices[3]->pos = Vector3(width2, -height2, 0);
    
    Vector3 moveto = position;
-   moveto.y += height2;
    impostor->Move(moveto);
    impostor->AdvanceAnimation(campos);
    rendermesh.Add(*impostor);
@@ -850,11 +861,13 @@ void Mesh::CalcBounds()
    Vector3 max;
    float temp;
    Vector3 localpos = GetPosition();
-   for (int i = 0; i < tris.size(); ++i)
+   size_t tsize = tris.size();
+   for (int i = 0; i < tsize; ++i)
    {
       for (int j = 0; j < 3; ++j)
       {
-         dist = tris[i]->v[j]->pos.distance(localpos) + tris[i]->radmod;
+         //dist = tris[i]->v[j]->pos.distance(localpos) + tris[i]->radmod;
+         dist = tris[i]->v[j]->pos.distance2(localpos);
          if (dist > size) size = dist;
          temp = tris[i]->v[j]->pos.x - localpos.x;
          if (temp + tris[i]->radmod > max.x) max.x = temp + tris[i]->radmod;
@@ -867,6 +880,7 @@ void Mesh::CalcBounds()
          if (temp - tris[i]->radmod < min.z) min.z = temp - tris[i]->radmod;
       }
    }
+   size = sqrt(size);
    height = max.y - min.y;
    width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
 }
@@ -1014,6 +1028,8 @@ void Mesh::Add(Mesh &mesh)
 void Mesh::Add(Mesh* mesh)
 {
    childmeshes.push_back(mesh);
+   newchildren = true;
+   tris.clear();
 }
 
 
@@ -1054,6 +1070,14 @@ void Mesh::SetAnimation(const int newanim)
 {
    if (newanim < 10 && numframes[newanim] != 0)
       nextanimation = newanim;
+}
+
+
+void Mesh::SetGL()
+{
+   glops = true;
+   for (int i = 0; i < frameroot.size(); ++i)
+      frameroot[i]->SetGL(true);
 }
 
 

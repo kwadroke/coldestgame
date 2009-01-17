@@ -26,6 +26,7 @@
 #include "ServerState.h"
 #include "IDGen.h"
 #include "util.h"
+#include "Bot.h"
 
 // Necessary declarations
 void ServerLoop();
@@ -84,6 +85,7 @@ set<unsigned long> commandids;
 size_t framecount;
 Uint32 lastfpsupdate;
 int servfps;
+vector<BotPtr> bots;
 
 class SortableIPaddress
 {
@@ -103,7 +105,7 @@ set<SortableIPaddress> validaddrs;
 
 int Server(void* dummy)
 {
-   if (console.GetString("servername") == "")
+   if (console.GetString("servername") == "@none@")
    {
       srand(time(0));
       int choosename = (int)Random(0, 16);  // Just for fun:-)
@@ -204,6 +206,7 @@ void ServerLoop()
    
    while (running)
    {
+      SDL_Delay(1); // Otherwise if we turn off limitserverrate this will hog CPU
       if (console.GetBool("limitserverrate"))
       {
          while (frametimer.elapsed() < 1000 / servertickrate - 1)
@@ -342,6 +345,7 @@ int ServerListen(void* dummy)
             if (serverplayers[i].addr.host == inpack->address.host &&
                serverplayers[i].addr.port == inpack->address.port)
             {
+               //logout << "Packet " << packettype << " " << packetnum << " from " << i << endl;
                oppnum = i;
                break;
             }
@@ -456,7 +460,9 @@ int ServerListen(void* dummy)
                   if (serverplayers[i].team != 0 && serverplayers[i].connected)
                      ++teamcount[serverplayers[i].team - 1];
                }
-               fill << (teamcount[0] > teamcount[1] ? 2 : 1) << eol;
+               int newteam = teamcount[0] > teamcount[1] ? 2 : 1;
+               fill << newteam << eol;
+               serverplayers[respondto].team = newteam;
                
                fill.addr = serverplayers[respondto].addr;
                servqueue.push_back(fill);
@@ -496,7 +502,7 @@ int ServerListen(void* dummy)
             bool accepted = false;
             Vector3 spawnpointreq;
             
-            //logout << "Player " << oppnum << " is spawning" << endl;
+            logout << "Player " << oppnum << " is spawning" << endl;
             SDL_mutexP(servermutex);
             get >> serverplayers[oppnum].unit;
             int weapid;
@@ -550,7 +556,7 @@ int ServerListen(void* dummy)
                      for (float zcheck = spawnpointreq.z - 100.f; zcheck <= spawnpointreq.z + 101.f; zcheck += 100.f)
                      {
                         checkvec = Vector3(xcheck, ycheck, zcheck);
-                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check).distance2() < 1e-4f && GetTerrainHeight(xcheck, zcheck) < ycheck)
+                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check).distance2() < 1e-4f && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
                         {
                            spawnpointreq = checkvec;
                            found = true;
@@ -588,14 +594,16 @@ int ServerListen(void* dummy)
                      serverplayers[oppnum].spawned = true;
                   }
                   serverplayers[oppnum].pos = spawnpointreq;
-                  UpdatePlayerModel(serverplayers[oppnum], servermeshes, false);
-                  serverplayers[oppnum].lastmovetick = SDL_GetTicks();
+                  serverplayers[oppnum].lastmovetick = 0;
                   serverplayers[oppnum].Reset();
                   for (int i = 0; i < numbodyparts; ++i)
                   {
                      serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
                      serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
                   }
+                  UpdatePlayerModel(serverplayers[oppnum], servermeshes, false);
+                  for (size_t i = 0; i < numbodyparts; ++i)
+                     serverplayers[oppnum].mesh[i]->AdvanceAnimation();
                }
             }
             
@@ -718,6 +726,7 @@ int ServerListen(void* dummy)
             SDL_mutexP(servermutex);
             if (serverplayers[oppnum].needsync)
             {
+               logout << "Syncing with " << oppnum << endl;
                SendSyncPacket(serverplayers[oppnum], packetnum);
                for (size_t i = 0; i < serveritems.size(); ++i)
                   SendItem(serveritems[i], oppnum);
@@ -1070,6 +1079,11 @@ void ServerLoadMap()
    logout << "Map loaded" << endl;
    serverhasmap = 1;
    gameover = 0;
+   
+   bots.clear();
+   int numbots = console.GetInt("bots");
+   for (size_t i = 0; i < numbots; ++i)
+      bots.push_back(BotPtr(new Bot()));
    SDL_mutexV(servermutex);
 }
 
@@ -1407,8 +1421,8 @@ int ServerInput(void* dummy)
          console.Parse(command, false);
       }
    }
-   return 0;
 #endif
+   return 0;
 }
 
 

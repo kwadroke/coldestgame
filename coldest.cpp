@@ -145,7 +145,9 @@ void InitGlobals()
    console.Parse("set respawntime 15000", false);
    console.Parse("set cache 1", false);
    console.Parse("set musicvol 40", false);
+   console.Parse("set servername @none@", false);
    console.Parse("set serverpwd password", false);
+   console.Parse("set bots 1", false);
    
    // I'm not entirely sure why this is separated from the declaration of dummy above,
    // but I'm not inclined to potentially break something by moving it either.
@@ -1141,8 +1143,15 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    Vector3 old = mplayer.pos;
    
    // Calculate how far to move based on time since last frame
-   int numticks = SDL_GetTicks() - mplayer.lastmovetick;
-   mplayer.lastmovetick = SDL_GetTicks();
+   Uint32 currtick = SDL_GetTicks();
+   if (!mplayer.lastmovetick)
+      mplayer.lastmovetick = currtick;
+   int numticks = currtick - mplayer.lastmovetick;
+   mplayer.lastmovetick = currtick;
+   if (numticks > 50)
+   {
+      return;
+   }
    float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
    
    bool onground = false;
@@ -1307,6 +1316,16 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       else adjust = adjust + legadjust;
       int count = 0;
       float slop = .1f;
+      
+      if (adjust.distance() > 20)
+      {
+         logout << "Adjust: " << adjust.distance() << endl;
+         logout << "Move: " << offsetoldmain.distance(mainoffset) << endl;
+         logout << "Numticks: " << numticks << endl;
+         logout << "Speed: " << mplayer.speed << endl;
+         logout << "Moving: " << moving << endl;
+         logout << "Fallvelocity: " << mplayer.fallvelocity << endl;
+      }
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
@@ -1564,10 +1583,15 @@ void Animate()
    additems.clear();
    
    // Meshes
-   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   static bool doanim = true;
+   if (doanim)
    {
-      i->AdvanceAnimation(player[0].pos);
+      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+      {
+         i->AdvanceAnimation(player[0].pos);
+      }
    }
+   doanim = !doanim;
    
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();

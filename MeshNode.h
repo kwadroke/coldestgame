@@ -22,13 +22,18 @@ class MeshNode
    public:
       MeshNode();
       void Transform(const shared_ptr<MeshNode>&, const float, VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void TransformLoop(const shared_ptr<MeshNode>&, const float, VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void TransformNoInt(VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void TransformNoIntLoop(VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void Scale(const float&);
       void ScaleZ(const float&);
+      void SetGL(const bool);
       
       int id, parentid;
       bool facing;
+      bool gl;
       Vector3 rot1, rot2;
       Vector3 trans;
       vector<shared_ptr<MeshNode> > children;
