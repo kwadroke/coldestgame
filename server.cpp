@@ -172,19 +172,20 @@ int Server(void* dummy)
    if (console.GetString("map") == "")
       console.Parse("set map newtest");
    LoadMapList();
-   ServerLoadMap();
    servermutex = SDL_CreateMutex();
    if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
       logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
+   ServerLoadMap();
    serversend = SDL_CreateThread(ServerSend, NULL);
    serverlisten = SDL_CreateThread(ServerListen, NULL);
    serverinput = SDL_CreateThread(ServerInput, NULL);
    
    ServerLoop();
    
+   bots.clear();
    SDL_WaitThread(serversend, NULL);
    SDL_WaitThread(serverlisten, NULL);
    SDL_WaitThread(serverinput, NULL);

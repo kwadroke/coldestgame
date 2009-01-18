@@ -113,6 +113,7 @@ class Mesh
       intvec numframes;
       intvec startframe;
       bool newchildren;
+      bool boundschanged;
       
       Vector3 position;
       Vector3 rots;
