@@ -19,11 +19,11 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 }
 
 
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs)
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, const bool extcheck)
 {
    Vector3 dummy;
    Mesh* dummymesh = NULL;
-   return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh);
+   return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh, NULL, extcheck);
 }
 
 
@@ -35,7 +35,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& allobjs,
-                                           Vector3& hitpos, Mesh*& hitobj, vector<Mesh*>* retobjs, bool debug)
+                                           Vector3& hitpos, Mesh*& hitobj, vector<Mesh*>* retobjs, const bool extcheck, const bool debug)
 {
    Vector3 adjust;
    Vector3 temp, temphitpos;
@@ -46,58 +46,84 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    hitpos = Vector3(1e38f, 1e38f, 1e38f);
    vector<Mesh*> objs;
    
+   float cullrad = midpoint.distance(oldpos);
+   
    for (size_t i = 0; i < allobjs.size(); ++i)
    {
+      Mesh& currmesh = *allobjs[i];
       if (oldpos.distance2(newpos) > 1e-5f)
       {
-         if (DistanceBetweenPointAndLine(allobjs[i]->GetPosition(), oldpos, newpos) <= allobjs[i]->size + radius)
-            objs.push_back(allobjs[i]);
+         if (DistanceBetweenPointAndLine(currmesh.GetPosition(), oldpos, newpos) <= currmesh.size + radius)
+         {
+            Vector3 currpos = currmesh.GetPosition();
+            float currheight = currmesh.GetHeight();
+            float currwidth = currmesh.GetWidth();
+            if (midpoint.x + cullrad > currpos.x - currwidth &&
+                midpoint.x - cullrad < currpos.x + currwidth &&
+                midpoint.z + cullrad > currpos.z - currwidth &&
+                midpoint.z - cullrad < currpos.z + currwidth)
+               objs.push_back(allobjs[i]);
+         }
       }
       else
       {
-         if (allobjs[i]->GetPosition().distance(oldpos) <= allobjs[i]->size + radius)
-            objs.push_back(allobjs[i]);
+         if (currmesh.GetPosition().distance(oldpos) <= currmesh.size + radius)
+         {
+            Vector3 currpos = currmesh.GetPosition();
+            float currheight = currmesh.GetHeight();
+            float currwidth = currmesh.GetWidth();
+            if (midpoint.x + cullrad > currpos.x - currwidth &&
+                midpoint.x - cullrad < currpos.x + currwidth &&
+                midpoint.z + cullrad > currpos.z - currwidth &&
+                midpoint.z - cullrad < currpos.z + currwidth)
+               objs.push_back(allobjs[i]);
+         }
       }
    }
    
+   size_t osize = objs.size();
+   vector<Triangle*> neartris;
+   neartris.reserve(osize * 200);
+   map<Triangle*, Mesh*> trimap;
+   Triangle* hittri = NULL;
    //logout << "Checking " << objs.size() << endl;
    //logout << "Radius " << radius << endl;
    //logout << "Dist " << oldpos.distance(newpos) << endl;
    
    Mesh* current;
-   for (int i = 0; i < objs.size(); i++)
+   for (int i = 0; i < osize; i++)
    {
       current = objs[i];
-      //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+      current->Begin();
+      while (current->HasNext())
       {
-         current->Begin();
-         while (current->HasNext())
+         Triangle& currtri = current->Next();
+         if (currtri.collide)
          {
-            Triangle& currtri = current->Next();
-            if (currtri.collide)
+            if (currtri.maxdim < 0) currtri.CalcMaxDim();
+            
+            float checkrad = currtri.maxdim + radius;
+            
+            if ((oldpos.distance2(newpos) > 1e-5f && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad) ||
+                  oldpos.distance(currtri.midpoint) < checkrad)
             {
-               if (currtri.maxdim < 0) currtri.CalcMaxDim();
+               // Cache the results of the previous calculations for later use
+               neartris.push_back(&currtri);
+               trimap.insert(make_pair(&currtri, current));
                
-               float localrad = radius + currtri.radmod;
-               float checkrad = currtri.maxdim + localrad;
+               temp = adjust;
+               adjust += PlaneSphereCollision(currtri, oldpos, newpos, radius + currtri.radmod, temphitpos);
                
-               if ((oldpos.distance2(newpos) > 1e-5f && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, newpos) < checkrad) ||
-                   oldpos.distance(currtri.midpoint) < checkrad)
+               if (adjust.distance2(temp) > .00001)
                {
-                  temp = adjust;
-                  adjust += PlaneSphereCollision(currtri, oldpos, newpos, localrad, temphitpos);
-                  
-                  if (adjust.distance2(temp) > .00001)
+                  if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
                   {
-                     if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
-                     {
-                        hitobj = current;
-                        hitpos = temphitpos;
-                     }
-                     adjusted++;
-                     if (retobjs)
-                        retobjs->push_back(current);
+                     hittri = &currtri;
+                     hitpos = temphitpos;
                   }
+                  adjusted++;
+                  if (retobjs)
+                     retobjs->push_back(current);
                }
             }
          }
@@ -132,45 +158,29 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          if (oldpos.distance2(newpos) < oldpos.distance2(hitpos))
             hitpos = newpos;
          float endside = norm.dot(newpos) + d;
-         adjust += norm * -endside;// * 1.05f;
+         adjust += norm * -endside;
          adjusted++;
       }
    }
    
+   size_t ntsize = neartris.size();
+   
    // Check edges of polys as well.
-   if (adjust.distance2(Vector3()) < .00001)
+   // This test will almost never hit for fast-moving projectiles, so don't even bother
+   if (!adjusted && !extcheck)
    {
-      for (int i = 0; i < objs.size(); i++)
+      for (int i = 0; i < ntsize; i++)
       {
-         current = objs[i];
-         //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+         Triangle& currtri = *neartris[i];
+         temp = adjust;
+         adjust += PlaneEdgeSphereCollision(currtri, newpos, radius + currtri.radmod);
+         if (adjust.distance2(temp) > .00001)
          {
-            current->Begin();
-            while (current->HasNext())
-            {
-               Triangle& currtri = current->Next();
-               if (currtri.collide)
-               {
-                  if (currtri.maxdim < 0) currtri.CalcMaxDim();
-                  
-                  float localrad = radius + currtri.radmod;
-                  float checkrad = currtri.maxdim + localrad;
-                  
-                  if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
-                  {
-                     temp = adjust;
-                     adjust += PlaneEdgeSphereCollision(currtri, newpos, localrad);
-                     if (adjust.distance2(temp) > .00001)
-                     {
-                        hitobj = current;
-                        hitpos = newpos;
-                        adjusted++;
-                        if (retobjs)
-                           retobjs->push_back(current);
-                     }
-                  }
-               }
-            }
+            hitobj = current;
+            hitpos = newpos;
+            adjusted++;
+            if (retobjs)
+               retobjs->push_back(trimap[&currtri]);
          }
       }
    }
@@ -178,9 +188,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    // If we moved a fairly long distance we're probably a projectile and need to do the following
    // These aren't useful for player movement though so we shouldn't do them in that case.
-   
-   // Still not sure how well this is working, but for the moment it isn't causing serious problems
-   if (oldpos.distance2(newpos) > radius * radius * 9)
+   if (extcheck)
    {
       // Do another edge check that checks the entire movement path, not just the ending position.
       // This is necessary because projectiles may move significantly larger distances than their
@@ -191,90 +199,49 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       // falls outside the edge vector, but we still actually touch the edge) which is acceptable
       // for projectiles because the corner test will catch them, but could be a problem for player
       // movement.  Whew.
-      if (adjust.distance2(Vector3()) < .00001)
+      for (int i = 0; i < ntsize; i++)
       {
-         for (int i = 0; i < objs.size(); i++)
+         Triangle& currtri = *neartris[i];
+         temphitpos = VectorEdgeCheck(currtri, oldpos, newpos, radius + currtri.radmod);
+         if (temphitpos.distance() > 1e-5f)
          {
-            current = objs[i];
-            //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+            adjust += temphitpos;
+            if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
             {
-               current->Begin();
-               while (current->HasNext())
-               {
-                  Triangle& currtri = current->Next();
-                  if (currtri.collide)
-                  {
-                     if (currtri.maxdim < 0) currtri.CalcMaxDim();
-                     
-                     float localrad = radius + currtri.radmod;
-                     float checkrad = currtri.maxdim + localrad;
-               
-                     if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
-                     {
-                        temp = adjust;
-                        adjust += VectorEdgeCheck(currtri, oldpos, newpos, localrad);
-                        if (adjust.distance2(temp) > .00001)
-                        {
-                           if (oldpos.distance2(adjust) < oldpos.distance2(hitpos))
-                           {
-                              hitobj = current;
-                              hitpos = adjust;
-                           }
-                           adjusted++;
-                           if (retobjs)
-                              retobjs->push_back(current);
-                        }
-                     }
-                  }
-               }
+               hitobj = current;
+               hitpos = temphitpos;
             }
+            adjusted++;
+            if (retobjs)
+               retobjs->push_back(current);
          }
       }
       
       // Do a ray-sphere check on each corner of the triangles.  This is to handle
       // the aforementioned case when we're moving nearly parallel to the edge.
-      if (adjust.distance2(Vector3()) < .00001)
+      for (int i = 0; i < ntsize; i++)
       {
-         for (int i = 0; i < objs.size(); i++)
+         Triangle& currtri = *neartris[i];
+         for (int j = 0; j < 3; ++j)
          {
-            current = objs[i];
-            //if (DistanceBetweenPointAndLine(current->GetPosition(), oldpos, newpos) <= current->size + radius)
+            if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod, temp))
             {
-               current->Begin();
-               while (current->HasNext())
+               if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
                {
-                  Triangle& currtri = current->Next();
-                  if (currtri.collide)
-                  {
-                     if (currtri.maxdim < 0) currtri.CalcMaxDim();
-                     
-                     float localrad = radius + currtri.radmod;
-                     float checkrad = currtri.maxdim + localrad;
-               
-                     if (currtri.midpoint.distance2(midpoint) < checkrad * checkrad)
-                     {
-                        for (int j = 0; j < 3; ++j)
-                        {
-                           if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, localrad, temp))
-                           {
-                              if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
-                              {
-                                 hitobj = current;
-                                 hitpos = currtri.v[j]->pos;
-                              }
-                              adjust += temp;
-                              adjusted++;
-                              if (retobjs)
-                                 retobjs->push_back(current);
-                           }
-                        }
-                     }
-                  }
+                  hitobj = current;
+                  hitpos = currtri.v[j]->pos;
                }
+               adjust += temp;
+               adjusted++;
+               if (retobjs)
+                  retobjs->push_back(current);
             }
          }
       }
    }
+   
+   if (hittri)
+      hitobj = trimap[hittri];
    
    if (adjusted <= 1)
       return adjust;
@@ -392,6 +359,9 @@ Vector3 CollisionDetection::PlaneSphereCollision(const Triangle& t, const Vector
 }
 
 
+#ifdef INLINE_COLDET
+inline
+#endif
 Vector3 CollisionDetection::PlaneEdgeSphereCollision(const Triangle& t, const Vector3& pos, const float& radius)
 {
    Vector3vec v(3);
@@ -425,7 +395,6 @@ Vector3 CollisionDetection::VectorEdgeCheck(const Triangle& t, const Vector3& st
    for (int i = 0; i < 3; ++i)
       v[i] = t.v[i]->pos;
    Vector3 adjust;
-   Vector3 n;
    Vector3 move = end - start;
    float j, k;
    
@@ -437,7 +406,6 @@ Vector3 CollisionDetection::VectorEdgeCheck(const Triangle& t, const Vector3& st
       ray = rayend - raystart;
       
       float dist = DistanceBetweenLines(start, move, raystart, ray, j, k);
-      Vector3 ts = raystart - start;
       if (dist < radius)
       {
          if (j < -1e-5 || k < -1e-5 || j > 1 || k > 1) // No hit
@@ -448,7 +416,9 @@ Vector3 CollisionDetection::VectorEdgeCheck(const Triangle& t, const Vector3& st
    return Vector3();
 }
 
-
+#ifdef INLINE_COLDET
+inline
+#endif
 bool CollisionDetection::InVector(Mesh* ptr, vector<Meshlist::iterator>& vec)
 {
    for (int i = 0; i < vec.size(); ++i)
@@ -459,6 +429,9 @@ bool CollisionDetection::InVector(Mesh* ptr, vector<Meshlist::iterator>& vec)
 
 // I don't think this one is ever used because in most cases we want to reuse d, so it doesn't make sense to 
 // calculate it each time
+#ifdef INLINE_COLDET
+inline
+#endif
 bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
                                       const Vector3& polypoint, float &denominator, Vector3& move)
 {
@@ -468,7 +441,10 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
 }
 
 
-// Also calculates the intersection point if we're interested.  
+// Also calculates the intersection point if we're interested.
+#ifdef INLINE_COLDET
+inline
+#endif
 bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
                                       const float& d, float &denominator, Vector3& move, float& x, Vector3& intpoint)
 {
@@ -484,6 +460,9 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
 
 // NOTE: This does not actually take the location of start into consideration, so if start is not
 // on the positive side of the plane then it may return true when the plane was not actually crossed.
+#ifdef INLINE_COLDET
+inline
+#endif
 bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, const Vector3& norm,
                                       const float& d, float &denominator, Vector3& move)
 {
@@ -519,6 +498,9 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
 
 
 // From http://geometryalgorithms.com/Archive/algorithm_0106/algorithm_0106.htm
+#ifdef INLINE_COLDET
+inline
+#endif
 float CollisionDetection::DistanceBetweenLines(const Vector3& start, const Vector3& dir, const Vector3& start1, const Vector3& dir1,
                                               float& j, float& k)
 {
@@ -543,14 +525,6 @@ float CollisionDetection::DistanceBetweenLines(const Vector3& start, const Vecto
    p = start + dir * j;
    p1 = start1 + dir1 * k;
    return p.distance(p1);
-}
-
-
-// From http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
-float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, const Vector3& start, const Vector3& end)
-{
-   if (start.distance2(end) < 1e-5f) return 0.f;
-   return ((end - start).cross(start - point)).magnitude() / (end - start).magnitude();
 }
 
 

@@ -11,7 +11,7 @@ using std::endl;
 // Doesn't make a huge difference in performance, but can be useful for profiling
 // because it causes the time taken by Vector3 calls to be lumped into the calling
 // function's profile time
-#define INLINEME 1
+#define INLINE_VECTOR3 1
 
 class Vector3
 {
@@ -45,7 +45,7 @@ class Vector3
 Vector3 operator*(const float, const Vector3&);
 Vector3 operator-(const Vector3&);
 
-#ifdef INLINEME
+#ifdef INLINE_VECTOR3
 inline float Vector3::dot(const Vector3& v) const
 {
    return x * v.x + y * v.y + z * v.z;

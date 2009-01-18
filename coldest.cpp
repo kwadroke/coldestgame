@@ -148,6 +148,7 @@ void InitGlobals()
    console.Parse("set servername @none@", false);
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 1", false);
+   console.Parse("set overheat 1", false);
    
    // I'm not entirely sure why this is separated from the declaration of dummy above,
    // but I'm not inclined to potentially break something by moving it either.
@@ -1257,8 +1258,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       groundcheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheckpos, mplayer.size);
-      Vector3 slopecheck = coldet.CheckSphereHit(old, groundcheckpos, .01f, check);
-      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0, mplayer.size + .1f, 0), mplayer.size * 1.1f, check);
+      Vector3 slopecheck = coldet.CheckSphereHit(old, groundcheckpos, .01f, check, false);
+      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0, mplayer.size + .1f, 0), mplayer.size * 1.1f, check, false);
       
       if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
       {
@@ -1309,8 +1310,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 offsetoldleg = offsetoldmain - Vector3(0, mplayer.size * 2.f, 0);
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old + offset, mplayer.pos, mplayer.size * 2.f);
-      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check);
-      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check);
+      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check, false);
+      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check, false);
       if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
          adjust = (adjust + legadjust) / 2.f;
       else adjust = adjust + legadjust;
@@ -1331,8 +1332,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       {
          mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check);
-         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check);
+         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check, false);
+         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check, false);
          if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
             adjust = (adjust + legadjust) / 2.f;
          else adjust = adjust + legadjust;

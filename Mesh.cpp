@@ -424,6 +424,8 @@ void Mesh::Load(const IniReader& reader)
 }
 
 
+// Note, if this mesh has child meshes they need to have Move(GetPosition()) called on them
+// to force an update on their geometry
 void Mesh::Move(const Vector3& v, bool movetris)
 {
    if (movetris)
@@ -866,21 +868,20 @@ void Mesh::CalcBounds()
    {
       for (int j = 0; j < 3; ++j)
       {
-         //dist = tris[i]->v[j]->pos.distance(localpos) + tris[i]->radmod;
-         dist = tris[i]->v[j]->pos.distance2(localpos);
+         Triangle& currtri = *tris[i];
+         dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
          if (dist > size) size = dist;
-         temp = tris[i]->v[j]->pos.x - localpos.x;
-         if (temp + tris[i]->radmod > max.x) max.x = temp + tris[i]->radmod;
-         if (temp - tris[i]->radmod < min.x) min.x = temp - tris[i]->radmod;
-         temp = tris[i]->v[j]->pos.y - localpos.y;
-         if (temp + tris[i]->radmod > max.y) max.y = temp + tris[i]->radmod;
-         if (temp - tris[i]->radmod < min.y) min.y = temp - tris[i]->radmod;
-         temp = tris[i]->v[j]->pos.z - localpos.z;
-         if (temp + tris[i]->radmod > max.z) max.z = temp + tris[i]->radmod;
-         if (temp - tris[i]->radmod < min.z) min.z = temp - tris[i]->radmod;
+         temp = currtri.v[j]->pos.x - localpos.x;
+         if (temp + currtri.radmod > max.x) max.x = temp + currtri.radmod;
+         if (temp - currtri.radmod < min.x) min.x = temp - currtri.radmod;
+         temp = currtri.v[j]->pos.y - localpos.y;
+         if (temp + currtri.radmod > max.y) max.y = temp + currtri.radmod;
+         if (temp - currtri.radmod < min.y) min.y = temp - currtri.radmod;
+         temp = currtri.v[j]->pos.z - localpos.z;
+         if (temp + currtri.radmod > max.z) max.z = temp + currtri.radmod;
+         if (temp - currtri.radmod < min.z) min.z = temp - currtri.radmod;
       }
    }
-   size = sqrt(size);
    height = max.y - min.y;
    width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
 }

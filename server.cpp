@@ -201,6 +201,7 @@ void ServerLoop()
    logout << "ServerLoop " << gettid() << endl;
    
    Uint32 currtick;
+   bool doanimation = true;
    Timer frametimer;
    frametimer.start();
    
@@ -247,12 +248,16 @@ void ServerLoop()
       SDL_mutexV(servermutex);
          
       // Update server meshes
-      SDL_mutexP(servermutex);
-      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
+      if (doanimation)
       {
-         i->AdvanceAnimation();
+         SDL_mutexP(servermutex);
+         for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
+         {
+            i->AdvanceAnimation();
+         }
+         SDL_mutexV(servermutex);
       }
-      SDL_mutexV(servermutex);
+      doanimation = !doanimation;
       
       SDL_mutexP(servermutex);
       // Save state so we can recall it for collision detection
@@ -547,7 +552,8 @@ int ServerListen(void* dummy)
             AppendDynamicMeshes(check, servermeshes);
             Vector3 checkvec;
             bool found = false;
-            if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 49.f, check).distance2() > 1e-4f)
+            // Since this check isn't actually moving doing the extended collision checks is pointless
+            if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 49.f, check, false).distance2() > 1e-4f)
             {
                for (float ycheck = spawnpointreq.y; ycheck <= 10000.f; ycheck += 100.f)
                {
@@ -556,7 +562,7 @@ int ServerListen(void* dummy)
                      for (float zcheck = spawnpointreq.z - 100.f; zcheck <= spawnpointreq.z + 101.f; zcheck += 100.f)
                      {
                         checkvec = Vector3(xcheck, ycheck, zcheck);
-                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check).distance2() < 1e-4f && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
+                        if (coldet.CheckSphereHit(checkvec, checkvec, 49.f, check, false).distance2() < 1e-4f && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
                         {
                            spawnpointreq = checkvec;
                            found = true;
@@ -1238,7 +1244,7 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].temperature = 0;
    
    // Give them the benefit of the doubt and cool them before calculating overheating
-   if (serverplayers[i].temperature > 100.f && serverplayers[i].spawned)
+   if (serverplayers[i].temperature > 100.f && serverplayers[i].spawned && console.GetBool("overheat"))
    {
       KillPlayer(i, i);
    }
