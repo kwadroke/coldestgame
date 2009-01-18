@@ -6,7 +6,7 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
             currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), terrain(false), dist(0.f), 
-            animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false), scale(.01f)
+            animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false), boundschanged(true), scale(.01f)
 {
 #ifndef DEDICATED
    if (gl)
@@ -39,7 +39,7 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          impostortex(m.impostortex), vbo(0), ibo(0), next(m.next), hasvbo(false),
          childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          basefile(m.basefile), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), dist(m.dist), animspeed(m.animspeed),
-         curranimation(m.curranimation), nextanimation(m.nextanimation), newchildren(m.newchildren),
+         curranimation(m.curranimation), nextanimation(m.nextanimation), newchildren(m.newchildren), boundschanged(m.boundschanged),
          numframes(m.numframes), startframe(m.startframe), scale(m.scale)
 {
 #ifndef DEDICATED
@@ -105,6 +105,7 @@ Mesh& Mesh::operator=(const Mesh& m)
    hasvbo = false;
    next = m.next;
    childmeshes = m.childmeshes;
+   boundschanged = m.boundschanged;
    currkeyframe = m.currkeyframe;
    frametime = m.frametime;
    glops = m.glops;
@@ -460,6 +461,8 @@ const Vector3 Mesh::GetPosition() const
 
 void Mesh::Rotate(const Vector3& v, bool movetris)
 {
+   if (rots.distance2(v) > 1.f)
+      boundschanged = true;
    if (movetris)
    {
       Vector3 pos = GetPosition();
@@ -834,6 +837,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    if (curranimation != nextanimation)
    {
       frameroot[index]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, nm, campos);
+      boundschanged = true;
    }
    else
    {
@@ -844,6 +848,7 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
       else
       {
          frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, nm, campos);
+         boundschanged = true;
       }
    }
    
@@ -857,33 +862,38 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
 
 void Mesh::CalcBounds()
 {
-   size = 0.f;
-   float dist = 0.f;
-   Vector3 min;
-   Vector3 max;
-   float temp;
-   Vector3 localpos = GetPosition();
-   size_t tsize = tris.size();
-   for (int i = 0; i < tsize; ++i)
+   // If we just translated the mesh then we don't need to do this.
+   if (boundschanged)
    {
-      for (int j = 0; j < 3; ++j)
+      size = 0.f;
+      float dist = 0.f;
+      Vector3 min;
+      Vector3 max;
+      float temp;
+      Vector3 localpos = GetPosition();
+      size_t tsize = tris.size();
+      for (int i = 0; i < tsize; ++i)
       {
-         Triangle& currtri = *tris[i];
-         dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
-         if (dist > size) size = dist;
-         temp = currtri.v[j]->pos.x - localpos.x;
-         if (temp + currtri.radmod > max.x) max.x = temp + currtri.radmod;
-         if (temp - currtri.radmod < min.x) min.x = temp - currtri.radmod;
-         temp = currtri.v[j]->pos.y - localpos.y;
-         if (temp + currtri.radmod > max.y) max.y = temp + currtri.radmod;
-         if (temp - currtri.radmod < min.y) min.y = temp - currtri.radmod;
-         temp = currtri.v[j]->pos.z - localpos.z;
-         if (temp + currtri.radmod > max.z) max.z = temp + currtri.radmod;
-         if (temp - currtri.radmod < min.z) min.z = temp - currtri.radmod;
+         for (int j = 0; j < 3; ++j)
+         {
+            Triangle& currtri = *tris[i];
+            dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
+            if (dist > size) size = dist;
+            temp = currtri.v[j]->pos.x - localpos.x;
+            if (temp + currtri.radmod > max.x) max.x = temp + currtri.radmod;
+            if (temp - currtri.radmod < min.x) min.x = temp - currtri.radmod;
+            temp = currtri.v[j]->pos.y - localpos.y;
+            if (temp + currtri.radmod > max.y) max.y = temp + currtri.radmod;
+            if (temp - currtri.radmod < min.y) min.y = temp - currtri.radmod;
+            temp = currtri.v[j]->pos.z - localpos.z;
+            if (temp + currtri.radmod > max.z) max.z = temp + currtri.radmod;
+            if (temp - currtri.radmod < min.z) min.z = temp - currtri.radmod;
+         }
       }
+      height = max.y - min.y;
+      width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
    }
-   height = max.y - min.y;
-   width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
+   boundschanged = false;
 }
 
 
@@ -1005,6 +1015,7 @@ void Mesh::Add(TrianglePtr& tri)
          tri->v[i]->id = vertices.size() - 1;
       }
    }
+   boundschanged = true;
 }
 
 
@@ -1031,6 +1042,7 @@ void Mesh::Add(Mesh* mesh)
    childmeshes.push_back(mesh);
    newchildren = true;
    tris.clear();
+   boundschanged = true;
 }
 
 

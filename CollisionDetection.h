@@ -45,10 +45,10 @@ class CollisionDetection
 // From http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 #ifdef INLINE_COLDET
 inline
-#endif
 float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, const Vector3& start, const Vector3& end)
 {
    if (start.distance2(end) < 1e-5f) return 0.f;
    return ((end - start).cross(start - point)).magnitude() / (end - start).magnitude();
 }
+#endif
 #endif
