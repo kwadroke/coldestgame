@@ -238,8 +238,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       
       // Generate primitives from our points
       
-      // This was a good idea, but it turns out there are problems with it and fast moving projectiles
-      /*if (lev == 0)
+      if (lev == 0)
       {
          Vector3 colstart, colend;
          for (int j = 0; j < oldpts.size(); ++j)
@@ -258,8 +257,9 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          coltri->v[2]->pos = colend;
          coltri->radmod = radius;
          coltri->collide = true;
+         coltri->material = bark;
          mesh->Add(coltri);
-      }*/
+      }
       int newind, newind1;
       for (int j = 0; j < oldpts.size(); ++j)
       {
@@ -291,8 +291,8 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          tc[1] = 1.f - float(currseg + 1) / float(locnumsegs);
          tempq.SetTexCoords(3, 0, tc);
          
-         if (lev == 0)
-            tempq.SetCollide(true);
+         //if (lev == 0)
+         //   tempq.SetCollide(true);
          
          mesh->Add(tempq);
          ++totalprims;

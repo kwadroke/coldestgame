@@ -12,7 +12,7 @@ Vector3::Vector3(const float& xin, const float& yin, const float& zin) : x(xin),
 }
 
 
-#ifndef INLINEME
+#ifndef INLINE_VECTOR3
 float Vector3::dot(const Vector3& v) const
 {
    return x * v.x + y * v.y + z * v.z;

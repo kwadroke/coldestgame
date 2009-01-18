@@ -37,12 +37,15 @@ bool Triangle::TriPtrComp(const TrianglePtr& l, const TrianglePtr& r)
 
 void Triangle::CalcMaxDim()
 {
-   maxdim = v[0]->pos.distance(v[1]->pos);
-   float tempdim = v[0]->pos.distance(v[2]->pos);
-   if (tempdim > maxdim) maxdim = tempdim;
-   tempdim = v[1]->pos.distance(v[2]->pos);
-   if (tempdim > maxdim) maxdim = tempdim;
    midpoint = (v[0]->pos + v[1]->pos + v[2]->pos) / 3.f;
+   maxdim = v[0]->pos.distance2(midpoint);
+   float tempdim = v[1]->pos.distance2(midpoint);
+   if (tempdim > maxdim)
+      maxdim = tempdim;
+   tempdim = v[2]->pos.distance2(midpoint);
+   if (tempdim > maxdim)
+      maxdim = tempdim;
+   maxdim = sqrt(maxdim);
    maxdim += radmod;
 }
 

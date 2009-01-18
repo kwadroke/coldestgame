@@ -102,7 +102,7 @@ void Repaint()
          else
          {
             viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
-            gluLookAt(viewoff.x, viewoff.y + 1.5f, viewoff.z + .01f, viewoff.x, viewoff.y + 1.5f, viewoff.z, 0, 1, 0);
+            gluLookAt(viewoff.x, viewoff.y/* + 1.5f*/, viewoff.z + .01f, viewoff.x, viewoff.y /*+ 1.5f*/, viewoff.z, 0, 1, 0);
          }
       }
       

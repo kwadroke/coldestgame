@@ -149,7 +149,6 @@ void Bot::Listen()
             get >> playernum;
             get >> map;
             get >> newteam;
-            needconnect = false;
             botconnected = true;
             /*itemsreceived.clear();
             hitsreceived.clear();*/
