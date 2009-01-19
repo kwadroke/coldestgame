@@ -85,8 +85,8 @@ void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpva
    {
       for (size_t i = 0; i < vsize; ++i)
       {
-         Vertex& verti = *vertices[i];
-         Vertex& interpvi = *interpnode->vertices[i];
+         Vertex& verti = vertices[i];
+         Vertex& interpvi = interpnode->vertices[i];
          Vertex& currvert = *verts[verti.id];
          
          currvert.pos = lerp(interpvi.pos, verti.pos, interpval);
@@ -107,10 +107,10 @@ void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpva
    {
       for (size_t i = 0; i < vsize; ++i)
       {
-         Vertex& verti = *vertices[i];
+         Vertex& verti = vertices[i];
          Vertex& currvert = *verts[verti.id];
          
-         currvert.pos = lerp(interpnode->vertices[i]->pos, verti.pos, interpval);
+         currvert.pos = lerp(interpnode->vertices[i].pos, verti.pos, interpval);
          currvert.pos.transform(m);
       }
    }
@@ -182,7 +182,7 @@ void MeshNode::TransformNoIntLoop(VertexPtrvec& verts, const GraphicMatrix& pare
    {
       for (size_t i = 0; i < vsize; ++i)
       {
-         Vertex& verti = *vertices[i];
+         Vertex& verti = vertices[i];
          Vertex& currvert = *verts[verti.id];
          
          currvert.pos = verti.pos;
@@ -202,7 +202,7 @@ void MeshNode::TransformNoIntLoop(VertexPtrvec& verts, const GraphicMatrix& pare
    {
       for (size_t i = 0; i < vsize; ++i)
       {
-         Vertex& verti = *vertices[i];
+         Vertex& verti = vertices[i];
          Vertex& currvert = *verts[verti.id];
          
          currvert.pos = verti.pos;
@@ -222,11 +222,7 @@ MeshNodePtr MeshNode::Clone()
    newmn->children.clear();
    newmn->parent = parent;
    newmn->gl = gl;
-   
-   for (size_t i = 0; i < vertices.size(); ++i)
-   {
-      newmn->vertices[i] = VertexPtr(new Vertex(*vertices[i]));
-   }
+   newmn->vertices = vertices;
    
    for (int i = 0; i < children.size(); ++i)
    {
@@ -248,7 +244,7 @@ void MeshNode::Scale(const float& sval)
 {
    for (size_t i = 0; i < vertices.size(); ++i)
    {
-      vertices[i]->pos *= sval;
+      vertices[i].pos *= sval;
    }
    trans *= sval;
    for (int i = 0; i < children.size(); ++i)
@@ -262,7 +258,7 @@ void MeshNode::ScaleZ(const float& sval)
 {
    for (size_t i = 0; i < vertices.size(); ++i)
    {
-      vertices[i]->pos.z *= sval;
+      vertices[i].pos.z *= sval;
    }
    trans.z *= sval;
    for (int i = 0; i < children.size(); ++i)

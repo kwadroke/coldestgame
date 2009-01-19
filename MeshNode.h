@@ -37,7 +37,7 @@ class MeshNode
       Vector3 rot1, rot2;
       Vector3 trans;
       vector<shared_ptr<MeshNode> > children;
-      VertexPtrvec vertices;
+      Vertexvec vertices;
       GraphicMatrix m;
       string name;
       MeshNode* parent;
