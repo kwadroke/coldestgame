@@ -266,35 +266,35 @@ void Mesh::Load(const IniReader& reader)
             for (int k = 0; k < currcon.NumChildren(); ++k)
             {
                const IniReader& currvert = currcon(k);
-               VertexPtr newv(new Vertex());
-               currvert.Read(newv->id, "ID");
-               currvert.Read(newv->pos.x, "Pos", 0);
-               currvert.Read(newv->pos.y, "Pos", 1);
-               currvert.Read(newv->pos.z, "Pos", 2);
-               currvert.Read(newv->norm.x, "Norm", 0);
-               currvert.Read(newv->norm.y, "Norm", 1);
-               currvert.Read(newv->norm.z, "Norm", 2);
-               newv->pos *= scale;
+               Vertex newv;
+               currvert.Read(newv.id, "ID");
+               currvert.Read(newv.pos.x, "Pos", 0);
+               currvert.Read(newv.pos.y, "Pos", 1);
+               currvert.Read(newv.pos.z, "Pos", 2);
+               currvert.Read(newv.norm.x, "Norm", 0);
+               currvert.Read(newv.norm.y, "Norm", 1);
+               currvert.Read(newv.norm.z, "Norm", 2);
+               newv.pos *= scale;
                for (int m = 0; m < 8; ++m)
                {
-                  currvert.Read(newv->texcoords[m][0], "TC", m * 2);
-                  currvert.Read(newv->texcoords[m][1], "TC", m * 2 + 1);
+                  currvert.Read(newv.texcoords[m][0], "TC", m * 2);
+                  currvert.Read(newv.texcoords[m][1], "TC", m * 2 + 1);
                }
                int intermediate; // These are uchars, so they will only read a single digit if read directly
                for (size_t m = 0; m < 4; ++m)
                {
-                  intermediate = newv->color[m];
+                  intermediate = newv.color[m];
                   currvert.Read(intermediate, "Color", m);
-                  newv->color[m] = intermediate;
+                  newv.color[m] = intermediate;
                }
                newnode->vertices.push_back(newv);
                if (!i)
                {
-                  vertices.push_back(VertexPtr(new Vertex(*newv)));
-                  vertmap[newv->id] = vertices.size() - 1;
+                  vertices.push_back(VertexPtr(new Vertex(newv)));
+                  vertmap[newv.id] = vertices.size() - 1;
                   vertices.back()->id = vertices.size() - 1;
                }
-               newv->id = vertmap[newv->id];
+               newnode->vertices.back().id = vertmap[newv.id];
             }
             currcon.Read(newnode->facing, "Facing");
             currcon.Read(newnode->name, "Name");
@@ -753,10 +753,10 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    impmat->SetTexture(0, impfbo.GetTexture());
    float width2 = width / 2.f;
    float height2 = height / 2.f;
-   impostor->frameroot[0]->vertices[0]->pos = Vector3(-width2, height2, 0);
-   impostor->frameroot[0]->vertices[1]->pos = Vector3(-width2, -height2, 0);
-   impostor->frameroot[0]->vertices[2]->pos = Vector3(width2, height2, 0);
-   impostor->frameroot[0]->vertices[3]->pos = Vector3(width2, -height2, 0);
+   impostor->frameroot[0]->vertices[0].pos = Vector3(-width2, height2, 0);
+   impostor->frameroot[0]->vertices[1].pos = Vector3(-width2, -height2, 0);
+   impostor->frameroot[0]->vertices[2].pos = Vector3(width2, height2, 0);
+   impostor->frameroot[0]->vertices[3].pos = Vector3(width2, -height2, 0);
    
    Vector3 moveto = position;
    impostor->Move(moveto);
