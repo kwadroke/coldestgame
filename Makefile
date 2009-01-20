@@ -420,10 +420,11 @@ Bot.o: /usr/include/bits/mathdef.h
 Bot.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Bot.o: /usr/include/bits/mathcalls.h
 Bot.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h GraphicMatrix.h
-Bot.o: tsint.h globals.h Mesh.h Triangle.h Vertex.h types.h Material.h
-Bot.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-Bot.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-Bot.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+Bot.o: tsint.h globals.h Mesh.h Triangle.h Vertex.h types.h
+Bot.o: VectorHeapPointer.h VectorHeap.h Material.h TextureManager.h
+Bot.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Bot.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Bot.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Bot.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Bot.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Bot.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -719,10 +720,11 @@ CollisionDetection.o: /usr/include/boost/detail/sp_counted_base.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_counted_impl.hpp
 CollisionDetection.o: /usr/include/boost/detail/workaround.hpp
-CollisionDetection.o: GraphicMatrix.h Material.h TextureManager.h
-CollisionDetection.o: TextureHandler.h /usr/include/SDL/SDL_image.h
-CollisionDetection.o: IniReader.h Shader.h ResourceManager.h SoundManager.h
-CollisionDetection.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
+CollisionDetection.o: VectorHeapPointer.h VectorHeap.h GraphicMatrix.h
+CollisionDetection.o: Material.h TextureManager.h TextureHandler.h
+CollisionDetection.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+CollisionDetection.o: ResourceManager.h SoundManager.h ALBuffer.h
+CollisionDetection.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 CollisionDetection.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 CollisionDetection.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 CollisionDetection.o: /usr/include/ogg/os_types.h
@@ -846,9 +848,9 @@ Console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Console.o: /usr/include/boost/detail/sp_counted_base.hpp
 Console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Console.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Console.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-Console.o: Material.h TextureManager.h TextureHandler.h
-Console.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Console.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+Console.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+Console.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Console.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Console.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Console.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -1463,14 +1465,14 @@ Item.o: /usr/include/bits/mathdef.h
 Item.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 Item.o: /usr/include/bits/mathcalls.h
 Item.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h Triangle.h
-Item.o: Vertex.h types.h GraphicMatrix.h Material.h TextureManager.h
-Item.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
-Item.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-Item.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
-Item.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
-Item.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Item.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
-Item.o: util.h tsint.h Timer.h
+Item.o: Vertex.h types.h VectorHeapPointer.h VectorHeap.h GraphicMatrix.h
+Item.o: Material.h TextureManager.h TextureHandler.h
+Item.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
+Item.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
+Item.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+Item.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+Item.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+Item.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
 Light.o: Light.h Vector3.h glinc.h /usr/include/GL/glew.h
 Light.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Light.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1745,9 +1747,9 @@ Material.o: /usr/include/boost/detail/sp_counted_base.hpp
 Material.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Material.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Material.o: /usr/include/boost/detail/workaround.hpp Shader.h globals.h
-Material.o: Mesh.h Triangle.h Vertex.h GraphicMatrix.h ResourceManager.h
-Material.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
-Material.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Material.o: Mesh.h Triangle.h Vertex.h VectorHeapPointer.h VectorHeap.h
+Material.o: GraphicMatrix.h ResourceManager.h SoundManager.h ALBuffer.h
+Material.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 Material.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Material.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Material.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
@@ -2008,10 +2010,11 @@ Mesh.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_base.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Mesh.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Mesh.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
-Mesh.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-Mesh.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-Mesh.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+Mesh.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+Mesh.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+Mesh.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Mesh.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Mesh.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Mesh.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Mesh.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Mesh.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -2141,14 +2144,14 @@ MeshCache.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 MeshCache.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 MeshCache.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 MeshCache.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-MeshCache.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-MeshCache.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-MeshCache.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-MeshCache.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
-MeshCache.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
-MeshCache.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-MeshCache.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
-MeshCache.o: FBO.h util.h tsint.h Timer.h
+MeshCache.o: VectorHeapPointer.h VectorHeap.h GraphicMatrix.h Material.h
+MeshCache.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+MeshCache.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+MeshCache.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+MeshCache.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+MeshCache.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+MeshCache.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+MeshCache.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
 MeshNode.o: MeshNode.h Triangle.h Vertex.h Vector3.h glinc.h
 MeshNode.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 MeshNode.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -2266,11 +2269,11 @@ MeshNode.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_base.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 MeshNode.o: /usr/include/boost/detail/sp_counted_impl.hpp
-MeshNode.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-MeshNode.o: Material.h TextureManager.h TextureHandler.h
-MeshNode.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-MeshNode.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-MeshNode.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+MeshNode.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+MeshNode.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+MeshNode.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+MeshNode.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+MeshNode.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 MeshNode.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 MeshNode.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 MeshNode.o: /usr/include/ogg/config_types.h ALSource.h globals.h Mesh.h
@@ -2556,10 +2559,10 @@ ObjectKDTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-ObjectKDTree.o: Material.h TextureManager.h TextureHandler.h
-ObjectKDTree.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-ObjectKDTree.o: ResourceManager.h SoundManager.h ALBuffer.h
+ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+ObjectKDTree.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+ObjectKDTree.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+ObjectKDTree.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 ObjectKDTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ObjectKDTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ObjectKDTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -2755,11 +2758,11 @@ Particle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_base.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Particle.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Particle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-Particle.o: Material.h TextureManager.h TextureHandler.h
-Particle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-Particle.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-Particle.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Particle.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+Particle.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+Particle.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+Particle.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+Particle.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 Particle.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Particle.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Particle.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
@@ -3052,7 +3055,8 @@ ParticleEmitter.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ParticleEmitter.o: /usr/include/boost/detail/sp_counted_base.hpp
 ParticleEmitter.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ParticleEmitter.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ParticleEmitter.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ParticleEmitter.o: /usr/include/boost/detail/workaround.hpp
+ParticleEmitter.o: VectorHeapPointer.h VectorHeap.h GraphicMatrix.h
 ParticleEmitter.o: Material.h TextureManager.h TextureHandler.h
 ParticleEmitter.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 ParticleEmitter.o: ResourceManager.h SoundManager.h ALBuffer.h
@@ -3338,10 +3342,10 @@ PlayerData.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_base.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 PlayerData.o: /usr/include/boost/detail/sp_counted_impl.hpp
-PlayerData.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-PlayerData.o: Material.h TextureManager.h TextureHandler.h
-PlayerData.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-PlayerData.o: ResourceManager.h SoundManager.h ALBuffer.h
+PlayerData.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+PlayerData.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+PlayerData.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+PlayerData.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 PlayerData.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 PlayerData.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 PlayerData.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -3594,11 +3598,12 @@ ProceduralTree.o: /usr/include/boost/detail/sp_counted_base.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
 ProceduralTree.o: /usr/include/boost/detail/workaround.hpp Mesh.h Triangle.h
-ProceduralTree.o: Vertex.h types.h Material.h TextureManager.h
-ProceduralTree.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
-ProceduralTree.o: ResourceManager.h SoundManager.h ALBuffer.h
-ProceduralTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
-ProceduralTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+ProceduralTree.o: Vertex.h types.h VectorHeapPointer.h VectorHeap.h
+ProceduralTree.o: Material.h TextureManager.h TextureHandler.h
+ProceduralTree.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
+ProceduralTree.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+ProceduralTree.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+ProceduralTree.o: /usr/include/vorbis/vorbisfile.h
 ProceduralTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ProceduralTree.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
 ProceduralTree.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
@@ -3712,9 +3717,9 @@ Quad.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Quad.o: /usr/include/boost/detail/sp_counted_base.hpp
 Quad.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Quad.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Quad.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
-Quad.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-Quad.o: IniReader.h Shader.h
+Quad.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+Quad.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+Quad.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Quaternion.o: Quaternion.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quaternion.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Quaternion.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -4171,10 +4176,10 @@ ServerState.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 ServerState.o: /usr/include/boost/detail/sp_counted_base.hpp
 ServerState.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ServerState.o: /usr/include/boost/detail/sp_counted_impl.hpp
-ServerState.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-ServerState.o: Material.h TextureManager.h TextureHandler.h
-ServerState.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-ServerState.o: ResourceManager.h SoundManager.h ALBuffer.h
+ServerState.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+ServerState.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+ServerState.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+ServerState.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 ServerState.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ServerState.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ServerState.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -4759,9 +4764,10 @@ Triangle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Triangle.o: /usr/include/boost/detail/sp_counted_base.hpp
 Triangle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Triangle.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Triangle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-Triangle.o: Material.h TextureManager.h TextureHandler.h
-Triangle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Triangle.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+Triangle.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+Triangle.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+Triangle.o: Shader.h
 Vector3.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Vector3.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Vector3.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -4851,6 +4857,8 @@ Vector3.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Vector3.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Vector3.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Vector3.o: /usr/include/SDL/SDL_version.h
+VectorHeap.o: VectorHeap.h VectorHeapPointer.h
+VectorHeapPointer.o: VectorHeapPointer.h VectorHeap.h
 Vertex.o: Vertex.h Vector3.h glinc.h /usr/include/GL/glew.h
 Vertex.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Vertex.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -4965,7 +4973,8 @@ Vertex.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 Vertex.o: /usr/include/boost/detail/sp_counted_base.hpp
 Vertex.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Vertex.o: /usr/include/boost/detail/sp_counted_impl.hpp
-Vertex.o: /usr/include/boost/detail/workaround.hpp
+Vertex.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+Vertex.o: VectorHeap.h
 Weapon.o: Weapon.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
 Weapon.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Weapon.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -5327,10 +5336,11 @@ actions.o: /usr/include/bits/mathdef.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 actions.o: /usr/include/bits/mathcalls.h
 actions.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
-actions.o: Mesh.h Triangle.h Vertex.h types.h GraphicMatrix.h Material.h
-actions.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-actions.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-actions.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+actions.o: Mesh.h Triangle.h Vertex.h types.h VectorHeapPointer.h
+actions.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+actions.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+actions.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+actions.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 actions.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 actions.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 actions.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -5644,9 +5654,9 @@ coldest.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 coldest.o: /usr/include/boost/detail/sp_counted_base.hpp
 coldest.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 coldest.o: /usr/include/boost/detail/sp_counted_impl.hpp
-coldest.o: /usr/include/boost/detail/workaround.hpp Material.h
-coldest.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
-coldest.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+coldest.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+coldest.o: VectorHeap.h Material.h TextureManager.h IniReader.h Shader.h
+coldest.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 coldest.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 coldest.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 coldest.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
@@ -5915,10 +5925,10 @@ editor.o: /usr/include/boost/detail/sp_counted_base.hpp
 editor.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 editor.o: /usr/include/boost/detail/sp_counted_impl.hpp
 editor.o: /usr/include/boost/detail/workaround.hpp Mesh.h Triangle.h Vertex.h
-editor.o: types.h Material.h TextureManager.h TextureHandler.h
-editor.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
-editor.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
-editor.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+editor.o: types.h VectorHeapPointer.h VectorHeap.h Material.h
+editor.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+editor.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+editor.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 editor.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 editor.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 editor.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -6330,10 +6340,11 @@ getmap.o: /usr/include/bits/mathdef.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathdef.h
 getmap.o: /usr/include/bits/mathcalls.h
 getmap.o: /usr/include/gentoo-multilib/amd64/bits/mathcalls.h logout.h Log.h
-getmap.o: Triangle.h Vertex.h types.h GraphicMatrix.h Material.h
-getmap.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-getmap.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-getmap.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+getmap.o: Triangle.h Vertex.h types.h VectorHeapPointer.h VectorHeap.h
+getmap.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+getmap.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
+getmap.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+getmap.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 getmap.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 getmap.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 getmap.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -6458,9 +6469,9 @@ globals.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 globals.o: /usr/include/boost/detail/sp_counted_base.hpp
 globals.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 globals.o: /usr/include/boost/detail/sp_counted_impl.hpp
-globals.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-globals.o: Material.h TextureManager.h TextureHandler.h
-globals.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+globals.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+globals.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+globals.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 globals.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 globals.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 globals.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -6886,10 +6897,11 @@ net.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 net.o: /usr/include/boost/detail/sp_counted_base.hpp
 net.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 net.o: /usr/include/boost/detail/sp_counted_impl.hpp
-net.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
-net.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-net.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-net.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+net.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+net.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+net.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+net.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+net.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 net.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 net.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 net.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -7157,9 +7169,9 @@ netdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 netdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
-netdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-netdefs.o: Material.h TextureManager.h TextureHandler.h
-netdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+netdefs.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+netdefs.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+netdefs.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 netdefs.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 netdefs.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 netdefs.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -7281,10 +7293,11 @@ render.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 render.o: /usr/include/boost/detail/sp_counted_base.hpp
 render.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 render.o: /usr/include/boost/detail/sp_counted_impl.hpp
-render.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
-render.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-render.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-render.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+render.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+render.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+render.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+render.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+render.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 render.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 render.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 render.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -7563,10 +7576,10 @@ renderdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 renderdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
-renderdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-renderdefs.o: Material.h TextureManager.h TextureHandler.h
-renderdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-renderdefs.o: ResourceManager.h SoundManager.h ALBuffer.h
+renderdefs.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+renderdefs.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+renderdefs.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+renderdefs.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
 renderdefs.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 renderdefs.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 renderdefs.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -7837,10 +7850,11 @@ server.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 server.o: /usr/include/boost/detail/sp_counted_base.hpp
 server.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 server.o: /usr/include/boost/detail/sp_counted_impl.hpp
-server.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
-server.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-server.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-server.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+server.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+server.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+server.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+server.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+server.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 server.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 server.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 server.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -8110,11 +8124,11 @@ settings.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 settings.o: /usr/include/boost/detail/sp_counted_base.hpp
 settings.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 settings.o: /usr/include/boost/detail/sp_counted_impl.hpp
-settings.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-settings.o: Material.h TextureManager.h TextureHandler.h
-settings.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-settings.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-settings.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+settings.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+settings.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+settings.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+settings.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+settings.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 settings.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 settings.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 settings.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
@@ -8543,9 +8557,9 @@ gui/GUI.o: /usr/include/boost/detail/bad_weak_ptr.hpp
 gui/GUI.o: /usr/include/boost/detail/sp_counted_base.hpp
 gui/GUI.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 gui/GUI.o: /usr/include/boost/detail/sp_counted_impl.hpp
-gui/GUI.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
-gui/GUI.o: Material.h TextureManager.h TextureHandler.h
-gui/GUI.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+gui/GUI.o: /usr/include/boost/detail/workaround.hpp VectorHeapPointer.h
+gui/GUI.o: VectorHeap.h GraphicMatrix.h Material.h TextureManager.h
+gui/GUI.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 gui/GUI.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 gui/GUI.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 gui/GUI.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h

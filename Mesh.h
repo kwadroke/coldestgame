@@ -1,6 +1,7 @@
 #ifndef __MESH_H
 #define __MESH_H
 
+#include <map>
 #include "Vector3.h"
 #include "Triangle.h"
 #include "types.h"
@@ -11,7 +12,7 @@
 #include "MeshNode.h"
 #include "FBO.h"
 #include "util.h"
-#include <map>
+#include "VectorHeap.h"
 #include "Timer.h" // Debugging
 
 using std::map;
@@ -85,6 +86,8 @@ class Mesh
       
       bool glops; // Whether to do things like GenVbo
       
+      VectorHeap<Vertex> vertheap;
+      
    private:
       void UpdateTris(int, const Vector3&);
       void BindVbo();
@@ -92,7 +95,7 @@ class Mesh
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;
-      VertexPtrvec vertices;
+      VertexVHPvec vertices;
       intvec vbosteps;
       GLuint vbo;
       GLuint ibo;

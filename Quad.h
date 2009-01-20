@@ -2,6 +2,7 @@
 #define __QUAD_H
 
 #include "Triangle.h"
+#include "VectorHeap.h"
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
@@ -9,11 +10,11 @@
 class Quad
 {
    public:
-      Quad();
+      Quad(VertexHeap&);
       Quad(const Quad&);
       Quad& operator=(const Quad&);
-      void SetVertexPtr(const int, const VertexPtr&);
-      VertexPtr GetVertexPtr(const int) const;
+      void SetVertexVHP(const int, const VertexVHP&);
+      VertexVHP GetVertexVHP(const int) const;
       void SetVertex(const int, const Vector3&);
       inline Vector3 GetVertex(const int) const;
       void SetNormal(const int, const Vector3&);
@@ -24,11 +25,13 @@ class Quad
       void SetTerrainWeight(const int, const int, const float);
       TrianglePtr First() {return first;}
       TrianglePtr Second() {return second;}
+      void ChangeHeap(VertexHeap&);
       
    private:
       inline void GetVertNums(const int, int&, int&) const;
       
       TrianglePtr first, second;
+      VertexHeap* vertheap;
 
 };
 

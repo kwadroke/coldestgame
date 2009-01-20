@@ -74,6 +74,7 @@ class ObjectKDTree
       Vector3vec vertices;
       MeshSet* retobjs;
       bool root;
+      VertexHeap vertheap;
       Quadvec p; // Only set in root node
       Quadvec* frustum; // Pointer to root's p
       static int maxlevels;
