@@ -16,6 +16,7 @@ endif
 
 #DEFINES += -DDEBUGSMT
 #DEFINES += -D_REENTRANT  This one is already added by sdl-config
+#DEFINES += -DNDEBUG
 
 # As it turns out static linking is a gigantic PITA, so I'm not going to bother
 #LDLIBS = -Wl,-v -Wl,-Bstatic -lSDL_ttf -lfreetype -lSDL_image -lSDL_net -L./lib -lxerces-c -lz -lGLEW `sdl-config --static-libs` -ldl -Wl,-Bdynamic -lGL -lGLU
@@ -76,10 +77,10 @@ master: $(MASTER)
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f *.o *~ gui/*.o gui/*~ coldest
-
-cleanobjs:
 	rm -f *.o *~ gui/*.o gui/*~
+
+cleanall:
+	rm -f *.o *~ gui/*.o gui/*~ coldest server
 	
 cleangui:
 	rm -f $(GUI)

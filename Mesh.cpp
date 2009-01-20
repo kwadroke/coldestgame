@@ -1050,25 +1050,6 @@ void Mesh::Add(Mesh* mesh)
 }
 
 
-void Mesh::Begin()
-{
-   next = 0;
-}
-
-
-bool Mesh::HasNext() const
-{
-   return next < tris.size();
-}
-
-
-Triangle& Mesh::Next()
-{
-   ++next;
-   return *tris[next - 1];
-}
-
-
 int Mesh::Size() const
 {
    return tris.size();

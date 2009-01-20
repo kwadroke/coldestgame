@@ -61,14 +61,14 @@ template <class T>
 VectorHeapPointer<T> VectorHeap<T>::insert(T& object)
 {
    size_t rsize = refcount.size();
-//    for (size_t i = 0; i < rsize; ++i)
-//    {
-//       if (refcount[i] == 0)
-//       {
-//          v[i] = object;
-//          return VectorHeapPointer<T>(this, i);
-//       }
-//    }
+   for (size_t i = 0; i < rsize; ++i)
+   {
+      if (refcount[i] == 0)
+      {
+         v[i] = object;
+         return VectorHeapPointer<T>(this, i);
+      }
+   }
    v.push_back(object);
    refcount.push_back(0);
    return VectorHeapPointer<T>(this, v.size() - 1);

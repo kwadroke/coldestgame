@@ -62,9 +62,9 @@ class Mesh
       float GetAnimSpeed() const{return animspeed;}
       float GetScale() const{return scale;}
       
-      void Begin();
-      bool HasNext() const;
-      Triangle& Next();
+      void Begin() {next = 0;}
+      bool HasNext() const {return next < tris.size();}
+      Triangle& Next() {++next; return *tris[next - 1];}
       
       int Size() const; // Not related to size member
       void AdvanceAnimation(const Vector3& campos = Vector3());
