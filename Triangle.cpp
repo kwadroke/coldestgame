@@ -1,10 +1,10 @@
 #include "Triangle.h"
 
-Triangle::Triangle() : maxdim(-1.f), material(NULL), collide(false),   
-                       matrix(GraphicMatrix()), radmod(0.f), v(VertexPtrvec(3))
+Triangle::Triangle(VertexHeap& vertheap) : maxdim(-1.f), material(NULL), collide(false),   
+                       matrix(GraphicMatrix()), radmod(0.f), v(VertexVHPvec(3))
 {
    for (size_t i = 0; i < 3; ++i)
-      v[i] = VertexPtr(new Vertex());
+      v[i] = vertheap.insert();
 }
 
 

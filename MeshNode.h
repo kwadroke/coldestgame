@@ -21,10 +21,10 @@ class MeshNode
 {
    public:
       MeshNode();
-      void Transform(const shared_ptr<MeshNode>&, const float, VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
-      void TransformLoop(const shared_ptr<MeshNode>&, const float, VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
-      void TransformNoInt(VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
-      void TransformNoIntLoop(VertexPtrvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void Transform(const shared_ptr<MeshNode>&, const float, VertexVHPvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void TransformLoop(const shared_ptr<MeshNode>&, const float, VertexVHPvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void TransformNoInt(VertexVHPvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
+      void TransformNoIntLoop(VertexVHPvec&, const GraphicMatrix&, const GraphicMatrix&, const Vector3&);
       shared_ptr<MeshNode> Clone();
       void GetContainers(map<string, shared_ptr<MeshNode> >& cont, shared_ptr<MeshNode>&);
       void Scale(const float&);

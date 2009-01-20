@@ -7,6 +7,7 @@
 #include "glinc.h"
 #include "types.h"
 #include <boost/shared_ptr.hpp>
+#include "VectorHeapPointer.h"
 
 using std::map;
 
@@ -69,6 +70,9 @@ typedef vector<Vertex> Vertexvec;
 typedef boost::shared_ptr<Vertex> VertexPtr;
 typedef vector<VertexPtr> VertexPtrvec;
 typedef map<string, VertexPtr> VertMap;
+typedef VectorHeapPointer<Vertex> VertexVHP;
+typedef vector<VertexVHP> VertexVHPvec;
+typedef VectorHeap<Vertex> VertexHeap;
 
 
 //inline 

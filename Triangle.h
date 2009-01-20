@@ -1,13 +1,14 @@
 #ifndef __TRIANGLE_H
 #define __TRIANGLE_H
 
+#include <vector>
+#include <string>
 #include "Vertex.h"
 #include "Vector3.h"
 #include "types.h"
 #include "GraphicMatrix.h"
 #include "Material.h"
-#include <vector>
-#include <string>
+#include "VectorHeap.h"
 
 using std::vector;
 using std::string;
@@ -24,7 +25,7 @@ using std::string;
 class Triangle
 {
    public:
-      Triangle();
+      Triangle(VertexHeap&);
       bool operator<(const Triangle&) const;
       bool operator>(const Triangle&) const;
       ushortvec GetIndices();
@@ -32,7 +33,7 @@ class Triangle
       static float Perimeter(const Vector3&, const Vector3&, const Vector3&);
       void CalcMaxDim();
       
-      VertexPtrvec v;
+      VertexVHPvec v;
       Material* material;
       string matname;
       bool collide;

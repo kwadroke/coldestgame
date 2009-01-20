@@ -203,6 +203,7 @@ void ServerLoop()
    
    Uint32 currtick;
    bool doanimation = true;
+   int checkmap = 0;
    Timer frametimer;
    frametimer.start();
    
@@ -215,21 +216,26 @@ void ServerLoop()
             SDL_Delay(1);
       }
       frametimer.start();
-         
-      SDL_mutexP(clientmutex); // Have to have clientmutex before touching mapname
-      if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
+      
+      // Grabbing clientmutex can take a long time, so don't check every time through
+      if (checkmap % 5 == 0)
       {
-         if (gameover && SDL_GetTicks() > nextmaptime)
+         SDL_mutexP(clientmutex); // Have to have clientmutex before touching mapname
+         if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
          {
-            srand(time(0));
-            int choosemap = (int)Random(0, maplist.size());
-            console.Parse("set map " + maplist[choosemap], false);
+            if (gameover && SDL_GetTicks() > nextmaptime)
+            {
+               srand(time(0));
+               int choosemap = (int)Random(0, maplist.size());
+               console.Parse("set map " + maplist[choosemap], false);
+            }
+            SDL_mutexV(clientmutex);
+            ServerLoadMap();
+            SDL_mutexP(clientmutex); // Avoid double unlock.  Necessary?  Eh.
          }
          SDL_mutexV(clientmutex);
-         ServerLoadMap();
-         SDL_mutexP(clientmutex); // Avoid double unlock.  Necessary?  Eh.
       }
-      SDL_mutexV(clientmutex);
+      checkmap = (checkmap + 1) % 5;
       
       SDL_mutexP(servermutex);
       for (int i = 1; i < serverplayers.size(); ++i)

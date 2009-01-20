@@ -34,7 +34,6 @@ struct TerrainParams
 
 vector<TerrainParams> terrparams;
 int terrainstretch;
-Quadvec worldbounds(6, Quad());
 
 void Repaint();
 float Max(float, float);
@@ -278,15 +277,6 @@ void GetMap(string fn)
    // Done loading heightmap
    
    // Data structures for storing relevant values
-   typedef vector<Quad> terrvec;
-   vector<terrvec> terrprims;
-   terrvec temp;
-   Quad quad;
-   for (int i = 0; i < maph - 1; ++i)
-      temp.push_back(quad);
-   for (int i = 0; i < mapw - 1; ++i)
-      terrprims.push_back(temp);
-   
    vector<Vector3vec> normals;
    Vector3vec temp1;
    Vector3 v;
@@ -437,7 +427,7 @@ void GetMap(string fn)
    progtext->text = "Building terrain";
    Repaint();
 #endif
-   // Build terrain objects
+   // Build terrain meshes
    int numobjsx = mapw / terrobjsize;
    int numobjsy = maph / terrobjsize;
    vector<Meshlist::iterator> meshits;
@@ -466,7 +456,7 @@ void GetMap(string fn)
       for (int y = 0; y < maph - 1; ++y)
       {
          currmesh = meshits[(y / terrobjsize) * numobjsx + (x / terrobjsize)];
-         Quad tempquad;
+         Quad tempquad(currmesh->vertheap);
          tempquad.SetVertex(0, Vector3(x * tilesize, heightmap[x][y], y * tilesize));
          tempquad.SetVertex(1, Vector3(x * tilesize, heightmap[x][y + 1], (y + 1) * tilesize));
          tempquad.SetVertex(2, Vector3((x + 1) * tilesize, heightmap[x + 1][y + 1], (y + 1) * tilesize));
@@ -607,12 +597,12 @@ void GetMap(string fn)
          if (size1 - size2 > float(tilesize) * .2f || 
              (mid1.y < mid2.y && size1 - size2 > -float(tilesize) * .2f))// Then rotate the quad so the triangle split happens on the other axis
          {
-            VertexPtr last = tempquad.GetVertexPtr(0);
+            VertexVHP last = tempquad.GetVertexVHP(0);
             for (size_t i = 0; i < 3; ++i)
             {
-               tempquad.SetVertexPtr(i, tempquad.GetVertexPtr((i + 1) % 4));
+               tempquad.SetVertexVHP(i, tempquad.GetVertexVHP((i + 1) % 4));
             }
-            tempquad.SetVertexPtr(3, last);
+            tempquad.SetVertexVHP(3, last);
                
          }
          
@@ -656,7 +646,7 @@ void GetMap(string fn)
    watermaxy = maph * tilesize + 5000.f;
    int numwaterx = (int)(watermaxx - waterminx) / (int)waterchunksize;
    int numwatery = (int)(watermaxy - waterminy) / (int)waterchunksize;
-   logout << numwaterx << "  " << numwatery << endl;
+   //logout << numwaterx << "  " << numwatery << endl;
    
    if (watermesh) delete watermesh;
    
@@ -667,7 +657,7 @@ void GetMap(string fn)
    {
       for (int j = 0; j < numwatery; ++j)
       {
-         Quad tempquad;
+         Quad tempquad(watermesh->vertheap);
          tempquad.SetVertex(0, Vector3(i * waterchunksize + waterminx, 0, j * waterchunksize + waterminy));
          tempquad.SetVertex(1, Vector3(i * waterchunksize + waterminx, 0, (j + 1) * waterchunksize + waterminy));
          tempquad.SetVertex(2, Vector3((i + 1) * waterchunksize + waterminx, 0, (j + 1) * waterchunksize + waterminy));

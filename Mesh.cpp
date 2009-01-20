@@ -56,10 +56,10 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
-   VertexPtrvec localvert = m.vertices;
-   for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
+   VertexVHPvec localvert = m.vertices;
+   for (VertexVHPvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
    {
-      VertexPtr p(new Vertex(**i));
+      VertexVHP p = vertheap.insert(**i);
       vertices.push_back(p);
    }
    for (size_t i = 0; i < m.tris.size(); ++i)
@@ -138,10 +138,10 @@ Mesh& Mesh::operator=(const Mesh& m)
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
    vertices.clear();
-   VertexPtrvec localvert = m.vertices;
-   for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
+   VertexVHPvec localvert = m.vertices;
+   for (VertexVHPvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
    {
-      VertexPtr p(new Vertex(**i));
+      VertexVHP p = vertheap.insert(**i);
       vertices.push_back(p);
    }
    tris.clear();
@@ -290,7 +290,7 @@ void Mesh::Load(const IniReader& reader)
                newnode->vertices.push_back(newv);
                if (!i)
                {
-                  vertices.push_back(VertexPtr(new Vertex(newv)));
+                  vertices.push_back(vertheap.insert(newv));
                   vertmap[newv.id] = vertices.size() - 1;
                   vertices.back()->id = vertices.size() - 1;
                }
@@ -332,7 +332,7 @@ void Mesh::Load(const IniReader& reader)
             for (size_t j = 0; j < readtris.NumChildren(); ++j)
             {
                const IniReader& curr = readtris(j);
-               TrianglePtr newtri(new Triangle());
+               TrianglePtr newtri(new Triangle(vertheap));
                for (int k = 0; k < 3; ++k)
                {
                   curr.Read(vid, "Verts", k);
@@ -359,7 +359,7 @@ void Mesh::Load(const IniReader& reader)
       float height = size;
       for (int j = 0; j < numleaves; j++)
       {
-         Quad newquad;
+         Quad newquad(vertheap);
          reader.Read(material, "Materials");
          newquad.SetMaterial(&resman.LoadMaterial(material));
          newquad.SetCollide(false);
@@ -433,7 +433,7 @@ void Mesh::Move(const Vector3& v, bool movetris)
    {
       Vector3 move = v - position;
       
-      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      for (VertexVHPvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
       {
          (*i)->pos += move;
       }
@@ -477,7 +477,7 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
       m.rotatez(v.z);
       m.translate(pos);
       
-      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      for (VertexVHPvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
       {
          (*i)->pos.transform(m);
       }
@@ -509,9 +509,9 @@ void Mesh::GenVbo()
             currmesh = this;
          else
             currmesh = childmeshes[m - 1];
-         VertexPtrvec& currvertices = currmesh->vertices;
-         VertexPtrvec::iterator cvend = currvertices.end();
-         for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
+         VertexVHPvec& currvertices = currmesh->vertices;
+         VertexVHPvec::iterator cvend = currvertices.end();
+         for (VertexVHPvec::iterator i = currvertices.begin(); i != cvend; ++i)
          {
             (*i)->tangent = Vector3();
          }
@@ -534,7 +534,7 @@ void Mesh::GenVbo()
          }
          
          // Build VBO
-         for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
+         for (VertexVHPvec::iterator i = currvertices.begin(); i != cvend; ++i)
          {
             Vertex& currv = **i;
             currv.tangent.normalize();
@@ -761,7 +761,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    Vector3 moveto = position;
    impostor->Move(moveto);
    impostor->AdvanceAnimation(campos);
-   rendermesh.Add(*impostor);
+   //rendermesh.Add(*impostor);
 #endif
 }
 
@@ -1004,6 +1004,10 @@ void Mesh::ResetTriMaxDims()
 }
 
 
+// Note: Triangles whose vertices were not allocated from our heap should not be added.
+// Because we're no longer allocating vertices on the global heap and using smart pointers
+// to ensure they aren't deleted out from under us, we have no guarantee that vertices outside
+// our heap will still be there when we need them.
 void Mesh::Add(TrianglePtr& tri)
 {
    tris.push_back(tri);
