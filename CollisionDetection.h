@@ -22,7 +22,7 @@ class CollisionDetection
                              vector<Mesh*>* = NULL, const bool extcheck = true, const bool debug = false);
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, const bool extcheck = true);
       // Useful for external code too
-      float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&);
+      float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&, const float);
       bool UnitTest();
       
       int intmethod;
@@ -31,9 +31,9 @@ class CollisionDetection
       vector<Quad> worldbounds;
       
    private:
-      Vector3 PlaneSphereCollision(const Triangle&, const Vector3&, const Vector3&, const float&, Vector3&, const bool debug = false);
-      Vector3 PlaneEdgeSphereCollision(const Triangle&, const Vector3&, const float&);
-      Vector3 VectorEdgeCheck(const Triangle&, const Vector3&, const Vector3&, const float&);
+      bool PlaneSphereCollision(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&, Vector3&, const bool debug = false);
+      bool PlaneEdgeSphereCollision(Vector3&, const Triangle&, const Vector3&, const float&);
+      bool VectorEdgeCheck(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&);
       bool InVector(Mesh*, vector<Meshlist::iterator>&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const Vector3&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&);
@@ -46,10 +46,11 @@ class CollisionDetection
 // From http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 #ifdef INLINE_COLDET
 inline
-float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, const Vector3& start, const Vector3& end)
+float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, const Vector3& start, const Vector3& move, const float movemaginv)
 {
-   if (start.distance2(end) < 1e-5f) return 0.f;
-   return ((end - start).cross(start - point)).magnitude() / (end - start).magnitude();
+   // This check is not required for any code that calls us and it helps performance significantly if we don't do it
+   //if (movemag < 1e-5f) return 0.f;
+   return(move.cross(start - point).magnitude() * movemaginv);
 }
 #endif
 #endif

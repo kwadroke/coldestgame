@@ -1365,6 +1365,8 @@ void Rewind(int ticks, const Vector3& start, const Vector3& end, const float rad
       if (currtick - oldstate[i].tick >= ticks) break;
    }
    
+   Vector3 move = end - start;
+   float movemaginv = 1.f / start.distance(end);
    size_t rewindcounter = 0;
    for (size_t j = 0; j < oldstate[i].index.size(); ++j)
    {
@@ -1373,7 +1375,7 @@ void Rewind(int ticks, const Vector3& start, const Vector3& end, const float rad
       {
          for (size_t k = 0; k < numbodyparts; ++k)
          {
-            if (coldet.DistanceBetweenPointAndLine(oldstate[i].position[j][k], start, end) < radius + oldstate[i].size[j][k] &&
+            if (coldet.DistanceBetweenPointAndLine(oldstate[i].position[j][k], start, move, movemaginv) < radius + oldstate[i].size[j][k] &&
                serverplayers[p].hp[k] > 0)
             {
                ++rewindcounter;
