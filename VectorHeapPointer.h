@@ -78,12 +78,12 @@ class VectorHeapPointer
          return heap != NULL;
       }
       
-      bool operator==(const VectorHeapPointer<T>& p)
+      bool operator==(const VectorHeapPointer<T>& p) const
       {
          return index == p.index && heap == p.heap;
       }
       
-      bool operator<(const VectorHeapPointer<T>& p)
+      bool operator<(const VectorHeapPointer<T>& p) const
       {
          if (heap != p.heap)
             return heap < p.heap;

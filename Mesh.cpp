@@ -1034,9 +1034,19 @@ void Mesh::Add(Quad& quad)
 
 void Mesh::Add(Mesh &mesh)
 {
+   map<VertexVHP, VertexVHP> vmap;
+   for (size_t i = 0; i < mesh.vertices.size(); ++i)
+   {
+      vertices.push_back(vertheap.insert(*mesh.vertices[i]));
+      vertices.back()->id = vertices.size() - 1;
+      vmap[mesh.vertices[i]] = vertices.back();
+   }
    for (size_t i = 0; i < mesh.tris.size(); ++i)
    {
-      Add(mesh.tris[i]);
+      TrianglePtr p(new Triangle(*mesh.tris[i]));
+      for (size_t j = 0; j < 3; ++j)
+         p->v[j] = vmap[mesh.tris[i]->v[j]];
+      Add(p);
    }
 }
 

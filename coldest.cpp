@@ -1140,7 +1140,7 @@ void Cleanup()
 
 void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
 {
-   // In case we hit something
+   // In case we run into problems
    Vector3 old = mplayer.pos;
    
    // Calculate how far to move based on time since last frame
@@ -1252,35 +1252,55 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       mplayer.pos.y += d.y * step * mplayer.speed;
    else
    {
-      float startheight = GetTerrainHeight(old.x, old.z);
-      float endheight = GetTerrainHeight(mplayer.pos.x, mplayer.pos.z);
-      Vector3 groundcheckpos = old;
-      groundcheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
+      bool downslope = false;
+      bool flat = false;
       
-      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, groundcheckpos, mplayer.size);
-      Vector3 slopecheck = coldet.CheckSphereHit(old, groundcheckpos, .01f, check, false);
-      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0, mplayer.size + .1f, 0), mplayer.size * 1.1f, check, false);
+      Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
+      Vector3 oldoffset = old - Vector3(0, mplayer.size / 2.f, 0);
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, oldoffset, legoffset, mplayer.size * (threshold + 1.f));
+         
+      Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.01f, check, false);
+      
+      if (downcheck.distance2() < 1e-5f)
+      {
+         downslope = true;
+      }
+      if (!downslope)
+      {
+         Vector3 upcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * .99f, check, false);
+         if (upcheck.distance2() < 1e-5f)
+            flat = true;
+      }
+      
+      
+      Vector3 slopecheckpos = old;
+      slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
+      
+      Vector3 slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check, false);
+      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check, false);
       
       if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
       {
-         if (mplayer.fallvelocity > .00001f)
-         {
-            // Eventually this might do damage if they fall too far
-            //logout << "Hit ground " << mplayer.fallvelocity << endl;
-         }
+         // Fall damage if wanted (disabled for now)
+//          if (mplayer.fallvelocity > .00001f)
+//          {
+//          }
          mplayer.fallvelocity = 0.f;
          if (mplayer.weight < .99f)
          {
             mplayer.pos.y -= step * 30.f * mplayer.weight;
          }
-         else if (!floatzero(mplayer.speed) && (endheight < startheight + 1e-4)) // Moving downhill
+         else if (!floatzero(mplayer.speed) && downslope) // Moving downhill
          {
+            // Give them a little push down to keep them on the ground
             mplayer.pos.y -= step * 2.f;
          }
-         else if (!floatzero(mplayer.speed)) // Moving uphill
+         else if (!floatzero(mplayer.speed) && !flat) // Moving uphill
          {
-            mplayer.pos.y -= step * 1.f;
+            mplayer.pos = lerp(mplayer.pos, old, .75f);
          }
+         else if (!floatzero(mplayer.speed)) // Mostly flat
+            mplayer.pos.y -= step;
       }
       else
       {
