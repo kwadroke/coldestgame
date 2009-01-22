@@ -149,6 +149,7 @@ void InitGlobals()
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 1", false);
    console.Parse("set overheat 1", false);
+   console.Parse("set syncmax 40", false);
    
    // I'm not entirely sure why this is separated from the declaration of dummy above,
    // but I'm not inclined to potentially break something by moving it either.
@@ -1259,7 +1260,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 oldoffset = old - Vector3(0, mplayer.size / 2.f, 0);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, oldoffset, legoffset, mplayer.size * (threshold + 1.f));
          
-      Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.01f, check, false);
+      Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.f, check, false);
       
       if (downcheck.distance2() < 1e-5f)
       {
@@ -1267,7 +1268,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       }
       if (!downslope)
       {
-         Vector3 upcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * .99f, check, false);
+         Vector3 upcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * .9f, check, false);
          if (upcheck.distance2() < 1e-5f)
             flat = true;
       }
@@ -1423,7 +1424,7 @@ void SynchronizePosition()
    static deque<Uint32> pings;
    if (player[servplayernum].ping >= 0 && player[servplayernum].ping < 2000)
       pings.push_back(player[servplayernum].ping);
-   while (pings.size() > 200)
+   while (pings.size() > 100)
       pings.pop_front();
    
    int ping = 0;
@@ -1446,8 +1447,6 @@ void SynchronizePosition()
    
    while (oldpos.size() > 500)
       oldpos.pop_front();
-   //while (oldpos.size() && oldpos.front().tick + 3000 < currtick) // Also remove very old oldpos's
-   //   oldpos.pop_front();
    
    if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object
    {
@@ -1501,14 +1500,22 @@ void SynchronizePosition()
    /* If we're way off, snap quite a bit because things are hopelessly out of sync and need
       to be fixed quickly.  If we're not moving then don't slide at all, as this looks
       quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
-   if (difference > 10.f && difference < 30.f)
-      posadj *= .7f;
-   else if (floatzero(player[0].speed))
-      posadj *= 0.f;
-   else if (difference > .2f)
-      posadj *= .2f;
-   // Note: If difference < .2f then we snap to the server location, but it's not noticeable
-   // because the error is so small
+   float syncmax = console.GetFloat("syncmax") / 100.f;
+   if (difference < 30.f)
+   {
+      if (difference > syncmax)
+      {
+         posadj.normalize();
+         posadj *= syncmax;
+      }
+   }
+   else posadj *= .5f;
+   static int large = 0, total = 0;
+   ++total;
+   if (difference > 9.f)
+      ++large;
+      //logout << difference << endl;
+   logout << large << "/" << total << endl;
    
    player[0].pos += posadj;
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
