@@ -462,7 +462,7 @@ void UpdateEditorGUI()
       guip.rotz->text = ToString(selected->GetRotation().z);
       guip.scale->text = ToString(selected->GetScale());
       guip.file->text = selected->GetFile();
-      guip.objecttris->text = ToString(selected->Size());
+      guip.objecttris->text = ToString(selected->NumTris());
       
       if (treemap.find(selected) != treemap.end())
       {

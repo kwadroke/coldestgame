@@ -1411,7 +1411,8 @@ void SynchronizePosition()
    return;
 #endif
    static deque<OldPosition> oldpos;
-   static int smoothfactor = 3;
+   static int smoothfactor = 1;
+   static int wayoffcount = 0;
    OldPosition temp;
    Uint32 currtick = SDL_GetTicks();
    Vector3 smoothserverpos;
@@ -1424,7 +1425,7 @@ void SynchronizePosition()
    static deque<Uint32> pings;
    if (player[servplayernum].ping >= 0 && player[servplayernum].ping < 2000)
       pings.push_back(player[servplayernum].ping);
-   while (pings.size() > 100)
+   while (pings.size() > 10)
       pings.pop_front();
    
    int ping = 0;
@@ -1433,7 +1434,9 @@ void SynchronizePosition()
    if (pings.size() != 0)
       ping /= pings.size();
    else ping = 0;
-   
+
+//#define SMOOTHPOS
+#ifdef SMOOTHPOS
    // Also smooth out positions over a few frames to further reduce jumpiness
    static deque<int> recentoldpos;
    static deque<PlayerData> recentservinfo;
@@ -1444,10 +1447,10 @@ void SynchronizePosition()
    for (deque<PlayerData>::iterator i = recentservinfo.begin(); i != recentservinfo.end(); ++i)
       smoothserverpos += i->pos;
    smoothserverpos /= recentservinfo.size();
-   
+#endif
    while (oldpos.size() > 500)
       oldpos.pop_front();
-   
+
    if (oldpos.size() < 1) // If oldpos is empty, populate it with a single object
    {
       temp.tick = currtick;
@@ -1477,7 +1480,7 @@ void SynchronizePosition()
          currindex = (currindex + lower) / 2;
       }
    }
-   
+#if SMOOTHPOS
    recentoldpos.push_back(currindex);
    while (recentoldpos.size() > smoothfactor)
       recentoldpos.pop_front();
@@ -1487,35 +1490,41 @@ void SynchronizePosition()
    
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
-   float pingslop = .3f;
+   float pingslop = 0.f;//.3f;
    float diffslop = difference - (float)tickdiff * pingslop;
    difference = diffslop > 0 ? diffslop : 0.f;
+#else
+   smoothserverpos = player[servplayernum].pos;
+   smootholdpos = oldpos[currindex].pos;
+   float difference = smoothserverpos.distance(smootholdpos);
+#endif
    
-   // vecdiff is not necessary, everything can probably be put directly into posadj now
-   Vector3 vecdiff = smoothserverpos - smootholdpos;
-   vecdiff.normalize();
-   vecdiff *= difference;
-   Vector3 posadj = vecdiff;
+   Vector3 posadj = smoothserverpos - smootholdpos;
    
-   /* If we're way off, snap quite a bit because things are hopelessly out of sync and need
-      to be fixed quickly.  If we're not moving then don't slide at all, as this looks
-      quite bad.  Otherwise, just adjust a little bit to keep us in sync.*/
+#if SMOOTHPOS
+   posadj.normalize();
+   posadj *= difference;
+#endif
+   
+   // Limit the max adjustment to syncmax in general so that we don't get nasty hitching while
+   // moving.  The exception is if we're way off in which case some hitching is necessary
    float syncmax = console.GetFloat("syncmax") / 100.f;
-   if (difference < 30.f)
+   if (difference < 30.f || wayoffcount < 3)
    {
       if (difference > syncmax)
       {
          posadj.normalize();
          posadj *= syncmax;
       }
+      if (difference < 30.f)
+         wayoffcount = 0;
+      else
+         ++wayoffcount;
    }
-   else posadj *= .5f;
-   static int large = 0, total = 0;
-   ++total;
-   if (difference > 9.f)
-      ++large;
-      //logout << difference << endl;
-   logout << large << "/" << total << endl;
+   else
+   {
+      posadj *= .5f;
+   }
    
    player[0].pos += posadj;
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
@@ -1611,15 +1620,13 @@ void Animate()
    additems.clear();
    
    // Meshes
-   static bool doanim = true;
-   if (doanim)
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
-      {
-         i->AdvanceAnimation(player[0].pos);
-      }
+      i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 10.f);
+      if (i->updatedelay > 300)
+         i->updatedelay = 300;
+      i->AdvanceAnimation(player[0].pos);
    }
-   doanim = !doanim;
    
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();
@@ -2075,15 +2082,9 @@ void UpdatePlayer()
    resman.soundman.SetListenPos(localplayer.pos);
 #endif
       
-      // Update the local model so there isn't a frame of lag.
    if (!player[0].spectate)
    {
       UpdatePlayerModel(player[0], meshes);
-      for (size_t i = 0; i < numbodyparts; ++i)
-      {
-         if (player[0].mesh[i] != meshes.end())
-            player[0].mesh[i]->AdvanceAnimation();
-      }
    }
       
    SDL_mutexV(clientmutex);

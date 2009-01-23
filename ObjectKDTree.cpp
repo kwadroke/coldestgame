@@ -257,7 +257,7 @@ void ObjectKDTree::refine(int level)
 
 bool ObjectKDTree::insert(Mesh *obj)
 {
-   if (innode(obj->GetPosition(), obj->size))
+   if (innode(obj->GetPosition(), obj->GetSize()))
    {
       members.push_back(obj);
       return true;
@@ -444,7 +444,7 @@ bool ObjectKDTree::infrustum(Mesh* obj)
       startside = norm.dot(obj->GetPosition()) + d;
       startside = -startside;
 
-      if (startside > obj->size) return false;
+      if (startside > obj->GetSize()) return false;
 
    }
    return true;
