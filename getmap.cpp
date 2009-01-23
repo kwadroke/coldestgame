@@ -622,7 +622,7 @@ void GetMap(string fn)
    for (size_t i = 0; i < meshits.size(); ++i)
    {
       Vector3 currpos = meshits[i]->GetPosition();
-      currpos.y /= meshits[i]->Size() / 2.f;
+      currpos.y /= meshits[i]->NumTris() / 2.f;
       meshits[i]->Move(currpos);
    }
    
@@ -777,7 +777,7 @@ void GetMap(string fn)
                   }
                }
             }
-            if (grassmesh.Size())
+            if (grassmesh.NumTris())
             {
                float mx = (x + (float)groupsize / 2.f) * grasssizex;
                float my = (y + (float)groupsize / 2.f) * grasssizey;

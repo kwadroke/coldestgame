@@ -32,6 +32,7 @@ class Mesh
       bool operator>(const Mesh&) const;
       void CalcBounds();
       void Load(const IniReader&);
+      void UpdateTris();
       void Move(const Vector3&, bool movetris = false);
       const Vector3 GetPosition() const;
       void Rotate(const Vector3&, bool movetris = false);
@@ -55,25 +56,25 @@ class Mesh
       void SetAnimation(const int);
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
       void ReadState(Vector3&, Vector3&, int&, int&, float&, float&);
-      float GetWidth(){return width;}
-      float GetHeight(){return height;}
+      float GetWidth(){UpdateTris(); return width;}
+      float GetHeight(){UpdateTris(); return height;}
+      float GetSize(){UpdateTris(); return size;}
       void SetGL();
       string GetFile() const{return basefile;}
       float GetAnimSpeed() const{return animspeed;}
       float GetScale() const{return scale;}
       
-      void Begin() {next = 0;}
+      void Begin() {next = 0; UpdateTris();}
       bool HasNext() const {return next < tris.size();}
       Triangle& Next() {++next; return *tris[next - 1];}
       
-      int Size() const; // Not related to size member
+      int NumTris() const; // Not related to size member
       void AdvanceAnimation(const Vector3& campos = Vector3());
       
       bool render;
       bool dynamic;
       bool collide;
       bool terrain;
-      float size; // I'm not sure this should be public, but for the moment we'll go with it
       float drawdistmult;
       string name;
       
@@ -84,12 +85,12 @@ class Mesh
       Uint32 lastimpupdate;
       bool debug;
       
-      bool glops; // Whether to do things like GenVbo
+      bool glops;
+      int updatedelay;
       
       VectorHeap<Vertex> vertheap;
       
    private:
-      void UpdateTris(int, const Vector3&);
       void BindVbo();
       void ResetTriMaxDims();
       
@@ -120,6 +121,7 @@ class Mesh
       
       Vector3 position;
       Vector3 rots;
+      float size;
       float height, width;
       Vector3 max, min;
       
@@ -131,8 +133,14 @@ class Mesh
       int next;
       
       bool havemats;
+      bool updatevbo;
       string basefile;
       float scale;
+      
+      Vector3 campos;
+      bool trisdirty;
+      Mesh* parent;
+      Uint32 lasttick;
 };
 
 typedef list<Mesh> Meshlist;

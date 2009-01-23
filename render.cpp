@@ -280,7 +280,8 @@ void RenderObjects(const PlayerData& localplayer)
       else
          localdrawdist = viewdist;
       
-      if (i->dist > (localdrawdist + i->size) * (localdrawdist + i->size)
+      float isize = i->GetSize();
+      if (i->dist > (localdrawdist + isize) * (localdrawdist + isize)
           && !staticdrawdist && !shadowrender)
       {
          continue; // Skip it if it's too far away
@@ -296,7 +297,7 @@ void RenderObjects(const PlayerData& localplayer)
       if (floatzero(i->impdist) || i->dist < adjustedimpdist || shadowrender || debug)
       {
          i->Render(override);
-         trislastframe += i->Size();
+         trislastframe += i->NumTris();
       }
       else
       {
@@ -323,13 +324,13 @@ void RenderObjects(const PlayerData& localplayer)
       if (i->dynamic)
       {
          i->Render(override);
-         trislastframe += i->Size();
+         trislastframe += i->NumTris();
       }
    }
    
    impostormesh->GenVbo();
    impostormesh->Render(override);
-   trislastframe += impostormesh->Size();
+   trislastframe += impostormesh->NumTris();
    
    glDepthMask(GL_TRUE); // Otherwise we may screw up rendering elsewhere
 }
@@ -344,7 +345,7 @@ void RenderParticles()
       if (shadowrender) override = shadowmat;
       particlemesh->GenVbo();
       particlemesh->Render(override);
-      trislastframe += particlemesh->Size();
+      trislastframe += particlemesh->NumTris();
    }
 }
 
@@ -469,7 +470,7 @@ void UpdateFBO(const PlayerData& localplayer)
       lights.Place();
       
       i->Render();
-      trislastframe += i->Size();
+      trislastframe += i->NumTris();
       
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
@@ -897,7 +898,7 @@ void RenderHud(const PlayerData& localplayer)
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
    if (particlemesh)
-      partlabel->text = "Particles: " + ToString(particlemesh->Size());
+      partlabel->text = "Particles: " + ToString(particlemesh->NumTris());
    torsohplabel->text = "Torso: " + ToString(localplayer.hp[Torso]);
    legshplabel->text = "Legs: " + ToString(localplayer.hp[Legs]);
    leftarmhplabel->text = "Left Arm: " + ToString(localplayer.hp[LArm]);

@@ -446,6 +446,17 @@ int ServerListen(void* dummy)
                   serverplayers.push_back(temp);
                   respondto = serverplayers.size() - 1;
                   validaddrs.insert(SortableIPaddress(inpack->address));
+                  
+                  // Choose a team for them
+                  vector<int> teamcount(2, 0);
+                  for (size_t i = 1; i < serverplayers.size(); ++i)
+                  {
+                     if (serverplayers[i].team != 0 && serverplayers[i].connected)
+                        ++teamcount[serverplayers[i].team - 1];
+                  }
+                  logout << teamcount[0] << " " << teamcount[1] << endl;
+                  int newteam = teamcount[0] > teamcount[1] ? 2 : 1;
+                  serverplayers[respondto].team = newteam;
                }
                
                if (!serverplayers[respondto].connected)
@@ -466,15 +477,7 @@ int ServerListen(void* dummy)
                fill << packetnum << eol;
                fill << respondto << eol;
                fill << console.GetString("map") << eol;
-               vector<int> teamcount(2, 0);
-               for (size_t i = 1; i < serverplayers.size(); ++i)
-               {
-                  if (serverplayers[i].team != 0 && serverplayers[i].connected)
-                     ++teamcount[serverplayers[i].team - 1];
-               }
-               int newteam = teamcount[0] > teamcount[1] ? 2 : 1;
-               fill << newteam << eol;
-               serverplayers[respondto].team = newteam;
+               fill << serverplayers[respondto].team << eol;
                
                fill.addr = serverplayers[respondto].addr;
                servqueue.push_back(fill);

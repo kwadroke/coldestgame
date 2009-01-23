@@ -6,7 +6,8 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
             size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
             impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
             currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), terrain(false), dist(0.f), 
-            animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false), boundschanged(true), scale(.01f)
+            animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false), boundschanged(true), scale(.01f), updatevbo(true),
+            trisdirty(true), parent(NULL), updatedelay(0), lasttick(0)
 {
 #ifndef DEDICATED
    if (gl)
@@ -40,7 +41,8 @@ Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.im
          childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
          basefile(m.basefile), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), dist(m.dist), animspeed(m.animspeed),
          curranimation(m.curranimation), nextanimation(m.nextanimation), newchildren(m.newchildren), boundschanged(m.boundschanged),
-         numframes(m.numframes), startframe(m.startframe), scale(m.scale)
+         numframes(m.numframes), startframe(m.startframe), scale(m.scale), updatevbo(m.updatevbo), campos(m.campos),
+         trisdirty(m.trisdirty), parent(m.parent), updatedelay(m.updatedelay), lasttick(m.lasttick)
 {
 #ifndef DEDICATED
    if (m.impmat)
@@ -122,6 +124,12 @@ Mesh& Mesh::operator=(const Mesh& m)
    numframes = m.numframes;
    startframe = m.startframe;
    scale = m.scale;
+   updatevbo = m.updatevbo;
+   campos = m.campos;
+   trisdirty = m.trisdirty;
+   parent = m.parent;
+   updatedelay = m.updatedelay;
+   lasttick = m.lasttick;
    
 #ifndef DEDICATED
    if (m.impmat)
@@ -348,7 +356,7 @@ void Mesh::Load(const IniReader& reader)
             }
          }
       }
-      UpdateTris(0, Vector3());
+      UpdateTris();
    }
    else if (type == "bush")
    {
@@ -437,12 +445,11 @@ void Mesh::Move(const Vector3& v, bool movetris)
       {
          (*i)->pos += move;
       }
-      GenVbo();
       CalcBounds();
    }
    
    position = v;
-   ResetTriMaxDims();
+   //trisdirty = true;
 }
 
 
@@ -481,12 +488,11 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
       {
          (*i)->pos.transform(m);
       }
-      GenVbo();
       CalcBounds();
    }
    
    rots = v;
-   ResetTriMaxDims();
+   //trisdirty = true;
 }
 
 
@@ -597,13 +603,10 @@ void Mesh::GenVbo()
       vbosize = vbodata.size() * sizeof(VBOData);
       ibosize = indexdata.size() * sizeof(unsigned short);
       
-      if (!glops)
-      {
-         LoadMaterials();
-      }
       hasvbo = true;
    }
    glops = true;
+   updatevbo = false;
 #endif
 }
 
@@ -658,6 +661,11 @@ void Mesh::BindVbo()
 void Mesh::Render(Material* overridemat)
 {
 #ifndef DEDICATED
+   UpdateTris();
+   if (updatevbo)
+      GenVbo();
+   if (!havemats)
+      LoadMaterials();
    if (!tris.size() || !render || !hasvbo)
    {
       return;
@@ -766,7 +774,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 }
 
 
-void Mesh::AdvanceAnimation(const Vector3& campos)
+void Mesh::AdvanceAnimation(const Vector3& cpos)
 {
    // Ideally this would be < 2, but it causes some problems ATM
    if (frameroot.size() < 1) // || frameroot.size() < 2 && !dynamic
@@ -791,7 +799,11 @@ void Mesh::AdvanceAnimation(const Vector3& campos)
       if (currkeyframe >= startframe[curranimation] + numframes[curranimation] - 1)
          currkeyframe = startframe[curranimation];
    }
-   UpdateTris(currkeyframe, campos);
+   // We no longer call UpdateTris from this function because it won't always be needed, and there are only a few
+   // places we have to insert the call elsewhere to guarantee that it is called when needed.  This way we don't
+   // do unnecessary UpdateTris (which can take a significant amount of CPU)
+   trisdirty = true;
+   campos = cpos;
 }
 
 
@@ -801,8 +813,14 @@ void Mesh::AdvanceAnimation(const Vector3& campos)
 // frameroot[index + 1] based on animtime
 
 // TODO: Doesn't currently update transparent tris (but then neither does anything else ATM)
-void Mesh::UpdateTris(int index, const Vector3& campos)
+void Mesh::UpdateTris()
 {
+   Uint32 currtick = SDL_GetTicks();
+   if (!trisdirty || !frameroot.size() ||
+      (currkeyframe < startframe[curranimation] || currkeyframe >= startframe[curranimation] + numframes[curranimation]) ||
+      (currtick - lasttick < updatedelay))
+      return;
+   lasttick = currtick;
    float interpval;
    if (frametime.size() > 0)
       interpval = (float)animtime / (float)frametime[currkeyframe];
@@ -811,8 +829,6 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    
    if (glops && !hasvbo) // Means we set glops with SetGL
       LoadMaterials(); // Need to do this before Transform
-   else if (index < startframe[curranimation] || index >= startframe[curranimation] + numframes[curranimation])
-      return;
    
    GraphicMatrix m, nm;
    
@@ -820,9 +836,10 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    m.rotatey(rots.y);
    m.rotatez(rots.z);
    
-   if (frameroot[index]->parent)
+   if (frameroot[currkeyframe]->parent)
    {
-      nm = frameroot[index]->parent->m;
+      parent->UpdateTris();
+      nm = frameroot[currkeyframe]->parent->m;
       nm.members[12] = 0.f;
       nm.members[13] = 0.f;
       nm.members[14] = 0.f;
@@ -836,27 +853,26 @@ void Mesh::UpdateTris(int index, const Vector3& campos)
    
    if (curranimation != nextanimation)
    {
-      frameroot[index]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, nm, campos);
+      frameroot[currkeyframe]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, nm, campos);
       boundschanged = true;
    }
    else
    {
-      if (index == startframe[curranimation] + numframes[curranimation] - 1)
+      if (currkeyframe == startframe[curranimation] + numframes[curranimation] - 1)
       {
-         frameroot[index]->Transform(frameroot[index], interpval, vertices, m, nm, campos);
+         frameroot[currkeyframe]->Transform(frameroot[currkeyframe], interpval, vertices, m, nm, campos);
       }
       else
       {
-         frameroot[index]->Transform(frameroot[index + 1], interpval, vertices, m, nm, campos);
+         frameroot[currkeyframe]->Transform(frameroot[currkeyframe + 1], interpval, vertices, m, nm, campos);
          boundschanged = true;
       }
    }
    
    CalcBounds();
    ResetTriMaxDims();
-   
-   if (glops)
-      GenVbo();
+   trisdirty = false;
+   updatevbo = true;
 }
 
 
@@ -912,8 +928,8 @@ void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, 
       position = pos;
    }
    
-   // campos is not important because this is only called by the server (at this time)
-   UpdateTris(currkeyframe, Vector3());
+   trisdirty = true;
+   UpdateTris();
 }
 
 
@@ -934,11 +950,8 @@ void Mesh::LoadMaterials()
    if (havemats) return;
    for (size_t i = 0; i < tris.size(); ++i)
    {
-      for (size_t j = 0; j < tris.size(); ++j)
-      {
-         if (!tris[i]->material && tris[i]->matname != "")
-            tris[i]->material = &resman.LoadMaterial(tris[i]->matname);
-      }
+      if (!tris[i]->material && tris[i]->matname != "")
+         tris[i]->material = &resman.LoadMaterial(tris[i]->matname);
    }
    impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
    havemats = true;
@@ -979,6 +992,7 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
    {
       m.frameroot[i]->parent = &(*framecontainer[i][name]);
    }
+   m.parent = this;
 }
 
 
@@ -1060,7 +1074,7 @@ void Mesh::Add(Mesh* mesh)
 }
 
 
-int Mesh::Size() const
+int Mesh::NumTris() const
 {
    return tris.size();
 }

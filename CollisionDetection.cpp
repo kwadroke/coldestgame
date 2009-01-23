@@ -56,7 +56,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       {
          Mesh& currmesh = *allobjs[i];
          Vector3 currpos = currmesh.GetPosition();
-         if (DistanceBetweenPointAndLine(currpos, oldpos, move, movemaginv) <= currmesh.size + radius)
+         if (DistanceBetweenPointAndLine(currpos, oldpos, move, movemaginv) <= currmesh.GetSize() + radius)
          {
             float currheight = currmesh.GetHeight();
             float currwidth = currmesh.GetWidth();
@@ -74,7 +74,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       {
          Mesh& currmesh = *allobjs[i];
          Vector3 currpos = currmesh.GetPosition();
-         if (currpos.distance(oldpos) <= currmesh.size + radius)
+         if (currpos.distance(oldpos) <= currmesh.GetSize() + radius)
          {
             float currheight = currmesh.GetHeight();
             float currwidth = currmesh.GetWidth();
