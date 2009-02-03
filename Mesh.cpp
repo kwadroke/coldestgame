@@ -605,7 +605,8 @@ void Mesh::GenVbo()
       
       hasvbo = true;
    }
-   glops = true;
+   if (!glops)
+      SetGL();
    updatevbo = false;
 #endif
 }
@@ -806,11 +807,6 @@ void Mesh::AdvanceAnimation(const Vector3& cpos)
    campos = cpos;
 }
 
-
-// Parameter is index into frameroot, if invalid (i.e. negative or > frameroot.size())
-// then this does nothing.  If frameroot.size() == 1 then it simply returns the tris
-// described by that nodetree.  Otherwise, interpolate between frameroot[index] and
-// frameroot[index + 1] based on animtime
 
 // TODO: Doesn't currently update transparent tris (but then neither does anything else ATM)
 void Mesh::UpdateTris()
