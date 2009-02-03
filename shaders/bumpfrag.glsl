@@ -30,4 +30,5 @@ void main()
    
    gl_FragColor = color * texture2D(tex, gl_TexCoord[0].st);
    //gl_FragColor.rg = gl_TexCoord[0].st;
+   //gl_FragColor.rgb = lightdir * 2. - 1.;
 }
