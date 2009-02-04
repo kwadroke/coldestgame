@@ -1049,6 +1049,8 @@ void Mesh::Add(Quad& quad)
 void Mesh::Add(Mesh &mesh)
 {
    mesh.UpdateTris();
+   if (glops)
+      mesh.SetGL();
    map<VertexVHP, VertexVHP> vmap;
    for (size_t i = 0; i < mesh.vertices.size(); ++i)
    {
@@ -1069,6 +1071,8 @@ void Mesh::Add(Mesh &mesh)
 void Mesh::Add(Mesh* mesh)
 {
    mesh->UpdateTris();
+   if (glops)
+      mesh->SetGL();
    childmeshes.push_back(mesh);
    newchildren = true;
    tris.clear();

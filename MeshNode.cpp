@@ -76,7 +76,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
 
 
 // Split this off to aid profiling - inline when not profiling
-//inline
+inline
 void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpval, VertexVHPvec& verts, 
                              const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
 {
