@@ -198,6 +198,7 @@ void EditorEventHandler(SDL_Event event)
             // Trees have a tendency to slide around while being rotated, this resets them
             if (treemap.find(selected) != treemap.end())
             {
+               selected->Move(selected->GetPosition() - Vector3(0.f, selected->GetHeight() / 2.f, 0.f));
                selected->Clear();
                treemap[selected].GenTree(selected, &resman.LoadMaterial(treemap[selected].barkfile), &resman.LoadMaterial(treemap[selected].leavesfile));
             }
@@ -286,6 +287,7 @@ bool EditorGUIEventHandler(SDL_Event event)
                   // Trees have a tendency to slide around while being rotated, this resets them
                   if (treemap.find(selected) != treemap.end())
                   {
+                     selected->Move(selected->GetPosition() - Vector3(0.f, selected->GetHeight() / 2.f, 0.f));
                      selected->Clear();
                      treemap[selected].GenTree(selected, &resman.LoadMaterial(treemap[selected].barkfile), &resman.LoadMaterial(treemap[selected].leavesfile));
                   }
@@ -340,10 +342,11 @@ bool MoveObject(SDL_Event& event)
          Vector3 sideways = d.cross(Vector3(0, -1, 0));
          sideways.normalize();
          
+         Vector3 oldpos = selected->GetPosition();
          if (SDL_GetModState() & KMOD_CTRL)
-            selected->Move(selected->GetPosition() + Vector3(0.f, -event.motion.yrel * modifier, 0.f), true);
+            selected->Move(oldpos + Vector3(0.f, -event.motion.yrel * modifier, 0.f), true);
          else
-            selected->Move(selected->GetPosition() + 
+            selected->Move(oldpos + 
                   d * event.motion.yrel * modifier +
                   sideways * event.motion.xrel * modifier, true);
          UpdateEditorGUI();
@@ -634,7 +637,7 @@ void SaveObject()
       {
          MeshPtr newmesh = meshcache->GetNewMesh("models/empty");
          
-         newmesh->Move(pos);
+         newmesh->Move(pos - Vector3(0.f, selected->GetHeight() / 2.f, 0.f));
          newmesh->Rotate(rot);
          newmesh->name = guip.objectname->text;
          newmesh->dynamic = true;

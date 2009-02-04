@@ -449,7 +449,9 @@ void Mesh::Move(const Vector3& v, bool movetris)
    }
    
    position = v;
-   //trisdirty = true;
+   trisdirty = true;
+   if (!frameroot.size())
+      updatevbo = true;
 }
 
 
@@ -492,7 +494,9 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
    }
    
    rots = v;
-   //trisdirty = true;
+   trisdirty = true;
+   if (!frameroot.size())
+      updatevbo = true;
 }
 
 
@@ -552,7 +556,7 @@ void Mesh::GenVbo()
       newchildren = false;
       
       // Build IBO
-      if (vbodata.size() * sizeof(VBOData) != vbosize)
+      //if (vbodata.size() * sizeof(VBOData) != vbosize)
       {
          sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
          indexdata.clear();
@@ -770,7 +774,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    Vector3 moveto = position;
    impostor->Move(moveto);
    impostor->AdvanceAnimation(campos);
-   //rendermesh.Add(*impostor);
+   rendermesh.Add(*impostor);
 #endif
 }
 
@@ -1044,6 +1048,7 @@ void Mesh::Add(Quad& quad)
 
 void Mesh::Add(Mesh &mesh)
 {
+   mesh.UpdateTris();
    map<VertexVHP, VertexVHP> vmap;
    for (size_t i = 0; i < mesh.vertices.size(); ++i)
    {
@@ -1063,6 +1068,7 @@ void Mesh::Add(Mesh &mesh)
 
 void Mesh::Add(Mesh* mesh)
 {
+   mesh->UpdateTris();
    childmeshes.push_back(mesh);
    newchildren = true;
    tris.clear();
