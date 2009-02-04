@@ -192,10 +192,7 @@ void MeshNode::TransformNoIntLoop(VertexVHPvec& verts, const GraphicMatrix& pare
          currvert.norm.transform(normalm);
          currvert.norm.normalize();
          
-         for (size_t j = 0; j < 4; ++j)
-         {
-            currvert.color[j] = verti.color[j];
-         }
+         currvert.color = verti.color;
       }
    }
    else
