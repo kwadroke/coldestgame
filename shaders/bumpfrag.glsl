@@ -23,12 +23,15 @@ void main()
    
    vec4 ambient, diffuse;
    basiclighting(bump, lightdir, color, ambient, diffuse, 0.);
+   vec4 texcol = texture2D(tex, gl_TexCoord[0].st);
+   color *= texcol;
+   diffuse *= texcol;
    vec4 specval = specular(bump, lightdir, view, color);
    shadow(diffuse, specval, dist, color);
    
    fog(dist, color);
    
-   gl_FragColor = color * texture2D(tex, gl_TexCoord[0].st);
+   gl_FragColor = color;
    //gl_FragColor.rg = gl_TexCoord[0].st;
    //gl_FragColor.rgb = lightdir * 2. - 1.;
 }
