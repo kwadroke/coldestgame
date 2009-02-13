@@ -36,7 +36,8 @@ void shadow(vec4 diff, vec4 spec, float d, inout vec4 col)
    total += shadow2DProj(shadowtex, shadowmappos + vec4(1. / shadowres, 1. / shadowres, 0., 0.)).r;
    
    float shadowval = 1. - smoothstep(0., .95, total / 9.);
-   col.rgb -= diff.rgb * shadowval;
+   // If we don't keep a little diffuse lighting our bumpmapped objects look completely flat in shadow
+   col.rgb -= diff.rgb * min(shadowval, .9);
    col.rgb -= spec.rgb * shadowval;
    col.a = alpha;
    
@@ -52,7 +53,7 @@ void shadow(vec4 diff, vec4 spec, float d, inout vec4 col)
    total += shadow2DProj(worldshadowtex, worldshadowmappos + vec4(1. / shadowres, 1. / shadowres, 0., 0.)).r;
    
    shadowval = 1. - smoothstep(0., .95, total / 9.);
-   color1.rgb -= diff.rgb * shadowval;
+   color1.rgb -= diff.rgb * min(shadowval, .9);
    color1.rgb -= spec.rgb * shadowval;
    color1.a = alpha;
    
