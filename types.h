@@ -17,7 +17,7 @@ using std::string;
 // Note: If you change the Unit enums you need to alter the GUI as well to match
 
 enum Units{Nemesis, Ultra, Omega, numunits};
-enum BodyParts{Legs, Torso, LArm, RArm, numbodyparts};
+enum BodyParts{Legs, Torso, LArm, RArm, Hips, numbodyparts};
 
 typedef vector<float> floatvec;
 typedef vector<int> intvec;

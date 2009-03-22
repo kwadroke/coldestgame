@@ -9,8 +9,8 @@ attribute vec3 tangent;
 
 void main()
 {
-   gl_TexCoord[0] = gl_MultiTexCoord0;
-   gl_FrontColor = vec4(1, 1, 1, 1);
+   gl_TexCoord[0].st = gl_MultiTexCoord0.st;
+   gl_FrontColor = gl_Color;
    
    /* Shadow calculations, the grunt work is done on the CPU and passed in
    using the texture matrix. */
