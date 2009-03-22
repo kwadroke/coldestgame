@@ -32,3 +32,4 @@ tsint spectateplayer;
 ALSourcePtr musicsource;
 bool editor;
 KeyMap keys;
+bool reloadgui;

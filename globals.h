@@ -66,6 +66,7 @@ extern tsint spectateplayer;
 extern ALSourcePtr musicsource;
 extern bool editor;
 extern KeyMap keys;
+extern bool reloadgui;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

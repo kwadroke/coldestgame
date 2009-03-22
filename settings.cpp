@@ -167,6 +167,6 @@ void SaveSettings()
    if (dorestart)
    {
       console.Parse("restartgl");
-      InitGUI(); // Can't call this here right now:-(
+      reloadgui = true;
    }
 }

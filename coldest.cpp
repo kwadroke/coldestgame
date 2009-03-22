@@ -263,6 +263,7 @@ void InitGUI()
    
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
+   reloadgui = false;
 #endif
 }
 
@@ -701,6 +702,10 @@ void MainLoop()
       
       // update the screen
       Repaint();
+      
+      // Can't do this in the event handler because that is called from within the GUI
+      if (reloadgui)
+         InitGUI();
 #else
       SDL_Delay(1);
 #endif
@@ -1755,6 +1760,16 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[Torso] = ml.begin();
       p.mesh[Torso]->Scale(units[p.unit].scale);
    }
+   if (p.mesh[Hips] == ml.end())
+   {
+      MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/hips");
+      newmesh->dynamic = true;
+      if (gl)
+         newmesh->SetGL();
+      ml.push_front(*newmesh);
+      p.mesh[Hips] = ml.begin();
+      p.mesh[Hips]->Scale(units[p.unit].scale);
+   }
    
    p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
    p.mesh[Legs]->Move(p.pos);
@@ -1762,13 +1777,16 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    p.mesh[Torso]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
    p.mesh[Torso]->Move(p.pos);
    
+   p.mesh[Hips]->Rotate(Vector3(-p.pitch, 0, p.roll));
+   p.mesh[Hips]->Move(p.pos);
+   
    if (p.mesh[LArm] == ml.end() && p.hp[LArm] > 0)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
       newmesh->dynamic = true;
       if (gl)
          newmesh->SetGL();
-      p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", *newmesh);
+      //p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
       p.mesh[LArm]->Scale(units[p.unit].scale);
@@ -1779,7 +1797,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       newmesh->dynamic = true;
       if (gl)
          newmesh->SetGL();
-      p.mesh[Torso]->InsertIntoContainer("RightArmConnector", *newmesh);
+      //p.mesh[Torso]->InsertIntoContainer("RightArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
