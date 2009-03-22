@@ -113,6 +113,17 @@ void Console::Parse(const string& line, bool echo)
    {
       SendPassword(Token(simple, 1));
    }
+   if (Token(simple, 0) == "include")
+   {
+      ifstream getconf(Token(simple, 1).c_str(), ios_base::in);
+      string buffer;
+   
+      while (!getconf.eof())
+      {
+         getline(getconf, buffer);
+         console.Parse(buffer);
+      }
+   }
 #endif
    else Action(Token(simple, 0));
 }
@@ -272,7 +283,8 @@ void Console::SaveToFile(const string& filename, const bool forcesave)
    if (forcesave) // Then we're writing a new config file
    {
       save << "# restartgl must be included to initialize OpenGL\n";
-      save << "restartgl";
+      save << "restartgl\n";
+      save << "include keys.cfg\n";
    }
    save.close();
    Unlock();

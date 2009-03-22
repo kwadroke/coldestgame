@@ -17,6 +17,7 @@
 #include "ParticleEmitter.h"
 #include "MeshCache.h"
 #include "logout.h"
+#include "KeyMap.h"
 
 
 #define PI 3.14159265
@@ -64,6 +65,7 @@ extern MeshCachePtr meshcache;
 extern tsint spectateplayer;
 extern ALSourcePtr musicsource;
 extern bool editor;
+extern KeyMap keys;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

@@ -31,3 +31,4 @@ MeshCachePtr meshcache;
 tsint spectateplayer;
 ALSourcePtr musicsource;
 bool editor;
+KeyMap keys;

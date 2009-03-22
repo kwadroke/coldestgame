@@ -24,6 +24,11 @@ void UpdateSettings()
    ComboBox* afbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("afbox"));
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
    Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
+   GUI* forwardbutton = gui[settings]->GetWidget("forwardbutton");
+   GUI* backbutton = gui[settings]->GetWidget("backbutton");
+   GUI* leftbutton = gui[settings]->GetWidget("leftbutton");
+   GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
+   GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
    
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -40,6 +45,11 @@ void UpdateSettings()
    weaponfocusslider->value = console.GetInt("weaponfocus");
    nameedit->text = console.GetString("name");
    musicvolslider->value = console.GetInt("musicvol");
+   forwardbutton->text = SDL_GetKeyName(keys.keyforward);
+   backbutton->text = SDL_GetKeyName(keys.keyback);
+   leftbutton->text = SDL_GetKeyName(keys.keyleft);
+   rightbutton->text = SDL_GetKeyName(keys.keyright);
+   loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
    
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");
@@ -140,9 +150,23 @@ void SaveSettings()
    console.Parse("setsave screenwidth " + ToString(newwidth), false);
    console.Parse("setsave screenheight " + ToString(newheight), false);
    
+   // Write keys file
+   ofstream writekeys("keys.cfg", ios_base::out);
+   writekeys << "set keyforward " << keys.keyforward << endl;
+   writekeys << "set keyback " << keys.keyback << endl;
+   writekeys << "set keyleft " << keys.keyleft << endl;
+   writekeys << "set keyright " << keys.keyright << endl;
+   writekeys << "set keyloadout " << keys.keyloadout << endl;
+   writekeys << "set mousefire " << keys.mousefire << endl;
+   writekeys << "set mousezoom " << keys.mousezoom << endl;
+   writekeys << "set mouseuse " << keys.mouseuse << endl;
+   writekeys << "set mousenextweap " << keys.mousenextweap << endl;
+   writekeys << "set mouseprevweap " << keys.mouseprevweap << endl;
+   writekeys.close();
+   
    if (dorestart)
    {
       console.Parse("restartgl");
-      //InitGUI(); // Can't call this here right now:-(
+      InitGUI(); // Can't call this here right now:-(
    }
 }
