@@ -146,6 +146,24 @@
                <Label x="190" y="0" width="50" height="20" name="weaponfocusslidervalue"/>
             </Slider>
          </ScrollView>
+	 <ScrollView x="10" y="220" width="350" height="300">
+	    <Label x="0" y="0" width="300" height="30" text="Key Bindings"/>
+	    <Button x="300" y="40" width="30" height="30" name="forwardbutton" leftclick="bindforward">
+	       <Label x="-300" y="0" width="300" height="30" text="Forward"/>
+	    </Button>
+	    <Button x="300" y="80" width="30" height="30" name="backbutton" leftclick="bindback">
+	       <Label x="-300" y="0" width="300" height="30" text="Back"/>
+	    </Button>
+	    <Button x="300" y="120" width="30" height="30" name="leftbutton" leftclick="bindleft">
+	       <Label x="-300" y="0" width="300" height="30" text="Left"/>
+	    </Button>
+	    <Button x="300" y="160" width="30" height="30" name="rightbutton" leftclick="bindright">
+	       <Label x="-300" y="0" width="300" height="30" text="Right"/>
+	    </Button>
+	    <Button x="300" y="200" width="30" height="30" name="loadoutbutton" leftclick="bindloadout">
+	       <Label x="-300" y="0" width="300" height="30" text="Loadout"/>
+	    </Button>
+	 </ScrollView>
       </Tab>
       <Tab text="Game" buttonwidth="100">
          <Label x="10" y="30" width="100" height="30" text="Name"/>
@@ -250,4 +268,6 @@
            pressed="textures/buttonpressed.png"
            leftclick="savesettings">
    </Button>
+   
+   <Label x="250" y="450" width="500" height="50" text="Press key to bind (esc to cancel)" name="bindmessage" visible="false"/>
 </GUI>

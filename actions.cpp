@@ -218,6 +218,56 @@ void SelectSpawn()
 }
 
 
+void DoBind(SDLKey& key)
+{
+   GUI* message = gui[settings]->GetWidget("bindmessage");
+   message->visible = true;
+   SDL_Event event;
+   while (!SDL_PollEvent(&event)){Repaint();}
+   
+   if (event.type == SDL_KEYDOWN && event.key.keysym.sym != SDLK_ESCAPE)
+      key = event.key.keysym.sym;
+      
+   message->visible = false;
+   
+   GUI* forwardbutton = gui[settings]->GetWidget("forwardbutton");
+   GUI* backbutton = gui[settings]->GetWidget("backbutton");
+   GUI* leftbutton = gui[settings]->GetWidget("leftbutton");
+   GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
+   GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
+   forwardbutton->text = SDL_GetKeyName(keys.keyforward);
+   backbutton->text = SDL_GetKeyName(keys.keyback);
+   leftbutton->text = SDL_GetKeyName(keys.keyleft);
+   rightbutton->text = SDL_GetKeyName(keys.keyright);
+   loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
+}
+
+void BindForward()
+{
+   DoBind(keys.keyforward);
+}
+
+void BindBack()
+{
+   DoBind(keys.keyback);
+}
+
+void BindLeft()
+{
+   DoBind(keys.keyleft);
+}
+
+void BindRight()
+{
+   DoBind(keys.keyright);
+}
+
+void BindLoadout()
+{
+   DoBind(keys.keyloadout);
+}
+
+
 // Stick this outside of GUI so we don't have to update the class every time we add an action
 void Action(const string& action)
 {
@@ -263,6 +313,16 @@ void Action(const string& action)
       DeleteObject();
    else if (action == "savemap")
       SaveMap();
+   else if (action == "bindforward")
+      BindForward();
+   else if (action == "bindback")
+      BindBack();
+   else if (action == "bindleft")
+      BindLeft();
+   else if (action == "bindright")
+      BindRight();
+   else if (action == "bindloadout")
+      BindLoadout();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }
