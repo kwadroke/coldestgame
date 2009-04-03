@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Hit.h"
 
 unsigned long Hit::nextid = 1;

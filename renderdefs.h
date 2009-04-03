@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __RENDERDEFS_H
 #define __RENDERDEFS_H
 

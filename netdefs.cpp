@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "netdefs.h"
 
 tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync;

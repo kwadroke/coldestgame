@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Bot.h"
 
 // Should leave thread to be initialized last so that all other data has been initialized first
@@ -54,6 +55,7 @@ int Bot::Start(void* obj)
    logout << "Bot id " << gettid() << " started." << endl;
    
    ((Bot*)obj)->Loop();
+   return 0;
 }
 
 
@@ -86,7 +88,7 @@ void Bot::Send()
       sendqueue.push_back(p);
       needconnect = false;
    }
-   else if (currtick - lasttick > 1000 / console.GetInt("tickrate"))
+   else if (currtick - lasttick > 1000 / (Uint32)console.GetInt("tickrate"))
    {
       lasttick = currtick;
       Packet p(&addr);
@@ -136,7 +138,7 @@ string Bot::FillUpdatePacket()
    
    // Quick and dirty checksumming
    unsigned long value = 0;
-   for (int i = 0; i < temp.str().length(); ++i)
+   for (size_t i = 0; i < temp.str().length(); ++i)
    {
       value += (char)(temp.str()[i]);
    }

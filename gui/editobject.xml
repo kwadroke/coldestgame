@@ -46,127 +46,125 @@
             </Label>
          </Tab>
          <Tab text="Tree" buttonwidth="100">
-            <Label x="10" y="10" width="150" height="30" text="Seed">
-               <LineEdit x="150" y="0" width="150" height="30" name="Seed"/>
-            </Label>
-            <Label x="10" y="40" width="150" height="30" text="Impostor Dist.">
-               <LineEdit x="150" y="0" width="150" height="30" name="ImpostorDistance"/>
-            </Label>
-            <Label x="10" y="70" width="450" height="30" text="Trunk" align="center"
-                  normal="textures/sliderbuttonnorm.png">
-               <Label x="0" y="30" width="150" height="30" text="Trunk Radius">
+            <Layout x="0" y="0" padding="0" xmargin="10" ymargin="10">
+               <Label width="150" height="30" text="Seed">
+                  <LineEdit x="150" y="0" width="150" height="30" name="Seed"/>
+               </Label>
+               <Label width="150" height="30" text="Impostor Dist.">
+                  <LineEdit x="150" y="0" width="150" height="30" name="ImpostorDistance"/>
+               </Label>
+               
+               <Label width="450" height="30" text="Trunk" align="center"
+                     normal="textures/sliderbuttonnorm.png"/>
+               <Label width="150" height="30" text="Trunk Radius">
                   <LineEdit x="150" y="0" width="150" height="30" name="TrunkRadius"/>
                </Label>
-               <Label x="0" y="60" width="150" height="30" text="Trunk Segments">
+               <Label width="150" height="30" text="Trunk Segments">
                   <LineEdit x="150" y="0" width="150" height="30" name="TrunkSegments"/>
                </Label>
-               <Label x="0" y="90" width="150" height="30" text="Trunk Slices">
+               <Label width="150" height="30" text="Trunk Slices">
                   <LineEdit x="150" y="0" width="150" height="30" name="TrunkSlices"/>
                </Label>
-               <Label x="0" y="120" width="150" height="30" text="Trunk Taper">
+               <Label width="150" height="30" text="Trunk Taper">
                   <LineEdit x="150" y="0" width="150" height="30" name="TrunkTaper"/>
                </Label>
-               <Label x="0" y="150" width="150" height="30" text="Max Angle">
+               <Label width="150" height="30" text="Max Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MaxTrunkAngle"/>
                </Label>
-            </Label>
-            
-            <Label x="10" y="250" width="450" height="30" text="Branches" align="center"
-                  normal="textures/sliderbuttonnorm.png">
-               <Label x="0" y="30" width="150" height="30" text="Max Angle">
+               
+               <Label width="450" height="30" text="Branches" align="center"
+                     normal="textures/sliderbuttonnorm.png"/>
+               <Label width="150" height="30" text="Max Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MaxBranchAngle"/>
                </Label>
-               <Label x="0" y="60" width="150" height="30" text="Initial Height">
+               <Label width="150" height="30" text="Initial Height">
                   <LineEdit x="150" y="0" width="150" height="30" name="InitialHeight"/>
                </Label>
-               <Label x="0" y="90" width="150" height="30" text="Height Reduction">
+               <Label width="150" height="30" text="Height Reduction">
                   <LineEdit x="150" y="0" width="150" height="30" name="HeightReduction"/>
                </Label>
-               <Label x="0" y="120" width="150" height="30" text="Initial Radius">
+               <Label width="150" height="30" text="Initial Radius">
                   <LineEdit x="150" y="0" width="150" height="30" name="InitialRadius"/>
                </Label>
-               <Label x="0" y="150" width="150" height="30" text="Radius Taper">
+               <Label width="150" height="30" text="Radius Taper">
                   <LineEdit x="150" y="0" width="150" height="30" name="RadiusTaper"/>
                </Label>
-               <Label x="0" y="180" width="150" height="30" text="Num Levels">
+               <Label width="150" height="30" text="Num Levels">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumLevels"/>
                </Label>
-               <Label x="0" y="210" width="150" height="30" text="Num Slices">
+               <Label width="150" height="30" text="Num Slices">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumSlices"/>
                </Label>
-               <Label x="0" y="240" width="150" height="30" text="Num Segments">
+               <Label width="150" height="30" text="Num Segments">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumSegments"/>
                </Label>
-               <Label x="0" y="270" width="150" height="30" text="Num Branches 0">
+               <Label width="150" height="30" text="Num Branches 0">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumBranches0"/>
                </Label>
-               <Label x="0" y="300" width="150" height="30" text="Num Branches 1">
+               <Label width="150" height="30" text="Num Branches 1">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumBranches1"/>
                </Label>
-               <Label x="0" y="330" width="150" height="30" text="Num Branches 2">
+               <Label width="150" height="30" text="Num Branches 2">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumBranches2"/>
                </Label>
-               <Label x="0" y="360" width="150" height="30" text="Curve Coeff.">
+               <Label width="150" height="30" text="Curve Coeff.">
                   <LineEdit x="150" y="0" width="150" height="30" name="CurveCoeff"/>
                </Label>
-               <Label x="0" y="390" width="150" height="30" text="Max Split Angle">
+               <Label width="150" height="30" text="Max Split Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MaxAngle"/>
                </Label>
-               <Label x="0" y="420" width="150" height="30" text="Min Split Angle">
+               <Label width="150" height="30" text="Min Split Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MinAngle"/>
                </Label>
-            </Label>
-            
-            <Label x="10" y="700" width="450" height="30" text="Side Branches" align="center"
-                   normal="textures/sliderbuttonnorm.png">
-               <Label x="0" y="30" width="150" height="30" text="Number">
+               
+               <Label width="450" height="30" text="Side Branches" align="center"
+                     normal="textures/sliderbuttonnorm.png"/>
+               <Label width="150" height="30" text="Number">
                   <LineEdit x="150" y="0" width="150" height="30" name="SideBranches"/>
                </Label>
-               <Label x="0" y="60" width="150" height="30" text="Min Angle">
+               <Label width="150" height="30" text="Min Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MinSideAngle"/>
                </Label>
-               <Label x="0" y="90" width="150" height="30" text="Max Angle">
+               <Label width="150" height="30" text="Max Angle">
                   <LineEdit x="150" y="0" width="150" height="30" name="MaxSideAngle"/>
                </Label>
-               <Label x="0" y="120" width="150" height="30" text="Branch After">
+               <Label width="150" height="30" text="Branch After">
                   <LineEdit x="150" y="0" width="150" height="30" name="BranchAfter"/>
                </Label>
-               <Label x="0" y="150" width="150" height="30" text="Taper">
+               <Label width="150" height="30" text="Taper">
                   <LineEdit x="150" y="0" width="150" height="30" name="SideTaper"/>
                </Label>
-               <Label x="0" y="180" width="150" height="30" text="Size %">
+               <Label width="150" height="30" text="Size %">
                   <LineEdit x="150" y="0" width="150" height="30" name="SideSizePerc"/>
                </Label>
-            </Label>
-            
-            <Label x="10" y="910" width="450" height="30" text="Leaves" align="center"
-                  normal="textures/sliderbuttonnorm.png">
-               <Label x="0" y="30" width="150" height="30" text="Num Leaves">
+               
+               <Label width="450" height="30" text="Leaves" align="center"
+                     normal="textures/sliderbuttonnorm.png"/>
+               <Label width="150" height="30" text="Num Leaves">
                   <LineEdit x="150" y="0" width="150" height="30" name="NumLeaves"/>
                </Label>
-               <Label x="0" y="60" width="150" height="30" text="Leaf Size">
+               <Label width="150" height="30" text="Leaf Size">
                   <LineEdit x="150" y="0" width="150" height="30" name="LeafSize"/>
                </Label>
-               <Label x="0" y="90" width="150" height="30" text="Leaf Segments">
+               <Label width="150" height="30" text="Leaf Segments">
                   <LineEdit x="150" y="0" width="150" height="30" name="LeafSegs"/>
                </Label>
-               <Label x="0" y="120" width="150" height="30" text="Leaf Curve">
+               <Label width="150" height="30" text="Leaf Curve">
                   <LineEdit x="150" y="0" width="150" height="30" name="LeafCurve"/>
                </Label>
-               <Label x="0" y="150" width="150" height="30" text="First Leaf Level">
+               <Label width="150" height="30" text="First Leaf Level">
                   <LineEdit x="150" y="0" width="150" height="30" name="FirstLeafLevel"/>
                </Label>
-            </Label>
-            
-            <Label x="10" y="1090" width="450" height="30" text="Materials" align="center"
-                   normal="textures/sliderbuttonnorm.png">
-               <Label x="0" y="30" width="150" height="30" text="Bark">
+               
+               <Label width="450" height="30" text="Materials" align="center"
+                     normal="textures/sliderbuttonnorm.png"/>
+               <Label width="150" height="30" text="Bark">
                   <LineEdit x="150" y="0" width="300" height="30" name="BarkMat"/>
                </Label>
-               <Label x="0" y="60" width="150" height="30" text="Leaves">
+               <Label width="150" height="30" text="Leaves">
                   <LineEdit x="150" y="0" width="300" height="30" name="LeavesMat"/>
                </Label>
-            </Label>
+            </Layout>
          </Tab>
       </TabWidget>
    </ScrollView>

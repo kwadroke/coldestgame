@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 uniform sampler2DShadow shadowtex;
 uniform sampler2DShadow worldshadowtex;
 uniform float shadowres;

@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 // Netcode
 
 #include <iostream>
@@ -89,7 +90,7 @@ int NetSend(void* dummy)
       SDL_Delay(1);
       
       currnettick = SDL_GetTicks();
-      if (currnettick - lastnettick >= 1000 / console.GetInt("tickrate"))
+      if (currnettick - lastnettick >= 1000 / (Uint32)console.GetInt("tickrate"))
       {
          if (connected)
          {
@@ -278,7 +279,7 @@ string FillUpdatePacket()
    
    // Quick and dirty checksumming
    unsigned long value = 0;
-   for (int i = 0; i < temp.str().length(); ++i)
+   for (size_t i = 0; i < temp.str().length(); ++i)
    {
       value += (char)(temp.str()[i]);
    }
@@ -384,7 +385,6 @@ int NetListen(void* dummy)
                }
                
                get >> oppnum;
-               short oldunit;
                while (oppnum != 0)
                {
                   while (oppnum >= player.size())  // Add new player(s)
@@ -457,8 +457,8 @@ int NetListen(void* dummy)
                }
                
                // Freak out if we get a packet whose checksum isn't right
-               unsigned long value = 0;
-               for (int i = 0; i < debug.length(); ++i)
+               size_t value = 0;
+               for (size_t i = 0; i < debug.length(); ++i)
                {
                   if (debug[i] == '&')
                      break;
@@ -466,7 +466,7 @@ int NetListen(void* dummy)
                }
                string dummy;
                get >> dummy;
-               int checksum;
+               size_t checksum;
                get >> checksum;
                if (checksum != value)
                {
@@ -515,7 +515,7 @@ int NetListen(void* dummy)
                short getunit, getteam;
                int getkills, getdeaths, getsalvage, getspawntimer;
                vector<int> gethp(numbodyparts);
-               int getping, getsvfps;
+               int getping;
                bool getspawned;
                string getname;
                SDL_mutexP(clientmutex);
@@ -906,7 +906,7 @@ int NetListen(void* dummy)
          }
          else if (packettype == "r") // Remove body part
          {
-            int num, part;
+            size_t num, part;
             get >> num;
             get >> part;
             

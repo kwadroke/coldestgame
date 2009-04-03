@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __RESOURCEMANAGER_H
 #define __RESOURCEMANAGER_H
 

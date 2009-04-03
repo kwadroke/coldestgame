@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Button.h"
 
 Button::Button(GUI* p, TextureManager* tm) : toggle(false), togglestate(0)

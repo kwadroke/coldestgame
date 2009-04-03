@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "TableItem.h"
 #include "Table.h" // Circular dependency, so can't go in header file
 

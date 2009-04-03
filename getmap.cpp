@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include <string>
 #include <sstream>
 #include <vector>
@@ -189,7 +190,7 @@ void GetMap(string fn)
    SpawnPointData spawntemp;
    IniReader spawnnode = mapdata.GetItemByName("SpawnPoints");
    
-   for (int i = 0; i < spawnnode.NumChildren(); ++i)
+   for (size_t i = 0; i < spawnnode.NumChildren(); ++i)
    {
       currnode = spawnnode(i);
       currnode.Read(spawntemp.team, "Team");
@@ -222,7 +223,7 @@ void GetMap(string fn)
    
    IniReader objectlist = mapdata.GetItemByName("Objects");
    string currmaterial;
-   for (int i = 0; i < objectlist.NumChildren(); ++i)
+   for (size_t i = 0; i < objectlist.NumChildren(); ++i)
    {
       currnode = objectlist(i);
       Mesh currmesh("", resman, currnode);
@@ -383,8 +384,6 @@ void GetMap(string fn)
    coldet.worldbounds[5].SetVertex(1, Vector3((mapw - 1) * tilesize, minworldheight, 0));
    coldet.worldbounds[5].SetVertex(2, Vector3((mapw - 1) * tilesize, minworldheight, (maph - 1) * tilesize));
    
-   float slopecutoff = .75;
-   float heightcutoff = 4;
    floatvec texweights(6, 0.f); // Can be increased, but will require a number of other changes
    int textouse[2];
    float currweights[2];
@@ -469,7 +468,7 @@ void GetMap(string fn)
    
    // Now build terrain triangles
    Meshlist::iterator currmesh;
-   map<set<int>, Material*> texmats;
+   map<set<GLuint>, Material*> texmats;
    for (int x = 0; x < mapw - 1; ++x)
    {
       for (int y = 0; y < maph - 1; ++y)
@@ -498,7 +497,7 @@ void GetMap(string fn)
          tempnorm = ChooseNormal(actualnorm, normals[x + 1][y]);
          tempquad.SetNormal(3, tempnorm);
 #ifndef DEDICATED
-         set<int> currtex;
+         set<GLuint> currtex;
          currtex.insert(tex1[x][y]);
          currtex.insert(tex2[x][y]);
          currtex.insert(tex1[x][y + 1]);
@@ -524,7 +523,7 @@ void GetMap(string fn)
                matfile += ToString(currtex.size());
                Material newmat(matfile, resman.texman, resman.shaderman);
                int count = 0;
-               for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
+               for (set<GLuint>::iterator i = currtex.begin(); i != currtex.end(); ++i)
                {
                   newmat.SetTexture(count, terrparams[*i].file);
                   ++count;
@@ -538,7 +537,7 @@ void GetMap(string fn)
          tempquad.SetMaterial(currmat);
          
          int realtex = 0;
-         for (set<int>::iterator i = currtex.begin(); i != currtex.end(); ++i)
+         for (set<GLuint>::iterator i = currtex.begin(); i != currtex.end(); ++i)
          {
             if (tex1[x][y] == *i)
                tempquad.SetTerrainWeight(0, realtex, texpercent[x][y]);
@@ -745,7 +744,7 @@ void GetMap(string fn)
       grassh = loadgrass->h;
       float grasssizex = mapwidth / float(grassw);
       float grasssizey = mapheight / float(grassh);
-      float maxperpoint = 100;
+      //float maxperpoint = 100;   unused
       float grassdensity = console.GetFloat("grassdensity");
    
       SDL_LockSurface(loadgrass);

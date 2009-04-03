@@ -17,12 +17,13 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Particle.h"
 #include "globals.h"
 
 
-Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0.f), accel(0.f),
-                   weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
+Particle::Particle(Mesh& meshin) : playernum(0), id(0), velocity(0.f), accel(0.f),
+                   weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f), mesh(meshin), 
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
 {
    t.start();
@@ -31,9 +32,9 @@ Particle::Particle(Mesh& meshin) : mesh(meshin), playernum(0), id(0), velocity(0
 
 
 Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc, float w,
-                   float rad, bool exp, Uint32 tick, Mesh& meshin) : mesh(meshin), playernum(0), id(nid),
+                   float rad, bool exp, Uint32 tick, Mesh& meshin) : playernum(0), id(nid),
                    dir(v), pos(p), origin(p), lasttracer(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
-                   lasttick(tick), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1),
+                   lasttick(tick), damage(0), dmgrad(0.f), mesh(meshin), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1),
                    tracertime(10000)
 {
    dir.normalize();
@@ -42,8 +43,8 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 }
 
 
-Particle::Particle(const string& filename, ResourceManager& resman) : mesh(meshcache->GetMesh("models/empty")), playernum(0), id(0),
-                   velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
+Particle::Particle(const string& filename, ResourceManager& resman) : playernum(0), id(0),
+                   velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f), mesh(meshcache->GetMesh("models/empty")),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
 {
    IniReader read(filename);

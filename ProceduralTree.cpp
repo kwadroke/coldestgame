@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "ProceduralTree.h"
 
 /*
@@ -67,7 +68,7 @@ ProceduralTree::ProceduralTree()
 
 
 // Returns the number of primitives generated
-long ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leavesmat)
+size_t ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leavesmat)
 {
    mesh = currmesh;
    bark = barkmat;
@@ -120,7 +121,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    vector<Vector3> oldnorms;
    
    float anglex, angley, anglez;
-   float startrad, endrad;
+   float startrad = 10.f, endrad = 10.f;
    float locnumsegs;
    int savenumslices = numslices;
    locnumsegs = numsegs;
@@ -246,7 +247,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          }
       }
       
-      for (int j = 0; j < oldpts.size(); ++j)
+      for (size_t j = 0; j < oldpts.size(); ++j)
       {
          temp = Vector3();
          temp.transform(trans);
@@ -260,12 +261,12 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       if (lev == 0)
       {
          Vector3 colstart, colend;
-         for (int j = 0; j < oldpts.size(); ++j)
+         for (size_t j = 0; j < oldpts.size(); ++j)
          {
             colstart += oldpts[j];
          }
          colstart /= oldpts.size();
-         for (int j = 0; j < newpts.size(); ++j)
+         for (size_t j = 0; j < newpts.size(); ++j)
          {
             colend += newpts[j];
          }
@@ -280,7 +281,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          mesh->Add(coltri);
       }
       int newind, newind1;
-      for (int j = 0; j < oldpts.size(); ++j)
+      for (size_t j = 0; j < oldpts.size(); ++j)
       {
          Quad tempq(mesh->vertheap);
 #ifndef DEDICATED
@@ -326,9 +327,9 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
    {
       vector<VertexVHPvec> verts(leafsegs + 1, VertexVHPvec(leafsegs + 1));
       float leafangle = 0.f;//180. / numleaves + random.Random(-45.f, 45.f);
-      float leafscale = 1.5;
-      float leafheight = height * (locnumsegs - seg) * leafscale;
-      float overlap = 5;
+      //float leafscale = 1.5;   unused
+      //float leafheight = height * (locnumsegs - seg) * leafscale;   unused
+      //float overlap = 5;   unused
       for (int i = 0; i < numleaves; ++i)
       {
          for (int x = -leafsegs / 2; x < leafsegs / 2; ++x)

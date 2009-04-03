@@ -17,12 +17,13 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "MeshNode.h"
 #include "globals.h" // Causes problems if included in header
 #include "Mesh.h"
 
-MeshNode::MeshNode() : id(0), parentid(0), rot1(Vector3()), rot2(Vector3()),
-                  trans(Vector3()), facing(false), gl(false),
+MeshNode::MeshNode() : id(0), parentid(0), facing(false), gl(false), rot1(Vector3()), rot2(Vector3()),
+                  trans(Vector3()),
                   name(""), parent(NULL)
 {
 }
@@ -240,7 +241,7 @@ MeshNodePtr MeshNode::Clone()
    newmn->gl = gl;
    newmn->vertices = vertices;
    
-   for (int i = 0; i < children.size(); ++i)
+   for (size_t i = 0; i < children.size(); ++i)
    {
       newmn->children.push_back(children[i]->Clone());
    }
@@ -251,7 +252,7 @@ MeshNodePtr MeshNode::Clone()
 void MeshNode::GetContainers(map<string, MeshNodePtr>& cont, MeshNodePtr& thisptr)
 {
    cont[name] = thisptr;
-   for (int i = 0; i < children.size(); ++i)
+   for (size_t i = 0; i < children.size(); ++i)
       children[i]->GetContainers(cont, children[i]);
 }
 
@@ -263,7 +264,7 @@ void MeshNode::Scale(const float& sval)
       vertices[i].pos *= sval;
    }
    trans *= sval;
-   for (int i = 0; i < children.size(); ++i)
+   for (size_t i = 0; i < children.size(); ++i)
    {
       children[i]->Scale(sval);
    }
@@ -277,7 +278,7 @@ void MeshNode::ScaleZ(const float& sval)
       vertices[i].pos.z *= sval;
    }
    trans.z *= sval;
-   for (int i = 0; i < children.size(); ++i)
+   for (size_t i = 0; i < children.size(); ++i)
    {
       children[i]->ScaleZ(sval);
    }
@@ -288,7 +289,7 @@ void MeshNode::SetGL(const bool dogl)
 {
    gl = dogl;
    
-   for (int i = 0; i < children.size(); ++i)
+   for (size_t i = 0; i < children.size(); ++i)
    {
       children[i]->SetGL(dogl);
    }

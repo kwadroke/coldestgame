@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 varying vec3 normal;
 varying vec3 light;
 

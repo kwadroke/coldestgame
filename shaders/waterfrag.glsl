@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 void shadow(vec4, vec4, float, inout vec4);
 
 uniform sampler2D tex;

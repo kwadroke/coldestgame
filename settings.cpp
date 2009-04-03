@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "globals.h"
 #include "gui/Slider.h"
 #include "gui/ComboBox.h"
@@ -138,6 +139,8 @@ void SaveSettings()
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
    Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
    
+   bool dorestart = false;
+   
    console.Parse("setsave partupdint " + ToString(partupdintslider->value), false);
    // Not implemented yet
    //console.Parse("set partcount " + ToString(partcountslider->value), false);
@@ -148,6 +151,8 @@ void SaveSettings()
    console.Parse("setsave shadows " + ToString(shadowsbutton->togglestate), false);
    console.Parse("setsave softshadows " + ToString(softshadowsbutton->togglestate), false);
    console.Parse("setsave reflection " + ToString(reflectionbutton->togglestate), false);
+   if (fullscreenbutton->togglestate != console.GetBool("fullscreen"))
+      dorestart = true;
    console.Parse("setsave fullscreen " + ToString(fullscreenbutton->togglestate), false);
    console.Parse("setsave turnsmooth " + ToString(turnsmoothslider->value), false);
    console.Parse("setsave mousespeed " + ToString(mousespeedslider->value), false);
@@ -163,7 +168,6 @@ void SaveSettings()
    selectedres.ignore();
    selectedres.ignore();
    selectedres >> newheight;
-   bool dorestart = false;
    if (newwidth != console.GetInt("screenwidth") || newheight != console.GetInt("screenheight"))
       dorestart = true;
    console.Parse("setsave screenwidth " + ToString(newwidth), false);

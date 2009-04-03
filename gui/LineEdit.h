@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __LINEEDIT_H
 #define __LINEEDIT_H
 
@@ -42,9 +43,9 @@ class LineEdit : public GUI
       virtual void KeyDown(SDL_Event*);
       virtual void ReadNodeExtra(DOMNode*, GUI*);
       
-      int cursorpos;
-      int offset;
-      int dragstart, dragend;
+      size_t cursorpos;
+      size_t offset;
+      size_t dragstart, dragend;
       
       // Copying not allowed - this may not be necessary anymore
       LineEdit(const LineEdit&);

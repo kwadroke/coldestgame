@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __WEAPON_H
 #define __WEAPON_H
 
@@ -39,7 +40,7 @@ class Weapon
       float Splash() const {return splashradius;}
       float ProjectileWeight() const {return projectileweight;}
       float Heat() const {return heat;}
-      int ReloadTime() const {return reloadtime;}
+      Uint32 ReloadTime() const {return reloadtime;}
       bool Explode() const {return explode;}
       string ModelFile() const {return modelfile;}
       string Name() const {return name;}
@@ -64,7 +65,7 @@ class Weapon
       float splashradius;
       float projectileweight;
       float heat;
-      int reloadtime;
+      Uint32 reloadtime;
       bool explode;
       string modelfile;
       string name;

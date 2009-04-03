@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
 void shadow(vec4, vec4, float, inout vec4);
 void fog(float dist, inout vec4 color);

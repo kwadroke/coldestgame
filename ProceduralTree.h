@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __PROCEDURALTREE_H
 #define __PROCEDURALTREE_H
 
@@ -39,7 +40,7 @@ class ProceduralTree
 {
    public:
       ProceduralTree();
-      long GenTree(Mesh*, Material*, Material*);
+      size_t GenTree(Mesh*, Material*, Material*);
       void ReadParams(const IniReader&);
       
       int numlevels;

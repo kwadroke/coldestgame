@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "TabWidget.h"
 
 TabWidget::TabWidget(GUI* p, TextureManager* tm) : buttonspacing(10.f), buttonheight(30.f)
@@ -34,7 +35,7 @@ void TabWidget::RenderWidget()
 {
    RenderBase();
    
-   for (int i = 0; i < buttons.size(); ++i)
+   for (size_t i = 0; i < buttons.size(); ++i)
    {
       buttons[i]->Render();
       scrollviews[i]->Render();
@@ -81,7 +82,7 @@ void TabWidget::ReadSpecialNodes(DOMNode* current, GUI* parentw)
       // so we have to read the children of the Tab here (maybe not strictly true, there's probably some
       // way to make it work in ReadNode, but it would probably be a bit messy)
       DOMNodeList* c = current->getChildNodes();
-      for (int i = 0; i < c->getLength(); ++i)
+      for (size_t i = 0; i < c->getLength(); ++i)
       {
          DOMNode* currnode = c->item(i);
          newsv->ReadNode(currnode, newsv.get());
@@ -94,7 +95,7 @@ void TabWidget::GetNextButtonPosition(float& x, float& y)
 {
    y = 0.f; // Only one row of buttons currently supported, so they'll all be here
    x = 0.f;
-   for (int i = 0; i < buttons.size(); ++i)
+   for (size_t i = 0; i < buttons.size(); ++i)
    {
       x += buttons[i]->width + buttonspacing;
    }
@@ -103,7 +104,7 @@ void TabWidget::GetNextButtonPosition(float& x, float& y)
 
 void TabWidget::CustomProcessEvent(SDL_Event* event)
 {
-   for (int i = 0; i < buttons.size(); ++i)
+   for (size_t i = 0; i < buttons.size(); ++i)
    {
       buttons[i]->ProcessEvent(event);
       scrollviews[i]->ProcessEvent(event);
@@ -113,8 +114,8 @@ void TabWidget::CustomProcessEvent(SDL_Event* event)
 
 void TabWidget::LeftClick(SDL_Event* event)
 {
-   int selected = -1;
-   for (int i = 0; i < buttons.size(); ++i)
+   size_t selected = UINT_MAX; // 4 billion and change should be out of the realistic range
+   for (size_t i = 0; i < buttons.size(); ++i)
    {
       if (buttons[i]->InWidget(event))
       {
@@ -125,9 +126,9 @@ void TabWidget::LeftClick(SDL_Event* event)
       }
    }
    
-   if (selected == -1) return;
+   if (selected == UINT_MAX) return;
    
-   for (int i = 0; i < buttons.size(); ++i)
+   for (size_t i = 0; i < buttons.size(); ++i)
    {
       if (i == selected) continue;
       buttons[i]->togglestate = 0;
@@ -143,7 +144,7 @@ GUI* TabWidget::GetWidget(string findname)
       return this;
    
    GUI* ret;
-   for (int i = 0; i < scrollviews.size(); ++i)
+   for (size_t i = 0; i < scrollviews.size(); ++i)
    {
       ret = scrollviews[i]->GetWidget(findname);
       if (ret) return ret;

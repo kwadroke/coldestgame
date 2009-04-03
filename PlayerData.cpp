@@ -17,12 +17,13 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "PlayerData.h"
 
-PlayerData::PlayerData(Meshlist& ml) : name("Nooblet"), team(0), mesh(numbodyparts, ml.end()),
-                       item(Item::NoItem, ml), speed(0.f), turnspeed(0.f), needsync(true), salvage(100), powerdowntime(0),
-                       healaccum(0.f), firerequests(0), hp(intvec(numbodyparts, 100)), destroyed(numbodyparts, false), weight(1.f),
-                       spectate(false), spawntimer(0), admin(false)
+PlayerData::PlayerData(Meshlist& ml) : speed(0.f), turnspeed(0.f), needsync(true), mesh(numbodyparts, ml.end()), 
+                       firerequests(0), item(Item::NoItem, ml), spawntimer(0), hp(intvec(numbodyparts, 100)), 
+                       destroyed(numbodyparts, false), team(0), name("Nooblet"), salvage(100), powerdowntime(0),
+                       healaccum(0.f), weight(1.f), spectate(false), admin(false)
 {
    Uint32 ticks = 0;
    if (SDL_WasInit(SDL_INIT_TIMER))

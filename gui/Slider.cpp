@@ -17,10 +17,11 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Slider.h"
 
-Slider::Slider(GUI* p, TextureManager* tm) : value(0), orientation(Horizontal), minvalue(0),
-               maxvalue(100), forceslidersize(-1.f), drag(false), sliderheight(30), sliderwidth(30), dragoffset(0.f)
+Slider::Slider(GUI* p, TextureManager* tm) : value(0), orientation(Horizontal), forceslidersize(-1.f), minvalue(0),
+               maxvalue(100), sliderheight(30), sliderwidth(30), drag(false), dragoffset(0.f)
 {
    Init(p, tm);
    button = new Button(this, tm);

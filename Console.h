@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __CONSOLE_H
 #define __CONSOLE_H
 
@@ -52,7 +53,7 @@ class Console
       
       
    private:
-      int NumTokens(const string&);
+      size_t NumTokens(const string&);
       string Token(const string&, int);
       string SimplifyWhitespace(const string&);
       void Action(const string&);

@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "renderdefs.h"
 
 // Variables that need to be shared for rendering

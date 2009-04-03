@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 // This file needs to be included in any file wanting to write to the log
 
 #ifndef __LOGOUT_H

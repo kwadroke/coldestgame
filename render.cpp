@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 // Rendering functions
 
 #include "globals.h"
@@ -408,8 +409,8 @@ void UpdateFBO(const PlayerData& localplayer)
             desireddim = fbodims[1];
          else desireddim = fbodims[0];
          
-         int current = 0;
-         int count = 0;
+         size_t current = 0;
+         size_t count = 0;
          Mesh* toswap;
          while (desireddim > currfbo->GetWidth())
          {

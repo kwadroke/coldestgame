@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 // Main loop and basic game logic - a rather large file that could probably afford to be
 // split up somewhat, but it hasn't really been a problem thus far.
 
@@ -262,10 +263,7 @@ void InitGUI()
    }
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
-   gui.clear();
-   //gui.reserve(numguis);
-   for (size_t i = 0; i < numguis; ++i)
-      gui.push_back(GUIPtr());
+   gui.reserve(numguis);
    gui[mainmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/mainmenu.xml"));
    gui[hud] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/hud.xml"));
    gui[loadprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadprogress.xml"));
@@ -279,6 +277,7 @@ void InitGUI()
    gui[loadoutmessage] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadoutmessage.xml"));
    gui[editobject] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editobject.xml"));
    gui[editormain] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editormain.xml"));
+   gui[serverbrowser] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/serverbrowser.xml"));
    
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
@@ -429,7 +428,7 @@ void SetupSDL()
    
    SDL_WM_SetCaption("Coldest", "");
    
-   SDL_ShowCursor(0);
+   SDL_ShowCursor(1);
    //SDL_WM_GrabInput(SDL_GRAB_ON);
    
    if (SDLNet_Init() == -1)
@@ -671,7 +670,6 @@ void MainLoop()
       {
          SDL_mutexV(clientmutex);
 #ifndef DEDICATED
-         GUI* progress = gui[loadprogress]->GetWidget("loadingprogress");
          ShowGUI(loadprogress);
          Repaint();
 #endif
@@ -758,7 +756,7 @@ void GUIUpdate()
       }
    }
    
-   for (int i = 0; i < newchatlines.size(); ++i)
+   for (size_t i = 0; i < newchatlines.size(); ++i)
       AppendToChat(newchatplayers[i], newchatlines[i]);
    newchatlines.clear();
    
@@ -772,7 +770,7 @@ void GUIUpdate()
          maplabel->ClearChildren();
          spawnbuttons.clear();
          availablespawns = mapspawns;
-         for (int i = 0; i < items.size(); ++i)
+         for (size_t i = 0; i < items.size(); ++i)
          {
             if (items[i].Type() == Item::SpawnPoint && items[i].team == player[0].team)
             {
@@ -784,7 +782,7 @@ void GUIUpdate()
                availablespawns.push_back(sp);
             }
          }
-         for (int i = 0; i < availablespawns.size(); ++i)
+         for (size_t i = 0; i < availablespawns.size(); ++i)
          {
             GUIPtr newbutton(new Button(maplabel, &resman.texman));
             Button* buttonptr = dynamic_cast<Button*>(newbutton.get()); // Can't set toggle on a GUIPtr
@@ -811,8 +809,6 @@ void GUIUpdate()
       GUI* spawntimer = gui[loadoutmenu]->GetWidget("SpawnTimer");
       if (player[0].spawntimer)
       {
-         GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
-         GUI* spawntimer = gui[loadoutmenu]->GetWidget("SpawnTimer");
          spawnbutton->visible = false;
          spawntimer->visible = true;
          spawntimer->text = "Spawn in " + ToString(player[0].spawntimer / 1000);
@@ -955,41 +951,45 @@ bool GUIEventHandler(SDL_Event &event)
                eatevent = true;
                break;
             case SDLK_F12:
-               logout << "Saving screenshot" << endl;
-               glPixelStorei(GL_PACK_ALIGNMENT,1);
-               int screenwidth = console.GetInt("screenwidth");
-               int screenheight = console.GetInt("screenheight");
-               GLubytevec pixels(screenwidth * screenheight * 3);
-            
-               glReadPixels(0, 0, screenwidth, screenheight, GL_BGR, GL_UNSIGNED_BYTE, &pixels[0]);
-               vector<unsigned char> header(12, 0);
-               header[2] = 2;
-               header.push_back(screenwidth % 256);
-               header.push_back(screenwidth / 256);
-               header.push_back(screenheight % 256);
-               header.push_back(screenheight / 256);
-               header.push_back(24);
-               header.push_back(0);
-            
-               int num = 0;
-               string filename;
-               bool finished = false;
-               while (!finished)
                {
-                  string padded = PadNum(num, 5);
-                  filename = "screenshot" + padded + ".tga";
-                  ifstream test(filename.c_str());
-                  if (!test)
-                     finished = true;
-                  test.close();
-                  ++num;
+                  logout << "Saving screenshot" << endl;
+                  glPixelStorei(GL_PACK_ALIGNMENT,1);
+                  int screenwidth = console.GetInt("screenwidth");
+                  int screenheight = console.GetInt("screenheight");
+                  GLubytevec pixels(screenwidth * screenheight * 3);
+               
+                  glReadPixels(0, 0, screenwidth, screenheight, GL_BGR, GL_UNSIGNED_BYTE, &pixels[0]);
+                  vector<unsigned char> header(12, 0);
+                  header[2] = 2;
+                  header.push_back(screenwidth % 256);
+                  header.push_back(screenwidth / 256);
+                  header.push_back(screenheight % 256);
+                  header.push_back(screenheight / 256);
+                  header.push_back(24);
+                  header.push_back(0);
+               
+                  int num = 0;
+                  string filename;
+                  bool finished = false;
+                  while (!finished)
+                  {
+                     string padded = PadNum(num, 5);
+                     filename = "screenshot" + padded + ".tga";
+                     ifstream test(filename.c_str());
+                     if (!test)
+                        finished = true;
+                     test.close();
+                     ++num;
+                  }
+                  ofstream screenshot(filename.c_str());
+                  for (size_t i = 0; i < header.size(); ++i)
+                     screenshot << header[i];
+                  for (size_t i = 0; i < pixels.size(); ++i)
+                     screenshot << pixels[i];
+                  screenshot.close();
                }
-               ofstream screenshot(filename.c_str());
-               for (size_t i = 0; i < header.size(); ++i)
-                  screenshot << header[i];
-               for (size_t i = 0; i < pixels.size(); ++i)
-                  screenshot << pixels[i];
-               screenshot.close();
+               break;
+            default:
                break;
          }
       
@@ -1026,6 +1026,12 @@ bool GUIEventHandler(SDL_Event &event)
    {
       SDL_ShowCursor(1);
       gui[settings]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[serverbrowser]->visible) 
+   {
+      SDL_ShowCursor(1);
+      gui[serverbrowser]->ProcessEvent(&event);
       eatevent = true;
    }
    SDL_mutexV(clientmutex);
@@ -1216,7 +1222,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    }
    float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
    
-   bool onground = false;
    bool moving = false;
    
    float direction;
@@ -1471,7 +1476,7 @@ void SynchronizePosition()
    return;
 #endif
    static deque<OldPosition> oldpos;
-   static int smoothfactor = 1;
+   //static int smoothfactor = 1;   unused
    static int wayoffcount = 0;
    OldPosition temp;
    Uint32 currtick = SDL_GetTicks();
@@ -1617,7 +1622,8 @@ void SynchronizePosition()
 
 void UpdateSpectatePosition()
 {
-   if (player[spectateplayer].spawned && spectateplayer != servplayernum)
+   // Yes, the size_t below is a bogus cast, but the difference should never matter here
+   if (player[spectateplayer].spawned && (size_t)spectateplayer != servplayernum)
    {
       player[0].pos = player[spectateplayer].pos;
       player[0].facing = player[spectateplayer].facing;
@@ -1639,7 +1645,7 @@ void SpectateNext()
    ++spectateplayer;
    while (spectateplayer != lastplayer)
    {
-      if (spectateplayer > player.size() - 1)
+      if ((size_t)spectateplayer > player.size() - 1)
          spectateplayer = 1;
       if (player[spectateplayer].spawned)
          break;
@@ -1672,7 +1678,7 @@ void Animate()
 {
    SDL_mutexP(clientmutex);
    // Delete meshes as requested by the net thread
-   for (int i = 0; i < deletemeshes.size(); ++i)
+   for (size_t i = 0; i < deletemeshes.size(); ++i)
    {
       if (deletemeshes[i] != meshes.end())
          meshes.erase(deletemeshes[i]);
@@ -1719,9 +1725,9 @@ void Animate()
    
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
-   for (int k = 1; k < player.size(); ++k)
+   for (size_t k = 1; k < player.size(); ++k)
    {
-      if (k != servplayernum)
+      if (k != (size_t)servplayernum)
          UpdatePlayerModel(player[k], meshes);
    }
    SDL_mutexV(clientmutex);
@@ -1731,7 +1737,7 @@ void Animate()
 void UpdateServerList()
 {
 #ifndef DEDICATED
-   Table* serverlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
+   Table* serverlist = (Table*)gui[serverbrowser]->GetWidget("serverlist");
    string values;
    vector<ServerInfo>::iterator i;
    if (!serverlist)
@@ -1858,7 +1864,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // The server is also the only one to pass in Rewind
 void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, vector<PlayerData>& playervec, const Vector3& campos,
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&),
-                     void (*Rewind)(int, const Vector3&, const Vector3&, const float))
+                     void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float))
 {
    list<Particle> newparts;
    int updint = console.GetInt("partupdateinterval");
@@ -2007,9 +2013,9 @@ void UpdatePlayerList()
          playerlist->Add(string("Spectators") + "|||");
          lplayerlist->Add(string("Spectators") + "||||");
       }
-      for (int i = 1; i < player.size(); ++i)
+      for (size_t i = 1; i < player.size(); ++i)
       {
-         if (player[i].connected && player[i].team == (j + 1) % 3)
+         if (player[i].connected && player[i].team == (int)(j + 1) % 3)
          {
             add = player[i].name + "|";
             add += ToString(player[i].kills) + "|";
@@ -2150,7 +2156,7 @@ void UpdatePlayer()
    // Update player position
    SDL_mutexP(clientmutex);
       
-   if (player[0].spectate && spectateplayer != servplayernum && player[0].spawned)
+   if (player[0].spectate && (size_t)spectateplayer != servplayernum && player[0].spawned)
       UpdateSpectatePosition();
    else
    {
@@ -2217,7 +2223,7 @@ bool PrimaryGUIVisible()
 #ifndef DEDICATED
    // A bit counterintuitive...
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
-         !gui[settings]->visible && !gui[endgame]->visible);
+         !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible);
 #endif
 }
 

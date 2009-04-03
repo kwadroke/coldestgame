@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Material.h"
 #include "globals.h"
 
@@ -24,8 +25,8 @@ int Material::nummats = 0;
 
 #ifndef DEDICATED
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f), shininess(0.f),
-                   texid(8, 0), texfilename(8, ""), texman(&tm), shaderhand(&s), id(nummats), cullface(true), alphatest(0.f), doalphatest(false),
-                   shader(""), alphatocoverage(false), additive(false), depthtest(true), depthwrite(true), noshadowcull(false)
+                   texid(8, 0), texfilename(8, ""), shader(""), texman(&tm), shaderhand(&s), id(nummats), cullface(true), doalphatest(false),
+                   alphatocoverage(false), additive(false), depthtest(true), depthwrite(true), noshadowcull(false), alphatest(0.f)
 {
    ifstream check(filename.c_str());
    if (check.fail())

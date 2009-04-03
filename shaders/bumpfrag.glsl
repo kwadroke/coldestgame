@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #version 110
 
 void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);

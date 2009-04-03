@@ -17,11 +17,12 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Packet.h"
 
 int Packet::laghax = 0;
 
-Packet::Packet(IPaddress* inaddr, string s) : ack(0), data(s),
+Packet::Packet(IPaddress* inaddr, string s) : data(s), ack(0),
                attempts(0), lastsent(0), sendinterval(100)
 {
    if (inaddr)

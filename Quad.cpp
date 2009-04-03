@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Quad.h"
 
 Quad::Quad(VertexHeap& vh) : first(new Triangle(vh)), second(new Triangle(vh))
