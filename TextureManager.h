@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __TEXTURE_MANAGER_H
 #define __TEXTURE_MANAGER_H
 

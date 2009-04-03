@@ -17,12 +17,12 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "ObjectKDTree.h"
 
 int ObjectKDTree::maxlevels = 7;
 
-ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : vertheap(8), p(6, Quad(vertheap)), vertices(v),
-                           haschildren(false), root(true), retobjs(new MeshSet())
+ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : haschildren(false), vertices(v), retobjs(new MeshSet()), root(true), vertheap(8), p(6, Quad(vertheap))
 {
    // Get pointers to objects
    for (Meshlist::iterator i = objs->begin(); i != objs->end(); ++i)
@@ -61,7 +61,7 @@ ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : vertheap(8), p(6, Qua
 }
 
 
-ObjectKDTree::ObjectKDTree() : members(list<Mesh*>()), haschildren(false), root(false), retobjs(NULL)
+ObjectKDTree::ObjectKDTree() : members(list<Mesh*>()), haschildren(false), retobjs(NULL), root(false)
 {
 }
 
@@ -129,7 +129,7 @@ void ObjectKDTree::refine(int level)
 {
    int curraxis = level % 2;
    int iterations = 0;
-   float currsplit, minsplit, maxsplit;
+   float currsplit = 0, minsplit, maxsplit;
 
    switch(curraxis)
    {

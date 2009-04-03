@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef OBJECTKDTREE_H
 #define OBJECTKDTREE_H
 

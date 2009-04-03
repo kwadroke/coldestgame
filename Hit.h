@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __HIT_H
 #define __HIT_H
 

@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __QUAD_H
 #define __QUAD_H
 
@@ -91,6 +92,8 @@ void Quad::GetVertNums(const int num, int& firstv, int& secondv) const
          secondv = 2;
          break;
       default:
+         firstv = -1; // Avoid uninitialized variable warnings
+         secondv = -1;
          logout << "Warning, bogus vertex passed to GetVertNums" << endl;
          break;
    };

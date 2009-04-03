@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "GUI.h"
 
 // These must be included here because they have a circular dependency with GUI
@@ -29,6 +30,7 @@
 #include "TextArea.h"
 #include "Slider.h"
 #include "TabWidget.h"
+#include "Layout.h"
 #include "../globals.h"
 
 
@@ -410,9 +412,6 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
          }
          else
          {
-            char* currstr;
-            DOMNamedNodeMap* attribs = current->getAttributes();
-            
             // Read the attributes
             virtualw = atof(ReadAttribute(current, XSWrapper("virtualw")).c_str());
             virtualh = atof(ReadAttribute(current, XSWrapper("virtualh")).c_str());
@@ -446,7 +445,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             rootnode = true;
          }
          DOMNodeList* children = current->getChildNodes();
-         for (int i = 0; i < children->getLength(); ++i)
+         for (size_t i = 0; i < children->getLength(); ++i)
          {
             currnode = children->item(i);
             ReadNode(currnode, this);
@@ -475,6 +474,8 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             newwidget = GUIPtr(new Slider(parent, texman));
          else if (name == XSWrapper("TabWidget"))
             newwidget = GUIPtr(new TabWidget(parent, texman));
+         else if (name == XSWrapper("Layout"))
+            newwidget = GUIPtr(new Layout(parent, texman));
          else // Not a node we recognize
          {
             ReadSpecialNodes(current, this);
@@ -520,7 +521,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
          children.push_back(newwidget);
          
          DOMNodeList* children = current->getChildNodes();
-         for (int i = 0; i < children->getLength(); ++i)
+         for (size_t i = 0; i < children->getLength(); ++i)
          {
             currnode = children->item(i);
             newwidget->ReadNode(currnode, newwidget.get());
@@ -644,6 +645,7 @@ void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
    if (!t)  // Had some problems with sdl-ttf at one point
    {        // At least this way it won't segfault
       logout << "Error rendering text: " << text << endl;
+      logout << "TTF Error: " << TTF_GetError() << endl;
       exit(-10);
    }
    
@@ -663,8 +665,6 @@ void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
 */
 void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_Font *font, GLuint tex, float scale, bool shadow)
 {
-   SDL_Surface *text;
-         
    if (str.length() == 0 || !TTF_WasInit())
       return;
    SDL_Color col;
@@ -697,7 +697,7 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
       bmask = 0x00ff0000;
       amask = 0xff000000;
 #endif
-      text = SDL_CreateRGBSurface(SDL_SWSURFACE, neww, newh, 32,
+      SDL_Surface *text = SDL_CreateRGBSurface(SDL_SWSURFACE, neww, newh, 32,
                               rmask, gmask, bmask, amask);
    
   
@@ -706,6 +706,8 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
       SDL_LockSurface(text);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, text->w, text->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, text->pixels);
+      
+      SDL_FreeSurface(text);
    }
    
    float texwidth = (float)t->w / (float)neww;
@@ -759,8 +761,6 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
    glColor4f(1, 1, 1, 1);
    
    SDL_FreeSurface(t);
-   if (oldstr != str)
-      SDL_FreeSurface(text);
 }
 
 

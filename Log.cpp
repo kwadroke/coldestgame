@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Log.h"
 
 // Note: violating all kinds of rules here, but since Log should only ever be constructed once, and never destructed

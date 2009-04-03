@@ -17,10 +17,11 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "ScrollView.h"
 
-ScrollView::ScrollView(GUI* p, TextureManager* tm) : vpoffsetx(0), vpoffsety(0),
-                       scrollbarwidth(20.f), drag(false)
+ScrollView::ScrollView(GUI* p, TextureManager* tm) : scrollbarwidth(20.f), vpoffsetx(0), vpoffsety(0),
+                       drag(false)
 {
    Init(p, tm);
    

@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 void fog(float dist, inout vec4 color)
 {
    float fogval = (dist - gl_Fog.start) * gl_Fog.scale;

@@ -17,16 +17,17 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Mesh.h"
 #include "ProceduralTree.h" // Circular dependency
 
-Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl) : vbosteps(), impdist(0.f), render(true), animtime(0),
-            lastanimtick(SDL_GetTicks()), position(Vector3()), rots(Vector3()),
-            size(100.f), drawdistmult(-1.f), debug(false), width(0.f), height(0.f), resman(rm),
-            impostortex(0), vbodata(vector<VBOData>()), vbo(0), ibo(0), next(0), hasvbo(false), vbosize(0), ibosize(0),
-            currkeyframe(0), frametime(), glops(gl), havemats(false), dynamic(false), collide(true), terrain(false), dist(0.f), 
-            animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false), boundschanged(true), scale(.01f), updatevbo(true),
-            trisdirty(true), parent(NULL), updatedelay(0), lasttick(0)
+Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl) : render(true), dynamic(false),
+           collide(true), terrain(false), drawdistmult(-1.f), impdist(0.f), dist(0.f), impostortex(0), debug(false),
+           updatedelay(0), vbo(0), ibo(0), hasvbo(false), vbosize(0), ibosize(0), animtime(0), currkeyframe(0),
+           lastanimtick(SDL_GetTicks()), animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false),
+           boundschanged(true), position(Vector3()), rots(Vector3()), size(100.f), height(0.f), width(0.f),
+           resman(rm), next(0), glops(gl), havemats(false), updatevbo(true), scale(.01f), trisdirty(true),
+           parent(NULL), lasttick(0)
 {
 #ifndef DEDICATED
    if (gl)
@@ -53,15 +54,15 @@ Mesh::~Mesh()
 }
 
 
-Mesh::Mesh(const Mesh& m) : resman(m.resman), vbosteps(m.vbosteps), impdist(m.impdist), render(m.render),
-         animtime(m.animtime), lastanimtick(m.lastanimtick), position(m.position), rots(m.rots),
-         size(m.size), drawdistmult(m.drawdistmult), name(m.name), debug(m.debug), width(m.width), height(m.height),
-         impostortex(m.impostortex), vbo(0), ibo(0), next(m.next), hasvbo(false),
-         childmeshes(m.childmeshes), currkeyframe(m.currkeyframe), frametime(m.frametime), glops(m.glops), havemats(m.havemats),
-         basefile(m.basefile), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), dist(m.dist), animspeed(m.animspeed),
-         curranimation(m.curranimation), nextanimation(m.nextanimation), newchildren(m.newchildren), boundschanged(m.boundschanged),
-         numframes(m.numframes), startframe(m.startframe), scale(m.scale), updatevbo(m.updatevbo), campos(m.campos),
-         trisdirty(m.trisdirty), parent(m.parent), updatedelay(m.updatedelay), lasttick(m.lasttick)
+Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist),  impostortex(m.impostortex), debug(m.debug), updatedelay(m.updatedelay),
+         vbosteps(m.vbosteps), vbo(0), ibo(0), 
+                  frametime(m.frametime), hasvbo(false),
+         
+                            childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe), lastanimtick(m.lastanimtick), animspeed(m.animspeed),
+                                        curranimation(m.curranimation), nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe), newchildren(m.newchildren), boundschanged(m.boundschanged),
+         position(m.position), rots(m.rots), size(m.size), height(m.height), width(m.width), resman(m.resman), 
+                  next(m.next), glops(m.glops), havemats(m.havemats), updatevbo(m.updatevbo), basefile(m.basefile), scale(m.scale), 
+                       campos(m.campos), trisdirty(m.trisdirty), parent(m.parent), lasttick(m.lasttick)
 {
 #ifndef DEDICATED
    if (m.impmat)
@@ -290,7 +291,7 @@ void Mesh::Load(const IniReader& reader)
             newnode->trans *= scale;
             
             // Read vertices
-            for (int k = 0; k < currcon.NumChildren(); ++k)
+            for (size_t k = 0; k < currcon.NumChildren(); ++k)
             {
                const IniReader& currvert = currcon(k);
                Vertex newv;
@@ -447,7 +448,7 @@ void Mesh::Load(const IniReader& reader)
 	   logout << " from file " << reader.GetPath() << endl;
    }
    CalcBounds();
-   for (int i = 0; i < frameroot.size(); ++i)
+   for (size_t i = 0; i < frameroot.size(); ++i)
       frameroot[i]->SetGL(glops);
 }
 
@@ -907,7 +908,7 @@ void Mesh::CalcBounds()
       float temp;
       Vector3 localpos = GetPosition();
       size_t tsize = tris.size();
-      for (int i = 0; i < tsize; ++i)
+      for (size_t i = 0; i < tsize; ++i)
       {
          for (int j = 0; j < 3; ++j)
          {
@@ -980,7 +981,7 @@ void Mesh::LoadMaterials()
 
 void Mesh::Scale(const float& sval)
 {
-   for (int i = 0; i < frameroot.size(); ++i)
+   for (size_t i = 0; i < frameroot.size(); ++i)
       frameroot[i]->Scale(sval);
    ResetTriMaxDims();
    scale *= sval;
@@ -1007,7 +1008,7 @@ void Mesh::InsertIntoContainer(const string& name, Mesh& m)
       return;
    }
    
-   for (int i = 0; i < frameroot.size(); ++i)
+   for (size_t i = 0; i < frameroot.size(); ++i)
    {
       m.frameroot[i]->parent = &(*framecontainer[i][name]);
    }
@@ -1123,7 +1124,7 @@ void Mesh::SetAnimation(const int newanim)
 void Mesh::SetGL()
 {
    glops = true;
-   for (int i = 0; i < frameroot.size(); ++i)
+   for (size_t i = 0; i < frameroot.size(); ++i)
       frameroot[i]->SetGL(true);
 }
 

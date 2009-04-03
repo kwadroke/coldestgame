@@ -17,19 +17,20 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "ALSource.h"
 
-ALSource::ALSource() : position(Vector3()), velocity(floatvec(3, 0.f)),
+ALSource::ALSource() : position(Vector3()),
                    pitch(1.f), gain(1.f), loop(AL_FALSE), refdist(200.f), maxdist(5000.f),
-                   rolloff(1.f), relative(AL_FALSE)
+                         rolloff(1.f), relative(AL_FALSE), velocity(floatvec(3, 0.f))
 {
    alGenSources(1, &id);
 }
 
 
-ALSource::ALSource(const ALSource& s) : position(s.position), velocity(s.velocity),
+ALSource::ALSource(const ALSource& s) : position(s.position),
                    pitch(s.pitch), gain(s.gain), loop(s.loop), refdist(s.refdist), maxdist(s.maxdist),
-                   rolloff(s.rolloff), relative(s.relative)
+                         rolloff(s.rolloff), relative(s.relative), velocity(s.velocity)
 {
    alGenSources(1, &id);
 }

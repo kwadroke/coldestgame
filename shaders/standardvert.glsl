@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #version 110
 
 varying vec4 shadowmappos, worldshadowmappos;

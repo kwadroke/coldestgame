@@ -17,9 +17,10 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Vertex.h"
 
-Vertex::Vertex() : index(0), norm(Vector3(0, 0, 1)), inited(false)
+Vertex::Vertex() : norm(Vector3(0, 0, 1)), index(0), inited(false)
 {
    floatvec tc(2, 0.f);
    texcoords = vector<floatvec>(8, tc);

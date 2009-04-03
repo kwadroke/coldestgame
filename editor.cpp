@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "editor.h"
 #include "globals.h"
 #include "renderdefs.h"
@@ -818,7 +819,7 @@ void AddTree()
    t.barkfile = "materials/bark";
    t.leavesfile = "materials/leaves";
    
-   size_t prims = t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
+   t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
    newmesh->CalcBounds();
    
    meshes.push_back(*newmesh);

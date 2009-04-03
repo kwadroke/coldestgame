@@ -17,9 +17,10 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Item.h"
 
-Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(0), mesh(ml.end()), type(newtype), 
+Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), mesh(ml.end()), team(0), type(newtype), 
            coolmultiplier(1.f), ammomultiplier(1.f), armormultiplier(1.f), weight(0), name("None"), modelfile("models/empty/base")
            
 {

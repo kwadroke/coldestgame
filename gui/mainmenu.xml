@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf"
+<GUI virtualw="1000" virtualh="1000" font="fonts/vtcorona.ttf"
      buttonnormal="textures/buttonnorm.png"
      buttonpressed="textures/buttonpressed.png"
      buttonhover="textures/buttonhover.png"
@@ -20,25 +20,23 @@
      tablerowhover=""
      cursornormal="textures/sliderbuttonnorm.png"
      leftclicksound="sounds/beep-3.ogg">
+   <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
+   
    <Label x="300" y="25" width="400" height="200" text="" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"
           normal="textures/logo.png"/>
-   <Button x="400" y="300" width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="6" align="center"
-           leftclick="resume"/>
-   <Button x="400" y="350" width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="host"/>
-   <Button x="400" y="400" width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="showsettings"/>
-   <Button x="400" y="450" width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="exit"/>
+   <Layout x="390" y="290" padding="10" orientation="vertical">
+      <Button width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="0" align="center"
+            leftclick="resume"/>
+      <Button width="200" height="40" text="Join" name="joinbutton" xmargin="3" ymargin="0" align="center"
+            leftclick="join"/>
+      <Button width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="0" align="center"
+            leftclick="host"/>
+      <Button width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="0" align="center"
+            leftclick="showsettings"/>
+      <Button width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="0" align="center"
+            leftclick="exit"/>
+   </Layout>
    
-   <Button x="100" y="550" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="connect"/>
-   <Button x="320" y="550" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="connectip"/>
-   <LineEdit x="520" y="566" width="380" height="24" text="www.nemebean.com:12012" name="servername"
-             normal="textures/buttonnorm.png"
-             hover="textures/buttonhover.png"/>
-   <Table x="100" y="600" width="800" height="300" name="serverlist" columns="2" colwidths="475|195|35|35|35" rowheight="25"
-          normal="textures/buttonnormsquare.png"/>
+   <Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/>
    
 </GUI>

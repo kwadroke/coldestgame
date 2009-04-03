@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 // This class is a wrapper around XMLCh pointers used by Xerces in parsing XML documents.
 // It provides some XMLString functionality in a more object-oriented manner as well as
 // automatically handling the memory management of dynamically allocated XMLCh*'s.

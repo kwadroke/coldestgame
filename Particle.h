@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __PARTICLE
 #define __PARTICLE
 
@@ -40,7 +41,7 @@ class Particle
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
       
-      short playernum;
+      size_t playernum;
       unsigned long id;
       
       Vector3 dir;

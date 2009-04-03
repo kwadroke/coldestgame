@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 // Actions for the GUI class to use
 #include "gui/GUI.h"
 #include "gui/ProgressBar.h"
@@ -87,7 +88,7 @@ void UpdateUnitSelection()
 
 void Connect()
 {
-   Table* servlist = (Table*)gui[mainmenu]->GetWidget("serverlist");
+   Table* servlist = (Table*)gui[serverbrowser]->GetWidget("serverlist");
    vector<ServerInfo>::iterator i;
    string serveraddress;
    Uint16 serverport;
@@ -151,15 +152,15 @@ void Host()
 }
 
 
-void Resume()
+void Join()
 {
-   ShowGUI(loadoutmenu);
+   ShowGUI(serverbrowser);
 }
 
 
-void LoadoutToMain()
+void Resume()
 {
-   ShowGUI(mainmenu);
+   ShowGUI(loadoutmenu);
 }
 
 
@@ -298,12 +299,12 @@ void Action(const string& action)
       ConnectToIp();
    else if (action == "host")
       Host();
+   else if (action == "join")
+      Join();
    else if (action == "resume")
       Resume();
    else if (action == "spawn")
       Spawn();
-   else if (action == "loadouttomain")
-      LoadoutToMain();
    else if (action == "updateunitselection")
       UpdateUnitSelection();
    else if (action == "submitcommand")

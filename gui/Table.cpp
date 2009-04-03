@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Table.h"
 
 // TODO (maybe): There's an awful lot of downcasting going on in this class.  Can we get rid of it?

@@ -17,8 +17,9 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "CollisionDetection.h"
-#include "util.h" // for floatzero
+#include "util.h"
 
 #define PI 3.14159265
 
@@ -61,7 +62,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    Vector3 midpoint = (oldpos + newpos) / 2.f;
    Vector3 move = newpos - oldpos;
    float movemaginv = 1.f / newpos.distance(oldpos);
-   float maxdim, tempdim;
    int adjusted = 0;
    // 1e38 is near the maximum representable value for a single precision float
    hitpos = Vector3(1e38f, 1e38f, 1e38f);
@@ -77,7 +77,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          Vector3 currpos = currmesh.GetPosition();
          if (DistanceBetweenPointAndLine(currpos, oldpos, move, movemaginv) <= currmesh.GetSize() + radius)
          {
-            float currheight = currmesh.GetHeight();
             float currwidth = currmesh.GetWidth();
             if (midpoint.x + cullrad > currpos.x - currwidth &&
                midpoint.x - cullrad < currpos.x + currwidth &&
@@ -95,7 +94,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          Vector3 currpos = currmesh.GetPosition();
          if (currpos.distance(oldpos) <= currmesh.GetSize() + radius)
          {
-            float currheight = currmesh.GetHeight();
             float currwidth = currmesh.GetWidth();
             if (midpoint.x + cullrad > currpos.x - currwidth &&
                midpoint.x - cullrad < currpos.x + currwidth &&
@@ -117,7 +115,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    Mesh* current;
    bool hit;
-   for (int i = 0; i < osize; i++)
+   for (size_t i = 0; i < osize; i++)
    {
       current = objs[i];
       current->Begin();
@@ -196,7 +194,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // This test will almost never hit for fast-moving projectiles, so don't even bother
    if (!adjusted && !extcheck)
    {
-      for (int i = 0; i < ntsize; i++)
+      for (size_t i = 0; i < ntsize; i++)
       {
          Triangle& currtri = *neartris[i];
          hit = false;
@@ -227,7 +225,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       // falls outside the edge vector, but we still actually touch the edge) which is acceptable
       // for projectiles because the corner test will catch them, but could be a problem for player
       // movement.  Whew.
-      for (int i = 0; i < ntsize; i++)
+      for (size_t i = 0; i < ntsize; i++)
       {
          Triangle& currtri = *neartris[i];
          hit = false;
@@ -248,7 +246,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       
       // Do a ray-sphere check on each corner of the triangles.  This is to handle
       // the aforementioned case when we're moving nearly parallel to the edge.
-      for (int i = 0; i < ntsize; i++)
+      for (size_t i = 0; i < ntsize; i++)
       {
          Triangle& currtri = *neartris[i];
          for (int j = 0; j < 3; ++j)
@@ -455,7 +453,7 @@ inline
 #endif
 bool CollisionDetection::InVector(Mesh* ptr, vector<Meshlist::iterator>& vec)
 {
-   for (int i = 0; i < vec.size(); ++i)
+   for (size_t i = 0; i < vec.size(); ++i)
       if (&(*vec[i]) == ptr) return true;
    return false;
 }

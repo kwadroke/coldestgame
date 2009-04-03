@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "globals.h"
 #include "renderdefs.h"
 
@@ -33,7 +34,7 @@ ResourceManager resman; // Handles loading and organizing different resources
 vector<PlayerData> player;
 vector<UnitData> units;
 bool server;            // Indicates whether we're running a server
-int servplayernum;
+size_t servplayernum;
 SDL_Thread* serverthread;
 ObjectKDTree kdtree;
 vector<floatvec> heightmap;  // Smoothed heightmap data

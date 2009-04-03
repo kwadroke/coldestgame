@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __GLOBALS
 #define __GLOBALS
 
@@ -49,7 +50,9 @@ using std::set;
 
 const int terrobjsize = 16; // Terrain objects are terrobjsize x terrobjsize tiles
 
-enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, statsdisp, consolegui, 
+// If you add to this and it's a primary GUI, don't forget to add it to GUIEventHandler or it won't get events
+// Also note that fullscreen GUI's should be added before statsdisp so they don't cover it up
+enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, serverbrowser, statsdisp, consolegui, 
    ingamestatus, chat, endgame, loadoutmessage, editobject, editormain, numguis};
 
 extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
@@ -66,7 +69,7 @@ extern vector<GUIPtr> gui;
 extern vector<PlayerData> player;
 extern vector<UnitData> units;
 extern bool server;
-extern int servplayernum;
+extern size_t servplayernum;
 extern SDL_Thread* serverthread;
 extern ObjectKDTree kdtree;
 extern vector<floatvec> heightmap;  // Smoothed heightmap data
@@ -92,7 +95,7 @@ float GetTerrainHeight(const float x, const float y);
 void AppendToChat(int, string);
 void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, vector<PlayerData>&, const Vector3& campos = Vector3(),
                      void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&) = NULL,
-                     void (*Rewind)(int, const Vector3&, const Vector3&, const float) = NULL);
+                     void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float) = NULL);
 void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);

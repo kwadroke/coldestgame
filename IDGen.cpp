@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "IDGen.h"
 
 IDGen::IDGen() : nextid(0), incmutex(SDL_CreateMutex())

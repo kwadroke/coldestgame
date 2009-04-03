@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __INIREADER_H
 #define __INIREADER_H
 
@@ -50,7 +51,7 @@ class IniReader
       template <typename T>
       T Read(T&, const string&, const int num = 0) const;
       string ReadLine(string&, const string) const;
-      int NumChildren() const;
+      size_t NumChildren() const;
       string GetPath() const;
 
    private:
@@ -67,7 +68,7 @@ class IniReader
          think that would be a serious problem so this stays (for now).
       */
       mutable map<string, string, std::less<string> > values;
-      int level;
+      size_t level;
       string name;
       string path;
 };

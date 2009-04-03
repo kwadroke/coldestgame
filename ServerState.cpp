@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "ServerState.h"
 
 ServerState::ServerState(const Uint32 tickin) : tick(tickin)

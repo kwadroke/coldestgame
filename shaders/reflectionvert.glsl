@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 varying vec4 shadowmappos, worldshadowmappos;
 varying float dist;
 varying vec4 ambient, diffuse;

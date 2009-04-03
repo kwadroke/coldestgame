@@ -17,10 +17,11 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Triangle.h"
 
-Triangle::Triangle(VertexHeap& vertheap) : maxdim(-1.f), material(NULL), collide(false),   
-                       matrix(GraphicMatrix()), radmod(0.f), v(VertexVHPvec(3))
+Triangle::Triangle(VertexHeap& vertheap) : v(VertexVHPvec(3)), material(NULL), collide(false),
+                   matrix(GraphicMatrix()), maxdim(-1.f), radmod(0.f)
 {
    for (size_t i = 0; i < 3; ++i)
       v[i] = vertheap.insert();

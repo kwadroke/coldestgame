@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __MESH_H
 #define __MESH_H
 
@@ -104,8 +105,7 @@ class Mesh
       Uint32 lastimpupdate;
       bool debug;
       
-      bool glops;
-      int updatedelay;
+      Uint32 updatedelay;
       
       VectorHeap<Vertex> vertheap;
       
@@ -125,7 +125,7 @@ class Mesh
       intvec frametime;
       vector<map<string, MeshNodePtr> > framecontainer;
       bool hasvbo;
-      int vbosize, ibosize;
+      size_t vbosize, ibosize;
       vector<Mesh*> childmeshes;
       
       int animtime;
@@ -149,8 +149,9 @@ class Mesh
       shared_ptr<Mesh> impostor;
       MaterialPtr impmat;
 
-      int next;
+      size_t next;
       
+      bool glops;
       bool havemats;
       bool updatevbo;
       string basefile;

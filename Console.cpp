@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "Console.h"
 #include "globals.h"
 
@@ -149,10 +150,10 @@ void Console::Parse(const string& line, bool echo)
 
 
 // Just counts spaces, make sure to run through simplifywhitespace first
-int Console::NumTokens(const string& str)
+size_t Console::NumTokens(const string& str)
 {
    int count = 0;
-   for (int i = 0; i < str.size(); i++)
+   for (size_t i = 0; i < str.size(); i++)
    {
       if (str.substr(i, 1) == " ")
          count++;
@@ -168,7 +169,7 @@ string Console::Token(const string& str, int tokennum)
    string newstr = str;
    while(!found && newstr.size())
    {
-      for (int i = 0; i < newstr.size(); i++)
+      for (size_t i = 0; i < newstr.size(); i++)
       {
          if (newstr.substr(i, 1) == " " || i == newstr.size() - 1)
          {
@@ -197,7 +198,7 @@ string Console::SimplifyWhitespace(const string& str)
 {
    string newstr = "";
    bool inwhitespace = true;
-   for (int i = 0; i < str.size(); i++)
+   for (size_t i = 0; i < str.size(); i++)
    {
       if (str.substr(i, 1) == " ")
       {

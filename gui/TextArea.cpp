@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "TextArea.h"
 
 TextArea::TextArea(GUI* p, TextureManager* tm)
@@ -82,7 +83,7 @@ void TextArea::Refresh()
    bool foundbreak = false;
    bool newline = false;
    table->Clear();
-   for (int i = 1; i < working.length(); ++i)
+   for (size_t i = 1; i < working.length(); ++i)
    {
       if (working[i] == ' ' || working[i] == '\n')
       {

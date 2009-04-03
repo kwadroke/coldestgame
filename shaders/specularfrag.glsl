@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 uniform sampler2D spectex;
 
 vec4 specular(vec3 norm, vec3 lightdir, in vec3 viewv, inout vec4 color)

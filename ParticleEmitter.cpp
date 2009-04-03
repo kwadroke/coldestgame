@@ -17,18 +17,19 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "ParticleEmitter.h"
 #include "globals.h"
 
 ParticleEmitter::ParticleEmitter(const Vector3& pos, Particle& p, Uint32 etime, float d, int maxcount) : 
-                                 position(pos), particle(p), emittertime(etime), density(d), count(maxcount),
-                                 lastupdate(SDL_GetTicks()), firstupdate(true)
+                                 position(pos), particle(p), emittertime(etime), lastupdate(SDL_GetTicks()), density(d), count(maxcount),
+                                 firstupdate(true)
 {
 }
 
 
 ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman) : 
-                                 lastupdate(SDL_GetTicks()), particle("particles/explosion", resman), firstupdate(true)
+                                 particle("particles/explosion", resman), lastupdate(SDL_GetTicks()), firstupdate(true)
 {
    IniReader read(filename);
    string partfile;
@@ -54,9 +55,9 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
    
    Uint32 currtick = SDL_GetTicks();
    Uint32 numticks = currtick - lastupdate;
-   int addcount = int(Random(0.f, density * float(numticks)));
+   ssize_t addcount = int(Random(0.f, density * float(numticks)));
    lastupdate = currtick;
-   for (ssize_t i = 0; i < addcount, count != 0; ++i)
+   for (ssize_t i = 0; (i < addcount), count != 0; ++i)
    {
       Particle newpart(particle);
       newpart.pos = position;

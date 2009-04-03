@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 /* Gets started as a separate thread whenever it is requested to start
    a server from the main progam file.*/
 
@@ -55,9 +56,9 @@ int ServerInput(void*);
 void ServerLoadMap();
 void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
 void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
-void ApplyDamage(Mesh*, const float, const int, const bool teamdamage = false);
+void ApplyDamage(Mesh*, const float, const size_t, const bool teamdamage = false);
 void ServerUpdatePlayer(int);
-void Rewind(int, const Vector3&, const Vector3&, const float);
+void Rewind(Uint32, const Vector3&, const Vector3&, const float);
 void SaveState();
 void AddItem(const Item&, int);
 void SendItem(const Item&, const int);
@@ -231,7 +232,7 @@ void ServerLoop()
       SDL_Delay(1); // Otherwise if we turn off limitserverrate this will hog CPU
       if (console.GetBool("limitserverrate"))
       {
-         while (frametimer.elapsed() < 1000 / servertickrate - 1)
+         while (frametimer.elapsed() < Uint32(1000 / servertickrate - 1))
             SDL_Delay(1);
       }
       frametimer.start();
@@ -257,7 +258,7 @@ void ServerLoop()
       checkmap = (checkmap + 1) % 5;
       
       SDL_mutexP(servermutex);
-      for (int i = 1; i < serverplayers.size(); ++i)
+      for (size_t i = 1; i < serverplayers.size(); ++i)
       {
          currtick = SDL_GetTicks();
          if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + 30000)
@@ -410,8 +411,8 @@ int ServerListen(void* dummy)
                //logout << oppx << "  " << oppy << "  " << oppz << endl << flush;
                
                // Freak out if we get a packet whose checksum isn't right
-               unsigned long value = 0;
-               for (int i = 0; i < debug.length(); ++i)
+               size_t value = 0;
+               for (size_t i = 0; i < debug.length(); ++i)
                {
                   if (debug[i] == '&')
                      break;
@@ -419,7 +420,7 @@ int ServerListen(void* dummy)
                }
                string dummy;
                get >> dummy;
-               int checksum;
+               size_t checksum;
                get >> checksum;
                if (checksum != value)
                {
@@ -445,7 +446,7 @@ int ServerListen(void* dummy)
             
             if (CountPlayers() < maxplayers && clientver == netver)
             {
-               for (int i = 1; i < serverplayers.size(); ++i)
+               for (size_t i = 1; i < serverplayers.size(); ++i)
                {
                   if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].addr.port == inpack->address.port)
                   {
@@ -554,7 +555,7 @@ int ServerListen(void* dummy)
             
             // TODO: Make sure weight and salvage are legal
             vector<SpawnPointData> allspawns = spawnpoints;
-            for (int i = 0; i < serveritems.size(); ++i)
+            for (size_t i = 0; i < serveritems.size(); ++i)
             {
                if (serveritems[i].Type() == Item::SpawnPoint && serveritems[i].team == serverplayers[oppnum].team)
                {
@@ -667,7 +668,7 @@ int ServerListen(void* dummy)
                serverplayers[oppnum].acked.insert(packetnum);
                
                // Propogate that chat text to all other connected players
-               for (int i = 1; i < serverplayers.size(); ++i)
+               for (size_t i = 1; i < serverplayers.size(); ++i)
                {
                   if (serverplayers[i].connected && i != oppnum && (!team || serverplayers[i].team == serverplayers[oppnum].team))
                   {
@@ -717,7 +718,7 @@ int ServerListen(void* dummy)
             response << newteam << eol;
             SDL_mutexP(servermutex);
             serverplayers[oppnum].team = newteam;
-            for (int i = 0; i < spawnpoints.size(); ++i)
+            for (size_t i = 0; i < spawnpoints.size(); ++i)
             {
                if ((spawnpoints[i].team == serverplayers[oppnum].team) || serverplayers[oppnum].team == 0)
                {
@@ -855,6 +856,7 @@ int ServerListen(void* dummy)
    
    // Clean up
    SDLNet_FreePacket(inpack);
+   return 0;
 }
 
 
@@ -904,7 +906,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          temp << "U" << eol;
          temp << servsendpacketnum << eol;
          SDL_mutexP(servermutex);
-         for (int i = 1; i < serverplayers.size(); ++i)
+         for (size_t i = 1; i < serverplayers.size(); ++i)
          {
             temp << i << eol;
             temp << serverplayers[i].spawned << eol;
@@ -932,7 +934,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          
          // Quick and dirty checksumming
          unsigned long value = 0;
-         for (int i = 0; i < temp.data.length(); ++i)
+         for (size_t i = 0; i < temp.data.length(); ++i)
          {
             value += (char)(temp.data[i]);
          }
@@ -943,7 +945,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          if (temp.data.length() < 5000)
          {
             SDL_mutexP(servermutex);
-            for (int i = 1; i < serverplayers.size(); ++i)
+            for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
                {
@@ -965,7 +967,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             pingpack << "P\n";
             pingpack << servsendpacketnum << eol;
             SDL_mutexP(servermutex);
-            for (int i = 1; i < serverplayers.size(); ++i)
+            for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
                {
@@ -982,7 +984,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             occup << "u\n";
             occup << servsendpacketnum << eol;
             occup << servfps << eol;
-            for (int i = 1; i < serverplayers.size(); ++i)
+            for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
                {
@@ -1001,7 +1003,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                }
             }
             occup << 0 << eol;
-            for (int i = 1; i < serverplayers.size(); ++i)
+            for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
                {
@@ -1080,7 +1082,7 @@ void ServerLoadMap()
    servparticles.clear();
    
    // Generate main base items
-   for (int i = 0; i < spawnpoints.size(); ++i)
+   for (size_t i = 0; i < spawnpoints.size(); ++i)
    {
       Item newitem(Item::Base, servermeshes);
       MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
@@ -1116,7 +1118,7 @@ void ServerLoadMap()
    gameover = 0;
    
    bots.clear();
-   int numbots = console.GetInt("bots");
+   size_t numbots = console.GetInt("bots");
    for (size_t i = 0; i < numbots; ++i)
       bots.push_back(BotPtr(new Bot()));
    SDL_mutexV(servermutex);
@@ -1126,10 +1128,9 @@ void ServerLoadMap()
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
 void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
 {
-   Mesh* curr;
+   Mesh* curr = NULL;
    // 1e38 is near the maximum representable value for a single precision float
    float currmindist = 1e38f, currdist = 0.f;
-   bool dead;
    // Should only hit each body part once per projectile
    sort(hitobjs.begin(), hitobjs.end());
    hitobjs.erase(unique(hitobjs.begin(), hitobjs.end()), hitobjs.end());
@@ -1137,7 +1138,7 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
    // would have passed through multiple objects.  Eliminate all but the nearest one.
    // This may obsolete the above, but I suspect that's a quicker way to eliminate dupes
    // so I'm going to leave it.
-   for (int j = 0; j < hitobjs.size(); ++j)
+   for (size_t j = 0; j < hitobjs.size(); ++j)
    {
       currdist = hitobjs[j]->GetPosition().distance2(p.origin);
       if (currdist < currmindist)
@@ -1146,6 +1147,8 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
          currmindist = currdist;
       }
    }
+   
+   assert(curr != NULL);
    
    SendHit(hitpos, p);
    
@@ -1186,13 +1189,13 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
 }
 
 
-void ApplyDamage(Mesh* curr, const float damage, const int playernum, const bool teamdamage)
+void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const bool teamdamage)
 {
    bool dead;
-   for (int i = 1; i < serverplayers.size(); ++i)
+   for (size_t i = 1; i < serverplayers.size(); ++i)
    {
       dead = false;
-      for (int part = 0; part < numbodyparts; ++part)
+      for (size_t part = 0; part < numbodyparts; ++part)
       {
          if (serverplayers[i].mesh[part] != servermeshes.end())
          {
@@ -1368,7 +1371,7 @@ void ServerUpdatePlayer(int i)
 
 
 // Only rewinds meshes that fall within the cylinder defined by start, end, and radius
-void Rewind(int ticks, const Vector3& start, const Vector3& end, const float radius)
+void Rewind(Uint32 ticks, const Vector3& start, const Vector3& end, const float radius)
 {
    Uint32 currtick = SDL_GetTicks();
    size_t i;

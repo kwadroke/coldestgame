@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "IniReader.h"
 
 IniReader::IniReader(int lev) : level(lev), name(""), path("")
@@ -50,7 +51,7 @@ IniReader::IniReader(string filename) : level(0), name(""), path(filename)
 void IniReader::Parse(istringstream& in)
 {
    string currline = "";
-   int linelevel = level;
+   size_t linelevel = level;
    string valname = "";
    istringstream line;
    bool firstline = true;
@@ -116,7 +117,7 @@ const IniReader& IniReader::GetItemByName(const string name) const
 
 int IniReader::GetItemIndex(const string name) const
 {
-   for (int i = 0; i < children.size(); ++i)
+   for (size_t i = 0; i < children.size(); ++i)
    {
       if (children[i]->name == name)
          return i;
@@ -174,7 +175,7 @@ bool IniReader::HaveValue(const string& name, const int num) const
 }
 
 
-int IniReader::NumChildren() const
+size_t IniReader::NumChildren() const
 {
    return children.size();
 }

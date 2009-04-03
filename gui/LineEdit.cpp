@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #include "LineEdit.h"
 
 LineEdit::LineEdit(GUI* p, TextureManager* tm)
@@ -60,7 +61,7 @@ void LineEdit::RenderWidget()
    {
       StringDim(font, text, w, h);
       float fh = (float)h / hratio;
-      float fw = (float)w / wratio;
+      //float fw = (float)w / wratio;    unused
       
       float scale = (height - ymargin * 2.f) / fh;
       fh *= scale;
@@ -198,7 +199,7 @@ void LineEdit::DeleteChar()
 string LineEdit::GetVisible()
 {
    string available = text.substr(offset);
-   int counter = 1;
+   size_t counter = 1;
    int strw, strh;
    StringDim(font, available.substr(0, counter), strw, strh);
    while (strw / wratio * fontscale < width - 2.f && available.substr(0, counter).length() < available.length())

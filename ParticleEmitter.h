@@ -17,6 +17,7 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
+
 #ifndef __PARTICLEEMITTER_H
 #define __PARTICLEEMITTER_H
 
