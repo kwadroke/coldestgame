@@ -80,8 +80,8 @@ Node
    Node
       Type External
       Name Unnamed
-      BaseFile models/nemesis/torso/base
+      BaseFile models/nemesis/legs/base
       Position 1880.99 829.134 1551.49
       Rotations 0 145 0
       AnimSpeed 1
-      Scale 0.013
+      Scale 0.01

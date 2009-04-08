@@ -91,7 +91,7 @@ void Connect()
    Table* servlist = (Table*)gui[serverbrowser]->GetWidget("serverlist");
    vector<ServerInfo>::iterator i;
    string serveraddress;
-   Uint16 serverport;
+   Uint16 serverport = 12010;
    int currsel = servlist->Selected();
    if (currsel == -1) return;
    int counter = 0;
