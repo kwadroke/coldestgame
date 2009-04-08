@@ -294,7 +294,7 @@ void InitUnits()
    dummy.acceleration = .05f;
    dummy.maxspeed = 3.f;
    dummy.size = 20.f;
-   dummy.scale = .68f;
+   dummy.scale = 1.f;
    dummy.weight = 50;
    dummy.weaponoffset[Legs] = Vector3();
    dummy.weaponoffset[Torso] = Vector3(0, 0, 0);
@@ -1802,7 +1802,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    p.mesh[Torso]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
    p.mesh[Torso]->Move(p.pos);
    
-   p.mesh[Hips]->Rotate(Vector3(-p.pitch, 0, p.roll));
+   p.mesh[Hips]->Rotate(Vector3(0/*-p.pitch*/, p.facing, p.roll));
    p.mesh[Hips]->Move(p.pos);
    
    if (p.mesh[LArm] == ml.end() && p.hp[LArm] > 0)
@@ -1811,7 +1811,6 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       newmesh->dynamic = true;
       if (gl)
          newmesh->SetGL();
-      //p.mesh[Torso]->InsertIntoContainer("LeftArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
       p.mesh[LArm]->Scale(units[p.unit].scale);
@@ -1822,15 +1821,16 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       newmesh->dynamic = true;
       if (gl)
          newmesh->SetGL();
-      //p.mesh[Torso]->InsertIntoContainer("RightArmConnector", *newmesh);
       ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
    }
-   if (p.hp[LArm] > 0)
-      p.mesh[LArm]->Move(Vector3()); // Force reset of these meshes' geometry
-   if (p.hp[RArm] > 0)
-      p.mesh[RArm]->Move(Vector3());
+   
+   p.mesh[LArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
+   p.mesh[LArm]->Move(p.pos);
+   
+   p.mesh[RArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
+   p.mesh[RArm]->Move(p.pos);
    
    p.size = units[p.unit].size;
    

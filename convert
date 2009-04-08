@@ -1,0 +1,301 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import commands
+import math
+
+# Note: obj only supports a single tex coord per vertex, so that's why this class only
+# includes a single place to store them
+class Vertex:
+   def __init__(self):
+      self.vid = 0
+      self.pos = Vector()
+      self.norm = Vector()
+      self.tc = [0, 0]
+      self.color = [255, 255, 255, 255]
+   def __str__(self):
+      retval = "   Vertex\n"
+      retval += "      ID " + str(self.vid) + "\n"
+      retval += "      Pos " + str(self.pos.x) + " " + str(self.pos.y) + " " + str(self.pos.z) +"\n"
+      retval += "      Norm " + str(self.norm.x) + " " + str(self.norm.y) + " " + str(self.norm.z) + "\n"
+      retval += "      TC " + str(self.tc[0]) + " " + str(self.tc[1]) + "\n"
+      retval += "      Color " + str(self.color[0]) + " " + str(self.color[1]) + " " + str(self.color[2]) + " " + str(self.color[3]) + "\n"
+      return retval
+      
+class Vector(object):
+   def __init__(self, a = 0, b = 0, c = 0):
+      self.x = a
+      self.y = b
+      self.z = c
+   def __getitem__(self, i):
+      if i == 0:
+         return self.x
+      if i == 1:
+         return self.y
+      if i == 2:
+         return self.z
+      return 0
+   def __str__(self):
+      return "(" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + ")"
+   
+   def cross(self, v):
+      return Vector(self.y * v.z - self.z * v.y, self.z * v.x - self.x * v.z, self.x * v.y - self.y * v.x)
+   
+   def distance(self, v):
+      return math.sqrt((self.x - v.x) * (self.x - v.x) + 
+         (self.y - v.y) * (self.y - v.y) + 
+         (self.z - v.z) * (self.z - v.z))
+   
+   def normalize(self):
+      mag = self.distance(Vector())
+      if mag > .00001:
+         self.x /= mag
+         self.y /= mag
+         self.z /= mag
+   
+   def __add__(self, v):
+      return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
+   
+   def __sub__(self, v):
+      return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+   
+   def __div__(self, v):
+      return Vector(self.x / v, self.y / v, self.z / v)
+   
+   def __mul__(self, v):
+      return Vector(self.x * v, self.y * v, self.z * v)
+      
+class Triangle:
+   def __init__(self):
+      self.tid = 0
+      self.verts = [0, 0, 0]
+      self.material = "materials/default"
+      self.collide = False
+   def __str__(self):
+      retval = "   Tri\n"
+      retval += "      ID " + str(self.tid) + "\n"
+      retval += "      Verts "
+      for i in range(0, 3):
+         retval += str(self.verts[i]) + " "
+      retval += "\n"
+      retval += "      Material " + self.material + "\n"
+      retval += "      Collide "
+      if self.collide: # No ternary op in python:-(
+         retval += "1\n"
+      else:
+         retval += "0\n"
+      return retval
+
+def checkwinding(verts, norms):
+   trinorm = (norms[0] + norms[1] + norms[2]) / 3
+   trinorm.normalize()
+   v1 = verts[1] - verts[0]
+   v2 = verts[2] - verts[0]
+   calcnorm = v1.cross(v2)
+   calcnorm.normalize()
+   if calcnorm.distance(trinorm) > 1:
+      return True
+   return False
+         
+if len(sys.argv) < 3:
+   print "Usage:", sys.argv[0], "-obj [basename] [-time frametime] [-stride #] "\
+         "[-dupfirst {0|1}] [-invert objectname] [-start firstframe]"
+   sys.exit(-1)
+   
+frametime = 30
+stride = 1
+dupfirst = True
+invobjs = []
+startout = 0
+for i in range(1, len(sys.argv), 2):
+   if i + 1 >= len(sys.argv):
+      print "Error parsing command line options"
+      sys.exit(-1)
+   if sys.argv[i] == "-obj":
+      base = sys.argv[i + 1]
+   elif sys.argv[i] == "-time":
+      frametime = int(sys.argv[i + 1])
+   elif sys.argv[i] == "-stride":
+      stride = int(sys.argv[i + 1])
+   elif sys.argv[i] == "-dupfirst":
+      if sys.argv[i + 1] == "0":
+         dupfirst = False
+   elif sys.argv[i] == "-invert":
+      invobjs.append(sys.argv[i + 1])
+   elif sys.argv[i] == "-start":
+      startout = int(sys.argv[i + 1])
+      
+i = 1
+matmap = dict()
+
+matfile = open(base + ".matmap")
+for line in matfile:
+   vals = line.split()
+   if len(vals):
+      matmap[vals[0]] = vals[1]
+   print "Mapping ", vals[0], "to", vals[1]
+matfile.close()
+   
+# Read in .obj data
+print "Processing ",
+while (os.path.exists(base + "_" + str(i).rjust(6, "0") + ".obj")):
+   nextid = 1
+   currmat = "materials/default"
+   collide = False
+   invert = False
+   vertices = []
+   vertpos = []
+   norms = []
+   texcoords = []
+   faces = []
+   tris = []
+   print i, "-",
+   infile = open(base + "_" + str(i).rjust(6, "0") + ".obj", "r")
+   for line in infile:
+      if line[:2] == "vt":
+         line = line[2:]
+         newtc = line.split()
+         # Apparently Blender exports UV's y-inverted from what we need
+         newtc[1] = 1 - float(newtc[1])
+         texcoords.append(newtc)
+      elif line[:2] == "vn":
+         line = line[2:]
+         vals = line.split()
+         modifier = 1
+         if invert:
+            modifier = -1
+         newnorm = Vector()
+         newnorm.x = float(vals[0]) * modifier
+         newnorm.y = float(vals[1]) * modifier
+         newnorm.z = float(vals[2]) * modifier
+         norms.append(newnorm)
+      elif line[:1] == "v":
+         line = line[1:]
+         addv = Vector()
+         vals = line.split()
+         addv.x = float(vals[0]) * 1000
+         addv.y = float(vals[1]) * 1000
+         addv.z = float(vals[2]) * 1000
+         vertpos.append(addv)
+      elif line[:1] == "f":
+         line = line[1:]
+         ind = line.split()
+         one = Triangle()
+         one.tid = nextid
+         nextid += 1
+         two = Triangle()
+         two.tid = nextid
+         if len(ind) > 3:
+            nextid += 1
+         
+         index = 0
+         currpos = dict()
+         currnorm = dict()
+         currvert = dict()
+         for j in ind:
+            newv = Vertex()
+            if j.find("/") != -1: # We have normals and uv (hopefully)
+               vals = j.split("/")
+               newv.pos = vertpos[int(vals[0]) - 1]
+               newv.tc = texcoords[int(vals[1]) - 1]
+               newv.norm = norms[int(vals[2]) - 1]
+            else:
+               newv.pos = vertpos[int(j)] # This actually isn't supported
+            newv.vid = nextid
+            currpos[nextid] = newv.pos
+            currnorm[nextid] = newv.norm
+            currvert[nextid] = len(vertices)
+            nextid += 1
+            vertices.append(newv)
+            if len(ind) == 4:
+               if index == 0:
+                  one.verts[0] = nextid - 1
+               elif index == 1:
+                  one.verts[1] = nextid - 1
+                  two.verts[0] = nextid - 1
+               elif index == 2:
+                  two.verts[1] = nextid - 1
+               elif index == 3:
+                  one.verts[2] = nextid - 1
+                  two.verts[2] = nextid - 1
+            elif len(ind) == 3:
+               one.verts[index] = nextid - 1
+            else:
+               print "Error: Unsupported number of vertices in face", len(ind)
+            index += 1
+         if invert:
+            one.verts.reverse()
+            two.verts.reverse()
+            
+         # Blender's obj exporter is occasionally giving us bogus normals,
+         # so we do a sanity check on what it's telling us
+         if checkwinding([currpos[one.verts[0]], currpos[one.verts[1]],
+            currpos[one.verts[2]]], [currnorm[one.verts[0]],
+            currnorm[one.verts[1]], currnorm[one.verts[2]]]):
+            for k in range(3):
+               vertices[currvert[one.verts[k]]].norm *= -1
+         if len(ind) > 3 and checkwinding([currpos[two.verts[0]], currpos[two.verts[1]],
+            currpos[two.verts[2]]], [currnorm[two.verts[0]],
+            currnorm[two.verts[1]], currnorm[two.verts[2]]]):
+            # Only change the one not changed by triangle one
+            # This assumes both triangles will always be backwards, so far a safe assumption
+            vertices[currvert[two.verts[1]]].norm *= -1
+            
+         one.material = two.material = currmat
+         one.collide = two.collide = collide
+         tris.append(one)
+         if len(ind) > 3:
+            tris.append(two)
+            
+      elif line[:6] == "usemtl":
+         line = line[7:-1] # Also need to strip \n
+         if line in matmap:
+            currmat = matmap[line]
+         else:
+            currmat = "materials/default"
+         
+      elif line[:1] == "o":
+         line = line[2:]
+         if line.find("Collide") == -1:
+            collide = False
+         else:
+            collide = True
+         for objname in invobjs:
+            if line.find(objname) != -1:
+               invert = True
+               break
+            else:
+               invert = False
+   infile.close()
+   # Write out Coldest style file
+   frameno = (i - 1) / stride + startout
+   print frameno,
+   filenum = str(frameno).rjust(4, "0")
+   
+   outfile = open("frame" + filenum, "w")
+   outfile.write("Version Version4\n")
+   outfile.write("NextID " + str(nextid) + "\n")
+   outfile.write("TimeToNextFrame " + str(frametime) + "\n")
+   outfile.write("Container\n")
+   outfile.write("   ID 0\n")
+   outfile.write("   ParentID -1\n")
+   outfile.write("   Name\n")
+   outfile.write("   Facing 0\n")
+   outfile.write("   Rot1 0 0 0\n")
+   outfile.write("   Rot2 0 0 0\n")
+   outfile.write("   Trans 0 0 0\n")
+   for vert in vertices:
+      outfile.write(str(vert))
+   outfile.write("Node\n")
+   outfile.write("   Triangles\n")
+   for tri in tris:
+      outfile.write(str(tri))
+   outfile.close()
+   i += stride
+   
+if dupfirst:
+   commands.getoutput("cp frame" + str(startout).rjust(4, "0") + " frame" + str((i - 1) / stride + startout).rjust(4, "0"))
+   i += stride
+print
+print "Generated", (i - 1) / stride, "frames"

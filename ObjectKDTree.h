@@ -30,7 +30,12 @@
 #include "Timer.h"
 #include <boost/shared_ptr.hpp>
 #ifdef __GNUG__
-#include <ext/hash_set>
+// This may not be ready for primetime yet (or I'm stupid, but either way it's getting commented out)
+//#   if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3)
+#      include <ext/hash_set>
+//#   else
+//#      include <unordered_set>
+//#   endif
 #else
 #include <hash_set>
 #endif
@@ -52,8 +57,12 @@ struct eqptr
 };
 
 #ifdef linux
+//#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3)
 typedef __gnu_cxx::hash_set<Mesh*, eqptr, eqptr> MeshSet;
+//#else
+//typedef unordered_set<Mesh*> MeshSet;
 //typedef set<Mesh*> MeshSet;
+//#endif
 #else
 //typedef stdext::hash_set<Mesh*, eqptr> MeshSet;
 typedef set<Mesh*> MeshSet;
