@@ -418,14 +418,6 @@ int NetListen(void* dummy)
                      get >> player[oppnum].speed;
                      get >> player[oppnum].powerdowntime;
                      
-                     /*logout << "Player " << oppnum << endl;
-                     //if (player[oppnum].unit != "unittest")
-                     //   logout << "Died on packet " << packetnum << endl;*/
-                     /*logout << oppnum << ": " << oppx << "  " << oppy << "  " << oppz << endl << flush;
-                     logout << oppfacing << "  ";
-                     logout << opppitch << "  ";
-                     logout << opproll << "  \n\n";*/
-                     
                      player[oppnum].pos.x = oppx;
                      player[oppnum].pos.y = oppy;
                      player[oppnum].pos.z = oppz;
