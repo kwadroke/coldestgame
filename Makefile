@@ -96,7 +96,7 @@ ALBuffer.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 ALBuffer.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ALBuffer.o: /usr/include/stdio.h /usr/include/features.h
 ALBuffer.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-ALBuffer.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+ALBuffer.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 ALBuffer.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 ALBuffer.o: /usr/include/libio.h /usr/include/_G_config.h
 ALBuffer.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
@@ -153,7 +153,7 @@ ALSource.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 ALSource.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 ALSource.o: /usr/include/features.h /usr/include/sys/cdefs.h
 ALSource.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-ALSource.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+ALSource.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ALSource.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 ALSource.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 ALSource.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -219,7 +219,7 @@ Bot.o: /usr/include/boost/config/select_platform_config.hpp
 Bot.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Bot.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Bot.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Bot.o: /usr/include/gnu/stubs-64.h /usr/include/bits/posix_opt.h
+Bot.o: /usr/include/gnu/stubs-32.h /usr/include/bits/posix_opt.h
 Bot.o: /usr/include/bits/environments.h /usr/include/bits/types.h
 Bot.o: /usr/include/bits/typesizes.h /usr/include/bits/confname.h
 Bot.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
@@ -276,14 +276,13 @@ Bot.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Bot.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Bot.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Bot.o: /usr/include/xercesc/util/XercesDefs.hpp
-Bot.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 Bot.o: /usr/include/xercesc/util/XercesVersion.hpp
+Bot.o: /usr/include/xercesc/util/AutoSense.hpp
+Bot.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 Bot.o: /usr/include/xercesc/dom/DOMNode.hpp
 Bot.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 Bot.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-Bot.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Bot.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-Bot.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Bot.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 Bot.o: /usr/include/xercesc/util/RefVectorOf.hpp
 Bot.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -297,8 +296,6 @@ Bot.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 Bot.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 Bot.o: /usr/include/xercesc/util/PlatformUtils.hpp
 Bot.o: /usr/include/xercesc/util/PanicHandler.hpp
-Bot.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-Bot.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 Bot.o: /usr/include/xercesc/framework/MemoryManager.hpp
 Bot.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 Bot.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -310,10 +307,11 @@ Bot.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 Bot.o: /usr/include/xercesc/internal/XSerializable.hpp
 Bot.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 Bot.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-Bot.o: /usr/include/xercesc/util/Hashers.hpp
+Bot.o: /usr/include/xercesc/util/HashBase.hpp
 Bot.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 Bot.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 Bot.o: /usr/include/xercesc/util/RuntimeException.hpp
+Bot.o: /usr/include/xercesc/util/HashXMLCh.hpp
 Bot.o: /usr/include/xercesc/util/RefHashTableOf.c
 Bot.o: /usr/include/xercesc/util/Janitor.hpp
 Bot.o: /usr/include/xercesc/util/Janitor.c
@@ -333,6 +331,8 @@ Bot.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 Bot.o: /usr/include/xercesc/util/regx/Token.hpp
 Bot.o: /usr/include/xercesc/util/Mutexes.hpp
 Bot.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Bot.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+Bot.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 Bot.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 Bot.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 Bot.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -360,10 +360,10 @@ Bot.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 Bot.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 Bot.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 Bot.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-Bot.o: /usr/include/xercesc/validators/common/Grammar.hpp
-Bot.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-Bot.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-Bot.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Bot.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+Bot.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 Bot.o: /usr/include/xercesc/dom/DOM.hpp /usr/include/xercesc/dom/DOMAttr.hpp
 Bot.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
 Bot.o: /usr/include/xercesc/dom/DOMText.hpp
@@ -376,35 +376,32 @@ Bot.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 Bot.o: /usr/include/xercesc/dom/DOMException.hpp
 Bot.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 Bot.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSException.hpp
 Bot.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 Bot.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 Bot.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 Bot.o: /usr/include/xercesc/dom/DOMNotation.hpp
 Bot.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Bot.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Bot.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 Bot.o: /usr/include/xercesc/dom/DOMRange.hpp
 Bot.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Bot.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 Bot.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-Bot.o: /usr/include/xercesc/dom/DOMStringList.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Bot.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 Bot.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-Bot.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 Bot.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 Bot.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Bot.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 Bot.o: /usr/include/xercesc/dom/DOMLocator.hpp
-Bot.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 Bot.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 Bot.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-Bot.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Bot.o: /usr/include/xercesc/dom/DOMWriter.hpp
+Bot.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+Bot.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 Bot.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 Bot.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Bot.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Bot.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Bot.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Bot.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 Bot.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
@@ -418,7 +415,7 @@ CollisionDetection.o: /usr/include/SDL/SDL_config.h
 CollisionDetection.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 CollisionDetection.o: /usr/include/features.h /usr/include/sys/cdefs.h
 CollisionDetection.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-CollisionDetection.o: /usr/include/gnu/stubs-64.h
+CollisionDetection.o: /usr/include/gnu/stubs-32.h
 CollisionDetection.o: /usr/include/bits/huge_val.h
 CollisionDetection.o: /usr/include/bits/huge_valf.h
 CollisionDetection.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
@@ -502,7 +499,7 @@ Console.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 Console.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 Console.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Console.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Console.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+Console.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 Console.o: /usr/include/bits/typesizes.h /usr/include/time.h
 Console.o: /usr/include/endian.h /usr/include/bits/endian.h
 Console.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -567,14 +564,13 @@ Console.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Console.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Console.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Console.o: /usr/include/xercesc/util/XercesDefs.hpp
-Console.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 Console.o: /usr/include/xercesc/util/XercesVersion.hpp
+Console.o: /usr/include/xercesc/util/AutoSense.hpp
+Console.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 Console.o: /usr/include/xercesc/dom/DOMNode.hpp
 Console.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 Console.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-Console.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-Console.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Console.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 Console.o: /usr/include/xercesc/util/RefVectorOf.hpp
 Console.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -588,8 +584,6 @@ Console.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 Console.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 Console.o: /usr/include/xercesc/util/PlatformUtils.hpp
 Console.o: /usr/include/xercesc/util/PanicHandler.hpp
-Console.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-Console.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 Console.o: /usr/include/xercesc/framework/MemoryManager.hpp
 Console.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 Console.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -601,10 +595,11 @@ Console.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 Console.o: /usr/include/xercesc/internal/XSerializable.hpp
 Console.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 Console.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-Console.o: /usr/include/xercesc/util/Hashers.hpp
+Console.o: /usr/include/xercesc/util/HashBase.hpp
 Console.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 Console.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 Console.o: /usr/include/xercesc/util/RuntimeException.hpp
+Console.o: /usr/include/xercesc/util/HashXMLCh.hpp
 Console.o: /usr/include/xercesc/util/RefHashTableOf.c
 Console.o: /usr/include/xercesc/util/Janitor.hpp
 Console.o: /usr/include/xercesc/util/Janitor.c
@@ -624,6 +619,8 @@ Console.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 Console.o: /usr/include/xercesc/util/regx/Token.hpp
 Console.o: /usr/include/xercesc/util/Mutexes.hpp
 Console.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Console.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+Console.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 Console.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 Console.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 Console.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -651,10 +648,10 @@ Console.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 Console.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 Console.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 Console.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-Console.o: /usr/include/xercesc/validators/common/Grammar.hpp
-Console.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-Console.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-Console.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Console.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+Console.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 Console.o: /usr/include/xercesc/dom/DOM.hpp
 Console.o: /usr/include/xercesc/dom/DOMAttr.hpp
 Console.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -668,35 +665,32 @@ Console.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 Console.o: /usr/include/xercesc/dom/DOMException.hpp
 Console.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 Console.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSException.hpp
 Console.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 Console.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 Console.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 Console.o: /usr/include/xercesc/dom/DOMNotation.hpp
 Console.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Console.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Console.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 Console.o: /usr/include/xercesc/dom/DOMRange.hpp
 Console.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Console.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 Console.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-Console.o: /usr/include/xercesc/dom/DOMStringList.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Console.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 Console.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-Console.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 Console.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 Console.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Console.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 Console.o: /usr/include/xercesc/dom/DOMLocator.hpp
-Console.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 Console.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 Console.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-Console.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Console.o: /usr/include/xercesc/dom/DOMWriter.hpp
+Console.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+Console.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Console.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Console.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 Console.o: ALSource.h gui/ProgressBar.h gui/Button.h netdefs.h ServerInfo.h
@@ -709,7 +703,7 @@ FBO.o: TextureHandler.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 FBO.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 FBO.o: /usr/include/features.h /usr/include/sys/cdefs.h
 FBO.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-FBO.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+FBO.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 FBO.o: /usr/include/bits/typesizes.h /usr/include/time.h
 FBO.o: /usr/include/endian.h /usr/include/bits/endian.h
 FBO.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -740,7 +734,7 @@ GraphicMatrix.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 GraphicMatrix.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 GraphicMatrix.o: /usr/include/features.h /usr/include/sys/cdefs.h
 GraphicMatrix.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-GraphicMatrix.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+GraphicMatrix.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 GraphicMatrix.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 GraphicMatrix.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 GraphicMatrix.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -779,7 +773,7 @@ IDGen.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 IDGen.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 IDGen.o: /usr/include/features.h /usr/include/sys/cdefs.h
 IDGen.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-IDGen.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+IDGen.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 IDGen.o: /usr/include/bits/typesizes.h /usr/include/time.h
 IDGen.o: /usr/include/endian.h /usr/include/bits/endian.h
 IDGen.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -808,7 +802,7 @@ IniReader.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 IniReader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 IniReader.o: /usr/include/sys/types.h /usr/include/features.h
 IniReader.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-IniReader.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+IniReader.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 IniReader.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 IniReader.o: /usr/include/time.h /usr/include/endian.h
 IniReader.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -860,7 +854,7 @@ Item.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Item.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Item.o: /usr/include/sys/types.h /usr/include/features.h
 Item.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-Item.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Item.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Item.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 Item.o: /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h
 Item.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -922,7 +916,7 @@ Light.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 Light.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 Light.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Light.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Light.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+Light.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 Light.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 Light.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Light.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -956,7 +950,7 @@ Log.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 Log.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 Log.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Log.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Log.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+Log.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 Log.o: /usr/include/bits/typesizes.h /usr/include/time.h
 Log.o: /usr/include/endian.h /usr/include/bits/endian.h
 Log.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -987,7 +981,7 @@ Material.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL.h
 Material.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Material.o: /usr/include/sys/types.h /usr/include/features.h
 Material.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-Material.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Material.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Material.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 Material.o: /usr/include/time.h /usr/include/endian.h
 Material.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -1051,14 +1045,13 @@ Material.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Material.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Material.o: /usr/include/xercesc/util/XercesDefs.hpp
-Material.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 Material.o: /usr/include/xercesc/util/XercesVersion.hpp
+Material.o: /usr/include/xercesc/util/AutoSense.hpp
+Material.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 Material.o: /usr/include/xercesc/dom/DOMNode.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-Material.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-Material.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Material.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 Material.o: /usr/include/xercesc/util/RefVectorOf.hpp
 Material.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -1072,8 +1065,6 @@ Material.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 Material.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 Material.o: /usr/include/xercesc/util/PlatformUtils.hpp
 Material.o: /usr/include/xercesc/util/PanicHandler.hpp
-Material.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-Material.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 Material.o: /usr/include/xercesc/framework/MemoryManager.hpp
 Material.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 Material.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -1085,10 +1076,11 @@ Material.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 Material.o: /usr/include/xercesc/internal/XSerializable.hpp
 Material.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 Material.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-Material.o: /usr/include/xercesc/util/Hashers.hpp
+Material.o: /usr/include/xercesc/util/HashBase.hpp
 Material.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 Material.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 Material.o: /usr/include/xercesc/util/RuntimeException.hpp
+Material.o: /usr/include/xercesc/util/HashXMLCh.hpp
 Material.o: /usr/include/xercesc/util/RefHashTableOf.c
 Material.o: /usr/include/xercesc/util/Janitor.hpp
 Material.o: /usr/include/xercesc/util/Janitor.c
@@ -1108,6 +1100,8 @@ Material.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 Material.o: /usr/include/xercesc/util/regx/Token.hpp
 Material.o: /usr/include/xercesc/util/Mutexes.hpp
 Material.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Material.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+Material.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 Material.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 Material.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 Material.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -1135,10 +1129,10 @@ Material.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 Material.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 Material.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 Material.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-Material.o: /usr/include/xercesc/validators/common/Grammar.hpp
-Material.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-Material.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-Material.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Material.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+Material.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+Material.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+Material.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 Material.o: /usr/include/xercesc/dom/DOM.hpp
 Material.o: /usr/include/xercesc/dom/DOMAttr.hpp
 Material.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -1152,35 +1146,32 @@ Material.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 Material.o: /usr/include/xercesc/dom/DOMException.hpp
 Material.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 Material.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSException.hpp
 Material.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 Material.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 Material.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 Material.o: /usr/include/xercesc/dom/DOMNotation.hpp
 Material.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Material.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Material.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 Material.o: /usr/include/xercesc/dom/DOMRange.hpp
 Material.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Material.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 Material.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-Material.o: /usr/include/xercesc/dom/DOMStringList.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Material.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 Material.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-Material.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 Material.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 Material.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Material.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 Material.o: /usr/include/xercesc/dom/DOMLocator.hpp
-Material.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 Material.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 Material.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-Material.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Material.o: /usr/include/xercesc/dom/DOMWriter.hpp
+Material.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+Material.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Material.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Material.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Material.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 Material.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
@@ -1193,7 +1184,7 @@ Mesh.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Mesh.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Mesh.o: /usr/include/math.h /usr/include/features.h /usr/include/sys/cdefs.h
 Mesh.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Mesh.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+Mesh.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 Mesh.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 Mesh.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Mesh.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -1259,7 +1250,7 @@ MeshCache.o: /usr/include/boost/config/select_platform_config.hpp
 MeshCache.o: /usr/include/boost/config/posix_features.hpp
 MeshCache.o: /usr/include/unistd.h /usr/include/features.h
 MeshCache.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-MeshCache.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+MeshCache.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 MeshCache.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 MeshCache.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 MeshCache.o: /usr/include/bits/confname.h /usr/include/getopt.h
@@ -1322,7 +1313,7 @@ MeshNode.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 MeshNode.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 MeshNode.o: /usr/include/features.h /usr/include/sys/cdefs.h
 MeshNode.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-MeshNode.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+MeshNode.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 MeshNode.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 MeshNode.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 MeshNode.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -1388,14 +1379,13 @@ MeshNode.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocument.hpp
 MeshNode.o: /usr/include/xercesc/util/XercesDefs.hpp
-MeshNode.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 MeshNode.o: /usr/include/xercesc/util/XercesVersion.hpp
+MeshNode.o: /usr/include/xercesc/util/AutoSense.hpp
+MeshNode.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMNode.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 MeshNode.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 MeshNode.o: /usr/include/xercesc/util/RefVectorOf.hpp
 MeshNode.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -1409,8 +1399,6 @@ MeshNode.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 MeshNode.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 MeshNode.o: /usr/include/xercesc/util/PlatformUtils.hpp
 MeshNode.o: /usr/include/xercesc/util/PanicHandler.hpp
-MeshNode.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-MeshNode.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 MeshNode.o: /usr/include/xercesc/framework/MemoryManager.hpp
 MeshNode.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 MeshNode.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -1422,10 +1410,11 @@ MeshNode.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 MeshNode.o: /usr/include/xercesc/internal/XSerializable.hpp
 MeshNode.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 MeshNode.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-MeshNode.o: /usr/include/xercesc/util/Hashers.hpp
+MeshNode.o: /usr/include/xercesc/util/HashBase.hpp
 MeshNode.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 MeshNode.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 MeshNode.o: /usr/include/xercesc/util/RuntimeException.hpp
+MeshNode.o: /usr/include/xercesc/util/HashXMLCh.hpp
 MeshNode.o: /usr/include/xercesc/util/RefHashTableOf.c
 MeshNode.o: /usr/include/xercesc/util/Janitor.hpp
 MeshNode.o: /usr/include/xercesc/util/Janitor.c
@@ -1445,6 +1434,8 @@ MeshNode.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 MeshNode.o: /usr/include/xercesc/util/regx/Token.hpp
 MeshNode.o: /usr/include/xercesc/util/Mutexes.hpp
 MeshNode.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+MeshNode.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+MeshNode.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 MeshNode.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 MeshNode.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 MeshNode.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -1472,10 +1463,10 @@ MeshNode.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 MeshNode.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 MeshNode.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-MeshNode.o: /usr/include/xercesc/validators/common/Grammar.hpp
-MeshNode.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-MeshNode.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-MeshNode.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+MeshNode.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+MeshNode.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+MeshNode.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+MeshNode.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOM.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMAttr.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -1489,35 +1480,32 @@ MeshNode.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMException.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSException.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMNotation.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMRange.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMStringList.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMLocator.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-MeshNode.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMWriter.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+MeshNode.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+MeshNode.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 MeshNode.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 MeshNode.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 MeshNode.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
@@ -1531,7 +1519,7 @@ ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 ObjectKDTree.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 ObjectKDTree.o: /usr/include/math.h /usr/include/features.h
 ObjectKDTree.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-ObjectKDTree.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+ObjectKDTree.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 ObjectKDTree.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 ObjectKDTree.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 ObjectKDTree.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
@@ -1598,7 +1586,7 @@ Packet.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Packet.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Packet.o: /usr/include/sys/types.h /usr/include/features.h
 Packet.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-Packet.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Packet.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Packet.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 Packet.o: /usr/include/time.h /usr/include/endian.h
 Packet.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -1629,7 +1617,7 @@ Particle.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Particle.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Particle.o: /usr/include/math.h /usr/include/features.h
 Particle.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-Particle.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Particle.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Particle.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 Particle.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 Particle.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
@@ -1695,14 +1683,13 @@ Particle.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Particle.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Particle.o: /usr/include/xercesc/util/XercesDefs.hpp
-Particle.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 Particle.o: /usr/include/xercesc/util/XercesVersion.hpp
+Particle.o: /usr/include/xercesc/util/AutoSense.hpp
+Particle.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 Particle.o: /usr/include/xercesc/dom/DOMNode.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-Particle.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-Particle.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Particle.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 Particle.o: /usr/include/xercesc/util/RefVectorOf.hpp
 Particle.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -1716,8 +1703,6 @@ Particle.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 Particle.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 Particle.o: /usr/include/xercesc/util/PlatformUtils.hpp
 Particle.o: /usr/include/xercesc/util/PanicHandler.hpp
-Particle.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-Particle.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 Particle.o: /usr/include/xercesc/framework/MemoryManager.hpp
 Particle.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 Particle.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -1729,10 +1714,11 @@ Particle.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 Particle.o: /usr/include/xercesc/internal/XSerializable.hpp
 Particle.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 Particle.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-Particle.o: /usr/include/xercesc/util/Hashers.hpp
+Particle.o: /usr/include/xercesc/util/HashBase.hpp
 Particle.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 Particle.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 Particle.o: /usr/include/xercesc/util/RuntimeException.hpp
+Particle.o: /usr/include/xercesc/util/HashXMLCh.hpp
 Particle.o: /usr/include/xercesc/util/RefHashTableOf.c
 Particle.o: /usr/include/xercesc/util/Janitor.hpp
 Particle.o: /usr/include/xercesc/util/Janitor.c
@@ -1752,6 +1738,8 @@ Particle.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 Particle.o: /usr/include/xercesc/util/regx/Token.hpp
 Particle.o: /usr/include/xercesc/util/Mutexes.hpp
 Particle.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Particle.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+Particle.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 Particle.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 Particle.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 Particle.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -1779,10 +1767,10 @@ Particle.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 Particle.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 Particle.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 Particle.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-Particle.o: /usr/include/xercesc/validators/common/Grammar.hpp
-Particle.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-Particle.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-Particle.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Particle.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+Particle.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+Particle.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+Particle.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 Particle.o: /usr/include/xercesc/dom/DOM.hpp
 Particle.o: /usr/include/xercesc/dom/DOMAttr.hpp
 Particle.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -1796,35 +1784,32 @@ Particle.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 Particle.o: /usr/include/xercesc/dom/DOMException.hpp
 Particle.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 Particle.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSException.hpp
 Particle.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 Particle.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 Particle.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 Particle.o: /usr/include/xercesc/dom/DOMNotation.hpp
 Particle.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Particle.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 Particle.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 Particle.o: /usr/include/xercesc/dom/DOMRange.hpp
 Particle.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Particle.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 Particle.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-Particle.o: /usr/include/xercesc/dom/DOMStringList.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Particle.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 Particle.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-Particle.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 Particle.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 Particle.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Particle.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 Particle.o: /usr/include/xercesc/dom/DOMLocator.hpp
-Particle.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 Particle.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 Particle.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-Particle.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Particle.o: /usr/include/xercesc/dom/DOMWriter.hpp
+Particle.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+Particle.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Particle.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 Particle.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Particle.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 Particle.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
@@ -1840,7 +1825,7 @@ ParticleEmitter.o: /usr/include/SDL/SDL_config.h
 ParticleEmitter.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 ParticleEmitter.o: /usr/include/features.h /usr/include/sys/cdefs.h
 ParticleEmitter.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-ParticleEmitter.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+ParticleEmitter.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ParticleEmitter.o: /usr/include/bits/huge_valf.h
 ParticleEmitter.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 ParticleEmitter.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
@@ -1915,14 +1900,13 @@ ParticleEmitter.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 ParticleEmitter.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocument.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/XercesDefs.hpp
-ParticleEmitter.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/XercesVersion.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/AutoSense.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMNode.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 ParticleEmitter.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/RefVectorOf.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -1936,8 +1920,6 @@ ParticleEmitter.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/PlatformUtils.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/PanicHandler.hpp
-ParticleEmitter.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-ParticleEmitter.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 ParticleEmitter.o: /usr/include/xercesc/framework/MemoryManager.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 ParticleEmitter.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -1949,10 +1931,11 @@ ParticleEmitter.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 ParticleEmitter.o: /usr/include/xercesc/internal/XSerializable.hpp
 ParticleEmitter.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-ParticleEmitter.o: /usr/include/xercesc/util/Hashers.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/HashBase.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/RuntimeException.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/HashXMLCh.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/RefHashTableOf.c
 ParticleEmitter.o: /usr/include/xercesc/util/Janitor.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/Janitor.c
@@ -1972,6 +1955,8 @@ ParticleEmitter.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/regx/Token.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/Mutexes.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+ParticleEmitter.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 ParticleEmitter.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 ParticleEmitter.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -1999,11 +1984,10 @@ ParticleEmitter.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 ParticleEmitter.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-ParticleEmitter.o: /usr/include/xercesc/validators/common/Grammar.hpp
-ParticleEmitter.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-ParticleEmitter.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-ParticleEmitter.o: /usr/include/bits/posix2_lim.h
-ParticleEmitter.o: /usr/include/bits/xopen_lim.h
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOM.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMAttr.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -2017,35 +2001,32 @@ ParticleEmitter.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMException.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSException.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMNotation.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMRange.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMStringList.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMLocator.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-ParticleEmitter.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMWriter.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+ParticleEmitter.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 ParticleEmitter.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 ParticleEmitter.o: /usr/include/SDL/SDL_ttf.h TextureManager.h
 ParticleEmitter.o: gui/XSWrapper.h util.h ALSource.h PlayerData.h Hit.h
@@ -2060,7 +2041,7 @@ PlayerData.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 PlayerData.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 PlayerData.o: /usr/include/features.h /usr/include/sys/cdefs.h
 PlayerData.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-PlayerData.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+PlayerData.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 PlayerData.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 PlayerData.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 PlayerData.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -2130,7 +2111,7 @@ PrimitiveOctree.o: /usr/include/SDL/SDL_config.h
 PrimitiveOctree.o: /usr/include/SDL/SDL_platform.h Vector3.h
 PrimitiveOctree.o: /usr/include/math.h /usr/include/features.h
 PrimitiveOctree.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-PrimitiveOctree.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+PrimitiveOctree.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 PrimitiveOctree.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 PrimitiveOctree.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 PrimitiveOctree.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
@@ -2170,7 +2151,7 @@ PrimitiveOctree.o: /usr/include/SDL/SDL_version.h
 ProceduralTree.o: ProceduralTree.h /usr/include/math.h
 ProceduralTree.o: /usr/include/features.h /usr/include/sys/cdefs.h
 ProceduralTree.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-ProceduralTree.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+ProceduralTree.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ProceduralTree.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 ProceduralTree.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 ProceduralTree.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -2246,7 +2227,7 @@ Quad.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 Quad.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 Quad.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Quad.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Quad.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+Quad.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 Quad.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 Quad.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Quad.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -2302,7 +2283,7 @@ Quaternion.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 Quaternion.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 Quaternion.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Quaternion.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Quaternion.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+Quaternion.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 Quaternion.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 Quaternion.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Quaternion.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -2343,7 +2324,7 @@ ResourceManager.o: TextureHandler.h /usr/include/SDL/SDL.h
 ResourceManager.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 ResourceManager.o: /usr/include/sys/types.h /usr/include/features.h
 ResourceManager.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-ResourceManager.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+ResourceManager.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 ResourceManager.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 ResourceManager.o: /usr/include/time.h /usr/include/endian.h
 ResourceManager.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -2414,7 +2395,7 @@ ServerInfo.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 ServerInfo.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 ServerInfo.o: /usr/include/sys/types.h /usr/include/features.h
 ServerInfo.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-ServerInfo.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+ServerInfo.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 ServerInfo.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 ServerInfo.o: /usr/include/time.h /usr/include/endian.h
 ServerInfo.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -2446,7 +2427,7 @@ ServerState.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 ServerState.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 ServerState.o: /usr/include/features.h /usr/include/sys/cdefs.h
 ServerState.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-ServerState.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+ServerState.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 ServerState.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 ServerState.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 ServerState.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -2517,7 +2498,7 @@ Shader.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 Shader.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 Shader.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Shader.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Shader.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+Shader.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 Shader.o: /usr/include/bits/typesizes.h /usr/include/time.h
 Shader.o: /usr/include/endian.h /usr/include/bits/endian.h
 Shader.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -2547,7 +2528,7 @@ SoundManager.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 SoundManager.o: /usr/include/vorbis/vorbisfile.h /usr/include/stdio.h
 SoundManager.o: /usr/include/features.h /usr/include/sys/cdefs.h
 SoundManager.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-SoundManager.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+SoundManager.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 SoundManager.o: /usr/include/bits/typesizes.h /usr/include/libio.h
 SoundManager.o: /usr/include/_G_config.h /usr/include/wchar.h
 SoundManager.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
@@ -2615,7 +2596,7 @@ TextureHandler.o: /usr/include/SDL/SDL_platform.h /usr/include/SDL/SDL.h
 TextureHandler.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 TextureHandler.o: /usr/include/sys/types.h /usr/include/features.h
 TextureHandler.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-TextureHandler.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+TextureHandler.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 TextureHandler.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 TextureHandler.o: /usr/include/time.h /usr/include/endian.h
 TextureHandler.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -2652,7 +2633,7 @@ TextureManager.o: /usr/include/SDL/SDL_platform.h /usr/include/SDL/SDL.h
 TextureManager.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 TextureManager.o: /usr/include/sys/types.h /usr/include/features.h
 TextureManager.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-TextureManager.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+TextureManager.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 TextureManager.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 TextureManager.o: /usr/include/time.h /usr/include/endian.h
 TextureManager.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -2686,7 +2667,7 @@ Timer.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 Timer.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 Timer.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Timer.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Timer.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+Timer.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 Timer.o: /usr/include/bits/typesizes.h /usr/include/time.h
 Timer.o: /usr/include/endian.h /usr/include/bits/endian.h
 Timer.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -2716,7 +2697,7 @@ Triangle.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 Triangle.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 Triangle.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Triangle.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Triangle.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+Triangle.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 Triangle.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 Triangle.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Triangle.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -2776,7 +2757,7 @@ Vector3.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Vector3.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Vector3.o: /usr/include/math.h /usr/include/features.h
 Vector3.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-Vector3.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Vector3.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Vector3.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 Vector3.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 Vector3.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
@@ -2813,7 +2794,7 @@ Vertex.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 Vertex.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 Vertex.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Vertex.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Vertex.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+Vertex.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 Vertex.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 Vertex.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Vertex.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -2869,7 +2850,7 @@ Weapon.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Weapon.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Weapon.o: /usr/include/sys/types.h /usr/include/features.h
 Weapon.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-Weapon.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Weapon.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 Weapon.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 Weapon.o: /usr/include/time.h /usr/include/endian.h
 Weapon.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -2917,24 +2898,16 @@ actions.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 actions.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocument.hpp
 actions.o: /usr/include/xercesc/util/XercesDefs.hpp
-actions.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-actions.o: /usr/include/inttypes.h /usr/include/features.h
-actions.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-actions.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
-actions.o: /usr/include/stdint.h /usr/include/bits/wchar.h
-actions.o: /usr/include/sys/types.h /usr/include/bits/types.h
-actions.o: /usr/include/bits/typesizes.h /usr/include/time.h
-actions.o: /usr/include/endian.h /usr/include/bits/endian.h
-actions.o: /usr/include/sys/select.h /usr/include/bits/select.h
-actions.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-actions.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
 actions.o: /usr/include/xercesc/util/XercesVersion.hpp
-actions.o: /usr/include/xercesc/dom/DOMNode.hpp
+actions.o: /usr/include/xercesc/util/AutoSense.hpp
+actions.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
+actions.o: /usr/include/endian.h /usr/include/features.h
+actions.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+actions.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
+actions.o: /usr/include/bits/endian.h /usr/include/xercesc/dom/DOMNode.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-actions.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-actions.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 actions.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 actions.o: /usr/include/xercesc/util/RefVectorOf.hpp
 actions.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -2942,7 +2915,12 @@ actions.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
 actions.o: /usr/include/xercesc/util/XMLException.hpp
 actions.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
 actions.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
-actions.o: /usr/include/xlocale.h /usr/include/alloca.h
+actions.o: /usr/include/xlocale.h /usr/include/sys/types.h
+actions.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+actions.o: /usr/include/time.h /usr/include/sys/select.h
+actions.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+actions.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+actions.o: /usr/include/bits/pthreadtypes.h /usr/include/alloca.h
 actions.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
 actions.o: /usr/include/xercesc/dom/DOMError.hpp
 actions.o: /usr/include/xercesc/util/XMLUni.hpp
@@ -2950,8 +2928,6 @@ actions.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 actions.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 actions.o: /usr/include/xercesc/util/PlatformUtils.hpp
 actions.o: /usr/include/xercesc/util/PanicHandler.hpp
-actions.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-actions.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 actions.o: /usr/include/xercesc/framework/MemoryManager.hpp
 actions.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 actions.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -2963,10 +2939,11 @@ actions.o: /usr/include/assert.h /usr/include/xercesc/util/XMLUniDefs.hpp
 actions.o: /usr/include/xercesc/internal/XSerializable.hpp
 actions.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 actions.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-actions.o: /usr/include/xercesc/util/Hashers.hpp
+actions.o: /usr/include/xercesc/util/HashBase.hpp
 actions.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 actions.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 actions.o: /usr/include/xercesc/util/RuntimeException.hpp
+actions.o: /usr/include/xercesc/util/HashXMLCh.hpp
 actions.o: /usr/include/xercesc/util/RefHashTableOf.c
 actions.o: /usr/include/xercesc/util/Janitor.hpp
 actions.o: /usr/include/xercesc/util/Janitor.c
@@ -2986,6 +2963,8 @@ actions.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 actions.o: /usr/include/xercesc/util/regx/Token.hpp
 actions.o: /usr/include/xercesc/util/Mutexes.hpp
 actions.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+actions.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+actions.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 actions.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 actions.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 actions.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -3013,11 +2992,11 @@ actions.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 actions.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 actions.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-actions.o: /usr/include/xercesc/validators/common/Grammar.hpp
-actions.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-actions.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-actions.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
-actions.o: /usr/include/bits/stdio_lim.h /usr/include/xercesc/dom/DOM.hpp
+actions.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+actions.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+actions.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+actions.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
+actions.o: /usr/include/xercesc/dom/DOM.hpp
 actions.o: /usr/include/xercesc/dom/DOMAttr.hpp
 actions.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
 actions.o: /usr/include/xercesc/dom/DOMText.hpp
@@ -3030,35 +3009,32 @@ actions.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 actions.o: /usr/include/xercesc/dom/DOMException.hpp
 actions.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 actions.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSException.hpp
 actions.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 actions.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 actions.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 actions.o: /usr/include/xercesc/dom/DOMNotation.hpp
 actions.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+actions.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 actions.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 actions.o: /usr/include/xercesc/dom/DOMRange.hpp
 actions.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+actions.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 actions.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-actions.o: /usr/include/xercesc/dom/DOMStringList.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+actions.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 actions.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-actions.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 actions.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 actions.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+actions.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 actions.o: /usr/include/xercesc/dom/DOMLocator.hpp
-actions.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 actions.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 actions.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-actions.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+actions.o: /usr/include/xercesc/dom/DOMWriter.hpp
+actions.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+actions.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+actions.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 actions.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 actions.o: /usr/include/boost/config/user.hpp
@@ -3083,21 +3059,23 @@ actions.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
 actions.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 actions.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 actions.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
-actions.o: /usr/include/wchar.h /usr/include/bits/sys_errlist.h
-actions.o: /usr/include/strings.h /usr/include/ctype.h /usr/include/iconv.h
-actions.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-actions.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-actions.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-actions.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-actions.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-actions.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-actions.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-actions.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-actions.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-actions.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-actions.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_ttf.h
-actions.o: TextureManager.h gui/XSWrapper.h util.h ALSource.h
-actions.o: gui/ProgressBar.h gui/GUI.h ServerInfo.h
+actions.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
+actions.o: /usr/include/bits/sys_errlist.h /usr/include/strings.h
+actions.o: /usr/include/inttypes.h /usr/include/stdint.h
+actions.o: /usr/include/bits/wchar.h /usr/include/ctype.h
+actions.o: /usr/include/iconv.h /usr/include/SDL/begin_code.h
+actions.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
+actions.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
+actions.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
+actions.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
+actions.o: /usr/include/SDL/SDL_cpuinfo.h /usr/include/SDL/SDL_events.h
+actions.o: /usr/include/SDL/SDL_active.h /usr/include/SDL/SDL_keyboard.h
+actions.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+actions.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
+actions.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+actions.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
+actions.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
+actions.o: ALSource.h gui/ProgressBar.h gui/GUI.h ServerInfo.h
 actions.o: /usr/include/SDL/SDL_net.h gui/Table.h gui/TableItem.h
 actions.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 actions.o: gui/ComboBox.h gui/Table.h gui/TextArea.h PlayerData.h Vector3.h
@@ -3314,7 +3292,7 @@ coldest.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 coldest.o: /usr/include/SDL/SDL_stdinc.h /usr/include/sys/types.h
 coldest.o: /usr/include/features.h /usr/include/sys/cdefs.h
 coldest.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-coldest.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+coldest.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 coldest.o: /usr/include/bits/typesizes.h /usr/include/time.h
 coldest.o: /usr/include/endian.h /usr/include/bits/endian.h
 coldest.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -3378,14 +3356,13 @@ coldest.o: Light.h gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 coldest.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 coldest.o: /usr/include/xercesc/dom/DOMDocument.hpp
 coldest.o: /usr/include/xercesc/util/XercesDefs.hpp
-coldest.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 coldest.o: /usr/include/xercesc/util/XercesVersion.hpp
+coldest.o: /usr/include/xercesc/util/AutoSense.hpp
+coldest.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 coldest.o: /usr/include/xercesc/dom/DOMNode.hpp
 coldest.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 coldest.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-coldest.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-coldest.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 coldest.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 coldest.o: /usr/include/xercesc/util/RefVectorOf.hpp
 coldest.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -3399,8 +3376,6 @@ coldest.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 coldest.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 coldest.o: /usr/include/xercesc/util/PlatformUtils.hpp
 coldest.o: /usr/include/xercesc/util/PanicHandler.hpp
-coldest.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-coldest.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 coldest.o: /usr/include/xercesc/framework/MemoryManager.hpp
 coldest.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 coldest.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -3412,10 +3387,11 @@ coldest.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 coldest.o: /usr/include/xercesc/internal/XSerializable.hpp
 coldest.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 coldest.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-coldest.o: /usr/include/xercesc/util/Hashers.hpp
+coldest.o: /usr/include/xercesc/util/HashBase.hpp
 coldest.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 coldest.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 coldest.o: /usr/include/xercesc/util/RuntimeException.hpp
+coldest.o: /usr/include/xercesc/util/HashXMLCh.hpp
 coldest.o: /usr/include/xercesc/util/RefHashTableOf.c
 coldest.o: /usr/include/xercesc/util/Janitor.hpp
 coldest.o: /usr/include/xercesc/util/Janitor.c
@@ -3435,6 +3411,8 @@ coldest.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 coldest.o: /usr/include/xercesc/util/regx/Token.hpp
 coldest.o: /usr/include/xercesc/util/Mutexes.hpp
 coldest.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+coldest.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+coldest.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 coldest.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 coldest.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 coldest.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -3462,10 +3440,10 @@ coldest.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 coldest.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 coldest.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 coldest.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-coldest.o: /usr/include/xercesc/validators/common/Grammar.hpp
-coldest.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-coldest.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-coldest.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+coldest.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+coldest.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+coldest.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+coldest.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 coldest.o: /usr/include/xercesc/dom/DOM.hpp
 coldest.o: /usr/include/xercesc/dom/DOMAttr.hpp
 coldest.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -3479,35 +3457,32 @@ coldest.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 coldest.o: /usr/include/xercesc/dom/DOMException.hpp
 coldest.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 coldest.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSException.hpp
 coldest.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 coldest.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 coldest.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 coldest.o: /usr/include/xercesc/dom/DOMNotation.hpp
 coldest.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+coldest.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 coldest.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 coldest.o: /usr/include/xercesc/dom/DOMRange.hpp
 coldest.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+coldest.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 coldest.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-coldest.o: /usr/include/xercesc/dom/DOMStringList.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+coldest.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 coldest.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-coldest.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 coldest.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 coldest.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+coldest.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 coldest.o: /usr/include/xercesc/dom/DOMLocator.hpp
-coldest.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 coldest.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 coldest.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-coldest.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+coldest.o: /usr/include/xercesc/dom/DOMWriter.hpp
+coldest.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+coldest.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+coldest.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 coldest.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
 coldest.o: gui/XSWrapper.h util.h ALSource.h gui/ProgressBar.h gui/GUI.h
 coldest.o: ServerInfo.h gui/Table.h gui/TableItem.h gui/LineEdit.h
@@ -3520,7 +3495,7 @@ editor.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 editor.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 editor.o: /usr/include/features.h /usr/include/sys/cdefs.h
 editor.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-editor.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+editor.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 editor.o: /usr/include/bits/typesizes.h /usr/include/time.h
 editor.o: /usr/include/endian.h /usr/include/bits/endian.h
 editor.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -3583,14 +3558,13 @@ editor.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 editor.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 editor.o: /usr/include/xercesc/dom/DOMDocument.hpp
 editor.o: /usr/include/xercesc/util/XercesDefs.hpp
-editor.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 editor.o: /usr/include/xercesc/util/XercesVersion.hpp
+editor.o: /usr/include/xercesc/util/AutoSense.hpp
+editor.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 editor.o: /usr/include/xercesc/dom/DOMNode.hpp
 editor.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 editor.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-editor.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-editor.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 editor.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 editor.o: /usr/include/xercesc/util/RefVectorOf.hpp
 editor.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -3604,8 +3578,6 @@ editor.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 editor.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 editor.o: /usr/include/xercesc/util/PlatformUtils.hpp
 editor.o: /usr/include/xercesc/util/PanicHandler.hpp
-editor.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-editor.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 editor.o: /usr/include/xercesc/framework/MemoryManager.hpp
 editor.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 editor.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -3617,10 +3589,11 @@ editor.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 editor.o: /usr/include/xercesc/internal/XSerializable.hpp
 editor.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 editor.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-editor.o: /usr/include/xercesc/util/Hashers.hpp
+editor.o: /usr/include/xercesc/util/HashBase.hpp
 editor.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 editor.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 editor.o: /usr/include/xercesc/util/RuntimeException.hpp
+editor.o: /usr/include/xercesc/util/HashXMLCh.hpp
 editor.o: /usr/include/xercesc/util/RefHashTableOf.c
 editor.o: /usr/include/xercesc/util/Janitor.hpp
 editor.o: /usr/include/xercesc/util/Janitor.c
@@ -3640,6 +3613,8 @@ editor.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 editor.o: /usr/include/xercesc/util/regx/Token.hpp
 editor.o: /usr/include/xercesc/util/Mutexes.hpp
 editor.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+editor.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+editor.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 editor.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 editor.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 editor.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -3667,10 +3642,10 @@ editor.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 editor.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 editor.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 editor.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-editor.o: /usr/include/xercesc/validators/common/Grammar.hpp
-editor.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-editor.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-editor.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+editor.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+editor.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 editor.o: /usr/include/xercesc/dom/DOM.hpp
 editor.o: /usr/include/xercesc/dom/DOMAttr.hpp
 editor.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -3684,35 +3659,32 @@ editor.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 editor.o: /usr/include/xercesc/dom/DOMException.hpp
 editor.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 editor.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSException.hpp
 editor.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 editor.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 editor.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 editor.o: /usr/include/xercesc/dom/DOMNotation.hpp
 editor.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+editor.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 editor.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 editor.o: /usr/include/xercesc/dom/DOMRange.hpp
 editor.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+editor.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 editor.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-editor.o: /usr/include/xercesc/dom/DOMStringList.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+editor.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 editor.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-editor.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 editor.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 editor.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+editor.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 editor.o: /usr/include/xercesc/dom/DOMLocator.hpp
-editor.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 editor.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 editor.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-editor.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+editor.o: /usr/include/xercesc/dom/DOMWriter.hpp
+editor.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+editor.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+editor.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 editor.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 editor.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 editor.o: ALSource.h globals.h Particle.h CollisionDetection.h ObjectKDTree.h
@@ -3726,24 +3698,16 @@ getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 getmap.o: /usr/include/xercesc/dom/DOMDocument.hpp
 getmap.o: /usr/include/xercesc/util/XercesDefs.hpp
-getmap.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-getmap.o: /usr/include/inttypes.h /usr/include/features.h
-getmap.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-getmap.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
-getmap.o: /usr/include/stdint.h /usr/include/bits/wchar.h
-getmap.o: /usr/include/sys/types.h /usr/include/bits/types.h
-getmap.o: /usr/include/bits/typesizes.h /usr/include/time.h
-getmap.o: /usr/include/endian.h /usr/include/bits/endian.h
-getmap.o: /usr/include/sys/select.h /usr/include/bits/select.h
-getmap.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-getmap.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
 getmap.o: /usr/include/xercesc/util/XercesVersion.hpp
-getmap.o: /usr/include/xercesc/dom/DOMNode.hpp
+getmap.o: /usr/include/xercesc/util/AutoSense.hpp
+getmap.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
+getmap.o: /usr/include/endian.h /usr/include/features.h
+getmap.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+getmap.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
+getmap.o: /usr/include/bits/endian.h /usr/include/xercesc/dom/DOMNode.hpp
 getmap.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 getmap.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-getmap.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-getmap.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 getmap.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 getmap.o: /usr/include/xercesc/util/RefVectorOf.hpp
 getmap.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -3751,7 +3715,12 @@ getmap.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
 getmap.o: /usr/include/xercesc/util/XMLException.hpp
 getmap.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
 getmap.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
-getmap.o: /usr/include/xlocale.h /usr/include/alloca.h
+getmap.o: /usr/include/xlocale.h /usr/include/sys/types.h
+getmap.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+getmap.o: /usr/include/time.h /usr/include/sys/select.h
+getmap.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+getmap.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+getmap.o: /usr/include/bits/pthreadtypes.h /usr/include/alloca.h
 getmap.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
 getmap.o: /usr/include/xercesc/dom/DOMError.hpp
 getmap.o: /usr/include/xercesc/util/XMLUni.hpp
@@ -3759,8 +3728,6 @@ getmap.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 getmap.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 getmap.o: /usr/include/xercesc/util/PlatformUtils.hpp
 getmap.o: /usr/include/xercesc/util/PanicHandler.hpp
-getmap.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-getmap.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 getmap.o: /usr/include/xercesc/framework/MemoryManager.hpp
 getmap.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 getmap.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -3772,10 +3739,11 @@ getmap.o: /usr/include/assert.h /usr/include/xercesc/util/XMLUniDefs.hpp
 getmap.o: /usr/include/xercesc/internal/XSerializable.hpp
 getmap.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 getmap.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-getmap.o: /usr/include/xercesc/util/Hashers.hpp
+getmap.o: /usr/include/xercesc/util/HashBase.hpp
 getmap.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 getmap.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 getmap.o: /usr/include/xercesc/util/RuntimeException.hpp
+getmap.o: /usr/include/xercesc/util/HashXMLCh.hpp
 getmap.o: /usr/include/xercesc/util/RefHashTableOf.c
 getmap.o: /usr/include/xercesc/util/Janitor.hpp
 getmap.o: /usr/include/xercesc/util/Janitor.c
@@ -3795,6 +3763,8 @@ getmap.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 getmap.o: /usr/include/xercesc/util/regx/Token.hpp
 getmap.o: /usr/include/xercesc/util/Mutexes.hpp
 getmap.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+getmap.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+getmap.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 getmap.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 getmap.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 getmap.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -3822,11 +3792,11 @@ getmap.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 getmap.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 getmap.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 getmap.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-getmap.o: /usr/include/xercesc/validators/common/Grammar.hpp
-getmap.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-getmap.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-getmap.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
-getmap.o: /usr/include/bits/stdio_lim.h /usr/include/xercesc/dom/DOM.hpp
+getmap.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+getmap.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+getmap.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+getmap.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
+getmap.o: /usr/include/xercesc/dom/DOM.hpp
 getmap.o: /usr/include/xercesc/dom/DOMAttr.hpp
 getmap.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
 getmap.o: /usr/include/xercesc/dom/DOMText.hpp
@@ -3839,35 +3809,32 @@ getmap.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 getmap.o: /usr/include/xercesc/dom/DOMException.hpp
 getmap.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 getmap.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSException.hpp
 getmap.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 getmap.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 getmap.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 getmap.o: /usr/include/xercesc/dom/DOMNotation.hpp
 getmap.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+getmap.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 getmap.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 getmap.o: /usr/include/xercesc/dom/DOMRange.hpp
 getmap.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+getmap.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 getmap.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-getmap.o: /usr/include/xercesc/dom/DOMStringList.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+getmap.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 getmap.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-getmap.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 getmap.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 getmap.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+getmap.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 getmap.o: /usr/include/xercesc/dom/DOMLocator.hpp
-getmap.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 getmap.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 getmap.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-getmap.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+getmap.o: /usr/include/xercesc/dom/DOMWriter.hpp
+getmap.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+getmap.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+getmap.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 getmap.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 getmap.o: /usr/include/boost/config/user.hpp
@@ -3892,8 +3859,10 @@ getmap.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
 getmap.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 getmap.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 getmap.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
-getmap.o: /usr/include/wchar.h /usr/include/bits/sys_errlist.h
-getmap.o: /usr/include/strings.h /usr/include/ctype.h /usr/include/iconv.h
+getmap.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
+getmap.o: /usr/include/bits/sys_errlist.h /usr/include/strings.h
+getmap.o: /usr/include/inttypes.h /usr/include/stdint.h
+getmap.o: /usr/include/bits/wchar.h /usr/include/ctype.h /usr/include/iconv.h
 getmap.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
 getmap.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
 getmap.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
@@ -3932,7 +3901,7 @@ globals.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 globals.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 globals.o: /usr/include/features.h /usr/include/sys/cdefs.h
 globals.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-globals.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+globals.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 globals.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 globals.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 globals.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -3995,14 +3964,13 @@ globals.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 globals.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocument.hpp
 globals.o: /usr/include/xercesc/util/XercesDefs.hpp
-globals.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 globals.o: /usr/include/xercesc/util/XercesVersion.hpp
+globals.o: /usr/include/xercesc/util/AutoSense.hpp
+globals.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 globals.o: /usr/include/xercesc/dom/DOMNode.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-globals.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-globals.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 globals.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 globals.o: /usr/include/xercesc/util/RefVectorOf.hpp
 globals.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -4016,8 +3984,6 @@ globals.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 globals.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 globals.o: /usr/include/xercesc/util/PlatformUtils.hpp
 globals.o: /usr/include/xercesc/util/PanicHandler.hpp
-globals.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-globals.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 globals.o: /usr/include/xercesc/framework/MemoryManager.hpp
 globals.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 globals.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -4029,10 +3995,11 @@ globals.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 globals.o: /usr/include/xercesc/internal/XSerializable.hpp
 globals.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 globals.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-globals.o: /usr/include/xercesc/util/Hashers.hpp
+globals.o: /usr/include/xercesc/util/HashBase.hpp
 globals.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 globals.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 globals.o: /usr/include/xercesc/util/RuntimeException.hpp
+globals.o: /usr/include/xercesc/util/HashXMLCh.hpp
 globals.o: /usr/include/xercesc/util/RefHashTableOf.c
 globals.o: /usr/include/xercesc/util/Janitor.hpp
 globals.o: /usr/include/xercesc/util/Janitor.c
@@ -4052,6 +4019,8 @@ globals.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 globals.o: /usr/include/xercesc/util/regx/Token.hpp
 globals.o: /usr/include/xercesc/util/Mutexes.hpp
 globals.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+globals.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+globals.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 globals.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 globals.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 globals.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -4079,10 +4048,10 @@ globals.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 globals.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 globals.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 globals.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-globals.o: /usr/include/xercesc/validators/common/Grammar.hpp
-globals.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-globals.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-globals.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+globals.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+globals.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+globals.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+globals.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 globals.o: /usr/include/xercesc/dom/DOM.hpp
 globals.o: /usr/include/xercesc/dom/DOMAttr.hpp
 globals.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -4096,35 +4065,32 @@ globals.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 globals.o: /usr/include/xercesc/dom/DOMException.hpp
 globals.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 globals.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSException.hpp
 globals.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 globals.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 globals.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 globals.o: /usr/include/xercesc/dom/DOMNotation.hpp
 globals.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+globals.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 globals.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 globals.o: /usr/include/xercesc/dom/DOMRange.hpp
 globals.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+globals.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 globals.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-globals.o: /usr/include/xercesc/dom/DOMStringList.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+globals.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 globals.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-globals.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 globals.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 globals.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+globals.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 globals.o: /usr/include/xercesc/dom/DOMLocator.hpp
-globals.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 globals.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 globals.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-globals.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+globals.o: /usr/include/xercesc/dom/DOMWriter.hpp
+globals.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+globals.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+globals.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 globals.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 globals.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 globals.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
@@ -4137,7 +4103,7 @@ logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 logout.o: /usr/include/features.h /usr/include/sys/cdefs.h
 logout.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-logout.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+logout.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 logout.o: /usr/include/bits/typesizes.h /usr/include/time.h
 logout.o: /usr/include/endian.h /usr/include/bits/endian.h
 logout.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -4167,7 +4133,7 @@ master.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 master.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 master.o: /usr/include/sys/types.h /usr/include/features.h
 master.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-master.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+master.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 master.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 master.o: /usr/include/time.h /usr/include/endian.h
 master.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -4205,7 +4171,7 @@ net.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 net.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 net.o: /usr/include/math.h /usr/include/features.h /usr/include/sys/cdefs.h
 net.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-net.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+net.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 net.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 net.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 net.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -4268,14 +4234,13 @@ net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
 net.o: /usr/include/xercesc/util/XercesDefs.hpp
-net.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 net.o: /usr/include/xercesc/util/XercesVersion.hpp
+net.o: /usr/include/xercesc/util/AutoSense.hpp
+net.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 net.o: /usr/include/xercesc/dom/DOMNode.hpp
 net.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 net.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-net.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-net.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 net.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 net.o: /usr/include/xercesc/util/RefVectorOf.hpp
 net.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -4289,8 +4254,6 @@ net.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 net.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 net.o: /usr/include/xercesc/util/PlatformUtils.hpp
 net.o: /usr/include/xercesc/util/PanicHandler.hpp
-net.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-net.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 net.o: /usr/include/xercesc/framework/MemoryManager.hpp
 net.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 net.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -4302,10 +4265,11 @@ net.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 net.o: /usr/include/xercesc/internal/XSerializable.hpp
 net.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 net.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-net.o: /usr/include/xercesc/util/Hashers.hpp
+net.o: /usr/include/xercesc/util/HashBase.hpp
 net.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 net.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 net.o: /usr/include/xercesc/util/RuntimeException.hpp
+net.o: /usr/include/xercesc/util/HashXMLCh.hpp
 net.o: /usr/include/xercesc/util/RefHashTableOf.c
 net.o: /usr/include/xercesc/util/Janitor.hpp
 net.o: /usr/include/xercesc/util/Janitor.c
@@ -4325,6 +4289,8 @@ net.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 net.o: /usr/include/xercesc/util/regx/Token.hpp
 net.o: /usr/include/xercesc/util/Mutexes.hpp
 net.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+net.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+net.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 net.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 net.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 net.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -4352,10 +4318,10 @@ net.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 net.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 net.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 net.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-net.o: /usr/include/xercesc/validators/common/Grammar.hpp
-net.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-net.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-net.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+net.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+net.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+net.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+net.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 net.o: /usr/include/xercesc/dom/DOM.hpp /usr/include/xercesc/dom/DOMAttr.hpp
 net.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
 net.o: /usr/include/xercesc/dom/DOMText.hpp
@@ -4368,35 +4334,32 @@ net.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 net.o: /usr/include/xercesc/dom/DOMException.hpp
 net.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 net.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-net.o: /usr/include/xercesc/dom/DOMLSException.hpp
 net.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 net.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 net.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 net.o: /usr/include/xercesc/dom/DOMNotation.hpp
 net.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+net.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 net.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 net.o: /usr/include/xercesc/dom/DOMRange.hpp
 net.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-net.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+net.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 net.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-net.o: /usr/include/xercesc/dom/DOMStringList.hpp
-net.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-net.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+net.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 net.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-net.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 net.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 net.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-net.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-net.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+net.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 net.o: /usr/include/xercesc/dom/DOMLocator.hpp
-net.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 net.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 net.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-net.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-net.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+net.o: /usr/include/xercesc/dom/DOMWriter.hpp
+net.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+net.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+net.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 net.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 net.o: ALSource.h Console.h gui/TextArea.h renderdefs.h Light.h
@@ -4407,7 +4370,7 @@ netdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 netdefs.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 netdefs.o: /usr/include/features.h /usr/include/sys/cdefs.h
 netdefs.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-netdefs.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+netdefs.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 netdefs.o: /usr/include/bits/typesizes.h /usr/include/time.h
 netdefs.o: /usr/include/endian.h /usr/include/bits/endian.h
 netdefs.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -4474,7 +4437,7 @@ render.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 render.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 render.o: /usr/include/features.h /usr/include/sys/cdefs.h
 render.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-render.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+render.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 render.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 render.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 render.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
@@ -4537,14 +4500,13 @@ render.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 render.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 render.o: /usr/include/xercesc/dom/DOMDocument.hpp
 render.o: /usr/include/xercesc/util/XercesDefs.hpp
-render.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 render.o: /usr/include/xercesc/util/XercesVersion.hpp
+render.o: /usr/include/xercesc/util/AutoSense.hpp
+render.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 render.o: /usr/include/xercesc/dom/DOMNode.hpp
 render.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 render.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-render.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-render.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 render.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 render.o: /usr/include/xercesc/util/RefVectorOf.hpp
 render.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -4558,8 +4520,6 @@ render.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 render.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 render.o: /usr/include/xercesc/util/PlatformUtils.hpp
 render.o: /usr/include/xercesc/util/PanicHandler.hpp
-render.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-render.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 render.o: /usr/include/xercesc/framework/MemoryManager.hpp
 render.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 render.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -4571,10 +4531,11 @@ render.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 render.o: /usr/include/xercesc/internal/XSerializable.hpp
 render.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 render.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-render.o: /usr/include/xercesc/util/Hashers.hpp
+render.o: /usr/include/xercesc/util/HashBase.hpp
 render.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 render.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 render.o: /usr/include/xercesc/util/RuntimeException.hpp
+render.o: /usr/include/xercesc/util/HashXMLCh.hpp
 render.o: /usr/include/xercesc/util/RefHashTableOf.c
 render.o: /usr/include/xercesc/util/Janitor.hpp
 render.o: /usr/include/xercesc/util/Janitor.c
@@ -4594,6 +4555,8 @@ render.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 render.o: /usr/include/xercesc/util/regx/Token.hpp
 render.o: /usr/include/xercesc/util/Mutexes.hpp
 render.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+render.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+render.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 render.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 render.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 render.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -4621,10 +4584,10 @@ render.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 render.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 render.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 render.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-render.o: /usr/include/xercesc/validators/common/Grammar.hpp
-render.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-render.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-render.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+render.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+render.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+render.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+render.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 render.o: /usr/include/xercesc/dom/DOM.hpp
 render.o: /usr/include/xercesc/dom/DOMAttr.hpp
 render.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -4638,35 +4601,32 @@ render.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 render.o: /usr/include/xercesc/dom/DOMException.hpp
 render.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 render.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-render.o: /usr/include/xercesc/dom/DOMLSException.hpp
 render.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 render.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 render.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 render.o: /usr/include/xercesc/dom/DOMNotation.hpp
 render.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+render.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 render.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 render.o: /usr/include/xercesc/dom/DOMRange.hpp
 render.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-render.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+render.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 render.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-render.o: /usr/include/xercesc/dom/DOMStringList.hpp
-render.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-render.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+render.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 render.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-render.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 render.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 render.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-render.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-render.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+render.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 render.o: /usr/include/xercesc/dom/DOMLocator.hpp
-render.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 render.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 render.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-render.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-render.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+render.o: /usr/include/xercesc/dom/DOMWriter.hpp
+render.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+render.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+render.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 render.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 render.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 render.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
@@ -4680,7 +4640,7 @@ renderdefs.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 renderdefs.o: /usr/include/SDL/SDL_platform.h PlayerData.h Vector3.h
 renderdefs.o: /usr/include/math.h /usr/include/features.h
 renderdefs.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-renderdefs.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+renderdefs.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 renderdefs.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 renderdefs.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 renderdefs.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
@@ -4747,14 +4707,13 @@ renderdefs.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocument.hpp
 renderdefs.o: /usr/include/xercesc/util/XercesDefs.hpp
-renderdefs.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 renderdefs.o: /usr/include/xercesc/util/XercesVersion.hpp
+renderdefs.o: /usr/include/xercesc/util/AutoSense.hpp
+renderdefs.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMNode.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 renderdefs.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 renderdefs.o: /usr/include/xercesc/util/RefVectorOf.hpp
 renderdefs.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -4768,8 +4727,6 @@ renderdefs.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 renderdefs.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 renderdefs.o: /usr/include/xercesc/util/PlatformUtils.hpp
 renderdefs.o: /usr/include/xercesc/util/PanicHandler.hpp
-renderdefs.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-renderdefs.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 renderdefs.o: /usr/include/xercesc/framework/MemoryManager.hpp
 renderdefs.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 renderdefs.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -4781,10 +4738,11 @@ renderdefs.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 renderdefs.o: /usr/include/xercesc/internal/XSerializable.hpp
 renderdefs.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 renderdefs.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-renderdefs.o: /usr/include/xercesc/util/Hashers.hpp
+renderdefs.o: /usr/include/xercesc/util/HashBase.hpp
 renderdefs.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 renderdefs.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 renderdefs.o: /usr/include/xercesc/util/RuntimeException.hpp
+renderdefs.o: /usr/include/xercesc/util/HashXMLCh.hpp
 renderdefs.o: /usr/include/xercesc/util/RefHashTableOf.c
 renderdefs.o: /usr/include/xercesc/util/Janitor.hpp
 renderdefs.o: /usr/include/xercesc/util/Janitor.c
@@ -4804,6 +4762,8 @@ renderdefs.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 renderdefs.o: /usr/include/xercesc/util/regx/Token.hpp
 renderdefs.o: /usr/include/xercesc/util/Mutexes.hpp
 renderdefs.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+renderdefs.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+renderdefs.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 renderdefs.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 renderdefs.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 renderdefs.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -4831,10 +4791,10 @@ renderdefs.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 renderdefs.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 renderdefs.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-renderdefs.o: /usr/include/xercesc/validators/common/Grammar.hpp
-renderdefs.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-renderdefs.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-renderdefs.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+renderdefs.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+renderdefs.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+renderdefs.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+renderdefs.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOM.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMAttr.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -4848,41 +4808,38 @@ renderdefs.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMException.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSException.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMNotation.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMRange.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMStringList.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMLocator.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-renderdefs.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMWriter.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+renderdefs.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+renderdefs.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 renderdefs.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 renderdefs.o: util.h ALSource.h gui/ProgressBar.h gui/GUI.h gui/Button.h
 server.o: /usr/include/poll.h /usr/include/sys/poll.h /usr/include/features.h
 server.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-server.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+server.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 server.o: /usr/include/bits/poll.h /usr/include/bits/sigset.h
 server.o: /usr/include/time.h /usr/include/bits/types.h
 server.o: /usr/include/bits/typesizes.h Particle.h CollisionDetection.h
@@ -4952,14 +4909,13 @@ server.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 server.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 server.o: /usr/include/xercesc/dom/DOMDocument.hpp
 server.o: /usr/include/xercesc/util/XercesDefs.hpp
-server.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 server.o: /usr/include/xercesc/util/XercesVersion.hpp
+server.o: /usr/include/xercesc/util/AutoSense.hpp
+server.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 server.o: /usr/include/xercesc/dom/DOMNode.hpp
 server.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 server.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-server.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-server.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 server.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 server.o: /usr/include/xercesc/util/RefVectorOf.hpp
 server.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -4973,8 +4929,6 @@ server.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 server.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 server.o: /usr/include/xercesc/util/PlatformUtils.hpp
 server.o: /usr/include/xercesc/util/PanicHandler.hpp
-server.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-server.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 server.o: /usr/include/xercesc/framework/MemoryManager.hpp
 server.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 server.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -4986,10 +4940,11 @@ server.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 server.o: /usr/include/xercesc/internal/XSerializable.hpp
 server.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 server.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-server.o: /usr/include/xercesc/util/Hashers.hpp
+server.o: /usr/include/xercesc/util/HashBase.hpp
 server.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 server.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 server.o: /usr/include/xercesc/util/RuntimeException.hpp
+server.o: /usr/include/xercesc/util/HashXMLCh.hpp
 server.o: /usr/include/xercesc/util/RefHashTableOf.c
 server.o: /usr/include/xercesc/util/Janitor.hpp
 server.o: /usr/include/xercesc/util/Janitor.c
@@ -5009,6 +4964,8 @@ server.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 server.o: /usr/include/xercesc/util/regx/Token.hpp
 server.o: /usr/include/xercesc/util/Mutexes.hpp
 server.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+server.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+server.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 server.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 server.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 server.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -5036,10 +4993,10 @@ server.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 server.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 server.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 server.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-server.o: /usr/include/xercesc/validators/common/Grammar.hpp
-server.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-server.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-server.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+server.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+server.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+server.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+server.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 server.o: /usr/include/xercesc/dom/DOM.hpp
 server.o: /usr/include/xercesc/dom/DOMAttr.hpp
 server.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -5053,35 +5010,32 @@ server.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 server.o: /usr/include/xercesc/dom/DOMException.hpp
 server.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 server.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-server.o: /usr/include/xercesc/dom/DOMLSException.hpp
 server.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 server.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 server.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 server.o: /usr/include/xercesc/dom/DOMNotation.hpp
 server.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+server.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 server.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 server.o: /usr/include/xercesc/dom/DOMRange.hpp
 server.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-server.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+server.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 server.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-server.o: /usr/include/xercesc/dom/DOMStringList.hpp
-server.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-server.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+server.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 server.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-server.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 server.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 server.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-server.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-server.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+server.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 server.o: /usr/include/xercesc/dom/DOMLocator.hpp
-server.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 server.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 server.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-server.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-server.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+server.o: /usr/include/xercesc/dom/DOMWriter.hpp
+server.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+server.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+server.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 server.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 server.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 server.o: ALSource.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
@@ -5095,7 +5049,7 @@ settings.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
 settings.o: /usr/include/SDL/SDL_platform.h /usr/include/math.h
 settings.o: /usr/include/features.h /usr/include/sys/cdefs.h
 settings.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-settings.o: /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h
+settings.o: /usr/include/gnu/stubs-32.h /usr/include/bits/huge_val.h
 settings.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
 settings.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 settings.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
@@ -5160,14 +5114,13 @@ settings.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 settings.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocument.hpp
 settings.o: /usr/include/xercesc/util/XercesDefs.hpp
-settings.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 settings.o: /usr/include/xercesc/util/XercesVersion.hpp
+settings.o: /usr/include/xercesc/util/AutoSense.hpp
+settings.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 settings.o: /usr/include/xercesc/dom/DOMNode.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-settings.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-settings.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 settings.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 settings.o: /usr/include/xercesc/util/RefVectorOf.hpp
 settings.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -5181,8 +5134,6 @@ settings.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 settings.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 settings.o: /usr/include/xercesc/util/PlatformUtils.hpp
 settings.o: /usr/include/xercesc/util/PanicHandler.hpp
-settings.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-settings.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 settings.o: /usr/include/xercesc/framework/MemoryManager.hpp
 settings.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 settings.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -5194,10 +5145,11 @@ settings.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 settings.o: /usr/include/xercesc/internal/XSerializable.hpp
 settings.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 settings.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-settings.o: /usr/include/xercesc/util/Hashers.hpp
+settings.o: /usr/include/xercesc/util/HashBase.hpp
 settings.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 settings.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 settings.o: /usr/include/xercesc/util/RuntimeException.hpp
+settings.o: /usr/include/xercesc/util/HashXMLCh.hpp
 settings.o: /usr/include/xercesc/util/RefHashTableOf.c
 settings.o: /usr/include/xercesc/util/Janitor.hpp
 settings.o: /usr/include/xercesc/util/Janitor.c
@@ -5217,6 +5169,8 @@ settings.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 settings.o: /usr/include/xercesc/util/regx/Token.hpp
 settings.o: /usr/include/xercesc/util/Mutexes.hpp
 settings.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+settings.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+settings.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 settings.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 settings.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 settings.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -5244,10 +5198,10 @@ settings.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 settings.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 settings.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 settings.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-settings.o: /usr/include/xercesc/validators/common/Grammar.hpp
-settings.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-settings.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-settings.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+settings.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+settings.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+settings.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+settings.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 settings.o: /usr/include/xercesc/dom/DOM.hpp
 settings.o: /usr/include/xercesc/dom/DOMAttr.hpp
 settings.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -5261,35 +5215,32 @@ settings.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 settings.o: /usr/include/xercesc/dom/DOMException.hpp
 settings.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 settings.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSException.hpp
 settings.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 settings.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 settings.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 settings.o: /usr/include/xercesc/dom/DOMNotation.hpp
 settings.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+settings.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 settings.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 settings.o: /usr/include/xercesc/dom/DOMRange.hpp
 settings.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+settings.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 settings.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-settings.o: /usr/include/xercesc/dom/DOMStringList.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+settings.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 settings.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-settings.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 settings.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 settings.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+settings.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 settings.o: /usr/include/xercesc/dom/DOMLocator.hpp
-settings.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 settings.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 settings.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-settings.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+settings.o: /usr/include/xercesc/dom/DOMWriter.hpp
+settings.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+settings.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+settings.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 settings.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 settings.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 settings.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
@@ -5303,7 +5254,7 @@ tsint.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 tsint.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 tsint.o: /usr/include/features.h /usr/include/sys/cdefs.h
 tsint.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-tsint.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+tsint.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 tsint.o: /usr/include/bits/typesizes.h /usr/include/time.h
 tsint.o: /usr/include/endian.h /usr/include/bits/endian.h
 tsint.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -5332,7 +5283,7 @@ util.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 util.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 util.o: /usr/include/features.h /usr/include/sys/cdefs.h
 util.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-util.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+util.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 util.o: /usr/include/bits/typesizes.h /usr/include/time.h
 util.o: /usr/include/endian.h /usr/include/bits/endian.h
 util.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -5372,7 +5323,7 @@ gui/GUI.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 gui/GUI.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 gui/GUI.o: /usr/include/sys/types.h /usr/include/features.h
 gui/GUI.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-gui/GUI.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+gui/GUI.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
 gui/GUI.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 gui/GUI.o: /usr/include/time.h /usr/include/endian.h
 gui/GUI.o: /usr/include/bits/endian.h /usr/include/sys/select.h
@@ -5397,7 +5348,7 @@ gui/GUI.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
 gui/GUI.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
 gui/GUI.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 gui/GUI.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
-gui/GUI.o: gui/TabWidget.h globals.h Mesh.h Vector3.h glinc.h
+gui/GUI.o: gui/TabWidget.h gui/Layout.h globals.h Mesh.h Vector3.h glinc.h
 gui/GUI.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 gui/GUI.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
 gui/GUI.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
@@ -5437,14 +5388,13 @@ gui/GUI.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 gui/GUI.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMDocument.hpp
 gui/GUI.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/GUI.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
 gui/GUI.o: /usr/include/xercesc/util/XercesVersion.hpp
+gui/GUI.o: /usr/include/xercesc/util/AutoSense.hpp
+gui/GUI.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMNode.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 gui/GUI.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
 gui/GUI.o: /usr/include/xercesc/util/RefVectorOf.hpp
 gui/GUI.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
@@ -5458,8 +5408,6 @@ gui/GUI.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 gui/GUI.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 gui/GUI.o: /usr/include/xercesc/util/PlatformUtils.hpp
 gui/GUI.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/GUI.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/GUI.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 gui/GUI.o: /usr/include/xercesc/framework/MemoryManager.hpp
 gui/GUI.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 gui/GUI.o: /usr/include/xercesc/util/RefVectorOf.c
@@ -5471,10 +5419,11 @@ gui/GUI.o: /usr/include/xercesc/util/XMLUniDefs.hpp
 gui/GUI.o: /usr/include/xercesc/internal/XSerializable.hpp
 gui/GUI.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
 gui/GUI.o: /usr/include/xercesc/util/RefHashTableOf.hpp
-gui/GUI.o: /usr/include/xercesc/util/Hashers.hpp
+gui/GUI.o: /usr/include/xercesc/util/HashBase.hpp
 gui/GUI.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
 gui/GUI.o: /usr/include/xercesc/util/NoSuchElementException.hpp
 gui/GUI.o: /usr/include/xercesc/util/RuntimeException.hpp
+gui/GUI.o: /usr/include/xercesc/util/HashXMLCh.hpp
 gui/GUI.o: /usr/include/xercesc/util/RefHashTableOf.c
 gui/GUI.o: /usr/include/xercesc/util/Janitor.hpp
 gui/GUI.o: /usr/include/xercesc/util/Janitor.c
@@ -5494,6 +5443,8 @@ gui/GUI.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
 gui/GUI.o: /usr/include/xercesc/util/regx/Token.hpp
 gui/GUI.o: /usr/include/xercesc/util/Mutexes.hpp
 gui/GUI.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+gui/GUI.o: /usr/include/xercesc/util/regx/ModifierToken.hpp
+gui/GUI.o: /usr/include/xercesc/util/regx/ConditionToken.hpp
 gui/GUI.o: /usr/include/xercesc/util/regx/OpFactory.hpp
 gui/GUI.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
 gui/GUI.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
@@ -5521,10 +5472,10 @@ gui/GUI.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
 gui/GUI.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
 gui/GUI.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
-gui/GUI.o: /usr/include/xercesc/validators/common/Grammar.hpp
-gui/GUI.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-gui/GUI.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-gui/GUI.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+gui/GUI.o: /usr/include/xercesc/framework/psvi/PSVIElement.hpp
+gui/GUI.o: /usr/include/xercesc/framework/psvi/PSVIItem.hpp
+gui/GUI.o: /usr/include/xercesc/framework/psvi/PSVIAttributeList.hpp
+gui/GUI.o: /usr/include/xercesc/framework/psvi/PSVIAttribute.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOM.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMAttr.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
@@ -5538,40 +5489,38 @@ gui/GUI.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMException.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMImplementation.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSException.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMRangeException.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMNodeList.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMNotation.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMRange.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMBuilder.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMStringList.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMEntityResolver.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSInput.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMInputSource.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMLocator.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
-gui/GUI.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMWriter.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMWriterFilter.hpp
+gui/GUI.o: /usr/include/xercesc/framework/XMLFormatter.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+gui/GUI.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
 gui/GUI.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 gui/GUI.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 gui/GUI.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 gui/GUI.o: gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
 gui/GUI.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
+gui/Layout.o: gui/Layout.h gui/GUI.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
 gui/ProgressBar.o: gui/ProgressBar.h gui/GUI.h
 gui/ScrollView.o: gui/ScrollView.h gui/GUI.h gui/Slider.h gui/Button.h
@@ -5589,7 +5538,7 @@ gui/TextArea.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 gui/TextArea.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
 gui/TextArea.o: /usr/include/features.h /usr/include/sys/cdefs.h
 gui/TextArea.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-gui/TextArea.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+gui/TextArea.o: /usr/include/gnu/stubs-32.h /usr/include/bits/types.h
 gui/TextArea.o: /usr/include/bits/typesizes.h /usr/include/time.h
 gui/TextArea.o: /usr/include/endian.h /usr/include/bits/endian.h
 gui/TextArea.o: /usr/include/sys/select.h /usr/include/bits/select.h
@@ -5619,23 +5568,22 @@ gui/XSWrapper.o: gui/XSWrapper.h /usr/include/xercesc/util/XMLString.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/XMLException.hpp
+gui/XSWrapper.o: /usr/include/xercesc/util/XMemory.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/XercesDefs.hpp
-gui/XSWrapper.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
-gui/XSWrapper.o: /usr/include/inttypes.h /usr/include/features.h
-gui/XSWrapper.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-gui/XSWrapper.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
-gui/XSWrapper.o: /usr/include/stdint.h /usr/include/bits/wchar.h
-gui/XSWrapper.o: /usr/include/sys/types.h /usr/include/bits/types.h
-gui/XSWrapper.o: /usr/include/bits/typesizes.h /usr/include/time.h
-gui/XSWrapper.o: /usr/include/endian.h /usr/include/bits/endian.h
-gui/XSWrapper.o: /usr/include/sys/select.h /usr/include/bits/select.h
-gui/XSWrapper.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-gui/XSWrapper.o: /usr/include/sys/sysmacros.h
-gui/XSWrapper.o: /usr/include/bits/pthreadtypes.h
 gui/XSWrapper.o: /usr/include/xercesc/util/XercesVersion.hpp
-gui/XSWrapper.o: /usr/include/xercesc/util/XMemory.hpp /usr/include/stdlib.h
+gui/XSWrapper.o: /usr/include/xercesc/util/AutoSense.hpp
+gui/XSWrapper.o: /usr/include/xercesc/util/Platforms/Linux/LinuxDefs.hpp
+gui/XSWrapper.o: /usr/include/endian.h /usr/include/features.h
+gui/XSWrapper.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+gui/XSWrapper.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h
+gui/XSWrapper.o: /usr/include/bits/endian.h /usr/include/stdlib.h
 gui/XSWrapper.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
-gui/XSWrapper.o: /usr/include/xlocale.h /usr/include/alloca.h
+gui/XSWrapper.o: /usr/include/xlocale.h /usr/include/sys/types.h
+gui/XSWrapper.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+gui/XSWrapper.o: /usr/include/time.h /usr/include/sys/select.h
+gui/XSWrapper.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+gui/XSWrapper.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+gui/XSWrapper.o: /usr/include/bits/pthreadtypes.h /usr/include/alloca.h
 gui/XSWrapper.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
 gui/XSWrapper.o: /usr/include/xercesc/dom/DOMError.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/XMLUni.hpp
@@ -5643,8 +5591,6 @@ gui/XSWrapper.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/XMLEnumerator.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/PlatformUtils.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/PanicHandler.hpp
-gui/XSWrapper.o: /usr/include/xercesc/util/XMLFileMgr.hpp
-gui/XSWrapper.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
 gui/XSWrapper.o: /usr/include/xercesc/framework/MemoryManager.hpp
 gui/XSWrapper.o: /usr/include/xercesc/util/BaseRefVectorOf.c
 gui/XSWrapper.o: /usr/include/xercesc/framework/XMLBuffer.hpp

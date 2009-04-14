@@ -91,7 +91,7 @@ class GUI
       virtual bool FloatsInWidget(float, float);
       bool InWidget(float, float);
       bool InWidget(const SDL_Event*);
-      void RenderText(string, string, int, int, int, TTF_Font*, GLuint, float scale = 1.f, bool shadow = true);
+      void RenderText(string, string, int, int, int, TTF_Font*, GLuint, SDL_Color, float scale = 1.f, bool shadow = true);
       void SetActive(bool act = true);
       void SetTextureID(int, GLuint);
       void SetTexture(int, const string&);
@@ -107,6 +107,7 @@ class GUI
       Alignment align;
       string leftclickaction, rightclickaction, valuechanged;
       string leftdownaction, rightdownaction;
+      SDL_Color textcolor;
    
    protected:
       void DoAction(string);

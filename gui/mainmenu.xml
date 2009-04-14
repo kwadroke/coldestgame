@@ -25,15 +25,15 @@
    <Label x="300" y="25" width="400" height="200" text="" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"
           normal="textures/logo.png"/>
    <Layout x="390" y="290" padding="10" orientation="vertical">
-      <Button width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="0" align="center"
+      <Button width="200" height="40" text="Resume" name="resumebutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="resume"/>
-      <Button width="200" height="40" text="Join" name="joinbutton" xmargin="3" ymargin="0" align="center"
+      <Button width="200" height="40" text="Join" name="joinbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="join"/>
-      <Button width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="0" align="center"
+      <Button width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="host"/>
-      <Button width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="0" align="center"
+      <Button width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="showsettings"/>
-      <Button width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="0" align="center"
+      <Button width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="exit"/>
    </Layout>
    
