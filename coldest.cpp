@@ -45,6 +45,8 @@ void Debug()
    
    SDL_Delay(1000);*/
    
+   cout << ToInt('f', hex) << endl;
+   
    exit(0);
 }
 

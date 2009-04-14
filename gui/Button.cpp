@@ -56,7 +56,7 @@ void Button::RenderWidget()
    float centerx = 0.f;
    if (align == Center)
       centerx = (width - fw) / 2.f - xmargin;
-   RenderText(text, oldtext, int((x + xoff + xmargin + centerx) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, scale);
+   RenderText(text, oldtext, int((x + xoff + xmargin + centerx) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, textcolor, scale);
    oldtext = text;
 }
 

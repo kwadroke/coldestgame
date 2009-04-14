@@ -307,6 +307,7 @@ void GUI::ProcessEvent(SDL_Event* event)
 
 
 // I'm not sure this works, since I've never had occasion to use it
+// Err, I think that's not true anymore.  I believe the minimap uses this
 void GUI::Add(GUIPtr widget)
 {
    children.push_back(widget);
@@ -345,7 +346,7 @@ void GUI::InitFromFile(string filename)
    catch (XMLException &e)
    {
       char* message = XMLString::transcode(e.getMessage());
-      cerr << "XML toolkit initialization error: " << message << endl;
+      logout << "XML toolkit initialization error: " << message << endl;
       XMLString::release(&message);
       return;
    }
@@ -514,6 +515,26 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
          if (val != "")
             newwidget->sounds[RightSound] = val;
          
+         val = ReadAttribute(current, XSWrapper("textcolor"));
+         if (val.length() == 4)
+         {
+            newwidget->textcolor.r = ToInt(val[0], hex) * 16 + 15;
+            newwidget->textcolor.g = ToInt(val[1], hex) * 16 + 15;
+            newwidget->textcolor.b = ToInt(val[2], hex) * 16 + 15;
+            newwidget->textcolor.unused = ToInt(val[3], hex) * 16 + 15;
+         }
+         else if (val.length() == 8)
+         {
+            newwidget->textcolor.r = ToInt(val.substr(0, 2), hex);
+            newwidget->textcolor.g = ToInt(val.substr(2, 2), hex);
+            newwidget->textcolor.b = ToInt(val.substr(4, 2), hex);
+            newwidget->textcolor.unused = ToInt(val.substr(6, 2), hex);
+         }
+         else
+         {
+            newwidget->textcolor.r = newwidget->textcolor.g = newwidget->textcolor.b = newwidget->textcolor.unused = 255;
+         }
+         
          // Load textures
          newwidget->textures = ReadTextures(current);
          
@@ -663,16 +684,16 @@ void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
    
    If str == oldstr then it won't re-render the text, it will just properly display the texture
 */
-void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_Font *font, GLuint tex, float scale, bool shadow)
+void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_Font *font, GLuint tex, SDL_Color col, float scale, bool shadow)
 {
    if (str.length() == 0 || !TTF_WasInit())
       return;
-   SDL_Color col;
-   col.r = 255;
-   col.g = 255;
-   col.b = 255;
+   SDL_Color white;
+   white.r = 255;
+   white.g = 255;
+   white.b = 255;
    
-   SDL_Surface *t = TTF_RenderText_Solid(font, str.c_str(), col);
+   SDL_Surface *t = TTF_RenderText_Solid(font, str.c_str(), white);
    if (!t)  // Had some problems with sdl-ttf at one point
    {        // At least this way it won't segfault
       logout << "Error rendering text: " << str << endl;
@@ -727,7 +748,12 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
          }
          else 
          {
-            glColor4f(1, 1, 1, 1);
+            logout << float(col.r) << endl;
+            float r = float(col.r) / 255.f;
+            float g = float(col.g) / 255.f;
+            float b = float(col.b) / 255.f;
+            float a = float(col.unused) / 255.f;
+            glColor4f(r, g, b, a);
             x -= offset;
             y -= offset;
          }

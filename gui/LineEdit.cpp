@@ -67,7 +67,7 @@ void LineEdit::RenderWidget()
       fh *= scale;
       
       float centery = height / 2.f - fh / 2.f;
-      RenderText(text, oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, scale);
+      RenderText(text, oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, textcolor, scale);
       oldtext = text;
       fontscale = scale;
    }

@@ -52,6 +52,16 @@ string ToString(const T &input)
    return temp.str();
 }
 
+template <typename T>
+int ToInt(const T &input, std::ios_base& (*f)(std::ios_base&) = std::dec)
+{
+   stringstream temp;
+   temp << input;
+   int retval;
+   temp >> f >> retval;
+   return retval;
+}
+
 
 template <typename T>
 T lerp(T x, T y, float a)
