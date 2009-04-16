@@ -1148,9 +1148,10 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
       }
    }
    
-   assert(curr != NULL);
-   
    SendHit(hitpos, p);
+   
+   if (!curr)
+      return;
    
    if (floatzero(p.dmgrad))
    {
@@ -1352,7 +1353,7 @@ void ServerUpdatePlayer(int i)
       Vector3 rot(serverplayers[i].pitch, serverplayers[i].facing + serverplayers[i].rotation, 0.f);
       Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
       
-      Particle part = CreateShot(currplayerweapon, rot, startpos, offset, i);
+      Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[serverplayers[i].unit].viewoffset, i);
       part.rewind = serverplayers[i].ping;
       part.id = nextservparticleid;
       

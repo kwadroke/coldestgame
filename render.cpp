@@ -133,7 +133,8 @@ void Repaint()
       viewoff.transform(viewm);
       
       Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
-      Vector3 difference = actualaim + rawoffset;
+      // When !guncam this reduces to difference = actualaim
+      Vector3 difference = actualaim + rawoffset - units[localplayer.unit].viewoffset;
       Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
          
       // For debugging third person view

@@ -78,9 +78,10 @@ void GUI::Init(GUI* p, TextureManager* tm)
    align = Left;
    xmargin = 6.f;
    ymargin = 2.f;
-   basefontsize = 12.f; // Font is rendered at this pt size and scaled
+   basefontsize = 48.f; // Font is rendered at this pt size and scaled
    fontscale = 12.f / basefontsize; // Default font size is 12
    text = oldtext = "";
+   textcolor.r = textcolor.g = textcolor.b = textcolor.unused = 255;
    for (size_t i = 0; i < numdefaults; ++i)
       defaulttextures.push_back(vector<string>());
    for (int i = 0; i < 3; ++i)
@@ -748,7 +749,6 @@ void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_F
          }
          else 
          {
-            logout << float(col.r) << endl;
             float r = float(col.r) / 255.f;
             float g = float(col.g) / 255.f;
             float b = float(col.b) / 255.f;

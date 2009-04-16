@@ -102,7 +102,7 @@ int Server(void* dummy);
 void ShowGUI(int);
 void ResetKeys();
 int CalculatePlayerWeight(const PlayerData&);
-Particle CreateShot(const Weapon&, const Vector3&, const Vector3&, Vector3, int pnum = 0);
+Particle CreateShot(const Weapon&, const Vector3&, const Vector3&, Vector3, const Vector3&, int pnum = 0);
 void CacheMeshes();
 void UpdateSettings();
 void SaveSettings();
@@ -112,5 +112,6 @@ void SpectatePrev();
 void EditorLoop(const string);
 vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData*, Meshlist&, ObjectKDTree&, const Vector3&, const Vector3&, const float);
 void RegenFBOList();
+PlayerData* PlayerFromMesh(Mesh*, vector<PlayerData>&);
 
 #endif
