@@ -860,6 +860,36 @@ void GUIUpdate()
          killtable->Add(killmessages[i]);
       killschanged = 0;
    }
+   
+   // Check to see if anyone is under our crosshair and display their info
+   if (!PrimaryGUIVisible())
+   {
+      Vector3 dir(0, 0, -2000.f);
+      GraphicMatrix m;
+      m.rotatex(-player[0].pitch);
+      m.rotatey(player[0].rotation + player[0].facing);
+      dir.transform(m);
+      Vector3 offset = units[player[0].unit].viewoffset;
+      offset.transform(m);
+      Vector3 checkstart = player[0].pos + offset;
+      Vector3 checkend = checkstart + dir;
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&player[servplayernum], meshes, kdtree, checkstart, checkend, .01f);
+      Vector3 dummy;
+      Mesh* hitmesh;
+      coldet.CheckSphereHit(checkstart, checkend, .01f, check, dummy, hitmesh);
+      PlayerData* p = PlayerFromMesh(hitmesh, player);
+      // Populate GUI object
+      GUI* targetplayer = gui[hud]->GetWidget("targetplayer");
+      if (p)
+      {
+         targetplayer->text = p->name;
+      }
+      else
+      {
+         targetplayer->text = "";
+      }
+   }
+   
    SDL_mutexV(clientmutex);
 #endif
 }
@@ -2086,7 +2116,7 @@ int CalculatePlayerWeight(const PlayerData& p)
 }
 
 
-Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& start, Vector3 offset, int pnum)
+Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& start, Vector3 offset, const Vector3& viewoffset, int pnum)
 {
    Vector3 dir(0, 0, -1);
    GraphicMatrix m;
@@ -2115,7 +2145,7 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
       
    // Note: weaponfocus should actually be configurable per-player
    Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
-   Vector3 difference = actualaim + rawoffset;
+   Vector3 difference = actualaim + rawoffset - viewoffset;
    Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
    m.identity();
    m.rotatex(-rots.x + rot.x);
@@ -2207,7 +2237,7 @@ void UpdatePlayer()
       Vector3 startpos = localplayer.pos;
       Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
       Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
-      Particle part = CreateShot(currplayerweapon, rot, startpos, offset);
+      Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[localplayer.unit].viewoffset);
          // Add tracer if necessary
       if (currplayerweapon.Tracer() != "")
       {
@@ -2217,6 +2247,20 @@ void UpdatePlayer()
       particles.push_back(part);
       SDL_mutexV(clientmutex);
    }
+}
+
+
+PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p)
+{
+   for (size_t i = 1; i < p.size(); ++i)
+   {
+      for (size_t j = 0; j < numbodyparts; ++j)
+      {
+         if (&(*p[i].mesh[j]) == m)
+            return &p[i];
+      }
+   }
+   return NULL;
 }
 
 

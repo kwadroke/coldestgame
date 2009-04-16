@@ -29,6 +29,7 @@
    
    <Label x="490" y="484" width="20" height="32" text="" name="reticle"
           normal="textures/reticle.png"/>
+   <Label x="250" y="520" width="500" height="30" text="" name="targetplayer" align="center"/>
    
    <Table x="10" y="650" width="300" height="150" name="killmessages" columns="1" colwidths="300" rowheight="20"/>
    
