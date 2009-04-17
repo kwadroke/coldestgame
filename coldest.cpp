@@ -864,13 +864,27 @@ void GUIUpdate()
    // Check to see if anyone is under our crosshair and display their info
    if (!PrimaryGUIVisible())
    {
-      Vector3 dir(0, 0, -2000.f);
       GraphicMatrix m;
       m.rotatex(-player[0].pitch);
       m.rotatey(player[0].rotation + player[0].facing);
-      dir.transform(m);
-      Vector3 offset = units[player[0].unit].viewoffset;
+      Vector3 offset;
+      if (!guncam)
+         offset = units[player[0].unit].viewoffset;
+      else
+         offset = units[player[0].unit].weaponoffset[weaponslots[player[0].currweapon]];
+      Vector3 rawoffset = offset;
       offset.transform(m);
+      
+      Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
+      // When !guncam this reduces to difference = actualaim
+      Vector3 difference = actualaim + rawoffset - units[player[0].unit].viewoffset;
+      Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
+      Vector3 dir(0, 0, -2000.f);
+      m.identity();
+      m.rotatex(-player[0].pitch + rot.x);
+      m.rotatey(player[0].rotation + player[0].facing - rot.y);
+      dir.transform(m);
+      
       Vector3 checkstart = player[0].pos + offset;
       Vector3 checkend = checkstart + dir;
       vector<Mesh*> check = GetMeshesWithoutPlayer(&player[servplayernum], meshes, kdtree, checkstart, checkend, .01f);
