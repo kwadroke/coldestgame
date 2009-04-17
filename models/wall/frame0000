@@ -1,0 +1,489 @@
+Version Version4
+NextID 85
+TimeToNextFrame 30
+Container
+   ID 0
+   ParentID -1
+   Name
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 3
+      Pos 10000.0 8858.168 698.139
+      Norm 0.0 -0.0 -1.0
+      TC 0.499798 0.246084
+      Color 255 255 255 255
+   Vertex
+      ID 4
+      Pos -9999.996 8858.165 698.139
+      Norm 0.0 -0.0 -1.0
+      TC 0.000281 0.246084
+      Color 255 255 255 255
+   Vertex
+      ID 5
+      Pos -10000.001 18298.166 698.138
+      Norm 0.0 -0.0 -1.0
+      TC 0.000281 0.481856
+      Color 255 255 255 255
+   Vertex
+      ID 6
+      Pos 10000.0 18298.168 698.138
+      Norm 0.0 -0.0 -1.0
+      TC 0.499798 0.481856
+      Color 255 255 255 255
+   Vertex
+      ID 9
+      Pos 10000.005 8858.17 1498.139
+      Norm -0.0 0.0 1.0
+      TC 0.500078 0.246016
+      Color 255 255 255 255
+   Vertex
+      ID 10
+      Pos 9999.993 18298.17 1498.138
+      Norm -0.0 0.0 1.0
+      TC 0.500078 0.481789
+      Color 255 255 255 255
+   Vertex
+      ID 11
+      Pos -10000.004 18298.164 1498.138
+      Norm -0.0 0.0 1.0
+      TC 0.999596 0.481789
+      Color 255 255 255 255
+   Vertex
+      ID 12
+      Pos -9999.999 8858.167 1498.139
+      Norm -0.0 0.0 1.0
+      TC 0.999596 0.246016
+      Color 255 255 255 255
+   Vertex
+      ID 15
+      Pos 10000.0 8858.168 698.139
+      Norm 1.0 1e-06 1e-06
+      TC 0.294825 0.958711
+      Color 255 255 255 255
+   Vertex
+      ID 16
+      Pos 10000.0 18298.168 698.138
+      Norm 1.0 1e-06 1e-06
+      TC 0.390694 0.958613
+      Color 255 255 255 255
+   Vertex
+      ID 17
+      Pos 9999.993 18298.17 1498.138
+      Norm 1.0 1e-06 1e-06
+      TC 0.390689 0.950491
+      Color 255 255 255 255
+   Vertex
+      ID 18
+      Pos 10000.005 8858.17 1498.139
+      Norm 1.0 1e-06 1e-06
+      TC 0.294815 0.950584
+      Color 255 255 255 255
+   Vertex
+      ID 21
+      Pos -10000.001 18298.166 698.138
+      Norm -1.0 -1e-06 -4e-06
+      TC 0.776142 0.958939
+      Color 255 255 255 255
+   Vertex
+      ID 22
+      Pos -9999.996 8858.165 698.139
+      Norm -1.0 -1e-06 -4e-06
+      TC 0.871850 0.959138
+      Color 255 255 255 255
+   Vertex
+      ID 23
+      Pos -9999.999 8858.167 1498.139
+      Norm -1.0 -1e-06 -4e-06
+      TC 0.871869 0.951028
+      Color 255 255 255 255
+   Vertex
+      ID 24
+      Pos -10000.004 18298.164 1498.138
+      Norm -1.0 -1e-06 -4e-06
+      TC 0.776157 0.950828
+      Color 255 255 255 255
+   Vertex
+      ID 27
+      Pos 9999.993 18298.17 1498.138
+      Norm -0.0 0.406139 0.913811
+      TC 0.500078 0.481789
+      Color 255 255 255 255
+   Vertex
+      ID 28
+      Pos 9999.989 27298.17 -2501.863
+      Norm -0.0 0.406139 0.913811
+      TC 0.500078 0.727772
+      Color 255 255 255 255
+   Vertex
+      ID 29
+      Pos -10000.01 27298.166 -2501.863
+      Norm -0.0 0.406139 0.913811
+      TC 0.999596 0.727773
+      Color 255 255 255 255
+   Vertex
+      ID 30
+      Pos -10000.004 18298.164 1498.138
+      Norm -0.0 0.406139 0.913811
+      TC 0.999596 0.481789
+      Color 255 255 255 255
+   Vertex
+      ID 33
+      Pos -10000.004 18298.164 1498.138
+      Norm -1.0 -2e-06 -3e-06
+      TC 0.776157 0.950828
+      Color 255 255 255 255
+   Vertex
+      ID 34
+      Pos -10000.01 27298.166 -2501.863
+      Norm -1.0 -2e-06 -3e-06
+      TC 0.684842 0.991243
+      Color 255 255 255 255
+   Vertex
+      ID 35
+      Pos -10000.008 27298.164 -3301.863
+      Norm -1.0 -2e-06 -3e-06
+      TC 0.684832 0.999354
+      Color 255 255 255 255
+   Vertex
+      ID 36
+      Pos -10000.001 18298.166 698.138
+      Norm -1.0 -2e-06 -3e-06
+      TC 0.776142 0.958939
+      Color 255 255 255 255
+   Vertex
+      ID 39
+      Pos 10000.0 18298.168 698.138
+      Norm 1.0 4e-06 8e-06
+      TC 0.390694 0.958613
+      Color 255 255 255 255
+   Vertex
+      ID 40
+      Pos 9999.994 27298.166 -3301.863
+      Norm 1.0 4e-06 8e-06
+      TC 0.482030 0.999184
+      Color 255 255 255 255
+   Vertex
+      ID 41
+      Pos 9999.989 27298.17 -2501.863
+      Norm 1.0 4e-06 8e-06
+      TC 0.482033 0.991068
+      Color 255 255 255 255
+   Vertex
+      ID 42
+      Pos 9999.993 18298.17 1498.138
+      Norm 1.0 4e-06 8e-06
+      TC 0.390689 0.950491
+      Color 255 255 255 255
+   Vertex
+      ID 45
+      Pos -10000.001 18298.166 698.138
+      Norm 0.0 -0.406139 -0.913811
+      TC 0.000281 0.481856
+      Color 255 255 255 255
+   Vertex
+      ID 46
+      Pos -10000.008 27298.164 -3301.863
+      Norm 0.0 -0.406139 -0.913811
+      TC 0.000281 0.72784
+      Color 255 255 255 255
+   Vertex
+      ID 47
+      Pos 9999.994 27298.166 -3301.863
+      Norm 0.0 -0.406139 -0.913811
+      TC 0.499798 0.72784
+      Color 255 255 255 255
+   Vertex
+      ID 48
+      Pos 10000.0 18298.168 698.138
+      Norm 0.0 -0.406139 -0.913811
+      TC 0.499798 0.481856
+      Color 255 255 255 255
+   Vertex
+      ID 51
+      Pos 9999.994 27298.166 -3301.863
+      Norm -0.0 1.0 -4e-06
+      TC 0.482030 0.999184
+      Color 255 255 255 255
+   Vertex
+      ID 52
+      Pos -10000.008 27298.164 -3301.863
+      Norm -0.0 1.0 -4e-06
+      TC 0.684832 0.999354
+      Color 255 255 255 255
+   Vertex
+      ID 53
+      Pos -10000.01 27298.166 -2501.863
+      Norm -0.0 1.0 -4e-06
+      TC 0.684842 0.991243
+      Color 255 255 255 255
+   Vertex
+      ID 54
+      Pos 9999.989 27298.17 -2501.863
+      Norm -0.0 1.0 -4e-06
+      TC 0.482033 0.991068
+      Color 255 255 255 255
+   Vertex
+      ID 57
+      Pos -9999.999 8858.167 1498.139
+      Norm 0.0 -0.406138 0.913812
+      TC 0.999596 0.246016
+      Color 255 255 255 255
+   Vertex
+      ID 58
+      Pos -9999.994 -141.833 -2501.86
+      Norm 0.0 -0.406138 0.913812
+      TC 0.999596 3.29999999999e-05
+      Color 255 255 255 255
+   Vertex
+      ID 59
+      Pos 10000.01 -141.831 -2501.86
+      Norm 0.0 -0.406138 0.913812
+      TC 0.500078 3.2e-05
+      Color 255 255 255 255
+   Vertex
+      ID 60
+      Pos 10000.005 8858.17 1498.139
+      Norm 0.0 -0.406138 0.913812
+      TC 0.500078 0.246016
+      Color 255 255 255 255
+   Vertex
+      ID 63
+      Pos -9999.996 8858.165 698.139
+      Norm -1.0 1e-06 -4e-06
+      TC 0.871850 0.959138
+      Color 255 255 255 255
+   Vertex
+      ID 64
+      Pos -9999.991 -141.835 -3301.86
+      Norm -1.0 1e-06 -4e-06
+      TC 0.962972 0.999906
+      Color 255 255 255 255
+   Vertex
+      ID 65
+      Pos -9999.994 -141.833 -2501.86
+      Norm -1.0 1e-06 -4e-06
+      TC 0.962992 0.991798
+      Color 255 255 255 255
+   Vertex
+      ID 66
+      Pos -9999.999 8858.167 1498.139
+      Norm -1.0 1e-06 -4e-06
+      TC 0.871869 0.951028
+      Color 255 255 255 255
+   Vertex
+      ID 69
+      Pos 10000.005 -141.834 -3301.86
+      Norm 1.0 3e-06 -6e-06
+      TC 0.203434 0.999502
+      Color 255 255 255 255
+   Vertex
+      ID 70
+      Pos 10000.0 8858.168 698.139
+      Norm 1.0 3e-06 -6e-06
+      TC 0.294825 0.958711
+      Color 255 255 255 255
+   Vertex
+      ID 71
+      Pos 10000.005 8858.17 1498.139
+      Norm 1.0 3e-06 -6e-06
+      TC 0.294815 0.950584
+      Color 255 255 255 255
+   Vertex
+      ID 72
+      Pos 10000.01 -141.831 -2501.86
+      Norm 1.0 3e-06 -6e-06
+      TC 0.203419 0.991371
+      Color 255 255 255 255
+   Vertex
+      ID 75
+      Pos 10000.0 8858.168 698.139
+      Norm -0.0 0.406138 -0.913812
+      TC 0.499798 0.246084
+      Color 255 255 255 255
+   Vertex
+      ID 76
+      Pos 10000.005 -141.834 -3301.86
+      Norm -0.0 0.406138 -0.913812
+      TC 0.499798 0.0001
+      Color 255 255 255 255
+   Vertex
+      ID 77
+      Pos -9999.991 -141.835 -3301.86
+      Norm -0.0 0.406138 -0.913812
+      TC 0.000281 0.0001
+      Color 255 255 255 255
+   Vertex
+      ID 78
+      Pos -9999.996 8858.165 698.139
+      Norm -0.0 0.406138 -0.913812
+      TC 0.000281 0.246084
+      Color 255 255 255 255
+   Vertex
+      ID 81
+      Pos 10000.01 -141.831 -2501.86
+      Norm 0.0 -1.0 3e-06
+      TC 0.203419 0.991371
+      Color 255 255 255 255
+   Vertex
+      ID 82
+      Pos -9999.994 -141.833 -2501.86
+      Norm 0.0 -1.0 3e-06
+      TC 0.000103 0.991774
+      Color 255 255 255 255
+   Vertex
+      ID 83
+      Pos -9999.991 -141.835 -3301.86
+      Norm 0.0 -1.0 3e-06
+      TC 0.000119 0.999906
+      Color 255 255 255 255
+   Vertex
+      ID 84
+      Pos 10000.005 -141.834 -3301.86
+      Norm 0.0 -1.0 3e-06
+      TC 0.203434 0.999502
+      Color 255 255 255 255
+Node
+   Triangles
+   Tri
+      ID 1
+      Verts 3 4 6 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 2
+      Verts 4 5 6 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 7
+      Verts 9 10 12 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 8
+      Verts 10 11 12 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 13
+      Verts 15 16 18 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 14
+      Verts 16 17 18 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 19
+      Verts 21 22 24 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 20
+      Verts 22 23 24 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 25
+      Verts 27 28 30 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 26
+      Verts 28 29 30 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 31
+      Verts 33 34 36 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 32
+      Verts 34 35 36 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 37
+      Verts 39 40 42 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 38
+      Verts 40 41 42 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 43
+      Verts 45 46 48 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 44
+      Verts 46 47 48 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 49
+      Verts 51 52 54 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 50
+      Verts 52 53 54 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 55
+      Verts 57 58 60 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 56
+      Verts 58 59 60 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 61
+      Verts 63 64 66 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 62
+      Verts 64 65 66 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 67
+      Verts 69 70 72 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 68
+      Verts 70 71 72 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 73
+      Verts 75 76 78 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 74
+      Verts 76 77 78 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 79
+      Verts 81 82 84 
+      Material materials/metal/wall
+      Collide 1
+   Tri
+      ID 80
+      Verts 82 83 84 
+      Material materials/metal/wall
+      Collide 1

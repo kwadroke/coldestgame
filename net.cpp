@@ -489,6 +489,8 @@ int NetListen(void* dummy)
                         newemitter.position = i->pos;
                         emitters.push_back(newemitter);
                      }
+                     if (i->indicator)
+                        i->indicator->ttl = 1;
                   }
                }
                SDL_mutexV(clientmutex);

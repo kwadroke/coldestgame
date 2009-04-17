@@ -1,0 +1,43 @@
+Version Version4
+NextID 7
+TimeToNextFrame 1000
+Container
+   ID 0
+   ParentID -1
+   Name 
+   Facing 1
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 1
+      Pos -1000 1000 0
+      Norm 0 0 1
+      TC 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+   Vertex
+      ID 2
+      Pos -1000 -1000 0
+      Norm 0 0 1
+      TC 0 0 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+   Vertex
+      ID 3
+      Pos 1000 1000 0
+      Norm 0 0 1
+      TC 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+   Vertex
+      ID 4
+      Pos 1000 -1000 0
+      Norm 0 0 1
+      TC 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Node
+   Triangles
+   Tri
+      ID 5
+      Verts 1 2 3
+      Material materials/misc/enemyindicator
+      Collide 0
+   Tri
+      ID 6
+      Verts 3 2 4
+      Material materials/misc/enemyindicator
+      Collide 0

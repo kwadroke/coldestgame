@@ -1901,6 +1901,23 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          }
       }
    }
+   
+   // Add a particle to enemies to indicate their affiliation
+   if (gl) // No reason to do this on the server
+   {
+      if (p.team != player[servplayernum].team)
+      {
+         if (!p.indicator)
+         {
+            MeshPtr indicatormesh = meshcache->GetNewMesh("models/enemyindicator");
+            Particle part(*indicatormesh);
+            part.ttl = 0;
+            particles.push_back(part);
+            p.indicator = &particles.back();
+         }
+         p.indicator->pos = p.pos;
+      }
+   }
 }
 
 

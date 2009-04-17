@@ -31,6 +31,7 @@
 #include "Weapon.h"
 #include "Item.h"
 #include "ALSource.h"
+#include "Particle.h"
 
 class PlayerData
 {
@@ -52,6 +53,7 @@ class PlayerData
       bool spawned;
       bool needsync;
       vector<Meshlist::iterator> mesh;
+      Particle* indicator;
       set<unsigned long> partids;
       set<unsigned long> acked;
       set<unsigned long> commandids;
@@ -84,7 +86,6 @@ class PlayerData
       int powerdowntime;
       float healaccum;
       // weight can be set to negative to cause a player to fall up, such as when ejecting
-      // Note that it is not replicated to the server, so 
       float weight;
       bool spectate;
       bool admin;
