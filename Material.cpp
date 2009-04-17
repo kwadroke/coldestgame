@@ -113,9 +113,9 @@ void Material::Use() const
    }
    else glDisable(GL_CULL_FACE);
 
-   /*if (depthtest)
+   if (depthtest)
       glEnable(GL_DEPTH_TEST);
-   else glDisable(GL_DEPTH_TEST);*/
+   else glDisable(GL_DEPTH_TEST);
 
    if (depthwrite)
       glDepthMask(GL_TRUE);
