@@ -24,7 +24,7 @@
 #define PI 3.14159265
 
 
-CollisionDetection::CollisionDetection() : vertheap(8), worldbounds(6, Quad(vertheap))
+CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
 {
    intmethod = 0;
 }

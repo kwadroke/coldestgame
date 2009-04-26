@@ -29,7 +29,7 @@ MeshNode::MeshNode() : id(0), parentid(0), facing(false), gl(false), rot1(Vector
 }
 
 
-void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, VertexVHPvec& verts, 
+void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, VertexPtrvec& verts, 
                          const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
 {
    if (interpnode.get() == this)
@@ -97,7 +97,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
 
 // Split this off to aid profiling - inline when not profiling
 inline
-void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpval, VertexVHPvec& verts, 
+void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpval, VertexPtrvec& verts, 
                              const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
 {
    size_t vsize = vertices.size();
@@ -137,7 +137,7 @@ void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpva
 }
 
 
-void MeshNode::TransformNoInt(VertexVHPvec& verts, const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
+void MeshNode::TransformNoInt(VertexPtrvec& verts, const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
 {
    m.identity();
    
@@ -195,7 +195,7 @@ void MeshNode::TransformNoInt(VertexVHPvec& verts, const GraphicMatrix& parentm,
 
 // Split this off to aid profiling - inline when not profiling
 inline
-void MeshNode::TransformNoIntLoop(VertexVHPvec& verts, const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
+void MeshNode::TransformNoIntLoop(VertexPtrvec& verts, const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
 {
    size_t vsize = vertices.size();
    if (gl) // Means we need normal and color data, otherwise we don't care

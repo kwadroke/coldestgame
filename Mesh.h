@@ -32,7 +32,6 @@
 #include "MeshNode.h"
 #include "FBO.h"
 #include "util.h"
-#include "VectorHeap.h"
 #include "Timer.h" // Debugging
 
 using std::map;
@@ -107,15 +106,13 @@ class Mesh
       
       Uint32 updatedelay;
       
-      VectorHeap<Vertex> vertheap;
-      
    private:
       void BindVbo();
       void ResetTriMaxDims();
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris;
-      VertexVHPvec vertices;
+      VertexPtrvec vertices;
       intvec vbosteps;
       GLuint vbo;
       GLuint ibo;

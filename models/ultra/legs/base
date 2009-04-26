@@ -2,10 +2,11 @@ Version Version4
 Type External
 Position 0 0 0
 Rotations 0 0 0
-NumFrames 1 13 13
-Scale .003
+NumFrames 1 11 11
+Scale .01
 Size 15000
 
 ConvertCommands
-   objconvert -obj ./legs -time 150 -stride 3 -invert Lower.001Collide -invert Foot.001Collide -start 1 (or 14)
-   objconvert -obj ./standing -time 50 -stride 3 -invert Lower.001Collide -invert Foot.001Collide -dupfirst 0
+   objconvert -obj legs -dupfirst 0 -start 1 -stride 3 -time 200 -invert RLegCollide
+   objconvert -obj standing -dupfirst 0 -invert RLegCollide
+

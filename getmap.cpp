@@ -474,7 +474,7 @@ void GetMap(string fn)
       for (int y = 0; y < maph - 1; ++y)
       {
          currmesh = meshits[(y / terrobjsize) * numobjsx + (x / terrobjsize)];
-         Quad tempquad(currmesh->vertheap);
+         Quad tempquad;
          tempquad.SetVertex(0, Vector3(x * tilesize, heightmap[x][y], y * tilesize));
          tempquad.SetVertex(1, Vector3(x * tilesize, heightmap[x][y + 1], (y + 1) * tilesize));
          tempquad.SetVertex(2, Vector3((x + 1) * tilesize, heightmap[x + 1][y + 1], (y + 1) * tilesize));
@@ -615,12 +615,12 @@ void GetMap(string fn)
          if (size1 - size2 > float(tilesize) * .2f || 
              (mid1.y < mid2.y && size1 - size2 > -float(tilesize) * .2f))// Then rotate the quad so the triangle split happens on the other axis
          {
-            VertexVHP last = tempquad.GetVertexVHP(0);
+            VertexPtr last = tempquad.GetVertexPtr(0);
             for (size_t i = 0; i < 3; ++i)
             {
-               tempquad.SetVertexVHP(i, tempquad.GetVertexVHP((i + 1) % 4));
+               tempquad.SetVertexPtr(i, tempquad.GetVertexPtr((i + 1) % 4));
             }
-            tempquad.SetVertexVHP(3, last);
+            tempquad.SetVertexPtr(3, last);
                
          }
          
@@ -675,7 +675,7 @@ void GetMap(string fn)
    {
       for (int j = 0; j < numwatery; ++j)
       {
-         Quad tempquad(watermesh->vertheap);
+         Quad tempquad;
          tempquad.SetVertex(0, Vector3(i * waterchunksize + waterminx, 0, j * waterchunksize + waterminy));
          tempquad.SetVertex(1, Vector3(i * waterchunksize + waterminx, 0, (j + 1) * waterchunksize + waterminy));
          tempquad.SetVertex(2, Vector3((i + 1) * waterchunksize + waterminx, 0, (j + 1) * waterchunksize + waterminy));

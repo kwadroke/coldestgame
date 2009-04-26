@@ -233,6 +233,9 @@ void InitGlobals()
       writekeys << "set mouseuse " << SDL_BUTTON_MIDDLE << endl;
       writekeys << "set mousenextweap " << SDL_BUTTON_WHEELDOWN << endl;
       writekeys << "set mouseprevweap " << SDL_BUTTON_WHEELUP << endl;
+      writekeys.close();
+      
+      console.Parse("include keys.cfg", true);
    }
    
    ReadConfig();
@@ -335,8 +338,16 @@ void InitUnits()
          read.Read(units[i].maxhp[j], "HP", j);
    }
    
-   units[Ultra].scale = dummy.scale * units[Ultra].size / units[Nemesis].size;
-   units[Omega].scale = dummy.scale * units[Omega].size / units[Nemesis].size;
+   // Just while we don't have unique models for each unit
+   units[Ultra].scale = units[Nemesis].scale * units[Ultra].size / units[Nemesis].size;
+   units[Omega].scale = units[Nemesis].scale * units[Omega].size / units[Nemesis].size;
+   units[Ultra].viewoffset = units[Nemesis].viewoffset * units[Ultra].size / units[Nemesis].size;
+   units[Omega].viewoffset = units[Nemesis].viewoffset * units[Omega].size / units[Nemesis].size;
+   for (size_t i = 0; i < numbodyparts; ++i)
+   {
+      units[Ultra].weaponoffset[i] = units[Nemesis].weaponoffset[i] * (units[Ultra].size / units[Nemesis].size);
+      units[Omega].weaponoffset[i] = units[Nemesis].weaponoffset[i] * (units[Omega].size / units[Nemesis].size);
+   }
 }
 
 
@@ -349,9 +360,10 @@ void ReadConfig()
    
    if (getconf.fail())
    {
+      getconf.close();
       console.SaveToFile(conffile, true);
       console.Parse("restartgl");
-      return;
+      getconf.open(conffile.c_str(), ios_base::in);
    }
    
    while (!getconf.eof())
@@ -1609,6 +1621,7 @@ void SynchronizePosition()
    smootholdpos = oldpos[currindex].pos;
    float difference = smoothserverpos.distance(smootholdpos);
    
+#ifndef DEDICATED
    deque<float> diffs;
    float dispdiff = 0.f;
    static int diffcounter = 0;
@@ -1624,6 +1637,7 @@ void SynchronizePosition()
       posvariance->text = "Pos Variance: " + ToString(difference);
       diffcounter = 0;
    }
+#endif
 #endif
    
    Vector3 posadj = smoothserverpos - smootholdpos;

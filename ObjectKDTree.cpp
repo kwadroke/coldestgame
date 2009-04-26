@@ -22,7 +22,7 @@
 
 int ObjectKDTree::maxlevels = 7;
 
-ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : haschildren(false), vertices(v), retobjs(new MeshSet()), root(true), vertheap(8), p(6, Quad(vertheap))
+ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : haschildren(false), vertices(v), retobjs(new MeshSet()), root(true), p(6, Quad())
 {
    // Get pointers to objects
    for (Meshlist::iterator i = objs->begin(); i != objs->end(); ++i)
@@ -74,9 +74,6 @@ ObjectKDTree& ObjectKDTree::operator=(const ObjectKDTree& o)
    children = o.children;
    root = o.root;
    p = o.p;
-   vertheap = o.vertheap;  // This HAS to be done after copying the quads
-   for (size_t i = 0; i < p.size(); ++i)
-      p[i].ChangeHeap(vertheap);
    frustum = &p;
    haschildren = o.haschildren;
    if (haschildren && root)
@@ -100,9 +97,6 @@ ObjectKDTree::ObjectKDTree(const ObjectKDTree& o)
    children = o.children;
    root = o.root;
    p = o.p;
-   vertheap = o.vertheap;  // This HAS to be done after copying the quads
-   for (size_t i = 0; i < p.size(); ++i)
-      p[i].ChangeHeap(vertheap);
    frustum = &p;
    haschildren = o.haschildren;
    if (haschildren && root)
