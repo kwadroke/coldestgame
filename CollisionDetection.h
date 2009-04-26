@@ -47,7 +47,6 @@ class CollisionDetection
       
       int intmethod;
       int tilesize;
-      VertexHeap vertheap;
       vector<Quad> worldbounds;
       
    private:

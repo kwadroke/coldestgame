@@ -4,8 +4,8 @@ MaxSpeed 3
 Size 15
 Scale .94
 Weight 50
-TorsoOffset 0 0 0
-LArmOffset -10 0 0
-RArmOffset 10 0 0
-ViewOffset 0 15 -5
+TorsoOffset 0 0 -15
+LArmOffset -20 15 -5
+RArmOffset 20 15 -5
+ViewOffset 0 20 -5
 HP 200 200 200 200

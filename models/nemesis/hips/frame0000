@@ -1,0 +1,217 @@
+Version Version4
+NextID 37
+TimeToNextFrame 30
+Container
+   ID 0
+   ParentID -1
+   Name
+   Facing 0
+   Rot1 0 0 0
+   Rot2 0 0 0
+   Trans 0 0 0
+   Vertex
+      ID 3
+      Pos 342.737 -194.431 -272.593
+      Norm 0.0 -1.0 -1.9e-05
+      TC 0.500014 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 4
+      Pos 342.737 -194.442 279.767
+      Norm 0.0 -1.0 -1.9e-05
+      TC 0.771462 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 5
+      Pos -334.85 -194.442 279.767
+      Norm 0.0 -1.0 -1.9e-05
+      TC 0.771463 1.1e-05
+      Color 255 255 255 255
+   Vertex
+      ID 6
+      Pos -334.85 -194.431 -272.593
+      Norm 0.0 -1.0 -1.9e-05
+      TC 0.500014 9.99999999995e-06
+      Color 255 255 255 255
+   Vertex
+      ID 9
+      Pos -334.85 270.638 -272.584
+      Norm -1.0 0.0 0.0
+      TC 0.000014 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 10
+      Pos -334.85 -194.431 -272.593
+      Norm -1.0 0.0 0.0
+      TC 0.000014 0.561551
+      Color 255 255 255 255
+   Vertex
+      ID 11
+      Pos -334.85 -194.442 279.767
+      Norm -1.0 0.0 0.0
+      TC 0.271462 0.561551
+      Color 255 255 255 255
+   Vertex
+      ID 12
+      Pos -334.85 270.627 279.776
+      Norm -1.0 0.0 0.0
+      TC 0.271462 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 15
+      Pos 342.737 -194.431 -272.593
+      Norm 1.0 0.0 0.0
+      TC 0.271467 0.333001
+      Color 255 255 255 255
+   Vertex
+      ID 16
+      Pos 342.737 270.638 -272.584
+      Norm 1.0 0.0 0.0
+      TC 0.271467 0.561552
+      Color 255 255 255 255
+   Vertex
+      ID 17
+      Pos 342.737 270.627 279.776
+      Norm 1.0 0.0 0.0
+      TC 0.542915 0.561552
+      Color 255 255 255 255
+   Vertex
+      ID 18
+      Pos 342.737 -194.442 279.767
+      Norm 1.0 0.0 0.0
+      TC 0.542915 0.333001
+      Color 255 255 255 255
+   Vertex
+      ID 21
+      Pos 342.737 270.638 -272.584
+      Norm 0.0 1.9e-05 -1.0
+      TC 0.271463 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 22
+      Pos 342.737 -194.431 -272.593
+      Norm 0.0 1.9e-05 -1.0
+      TC 0.500014 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 23
+      Pos -334.85 -194.431 -272.593
+      Norm 0.0 1.9e-05 -1.0
+      TC 0.500014 9.99999999995e-06
+      Color 255 255 255 255
+   Vertex
+      ID 24
+      Pos -334.85 270.638 -272.584
+      Norm 0.0 1.9e-05 -1.0
+      TC 0.271463 9.99999999995e-06
+      Color 255 255 255 255
+   Vertex
+      ID 27
+      Pos -334.85 270.627 279.776
+      Norm 0.0 -1.9e-05 1.0
+      TC 1.000014 1.2e-05
+      Color 255 255 255 255
+   Vertex
+      ID 28
+      Pos -334.85 -194.442 279.767
+      Norm 0.0 -1.9e-05 1.0
+      TC 0.771463 1.1e-05
+      Color 255 255 255 255
+   Vertex
+      ID 29
+      Pos 342.737 -194.442 279.767
+      Norm 0.0 -1.9e-05 1.0
+      TC 0.771462 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 30
+      Pos 342.737 270.627 279.776
+      Norm 0.0 -1.9e-05 1.0
+      TC 1.000012 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 33
+      Pos -334.85 270.638 -272.584
+      Norm 0.0 1.0 1.9e-05
+      TC 0.271463 9.99999999995e-06
+      Color 255 255 255 255
+   Vertex
+      ID 34
+      Pos -334.85 270.627 279.776
+      Norm 0.0 1.0 1.9e-05
+      TC 0.000014 9.99999999995e-06
+      Color 255 255 255 255
+   Vertex
+      ID 35
+      Pos 342.737 270.627 279.776
+      Norm 0.0 1.0 1.9e-05
+      TC 0.000014 0.333
+      Color 255 255 255 255
+   Vertex
+      ID 36
+      Pos 342.737 270.638 -272.584
+      Norm 0.0 1.0 1.9e-05
+      TC 0.271463 0.333
+      Color 255 255 255 255
+Node
+   Triangles
+   Tri
+      ID 1
+      Verts 3 4 6 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 2
+      Verts 4 5 6 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 7
+      Verts 9 10 12 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 8
+      Verts 10 11 12 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 13
+      Verts 15 16 18 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 14
+      Verts 16 17 18 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 19
+      Verts 21 22 24 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 20
+      Verts 22 23 24 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 25
+      Verts 27 28 30 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 26
+      Verts 28 29 30 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 31
+      Verts 33 34 36 
+      Material materials/metal/hips
+      Collide 1
+   Tri
+      ID 32
+      Verts 34 35 36 
+      Material materials/metal/hips
+      Collide 1

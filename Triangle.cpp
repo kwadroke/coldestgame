@@ -20,11 +20,11 @@
 
 #include "Triangle.h"
 
-Triangle::Triangle(VertexHeap& vertheap) : v(VertexVHPvec(3)), material(NULL), collide(false),
+Triangle::Triangle() : v(VertexPtrvec(3)), material(NULL), collide(false),
                    matrix(GraphicMatrix()), maxdim(-1.f), radmod(0.f)
 {
    for (size_t i = 0; i < 3; ++i)
-      v[i] = vertheap.insert();
+      v[i] = VertexPtr(new Vertex());
 }
 
 

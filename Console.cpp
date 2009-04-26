@@ -141,7 +141,7 @@ void Console::Parse(const string& line, bool echo)
       while (!getconf.eof())
       {
          getline(getconf, buffer);
-         console.Parse(buffer);
+         console.Parse(buffer, echo);
       }
    }
 #endif

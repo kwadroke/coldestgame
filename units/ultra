@@ -1,8 +1,8 @@
 TurnSpeed 1
 Acceleration .02
 MaxSpeed 2
-Size 25
-Scale .68
+Size 20
+Scale .65
 Weight 80
 TorsoOffset 0 0 0
 LArmOffset -10 0 0

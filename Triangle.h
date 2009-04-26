@@ -28,7 +28,6 @@
 #include "types.h"
 #include "GraphicMatrix.h"
 #include "Material.h"
-#include "VectorHeap.h"
 
 using std::vector;
 using std::string;
@@ -45,7 +44,7 @@ using std::string;
 class Triangle
 {
    public:
-      Triangle(VertexHeap&);
+      Triangle();
       bool operator<(const Triangle&) const;
       bool operator>(const Triangle&) const;
       ushortvec GetIndices();
@@ -53,7 +52,7 @@ class Triangle
       static float Perimeter(const Vector3&, const Vector3&, const Vector3&);
       void CalcMaxDim();
       
-      VertexVHPvec v;
+      VertexPtrvec v;
       Material* material;
       string matname;
       bool collide;

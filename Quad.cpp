@@ -20,7 +20,7 @@
 
 #include "Quad.h"
 
-Quad::Quad(VertexHeap& vh) : first(new Triangle(vh)), second(new Triangle(vh))
+Quad::Quad() : first(new Triangle()), second(new Triangle())
 {
    second->v[0] = first->v[1];
    second->v[2] = first->v[2];
@@ -42,17 +42,15 @@ Quad::Quad(VertexHeap& vh) : first(new Triangle(vh)), second(new Triangle(vh))
             second->v[vert1]->texcoords[i] = tcv[j];
       }
    }
-   vertheap = &vh; // Need to save this so we can use it for copying later
 }
 
 
 Quad::Quad(const Quad& q) : first(new Triangle(*q.first)), second(new Triangle(*q.second))
 {
-   vertheap = q.vertheap;
    for (size_t i = 0; i < 3; ++i)
    {
-      first->v[i] = vertheap->insert(*first->v[i]);
-      second->v[i] = vertheap->insert(*second->v[i]);
+      first->v[i] = VertexPtr(new Vertex((*first->v[i])));
+      second->v[i] = VertexPtr(new Vertex((*second->v[i])));
    }
    second->v[0] = first->v[1];
    second->v[2] = first->v[2];
@@ -63,11 +61,10 @@ Quad& Quad::operator=(const Quad& q)
 {
    first = TrianglePtr(new Triangle(*q.first));
    second = TrianglePtr(new Triangle(*q.second));
-   vertheap = q.vertheap;
    for (size_t i = 0; i < 3; ++i)
    {
-      first->v[i] = vertheap->insert(*first->v[i]);
-      second->v[i] = vertheap->insert(*second->v[i]);
+      first->v[i] = VertexPtr(new Vertex((*first->v[i])));
+      second->v[i] = VertexPtr(new Vertex((*second->v[i])));
    }
    second->v[0] = first->v[1];
    second->v[2] = first->v[2];
@@ -75,7 +72,7 @@ Quad& Quad::operator=(const Quad& q)
 }
 
 
-void Quad::SetVertexVHP(const int num, const VertexVHP& v)
+void Quad::SetVertexPtr(const int num, const VertexPtr& v)
 {
    int vert, vert1;
    
@@ -88,7 +85,7 @@ void Quad::SetVertexVHP(const int num, const VertexVHP& v)
 }
 
 
-VertexVHP Quad::GetVertexVHP(const int num) const
+VertexPtr Quad::GetVertexPtr(const int num) const
 {
    int vert, vert1;
    
@@ -98,7 +95,7 @@ VertexVHP Quad::GetVertexVHP(const int num) const
       return first->v[vert];
    if (vert1 >= 0 && vert1 < 3) 
       return second->v[vert1];
-   return VertexVHP(); // Uh oh
+   return VertexPtr(); // Uh oh
 }
 
 
@@ -182,13 +179,4 @@ void Quad::SetMaterial(Material* m)
 }
 
 
-void Quad::ChangeHeap(VertexHeap& h)
-{
-   vertheap = &h;
-   for (size_t i = 0; i < 3; ++i)
-   {
-      first->v[i].changeheap(h);
-      second->v[i].changeheap(h);
-   }
-}
 
