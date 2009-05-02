@@ -45,8 +45,6 @@ list<Packet> queue;
 vector<ServerInfo> servers;
 set<ServerInfo> knownservers;
 
-const char eol = '\n';
-
 int main()
 {
    logout.SetFile("console.log");

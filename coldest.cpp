@@ -73,7 +73,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #ifndef _WIN32
    if (argc < 2)
 #else
+   // This is an overly simplistic command line handler, but for the moment it suffices
    string cmdline(lpCmdLine);
+   size_t argc = 0;
+   vector<string> argv(2);
+   if (cmdline.length() > 0)
+   {
+      argv[1] = cmdline;
+      argc = 2;
+   }
 #endif
       StartBGMusic();
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
@@ -83,7 +91,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    InitShaders();
    InitNoise();
    
-#if !defined(DEDICATED) && !defined(WIN32)
+#if !defined(DEDICATED)
    if (argc > 1)
    {
       logout << "Editing " << argv[1] << endl;
