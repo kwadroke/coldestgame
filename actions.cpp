@@ -255,11 +255,13 @@ void DoBind(SDLKey& key)
    GUI* leftbutton = gui[settings]->GetWidget("leftbutton");
    GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
    GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
+   GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
    forwardbutton->text = SDL_GetKeyName(keys.keyforward);
    backbutton->text = SDL_GetKeyName(keys.keyback);
    leftbutton->text = SDL_GetKeyName(keys.keyleft);
    rightbutton->text = SDL_GetKeyName(keys.keyright);
    loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
+   useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
 }
 
 void BindForward()
@@ -285,6 +287,11 @@ void BindRight()
 void BindLoadout()
 {
    DoBind(keys.keyloadout);
+}
+
+void BindUseItem()
+{
+   DoBind(keys.keyuseitem);
 }
 
 
@@ -343,6 +350,8 @@ void Action(const string& action)
       BindRight();
    else if (action == "bindloadout")
       BindLoadout();
+   else if (action == "binduseitem")
+      BindUseItem();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }

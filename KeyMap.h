@@ -22,10 +22,13 @@
 #define __KEYMAP_H
 #include <SDL.h>
 
+/* When you add another key to this class, you need to add the appropriate connections in
+   settings.xml, actions.cpp, and settings.cpp */
+
 class KeyMap
 {
    public:
-      KeyMap() : keyforward(SDLK_F13), keyback(SDLK_F13), keyleft(SDLK_F13), keyright(SDLK_F13), keyloadout(SDLK_F13),
+      KeyMap() : keyforward(SDLK_F13), keyback(SDLK_F13), keyleft(SDLK_F13), keyright(SDLK_F13), keyloadout(SDLK_F13), keyuseitem(SDLK_F13),
 	         mousefire(255), mousezoom(255), mouseuse(255), mousenextweap(255), mouseprevweap(255)
 		 {};
       SDLKey keyforward;
@@ -33,6 +36,7 @@ class KeyMap
       SDLKey keyleft;
       SDLKey keyright;
       SDLKey keyloadout;
+      SDLKey keyuseitem;
       Uint8 mousefire;
       Uint8 mousezoom;
       Uint8 mouseuse;
