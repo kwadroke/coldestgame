@@ -1,0 +1,9 @@
+Diffuse 1 1 1 1
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Shininess 32
+Texture0 textures/metal/base.png
+Texture1 textures/metal/basenorm.png
+Texture2 textures/metal/basespec.png
+Shader shaders/bump
+CullFace 1
