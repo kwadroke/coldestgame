@@ -359,7 +359,7 @@ void GUI::InitFromFile(string filename)
       parser->parse(filename.c_str());
    
       // doc is owned by the parser, we don't need to worry about it
-      DOMDocument* doc = parser->getDocument();
+	  xercesc::DOMDocument* doc = parser->getDocument();
       if (doc)
       {
          DOMElement* element = doc->getDocumentElement();

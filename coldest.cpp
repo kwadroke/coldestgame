@@ -70,11 +70,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    InitGlobals();
    initialized = true;
    
-#ifndef WIN32
+#ifndef _WIN32
    if (argc < 2)
 #else
    string cmdline(lpCmdLine);
-   
 #endif
       StartBGMusic();
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
