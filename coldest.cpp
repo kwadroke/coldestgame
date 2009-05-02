@@ -72,6 +72,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    
 #ifndef WIN32
    if (argc < 2)
+#else
+   string cmdline(lpCmdLine);
+   
 #endif
       StartBGMusic();
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
@@ -228,6 +231,7 @@ void InitGlobals()
       writekeys << "set keyleft " << SDLK_a << endl;
       writekeys << "set keyright " << SDLK_d << endl;
       writekeys << "set keyloadout " << SDLK_l << endl;
+      writekeys << "set keyuseitem " << SDLK_u << endl;
       writekeys << "set mousefire " << SDL_BUTTON_LEFT << endl;
       writekeys << "set mousezoom " << SDL_BUTTON_RIGHT << endl;
       writekeys << "set mouseuse " << SDL_BUTTON_MIDDLE << endl;
@@ -378,6 +382,7 @@ void ReadConfig()
    keys.keyleft = SDLKey(console.GetInt("keyleft"));
    keys.keyright = SDLKey(console.GetInt("keyright"));
    keys.keyloadout = SDLKey(console.GetInt("keyloadout"));
+   keys.keyuseitem = SDLKey(console.GetInt("keyuseitem"));
    keys.mousefire = console.GetInt("mousefire");
    keys.mousezoom = console.GetInt("mousezoom");
    keys.mouseuse = console.GetInt("mouseuse");
@@ -1137,6 +1142,10 @@ void GameEventHandler(SDL_Event &event)
                gui[loadoutmenu]->visible = true;
                gui[hud]->visible = false;
             }
+            else if (event.key.keysym.sym == keys.keyuseitem)
+            {
+               useitem = true;
+            }
             else if (event.key.keysym.sym == SDLK_LSHIFT)
             {
                player[0].run = true;
@@ -1454,8 +1463,9 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 offsetoldleg = offsetoldmain - Vector3(0, mplayer.size * 2.f, 0);
       
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old + offset, mplayer.pos, mplayer.size * 2.f);
-      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check, false);
-      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check, false);
+      float checksize = mplayer.size * 1.01f;
+      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, false);
+      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, checksize, check, false);
       if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
          adjust = (adjust + legadjust) / 2.f;
       else adjust = adjust + legadjust;
@@ -1476,8 +1486,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       {
          mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, mplayer.size, check, false);
-         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, mplayer.size, check, false);
+         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, false);
+         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, checksize, check, false);
          if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
             adjust = (adjust + legadjust) / 2.f;
          else adjust = adjust + legadjust;

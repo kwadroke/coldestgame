@@ -582,6 +582,7 @@ int ServerListen(void* dummy)
             AppendDynamicMeshes(check, servermeshes);
             Vector3 checkvec;
             bool found = false;
+            spawnpointreq.y += 50.f;
             // Since this check isn't actually moving doing the extended collision checks is pointless
             if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 49.f, check, false).distance2() > 1e-4f)
             {

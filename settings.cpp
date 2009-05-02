@@ -49,6 +49,7 @@ void UpdateSettings()
    GUI* leftbutton = gui[settings]->GetWidget("leftbutton");
    GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
    GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
+   GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
    
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -70,6 +71,7 @@ void UpdateSettings()
    leftbutton->text = SDL_GetKeyName(keys.keyleft);
    rightbutton->text = SDL_GetKeyName(keys.keyright);
    loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
+   useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
    
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");
@@ -181,6 +183,7 @@ void SaveSettings()
    writekeys << "set keyleft " << keys.keyleft << endl;
    writekeys << "set keyright " << keys.keyright << endl;
    writekeys << "set keyloadout " << keys.keyloadout << endl;
+   writekeys << "set keyuseitem " << keys.keyuseitem << endl;
    writekeys << "set mousefire " << (int)keys.mousefire << endl;
    writekeys << "set mousezoom " << (int)keys.mousezoom << endl;
    writekeys << "set mouseuse " << (int)keys.mouseuse << endl;

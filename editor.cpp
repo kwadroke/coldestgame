@@ -34,6 +34,8 @@ GUIPointers guip;
 Mesh* selected = NULL;
 bool clicked = false;
 bool rotating = false;
+bool lockx = false;
+bool locky = false;
 
 void EditorLoop(const string editmap)
 {
@@ -41,6 +43,7 @@ void EditorLoop(const string editmap)
    
    editor = true;
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+   SDL_ShowCursor(SDL_DISABLE);
    gui[mainmenu]->visible = false;
    gui[loadprogress]->visible = true;
    GetMap("maps/" + editmap);
@@ -115,6 +118,16 @@ void EditorEventHandler(SDL_Event event)
          {
             rotating = true;
          }
+         else if (event.key.keysym.sym == SDLK_x)
+         {
+            if (rotating)
+               lockx = !lockx;
+         }
+         else if (event.key.keysym.sym == SDLK_y)
+         {
+            if (rotating)
+               locky = !locky;
+         }
          else if (event.key.keysym.sym == SDLK_c)
          {
             if (SDL_GetModState() & KMOD_CTRL)
@@ -173,6 +186,7 @@ void EditorEventHandler(SDL_Event event)
          else if (event.key.keysym.sym == SDLK_r)
          {
             rotating = false;
+            lockx = locky = false;
          }
          else if (event.key.keysym.sym == SDLK_LSHIFT)
          {
@@ -244,6 +258,17 @@ bool EditorGUIEventHandler(SDL_Event event)
             if (event.key.keysym.sym == SDLK_r)
             {
                rotating = true;
+               lockx = locky = false;
+            }
+            else if (event.key.keysym.sym == SDLK_x)
+            {
+               if (rotating)
+                  lockx = !lockx;
+            }
+            else if (event.key.keysym.sym == SDLK_y)
+            {
+               if (rotating)
+                  locky = !locky;
             }
             else if (event.key.keysym.sym == SDLK_o && (SDL_GetModState() & KMOD_LCTRL))
             {
@@ -374,7 +399,13 @@ bool MoveObject(SDL_Event& event)
       else
       {
          float modifier = 1.f;
-         selected->Rotate(selected->GetRotation() + Vector3(event.motion.yrel * modifier, event.motion.xrel * modifier, 0.f), true);
+         float ax = event.motion.xrel * modifier;
+         float ay = event.motion.yrel * modifier;
+         if (lockx)
+            ax = 0.f;
+         if (locky)
+            ay = 0.f;
+         selected->Rotate(selected->GetRotation() + Vector3(ay, ax, 0.f), true);
          UpdateEditorGUI();
       }
       return true;
@@ -599,6 +630,7 @@ void SaveMap()
          {
             ProceduralTree t = treemap[&(*i)];
             Vector3 currpos = i->GetPosition();
+            currpos -= Vector3(0, i->GetHeight() / 2.f, 0);
             Vector3 currrot = i->GetRotation();
             newmap << "      Type proctree\n";
             newmap << "      Position " << currpos.x << " " << currpos.y << " " << currpos.z << endl;
