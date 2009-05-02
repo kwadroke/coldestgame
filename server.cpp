@@ -27,7 +27,7 @@
 #include <string>
 #include <vector>
 #include <deque>
-#ifndef WIN32
+#ifndef _WIN32
 #include <poll.h>
 #else
 #include <Winsock2.h>

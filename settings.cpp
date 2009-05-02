@@ -153,7 +153,7 @@ void SaveSettings()
    console.Parse("setsave shadows " + ToString(shadowsbutton->togglestate), false);
    console.Parse("setsave softshadows " + ToString(softshadowsbutton->togglestate), false);
    console.Parse("setsave reflection " + ToString(reflectionbutton->togglestate), false);
-   if (fullscreenbutton->togglestate != console.GetBool("fullscreen"))
+   if (bool(fullscreenbutton->togglestate) != console.GetBool("fullscreen"))
       dorestart = true;
    console.Parse("setsave fullscreen " + ToString(fullscreenbutton->togglestate), false);
    console.Parse("setsave turnsmooth " + ToString(turnsmoothslider->value), false);

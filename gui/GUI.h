@@ -51,7 +51,7 @@ using xercesc::DOMElement;
 using xercesc::XercesDOMParser;
 using xercesc::XMLPlatformUtils;
 using xercesc::XMLException;
-using xercesc::DOMDocument;
+//using xercesc::DOMDocument;
 using xercesc::DOMNode;
 using xercesc::DOMNodeList;
 using xercesc::DOMNamedNodeMap;
