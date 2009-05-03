@@ -279,7 +279,8 @@ void InitGUI()
    }
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
-   gui.reserve(numguis);
+   gui.clear();
+   gui.resize(numguis);
    gui[mainmenu] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/mainmenu.xml"));
    gui[hud] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/hud.xml"));
    gui[loadprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/loadprogress.xml"));
@@ -367,15 +368,16 @@ void ReadConfig()
    string conffile = "autoexec.cfg";
    string buffer;
    
-   ifstream getconf(conffile.c_str(), ios_base::in);
+   ifstream checkconf(conffile.c_str(), ios_base::in);
    
-   if (getconf.fail())
+   if (checkconf.fail())
    {
-      getconf.close();
+      checkconf.close();
       console.SaveToFile(conffile, true);
       console.Parse("restartgl");
-      getconf.open(conffile.c_str(), ios_base::in);
    }
+
+   ifstream getconf(conffile.c_str(), ios_base::in);
    
    while (!getconf.eof())
    {
@@ -471,8 +473,6 @@ void SetupSDL()
 void SetupOpenGL()
 {
 #ifndef DEDICATED
-   static bool first = true;
-   
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
    aspect = (float)screenwidth / (float)screenheight;
@@ -487,9 +487,8 @@ void SetupOpenGL()
    //glFrustum(-1, 1, -1 / aspect, 1 / aspect, 1, 10000.);
    
    glMatrixMode(GL_MODELVIEW);
-   
-   if (!first) return;
-   first = false;
+
+   resman.texman.Clear();
 
    glClearColor(0.0, 0.0 ,0.0, 0);
    
@@ -729,6 +728,10 @@ void MainLoop()
             repeat = true;
          }
       }
+
+      // Can't do this in the event handler because that is called from within the GUI
+      if (reloadgui)
+         InitGUI();
       
       // Check for end of game
       if (winningteam)
@@ -745,10 +748,7 @@ void MainLoop()
       
       // update the screen
       Repaint();
-      
-      // Can't do this in the event handler because that is called from within the GUI
-      if (reloadgui)
-         InitGUI();
+
 #else
       SDL_Delay(1);
 #endif

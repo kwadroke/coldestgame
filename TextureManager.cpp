@@ -44,7 +44,7 @@ GLuint TextureManager::LoadTexture(string filename, bool mipmap)
       bool alpha;
       glGenTextures(1, &texnum);
       texhand->LoadTexture(filename, texnum, mipmap, &alpha);
-      texnames.insert(make_pair(filename, texnum));
+      texnames[filename] = texnum;
       loaded.insert(filename);
       return texnum;
    }
