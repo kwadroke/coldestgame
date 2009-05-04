@@ -53,3 +53,4 @@ ALSourcePtr musicsource;
 bool editor;
 KeyMap keys;
 bool reloadgui;
+string userpath;

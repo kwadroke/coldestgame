@@ -89,6 +89,7 @@ extern ALSourcePtr musicsource;
 extern bool editor;
 extern KeyMap keys;
 extern bool reloadgui;
+extern string userpath;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
