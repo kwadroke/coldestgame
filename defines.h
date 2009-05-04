@@ -74,6 +74,7 @@ using std::flush;*/
 using namespace std;
 
 // Function definitions
+void CreateAppDir();
 void OutputDiagnosticData();
 void SetupSDL();
 void SetupOpenGL();

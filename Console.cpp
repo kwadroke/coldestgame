@@ -135,7 +135,8 @@ void Console::Parse(const string& line, bool echo)
    }
    if (Token(simple, 0) == "include")
    {
-      ifstream getconf(Token(simple, 1).c_str(), ios_base::in);
+      string fullpath = userpath + Token(simple, 1);
+      ifstream getconf(fullpath.c_str(), ios_base::in);
       string buffer;
    
       while (!getconf.eof())
