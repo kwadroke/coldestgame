@@ -28,9 +28,10 @@
 #include "netdefs.h"
 #include <boost/filesystem.hpp>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <shlobj.h>
 #endif
 
 /* Do anything function that can be handy for debugging various things
