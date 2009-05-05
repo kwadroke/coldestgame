@@ -204,7 +204,7 @@ void InitGlobals()
    console.Parse("set maxplayers 32", false);
    console.Parse("set mousespeed 400", false);
    console.Parse("set terrainmulti 3", false);
-   console.Parse("set map diamond", false);
+   console.Parse("set map riverside", false);
    console.Parse("set master www.coldestgame.com", false);
    console.Parse("set respawntime 15000", false);
    console.Parse("set cache 1", false);

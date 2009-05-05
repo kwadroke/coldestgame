@@ -51,19 +51,19 @@ Node
    SpawnPoints
    Node
       Team 1
-      Location 893.498 150 890.227
+      Location 893.498 106 890.227
       Name Base1
    Node
       Team 1
-      Location 6446.91 158 783.071
+      Location 6528.91 158 782.716
       Name Base1
    Node
       Team 2
-      Location 1068.1 145 6780.88
+      Location 879.193 152 6797.63
       Name Base2
    Node
       Team 2
-      Location 6691.3 129 6602.89
+      Location 6741.17 105 6598.16
       Name Base2
 
 Node
