@@ -187,7 +187,7 @@ void InitGlobals()
    console.Parse("set aa 0", false);
    console.Parse("set af 1", false);
    console.Parse("set impdistmulti 5", false);
-   console.Parse("set detailmapsize 300", false);
+   console.Parse("set detailmapsize 600", false);
    console.Parse("set softshadows 0", false);
    console.Parse("set turnsmooth 10", false);
    console.Parse("set endgametime 10", false);
