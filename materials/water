@@ -1,5 +1,5 @@
-Diffuse .6 .6 .9 1
-Ambient 1 1 1 1
+Diffuse .22 .23 .05 1
+Ambient .2 .2 .2 1
 Specular 1 1 1 1
 Texture0 
 Texture1 

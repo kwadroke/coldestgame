@@ -36,22 +36,24 @@ void main()
    vec4 shiftamount;
    vec4 shiftamount1;
    vec2 offsets[4];
-   offsets[0] = gl_TexCoord[1].st * vec2(3., 5.);
+   offsets[0] = gl_TexCoord[1].st * vec2(3., 8.);
    offsets[1] = gl_TexCoord[1].st * vec2(25., 65.);
    offsets[2] = gl_TexCoord[1].st * vec2(65., 125.);
    offsets[3] = gl_TexCoord[1].st * vec2(105., 195.);
    for (int i = 0; i < 4; ++i)
-      offsets[i] += vec2(0., time / 80000.);
+      offsets[i] += vec2(0., time / 40000.);
    
    shiftamount.xy = texture2D(noisetex, offsets[0]).rg - .5;
    shiftamount.zw = texture2D(fastnoisetex, offsets[1]).rg - .5;
    shiftamount1.xy = texture2D(fastnoisetex, offsets[2]).rg - .5;
    shiftamount1.zw = texture2D(fastnoisetex, offsets[3]).rg - .5;
+   shiftamount.xy *= 8.;
+   shiftamount.zw *= 4.;
    shiftamount.xy += shiftamount.zw;
    shiftamount.xy += shiftamount1.xy + shiftamount1.zw;
    
    shiftedtc += vec4(shiftamount.x, shiftamount.y, 0., 0.);
-   vec3 normal = vec3(0., 4., 0.);
+   vec3 normal = vec3(0., 15., 0.);
    normal += vec3(shiftamount.x, 0, shiftamount.y);
    vec4 reflectioncolor = texture2DProj(tex, shiftedtc);
    
@@ -62,12 +64,13 @@ void main()
    float specval = pow(ndothv, gl_FrontMaterial.shininess);
    
    vec4 diffuse = gl_FrontMaterial.diffuse;
-   diffuse = mix(diffuse, reflectioncolor, .4);
+   float diffmix = .2;
+   diffuse = mix(diffuse, reflectioncolor, diffmix);
    vec4 color = diffuse + vec4(specval);
    float dist = distance(location, worldcoords);
-   diffuse -= reflectioncolor * .4;
+   diffuse *= gl_FrontMaterial.ambient; // Not really the right way to do this, but it works
    shadow(diffuse, vec4(specval), dist, color);
-   color.a = .6;
+   color.a = .8;
       
    // Fogging
    float fogval = (dist - gl_Fog.start) * gl_Fog.scale;
