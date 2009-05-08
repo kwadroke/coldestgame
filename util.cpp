@@ -42,14 +42,20 @@ string PadNum(int n, int digits)
 }
 
 
-// TODO: This is almost certainly not portable as written
 string AddressToDD(Uint32 ahost)
 {
    int parts[4];
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
    parts[0] = ahost & 0x000000ff;
    parts[1] = (ahost & 0x0000ff00) >> 8;
    parts[2] = (ahost & 0x00ff0000) >> 16;
    parts[3] = (ahost & 0xff000000) >> 24;
+#else
+   parts[0] = ahost & 0xff000000;
+   parts[1] = (ahost & 0x00ff0000) >> 8;
+   parts[2] = (ahost & 0x0000ff00) >> 16;
+   parts[3] = (ahost & 0x000000ff) >> 24;
+#endif
    ostringstream dotteddec;
    dotteddec << parts[0] << '.' << parts[1] << '.' << parts[2] << '.' << parts[3];
    return dotteddec.str();

@@ -553,7 +553,6 @@ int ServerListen(void* dummy)
             get >> spawnpointreq.y;
             get >> spawnpointreq.z;
             
-            // TODO: Make sure weight and salvage are legal
             vector<SpawnPointData> allspawns = spawnpoints;
             for (size_t i = 0; i < serveritems.size(); ++i)
             {
