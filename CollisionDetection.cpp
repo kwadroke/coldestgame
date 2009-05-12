@@ -61,7 +61,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    Vector3 temp, temphitpos;
    Vector3 midpoint = (oldpos + newpos) / 2.f;
    Vector3 move = newpos - oldpos;
-   float movemaginv = 1.f / newpos.distance(oldpos);
+   bool nomove = false;
+   if (move.magnitude() < 1e-5f)
+      nomove = true;
+   float movemaginv;
    int adjusted = 0;
    // 1e38 is near the maximum representable value for a single precision float
    hitpos = Vector3(1e38f, 1e38f, 1e38f);
@@ -69,8 +72,9 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    float cullrad = midpoint.distance(oldpos);
    
-   if (oldpos.distance2(newpos) > 1e-5f)
+   if (!nomove)
    {
+      movemaginv = 1.f / newpos.distance(oldpos);
       for (size_t i = 0; i < allobjs.size(); ++i)
       {
          Mesh& currmesh = *allobjs[i];
@@ -88,6 +92,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    }
    else
    {
+      movemaginv = 0.f;
       for (size_t i = 0; i < allobjs.size(); ++i)
       {
          Mesh& currmesh = *allobjs[i];
@@ -128,7 +133,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             
             float checkrad = currtri.maxdim + radius;
             
-            if ((oldpos.distance2(newpos) > 1e-5f && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, move, movemaginv) < checkrad) ||
+            if ((!nomove && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, move, movemaginv) < checkrad) ||
                   oldpos.distance(currtri.midpoint) < checkrad)
             {
                // Cache the results of the previous calculations for later use
@@ -136,7 +141,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                trimap.insert(make_pair(&currtri, current));
                
                hit = false;
-               hit = PlaneSphereCollision(temp, currtri, oldpos, newpos, radius + currtri.radmod, temphitpos);
+               hit = PlaneSphereCollision(temp, currtri, oldpos, newpos, radius + currtri.radmod, temphitpos, nomove);
                
                if (hit)
                {
@@ -277,8 +282,14 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
 
 
 // May want to precalculate normals where we can to speed things up
+
+/* If nomove is true (which should imply that pos == pos1), then this will just check if the sphere intersects
+   the triangle, regardless of the side its on.  This is necessary because if pos isn't moving we can't possibly
+   hit using the other detection method, but in some cases (say calculating damage radius for splash damage) we
+   need to be able to hit while not moving.
+*/
 bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t, const Vector3& pos, const Vector3& pos1,
-      const float& radius, Vector3& hitpos, bool debug)
+      const float& radius, Vector3& hitpos, bool nomove, bool debug)
 {
    Vector3vec v(3);
    for (int i = 0; i < 3; ++i)
@@ -286,34 +297,32 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
    Vector3 adjust;
    Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
    norm.normalize();
+   Vector3 endpos = pos1;
+   
+   if (!nomove)
+   {
+      for (int i = 0; i < 3; ++i)
+         v[i] += norm * radius;
+   }
    
    float d = -norm.dot(v[0]);
+   
    float startside = norm.dot(pos) + d;
-   
-   // Flip the normal if we start out on the back side
-   // or not...it's possible to get bogus hits if we do this
-   //if (startside < -1e-3) return Vector3();
-   /*if (startside < 0)
+   if (startside < -1e-2)
    {
-      norm = (v[2] - v[0]).cross(v[1] - v[0]);
-      norm.normalize();
-   }*/
-   for (int i = 0; i < 3; ++i)
-      v[i] += norm * radius;
-   /*if (startside < 0)
-      norm = (v[2] - v[0]).cross(v[1] - v[0]);
-   else
-      norm = (v[1] - v[0]).cross(v[2] - v[0]);
-   norm.normalize();*/
-   d = -norm.dot(v[0]);
-   
-   startside = norm.dot(pos) + d;
-   if (startside < -1e-1) return false;
+      if (!nomove)
+         return false;
+      else
+         endpos += norm * radius;
+   }
+   else if (nomove)
+      endpos -= norm * radius;
    
    float denominator;
    Vector3 move;
    float x = -1.f;
    Vector3 intpoint;
+   
 #if 0
    if (floatzero(v[0].x - norm.x * radius * .98) && floatzero(v[0].z - norm.z * radius * .98))
    {
@@ -347,7 +356,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
       //intpoint.print();
    }
 #endif
-   if (CrossesPlane(pos, pos1, norm, d, denominator, move, x, intpoint))
+   if (CrossesPlane(pos, endpos, norm, d, denominator, move, x, intpoint))
    {
       // The following line has to be here because CrossesPlane does not have access to
       // radius, nor should it IMHO
@@ -376,7 +385,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
       
       if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
       {
-         float endside = norm.dot(pos1) + d;
+         float endside = norm.dot(endpos) + d;
          adjust = norm * -endside;
          hitpos = intpoint;
          retval = adjust;

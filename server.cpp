@@ -1153,6 +1153,8 @@ void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
    if (!curr)
       return;
    
+   hitpos.print();
+   
    if (floatzero(p.dmgrad))
    {
       ApplyDamage(curr, p.damage, p.playernum);
@@ -1178,7 +1180,7 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
       AppendDynamicMeshes(check, servermeshes);
       
       Mesh* dummymesh = NULL;
-      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, dummymesh, &hitmeshes);
+      Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, dummymesh, &hitmeshes, false);
       sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
       
@@ -1234,8 +1236,10 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
    }
    bool doremove;
    vector<Item>::iterator i = serveritems.begin();
+   logout << curr->NumTris() << endl;
    while (i != serveritems.end())
    {
+      logout << "Checking " << &(*i->mesh) << " with " << curr << endl;
       if (&(*i->mesh) == curr)
       {
          logout << "Hit " << curr << endl;

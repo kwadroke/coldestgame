@@ -947,7 +947,7 @@ void GUIUpdate()
       Vector3 dummy;
       Mesh* hitmesh;
       coldet.CheckSphereHit(checkstart, checkend, .01f, check, dummy, hitmesh);
-      PlayerData* p = PlayerFromMesh(hitmesh, player);
+      PlayerData* p = PlayerFromMesh(hitmesh, player, meshes.end());
       // Populate GUI object
       GUI* targetplayer = gui[hud]->GetWidget("targetplayer");
       if (p)
@@ -2344,13 +2344,14 @@ void UpdatePlayer()
 }
 
 
-PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p)
+PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p, Meshlist::iterator invalid)
 {
-   for (size_t i = 1; i < p.size(); ++i)
+   size_t psize = p.size();
+   for (size_t i = 1; i < psize; ++i)
    {
       for (size_t j = 0; j < numbodyparts; ++j)
       {
-         if (&(*p[i].mesh[j]) == m)
+         if ((p[i].mesh[j] != invalid) && (&(*p[i].mesh[j]) == m))
             return &p[i];
       }
    }
@@ -2375,7 +2376,7 @@ void StartBGMusic()
       musicsource = ALSourcePtr(new ALSource());
    musicsource->loop = AL_TRUE;
    musicsource->rolloff = 0.f;
-   musicsource->relative = AL_TRUE;
+   //musicsource->relative = AL_TRUE;
    musicsource->gain = console.GetFloat("musicvol") / 100.f;
    musicsource->Play(resman.soundman.GetBuffer("sounds/bgmusic.ogg"));
 #endif
