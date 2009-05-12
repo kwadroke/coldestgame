@@ -41,9 +41,9 @@ Bot::~Bot()
 {
    logout << "Bot id " << id << " shutting down." << endl;
    botrunning = false;
+   SDL_WaitThread(thread, NULL);
    SDLNet_FreePacket(packet);
    SDLNet_UDP_Close(socket);
-   SDL_WaitThread(thread, NULL);
 }
 
 

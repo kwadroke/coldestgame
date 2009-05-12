@@ -50,7 +50,7 @@ class CollisionDetection
       vector<Quad> worldbounds;
       
    private:
-      bool PlaneSphereCollision(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&, Vector3&, const bool debug = false);
+      bool PlaneSphereCollision(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&, Vector3&, const bool nomove, const bool debug = false);
       bool PlaneEdgeSphereCollision(Vector3&, const Triangle&, const Vector3&, const float&);
       bool VectorEdgeCheck(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&);
       bool InVector(Mesh*, vector<Meshlist::iterator>&);
