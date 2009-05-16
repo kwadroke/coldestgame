@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/lcd.ttf" visible="false"
+<GUI virtualw="1000" virtualh="1000" font="fonts/vtcorona.ttf" visible="false"
      buttonnormal="textures/buttonnorm.png"
      buttonpressed="textures/buttonpressed.png"
      buttonhover="textures/buttonhover.png"
@@ -24,13 +24,17 @@
    
    <Label x="400" y="50" width="200" height="50" text="Server Browser" readonly="true" xmargin="0" ymargin="0" align="center"/>
    
-   <Button x="100" y="150" width="200" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="connect"/>
-   <Button x="320" y="150" width="200" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
-           leftclick="connectip"/>
-   <LineEdit x="520" y="166" width="380" height="24" text="www.nemebean.com:12012" name="servername"
-             normal="textures/buttonnorm.png"
-             hover="textures/buttonhover.png"/>
+   <Layout x="100" y="150" orientation="horizontal" padding="5">
+      <Button x="100" y="150" width="100" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
+            leftclick="connect"/>
+      <Button width="100" height="40" text="Refresh" name="refreshbutton" xmargin="3" ymargin="6" align="center"
+              leftclick="refreshservers"/>
+      <Button x="320" y="150" width="100" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
+            leftclick="connectip"/>
+      <LineEdit x="520" y="166" width="380" height="24" text="www.nemebean.com:12012" name="servername"
+               normal="textures/buttonnorm.png"
+               hover="textures/buttonhover.png"/>
+   </Layout>
    <Table x="100" y="200" width="800" height="700" name="serverlist" columns="2" colwidths="475|195|35|35|35" rowheight="25"
           normal="textures/buttonnormsquare.png"/>
    

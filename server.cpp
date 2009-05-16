@@ -1187,7 +1187,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
          if (serverplayers[i].mesh[part] != servermeshes.end())
          {
             if (curr == &(*serverplayers[i].mesh[part]) &&
-                (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage || 1))
+                (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage))
             {
                logout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage * serverplayers[i].item.ArmorMult());
