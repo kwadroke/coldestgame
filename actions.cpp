@@ -238,6 +238,23 @@ void SelectSpawn()
 }
 
 
+void RefreshServers()
+{
+   Table* serverlist = (Table*)gui[serverbrowser]->GetWidget("serverlist");
+   vector<ServerInfo>::iterator i;
+   if (!serverlist)
+   {
+      logout << "Failed to get pointer to serverlist" << endl;
+      exit(-10);
+   }
+   serverlist->Clear();
+   for (i = servers.begin(); i != servers.end(); ++i)
+   {
+      i->inlist = false;
+   }
+}
+
+
 void DoBind(SDLKey& key)
 {
    GUI* message = gui[settings]->GetWidget("bindmessage");
@@ -352,6 +369,8 @@ void Action(const string& action)
       BindLoadout();
    else if (action == "binduseitem")
       BindUseItem();
+   else if (action == "refreshservers")
+      RefreshServers();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }

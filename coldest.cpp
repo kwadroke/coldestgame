@@ -211,7 +211,7 @@ void InitGlobals()
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 0", false);
    console.Parse("set overheat 1", false);
-   console.Parse("set syncmax 40", false);
+   console.Parse("set syncmax 50", false);
    console.Parse("set name Nooblet", false);
    
    // Variables that cannot be set from the console
@@ -796,7 +796,7 @@ void GUIUpdate()
    static Uint32 statupdatecounter = SDL_GetTicks();
    Uint32 currtick;
    SDL_mutexP(clientmutex);
-   if (gui[mainmenu]->visible)
+   if (gui[serverbrowser]->visible)
    {
       currtick = SDL_GetTicks();
       if (currtick - servupdatecounter > 100)
@@ -1709,7 +1709,7 @@ void SynchronizePosition()
    // Limit the max adjustment to syncmax in general so that we don't get nasty hitching while
    // moving.  The exception is if we're way off in which case some hitching is necessary
    float syncmax = console.GetFloat("syncmax") / 100.f;
-   if (difference < 30.f || wayoffcount < 3)
+   if (difference < 30.f || wayoffcount < 5)
    {
       if (difference > syncmax)
       {
@@ -1723,7 +1723,7 @@ void SynchronizePosition()
    }
    else
    {
-      posadj *= .5f;
+      posadj *= .3f;
    }
    
    player[0].pos += posadj;
@@ -1868,7 +1868,6 @@ void UpdateServerList()
       exit(-10);
    }
    SDL_mutexP(clientmutex);
-   //serverlist->clear();
    for (i = servers.begin(); i != servers.end(); ++i)
    {
       if (!i->inlist && i->haveinfo)
