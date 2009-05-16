@@ -268,7 +268,7 @@ void ObjectKDTree::refine(int level)
 }
 
 
-bool ObjectKDTree::insert(Mesh *obj)
+bool ObjectKDTree::insert(Mesh* obj)
 {
    if (innode(obj->GetPosition(), obj->GetSize()))
    {
@@ -279,7 +279,7 @@ bool ObjectKDTree::insert(Mesh *obj)
 }
 
 
-void ObjectKDTree::erase(Mesh *m)
+void ObjectKDTree::erase(Mesh* m)
 {
    for (list<Mesh*>::iterator i = members.begin(); i != members.end(); ++i)
    {

@@ -41,6 +41,7 @@
 #include "Timer.h"
 #include "SDL_ttf.h"
 #include "Mesh.h"
+#include "RWLock.h"
 
 using std::vector;
 using std::list;

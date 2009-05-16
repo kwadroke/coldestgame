@@ -423,28 +423,6 @@ int NetListen(void* dummy)
                      player[oppnum].pos.z = oppz;
                      
                   }
-#if 0 // This probably doesn't need to go back in, but we'll see
-                  if (oppnum != servplayernum)// && player[oppnum].unit != 0)
-                  {
-                     if (oldunit != player[oppnum].unit)
-                     {
-                        if (player[oppnum].legs != dynobjects.end())
-                           dynobjects.erase(player[oppnum].legs);
-                        if (player[oppnum].torso != dynobjects.end())
-                           dynobjects.erase(player[oppnum].torso);
-                        if (player[oppnum].larm != dynobjects.end())
-                           dynobjects.erase(player[oppnum].larm);
-                        if (player[oppnum].rarm != dynobjects.end())
-                           dynobjects.erase(player[oppnum].rarm);
-                        player[oppnum].legs = dynobjects.end();
-                        player[oppnum].torso = dynobjects.end();
-                        player[oppnum].larm = dynobjects.end();
-                        player[oppnum].rarm = dynobjects.end();
-                     }
-                     UpdatePlayerModel(player[oppnum], dynobjects);
-                  }
-#endif
-                  
                   get >> oppnum;
                }
                
@@ -474,6 +452,7 @@ int NetListen(void* dummy)
                   if (!i->spawned)
                   {
                      addemitter = false;
+                     locks.Read(meshes);
                      for (int part = 0; part < numbodyparts; ++part)
                      {
                         if (i->mesh[part] != meshes.end())
@@ -483,6 +462,7 @@ int NetListen(void* dummy)
                            addemitter = true;
                         }
                      }
+                     locks.EndRead(meshes);
                      if (addemitter)
                      {
                         ParticleEmitter newemitter("particles/emitters/explosion", resman);
@@ -490,7 +470,10 @@ int NetListen(void* dummy)
                         emitters.push_back(newemitter);
                      }
                      if (i->indicator)
+                     {
                         i->indicator->ttl = 1;
+                        i->indicator = NULL; // Oops, don't forget this!
+                     }
                   }
                }
                SDL_mutexV(clientmutex);
@@ -908,9 +891,11 @@ int NetListen(void* dummy)
                num = 0;
             
             SDL_mutexP(clientmutex);
+            locks.Read(meshes);
             deletemeshes.push_back(player[num].mesh[part]);
             player[num].mesh[part] = meshes.end();
             player[num].hp[part] = 0;
+            locks.EndRead(meshes);
             SDL_mutexV(clientmutex);
             
             Ack(packetnum);

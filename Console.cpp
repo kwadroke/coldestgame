@@ -389,7 +389,8 @@ void Console::Action(const string& action)
    else if (action == "name action")
    {
       SDL_mutexP(clientmutex);
-      player[0].name = GetString("name");
+      if (player.size())
+         player[0].name = GetString("name");
       SDL_mutexV(clientmutex);
    }
    else if (action == "af action")

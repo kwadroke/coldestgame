@@ -32,7 +32,7 @@ class ServerState
 {
    public:
       ServerState(const Uint32);
-      void Add(const PlayerData&, const size_t);
+      void Add(const PlayerData&, const size_t, Meshlist::iterator);
       
       vector<Vector3vec> position;
       vector<Vector3vec> rots;

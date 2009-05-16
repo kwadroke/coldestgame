@@ -88,7 +88,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
       argc = 2;
    }
 #endif
-      StartBGMusic();
+   StartBGMusic();
    // Note, these are called by the restartgl console command, which is required in the autoexec.cfg file
    //SetupSDL();
    //SetupOpenGL();
@@ -161,8 +161,6 @@ void OutputDiagnosticData()
 
 void InitGlobals()
 {
-   PlayerData dummy = PlayerData(meshes); // Local player is always index 0
-   
    // Default cvars
    console.Parse("set screenwidth 800", false);
    console.Parse("set screenheight 600", false);
@@ -214,13 +212,7 @@ void InitGlobals()
    console.Parse("set bots 0", false);
    console.Parse("set overheat 1", false);
    console.Parse("set syncmax 40", false);
-   
-   // I'm not entirely sure why this is separated from the declaration of dummy above,
-   // but I'm not inclined to potentially break something by moving it either.
-   dummy.unit = Nemesis;
-   dummy.spawned = true;
-   player.push_back(dummy);
-   console.Parse("set name Nooblet", false); // player[0] must exist before this is set
+   console.Parse("set name Nooblet", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -282,6 +274,15 @@ void InitGlobals()
    }
    
    ReadConfig();
+   
+   locks.Register(meshes);
+   
+   // Can't create players until after SDL has been init'd in ReadConfig
+   PlayerData dummy = PlayerData(meshes); // Local player is always index 0
+   dummy.unit = Nemesis;
+   dummy.spawned = true;
+   dummy.name = console.GetString("name");
+   player.push_back(dummy);
    
    SetupOpenAL();
    
@@ -943,11 +944,13 @@ void GUIUpdate()
       
       Vector3 checkstart = player[0].pos + offset;
       Vector3 checkend = checkstart + dir;
+      locks.Write(meshes);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&player[servplayernum], meshes, kdtree, checkstart, checkend, .01f);
       Vector3 dummy;
       Mesh* hitmesh;
       coldet.CheckSphereHit(checkstart, checkend, .01f, check, dummy, hitmesh);
       PlayerData* p = PlayerFromMesh(hitmesh, player, meshes.end());
+      locks.EndWrite(meshes);
       // Populate GUI object
       GUI* targetplayer = gui[hud]->GetWidget("targetplayer");
       if (p)
@@ -1429,6 +1432,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
       Vector3 oldoffset = old - Vector3(0, mplayer.size / 2.f, 0);
+      locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, oldoffset, legoffset, mplayer.size * (threshold + 1.f));
          
       Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.f, check, false);
@@ -1450,6 +1454,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       Vector3 slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check, false);
       Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check, false);
+      locks.EndWrite(ml);
       
       if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
       {
@@ -1501,6 +1506,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
       Vector3 offsetoldleg = offsetoldmain - Vector3(0, mplayer.size * 2.f, 0);
       
+      locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old + offset, mplayer.pos, mplayer.size * 2.f);
       float checksize = mplayer.size * 1.01f;
       Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, false);
@@ -1540,6 +1546,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
             break;
          }
       }
+      locks.EndWrite(ml);
       mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
 }
@@ -1548,6 +1555,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
 vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, ObjectKDTree& kt,
                                      const Vector3& oldpos, const Vector3& newpos, const float size)
 {
+   locks.Read(ml);
    vector<Mesh*> check = kt.getmeshes(oldpos, newpos, size);
    AppendDynamicMeshes(check, ml);
    if (mplayer)
@@ -1555,9 +1563,12 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, Ob
       for (int part = 0; part < numbodyparts; ++part)
       {
          if (mplayer->mesh[part] != ml.end())
+         {
             check.erase(remove(check.begin(), check.end(), &(*mplayer->mesh[part])), check.end());
+         }
       }
    }
+   locks.EndRead(ml);
    return check;
 }
 
@@ -1567,7 +1578,6 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
    for (Meshlist::iterator i = ml.begin(); i != ml.end(); ++i)
    {
       if (i->dynamic && i->collide)
-      //if (i->collide)
       {
          appto.push_back(&(*i));
       }
@@ -1787,6 +1797,8 @@ void Animate()
 {
    SDL_mutexP(clientmutex);
    // Delete meshes as requested by the net thread
+   locks.Write(meshes);
+   
    for (size_t i = 0; i < deletemeshes.size(); ++i)
    {
       if (deletemeshes[i] != meshes.end())
@@ -1818,6 +1830,7 @@ void Animate()
          i->updatedelay = 300;
       i->AdvanceAnimation(player[0].pos);
    }
+   locks.EndWrite(meshes);
    
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();
@@ -1874,6 +1887,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
    if (!p.spawned) return;
    
+   locks.Write(ml);
    if (p.mesh[Legs] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/legs");
@@ -1935,17 +1949,23 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[RArm]->Scale(units[p.unit].scale);
    }
    
-   p.mesh[LArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
-   p.mesh[LArm]->Move(p.pos);
+   if (p.mesh[LArm] != ml.end())
+   {
+      p.mesh[LArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
+      p.mesh[LArm]->Move(p.pos);
+   }
    
-   p.mesh[RArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
-   p.mesh[RArm]->Move(p.pos);
+   if (p.mesh[RArm] != ml.end())
+   {
+      p.mesh[RArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
+      p.mesh[RArm]->Move(p.pos);
+   }
    
    p.size = units[p.unit].size;
    
    for (size_t i = 0; i < numbodyparts; ++i)
    {
-      if (p.hp[i] > 0)
+      if (p.mesh[i] != ml.end())
       {
          if (floatzero(p.speed))
          {
@@ -1964,6 +1984,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          }
       }
    }
+   locks.EndWrite(ml);
    
    // Add a particle to enemies to indicate their affiliation
    if (gl) // No reason to do this on the server
@@ -1989,7 +2010,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 // and if the server thread tries to do GL it will crash
 // The server is also the only one to pass in Rewind
 void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Meshlist& ml, vector<PlayerData>& playervec, const Vector3& campos,
-                     void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&),
+                     void (*HitHandler)(Particle&, Mesh*, const Vector3&),
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float))
 {
    list<Particle> newparts;
@@ -2007,10 +2028,12 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 #endif
    Vector3 oldpos, partcheck, hitpos;
    vector<Mesh*> hitmeshes;
+   Mesh* hitmesh;
    if (partupd >= updint)
    {
       // Update particles
       list<Particle>::iterator j = parts.begin();
+      locks.Write(ml);
       while (j != parts.end())
       {
          partcheck = Vector3();
@@ -2020,7 +2043,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             if (Rewind)
                Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            Mesh* hitmesh = NULL;
             partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, &hitmeshes);
          }
          
@@ -2049,7 +2071,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          else
          {
             if (HitHandler)
-               HitHandler(*j, hitmeshes, hitpos);
+               HitHandler(*j, hitmesh, hitpos);
             else
             {
                if (j->tracer)
@@ -2061,6 +2083,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             j = parts.erase(j);
          }
       }
+      locks.EndWrite(ml);
       partupd = 0;
 #ifndef DEDICATED
       if (!HitHandler)
@@ -2391,6 +2414,7 @@ void RegenFBOList()
    FBO dummyfbo;
    impmeshes.clear();
    impfbolist.clear();
+   locks.Write(meshes);
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!floatzero(i->impdist))
@@ -2408,6 +2432,7 @@ void RegenFBOList()
       }
       i->GenVbo();
    }
+   locks.EndWrite(meshes);
 #endif
 }
 

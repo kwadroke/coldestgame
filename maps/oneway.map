@@ -5,9 +5,9 @@ Stretch 8
 
 LightData
 Direction 1 1 -1
-Diffuse .8 .8 .8 1
+Diffuse .6 .6 .6 1
 Specular 1 1 1 1
-Ambient .2 .2 .2 1
+Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 

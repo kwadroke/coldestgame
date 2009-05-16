@@ -19,11 +19,18 @@
 
 
 #include "Item.h"
+#include "globals.h"
 
-Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), mesh(ml.end()), team(0), type(newtype), 
+Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(0), type(newtype), 
            coolmultiplier(1.f), ammomultiplier(1.f), armormultiplier(1.f), weight(0), name("None"), modelfile("models/empty/base")
            
 {
+   // Occasionally we are called with a dummy Meshlist, and multiple registrations are okay
+   locks.Register(ml);
+   locks.Read(ml);
+   mesh = ml.end();
+   locks.EndRead(ml);
+   
    switch (newtype)
    {
       case Item::NoItem:
