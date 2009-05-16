@@ -31,7 +31,7 @@ ProceduralTree copytree;
 bool copyistree;
 GUIPointers guip;
 
-Mesh* selected = NULL;
+Mesh* selected;
 bool clicked = false;
 bool rotating = false;
 bool lockx = false;

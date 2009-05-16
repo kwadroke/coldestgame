@@ -54,7 +54,7 @@ int ServerSend(void*);
 int ServerListen(void*);
 int ServerInput(void*);
 void ServerLoadMap();
-void HandleHit(Particle&, vector<Mesh*>&, const Vector3&);
+void HandleHit(Particle&, Mesh*, const Vector3&);
 void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
 void ApplyDamage(Mesh*, const float, const size_t, const bool teamdamage = false);
 void ServerUpdatePlayer(int);
@@ -190,9 +190,10 @@ int Server(void* dummy)
    framecount = 0;
    lastfpsupdate = SDL_GetTicks();
    if (console.GetString("map") == "")
-      console.Parse("set map newtest");
+      console.Parse("set map riverside");
    LoadMapList();
    servermutex = SDL_CreateMutex();
+   locks.Register(servermeshes);
    if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
       logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
@@ -639,7 +640,10 @@ int ServerListen(void* dummy)
                   }
                   UpdatePlayerModel(serverplayers[oppnum], servermeshes, false);
                   for (size_t i = 0; i < numbodyparts; ++i)
-                     serverplayers[oppnum].mesh[i]->AdvanceAnimation();
+                  {
+                     if (serverplayers[oppnum].mesh[i] != servermeshes.end())
+                        serverplayers[oppnum].mesh[i]->AdvanceAnimation();
+                  }
                }
             }
             
@@ -1070,7 +1074,9 @@ void ServerLoadMap()
    SDL_mutexV(clientmutex);
    
    SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
+   locks.Read(meshes);
    servermeshes = meshes;
+   locks.EndRead(meshes);
    
    serveritems.clear();
    
@@ -1126,34 +1132,12 @@ void ServerLoadMap()
 
 
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
-void HandleHit(Particle& p, vector<Mesh*>& hitobjs, const Vector3& hitpos)
+void HandleHit(Particle& p, Mesh* curr, const Vector3& hitpos)
 {
-   Mesh* curr = NULL;
-   // 1e38 is near the maximum representable value for a single precision float
-   float currmindist = 1e38f, currdist = 0.f;
-   // Should only hit each body part once per projectile
-   sort(hitobjs.begin(), hitobjs.end());
-   hitobjs.erase(unique(hitobjs.begin(), hitobjs.end()), hitobjs.end());
-   // In fact, we should probably only hit a single object with a single shot, even if it
-   // would have passed through multiple objects.  Eliminate all but the nearest one.
-   // This may obsolete the above, but I suspect that's a quicker way to eliminate dupes
-   // so I'm going to leave it.
-   for (size_t j = 0; j < hitobjs.size(); ++j)
-   {
-      currdist = hitobjs[j]->GetPosition().distance2(p.origin);
-      if (currdist < currmindist)
-      {
-         curr = hitobjs[j];
-         currmindist = currdist;
-      }
-   }
-   
    SendHit(hitpos, p);
    
    if (!curr)
       return;
-   
-   hitpos.print();
    
    if (floatzero(p.dmgrad))
    {
@@ -1179,7 +1163,7 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
       check = serverkdtree.getmeshes(hitpos, hitpos, dmgrad);
       AppendDynamicMeshes(check, servermeshes);
       
-      Mesh* dummymesh = NULL;
+      Mesh* dummymesh;
       Vector3 partcheck = coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, dummymesh, &hitmeshes, false);
       sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
@@ -1203,7 +1187,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
          if (serverplayers[i].mesh[part] != servermeshes.end())
          {
             if (curr == &(*serverplayers[i].mesh[part]) &&
-                (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage))
+                (serverplayers[i].team != serverplayers[playernum].team || i == playernum || teamdamage || 1))
             {
                logout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage * serverplayers[i].item.ArmorMult());
@@ -1236,13 +1220,11 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
    }
    bool doremove;
    vector<Item>::iterator i = serveritems.begin();
-   logout << curr->NumTris() << endl;
    while (i != serveritems.end())
    {
-      logout << "Checking " << &(*i->mesh) << " with " << curr << endl;
       if (&(*i->mesh) == curr)
       {
-         logout << "Hit " << curr << endl;
+         logout << "Hit item " << curr << endl;
          i->hp -= int(damage);
          if (i->hp < 0)
          {
@@ -1269,12 +1251,20 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
 // Note: must be called from within mutex'd code
 void ServerUpdatePlayer(int i)
 {
+   Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
+   // Update spawn timer
+   serverplayers[i].spawntimer -= ticks;
+   if (serverplayers[i].spawntimer < 0)
+      serverplayers[i].spawntimer = 0;
+   
+   if (!serverplayers[i].spawned)
+      return;
+   
    // Cooling
    float coolrate = .01f;
    coolrate *= serverplayers[i].item.CoolMult();
    if (serverplayers[i].pos.y < serverplayers[i].size * 2.f)
       coolrate *= 1.5f;
-   Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
    serverplayers[i].lastcoolingtick += ticks;
    serverplayers[i].temperature -= ticks * coolrate;
    if (serverplayers[i].temperature < 0)
@@ -1294,14 +1284,6 @@ void ServerUpdatePlayer(int i)
    }
    
    if (serverplayers[i].powerdowntime) return;
-   
-   // Update spawn timer
-   serverplayers[i].spawntimer -= ticks;
-   if (serverplayers[i].spawntimer < 0)
-      serverplayers[i].spawntimer = 0;
-   
-   if (!serverplayers[i].spawned)
-      return;
    
    // Healing
    serverplayers[i].healaccum += float(ticks) * .0005f;
@@ -1427,7 +1409,7 @@ void SaveState()
    {
       if (serverplayers[i].spawned)
       {
-         newstate.Add(serverplayers[i], i);
+         newstate.Add(serverplayers[i], i, servermeshes.end());
       }
    }
    oldstate.push_back(newstate);
@@ -1705,7 +1687,7 @@ void KillPlayer(const int i, const int killer)
    serverplayers[i].Kill();
    serverplayers[i].spawntimer = console.GetInt("respawntime");
    SendKill(i, killer);
-   SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
+   //SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
 }
 
 

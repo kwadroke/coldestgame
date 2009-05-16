@@ -54,3 +54,4 @@ bool editor;
 KeyMap keys;
 bool reloadgui;
 string userpath;
+LockManager locks;

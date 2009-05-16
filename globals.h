@@ -38,6 +38,7 @@
 #include "MeshCache.h"
 #include "logout.h"
 #include "KeyMap.h"
+#include "LockManager.h"
 
 
 #define PI 3.14159265
@@ -90,12 +91,13 @@ extern bool editor;
 extern KeyMap keys;
 extern bool reloadgui;
 extern string userpath;
+extern LockManager locks;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
 void AppendToChat(int, string);
 void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, vector<PlayerData>&, const Vector3& campos = Vector3(),
-                     void (*HitHandler)(Particle&, vector<Mesh*>&, const Vector3&) = NULL,
+                     void (*HitHandler)(Particle&, Mesh*, const Vector3&) = NULL,
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float) = NULL);
 void Move(PlayerData&, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);

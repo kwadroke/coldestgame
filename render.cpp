@@ -263,6 +263,7 @@ void RenderObjects(const PlayerData& localplayer)
    bool debug = false; // Turns off impostoring if true
    //debug = true;
    
+   locks.Write(meshes);
    list<Mesh*> m = kdtree.getmeshes();
    
    list<Mesh*>::iterator iptr;
@@ -348,6 +349,7 @@ void RenderObjects(const PlayerData& localplayer)
          trislastframe += i->NumTris();
       }
    }
+   locks.EndWrite(meshes);
    
    impostormesh->GenVbo();
    impostormesh->Render(override);

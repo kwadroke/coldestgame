@@ -1,31 +1,30 @@
-TileSize 20
-HeightScale .8
-ZeroHeight 30
-NumTextures 18
+TileSize 200
+HeightScale .5
+ZeroHeight 40
 Stretch 8
 
 LightData
-Direction -1 1 -1
-Diffuse 1.5 1.5 1.5 1
+Direction 1 1.1 1
+Diffuse .8 .8 .8 1
 Specular 1 1 1 1
-Ambient .2 .2 .2 1
+Ambient .4 .4 .4 1
 
 SkyBox materials/sky
-
-TerrainMaterial materials/terrain/basic
+Water materials/water
+TerrainMaterial materials/terrain/tropical
 Node
    TerrainParams
    Node
       Texture0
-      File textures/grass/Grass1.png
+      File textures/grass/greengrass.png
       HeightRange -10000 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/Rockt.png
+      File textures/rock/mossyrock.png
       HeightRange -10000 -10000
-      SlopeRange 0 .8
+      SlopeRange 0 .80
       RandRange 500 500
    Node
       Texture2
@@ -36,23 +35,17 @@ Node
       
 Node
    GrassData
-ENDOFGRASS
-   Node
-      File grass
-      Model models/grass/base
-      GroupSize 20
-      Density 3
 
 Node
    SpawnPoints
    Node
       Team 1
-      Location 150 150 150
-      Name Team1Spawn
+      Location 315.966 102 356.074
+      Name Base1
    Node
       Team 2
-      Location 250 250 250
-      Name Team2Spawn
-      
+      Location 2540.86 94 2556.12
+      Name Base2
+
 Node
    Objects

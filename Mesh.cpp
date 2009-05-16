@@ -532,6 +532,9 @@ void Mesh::GenVbo()
          glGenBuffersARB(1, &vbo);
          glGenBuffersARB(1, &ibo);
       }
+      // Note: Strictly speaking we should lock meshes here, but because this can only be called
+      // from the main thread and that's also the only place we modify meshes, it should be okay
+      // for now.  If other threads are ever going to delete or modify meshes that may change.
       for (size_t m = 0; m < childmeshes.size() + 1; ++m)
       {
          Mesh* currmesh;

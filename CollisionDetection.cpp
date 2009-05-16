@@ -42,7 +42,7 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, const bool extcheck)
 {
    Vector3 dummy;
-   Mesh* dummymesh = NULL;
+   Mesh* dummymesh;
    return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh, NULL, extcheck);
 }
 
@@ -118,11 +118,10 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    //logout << "Radius " << radius << endl;
    //logout << "Dist " << oldpos.distance(newpos) << endl;
    
-   Mesh* current;
    bool hit;
    for (size_t i = 0; i < osize; i++)
    {
-      current = objs[i];
+      Mesh* current = objs[i];
       current->Begin();
       while (current->HasNext())
       {
@@ -207,7 +206,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          if (hit)
          {
             adjust += temp;
-            hitobj = current;
+            hitobj = trimap[&currtri];
             hitpos = newpos;
             adjusted++;
             if (retobjs)
@@ -240,12 +239,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             adjust += temphitpos;
             if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
             {
-               hitobj = current;
+               hitobj = trimap[&currtri];
                hitpos = temphitpos;
             }
             adjusted++;
             if (retobjs)
-               retobjs->push_back(current);
+               retobjs->push_back(trimap[&currtri]);
          }
       }
       
@@ -260,13 +259,13 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             {
                if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
                {
-                  hitobj = current;
+                  hitobj = trimap[&currtri];
                   hitpos = currtri.v[j]->pos;
                }
                adjust += temp;
                adjusted++;
                if (retobjs)
-                  retobjs->push_back(current);
+                  retobjs->push_back(trimap[&currtri]);
             }
          }
       }

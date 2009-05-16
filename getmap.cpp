@@ -133,7 +133,9 @@ void GetMap(string fn)
 #endif
 
    // Release any previously allocated resources so we don't leak memory
+   locks.Write(meshes);
    meshes.clear();
+   locks.EndWrite(meshes);
    items.clear();
    mapspawns.clear(); 
 #ifndef DEDICATED
@@ -223,6 +225,7 @@ void GetMap(string fn)
    
    IniReader objectlist = mapdata.GetItemByName("Objects");
    string currmaterial;
+   locks.Write(meshes);
    for (size_t i = 0; i < objectlist.NumChildren(); ++i)
    {
       currnode = objectlist(i);
@@ -243,6 +246,7 @@ void GetMap(string fn)
       }
 #endif
    }
+   locks.EndWrite(meshes);
    
 #ifndef DEDICATED
    progress->value = 2;
@@ -451,6 +455,7 @@ void GetMap(string fn)
    vector<Meshlist::iterator> meshits;
    Mesh baseterrain("models/terrain/base", resman);
    
+   locks.Write(meshes);
    for (int y = 0; y < numobjsy; ++y)
    {
       for (int x = 0; x < numobjsx; ++x)
@@ -643,6 +648,7 @@ void GetMap(string fn)
       currpos.y /= meshits[i]->NumTris() / 2.f;
       meshits[i]->Move(currpos);
    }
+   locks.EndWrite(meshes);
    
    
    // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
@@ -754,6 +760,7 @@ void GetMap(string fn)
       
       logout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
+      locks.Write(meshes);
       for (int x = 0; x < grassw; x += groupsize)
       {
          for (int y = 0; y < grassh; y += groupsize)
@@ -808,17 +815,20 @@ void GetMap(string fn)
             }
          }
       }
+      locks.EndWrite(meshes);
    }
    
    progress->value = 6;
    progtext->text = "Partitioning world";
    Repaint();
    
+   locks.Write(meshes);
    // Must be done here so it's available for KDTree creation
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       i->CalcBounds();
    }
+   locks.EndWrite(meshes);
    
    // Add objects to kd-tree
    Vector3vec points(8, Vector3());
@@ -830,9 +840,11 @@ void GetMap(string fn)
    {
       points[i + 4] = coldet.worldbounds[5].GetVertex(i);
    }
+   locks.Read(meshes);
    kdtree = ObjectKDTree(&meshes, points);
    logout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
+   locks.EndRead(meshes);
    logout << "Done\n" << flush;
    
    progress->value = 6;
