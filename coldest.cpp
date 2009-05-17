@@ -187,7 +187,7 @@ void InitGlobals()
    console.Parse("set impdistmulti 5", false);
    console.Parse("set detailmapsize 600", false);
    console.Parse("set softshadows 0", false);
-   console.Parse("set turnsmooth 10", false);
+   console.Parse("set turnsmooth 20", false);
    console.Parse("set endgametime 10", false);
    console.Parse("set splashlevels 3", false);
    console.Parse("set grassdrawdist 1000", false);
@@ -764,7 +764,11 @@ void MainLoop()
 
       // Can't do this in the event handler because that is called from within the GUI
       if (reloadgui)
+      {
+         SDL_mutexP(clientmutex);
          InitGUI();
+         SDL_mutexV(clientmutex);
+      }
       
       // Check for end of game
       if (winningteam)
@@ -1709,7 +1713,7 @@ void SynchronizePosition()
    // Limit the max adjustment to syncmax in general so that we don't get nasty hitching while
    // moving.  The exception is if we're way off in which case some hitching is necessary
    float syncmax = console.GetFloat("syncmax") / 100.f;
-   if (difference < 30.f || wayoffcount < 5)
+   if (difference < 30.f || wayoffcount < 15)
    {
       if (difference > syncmax)
       {
@@ -1723,7 +1727,7 @@ void SynchronizePosition()
    }
    else
    {
-      posadj *= .3f;
+      posadj *= .1f;
    }
    
    player[0].pos += posadj;
@@ -2394,7 +2398,7 @@ bool PrimaryGUIVisible()
 void StartBGMusic()
 {
 #ifndef DEDICATED
-   if (!musicsource)
+   //if (!musicsource)
       musicsource = ALSourcePtr(new ALSource());
    musicsource->loop = AL_TRUE;
    musicsource->rolloff = 0.f;

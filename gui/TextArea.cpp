@@ -24,7 +24,7 @@ TextArea::TextArea(GUI* p, TextureManager* tm)
 {
    Init(p, tm);
    table = new Table(this, texman);
-   table->rowheight = 20;
+   table->rowheight = 30;
    table->colwidths = ToString(width);
    table->x = 0;
    table->y = 0;
