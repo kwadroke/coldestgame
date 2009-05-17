@@ -284,18 +284,20 @@
       </Tab>
    </TabWidget>
    
-   <Button x="400" y="925" width="200" height="50" text="Back" align="center"
-           normal="textures/buttonnorm.png"
-           hover="textures/buttonhover.png"
-           pressed="textures/buttonpressed.png"
-           leftclick="showmain">
-   </Button>
    <Button x="100" y="925" width="200" height="50" text="Save" align="center"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"
            pressed="textures/buttonpressed.png"
            leftclick="savesettings">
    </Button>
+   <Button x="350" y="925" width="200" height="50" text="Back" align="center"
+           normal="textures/buttonnorm.png"
+           hover="textures/buttonhover.png"
+           pressed="textures/buttonpressed.png"
+           leftclick="showmain">
+   </Button>
+   <Label x="600" y="925" width="350" height="50" text="Some settings may require a restart" align="center"
+          normal="textures/buttonnorm.png"/>
    
    <Label x="250" y="450" width="500" height="50" text="Press key to bind (esc to cancel)" name="bindmessage" visible="false"/>
    

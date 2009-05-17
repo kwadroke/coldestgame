@@ -163,6 +163,7 @@ void SaveSettings()
    console.Parse("setsave af " + ToString(afbox->SelectedText()), false);
    console.Parse("setsave name " + nameedit->text, false);
    console.Parse("setsave musicvol " + ToString(musicvolslider->value), false);
+   StartBGMusic();
    
    stringstream selectedres(resolutionbox->SelectedText());
    int newwidth, newheight;
