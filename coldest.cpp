@@ -213,6 +213,7 @@ void InitGlobals()
    console.Parse("set overheat 1", false);
    console.Parse("set syncmax 50", false);
    console.Parse("set name Nooblet", false);
+   console.Parse("set syncgrace 15", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -1713,7 +1714,7 @@ void SynchronizePosition()
    // Limit the max adjustment to syncmax in general so that we don't get nasty hitching while
    // moving.  The exception is if we're way off in which case some hitching is necessary
    float syncmax = console.GetFloat("syncmax") / 100.f;
-   if (difference < 30.f || wayoffcount < 15)
+   if (difference < 30.f || wayoffcount < console.GetInt("syncgrace"))
    {
       if (difference > syncmax)
       {
