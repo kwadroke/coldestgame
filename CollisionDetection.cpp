@@ -357,12 +357,6 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
 #endif
    if (CrossesPlane(pos, endpos, norm, d, denominator, move, x, intpoint))
    {
-      // The following line has to be here because CrossesPlane does not have access to
-      // radius, nor should it IMHO
-      if (x > move.magnitude() + radius || x < -radius)
-      {
-         return false;
-      }
       // Determine whether we're on the poly
       float angle = 0.f;
       bool forcehit = false;
@@ -492,7 +486,8 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    {
       x = -(norm.dot(start) + d) / denominator;
       intpoint = start + move * x;
-      return true;
+      if (x < 1.f && x > -1e-4f)
+         return true;
    }
    return false;
 }
@@ -509,26 +504,11 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    
    float endside = norm.dot(end) + d;
    
-   /* Because if the signs are the same, this will end up positive
-      At times, when one of these variables should be zero, it will
-      actually be a very small number (7E-6 for instance) of the
-      opposite sign from the other variable, which means if we just
-      check the signs it appears we hit when we didn't.  Including
-      values very close to 0 as non-hits fixes this.
-   
-      Err, cancel the above.
-   
-      Okay, from now on we have to assume that startside is positive.
-      Multiplying them together when they could both be extremely small
-      was resulting in numbers so close to 0 that we couldn't accurately
-      distinguish them, so from now on this function requires that start
-      be on the positive side of the plane.
-   */
    if (endside < .00001)
    {
       move = end - start;
       denominator = norm.dot(move);
-      if (denominator != 0)
+      if (!floatzero(denominator))
       {
          return true;
       }
