@@ -1014,12 +1014,10 @@ void SetReflection(bool on)
    reflectionrender = on;
    if (on)
    {
-      resman.shaderman.SetUniform1f(standardshader, "reflectval", 1.f);
-      resman.shaderman.SetUniform1f(terrainshader, "reflectval", 1.f);
+      resman.shaderman.GlobalSetUniform1f("reflectval", 1.f);
    }
    else
    {
-      resman.shaderman.SetUniform1f(standardshader, "reflectval", 0.f);
-      resman.shaderman.SetUniform1f(terrainshader, "reflectval", 0.f);
+      resman.shaderman.GlobalSetUniform1f("reflectval", 0.f);
    }
 }

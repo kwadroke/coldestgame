@@ -274,7 +274,8 @@ void Shader::GlobalSetUniform1i(string name, GLint val)
    ++i;
    for (; i != programs.end(); ++i)
    {
-      SetUniform1i(i->first, name, val);
+      if (i->first != " ")
+         SetUniform1i(i->first, name, val);
    }
 }
 
@@ -297,7 +298,9 @@ void Shader::GlobalSetUniform1f(string name, GLfloat val)
    ++i;
    for (; i != programs.end(); ++i)
    {
-      SetUniform1f(i->first, name, val);
+      // Workaround a bug somewhere else for now
+      if (i->first != " ")
+         SetUniform1f(i->first, name, val);
    }
 }
 
