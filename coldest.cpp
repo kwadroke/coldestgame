@@ -1081,10 +1081,12 @@ bool GUIEventHandler(SDL_Event &event)
                   int num = 0;
                   string filename;
                   bool finished = false;
+                  if (!boost::filesystem::is_directory(userpath + "screenshots/"))
+                     boost::filesystem::create_directory(userpath + "screenshots/");
                   while (!finished)
                   {
                      string padded = PadNum(num, 5);
-                     filename = "screenshot" + padded + ".tga";
+                     filename = userpath + "screenshots/screenshot" + padded + ".tga";
                      ifstream test(filename.c_str());
                      if (!test)
                         finished = true;
@@ -1831,8 +1833,8 @@ void Animate()
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 10.f);
-      if (i->updatedelay > 300)
-         i->updatedelay = 300;
+      if (i->updatedelay > 100)
+         i->updatedelay = 100;
       i->AdvanceAnimation(player[0].pos);
    }
    locks.EndWrite(meshes);
@@ -2287,17 +2289,21 @@ void CacheMeshes()
    tocache.push_back("models/nemesis/torso");
    tocache.push_back("models/nemesis/larm");
    tocache.push_back("models/nemesis/rarm");
+   tocache.push_back("models/nemesis/hips");
    tocache.push_back("models/ultra/legs");
    tocache.push_back("models/ultra/torso");
    tocache.push_back("models/ultra/larm");
    tocache.push_back("models/ultra/rarm");
+   tocache.push_back("models/ultra/hips");
    tocache.push_back("models/omega/legs");
    tocache.push_back("models/omega/torso");
    tocache.push_back("models/omega/larm");
    tocache.push_back("models/omega/rarm");
+   tocache.push_back("models/omega/hips");
    
    tocache.push_back("models/explosion");
    tocache.push_back("models/spawn");
+   tocache.push_back("models/base");
    
    for (size_t i = 0; i < tocache.size(); ++i)
       meshcache->GetNewMesh(tocache[i]);

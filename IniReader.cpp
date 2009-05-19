@@ -29,7 +29,7 @@ IniReader::IniReader(string filename) : level(0), name(""), path(filename)
    if (filename == "") return; // Don't think this is necessary anymore, but it doesn't hurt
 
    ifstream in(filename.c_str(), ios::in|ios::binary);
-
+   
    if (in.fail())
    {
       logout << "Failed to open file " << filename << endl;
