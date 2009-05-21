@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
    <TextArea x="10" y="10" width="980" height="600" name="consoleoutput" rowheight="20" colwidths="980"
-             normal="textures/buttonnormsquare.png"
-             vnormal="textures/buttonnormsquare.png">
+             normal="textures/hud/button.png"
+             vnormal="textures/hud/button.png">
    </TextArea>
    <LineEdit x="10" y="610" width="980" height="30" text="" name="consoleinput"
-             normal="textures/buttonnormsquare.png"
-             hover="textures/buttonhover.png"
-             pressed="textures/buttonpressed.png"/>
+             normal="textures/hud/button.png"
+             hover="textures/hud/buttonhover.png"
+             pressed="textures/hud/buttonred.png"/>
 </GUI>

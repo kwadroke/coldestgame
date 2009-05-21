@@ -30,11 +30,11 @@ MeshNode::MeshNode() : id(0), parentid(0), facing(false), gl(false), rot1(Vector
 
 
 void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, VertexPtrvec& verts, 
-                         const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
+                         const GraphicMatrix& parentm, const Vector3& campos)
 {
    if (interpnode.get() == this)
    {
-      TransformNoInt(verts, parentm, normalm, campos);
+      TransformNoInt(verts, parentm, campos);
       return;
    }
    Vector3 interprot1 = lerp(interpnode->rot1, rot1, interpval);
@@ -60,7 +60,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
       Vector3 dir;
       Vector3 start(0, 0, 1);
       Vector3 facerot, currpos;
-      start.transform(normalm);
+      start.transform3(m);
       
       // Find the current position - note that this duplicates code, but with facing containers
       // it is necessary to do this twice so there's not a good way around that
@@ -84,13 +84,13 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
    }
    m *= parentm;
    
-   TransformLoop(interpnode, interpval, verts, parentm, normalm, campos);
+   TransformLoop(interpnode, interpval, verts, parentm, campos);
    
    // Recursively call this on our children
    size_t csize = children.size();
    for (size_t i = 0; i < csize; ++i)
    {
-      children[i]->Transform(interpnode->children[i], interpval, verts, m, normalm, campos);
+      children[i]->Transform(interpnode->children[i], interpval, verts, m, campos);
    }
 }
 
@@ -98,7 +98,7 @@ void MeshNode::Transform(const MeshNodePtr& interpnode, const float interpval, V
 // Split this off to aid profiling - inline when not profiling
 inline
 void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpval, VertexPtrvec& verts, 
-                             const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
+                             const GraphicMatrix& parentm, const Vector3& campos)
 {
    size_t vsize = vertices.size();
    if (gl)
@@ -109,12 +109,12 @@ void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpva
          Vertex& interpvi = interpnode->vertices[i];
          Vertex& currvert = *verts[verti.id];
          
+         currvert.norm = lerp(interpvi.norm, verti.norm, interpval);
+         currvert.tangent = lerp(interpvi.tangent, verti.tangent, interpval);
          currvert.pos = lerp(interpvi.pos, verti.pos, interpval);
          currvert.pos.transform(m);
-         
-         currvert.norm = lerp(interpvi.norm, verti.norm, interpval);
-         currvert.norm.transform(normalm);
-         currvert.norm.normalize();
+         currvert.norm.transform3(m);
+         currvert.tangent.transform3(m);
          
          for (size_t j = 0; j < 4; ++j)
          {
@@ -137,7 +137,7 @@ void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpva
 }
 
 
-void MeshNode::TransformNoInt(VertexPtrvec& verts, const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
+void MeshNode::TransformNoInt(VertexPtrvec& verts, const GraphicMatrix& parentm, const Vector3& campos)
 {
    m.identity();
    
@@ -158,7 +158,7 @@ void MeshNode::TransformNoInt(VertexPtrvec& verts, const GraphicMatrix& parentm,
       Vector3 dir;
       Vector3 start(0, 0, 1);
       Vector3 facerot, currpos;
-      start.transform(normalm);
+      start.transform3(m);
       
       // Find the current position - note that this duplicates code, but with facing containers
       // it is necessary to do this twice so there's not a good way around that
@@ -182,20 +182,20 @@ void MeshNode::TransformNoInt(VertexPtrvec& verts, const GraphicMatrix& parentm,
    }
    m *= parentm;
    
-   TransformNoIntLoop(verts, parentm, normalm, campos);
+   TransformNoIntLoop(verts, parentm, campos);
    
    // Recursively call this on our children
    size_t csize = children.size();
    for (size_t i = 0; i < csize; ++i)
    {
-      children[i]->TransformNoInt(verts, m, normalm, campos);
+      children[i]->TransformNoInt(verts, m, campos);
    }
 }
 
 
 // Split this off to aid profiling - inline when not profiling
 inline
-void MeshNode::TransformNoIntLoop(VertexPtrvec& verts, const GraphicMatrix& parentm, const GraphicMatrix& normalm, const Vector3& campos)
+void MeshNode::TransformNoIntLoop(VertexPtrvec& verts, const GraphicMatrix& parentm, const Vector3& campos)
 {
    size_t vsize = vertices.size();
    if (gl) // Means we need normal and color data, otherwise we don't care
@@ -205,12 +205,12 @@ void MeshNode::TransformNoIntLoop(VertexPtrvec& verts, const GraphicMatrix& pare
          Vertex& verti = vertices[i];
          Vertex& currvert = *verts[verti.id];
          
-         currvert.pos = verti.pos;
-         currvert.pos.transform(m);
-         
          currvert.norm = verti.norm;
-         currvert.norm.transform(normalm);
-         currvert.norm.normalize();
+         currvert.pos = verti.pos;
+         currvert.tangent = verti.tangent;
+         currvert.pos.transform(m);
+         currvert.norm.transform3(m);
+         currvert.tangent.transform3(m);
          
          currvert.color = verti.color;
       }
@@ -293,6 +293,21 @@ void MeshNode::SetGL(const bool dogl)
    {
       children[i]->SetGL(dogl);
    }
+}
+
+
+void MeshNode::SetTangent(const size_t id, const Vector3& tan)
+{
+   for (size_t i = 0; i < vertices.size(); ++i)
+   {
+      if (vertices[i].id == id)
+      {
+         vertices[i].tangent = tan;
+         return;
+      }
+   }
+   for (size_t i = 0; i < children.size(); ++i)
+      children[i]->SetTangent(id, tan);
 }
 
 

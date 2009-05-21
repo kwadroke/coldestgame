@@ -903,9 +903,20 @@ void RenderHud(const PlayerData& localplayer)
    GUI* minimaplabel = gui[hud]->GetWidget("minimap");
    GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
    
+   static Timer fpstimer;
+   static int longfpscounter = 0;
+   static float smoothfps;
+   ++longfpscounter;
+   if (fpstimer.elapsed() > 5000)
+   {
+      smoothfps = (float)longfpscounter / (float) fpstimer.elapsed() * 1000.f;
+      fpstimer.start();
+      longfpscounter = 0;
+   }
+   
    if (frames >= 30) // Update FPS
    {
-      int currtick = SDL_GetTicks();
+      Uint32 currtick = SDL_GetTicks();
       fps = (float) frames / ((currtick - lasttick) / 1000.);
       mpflabel->text = "ms/frame: " + ToString(1000. / fps);
       frames = 0;
@@ -915,7 +926,7 @@ void RenderHud(const PlayerData& localplayer)
    
    // Update GUI values
    SDL_GL_Enter2dMode();
-   fpslabel->text = ToString(fps);
+   fpslabel->text = ToString(fps) + "/" + ToString(smoothfps);
    tpslabel->text = "Tris/sec: " + ToString(trislastframe * fps / 1000000.f) + " million";
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
@@ -997,6 +1008,11 @@ void RenderHud(const PlayerData& localplayer)
    
    // Render all of the GUI objects, they know whether they're visible or not
    resman.shaderman.UseShader("none");
+   // This should really be done by setting a GUI material, but for the moment it will work
+   glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glDisable(GL_ALPHA_TEST);
    glColor4f(1, 1, 1, 1);
    for (size_t i = 0; i < gui.size(); ++i)
    {

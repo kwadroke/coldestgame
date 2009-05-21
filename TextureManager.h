@@ -35,9 +35,9 @@ class TextureManager
    public:
       TextureManager(TextureHandler* th = NULL);
       ~TextureManager();
-      GLuint LoadTexture(string, bool mipmap = true);
-      void BindTexture(string);
-      void DeleteTexture(string, bool gldelete = true);
+      GLuint LoadTexture(const string&, bool mipmap = true);
+      void BindTexture(const string&);
+      void DeleteTexture(const string&, bool gldelete = true);
       void Clear();
       
       TextureHandler* texhand;

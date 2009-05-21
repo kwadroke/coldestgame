@@ -59,6 +59,7 @@ class Material
       vector<GLuint> texid;
       vector<string> texfilename;
       string shader;
+      GLhandleARB shaderid;
 #ifndef DEDICATED
       TextureManager* texman;
       Shader* shaderhand;

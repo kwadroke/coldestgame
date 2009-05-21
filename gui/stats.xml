@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf">
-   <Label x="0" y="0" width="100" height="20" text="" name="fps" xmargin="2" ymargin="0"/>
+   <Label x="0" y="0" width="250" height="20" text="" name="fps" xmargin="2" ymargin="0"/>
    <Label x="0" y="20" width="250" height="20" text="" name="trispersec" xmargin="2" ymargin="0"/>
    <Label x="0" y="40" width="200" height="20" text="" name="trisperframe" xmargin="2" ymargin="0"/>
    <Label x="0" y="60" width="200" height="20" text="" name="ping" xmargin="2" ymargin="0"/>

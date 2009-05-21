@@ -20,15 +20,15 @@
 
 #include "Shader.h"
 
-Shader::Shader() : currshader("none"), shadows(true)
+Shader::Shader() : currshader(0), shadows(true)
 {
    programs.insert(make_pair("none", 0));
 }
 
 
-void Shader::LoadShader(string file)
+GLhandleARB Shader::LoadShader(const string& file)
 {
-   if (programs.find(file) != programs.end() || file == "none") return;
+   if (programs.find(file) != programs.end() || file == "none") return 0;
    
    logout << "Loading shader " << file << endl;
    ifstream in(file.c_str());
@@ -36,7 +36,7 @@ void Shader::LoadShader(string file)
    if (in.fail())
    {
       logout << "Failed to open file " << file << endl;
-      return;
+      return 0;
    }
    
    string buffer;
@@ -169,15 +169,22 @@ void Shader::LoadShader(string file)
       }
       in >> buffer;
    }
+   return program;
 }
 
 
-void Shader::UseShader(string name)
+void Shader::UseShader(const string& name)
 {
-   if (currshader != name)
+   UseShader(programs[name]);
+}
+
+
+void Shader::UseShader(const GLhandleARB& id)
+{
+   if (currshader != id)
    {
-      currshader = name;
-      UseProgram(programs[name]);
+      currshader = id;
+      UseProgram(id);
    }
 }
 
@@ -194,7 +201,7 @@ GLhandleARB Shader::CreateVertexShader()
 }
 
 
-void Shader::InitShader(GLhandleARB handle, string filename)
+void Shader::InitShader(GLhandleARB handle, const string& filename)
 {
    vector<string> buffer;
    int lines = 0;
@@ -256,9 +263,9 @@ void Shader::UseProgram(GLhandleARB program)
 }
 
 
-void Shader::SetUniform1i(string shader, string name, GLint val)
+void Shader::SetUniform1i(const string& shader, const string& name, GLint val)
 {
-   string save = currshader;
+   GLhandleARB save = currshader;
    UseShader(shader); // Have to be bound to a shader to do the following
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
@@ -268,7 +275,7 @@ void Shader::SetUniform1i(string shader, string name, GLint val)
    UseShader(save);
 }
 
-void Shader::GlobalSetUniform1i(string name, GLint val)
+void Shader::GlobalSetUniform1i(const string& name, GLint val)
 {
    progmap::iterator i = programs.begin();
    ++i;
@@ -280,9 +287,9 @@ void Shader::GlobalSetUniform1i(string name, GLint val)
 }
 
 
-void Shader::SetUniform1f(string shader, string name, GLfloat val)
+void Shader::SetUniform1f(const string& shader, const string& name, GLfloat val)
 {
-   string save = currshader;
+   GLhandleARB save = currshader;
    UseShader(shader); // Have to be bound to a shader to do the following
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
@@ -292,7 +299,7 @@ void Shader::SetUniform1f(string shader, string name, GLfloat val)
    UseShader(save);
 }
 
-void Shader::GlobalSetUniform1f(string name, GLfloat val)
+void Shader::GlobalSetUniform1f(const string& name, GLfloat val)
 {
    progmap::iterator i = programs.begin();
    ++i;
@@ -305,9 +312,9 @@ void Shader::GlobalSetUniform1f(string name, GLfloat val)
 }
 
 
-void Shader::SetUniform3f(string shader, string name, const vector<GLfloat>& val)
+void Shader::SetUniform3f(const string& shader, const string& name, const vector<GLfloat>& val)
 {
-   string save = currshader;
+   GLhandleARB save = currshader;
    UseShader(shader); // Have to be bound to a shader to do the following
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
@@ -317,9 +324,9 @@ void Shader::SetUniform3f(string shader, string name, const vector<GLfloat>& val
 }
 
 
-void Shader::SetUniform1fv(string shader, string name, GLsizei count, GLfloat* val)
+void Shader::SetUniform1fv(const string& shader, const string& name, GLsizei count, GLfloat* val)
 {
-   string save = currshader;
+   GLhandleARB save = currshader;
    UseShader(shader);
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
@@ -329,9 +336,9 @@ void Shader::SetUniform1fv(string shader, string name, GLsizei count, GLfloat* v
 }
 
 
-void Shader::SetUniform2fv(string shader, string name, GLsizei count, GLfloat* val)
+void Shader::SetUniform2fv(const string& shader, const string& name, GLsizei count, GLfloat* val)
 {
-   string save = currshader;
+   GLhandleARB save = currshader;
    UseShader(shader);
    
    GLint loc = glGetUniformLocationARB(programs[shader], name.c_str());
@@ -341,7 +348,7 @@ void Shader::SetUniform2fv(string shader, string name, GLsizei count, GLfloat* v
 }
 
 
-string Shader::CurrentShader()
+GLhandleARB Shader::CurrentShader()
 {
    return currshader;
 }
@@ -349,19 +356,19 @@ string Shader::CurrentShader()
 
 void Shader::ForgetCurrent()
 {
-   currshader = "none";
+   currshader = 0;
 }
 
 
-int Shader::GetAttribLocation(string shader, string name)
+int Shader::GetAttribLocation(const GLhandleARB& id, const string& name)
 {
-   return glGetAttribLocationARB(programs[shader], name.c_str());
+   return glGetAttribLocationARB(id, name.c_str());
 }
 
 
-void Shader::BindAttribLocation(string shader, GLuint location, string name)
+void Shader::BindAttribLocation(const GLhandleARB& id, GLuint location, const string& name)
 {
-   glBindAttribLocationARB(programs[shader], location, name.c_str());
+   glBindAttribLocationARB(id, location, name.c_str());
 }
 
 

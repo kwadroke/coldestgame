@@ -259,10 +259,11 @@ void ServerLoop()
       checkmap = (checkmap + 1) % 5;
       
       SDL_mutexP(servermutex);
+      Uint32 timeout = console.GetInt("timeout");
       for (size_t i = 1; i < serverplayers.size(); ++i)
       {
          currtick = SDL_GetTicks();
-         if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + 30000)
+         if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + timeout * 1000)
          {
             validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
             serverplayers[i].Disconnect();
@@ -1199,6 +1200,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
                      dead = true;
                   else
                   {
+                     serverplayers[i].rendermesh->Remove(&(*serverplayers[i].mesh[part]));
                      servermeshes.erase(serverplayers[i].mesh[part]);
                      serverplayers[i].mesh[part] = servermeshes.end();
                      for (size_t j = 1; j < serverplayers.size(); ++j)

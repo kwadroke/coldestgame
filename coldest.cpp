@@ -214,6 +214,8 @@ void InitGlobals()
    console.Parse("set syncmax 50", false);
    console.Parse("set name Nooblet", false);
    console.Parse("set syncgrace 15", false);
+   console.Parse("set maxanimdelay 100", false);
+   console.Parse("set timeout 30", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -1574,6 +1576,8 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, Ob
             check.erase(remove(check.begin(), check.end(), &(*mplayer->mesh[part])), check.end());
          }
       }
+      if (mplayer->rendermesh != ml.end())
+         check.erase(remove(check.begin(), check.end(), &(*mplayer->rendermesh)), check.end());
    }
    locks.EndRead(ml);
    return check;
@@ -1832,9 +1836,10 @@ void Animate()
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 10.f);
-      if (i->updatedelay > 100)
-         i->updatedelay = 100;
+      i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 30.f);
+      size_t maxdelay = console.GetInt("maxanimdelay");
+      if (i->updatedelay > maxdelay)
+         i->updatedelay = maxdelay;
       i->AdvanceAnimation(player[0].pos);
    }
    locks.EndWrite(meshes);
@@ -1891,39 +1896,52 @@ void UpdateServerList()
 
 void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
-   if (!p.spawned) return;
+   if (!p.spawned)
+      return;
    
    locks.Write(ml);
+   if (p.rendermesh == ml.end())
+   {
+      MeshPtr newmesh = meshcache->GetNewMesh("models/empty");
+      newmesh->dynamic = true;
+      newmesh->collide = false;
+      if (gl)
+         newmesh->SetGL();
+      ml.push_front(*newmesh);
+      p.rendermesh = ml.begin();
+   }
    if (p.mesh[Legs] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/legs");
       newmesh->dynamic = true;
-      if (gl)
-         newmesh->SetGL();
+      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[Legs] = ml.begin();
       p.mesh[Legs]->Scale(units[p.unit].scale);
+      p.rendermesh->Add(&ml.front());
    }
    if (p.mesh[Torso] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/torso");
       newmesh->dynamic = true;
-      if (gl)
-         newmesh->SetGL();
+      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[Torso] = ml.begin();
       p.mesh[Torso]->Scale(units[p.unit].scale);
+      p.rendermesh->Add(&ml.front());
    }
    if (p.mesh[Hips] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/hips");
       newmesh->dynamic = true;
-      if (gl)
-         newmesh->SetGL();
+      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[Hips] = ml.begin();
       p.mesh[Hips]->Scale(units[p.unit].scale);
+      p.rendermesh->Add(&ml.front());
    }
+   
+   p.rendermesh->Move(p.pos); // Or our bounding box will get huge
    
    p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
    p.mesh[Legs]->Move(p.pos);
@@ -1938,21 +1956,21 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
       newmesh->dynamic = true;
-      if (gl)
-         newmesh->SetGL();
+      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
       p.mesh[LArm]->Scale(units[p.unit].scale);
+      p.rendermesh->Add(&ml.front());
    }
    if (p.mesh[RArm] == ml.end() && p.hp[RArm] > 0)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/rarm");
       newmesh->dynamic = true;
-      if (gl)
-         newmesh->SetGL();
+      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
+      p.rendermesh->Add(&ml.front());
    }
    
    if (p.mesh[LArm] != ml.end())
@@ -2382,6 +2400,8 @@ PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p, Meshlist::iterator in
    size_t psize = p.size();
    for (size_t i = 1; i < psize; ++i)
    {
+      if ((p[i].rendermesh != invalid) && (&(*p[i].rendermesh) == m))
+         return &p[i];
       for (size_t j = 0; j < numbodyparts; ++j)
       {
          if ((p[i].mesh[j] != invalid) && (&(*p[i].mesh[j]) == m))

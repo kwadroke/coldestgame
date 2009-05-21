@@ -65,6 +65,7 @@ class Mesh
       void Add(Quad&);
       void Add(Mesh&);
       void Add(Mesh*);
+      void Remove(Mesh*);
       void Clear();
       void InsertIntoContainer(const string&, Mesh&);
       void LoadMaterials();
@@ -87,8 +88,9 @@ class Mesh
       bool HasNext() const {return next < tris.size();}
       Triangle& Next() {++next; return *tris[next - 1];}
       
-      int NumTris() const; // Not related to size member
+      int NumTris() const;
       void AdvanceAnimation(const Vector3& campos = Vector3());
+      void GenTangents();
       
       bool render;
       bool dynamic;
@@ -111,7 +113,7 @@ class Mesh
       void ResetTriMaxDims();
       
       TrianglePtrvec tris;
-      TrianglePtrvec trantris;
+      TrianglePtrvec trantris; // Currently not used
       VertexPtrvec vertices;
       intvec vbosteps;
       GLuint vbo;
