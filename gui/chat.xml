@@ -4,10 +4,10 @@
              normal="textures/transparent.png">
    </TextArea>
    <Label x="250" y="960" width="50" height="30" text="Team" name="chatteam" visible="false"
-          normal="textures/buttonnorm.png"/>
+          normal="textures/hud/button.png"/>
    <LineEdit x="300" y="960" width="450" height="30" text="" name="chatinput" visible="false"
-             normal="textures/buttonnormsquare.png"
-             hover="textures/buttonhover.png"
-             pressed="textures/buttonpressed.png">
+             normal="textures/hud/button.png"
+             hover="textures/hud/buttonhover.png"
+             pressed="textures/hud/buttonred.png">
    </LineEdit>
 </GUI>
