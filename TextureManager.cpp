@@ -34,7 +34,7 @@ TextureManager::~TextureManager()
 }
 
 
-GLuint TextureManager::LoadTexture(string filename, bool mipmap)
+GLuint TextureManager::LoadTexture(const string& filename, bool mipmap)
 {
    if (filename == "") return 0;
    
@@ -52,13 +52,13 @@ GLuint TextureManager::LoadTexture(string filename, bool mipmap)
 }
 
 
-void TextureManager::BindTexture(string filename)
+void TextureManager::BindTexture(const string& filename)
 {
    texhand->BindTexture(texnames[filename]);
 }
 
 
-void TextureManager::DeleteTexture(string filename, bool gldelete)
+void TextureManager::DeleteTexture(const string& filename, bool gldelete)
 {
    if (loaded.find(filename) != loaded.end())
    {

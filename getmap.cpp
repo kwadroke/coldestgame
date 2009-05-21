@@ -150,6 +150,7 @@ void GetMap(string fn)
    {
       player[0].mesh[i] = meshes.end();
    }
+   player[0].rendermesh = meshes.end();
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);

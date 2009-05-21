@@ -16,7 +16,7 @@
      tablecellpressed="textures/transparent.png"
      tablecellhover="textures/transparent.png"
      tablerownormal=""
-     tablerowpressed="textures/buttonnormsquare.png"
+     tablerowpressed="textures/buttonhover.png"
      tablerowhover=""
      cursornormal="textures/sliderbuttonnorm.png"
      leftclicksound="sounds/beep-3.ogg">

@@ -18,7 +18,7 @@
 // @End License@
 
 
-void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
+void basiclighting(inout vec3, in vec3, out vec4, out vec4, out vec4, in float);
 void shadow(vec4, vec4, float, inout vec4);
 void fog(float, inout vec4);
 

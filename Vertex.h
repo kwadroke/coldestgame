@@ -29,6 +29,7 @@
 #include <boost/shared_ptr.hpp>
 
 using std::map;
+#define INLINE_VERTEX
 
 // We pass this structure directly to OpenGL, so it needs to be aligned on single bytes
 // Edit: Maybe.  It seems to work without doing that, but it may waste memory to align this
@@ -62,8 +63,7 @@ class Vertex
 {
    public:
       Vertex();
-      VBOData& GetVboData();
-      void PopulateVboData();
+      void GetVboData(VBOData*);
       
       Vector3 pos;
       Vector3 norm;
@@ -78,11 +78,6 @@ class Vertex
 #else
       size_t id;
 #endif
-      
-   private:
-      VBOData vbodata;
-      bool inited;
-
 };
 
 typedef vector<Vertex> Vertexvec;
@@ -91,6 +86,40 @@ typedef vector<VertexPtr> VertexPtrvec;
 typedef map<string, VertexPtr> VertMap;
 
 
-//inline 
+#ifdef INLINE_VERTEX
+inline
+void Vertex::GetVboData(VBOData* data)
+{
+   VBOData& vbodata = *data;
+   vbodata.x = pos.x;
+   vbodata.y = pos.y;
+   vbodata.z = pos.z;
+   vbodata.nx = norm.x;
+   vbodata.ny = norm.y;
+   vbodata.nz = norm.z;
+   
+   vbodata.tx = tangent.x;
+   vbodata.ty = tangent.y;
+   vbodata.tz = tangent.z;
+   
+   for (int i = 0; i < 8; ++i)
+   {
+      vbodata.tc[i][0] = texcoords[i][0];
+      vbodata.tc[i][1] = texcoords[i][1];
+   }
+   vbodata.r = color[0];
+   vbodata.g = color[1];
+   vbodata.b = color[2];
+   vbodata.a = color[3];
+   
+   vbodata.terrainwt[0] = terrainwt[0];
+   vbodata.terrainwt[1] = terrainwt[1];
+   vbodata.terrainwt[2] = terrainwt[2];
+   vbodata.terrainwt1[0] = terrainwt[3];
+   vbodata.terrainwt1[1] = terrainwt[4];
+   vbodata.terrainwt1[2] = terrainwt[5];
+}
+#endif
+
 
 #endif

@@ -54,15 +54,16 @@ Mesh::~Mesh()
 }
 
 
-Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain), drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist),  impostortex(m.impostortex), debug(m.debug), updatedelay(m.updatedelay),
-         vbosteps(m.vbosteps), vbo(0), ibo(0), 
-                  frametime(m.frametime), hasvbo(false),
-         
-                            childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe), lastanimtick(m.lastanimtick), animspeed(m.animspeed),
-                                        curranimation(m.curranimation), nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe), newchildren(m.newchildren), boundschanged(m.boundschanged),
-         position(m.position), rots(m.rots), size(m.size), height(m.height), width(m.width), resman(m.resman), 
-                  next(m.next), glops(m.glops), havemats(m.havemats), updatevbo(m.updatevbo), basefile(m.basefile), scale(m.scale), 
-                       campos(m.campos), trisdirty(m.trisdirty), parent(m.parent), lasttick(m.lasttick)
+Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain),
+           drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist), impostortex(m.impostortex),
+           debug(m.debug), updatedelay(m.updatedelay), vbosteps(m.vbosteps), vbo(0), ibo(0), frametime(m.frametime),
+           hasvbo(false), childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe),
+           lastanimtick(m.lastanimtick), animspeed(m.animspeed), curranimation(m.curranimation),
+           nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe),
+           newchildren(m.newchildren), boundschanged(m.boundschanged), position(m.position), rots(m.rots),
+           size(m.size), height(m.height), width(m.width), resman(m.resman), next(m.next), glops(m.glops),
+           havemats(m.havemats), updatevbo(m.updatevbo), basefile(m.basefile), scale(m.scale), campos(m.campos),
+           trisdirty(m.trisdirty), parent(m.parent), lasttick(m.lasttick)
 {
 #ifndef DEDICATED
    if (m.impmat)
@@ -372,62 +373,35 @@ void Mesh::Load(const IniReader& reader)
                if (glops)
                   newtri->material = &resman.LoadMaterial(newtri->matname);
                curr.Read(newtri->collide, "Collide");
+               
                tris.push_back(newtri);
+            }
+         }
+         
+         // Generate tangents for triangles
+         size_t currf = frameroot.size() - 1;
+         GraphicMatrix m;
+         frameroot[currf]->Transform(frameroot[currf], 0.f, vertices, m, Vector3());
+         
+         for (size_t k = 0; k < tris.size(); ++k)
+         {
+            TrianglePtr newtri = tris[k];
+            Vector3 one = newtri->v[1]->pos - newtri->v[0]->pos;
+            Vector3 two = newtri->v[2]->pos - newtri->v[0]->pos;
+            float tcone = newtri->v[1]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
+            float tctwo = newtri->v[2]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
+            Vector3 tangent = one * -tctwo + two * tcone;
+            for (size_t j = 0; j < 3; ++j)
+               newtri->v[j]->tangent += tangent;
+            // Apply tangents to nodes' vertices
+            for (size_t j = 0; j < 3; ++j)
+            {
+               newtri->v[j]->tangent.normalize();
+               frameroot[currf]->SetTangent(newtri->v[j]->id, newtri->v[j]->tangent);
             }
          }
       }
       UpdateTris();
-   }
-   else if (type == "bush")
-   {
-      int numleaves = 0;  // Don't need to store this value
-      reader.Read(numleaves, "NumLeaves");
-      
-      // Generate leaves
-      float height = size;
-      for (int j = 0; j < numleaves; j++)
-      {
-         Quad newquad;
-         reader.Read(material, "Materials");
-         newquad.SetMaterial(&resman.LoadMaterial(material));
-         newquad.SetCollide(false);
-         float leafratio = .5;
-         Vector3vec corners(4, Vector3());
-         corners[0] = Vector3(height / leafratio, 0, height / leafratio);
-         corners[1] = Vector3(height / leafratio, 0, -height / leafratio);
-         corners[2] = Vector3(-height / leafratio, 0, -height / leafratio);
-         corners[3] = Vector3(-height / leafratio, 0, height / leafratio);
-         
-         float amount = j * 360 / numleaves;
-         GraphicMatrix transform;
-         transform.rotatex(amount * 2.5);
-         transform.rotatey(amount * 3.3);
-         transform.rotatez(amount);
-         transform.translate(0, height / 2.f, 0);
-         transform.rotatex(rots.x);
-         transform.rotatey(rots.y);
-         transform.rotatez(rots.z);
-         transform.translate(position);
-         
-         for (int v = 0; v < 4; v++)
-         {
-            corners[v].transform(transform);
-         }
-         newquad.SetVertex(0, corners[0]);
-         newquad.SetVertex(1, corners[1]);
-         newquad.SetVertex(2, corners[2]);
-         newquad.SetVertex(3, corners[3]);
-         /* Right now we shut off lighting for tree leaves because
-            it doesn't really look very good, so this step is not necessary
-         for (int n = 0; n < 4; n++)
-         {
-            Vector3 temp1 = prims[nextprim].v[1] - prims[nextprim].v[0];
-            Vector3 temp2 = prims[nextprim].v[2] - prims[nextprim].v[0];
-            prims[nextprim].n[n] = temp1.cross(temp2);
-            prims[nextprim].n[n].normalize();
-         }*/
-         Add(newquad);
-      }
    }
    else if (type == "proctree")
    {
@@ -523,18 +497,24 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
 void Mesh::GenVbo()
 {
 #ifndef DEDICATED
-   if (tris.size() || childmeshes.size())
+   if ((tris.size() || childmeshes.size()) && render)
    {
-      vbodata.clear();
-      int currindex = 0;
+      size_t currindex = 0;
       if (!hasvbo)
       {
          glGenBuffersARB(1, &vbo);
          glGenBuffersARB(1, &ibo);
       }
-      // Note: Strictly speaking we should lock meshes here, but because this can only be called
-      // from the main thread and that's also the only place we modify meshes, it should be okay
-      // for now.  If other threads are ever going to delete or modify meshes that may change.
+      
+      size_t numverts = vertices.size();
+      for (size_t m = 0; m < childmeshes.size(); ++m)
+      {
+         numverts += childmeshes[m]->vertices.size();
+      }
+      
+      if (vbodata.size() < numverts)
+         vbodata.resize(numverts);
+      
       for (size_t m = 0; m < childmeshes.size() + 1; ++m)
       {
          Mesh* currmesh;
@@ -544,44 +524,33 @@ void Mesh::GenVbo()
             currmesh = childmeshes[m - 1];
          VertexPtrvec& currvertices = currmesh->vertices;
          VertexPtrvec::iterator cvend = currvertices.end();
-         for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
-         {
-            (*i)->tangent = Vector3();
-         }
          TrianglePtrvec& currtris = currmesh->tris;
          size_t ctsize = currtris.size();
-         for (size_t i = 0; i < ctsize; ++i)
+         if (newchildren && m > 0)
          {
-            // Generate tangents for triangles
-            Triangle& currtri = *currtris[i];
-            Vector3 one = currtri.v[1]->pos - currtri.v[0]->pos;
-            Vector3 two = currtri.v[2]->pos - currtri.v[0]->pos;
-            float tcone = currtri.v[1]->texcoords[0][1] - currtri.v[0]->texcoords[0][1];
-            float tctwo = currtri.v[2]->texcoords[0][1] - currtri.v[0]->texcoords[0][1];
-            Vector3 tangent = one * -tctwo + two * tcone;
-            for (size_t j = 0; j < 3; ++j)
-               currtri.v[j]->tangent += tangent;
-            
-            if (newchildren && m > 0)
+            for (size_t i = 0; i < ctsize; ++i)
+            {
                tris.push_back(currtris[i]);
+            }
          }
          
          // Build VBO
          for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
          {
             Vertex& currv = **i;
-            currv.tangent.normalize();
             currv.index = currindex;
+            currv.GetVboData(&vbodata[currindex]);
             ++currindex;
-            vbodata.push_back(currv.GetVboData());
          }
       }
       newchildren = false;
       
       // Build IBO
+      // For some reason this makes impostors flicker
       //if (vbodata.size() * sizeof(VBOData) != vbosize)
       {
          sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
+         // Shouldn't clear these for efficiency reasons, but for the moment I'm not worrying about it
          indexdata.clear();
          vbosteps.clear();
          int counter = 0;
@@ -690,11 +659,13 @@ void Mesh::Render(Material* overridemat)
 {
 #ifndef DEDICATED
    UpdateTris();
+   if (!render)
+      return;
    if (updatevbo)
       GenVbo();
    if (!havemats)
       LoadMaterials();
-   if (!tris.size() || !render || !hasvbo)
+   if (!tris.size() || !hasvbo)
    {
       return;
    }
@@ -723,7 +694,7 @@ void Mesh::Render(Material* overridemat)
 void Mesh::BindAttribs()
 {
 #ifndef DEDICATED
-   if (resman.shaderman.CurrentShader() == "none") return;
+   if (resman.shaderman.CurrentShader() == 0) return;
    VBOData dummy;
    int location;
    location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
@@ -751,7 +722,7 @@ void Mesh::BindAttribs()
 void Mesh::UnbindAttribs()
 {
 #ifndef DEDICATED
-   if (resman.shaderman.CurrentShader() == "none") return;
+   if (resman.shaderman.CurrentShader() == 0) return;
    int location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
    if (location >= 0)
    {
@@ -853,48 +824,36 @@ void Mesh::UpdateTris()
    if (glops && !hasvbo) // Means we set glops with SetGL
       LoadMaterials(); // Need to do this before Transform
    
-   GraphicMatrix m, nm;
+   GraphicMatrix m;
    
    m.rotatex(rots.x);
    m.rotatey(rots.y);
    m.rotatez(rots.z);
    
-   if (frameroot[currkeyframe]->parent)
-   {
-      parent->UpdateTris();
-      nm = frameroot[currkeyframe]->parent->m;
-      nm.members[12] = 0.f;
-      nm.members[13] = 0.f;
-      nm.members[14] = 0.f;
-   }
-   else
-   {
-      nm = m;
-   }
-   
    m.translate(position);
    
    if (curranimation != nextanimation)
    {
-      frameroot[currkeyframe]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, nm, campos);
+      frameroot[currkeyframe]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, campos);
       boundschanged = true;
    }
    else
    {
       if (currkeyframe == startframe[curranimation] + numframes[curranimation] - 1)
       {
-         frameroot[currkeyframe]->Transform(frameroot[currkeyframe], interpval, vertices, m, nm, campos);
+         frameroot[currkeyframe]->Transform(frameroot[currkeyframe], interpval, vertices, m, campos);
       }
       else
       {
-         frameroot[currkeyframe]->Transform(frameroot[currkeyframe + 1], interpval, vertices, m, nm, campos);
+         frameroot[currkeyframe]->Transform(frameroot[currkeyframe + 1], interpval, vertices, m, campos);
          boundschanged = true;
       }
    }
    
    CalcBounds();
    ResetTriMaxDims();
-   trisdirty = false;
+   if (!childmeshes.size())
+      trisdirty = false; // We don't know this if we have child meshes
    updatevbo = true;
 }
 
@@ -979,6 +938,27 @@ void Mesh::LoadMaterials()
    impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
    havemats = true;
 #endif
+}
+
+
+// Only for meshes that are built out of raw triangles - meshes loaded from a file should already have this done
+void Mesh::GenTangents()
+{
+   for (size_t k = 0; k < tris.size(); ++k)
+   {
+      TrianglePtr newtri = tris[k];
+      Vector3 one = newtri->v[1]->pos - newtri->v[0]->pos;
+      Vector3 two = newtri->v[2]->pos - newtri->v[0]->pos;
+      float tcone = newtri->v[1]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
+      float tctwo = newtri->v[2]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
+      Vector3 tangent = one * -tctwo + two * tcone;
+      for (size_t j = 0; j < 3; ++j)
+         newtri->v[j]->tangent += tangent;
+   }
+   for (size_t i = 0; i < vertices.size(); ++i)
+   {
+      vertices[i]->tangent.normalize();
+   }
 }
 
 
@@ -1084,7 +1064,18 @@ void Mesh::Add(Mesh* mesh)
       mesh->SetGL();
    childmeshes.push_back(mesh);
    newchildren = true;
+   if (tris.size() && !childmeshes.size())
+      logout << "Warning: Adding mesh pointers to non-empty mesh.  This erases all of its existing triangles.\n";
    tris.clear();
+   boundschanged = true;
+}
+
+
+void Mesh::Remove(Mesh* mesh)
+{
+   childmeshes.erase(remove(childmeshes.begin(), childmeshes.end(), mesh), childmeshes.end());
+   tris.clear();
+   newchildren = true;
    boundschanged = true;
 }
 

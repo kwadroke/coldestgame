@@ -3,7 +3,7 @@ DEBUG=0
 ifeq ($(PROF),1)
    DEBUGOPTS=-ggdb3 -pg
 else ifeq ($(DEBUG),0)
-   DEBUGOPTS=-O2 -g1
+   DEBUGOPTS=-O2 -ggdb
 else ifeq ($(DEBUG), 2)
    DEBUGOPTS=-ggdb3 -O0 -D_GLIBCXX_DEBUG
 else

@@ -20,7 +20,7 @@
 
 #version 110
 
-void basiclighting(in vec3, in vec3, out vec4, out vec4, out vec4, in float);
+void basiclighting(inout vec3, in vec3, out vec4, out vec4, out vec4, in float);
 vec4 specular(vec3, vec3, in vec3, inout vec4);
 void shadow(vec4, vec4, float, inout vec4);
 void fog(float, inout vec4);

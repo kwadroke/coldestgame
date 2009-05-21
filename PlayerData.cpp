@@ -21,7 +21,8 @@
 #include "PlayerData.h"
 #include "globals.h"
 
-PlayerData::PlayerData(Meshlist& ml) : speed(0.f), turnspeed(0.f), needsync(true), mesh(numbodyparts, ml.end()), indicator(NULL),
+PlayerData::PlayerData(Meshlist& ml) : speed(0.f), turnspeed(0.f), needsync(true), mesh(numbodyparts, ml.end()), 
+                       rendermesh(ml.end()), indicator(NULL),
                        firerequests(0), item(Item::NoItem, ml), spawntimer(0), hp(intvec(numbodyparts, 100)), 
                        destroyed(numbodyparts, false), team(0), name("Nooblet"), salvage(100), powerdowntime(0),
                        healaccum(0.f), weight(1.f), spectate(false), admin(false)
@@ -83,6 +84,8 @@ void PlayerData::Kill()
          mesh[part] = meshes->end();
       }
    }
+   meshes->erase(rendermesh);
+   rendermesh = meshes->end();
    locks.EndWrite(*meshes);
 }
 

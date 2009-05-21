@@ -38,18 +38,20 @@ class Shader
    public:
       Shader();
       void UseProgram(GLhandleARB);
-      void SetUniform1i(string, string, GLint);
-      void GlobalSetUniform1i(string, GLint);
-      void SetUniform1f(string, string, GLfloat);
-      void GlobalSetUniform1f(string, GLfloat);
-      void SetUniform3f(string, string, const vector<GLfloat>&);
-      void SetUniform1fv(string, string, GLsizei, GLfloat*);
-      void SetUniform2fv(string, string, GLsizei, GLfloat*);
-      void LoadShader(string);
-      void UseShader(string);
-      int GetAttribLocation(string, string);
-      void BindAttribLocation(string, GLuint, string);
-      string CurrentShader();
+      void SetUniform1i(const string&, const string&, GLint);
+      void GlobalSetUniform1i(const string&, GLint);
+      void SetUniform1f(const string&, const string&, GLfloat);
+      void GlobalSetUniform1f(const string&, GLfloat);
+      void SetUniform3f(const string&, const string&, const vector<GLfloat>&);
+      void SetUniform1fv(const string&, const string&, GLsizei, GLfloat*);
+      void SetUniform2fv(const string&, const string&, GLsizei, GLfloat*);
+      GLhandleARB LoadShader(const string&);
+      void UseShader(const string&);
+      void UseShader(const GLhandleARB&);
+      int GetAttribLocation(const string&, const string&);
+      int GetAttribLocation(const GLhandleARB&, const string&);
+      void BindAttribLocation(const GLhandleARB&, GLuint, const string&);
+      GLhandleARB CurrentShader();
       void ForgetCurrent();
       void SetShadow(bool, bool);
       void ReloadAll(bool reload = true);
@@ -57,12 +59,12 @@ class Shader
    private:
       GLhandleARB CreatePixelShader();
       GLhandleARB CreateVertexShader();
-      void InitShader(GLhandleARB, string);
+      void InitShader(GLhandleARB, const string&);
       GLhandleARB CreateProgram();
       void AttachShader(GLhandleARB, GLhandleARB);
       void LinkProgram(GLhandleARB);
       
-      string currshader;
+      GLhandleARB currshader;
       map<string, GLhandleARB> programs;
       bool shadows, softshadows;
 };

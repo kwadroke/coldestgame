@@ -156,13 +156,24 @@ float* Vector3::array(float *output)
 
 void Vector3::transform(const GLfloat matrix[16])
 {
-   float oldx, oldy, oldz;
-   oldx = x;
-   oldy = y;
-   oldz = z;
+   float oldx = x;
+   float oldy = y;
+   float oldz = z;
    x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz + matrix[12];
    y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz + matrix[13];
    z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz + matrix[14];
+}
+
+
+// Intended for use in situations like normal transformation where translation doesn't matter
+void Vector3::transform3(const GLfloat matrix[16])
+{
+   float oldx = x;
+   float oldy = y;
+   float oldz = z;
+   x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz;
+   y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz;
+   z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz;
 }
 
 
@@ -205,30 +216,6 @@ void Vector3::translate(float xt, float yt, float zt)
    x += xt;
    y += yt;
    z += zt;
-}
-
-
-void Vector3::transform4(const GLfloat matrix[16])
-{
-   float oldx, oldy, oldz, w;
-   oldx = x;
-   oldy = y;
-   oldz = z;
-   x = matrix[0] * oldx + matrix[4] * oldy + matrix[8] * oldz;// + matrix[12];
-   y = matrix[1] * oldx + matrix[5] * oldy + matrix[9] * oldz;// + matrix[13];
-   z = matrix[2] * oldx + matrix[6] * oldy + matrix[10] * oldz;// + matrix[14];
-   w = matrix[3] * oldx + matrix[7] * oldy + matrix[11] * oldz;// + matrix[15];
-   
-   /*x = matrix[0] * oldx + matrix[1] * oldy + matrix[2] * oldz;// + matrix[12];
-   y = matrix[4] * oldx + matrix[5] * oldy + matrix[6] * oldz;// + matrix[13];
-   z = matrix[8] * oldx + matrix[9] * oldy + matrix[10] * oldz;// + matrix[14];
-   w = matrix[12] * oldx + matrix[13] * oldy + matrix[14] * oldz;// + matrix[15];*/
-   
-   if (w < .0001) return; // Div by zero bad:-)
-   x /= w;
-   y /= w;
-   z /= w;
-   
 }
 #endif
 

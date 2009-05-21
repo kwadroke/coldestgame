@@ -25,7 +25,7 @@ int Material::nummats = 0;
 
 #ifndef DEDICATED
 Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 0.f), ambient(4, 0.f), specular(4, 0.f), shininess(0.f),
-                   texid(8, 0), texfilename(8, ""), shader(""), texman(&tm), shaderhand(&s), id(nummats), cullface(true), doalphatest(false),
+                   texid(8, 0), texfilename(8, ""), shader(""), shaderid(0), texman(&tm), shaderhand(&s), id(nummats), cullface(true), doalphatest(false),
                    alphatocoverage(false), additive(false), depthtest(true), depthwrite(true), noshadowcull(false), alphatest(0.f)
 {
    ifstream check(filename.c_str());
@@ -97,10 +97,7 @@ void Material::Use() const
    for (int i = 0; i < 6; ++i) // At this time, textures 7 and 8 are reserved for shadowmaps
    {
       texman->texhand->ActiveTexture(i);
-      if (texfilename[i] != "")
-         texman->BindTexture(texfilename[i]);
-      else
-         texman->texhand->BindTexture(texid[i]);
+      texman->texhand->BindTexture(texid[i]);
    }
 
    texman->texhand->ActiveTexture(0);
@@ -163,10 +160,7 @@ void Material::Use() const
 void Material::UseTextureOnly() const
 {
 #ifndef DEDICATED
-   if (texfilename[0] != "")
-      texman->BindTexture(texfilename[0]);
-   else
-      texman->texhand->BindTexture(texid[0]);
+   texman->texhand->BindTexture(texid[0]);
 
    // Also do face culling so we can render only back faces for shadowing
    if (cullface && !noshadowcull)

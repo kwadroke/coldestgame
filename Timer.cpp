@@ -20,7 +20,7 @@
 
 #include "Timer.h"
 
-Timer::Timer()
+Timer::Timer() : starttick(0)
 {
 }
 
