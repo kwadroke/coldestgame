@@ -31,7 +31,7 @@
               leftclick="refreshservers"/>
       <Button x="320" y="150" width="100" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
             leftclick="connectip"/>
-      <LineEdit x="520" y="166" width="380" height="24" text="www.nemebean.com:12012" name="servername"
+      <LineEdit x="520" y="166" width="380" height="24" text="www.nemebean.com" name="servername"
                normal="textures/buttonnorm.png"
                hover="textures/buttonhover.png"/>
    </Layout>
