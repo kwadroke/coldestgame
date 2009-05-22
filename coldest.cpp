@@ -26,7 +26,11 @@
 #include "globals.h"
 #include "renderdefs.h"
 #include "netdefs.h"
+#ifndef _WIN32
+// I hate Windows so much...boost::filesystem is apparently broken with STLPort,
+// and the Visual C++ STL performance is terrible compared to STLPort for me
 #include <boost/filesystem.hpp>
+#endif
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -139,8 +143,13 @@ void CreateAppDir()
    else
       userpath += ".coldest/";
    
+#ifndef _WIN32
    if (!boost::filesystem::is_directory(userpath))
       boost::filesystem::create_directory(userpath);
+#else
+   // This will fail most of the time because the directory already exists, but oh well.
+   CreateDirectory(userpath.c_str(), NULL);
+#endif
 }
 
 
@@ -1086,8 +1095,13 @@ bool GUIEventHandler(SDL_Event &event)
                   int num = 0;
                   string filename;
                   bool finished = false;
+#ifndef _WIN32
                   if (!boost::filesystem::is_directory(userpath + "screenshots/"))
                      boost::filesystem::create_directory(userpath + "screenshots/");
+#else
+                  string screenpath = userpath + "screenshots/";
+                  CreateDirectory(screenpath.c_str(), NULL);
+#endif
                   while (!finished)
                   {
                      string padded = PadNum(num, 5);
