@@ -64,9 +64,6 @@ void Repaint()
       // causing problems ATM so it stays.
       gui[chat]->visible = true;
       
-      // Update any animated objects
-      Animate();
-      
       if (shadows)
       {
          Vector3 rots = lights.GetRots(0);
@@ -216,6 +213,12 @@ void Repaint()
    } // if !mainmenu.visible
    else
    {
+      // Make sure materials are loaded.  Otherwise we have a long delay on the first spawn.
+      // Note that LoadMaterials is a very cheap call if the materials have already been loaded
+      // so it shouldn't be a problem to always do this.
+      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+         i->LoadMaterials();
+      
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       resman.shaderman.UseShader("none");
       gui[chat]->visible = false;
