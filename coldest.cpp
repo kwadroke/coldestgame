@@ -786,6 +786,9 @@ void MainLoop()
          UpdatePlayer();
       SDL_mutexV(clientmutex);
       
+      // Update any animated objects
+      Animate();
+      
       // update the screen
       Repaint();
 
@@ -1896,7 +1899,7 @@ void UpdateServerList()
 
 void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
-   if (!p.spawned)
+   if (!p.spawned || p.unit == numunits)
       return;
    
    locks.Write(ml);
