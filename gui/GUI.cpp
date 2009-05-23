@@ -372,6 +372,7 @@ void GUI::InitFromFile(string filename)
       else
       {
          logout << "Error getting document object" << endl;
+         logout << filename << endl;
       }
       // Cleanup
       delete parser;
