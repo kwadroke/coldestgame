@@ -196,7 +196,7 @@ int Server(void* dummy)
    locks.Register(servermeshes);
    if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
-      logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "Server SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    ServerLoadMap();
@@ -889,7 +889,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
    
    if (!(broadcastsock = SDLNet_UDP_Open(0)))
    {
-      logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "Broadcast SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
    
