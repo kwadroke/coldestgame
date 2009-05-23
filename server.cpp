@@ -1431,20 +1431,16 @@ int ServerInput(void* dummy)
    // we try to run somewhere that stdin isn't fd 0 then it will still just work
    cinfd[0].fd = fileno(stdin);
    cinfd[0].events = POLLIN;
-#else
-   fd_set readfds;
-   timeval timeout;
-   FD_ZERO(&readfds);
-   FD_SET(fileno(stdin), readfds);
-   timeout.tv_sec = 1;
-   timeout.tv_usec = 0;
 #endif
    while (running)
    {
 #ifndef WIN32
       if (poll(cinfd, 1, 1000))
 #else
-      if (select(1, &readfds, NULL, NULL, timeout))
+      // This is problematic because input on Windows is not line-buffered so this will return
+      // even if getline may block.  Not fixing it for the moment though.
+      HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
+      if (WaitForSingleObject(h, 0) == WAIT_OBJECT_0)
 #endif
       {
          getline(cin, command);

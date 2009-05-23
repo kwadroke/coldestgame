@@ -119,7 +119,7 @@ void Connect()
 
 void ConnectToIp()
 {
-   GUI* servname = gui[mainmenu]->GetWidget("servername");
+   GUI* servname = gui[serverbrowser]->GetWidget("servername");
    string wholeaddr = servname->text;
    string serveraddr, serverport = "12010";
    if (wholeaddr.find(":") != string::npos)
@@ -144,6 +144,8 @@ void ConnectToIp()
 
 void Host()
 {
+   if (server) // Starting two servers == BAD
+      return;
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
    console.Parse("set serveraddr localhost", false);
@@ -160,7 +162,12 @@ void Join()
 
 void Resume()
 {
-   ShowGUI(loadoutmenu);
+   SDL_mutexP(clientmutex);
+   if (player[0].spawned)
+      gui[mainmenu]->visible = false;
+   else
+      ShowGUI(loadoutmenu);
+   SDL_mutexV(clientmutex);
 }
 
 

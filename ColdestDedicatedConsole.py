@@ -6,6 +6,7 @@ import subprocess
 import select
 import os, signal
 import sys
+import platform
 
 class ColdestDedicatedConsole(QtGui.QDialog):
    def __init__(self, parent=None):
@@ -16,6 +17,11 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       global looptimer
       global server
       global inbox, output
+      global win32
+      if platform.system() == "Windows":
+         win32 = True
+      else:
+         win32 = False
       looptimer = QtCore.QTimer()
       looptimer.setInterval(500)
       self.connect(looptimer, QtCore.SIGNAL('timeout()'), self.mainloop)
@@ -67,6 +73,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       
    def closeEvent(self, event):
       global server, output
+      global win32
       output.append("\nEnding server\n")
       server.stdin.write("quit\n")
       server.stdin.flush()
@@ -74,22 +81,29 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       time.sleep(1)
       if server.poll() == None:
          print "Tired of waiting, killing server"
-         os.kill(server.pid, signal.SIGKILL)
+         if not win32:
+            os.kill(server.pid, signal.SIGKILL)
+         else:
+            import win32api
+            handle = win32api.OpenProcess(1, 0, server.pid)
+            win32api.TerminateProcess(handle, )
       event.accept()
       
       
    def mainloop(self):
       global server, output
+      global win32
       print server.poll()
       if server.poll() != None:
          sys.exit(0)
       # Warning: not portable to Windows
-      poller = select.poll()
-      poller.register(server.stdout)
-      while True:
-         event = poller.poll(0)
-         if not len(event) or not (event[0][1] & select.POLLIN):
-            break
-         servout = server.stdout.readline()
-         output.insertPlainText(servout)
+      if not win32:
+         poller = select.poll()
+         poller.register(server.stdout)
+         while True:
+            event = poller.poll(0)
+            if not len(event) or not (event[0][1] & select.POLLIN):
+               break
+            servout = server.stdout.readline()
+            output.insertPlainText(servout)
       
