@@ -163,8 +163,8 @@ void Join()
 void Resume()
 {
    SDL_mutexP(clientmutex);
-   if (player[0].spawned)
-      gui[mainmenu]->visible = false;
+   if (player[servplayernum].spawned)
+      ShowGUI(hud);
    else
       ShowGUI(loadoutmenu);
    SDL_mutexV(clientmutex);
