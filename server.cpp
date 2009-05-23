@@ -1031,7 +1031,6 @@ int ServerSend(void* dummy)  // Thread for sending updates
             
             // Resend to just master server
             SDLNet_ResolveHost(&bcpack.addr, console.GetString("master").c_str(), 12011);
-            logout << AddressToDD(bcpack.addr.host) << ":" << SDLNet_Read16(&bcpack.addr.port) << endl;
             bcpack.Send(servoutpack, servsock);
             
             SDL_mutexV(servermutex);
