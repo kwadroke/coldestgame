@@ -1023,13 +1023,15 @@ int ServerSend(void* dummy)  // Thread for sending updates
             bc.host = INADDR_BROADCAST;
             SDLNet_Write16(12011, &(bc.port));
             Packet bcpack(&bc);
+            bcpack.sendinterval = 0;
             bcpack << "a\n";
             bcpack << servsendpacketnum << eol;
             bcpack << console.GetString("serverport") << eol;
             bcpack.Send(servoutpack, broadcastsock);
             
             // Resend to just master server
-            SDLNet_ResolveHost(&bcpack.addr, console.GetString("master").c_str(), 12011); 
+            SDLNet_ResolveHost(&bcpack.addr, console.GetString("master").c_str(), 12011);
+            logout << AddressToDD(bcpack.addr.host) << ":" << SDLNet_Read16(&bcpack.addr.port) << endl;
             bcpack.Send(servoutpack, servsock);
             
             SDL_mutexV(servermutex);
