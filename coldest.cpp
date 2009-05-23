@@ -57,7 +57,7 @@ void Debug()
 }
 
 
-#ifndef WIN32
+#if !defined(WIN32) || defined(DEDICATED)
 int main(int argc, char* argv[])
 #else
 int APIENTRY WinMain(HINSTANCE hInstance,
@@ -79,7 +79,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    InitGlobals();
    initialized = true;
    
-#ifndef _WIN32
+#if !defined(_WIN32) || defined(DEDICATED)
    if (argc < 2)
 #else
    // This is an overly simplistic command line handler, but for the moment it suffices
@@ -503,6 +503,7 @@ void SetupSDL()
    
    SDL_ShowCursor(1);
    //SDL_WM_GrabInput(SDL_GRAB_ON);
+#endif
    
    if (SDLNet_Init() == -1)
    {
@@ -511,7 +512,6 @@ void SetupSDL()
    }
    
    atexit(SDLNet_Quit);
-#endif
 }
 
 
@@ -1170,6 +1170,7 @@ bool GUIEventHandler(SDL_Event &event)
    
    return eatevent;
 #endif
+   return false;
 }
 
 
@@ -2436,6 +2437,7 @@ bool PrimaryGUIVisible()
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
          !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible);
 #endif
+   return false;
 }
 
 
