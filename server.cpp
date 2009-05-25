@@ -871,9 +871,11 @@ int ServerSend(void* dummy)  // Thread for sending updates
    Uint32 lastnettick = SDL_GetTicks();
    Uint32 currnettick = 0;
    short int pingtick = 0;
+   size_t sentbytes = 0, servbps;
    UDPsocket broadcastsock;
-   Timer frametimer;
+   Timer frametimer, sentbytestimer;
    frametimer.start();
+   sentbytestimer.start();
    
    setsighandler();
    
@@ -990,6 +992,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             occup << "u\n";
             occup << servsendpacketnum << eol;
             occup << servfps << eol;
+            occup << servbps << eol;
             for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
@@ -1044,6 +1047,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          if (i->sendtick <= currnettick)
          {
             i->Send(servoutpack, servsock);
+            sentbytes += i->data.length();
             if (!i->ack || i->attempts > 5000) // Non-ack packets get sent once and then are on their own
             {
                i = servqueue.erase(i);
@@ -1051,6 +1055,13 @@ int ServerSend(void* dummy)  // Thread for sending updates
             }
          }
          ++i;
+      }
+      
+      if (sentbytestimer.elapsed() > 1000)
+      {
+         servbps = (size_t)((float)sentbytes / (float)sentbytestimer.elapsed() * 1000.f);
+         sentbytes = 0;
+         sentbytestimer.start();
       }
       SDL_mutexV(servermutex);
       //t.stop();

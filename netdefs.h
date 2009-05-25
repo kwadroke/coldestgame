@@ -58,6 +58,7 @@ extern set<unsigned long> killsreceived;
 extern unsigned long lastsyncpacket;
 extern tsint lasthit;
 extern tsint serverfps;
+extern tsint serverbps;
 extern deque<string> killmessages;
 extern tsint killschanged;
 

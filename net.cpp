@@ -487,9 +487,11 @@ int NetListen(void* dummy)
             {
                oppnum = 0;
                
-               long tempfps;
-               get >> tempfps;
-               serverfps = tempfps;
+               long temp;
+               get >> temp;
+               serverfps = temp;
+               get >> temp;
+               serverbps = temp;
                get >> oppnum;
                short getunit, getteam;
                int getkills, getdeaths, getsalvage, getspawntimer;

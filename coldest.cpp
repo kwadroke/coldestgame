@@ -913,6 +913,8 @@ void GUIUpdate()
    
    GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
    servfps->text = "Server FPS: " + ToString(serverfps);
+   GUI* bpslabel = gui[statsdisp]->GetWidget("serverbps");
+   bpslabel->text = "Server BPS: " + ToString(serverbps);
    
    if (gui[mainmenu]->visible)
    {

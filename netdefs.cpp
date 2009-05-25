@@ -42,5 +42,6 @@ set<unsigned long> killsreceived;
 unsigned long lastsyncpacket;
 tsint lasthit;
 tsint serverfps;
+tsint serverbps;
 deque<string> killmessages;
 tsint killschanged;
