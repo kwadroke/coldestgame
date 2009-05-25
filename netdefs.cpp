@@ -20,7 +20,7 @@
 
 #include "netdefs.h"
 
-tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync;
+tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;
 unsigned long recpacketnum, ackpack;
 IDGen sendpacketnum;
 set<unsigned long> partids;

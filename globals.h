@@ -117,5 +117,7 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData*, Meshlist&, ObjectKDTree&
 void RegenFBOList();
 PlayerData* PlayerFromMesh(Mesh*, vector<PlayerData>&, Meshlist::iterator);
 void StartBGMusic();
+bool NearSpawn(PlayerData&, vector<SpawnPointData>&);
+vector<SpawnPointData> GetSpawns(vector<Item>&);
 
 #endif

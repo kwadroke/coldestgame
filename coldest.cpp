@@ -147,7 +147,8 @@ void CreateAppDir()
    if (!boost::filesystem::is_directory(userpath))
       boost::filesystem::create_directory(userpath);
 #else
-   // This will fail most of the time because the directory already exists, but oh well.
+   // This will fail most of the time because the directory already/* Gets started as a separate thread whenever it is requested to start
+   a server from the main progam file.*/ exists, but oh well.
    CreateDirectory(userpath.c_str(), NULL);
 #endif
 }
@@ -1210,8 +1211,15 @@ void GameEventHandler(SDL_Event &event)
             }
             else if (event.key.keysym.sym == keys.keyloadout)
             {
-               gui[loadoutmenu]->visible = true;
-               gui[hud]->visible = false;
+               vector<SpawnPointData> allspawns = spawnpoints;
+               vector<SpawnPointData> itemspawns = GetSpawns(items);
+               allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
+               if (!player[0].spawned || NearSpawn(player[0], allspawns))
+               {
+                  gui[loadoutmenu]->visible = true;
+                  gui[hud]->visible = false;
+                  sendloadout = 1;
+               }
             }
             else if (event.key.keysym.sym == keys.keyuseitem)
             {
@@ -2485,6 +2493,37 @@ void RegenFBOList()
    }
    locks.EndWrite(meshes);
 #endif
+}
+
+
+bool NearSpawn(PlayerData& p, vector<SpawnPointData>& allspawns)
+{
+   for (size_t i = 0; i < allspawns.size(); ++i)
+   {
+      if (p.pos.distance(allspawns[i].position) < 200.f && allspawns[i].team == p.team)
+      {
+         return true;
+      }
+   }
+   return false;
+}
+
+
+vector<SpawnPointData> GetSpawns(vector<Item>& allitems)
+{
+   vector<SpawnPointData> retval;
+   for (size_t i = 0; i < allitems.size(); ++i)
+   {
+      if (allitems[i].Type() == Item::SpawnPoint)
+      {
+         SpawnPointData sp;
+         sp.name = "Spawn " + ToString(i);
+         sp.position = allitems[i].mesh->GetPosition();
+         sp.team = allitems[i].team;
+         retval.push_back(sp);
+      }
+   }
+   return retval;
 }
 
 
