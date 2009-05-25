@@ -65,6 +65,7 @@ void GUI::Init(GUI* p, TextureManager* tm)
    yoff = p->y + p->yoff;
    name = "";
    leftclickaction = "";
+   doubleclickaction = "";
    state = 0;
    parent = p;
    texman = tm;
@@ -82,6 +83,7 @@ void GUI::Init(GUI* p, TextureManager* tm)
    fontscale = 12.f / basefontsize; // Default font size is 12
    text = oldtext = "";
    textcolor.r = textcolor.g = textcolor.b = textcolor.unused = 255;
+   lastclick = 0;
    for (size_t i = 0; i < numdefaults; ++i)
       defaulttextures.push_back(vector<string>());
    for (int i = 0; i < 3; ++i)
@@ -251,11 +253,21 @@ void GUI::ProcessEvent(SDL_Event* event)
             state = Hover;
             if (event->button.button == SDL_BUTTON_LEFT)
             {
-               if (sounds[LeftSound] != "")
-                  soundsource->Play(resman.soundman.GetBuffer(sounds[LeftSound]));
-               LeftClick(event);
-               GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
-               DoAction(leftclickaction);
+               Uint32 currtick = SDL_GetTicks();
+               if (currtick - lastclick > 200)
+               {
+                  if (sounds[LeftSound] != "")
+                     soundsource->Play(resman.soundman.GetBuffer(sounds[LeftSound]));
+                  LeftClick(event);
+                  GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
+                  DoAction(leftclickaction);
+                  lastclick = currtick;
+               }
+               else
+               {
+                  logout << "Doing" << endl;
+                  DoAction(doubleclickaction);
+               }
             }
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
@@ -496,6 +508,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
          newwidget->xmargin = atof(ReadAttribute(current, XSWrapper("xmargin")).c_str());
          newwidget->ymargin = atof(ReadAttribute(current, XSWrapper("ymargin")).c_str());
          newwidget->leftclickaction = ReadAttribute(current, XSWrapper("leftclick"));
+         newwidget->doubleclickaction = ReadAttribute(current, XSWrapper("doubleclick"));
          newwidget->valuechanged = ReadAttribute(current, XSWrapper("valuechanged"));
          
          string val = ReadAttribute(current, XSWrapper("visible"));

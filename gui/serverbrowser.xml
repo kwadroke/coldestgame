@@ -36,7 +36,8 @@
                hover="textures/buttonhover.png"/>
    </Layout>
    <Table x="100" y="200" width="800" height="700" name="serverlist" columns="2" colwidths="475|195|35|35|35" rowheight="25"
-          normal="textures/buttonnormsquare.png"/>
+          normal="textures/buttonnormsquare.png"
+          doubleclick="connect"/>
    
    <Button x="100" y="910" width="200" height="50" text="Main Menu" align="center"
            leftclick="showmain"/>
