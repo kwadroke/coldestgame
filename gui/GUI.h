@@ -107,6 +107,7 @@ class GUI
       Alignment align;
       string leftclickaction, rightclickaction, valuechanged;
       string leftdownaction, rightdownaction;
+      string doubleclickaction;
       SDL_Color textcolor;
    
    protected:
@@ -165,6 +166,7 @@ class GUI
       vector<GLuint> texids;
       TextureManager *texman;
       TTF_Font* font;
+      Uint32 lastclick;
       
 };
 
