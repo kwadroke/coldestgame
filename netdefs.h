@@ -36,7 +36,7 @@
 
 const int netver = 1;
 
-extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync;
+extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;
 extern unsigned long recpacketnum, ackpack;
 extern IDGen sendpacketnum;
 extern set<unsigned long> partids;

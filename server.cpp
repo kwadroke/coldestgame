@@ -17,10 +17,6 @@
 // Copyright 2008, 2009 Ben Nemec
 // @End License@
 
-
-/* Gets started as a separate thread whenever it is requested to start
-   a server from the main progam file.*/
-
 #include <list>
 #include <queue>
 #include <sstream>
@@ -556,18 +552,8 @@ int ServerListen(void* dummy)
             get >> spawnpointreq.z;
             
             vector<SpawnPointData> allspawns = spawnpoints;
-            for (size_t i = 0; i < serveritems.size(); ++i)
-            {
-               if (serveritems[i].Type() == Item::SpawnPoint && serveritems[i].team == serverplayers[oppnum].team)
-               {
-                  string name = "Spawn " + ToString(i);
-                  SpawnPointData sp;
-                  sp.name = name;
-                  sp.position = serveritems[i].mesh->GetPosition();
-                  sp.team = serveritems[i].team;
-                  allspawns.push_back(sp);
-               }
-            }
+            vector<SpawnPointData> itemspawns = GetSpawns(serveritems);
+            allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
             for (size_t i = 0; i < allspawns.size(); ++i)
             {
                if (spawnpointreq.distance(allspawns[i].position) < 1.f && allspawns[i].team == serverplayers[oppnum].team)
