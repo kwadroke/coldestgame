@@ -409,6 +409,6 @@ void Console::Action(const string& action)
    }
    else if (action == "exit" || action == "quit")
    {
-      Quit();
+      running = false;
    }
 }
