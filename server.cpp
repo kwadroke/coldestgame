@@ -733,6 +733,8 @@ int ServerListen(void* dummy)
             {
                AddItem(serverplayers[oppnum].item, oppnum);
                serverplayers[oppnum].item.usesleft--;
+               if (serverplayers[oppnum].item.Type() == Item::SpawnPoint)
+                  serverplayers[oppnum].item = Item(Item::NoItem, servermeshes);
             }
             SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
@@ -838,6 +840,19 @@ int ServerListen(void* dummy)
                logout << "Password incorrect" << endl;
             }
             SDL_mutexV(servermutex);
+            Ack(packetnum, inpack);
+         }
+         else if (packettype == "L") // Loadout request
+         {
+            vector<SpawnPointData> allspawns = spawnpoints;
+            vector<SpawnPointData> itemspawns = GetSpawns(items);
+            allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
+            if (serverplayers[oppnum].spawned && NearSpawn(serverplayers[oppnum], allspawns))
+            {
+               serverplayers[oppnum].salvage += CalculatePlayerWeight(serverplayers[oppnum]);
+               serverplayers[oppnum].Kill();
+               serverplayers[oppnum].spawntimer = console.GetInt("respawntime");
+            }
             Ack(packetnum, inpack);
          }
       }
@@ -1253,14 +1268,6 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
 void ServerUpdatePlayer(int i)
 {
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
-   // Update spawn timer
-   serverplayers[i].spawntimer -= ticks;
-   if (serverplayers[i].spawntimer < 0)
-      serverplayers[i].spawntimer = 0;
-   
-   if (!serverplayers[i].spawned)
-      return;
-   
    // Cooling
    float coolrate = .01f;
    coolrate *= serverplayers[i].item.CoolMult();
@@ -1270,6 +1277,14 @@ void ServerUpdatePlayer(int i)
    serverplayers[i].temperature -= ticks * coolrate;
    if (serverplayers[i].temperature < 0)
       serverplayers[i].temperature = 0;
+   
+   // Update spawn timer
+   serverplayers[i].spawntimer -= ticks;
+   if (serverplayers[i].spawntimer < 0)
+      serverplayers[i].spawntimer = 0;
+   
+   if (!serverplayers[i].spawned)
+      return;
    
    // Give them the benefit of the doubt and cool them before calculating overheating
    if (serverplayers[i].temperature > 100.f && serverplayers[i].spawned && console.GetBool("overheat"))
@@ -1684,7 +1699,7 @@ void KillPlayer(const int i, const int killer)
    serverplayers[i].Kill();
    serverplayers[i].spawntimer = console.GetInt("respawntime");
    SendKill(i, killer);
-   //SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
+   SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
 }
 
 

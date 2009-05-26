@@ -225,6 +225,17 @@ int NetSend(void* dummy)
          SDL_mutexV(netmutex);
          needsync = false;
       }
+      if (sendloadout)
+      {
+         Packet p(&addr);
+         p.ack = sendpacketnum;
+         p << "L\n";
+         p << p.ack << eol;
+         SDL_mutexP(netmutex);
+         sendqueue.push_back(p);
+         SDL_mutexV(netmutex);
+         sendloadout = 0;
+      }
       
       
       SDL_mutexP(netmutex);
@@ -568,7 +579,7 @@ int NetListen(void* dummy)
             }
             HandleAck(packetnum);
          }
-         else if (packettype == "f") // Server was full or out netcode doesn't match theirs
+         else if (packettype == "f") // Server was full or our netcode doesn't match theirs
          {
             logout << "Error: Server is full or netcode version mismatch\n";
             SDL_mutexP(clientmutex);
