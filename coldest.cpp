@@ -147,8 +147,7 @@ void CreateAppDir()
    if (!boost::filesystem::is_directory(userpath))
       boost::filesystem::create_directory(userpath);
 #else
-   // This will fail most of the time because the directory already/* Gets started as a separate thread whenever it is requested to start
-   a server from the main progam file.*/ exists, but oh well.
+   // This will fail most of the time because the directory already exists, but oh well.
    CreateDirectory(userpath.c_str(), NULL);
 #endif
 }
