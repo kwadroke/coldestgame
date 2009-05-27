@@ -55,7 +55,10 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       output.setReadOnly(True)
       
       # Start the actual server process
-      server = subprocess.Popen("./server", stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+      if not win32:
+         server = subprocess.Popen("./server", stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+      else:
+         server = subprocess.Popen("Dedicated.exe", stdin=subprocess.PIPE, stdout=None)
       
       self.setLayout(layout)
       self.resize(500, 300)
@@ -84,9 +87,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
          if not win32:
             os.kill(server.pid, signal.SIGKILL)
          else:
-            import win32api
-            handle = win32api.OpenProcess(1, 0, server.pid)
-            win32api.TerminateProcess(handle, )
+            server.terminate() # Best we can do on Windows
       event.accept()
       
       
@@ -96,7 +97,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       print server.poll()
       if server.poll() != None:
          sys.exit(0)
-      # Warning: not portable to Windows
+      
       if not win32:
          poller = select.poll()
          poller.register(server.stdout)
@@ -106,4 +107,16 @@ class ColdestDedicatedConsole(QtGui.QDialog):
                break
             servout = server.stdout.readline()
             output.insertPlainText(servout)
+      else:
+         # We read from console.log directly because Windows doesn't support polling
+         # stdout and we don't want to block (and I haven't found a good way around it yet)
+         appdatapath = os.environ('APPDATA') # Hopefully this will always be right
+         coldestpath = os.path.join(".coldest", "console.log")
+         logpath = os.path.join(appdatapath, coldestpath)
+         if not os.path.exists(logpath):
+            return # Guess we get no output - input should still work though
+         output.clear()
+         logfile = open(logpath)
+         for line in logfile:
+            output.insertPlainText(line)
       
