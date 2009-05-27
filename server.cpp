@@ -1444,6 +1444,8 @@ int ServerInput(void* dummy)
    // we try to run somewhere that stdin isn't fd 0 then it will still just work
    cinfd[0].fd = fileno(stdin);
    cinfd[0].events = POLLIN;
+#else
+   HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
 #endif
    while (running)
    {
@@ -1451,8 +1453,11 @@ int ServerInput(void* dummy)
       if (poll(cinfd, 1, 1000))
 #else
       // This is problematic because input on Windows is not line-buffered so this will return
-      // even if getline may block.  Not fixing it for the moment though.
-      HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
+      // even if getline may block.  I haven't found a good way to fix it, so for the moment
+      // I just strongly suggest only running the server from the Python frontend, which does
+      // line buffer input.  This does work okay as long as the user doesn't enter characters
+      // without pressing enter, and then try to end the server another way (say a remote
+      // console command), in which case we'll still be waiting for the stdin EOL and hang.
       if (WaitForSingleObject(h, 0) == WAIT_OBJECT_0)
 #endif
       {

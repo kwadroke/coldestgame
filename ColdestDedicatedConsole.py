@@ -110,13 +110,15 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       else:
          # We read from console.log directly because Windows doesn't support polling
          # stdout and we don't want to block (and I haven't found a good way around it yet)
-         appdatapath = os.environ('APPDATA') # Hopefully this will always be right
+         appdatapath = os.getenv("APPDATA") # Hopefully this will always be right
          coldestpath = os.path.join(".coldest", "console.log")
          logpath = os.path.join(appdatapath, coldestpath)
          if not os.path.exists(logpath):
             return # Guess we get no output - input should still work though
-         output.clear()
          logfile = open(logpath)
+         alllines = ""
          for line in logfile:
-            output.insertPlainText(line)
-      
+            alllines += line
+            if len(alllines) > len(output.toPlainText()):
+               output.insertPlainText(line)
+		 
