@@ -38,6 +38,11 @@
 #include <shlobj.h>
 #endif
 
+// Notes: Currently seems to be detrimental to performance, will need updates to
+// work if it is needed in the future because these worker threads have been
+// repurposed to thread VBO updates in the render code.
+//#define THREADANIM
+
 /* Do anything function that can be handy for debugging various things
    in a more limited context than the entire engine.*/
 void Debug()
@@ -225,6 +230,7 @@ void InitGlobals()
    console.Parse("set syncgrace 15", false);
    console.Parse("set maxanimdelay 100", false);
    console.Parse("set timeout 30", false);
+   console.Parse("set numthreads 2", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -308,6 +314,12 @@ void InitGlobals()
       console.Parse("setsave shadowres 1024", false);
    
    InitGUI();
+   
+   for (size_t i = 0; i < vboworkers.size(); ++i)
+   {
+      if (!vboworkers[i])
+         vboworkers[i] = VboWorkerPtr(new VboWorker());
+   }
 #endif
    InitUnits();
 }
@@ -1860,16 +1872,44 @@ void Animate()
    }
    additems.clear();
    
+   
    // Meshes
+#if defined(THREADANIM) && !defined(DEDICATED)
+   size_t workercount = meshes.size() / console.GetInt("numthreads");
+   size_t counter = 0, currworker = 0;
+   Meshlist::iterator workerstart = meshes.begin();
+#endif
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 30.f);
       size_t maxdelay = console.GetInt("maxanimdelay");
       if (i->updatedelay > maxdelay)
          i->updatedelay = maxdelay;
+#if defined(THREADANIM) && !defined(DEDICATED)
+      if (counter == workercount)
+      {
+         vboworkers[currworker]->Run(workerstart, i, player[0].pos);
+         if (currworker != (size_t)console.GetInt("numthreads") - 1)
+            workerstart = i;
+         ++currworker;
+         counter = 0;
+      }
+      ++counter;
+#else
       i->AdvanceAnimation(player[0].pos);
+#endif
    }
+#if defined(THREADANIM) && !defined(DEDICATED)
+   animworkers.back()->Run(workerstart, meshes.end(), player[0].pos);
+   
+   // Wait for worker threads to finish
+   for (size_t i = 0; i < animworkers.size(); ++i)
+   {
+      animworkers[i]->wait();
+   }
+#endif
    locks.EndWrite(meshes);
+   
    
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();
@@ -2013,6 +2053,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    }
    
    p.size = units[p.unit].size;
+   p.rendermesh->CalcBounds();
    
    for (size_t i = 0; i < numbodyparts; ++i)
    {

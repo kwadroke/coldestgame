@@ -82,6 +82,7 @@ class ObjectKDTree
       void setvertices(Vector3vec);
       void setfrustum(Vector3, Vector3, float, float, float, float);
       void setfrustum(Quadvec*);
+      bool infrustum(Mesh*);
       vector<Mesh*> getmeshes(const Vector3&, const float);
       vector<Mesh*> getmeshes(const Vector3&, const Vector3&, const float);
       list<Mesh*> getmeshes();
@@ -91,7 +92,6 @@ class ObjectKDTree
       int size();
       bool innode(Vector3, float);
       bool infrustum();
-      bool infrustum(Mesh*);
       void setretobjs(MeshSet*);
       void getmeshes(const Vector3&, const float, vector<Mesh*>&);
       void getmeshes(list<Mesh*>&);

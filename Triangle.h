@@ -60,6 +60,7 @@ class Triangle
       float maxdim;
       Vector3 midpoint;
       float radmod;
+      size_t id;
 
 };
 

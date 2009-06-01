@@ -56,7 +56,7 @@ class Mesh
       const Vector3 GetPosition() const;
       void Rotate(const Vector3&, bool movetris = false);
       const Vector3 GetRotation() const {return rots;}
-      void GenVbo();
+      void GenVbo(const int type = 0);
       void BindAttribs();
       void UnbindAttribs();
       void Render(Material* overridemat = NULL);
@@ -76,15 +76,16 @@ class Mesh
       void SetAnimation(const int);
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
       void ReadState(Vector3&, Vector3&, int&, int&, float&, float&);
-      float GetWidth(){UpdateTris(); return width;}
-      float GetHeight(){UpdateTris(); return height;}
-      float GetSize(){UpdateTris(); return size;}
+      float GetWidth(){return width;}
+      float GetHeight(){return height;}
+      float GetSize(){return size;}
       void SetGL();
       string GetFile() const{return basefile;}
       float GetAnimSpeed() const{return animspeed;}
       float GetScale() const{return scale;}
+      bool VboDirty() const{return updatevbo;}
       
-      void Begin() {next = 0; UpdateTris();}
+      void Begin() {next = 0;}
       bool HasNext() const {return next < tris.size();}
       Triangle& Next() {++next; return *tris[next - 1];}
       
@@ -108,14 +109,20 @@ class Mesh
       
       Uint32 updatedelay;
       
+      enum UpdateType{All, OnlyData, OnlyUpload};
+      
    private:
       void BindVbo();
       void ResetTriMaxDims();
+      void GenVboData();
+      void GenIboData();
+      void UploadVbo();
       
       TrianglePtrvec tris;
       TrianglePtrvec trantris; // Currently not used
       VertexPtrvec vertices;
       intvec vbosteps;
+      intvec minindex, maxindex;
       GLuint vbo;
       GLuint ibo;
       vector<VBOData> vbodata;
@@ -152,7 +159,7 @@ class Mesh
       
       bool glops;
       bool havemats;
-      bool updatevbo;
+      bool updatevbo, updateibo;
       string basefile;
       float scale;
       

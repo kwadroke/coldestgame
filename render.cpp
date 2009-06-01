@@ -26,9 +26,12 @@
 
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
+bool firstpass;
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 set<Mesh*> implist;
 set<Mesh*> visiblemeshes;
+
+#define THREADVBO
 
 void Repaint()
 {
@@ -54,6 +57,7 @@ void Repaint()
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    trislastframe = 0;
+   firstpass = true;
    SDL_mutexP(clientmutex);
    localplayer = player[0];
    SDL_mutexV(clientmutex);
@@ -344,17 +348,65 @@ void RenderObjects(const PlayerData& localplayer)
    UpdateFBO(localplayer);
    
    // Render all dynamic meshes (since they won't show up in the KDTree)
+#if defined(THREADVBO) && !defined(DEDICATED)
+   vector<Mesh*> dynmeshes;
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      if (i->dynamic)
+      if (i->dynamic && i->render)
+      {
+         dynmeshes.push_back(&(*i));
+      }
+   }
+   if (firstpass)
+   {
+      size_t workerstouse = console.GetInt("numthreads");
+      size_t workercount = dynmeshes.size() / workerstouse;
+      size_t counter = 0, currworker = 0;
+      vector<Mesh*>::iterator workerstart = dynmeshes.begin();
+      for (vector<Mesh*>::iterator i = dynmeshes.begin(); i != dynmeshes.end(); ++i)
+      {
+         if (counter == workercount)
+         {
+            vboworkers[currworker]->Run(workerstart, i);
+            workerstart = i;
+            ++currworker;
+            if (currworker == workerstouse - 1)
+               break;
+            counter = 0;
+         }
+         ++counter;
+      }
+      vboworkers[workerstouse - 1]->Run(workerstart, dynmeshes.end());
+      
+      // Wait for worker threads to finish
+      for (size_t i = 0; i < vboworkers.size(); ++i)
+      {
+         vboworkers[i]->wait();
+      }
+      firstpass = false;
+   }
+   // This part has to be done from this thread because it does OpenGL calls
+   for (vector<Mesh*>::iterator i = dynmeshes.begin(); i != dynmeshes.end(); ++i)
+   {
+      Mesh& curr = **i;
+      if (curr.VboDirty())
+         curr.GenVbo(Mesh::OnlyUpload);
+      if (kdtree.infrustum(&curr))
+         curr.Render(override);
+      trislastframe += curr.NumTris();
+   }
+#else
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      if (i->dynamic && kdtree.infrustum(&(*i)))
       {
          i->Render(override);
          trislastframe += i->NumTris();
       }
    }
+#endif
    locks.EndWrite(meshes);
    
-   impostormesh->GenVbo();
    impostormesh->Render(override);
    trislastframe += impostormesh->NumTris();
    
