@@ -21,7 +21,7 @@
 #include "Triangle.h"
 
 Triangle::Triangle() : v(VertexPtrvec(3)), material(NULL), collide(false),
-                   matrix(GraphicMatrix()), maxdim(-1.f), radmod(0.f)
+                   matrix(GraphicMatrix()), maxdim(-1.f), radmod(0.f), id(0)
 {
    for (size_t i = 0; i < 3; ++i)
       v[i] = VertexPtr(new Vertex());
@@ -39,10 +39,13 @@ ushortvec Triangle::GetIndices()
 
 bool Triangle::operator<(const Triangle& t) const
 {
-   return material < t.material;
+   if (material < t.material) return true;
+   if (material > t.material) return false;
+   return id < t.id;
 }
 
 
+// Not sure this is ever used...
 bool Triangle::operator>(const Triangle& t) const
 {
    return material > t.material;

@@ -403,6 +403,21 @@ void Console::Action(const string& action)
    {
       InitShaders();
    }
+   else if (action == "numthreads action")
+   {
+#ifndef DEDICATED
+      vboworkers.resize(GetInt("numthreads"));
+      // This will crash if done before SDL_Init
+      if (SDL_WasInit(SDL_INIT_VIDEO) & SDL_INIT_VIDEO)
+      {
+         for (size_t i = 0; i < vboworkers.size(); ++i)
+         {
+            if (!vboworkers[i])
+               vboworkers[i] = VboWorkerPtr(new VboWorker());
+         }
+      }
+#endif
+   }
    else if (action == "kill")
    {
       sendkill = true;

@@ -31,7 +31,7 @@ DEPEND = makedepend $(CXXFLAGS)
 
 VPATH = .:gui
 
-GENERAL = coldest.o Vector3.o GraphicMatrix.o Quaternion.o CollisionDetection.o\
+GENERAL = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		Particle.o ProceduralTree.o TextureHandler.o Hit.o Vertex.o\
 		Console.o server.o render.o IDGen.o Weapon.o Item.o util.o\
 		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
@@ -412,8 +412,8 @@ Bot.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 Bot.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
 Bot.o: gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 Bot.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
-Bot.o: gui/Button.h RWLock.h netdefs.h ParticleEmitter.h MeshCache.h KeyMap.h
-Bot.o: LockManager.h
+Bot.o: gui/Button.h RWLock.h VboWorker.h netdefs.h ParticleEmitter.h
+Bot.o: MeshCache.h KeyMap.h LockManager.h
 CollisionDetection.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 CollisionDetection.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 CollisionDetection.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -703,9 +703,9 @@ Console.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 Console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Console.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
-Console.o: ALSource.h gui/ProgressBar.h gui/Button.h RWLock.h netdefs.h
-Console.o: ServerInfo.h IDGen.h Packet.h globals.h ParticleEmitter.h
-Console.o: MeshCache.h KeyMap.h LockManager.h
+Console.o: ALSource.h gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h
+Console.o: netdefs.h ServerInfo.h IDGen.h Packet.h globals.h
+Console.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 FBO.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 FBO.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1061,8 +1061,8 @@ Item.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 Item.o: ALSource.h PlayerData.h Hit.h Weapon.h Console.h gui/TextArea.h
 Item.o: gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 Item.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
-Item.o: gui/Button.h RWLock.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-Item.o: MeshCache.h KeyMap.h LockManager.h
+Item.o: gui/Button.h RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h
+Item.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
 Light.o: Light.h Vector3.h glinc.h /usr/include/GL/glew.h
 Light.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Light.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -1335,8 +1335,8 @@ Material.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 Material.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 Material.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 Material.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
-Material.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-Material.o: LockManager.h
+Material.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+Material.o: MeshCache.h KeyMap.h LockManager.h
 Mesh.o: Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
 Mesh.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 Mesh.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1675,8 +1675,8 @@ MeshNode.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 MeshNode.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 MeshNode.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 MeshNode.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
-MeshNode.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-MeshNode.o: LockManager.h
+MeshNode.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+MeshNode.o: MeshCache.h KeyMap.h LockManager.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
 ObjectKDTree.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
@@ -1985,8 +1985,8 @@ Particle.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 Particle.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 Particle.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 Particle.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
-Particle.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-Particle.o: LockManager.h
+Particle.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+Particle.o: MeshCache.h KeyMap.h LockManager.h
 ParticleEmitter.o: ParticleEmitter.h Particle.h CollisionDetection.h
 ParticleEmitter.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ParticleEmitter.o: /usr/include/GL/glew.h /usr/include/GL/glu.h
@@ -2207,8 +2207,9 @@ ParticleEmitter.o: gui/XSWrapper.h util.h ALSource.h PlayerData.h Hit.h
 ParticleEmitter.o: Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h
 ParticleEmitter.o: gui/Table.h gui/TableItem.h gui/LineEdit.h
 ParticleEmitter.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h
-ParticleEmitter.o: Light.h gui/ProgressBar.h gui/Button.h RWLock.h netdefs.h
-ParticleEmitter.o: IDGen.h Packet.h MeshCache.h KeyMap.h LockManager.h
+ParticleEmitter.o: Light.h gui/ProgressBar.h gui/Button.h RWLock.h
+ParticleEmitter.o: VboWorker.h netdefs.h IDGen.h Packet.h MeshCache.h
+ParticleEmitter.o: KeyMap.h LockManager.h
 PlayerData.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
 PlayerData.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PlayerData.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -2419,8 +2420,9 @@ PlayerData.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 PlayerData.o: util.h ALSource.h Console.h gui/TextArea.h gui/GUI.h
 PlayerData.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 PlayerData.o: gui/Slider.h gui/Button.h renderdefs.h Light.h
-PlayerData.o: gui/ProgressBar.h gui/Button.h RWLock.h netdefs.h IDGen.h
-PlayerData.o: Packet.h ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
+PlayerData.o: gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h netdefs.h
+PlayerData.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
+PlayerData.o: LockManager.h
 PrimitiveOctree.o: PrimitiveOctree.h glinc.h /usr/include/GL/glew.h
 PrimitiveOctree.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 PrimitiveOctree.o: /usr/include/SDL/SDL_opengl.h
@@ -3422,9 +3424,9 @@ actions.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 actions.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 actions.o: util.h tsint.h Timer.h Hit.h Weapon.h Item.h Particle.h
 actions.o: CollisionDetection.h ObjectKDTree.h globals.h Console.h
-actions.o: renderdefs.h Light.h gui/Button.h RWLock.h netdefs.h IDGen.h
-actions.o: Packet.h ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
-actions.o: editor.h ProceduralTree.h StableRandom.h
+actions.o: renderdefs.h Light.h gui/Button.h RWLock.h VboWorker.h netdefs.h
+actions.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
+actions.o: LockManager.h editor.h ProceduralTree.h StableRandom.h
 actions.o: /usr/include/boost/tokenizer.hpp
 actions.o: /usr/include/boost/token_iterator.hpp
 actions.o: /usr/include/boost/iterator/iterator_adaptor.hpp
@@ -3825,8 +3827,8 @@ coldest.o: gui/XSWrapper.h util.h ALSource.h gui/ProgressBar.h gui/GUI.h
 coldest.o: ServerInfo.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 coldest.o: gui/ScrollView.h gui/Slider.h gui/Button.h gui/TextArea.h
 coldest.o: gui/Table.h gui/ComboBox.h globals.h Console.h renderdefs.h
-coldest.o: gui/Button.h RWLock.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-coldest.o: MeshCache.h KeyMap.h LockManager.h
+coldest.o: gui/Button.h RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h
+coldest.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
 coldest.o: /usr/include/boost/filesystem.hpp
 coldest.o: /usr/include/boost/filesystem/operations.hpp
 coldest.o: /usr/include/boost/filesystem/path.hpp
@@ -4236,8 +4238,8 @@ editor.o: ServerInfo.h /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h
 editor.o: Item.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
 editor.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
 editor.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
-editor.o: RWLock.h netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h
-editor.o: KeyMap.h LockManager.h
+editor.o: RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+editor.o: MeshCache.h KeyMap.h LockManager.h
 getmap.o: gui/ProgressBar.h gui/GUI.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -4443,8 +4445,8 @@ getmap.o: globals.h Particle.h ServerInfo.h /usr/include/SDL/SDL_net.h
 getmap.o: PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
 getmap.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 getmap.o: gui/Slider.h gui/Button.h renderdefs.h gui/Button.h RWLock.h
-getmap.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-getmap.o: LockManager.h editor.h
+getmap.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+getmap.o: MeshCache.h KeyMap.h LockManager.h editor.h
 globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 globals.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 globals.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -4651,8 +4653,8 @@ globals.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 globals.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 globals.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 globals.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
-globals.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-globals.o: LockManager.h
+globals.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+globals.o: MeshCache.h KeyMap.h LockManager.h
 logout.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -4921,8 +4923,8 @@ net.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 net.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 net.o: ALSource.h Console.h gui/TextArea.h renderdefs.h Light.h
-net.o: gui/ProgressBar.h gui/Button.h RWLock.h ParticleEmitter.h MeshCache.h
-net.o: KeyMap.h LockManager.h
+net.o: gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h ParticleEmitter.h
+net.o: MeshCache.h KeyMap.h LockManager.h
 netdefs.o: netdefs.h ServerInfo.h /usr/include/SDL/SDL_net.h
 netdefs.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 netdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -5195,8 +5197,9 @@ render.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 render.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 render.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 render.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
-render.o: gui/ProgressBar.h gui/Button.h RWLock.h netdefs.h IDGen.h Packet.h
-render.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
+render.o: gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h netdefs.h
+render.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
+render.o: LockManager.h
 renderdefs.o: renderdefs.h glinc.h /usr/include/GL/glew.h
 renderdefs.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 renderdefs.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -5405,7 +5408,7 @@ renderdefs.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 renderdefs.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 renderdefs.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
 renderdefs.o: util.h ALSource.h gui/ProgressBar.h gui/GUI.h gui/Button.h
-renderdefs.o: RWLock.h
+renderdefs.o: RWLock.h VboWorker.h
 server.o: /usr/include/poll.h /usr/include/sys/poll.h /usr/include/features.h
 server.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
 server.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
@@ -5613,8 +5616,8 @@ server.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 server.o: ALSource.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
 server.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
 server.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
-server.o: RWLock.h netdefs.h IDGen.h ParticleEmitter.h MeshCache.h KeyMap.h
-server.o: LockManager.h ServerState.h Bot.h
+server.o: RWLock.h VboWorker.h netdefs.h IDGen.h ParticleEmitter.h
+server.o: MeshCache.h KeyMap.h LockManager.h ServerState.h Bot.h
 settings.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 settings.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 settings.o: /usr/include/SDL/SDL_opengl.h /usr/include/SDL/SDL_config.h
@@ -5823,8 +5826,8 @@ settings.o: util.h ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 settings.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 settings.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 settings.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
-settings.o: netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-settings.o: LockManager.h gui/Slider.h gui/ComboBox.h
+settings.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+settings.o: MeshCache.h KeyMap.h LockManager.h gui/Slider.h gui/ComboBox.h
 tsint.o: tsint.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 tsint.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 tsint.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -6099,8 +6102,8 @@ gui/GUI.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 gui/GUI.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 gui/GUI.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 gui/GUI.o: gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
-gui/GUI.o: RWLock.h netdefs.h IDGen.h Packet.h ParticleEmitter.h MeshCache.h
-gui/GUI.o: KeyMap.h LockManager.h
+gui/GUI.o: RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+gui/GUI.o: MeshCache.h KeyMap.h LockManager.h
 gui/Layout.o: gui/Layout.h gui/GUI.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
 gui/ProgressBar.o: gui/ProgressBar.h gui/GUI.h

@@ -35,9 +35,8 @@ Vertex::Vertex() : norm(Vector3(0, 0, 1)), index(0)
 
 
 #ifndef INLINE_VERTEX
-void Vertex::GetVboData(VBOData* data)
+void Vertex::GetVboData(VBOData& vbodata, const bool dynamic)
 {
-   VBOData& vbodata = *data;
    vbodata.x = pos.x;
    vbodata.y = pos.y;
    vbodata.z = pos.z;
@@ -59,11 +58,14 @@ void Vertex::GetVboData(VBOData* data)
    vbodata.b = color[2];
    vbodata.a = color[3];
    
-   vbodata.terrainwt[0] = terrainwt[0];
-   vbodata.terrainwt[1] = terrainwt[1];
-   vbodata.terrainwt[2] = terrainwt[2];
-   vbodata.terrainwt1[0] = terrainwt[3];
-   vbodata.terrainwt1[1] = terrainwt[4];
-   vbodata.terrainwt1[2] = terrainwt[5];
+   if (!dynamic)
+   {
+      vbodata.terrainwt[0] = terrainwt[0];
+      vbodata.terrainwt[1] = terrainwt[1];
+      vbodata.terrainwt[2] = terrainwt[2];
+      vbodata.terrainwt1[0] = terrainwt[3];
+      vbodata.terrainwt1[1] = terrainwt[4];
+      vbodata.terrainwt1[2] = terrainwt[5];
+   }
 }
 #endif

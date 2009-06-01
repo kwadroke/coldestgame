@@ -26,7 +26,7 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
            updatedelay(0), vbo(0), ibo(0), hasvbo(false), vbosize(0), ibosize(0), animtime(0), currkeyframe(0),
            lastanimtick(SDL_GetTicks()), animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false),
            boundschanged(true), position(Vector3()), rots(Vector3()), size(100.f), height(0.f), width(0.f),
-           resman(rm), next(0), glops(gl), havemats(false), updatevbo(true), scale(.01f), trisdirty(true),
+           resman(rm), next(0), glops(gl), havemats(false), updatevbo(true), updateibo(false), scale(.01f), trisdirty(true),
            parent(NULL), lasttick(0)
 {
 #ifndef DEDICATED
@@ -56,14 +56,15 @@ Mesh::~Mesh()
 
 Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain),
            drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist), impostortex(m.impostortex),
-           debug(m.debug), updatedelay(m.updatedelay), vbosteps(m.vbosteps), vbo(0), ibo(0), frametime(m.frametime),
+           debug(m.debug), updatedelay(m.updatedelay), vbosteps(m.vbosteps), minindex(m.minindex), maxindex(m.maxindex), 
+           vbo(0), ibo(0), frametime(m.frametime),
            hasvbo(false), childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe),
            lastanimtick(m.lastanimtick), animspeed(m.animspeed), curranimation(m.curranimation),
            nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe),
            newchildren(m.newchildren), boundschanged(m.boundschanged), position(m.position), rots(m.rots),
            size(m.size), height(m.height), width(m.width), resman(m.resman), next(m.next), glops(m.glops),
-           havemats(m.havemats), updatevbo(m.updatevbo), basefile(m.basefile), scale(m.scale), campos(m.campos),
-           trisdirty(m.trisdirty), parent(m.parent), lasttick(m.lasttick)
+           havemats(m.havemats), updatevbo(m.updatevbo), updateibo(m.updateibo), basefile(m.basefile), scale(m.scale),
+           campos(m.campos), trisdirty(m.trisdirty), parent(m.parent), lasttick(m.lasttick)
 {
 #ifndef DEDICATED
    if (m.impmat)
@@ -110,6 +111,8 @@ Mesh& Mesh::operator=(const Mesh& m)
    
    //resman = m.resman; Reference, can't be reseated.  Should be okay to leave it since it has to be set though.
    vbosteps = m.vbosteps;
+   minindex = m.minindex;
+   maxindex = m.maxindex;
    impdist = m.impdist;
    render = m.render;
    animtime = m.animtime;
@@ -146,6 +149,7 @@ Mesh& Mesh::operator=(const Mesh& m)
    startframe = m.startframe;
    scale = m.scale;
    updatevbo = m.updatevbo;
+   updateibo = m.updateibo;
    campos = m.campos;
    trisdirty = m.trisdirty;
    parent = m.parent;
@@ -373,6 +377,7 @@ void Mesh::Load(const IniReader& reader)
                if (glops)
                   newtri->material = &resman.LoadMaterial(newtri->matname);
                curr.Read(newtri->collide, "Collide");
+               curr.Read(newtri->id, "ID");
                
                tris.push_back(newtri);
             }
@@ -494,117 +499,154 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
 }
 
 
-void Mesh::GenVbo()
+void Mesh::GenVbo(const int type)
 {
 #ifndef DEDICATED
    if ((tris.size() || childmeshes.size()) && render)
    {
-      size_t currindex = 0;
-      if (!hasvbo)
+      if (type != OnlyUpload)
       {
-         glGenBuffersARB(1, &vbo);
-         glGenBuffersARB(1, &ibo);
+         GenVboData();
+         GenIboData();
       }
-      
-      size_t numverts = vertices.size();
-      for (size_t m = 0; m < childmeshes.size(); ++m)
+      if (type != OnlyData)
       {
-         numverts += childmeshes[m]->vertices.size();
+         UploadVbo();
       }
-      
-      if (vbodata.size() < numverts)
-         vbodata.resize(numverts);
-      
-      for (size_t m = 0; m < childmeshes.size() + 1; ++m)
-      {
-         Mesh* currmesh;
-         if (m < 1)
-            currmesh = this;
-         else
-            currmesh = childmeshes[m - 1];
-         VertexPtrvec& currvertices = currmesh->vertices;
-         VertexPtrvec::iterator cvend = currvertices.end();
-         TrianglePtrvec& currtris = currmesh->tris;
-         size_t ctsize = currtris.size();
-         if (newchildren && m > 0)
-         {
-            for (size_t i = 0; i < ctsize; ++i)
-            {
-               tris.push_back(currtris[i]);
-            }
-         }
-         
-         // Build VBO
-         for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
-         {
-            Vertex& currv = **i;
-            currv.index = currindex;
-            currv.GetVboData(&vbodata[currindex]);
-            ++currindex;
-         }
-      }
-      newchildren = false;
-      
-      // Build IBO
-      // For some reason this makes impostors flicker
-      //if (vbodata.size() * sizeof(VBOData) != vbosize)
-      {
-         sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
-         // Shouldn't clear these for efficiency reasons, but for the moment I'm not worrying about it
-         indexdata.clear();
-         vbosteps.clear();
-         int counter = 0;
-         TrianglePtrvec::iterator last = tris.begin();
-         TrianglePtrvec::iterator tend = tris.end();
-         for (TrianglePtrvec::iterator i = tris.begin(); i != tend; ++i)
-         {
-            if ((*last)->material != (*i)->material)
-            {
-               vbosteps.push_back(counter);
-               counter = 0;
-            }
-            ushortvec ind = (*i)->GetIndices();
-            indexdata.insert(indexdata.end(), ind.begin(), ind.end());
-            last = i;
-            ++counter;
-         }
-         vbosteps.push_back(counter);
-      }
-      glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
-      glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
-      if (!hasvbo || (vbodata.size() * sizeof(VBOData) > vbosize) || (indexdata.size() * sizeof(unsigned short) > ibosize))
-      {
-         if (frameroot.size() <= 1 && !dynamic)
-         {
-            glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                           &indexdata[0], GL_STATIC_DRAW_ARB);
-            glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
-                        vbodata.size() * sizeof(VBOData), 
-                        &vbodata[0], GL_STATIC_DRAW_ARB);
-         }
-         else
-         {
-            glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                           &indexdata[0], GL_STREAM_DRAW_ARB);
-            glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
-                           vbodata.size() * sizeof(VBOData), 
-                           &vbodata[0], GL_STREAM_DRAW_ARB);
-         }
-      }
+   }
+#endif
+}
+
+
+void Mesh::GenVboData()
+{
+   size_t currindex = 0;
+   
+   size_t numverts = vertices.size();
+   for (size_t m = 0; m < childmeshes.size(); ++m)
+   {
+      numverts += childmeshes[m]->vertices.size();
+   }
+   
+   if (vbodata.size() < numverts)
+   {
+      updateibo = true;
+      vbodata.resize(numverts);
+   }
+   
+   for (size_t m = 0; m < childmeshes.size() + 1; ++m)
+   {
+      Mesh* currmesh;
+      if (m < 1)
+         currmesh = this;
       else
+         currmesh = childmeshes[m - 1];
+      VertexPtrvec& currvertices = currmesh->vertices;
+      VertexPtrvec::iterator cvend = currvertices.end();
+      TrianglePtrvec& currtris = currmesh->tris;
+      size_t ctsize = currtris.size();
+      if (newchildren && m > 0)
       {
-         glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
-         glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
+         for (size_t i = 0; i < ctsize; ++i)
+         {
+            tris.push_back(currtris[i]);
+         }
       }
-      vbosize = vbodata.size() * sizeof(VBOData);
-      ibosize = indexdata.size() * sizeof(unsigned short);
       
+      // Build VBO
+      for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
+      {
+         Vertex& currv = **i;
+         currv.index = currindex;
+         currv.GetVboData(vbodata[currindex], dynamic);
+         ++currindex;
+      }
+   }
+   newchildren = false;
+}
+
+void Mesh::GenIboData()
+{
+   // Build IBO
+   if (updateibo)
+   {
+      sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
+      // Shouldn't clear these for efficiency reasons, but for the moment I'm not worrying about it
+      indexdata.clear();
+      vbosteps.clear();
+      minindex.clear();
+      maxindex.clear();
+      int counter = 0;
+      unsigned short currmin = 0, currmax = 0;
+      TrianglePtrvec::iterator last = tris.begin();
+      TrianglePtrvec::iterator tend = tris.end();
+      for (TrianglePtrvec::iterator i = tris.begin(); i != tend; ++i)
+      {
+         if ((*last)->material != (*i)->material)
+         {
+            vbosteps.push_back(counter);
+            minindex.push_back(currmin);
+            maxindex.push_back(currmax);
+            counter = 0;
+            currmin = 0;
+            currmax = 0;
+         }
+         ushortvec ind = (*i)->GetIndices();
+         indexdata.insert(indexdata.end(), ind.begin(), ind.end());
+         last = i;
+         ++counter;
+         for (size_t j = 0; j < ind.size(); ++j)
+         {
+            currmin = std::min(currmin, ind[j]);
+            currmax = std::max(currmax, ind[j]);
+         }
+      }
+      vbosteps.push_back(counter);
+      minindex.push_back(currmin);
+      maxindex.push_back(currmax);
+      updateibo = false;
+   }
+}
+
+void Mesh::UploadVbo()
+{
+   if (!hasvbo)
+   {
+      glGenBuffersARB(1, &vbo);
+      glGenBuffersARB(1, &ibo);
       hasvbo = true;
    }
+   
+   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
+   glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
+   
+   if (frameroot.size() <= 1 && !dynamic)
+   {
+      glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
+                        NULL, GL_STATIC_DRAW_ARB);
+      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+                        vbodata.size() * sizeof(VBOData), 
+                        NULL, GL_STATIC_DRAW_ARB);
+   }
+   else
+   {
+      // Apparently it's faster to discard the old buffer and create a new one than to update the old one.
+      // I haven't noticed, but it seems my bottleneck is elsewhere so once that's fixed maybe it will matter.
+      glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
+                        NULL, GL_DYNAMIC_DRAW_ARB);
+      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
+                        vbodata.size() * sizeof(VBOData), 
+                        NULL, GL_DYNAMIC_DRAW_ARB);
+   }
+   
+   glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
+   glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
+   
+   vbosize = vbodata.size() * sizeof(VBOData);
+   ibosize = indexdata.size() * sizeof(unsigned short);
+   updatevbo = false;
    if (!glops)
       SetGL();
-   updatevbo = false;
-#endif
 }
 
 
@@ -658,10 +700,9 @@ void Mesh::BindVbo()
 void Mesh::Render(Material* overridemat)
 {
 #ifndef DEDICATED
-   UpdateTris();
    if (!render)
       return;
-   if (updatevbo)
+   if (updatevbo)// && !hasvbo) // For checking VBO generation performance
       GenVbo();
    if (!havemats)
       LoadMaterials();
@@ -683,7 +724,7 @@ void Mesh::Render(Material* overridemat)
       }
       BindAttribs();
       void* offset = (void*)(ptrdiff_t(&indexdata[currindex * 3]) - ptrdiff_t(&indexdata[0]));
-      glDrawElements(GL_TRIANGLES, vbosteps[i] * 3, GL_UNSIGNED_SHORT, offset);
+      glDrawRangeElements(GL_TRIANGLES, minindex[i], maxindex[i], vbosteps[i] * 3, GL_UNSIGNED_SHORT, offset);
       UnbindAttribs();
       currindex += vbosteps[i];
    }
@@ -798,11 +839,9 @@ void Mesh::AdvanceAnimation(const Vector3& cpos)
       if (currkeyframe >= startframe[curranimation] + numframes[curranimation] - 1)
          currkeyframe = startframe[curranimation];
    }
-   // We no longer call UpdateTris from this function because it won't always be needed, and there are only a few
-   // places we have to insert the call elsewhere to guarantee that it is called when needed.  This way we don't
-   // do unnecessary UpdateTris (which can take a significant amount of CPU)
    trisdirty = true;
    campos = cpos;
+   UpdateTris();
 }
 
 
@@ -861,7 +900,7 @@ void Mesh::UpdateTris()
 void Mesh::CalcBounds()
 {
    // If we just translated the mesh then we don't need to do this.
-   if (boundschanged)
+   if (boundschanged && !childmeshes.size())
    {
       size = 0.f;
       float dist = 0.f;
@@ -888,10 +927,25 @@ void Mesh::CalcBounds()
             if (temp - currtri.radmod < min.z) min.z = temp - currtri.radmod;
          }
       }
+      // I don't think this will do what we want, but I also don't think it's used anywhere right now
       height = max.y - min.y;
       width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
    }
    boundschanged = false;
+   if (childmeshes.size())
+   {
+      for (size_t i = 0; i < childmeshes.size(); ++i)
+         childmeshes[i]->CalcBounds();
+      size = 0;
+      height = 0;
+      width = 0;
+      for (size_t i = 0; i < childmeshes.size(); ++i)
+      {
+         size = std::max(size, childmeshes[i]->size);
+         height = std::max(height, childmeshes[i]->height);
+         width = std::max(width, childmeshes[i]->width);
+      }
+   }
 }
 
 
@@ -1091,6 +1145,7 @@ void Mesh::Clear()
    tris.clear();
    vertices.clear();
    childmeshes.clear();
+   vbosize = 0;
 }
 
 
@@ -1104,6 +1159,7 @@ void Mesh::SetAnimation(const int newanim)
 void Mesh::SetGL()
 {
    glops = true;
+   LoadMaterials();
    for (size_t i = 0; i < frameroot.size(); ++i)
       frameroot[i]->SetGL(true);
 }

@@ -63,7 +63,7 @@ class Vertex
 {
    public:
       Vertex();
-      void GetVboData(VBOData*);
+      void GetVboData(VBOData&, const bool dynamic);
       
       Vector3 pos;
       Vector3 norm;
@@ -88,9 +88,8 @@ typedef map<string, VertexPtr> VertMap;
 
 #ifdef INLINE_VERTEX
 inline
-void Vertex::GetVboData(VBOData* data)
+void Vertex::GetVboData(VBOData& vbodata, const bool dynamic)
 {
-   VBOData& vbodata = *data;
    vbodata.x = pos.x;
    vbodata.y = pos.y;
    vbodata.z = pos.z;
@@ -102,7 +101,7 @@ void Vertex::GetVboData(VBOData* data)
    vbodata.ty = tangent.y;
    vbodata.tz = tangent.z;
    
-   for (int i = 0; i < 8; ++i)
+   for (int i = 0; i < 2; ++i)
    {
       vbodata.tc[i][0] = texcoords[i][0];
       vbodata.tc[i][1] = texcoords[i][1];
@@ -112,12 +111,15 @@ void Vertex::GetVboData(VBOData* data)
    vbodata.b = color[2];
    vbodata.a = color[3];
    
-   vbodata.terrainwt[0] = terrainwt[0];
-   vbodata.terrainwt[1] = terrainwt[1];
-   vbodata.terrainwt[2] = terrainwt[2];
-   vbodata.terrainwt1[0] = terrainwt[3];
-   vbodata.terrainwt1[1] = terrainwt[4];
-   vbodata.terrainwt1[2] = terrainwt[5];
+   if (!dynamic)
+   {
+      vbodata.terrainwt[0] = terrainwt[0];
+      vbodata.terrainwt[1] = terrainwt[1];
+      vbodata.terrainwt[2] = terrainwt[2];
+      vbodata.terrainwt1[0] = terrainwt[3];
+      vbodata.terrainwt1[1] = terrainwt[4];
+      vbodata.terrainwt1[2] = terrainwt[5];
+   }
 }
 #endif
 

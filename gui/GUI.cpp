@@ -254,7 +254,7 @@ void GUI::ProcessEvent(SDL_Event* event)
             if (event->button.button == SDL_BUTTON_LEFT)
             {
                Uint32 currtick = SDL_GetTicks();
-               if (currtick - lastclick > 200)
+               if (currtick - lastclick > 400)
                {
                   if (sounds[LeftSound] != "")
                      soundsource->Play(resman.soundman.GetBuffer(sounds[LeftSound]));
@@ -265,7 +265,6 @@ void GUI::ProcessEvent(SDL_Event* event)
                }
                else
                {
-                  logout << "Doing" << endl;
                   DoAction(doubleclickaction);
                }
             }
