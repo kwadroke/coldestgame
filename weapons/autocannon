@@ -1,12 +1,12 @@
 Weight 15
 Velocity 20
-Damage 20
+Damage 30
 Ammo 50
 Radius 1
 ProjectileWeight .1
 Model projectile
 Name Autocannon
-ReloadTime 300
+ReloadTime 200
 Tracer autocannon
 TracerTime 30
 ExplosionEmitter particles/emitters/debris

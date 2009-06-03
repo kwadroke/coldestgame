@@ -1,5 +1,5 @@
 ReloadTime 1000
-Velocity .8
+Velocity 1
 Weight 30
 Name Mortar
 Splash 100
