@@ -56,7 +56,7 @@ void RenderHud(const PlayerData&);
 void RenderClouds();
 void RenderWater();
 void UpdateFBO(const PlayerData&);
-void GenShadows(Vector3, float, FBO&, const PlayerData&);
+void GenShadows(const Vector3&, float, FBO&, const PlayerData&);
 void GenClouds();
 void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
@@ -71,6 +71,10 @@ void SynchronizePosition(); // These two do not really belong here
 void UpdateSpectatePosition();
 void LoadMaterials();
 void InitShaders();
+vector<Mesh*> GetDynamicMeshes(const PlayerData&);
+void SetShadowFrustum(const float, const Vector3&, const PlayerData&);
+Vector3 GetShadowLook(const float, const PlayerData&);
+void SetReflectionFrustum(const PlayerData&);
 
 extern Meshlist meshes;
 

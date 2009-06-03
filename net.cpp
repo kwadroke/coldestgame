@@ -386,15 +386,6 @@ int NetListen(void* dummy)
                oppnum = 0;
                SDL_mutexP(clientmutex);
                
-               /* Any player that the server does not send an update for must
-                  not be connected anymore, so assume all players are not
-                  connected, and as we find otherwise update that. */
-               // At some point this probably won't work, but for the moment it does
-               for (vector<PlayerData>::iterator i = player.begin(); i != player.end(); i++)
-               {
-                  i->connected = false;
-               }
-               
                get >> oppnum;
                while (oppnum != 0)
                {
@@ -404,7 +395,6 @@ int NetListen(void* dummy)
                      player.push_back(dummy);
                      logout << "Adding player " << (player.size() - 1) << endl;
                   }
-                  player[oppnum].connected = true;
                   get >> player[oppnum].spawned;
                   if (player[oppnum].spawned)
                   {
@@ -508,7 +498,7 @@ int NetListen(void* dummy)
                int getkills, getdeaths, getsalvage, getspawntimer;
                vector<int> gethp(numbodyparts);
                int getping;
-               bool getspawned;
+               bool getspawned, getconnected;
                string getname;
                SDL_mutexP(clientmutex);
                while (oppnum != 0)
@@ -521,6 +511,7 @@ int NetListen(void* dummy)
                      get >> gethp[i];
                   get >> getping;
                   get >> getspawned;
+                  get >> getconnected;
                   get >> getname;
                   get >> getsalvage;
                   get >> getspawntimer;
@@ -534,6 +525,7 @@ int NetListen(void* dummy)
                         player[oppnum].hp[i] = gethp[i];
                      player[oppnum].ping = getping;
                      player[oppnum].spawned = getspawned;
+                     player[oppnum].connected = getconnected;
                      player[oppnum].name = getname;
                      player[oppnum].salvage = getsalvage;
                      player[oppnum].spawntimer = getspawntimer;

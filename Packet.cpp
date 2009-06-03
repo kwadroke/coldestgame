@@ -32,17 +32,17 @@ Packet::Packet(IPaddress* inaddr, string s) : data(s), ack(0),
 }
 
 
-void Packet::Send(UDPpacket* packet, UDPsocket& socket)
+size_t Packet::Send(UDPpacket* packet, UDPsocket& socket)
 {
    if (!packet)
    {
       logout << "Send Error: null packet" << endl;
-      return;
+      return 0;
    }
    
    Uint32 currtick = SDL_GetTicks();
    if (currtick - lastsent < sendinterval) // Don't swamp the receiver with ack packets
-      return;
+      return 0;
    lastsent = currtick;
    
    packet->address = addr;
@@ -51,5 +51,6 @@ void Packet::Send(UDPpacket* packet, UDPsocket& socket)
    
    SDLNet_UDP_Send(socket, -1, packet);
    ++attempts;
+   return data.length();
 }
 

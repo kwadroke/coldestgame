@@ -228,7 +228,7 @@ void InitGlobals()
    console.Parse("set syncmax 50", false);
    console.Parse("set name Nooblet", false);
    console.Parse("set syncgrace 15", false);
-   console.Parse("set maxanimdelay 100", false);
+   console.Parse("set maxanimdelay 25", false);
    console.Parse("set timeout 30", false);
    console.Parse("set numthreads 2", false);
    
@@ -1279,7 +1279,8 @@ void GameEventHandler(SDL_Event &event)
             
          case SDL_MOUSEMOTION:
             if ((event.motion.x != screenwidth / 2 || 
-               event.motion.y != screenheight / 2) && !gui[consolegui]->visible)
+               event.motion.y != screenheight / 2) && !gui[consolegui]->visible &&
+               (SDL_GetAppState() & SDL_APPINPUTFOCUS))
             {
                float zoomfactor = console.GetFloat("zoomfactor");
                float mousespeed = console.GetFloat("mousespeed") / 100.f;
@@ -1328,7 +1329,7 @@ void GameEventHandler(SDL_Event &event)
             if (event.button.button == keys.mousefire)
                player[0].leftclick = false;
             break;
-   
+            
          case SDL_QUIT:
             Quit();
       }
@@ -1438,8 +1439,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    }
    if (mplayer.pos.y < mplayer.size)
    {
-      maxspeed /= 2.f;
-      acceleration /= 2.f;
+      maxspeed /= 1.5f;
+      acceleration /= 1.5f;
    }
    
    if (moving) // Accelerate or decelerate properly
@@ -2092,6 +2093,11 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
             p.indicator = &particles.back();
          }
          p.indicator->pos = p.pos;
+      }
+      else if (p.indicator) // Also remove in case we switched teams
+      {
+         p.indicator->ttl = 1;
+         p.indicator = NULL;
       }
    }
 }
