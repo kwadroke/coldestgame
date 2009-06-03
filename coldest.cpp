@@ -2546,7 +2546,8 @@ bool NearSpawn(PlayerData& p, vector<SpawnPointData>& allspawns)
 {
    for (size_t i = 0; i < allspawns.size(); ++i)
    {
-      if (p.pos.distance(allspawns[i].position) < 200.f && allspawns[i].team == p.team)
+      logout << p.pos.distance(allspawns[i].position) << endl;
+      if (p.pos.distance(allspawns[i].position) < 400.f && allspawns[i].team == p.team)
       {
          return true;
       }
