@@ -1,4 +1,5 @@
-Velocity 1
+Velocity .1
+Acceleration .002
 Weight 30
 ProjectileWeight 0
 Name Neutrino Cannon

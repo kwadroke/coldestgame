@@ -1,8 +1,8 @@
-ReloadTime 50
-Velocity 20
+ReloadTime 100
+Velocity 30
 Radius 1
-Damage 1
-Ammo 1000
+Damage 5
+Ammo 500
 ProjectileWeight .1
 Weight 5
 Model empty
