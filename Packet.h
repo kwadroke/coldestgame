@@ -37,7 +37,7 @@ class Packet
       
       template <typename T>
       Packet& operator<<(T&);
-      void Send(UDPpacket*, UDPsocket&);
+      size_t Send(UDPpacket*, UDPsocket&);
       IPaddress addr;
       string data;
       unsigned long ack;

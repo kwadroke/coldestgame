@@ -60,8 +60,10 @@ class VboWorker
       
    private:
       SDL_Thread* thread;
-      tsint running;
-      tsint go;
+      // Assignment on ints is atomic on most platforms, and the overhead of locking a tsint
+      // gets rather high due to the very tight loop, so these are just declared volatile
+      volatile int running;
+      volatile int go;
       vector<Mesh*>::iterator start, end;
       
       // No copying

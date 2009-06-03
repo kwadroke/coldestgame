@@ -30,8 +30,9 @@ bool firstpass;
 GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 set<Mesh*> implist;
 set<Mesh*> visiblemeshes;
+vector<Mesh*> dynmeshes;
 
-#define THREADVBO
+//#define THREADVBO
 
 void Repaint()
 {
@@ -68,46 +69,13 @@ void Repaint()
       // causing problems ATM so it stays.
       gui[chat]->visible = true;
       
+      dynmeshes = GetDynamicMeshes(localplayer);
+      
       if (shadows)
       {
-         Vector3 rots = lights.GetRots(0);
-         float detailmapsize = console.GetFloat("detailmapsize");
-         // Not sure whether I actually like this.  It's really just a cheap version of frustum warping, and if I'm going
-         // to do that I should probably use a real warping technique.
-         /*if (localplayer.pitch > 30.f)
-         {
-            detailmapsize = 75.f + detailmapsize * (1.f - localplayer.pitch / 90.f);
-            logout << detailmapsize << endl;
-         }*/
-         resman.shaderman.GlobalSetUniform1f("detailmapsize", detailmapsize);
-         float shadowres = console.GetFloat("shadowres");
-         float shadowmapsizeworld = detailmapsize * 1.42;
-         float worldperoneshadow = shadowmapsizeworld / shadowres;
-         
-         // Find out where we're looking, a little rough ATM
-         GraphicMatrix rot;
-         rot.rotatex(-localplayer.pitch);
-         rot.rotatey(localplayer.facing + localplayer.rotation);
-         //rot.rotatez(localplayer.roll);
-         Vector3 look(0, 0, -detailmapsize / 2.f);
-         look.transform(rot);
-         look += localplayer.pos;
-         
-         GraphicMatrix invrot;
-         rot.identity();
-         rot.rotatex(-rots.x);
-         rot.rotatey(rots.y);
-         invrot.rotatey(-rots.y);
-         invrot.rotatex(rots.x);
-         
-         look.transform(invrot);
-         look.x = (int)(look.x / worldperoneshadow);
-         look.x *= worldperoneshadow;
-         look.y = (int)(look.y / worldperoneshadow);
-         look.y *= worldperoneshadow;
-         
-         look.transform(rot);
-         
+         float shadowmapsizeworld = console.GetFloat("detailmapsize") * 1.42;
+         Vector3 look = GetShadowLook(shadowmapsizeworld, localplayer);
+         SetShadowFrustum(shadowmapsizeworld, look, localplayer);
          GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo, localplayer);
       }
       
@@ -202,7 +170,8 @@ void Repaint()
       
       RenderObjects(localplayer);
       
-      if ((localplayer.pos - viewoff).y > 0)
+      // This produces bogus reflections, but that's better than rendering no water at all
+      //if ((localplayer.pos - viewoff).y > 0)
       {
          UpdateNoise();
          UpdateReflection(localplayer);
@@ -349,14 +318,6 @@ void RenderObjects(const PlayerData& localplayer)
    
    // Render all dynamic meshes (since they won't show up in the KDTree)
 #if defined(THREADVBO) && !defined(DEDICATED)
-   vector<Mesh*> dynmeshes;
-   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
-   {
-      if (i->dynamic && i->render)
-      {
-         dynmeshes.push_back(&(*i));
-      }
-   }
    if (firstpass)
    {
       size_t workerstouse = console.GetInt("numthreads");
@@ -379,7 +340,7 @@ void RenderObjects(const PlayerData& localplayer)
       vboworkers[workerstouse - 1]->Run(workerstart, dynmeshes.end());
       
       // Wait for worker threads to finish
-      for (size_t i = 0; i < vboworkers.size(); ++i)
+      for (size_t i = 0; i < workerstouse; ++i)
       {
          vboworkers[i]->wait();
       }
@@ -566,7 +527,7 @@ void UpdateFBO(const PlayerData& localplayer)
 
 
 // Generates the depth texture that will be used in shadowing
-void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localplayer)
+void GenShadows(const Vector3& center, float size, FBO& fbo, const PlayerData& localplayer)
 {
    fbo.Bind();
    
@@ -594,15 +555,6 @@ void GenShadows(Vector3 center, float size, FBO& fbo, const PlayerData& localpla
    glCullFace(GL_FRONT);
    glColorMask(0, 0, 0, 0);
 #endif
-   
-   // Need to reset kdtree frustum...
-   Vector3 p = lights.GetPos(0);
-   Vector3 rots = lights.GetRots(0);
-   
-   // 1.5 is to leave some room for error since we're approximating an ortho view with
-   // a perspective projection
-   float lightfov = tan(size * 1.5f / Light::infinity) * 180.f / PI;
-   kdtree.setfrustum(p + center, rots, Light::infinity - 5000, Light::infinity + 5000, lightfov, 1);
    
    glEnable(GL_POLYGON_OFFSET_FILL);
    glPolygonOffset(2.0f, 2.0f);
@@ -780,11 +732,7 @@ void UpdateReflection(const PlayerData& localplayer)
       
       if (console.GetBool("reflection"))
       {
-         // Remember, rotations not vector
-         Vector3 invlook(-localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-         Vector3 invpos = localplayer.pos;
-         invpos.y *= -1;
-         kdtree.setfrustum(invpos, invlook, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect);
+         SetReflectionFrustum(localplayer);
          
          lights.Place();
          SetReflection(true);
@@ -1091,4 +1039,105 @@ void SetReflection(bool on)
    {
       resman.shaderman.GlobalSetUniform1f("reflectval", 0.f);
    }
+}
+
+
+vector<Mesh*> GetDynamicMeshes(const PlayerData& localplayer)
+{
+   set<Mesh*> retval;
+   Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
+   kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), console.GetFloat("fov"), aspect);
+   
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      if (i->dynamic && kdtree.infrustum(&(*i)) && i->render)
+         retval.insert(&(*i));
+   }
+   
+   if (console.GetBool("reflection"))
+   {
+      SetReflectionFrustum(localplayer);
+      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+      {
+         if (i->dynamic && kdtree.infrustum(&(*i)) && i->render)
+            retval.insert(&(*i));
+      }
+   }
+   if (console.GetBool("shadows"))
+   {
+      // Duplicated from shadow render code
+      float shadowmapsizeworld = console.GetFloat("detailmapsize") * 1.42;
+      Vector3 look = GetShadowLook(shadowmapsizeworld, localplayer);
+      SetShadowFrustum(shadowmapsizeworld, look, localplayer);
+      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+      {
+         if (i->dynamic && kdtree.infrustum(&(*i)) && i->render)
+            retval.insert(&(*i));
+      }
+   }
+   return vector<Mesh*>(retval.begin(), retval.end());
+}
+
+
+void SetReflectionFrustum(const PlayerData& localplayer)
+{
+   // Remember, rotations not vector
+   Vector3 invlook(-localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
+   Vector3 invpos = localplayer.pos;
+   invpos.y *= -1;
+   kdtree.setfrustum(invpos, invlook, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect);
+}
+
+
+void SetShadowFrustum(const float size, const Vector3& look, const PlayerData& localplayer)
+{
+   Vector3 p = lights.GetPos(0);
+   Vector3 rots = lights.GetRots(0);
+   
+   // 1.5 is to leave some room for error since we're approximating an ortho view with
+   // a perspective projection
+   float lightfov = tan(size * 1.5f / Light::infinity) * 180.f / PI;
+   kdtree.setfrustum(p + look, rots, Light::infinity - 5000, Light::infinity + 5000, lightfov, 1);
+}
+
+
+Vector3 GetShadowLook(const float shadowmapsizeworld, const PlayerData& localplayer)
+{
+   Vector3 rots = lights.GetRots(0);
+   float detailmapsize = console.GetFloat("detailmapsize");
+   // Not sure whether I actually like this.  It's really just a cheap version of frustum warping, and if I'm going
+   // to do that I should probably use a real warping technique.
+   /*if (localplayer.pitch > 30.f)
+   {
+      detailmapsize = 75.f + detailmapsize * (1.f - localplayer.pitch / 90.f);
+      logout << detailmapsize << endl;
+   }*/
+   resman.shaderman.GlobalSetUniform1f("detailmapsize", detailmapsize);
+   float shadowres = console.GetFloat("shadowres");
+   float worldperoneshadow = shadowmapsizeworld / shadowres;
+         
+   // Find out where we're looking, a little rough ATM
+   GraphicMatrix rot;
+   rot.rotatex(-localplayer.pitch);
+   rot.rotatey(localplayer.facing + localplayer.rotation);
+   //rot.rotatez(localplayer.roll);
+   Vector3 look(0, 0, -detailmapsize / 2.f);
+   look.transform(rot);
+   look += localplayer.pos;
+         
+   GraphicMatrix invrot;
+   rot.identity();
+   rot.rotatex(-rots.x);
+   rot.rotatey(rots.y);
+   invrot.rotatey(-rots.y);
+   invrot.rotatex(rots.x);
+         
+   look.transform(invrot);
+   look.x = (int)(look.x / worldperoneshadow);
+   look.x *= worldperoneshadow;
+   look.y = (int)(look.y / worldperoneshadow);
+   look.y *= worldperoneshadow;
+         
+   look.transform(rot);
+   return look;
 }

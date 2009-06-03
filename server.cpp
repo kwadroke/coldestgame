@@ -219,7 +219,6 @@ void ServerLoop()
    logout << "ServerLoop " << gettid() << endl;
    
    Uint32 currtick;
-   bool doanimation = true;
    int checkmap = 0;
    Timer frametimer;
    frametimer.start();
@@ -273,16 +272,12 @@ void ServerLoop()
       SDL_mutexV(servermutex);
          
       // Update server meshes
-      if (doanimation)
+      SDL_mutexP(servermutex);
+      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
       {
-         SDL_mutexP(servermutex);
-         for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
-         {
-            i->AdvanceAnimation();
-         }
-         SDL_mutexV(servermutex);
+         i->AdvanceAnimation();
       }
-      doanimation = !doanimation;
+      SDL_mutexV(servermutex);
       
       SDL_mutexP(servermutex);
       // Save state so we can recall it for collision detection
@@ -746,6 +741,8 @@ int ServerListen(void* dummy)
             {
                serverplayers[oppnum].spawned = false;
                serverplayers[oppnum].Kill();
+               if (serverplayers[oppnum].salvage < 100)
+                  serverplayers[oppnum].salvage = 100;
                SendKill(oppnum, oppnum);
             }
             SDL_mutexV(servermutex);
@@ -1007,6 +1004,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                      occup << serverplayers[i].hp[j] << eol;
                   occup << serverplayers[i].ping << eol;
                   occup << serverplayers[i].spawned << eol;
+                  occup << serverplayers[i].connected << eol;
                   occup << serverplayers[i].name << eol;
                   occup << serverplayers[i].salvage << eol;
                   occup << serverplayers[i].spawntimer << eol;
@@ -1047,8 +1045,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
       {
          if (i->sendtick <= currnettick)
          {
-            i->Send(servoutpack, servsock);
-            sentbytes += i->data.length();
+            sentbytes += i->Send(servoutpack, servsock);
             if (!i->ack || i->attempts > 5000) // Non-ack packets get sent once and then are on their own
             {
                i = servqueue.erase(i);
@@ -1289,6 +1286,8 @@ void ServerUpdatePlayer(int i)
    // Give them the benefit of the doubt and cool them before calculating overheating
    if (serverplayers[i].temperature > 100.f && serverplayers[i].spawned && console.GetBool("overheat"))
    {
+      if (serverplayers[i].salvage < 100)
+         serverplayers[i].salvage = 100;
       KillPlayer(i, i);
    }
    

@@ -528,7 +528,7 @@ void Mesh::GenVboData()
       numverts += childmeshes[m]->vertices.size();
    }
    
-   if (vbodata.size() < numverts)
+   if (vbodata.size() != numverts)
    {
       updateibo = true;
       vbodata.resize(numverts);
@@ -610,6 +610,7 @@ void Mesh::GenIboData()
 
 void Mesh::UploadVbo()
 {
+#ifndef DEDICATED
    if (!hasvbo)
    {
       glGenBuffersARB(1, &vbo);
@@ -647,6 +648,7 @@ void Mesh::UploadVbo()
    updatevbo = false;
    if (!glops)
       SetGL();
+#endif
 }
 
 
