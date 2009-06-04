@@ -39,11 +39,12 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 }
 
 
-Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, const bool extcheck)
+Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, const bool extcheck,
+                                           bool* exthit, const bool debug)
 {
    Vector3 dummy;
    Mesh* dummymesh;
-   return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh, NULL, extcheck);
+   return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh, NULL, extcheck, exthit, debug);
 }
 
 
@@ -55,7 +56,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
 Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& allobjs,
-                                           Vector3& hitpos, Mesh*& hitobj, vector<Mesh*>* retobjs, const bool extcheck, const bool debug)
+                                           Vector3& hitpos, Mesh*& hitobj, vector<Mesh*>* retobjs, const bool extcheck, bool* exthit, const bool debug)
 {
    Vector3 adjust;
    Vector3 temp, temphitpos;
@@ -69,6 +70,11 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // 1e38 is near the maximum representable value for a single precision float
    hitpos = Vector3(1e38f, 1e38f, 1e38f);
    vector<Mesh*> objs;
+   
+   bool dummyexthit;
+   if (!exthit)
+      exthit = &dummyexthit;
+   *exthit = false;
    
    float cullrad = midpoint.distance(oldpos);
    
@@ -196,7 +202,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    // Check edges of polys as well.
    // This test will almost never hit for fast-moving projectiles, so don't even bother
-   if (!adjusted && !extcheck)
+   if (!adjusted)
    {
       for (size_t i = 0; i < ntsize; i++)
       {
@@ -217,8 +223,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    
    
    // If we moved a fairly long distance we're probably a projectile and need to do the following
-   // These aren't useful for player movement though so we shouldn't do them in that case.
-   if (extcheck)
+   if (extcheck && !nomove && !adjusted)
    {
       // Do another edge check that checks the entire movement path, not just the ending position.
       // This is necessary because projectiles may move significantly larger distances than their
@@ -233,16 +238,17 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       {
          Triangle& currtri = *neartris[i];
          hit = false;
-         hit = VectorEdgeCheck(temphitpos, currtri, oldpos, newpos, radius + currtri.radmod);
+         hit = VectorEdgeCheck(temp, temphitpos, currtri, oldpos, newpos, radius + currtri.radmod);
          if (hit)
          {
-            adjust += temphitpos;
+            adjust += temp;
             if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
             {
                hitobj = trimap[&currtri];
                hitpos = temphitpos;
             }
             adjusted++;
+            *exthit = true;
             if (retobjs)
                retobjs->push_back(trimap[&currtri]);
          }
@@ -262,8 +268,9 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   hitobj = trimap[&currtri];
                   hitpos = currtri.v[j]->pos;
                }
-               adjust += temp;
+               adjust -= temp; // The returned vector is going to be backwards in this case, because we inverted the check
                adjusted++;
+               *exthit = true;
                if (retobjs)
                   retobjs->push_back(trimap[&currtri]);
             }
@@ -357,7 +364,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
 #endif
    if (CrossesPlane(pos, endpos, norm, d, denominator, move, x, intpoint))
    {
-      // Determine whether we're on the poly
+      // Determine whether we're on the tri
       float angle = 0.f;
       bool forcehit = false;
       
@@ -422,7 +429,7 @@ bool CollisionDetection::PlaneEdgeSphereCollision(Vector3& retval, const Triangl
 // Finds the point of nearest approach of the vectors describing the movement and the edge
 // of the triangle.  If this point falls on the edge of the polygon and the minimum distance
 // between the two vectors is less than radius then we hit
-bool CollisionDetection::VectorEdgeCheck(Vector3& retval, const Triangle& t, const Vector3& start, const Vector3& end, const float& radius)
+bool CollisionDetection::VectorEdgeCheck(Vector3& retval, Vector3& hitpos, const Triangle& t, const Vector3& start, const Vector3& end, const float& radius)
 {
    Vector3vec v(3);
    for (int i = 0; i < 3; ++i)
@@ -441,9 +448,14 @@ bool CollisionDetection::VectorEdgeCheck(Vector3& retval, const Triangle& t, con
       float dist = DistanceBetweenLines(start, move, raystart, ray, j, k);
       if (dist < radius)
       {
-         if (j < -1e-5 || k < -1e-5 || j > 1 || k > 1) // No hit
+         if (j < 1e-5 || k < 1e-5 || j > .99999 || k > .99999) // No hit
             continue;
-         retval = start + move * j;
+         hitpos = start + move * j;
+         Vector3 other = raystart + ray * k;
+         retval = hitpos - other;
+         float retmag = radius - retval.magnitude();
+         retval.normalize();
+         retval *= retmag;
          return true;
       }
    }

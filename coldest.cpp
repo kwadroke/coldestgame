@@ -1484,7 +1484,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, oldoffset, legoffset, mplayer.size * (threshold + 1.f));
          
-      Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.f, check, false);
+      Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.f, check);
       
       if (downcheck.distance2() < 1e-5f)
       {
@@ -1492,7 +1492,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       }
       if (!downslope)
       {
-         Vector3 upcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * .9f, check, false);
+         Vector3 upcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * .9f, check);
          if (upcheck.distance2() < 1e-5f)
             flat = true;
       }
@@ -1501,8 +1501,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 slopecheckpos = old;
       slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
-      Vector3 slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check, false);
-      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check, false);
+      Vector3 slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check);
+      Vector3 groundcheck = coldet.CheckSphereHit(old, old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check);
       locks.EndWrite(ml);
       
       if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
@@ -1554,12 +1554,13 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
       Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
       Vector3 offsetoldleg = offsetoldmain - Vector3(0, mplayer.size * 2.f, 0);
+      bool exthit;
       
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old + offset, mplayer.pos, mplayer.size * 2.f);
-      float checksize = mplayer.size * 1.01f;
-      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, false);
-      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, checksize, check, false);
+      float checksize = mplayer.size;
+      Vector3 adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, true, &exthit, false);
+      Vector3 legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, checksize, check, true, &exthit, true);
       if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
          adjust = (adjust + legadjust) / 2.f;
       else adjust = adjust + legadjust;
@@ -1578,10 +1579,27 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
+         if (exthit)
+         {
+            // Extended checks occasionally return undesirable hits because they work differently.
+            // However, we don't need them if we travelled less than radius size because it's
+            // impossible to fall through a crack in that case, and this eliminates most of
+            // the hits we don't want.
+            if ((mplayer.pos - old).magnitude() > mplayer.size)
+            {
+               logout << "Warning: Unexpected collision type occurred.  Disallowing movement." << endl;
+               old.print();
+               mplayer.pos.print();
+               (mplayer.pos - old).print();
+               logout << mplayer.fallvelocity << endl;
+               mplayer.pos = old;
+            }
+            break;
+         }
          mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, false);
-         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, checksize, check, false);
+         adjust = coldet.CheckSphereHit(offsetoldmain, mainoffset, checksize, check, true, &exthit);
+         legadjust = coldet.CheckSphereHit(offsetoldleg, legoffset, checksize, check, true, &exthit);
          if (!floatzero(adjust.distance2()) && !floatzero(legadjust.distance2()))
             adjust = (adjust + legadjust) / 2.f;
          else adjust = adjust + legadjust;
