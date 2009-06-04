@@ -849,6 +849,7 @@ void GUIUpdate()
    for (size_t i = 0; i < newchatlines.size(); ++i)
       AppendToChat(newchatplayers[i], newchatlines[i]);
    newchatlines.clear();
+   newchatplayers.clear();
    
    if (gui[loadoutmenu]->visible)
    {

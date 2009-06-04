@@ -8,7 +8,7 @@
      gutterhover="textures/buttonnorm.png"
      cursornormal="textures/sliderbuttonnorm.png">
    <TextArea x="250" y="830" width="500" height="150" name="chatoutput" rowheight="20"
-             normal="textures/hud/button.png">
+             normal="textures/transparent.png">
    </TextArea>
    <Label x="250" y="980" width="50" height="20" text="Team" name="chatteam" visible="false"
           normal="textures/hud/button.png"/>
