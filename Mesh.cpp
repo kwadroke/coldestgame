@@ -1123,6 +1123,7 @@ void Mesh::Add(Mesh* mesh)
    if (tris.size() && !childmeshes.size())
       logout << "Warning: Adding mesh pointers to non-empty mesh.  This erases all of its existing triangles.\n";
    tris.clear();
+   updateibo = true;
    boundschanged = true;
 }
 

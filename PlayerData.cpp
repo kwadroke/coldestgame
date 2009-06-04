@@ -87,6 +87,11 @@ void PlayerData::Kill()
    if (rendermesh != meshes->end())
       meshes->erase(rendermesh);
    rendermesh = meshes->end();
+   if (indicator)
+   {
+      indicator->ttl = 1;
+      indicator = NULL;
+   }
    locks.EndWrite(*meshes);
 }
 
