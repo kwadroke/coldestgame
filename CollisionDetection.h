@@ -39,8 +39,8 @@ class CollisionDetection
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
       Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&, Mesh*&,
-                             vector<Mesh*>* = NULL, const bool extcheck = true, const bool debug = false);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, const bool extcheck = true);
+                             vector<Mesh*>* = NULL, const bool extcheck = true, bool* exthit = NULL, const bool debug = false);
+      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, const bool extcheck = true, bool* exthit = NULL, const bool debug = false);
       // Useful for external code too
       float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&, const float);
       bool UnitTest();
@@ -52,7 +52,7 @@ class CollisionDetection
    private:
       bool PlaneSphereCollision(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&, Vector3&, const bool nomove, const bool debug = false);
       bool PlaneEdgeSphereCollision(Vector3&, const Triangle&, const Vector3&, const float&);
-      bool VectorEdgeCheck(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&);
+      bool VectorEdgeCheck(Vector3&, Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&);
       bool InVector(Mesh*, vector<Meshlist::iterator>&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const Vector3&, float&, Vector3&);
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&);
