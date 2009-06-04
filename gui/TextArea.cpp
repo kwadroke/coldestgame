@@ -56,6 +56,7 @@ void TextArea::RenderWidget()
    
    table->width = width;
    table->height = height;
+   table->colwidths = ToString(width);
    table->Render();
 }
 

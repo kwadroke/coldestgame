@@ -67,8 +67,8 @@ void LineEdit::RenderWidget()
       fh *= scale;
       
       float centery = height / 2.f - fh / 2.f;
-      RenderText(text, oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, textcolor, scale);
-      oldtext = text;
+      RenderText(GetVisible(), oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, textcolor, scale);
+      oldtext = GetVisible();
       fontscale = scale;
    }
    
@@ -113,13 +113,12 @@ void LineEdit::KeyDown(SDL_Event* event)
          DeleteChar();
          break;
       case SDLK_LEFT:
-         --cursorpos;
-         if (cursorpos < 0)
+         if (cursorpos == 0)
          {
             if (offset > 0) --offset;
-            
-            cursorpos = 0;
          }
+         else
+            --cursorpos;
          break;
       case SDLK_RIGHT:
          if (cursorpos + offset < text.length())
@@ -166,7 +165,7 @@ void LineEdit::InsertChar(char c)
 {
    text.insert(offset + cursorpos, 1, c);
    ++cursorpos;
-   if (cursorpos > GetVisible().length())
+   if (offset + cursorpos > GetVisible().length())
    {
       ++offset;
       --cursorpos;

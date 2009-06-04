@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false">
-   <TextArea x="250" y="850" width="500" height="140" name="chatoutput"
-             normal="textures/transparent.png">
+<GUI virtualw="1000" virtualh="1000" font="fonts/jackinput.ttf" visible="false"
+     slidernormal="textures/sliderbuttonnorm.png"
+     sliderpressed="textures/sliderbuttonnorm.png"
+     sliderhover="textures/sliderbuttonnorm.png"
+     gutternormal="textures/buttonnorm.png"
+     gutterpressed="textures/buttonnorm.png"
+     gutterhover="textures/buttonnorm.png"
+     cursornormal="textures/sliderbuttonnorm.png">
+   <TextArea x="250" y="830" width="500" height="150" name="chatoutput" rowheight="20"
+             normal="textures/hud/button.png">
    </TextArea>
-   <Label x="250" y="960" width="50" height="30" text="Team" name="chatteam" visible="false"
+   <Label x="250" y="980" width="50" height="20" text="Team" name="chatteam" visible="false"
           normal="textures/hud/button.png"/>
-   <LineEdit x="300" y="960" width="450" height="30" text="" name="chatinput" visible="false"
+   <LineEdit x="300" y="980" width="450" height="20" text="" name="chatinput" visible="false"
              normal="textures/hud/button.png"
              hover="textures/hud/buttonhover.png"
              pressed="textures/hud/buttonred.png">

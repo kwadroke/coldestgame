@@ -221,6 +221,8 @@
             <ComboBoxItem>****!</ComboBoxItem>
          </ComboBox>
          
+         <LineEdit x="40" y="600" width="120" height="20" text="Some large amount of text that will overflow"/>
+         
          <ScrollView x="400" y="10" width="100" height="100" 
                      vnormal="textures/buttonnorm.png"
                      hnormal="textures/buttonnorm.png">
