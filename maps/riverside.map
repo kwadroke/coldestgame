@@ -48,7 +48,7 @@ Node
       File grass
       Model models/bush/base
       GroupSize 10
-      Density 10
+      Density 5
       MinTilt 0
       MaxTilt 1
       Scale 1
