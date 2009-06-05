@@ -721,6 +721,7 @@ void GetMap(string fn)
    progtext->text = "Generating grass";
    Repaint();
    IniReader grassnode = mapdata.GetItemByName("GrassData");
+   size_t grasstris = 0;
    for (size_t i = 0; i < grassnode.NumChildren(); ++i)
    {
       string file, model;
@@ -813,11 +814,13 @@ void GetMap(string fn)
                grassmesh.terrain = true;
                grassmesh.drawdistmult = console.GetFloat("grassdrawdist") / console.GetFloat("viewdist");
                meshes.push_back(grassmesh);
+               grasstris += grassmesh.NumTris();
             }
          }
       }
       locks.EndWrite(meshes);
    }
+   logout << "Generated " << grasstris << " grass tris\n";
    
    progress->value = 6;
    progtext->text = "Partitioning world";
