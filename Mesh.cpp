@@ -643,6 +643,12 @@ void Mesh::UploadVbo()
    glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
    glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
    
+   if (frameroot.size() <= 1 && !dynamic)
+   {
+      vbodata.clear();
+      indexdata.clear();
+   }
+   
    vbosize = vbodata.size() * sizeof(VBOData);
    ibosize = indexdata.size() * sizeof(unsigned short);
    updatevbo = false;
