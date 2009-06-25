@@ -63,6 +63,25 @@ void ScrollView::RenderWidget()
    xoff -= vpoffsetx;
    yoff -= vpoffsety;
    
+   // Determine whether children are in view
+   for (guiiter i = children.begin(); i != children.end(); ++i)
+   {
+      GUIPtr iptr = *i;
+      iptr->visible = true;
+      float ix = iptr->x;
+      float iy = iptr->y;
+      float iwidth = iptr->width;
+      float iheight = iptr->height;
+      if (ix > vpoffsetx + width)
+         iptr->visible = false;
+      if (ix + iwidth < vpoffsetx)
+         iptr->visible = false;
+      if (iy > vpoffsety + height)
+         iptr->visible = false;
+      if (iy + iheight < vpoffsety)
+         iptr->visible = false;
+   }
+   
    // Children are now rendered by the base Render function, we just need to turn on scissoring
    glEnable(GL_SCISSOR_TEST);
    int scissorcoords[4];
