@@ -52,6 +52,8 @@ class Bot{
       Meshlist dummymeshes;
       PlayerData bot;
       vector<SpawnPointData> spawns;
+      Timer timer;
+      Timer movetimer;
       
       int id;
       SDL_Thread* thread;
@@ -63,6 +65,7 @@ class Bot{
       Bot& operator=(const Bot&);
       
       static int Start(void*);
+      void Update();
       void Loop();
       void Send();
       void Listen();

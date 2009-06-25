@@ -50,7 +50,9 @@ void EditorLoop(const string editmap)
    for (list<Mesh>::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain)
+      {
          i->dynamic = true; // Because we could be moving anything else around
+      }
    }
    gui[loadprogress]->visible = false;
    gui[editormain]->visible = false;
@@ -497,7 +499,8 @@ void GetSelectedMesh(SDL_Event event)
    AppendDynamicMeshes(check, meshes);
    
    Vector3 dummy;
-   coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected);
+   selected = NULL;
+   coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected, NULL, true);
    
    UpdateEditorGUI();
 }

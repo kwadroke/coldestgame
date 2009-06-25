@@ -208,6 +208,7 @@ void Repaint()
    if (console.GetBool("thirdperson"))
    {
       glPopMatrix();
+      glEnable(GL_COLOR_MATERIAL);
       glColor4f(1, 0, 0, .8);
       GLUquadricObj *s = gluNewQuadric();
       gluQuadricTexture(s, GL_TRUE);

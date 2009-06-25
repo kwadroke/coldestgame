@@ -274,7 +274,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          colend /= newpts.size();
          TrianglePtr coltri = TrianglePtr(new Triangle());
          coltri->v[0]->pos = colstart;
-         coltri->v[1]->pos = colstart;
+         coltri->v[1]->pos = (colstart + colend) / 2.f;
          coltri->v[2]->pos = colend;
          coltri->radmod = radius;
          coltri->collide = true;

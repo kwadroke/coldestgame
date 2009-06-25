@@ -76,7 +76,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       exthit = &dummyexthit;
    *exthit = false;
    
-   float cullrad = midpoint.distance(oldpos);
+   //float cullrad = midpoint.distance(oldpos);
    
    if (!nomove)
    {
@@ -87,11 +87,11 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          Vector3 currpos = currmesh.GetPosition();
          if (DistanceBetweenPointAndLine(currpos, oldpos, move, movemaginv) <= currmesh.GetSize() + radius)
          {
-            float currwidth = currmesh.GetWidth();
+            /*float currwidth = currmesh.GetWidth();
             if (midpoint.x + cullrad > currpos.x - currwidth &&
                midpoint.x - cullrad < currpos.x + currwidth &&
                midpoint.z + cullrad > currpos.z - currwidth &&
-               midpoint.z - cullrad < currpos.z + currwidth)
+               midpoint.z - cullrad < currpos.z + currwidth)*/
                objs.push_back(allobjs[i]);
          }
       }
@@ -105,11 +105,11 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          Vector3 currpos = currmesh.GetPosition();
          if (currpos.distance(oldpos) <= currmesh.GetSize() + radius)
          {
-            float currwidth = currmesh.GetWidth();
+            /*float currwidth = currmesh.GetWidth();
             if (midpoint.x + cullrad > currpos.x - currwidth &&
                midpoint.x - cullrad < currpos.x + currwidth &&
                midpoint.z + cullrad > currpos.z - currwidth &&
-               midpoint.z - cullrad < currpos.z + currwidth)
+               midpoint.z - cullrad < currpos.z + currwidth)*/
                objs.push_back(allobjs[i]);
          }
       }
@@ -120,9 +120,9 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    neartris.reserve(osize * 200);
    map<Triangle*, Mesh*> trimap;
    Triangle* hittri = NULL;
-   //logout << "Checking " << objs.size() << endl;
-   //logout << "Radius " << radius << endl;
-   //logout << "Dist " << oldpos.distance(newpos) << endl;
+//    logout << "Checking " << objs.size() << endl;
+//    logout << "Radius " << radius << endl;
+//    logout << "Dist " << oldpos.distance(newpos) << endl;
    
    bool hit;
    for (size_t i = 0; i < osize; i++)
@@ -159,6 +159,175 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   adjusted++;
                   if (retobjs)
                      retobjs->push_back(current);
+               }
+               else if (0)//!nomove) // Debugging
+               {
+                  hit = PlaneSphereCollision(temp, currtri, newpos, newpos, radius + currtri.radmod, temphitpos, true);
+                  if (hit && temp.magnitude() > 1e-3f)
+                  {
+                     Vector3vec v(3);
+                     for (int i = 0; i < 3; ++i)
+                        v[i] = currtri.v[i]->pos;
+                     Vector3 norm = (v[1] - v[0]).cross(v[2] - v[0]);
+                     norm.normalize();
+   
+                     if (!nomove)
+                     {
+                        for (int i = 0; i < 3; ++i)
+                           v[i] += norm * radius;
+                     }
+   
+                     float d = -norm.dot(v[0]);
+   
+                     float startside = norm.dot(oldpos) + d;
+                     float endside = norm.dot(newpos) + d;
+                     if (startside * endside < 0)
+                     {
+                        logout << "*************Error\n";
+                        logout << startside << "  " << endside << endl;
+                        logout << temp.magnitude() << endl;
+                        temp.print();
+                        oldpos.print();
+                        newpos.print();
+                        logout << (radius + currtri.radmod) << endl;
+                        temphitpos.print();
+                        for (size_t j = 0; j < 3; ++j)
+                           currtri.v[j]->pos.print();
+                        currtri.midpoint.print();
+                     }
+                     
+                     float denominator;
+                     Vector3 move;
+                     float x = -1.f;
+                     Vector3 intpoint;
+   
+                     if (CrossesPlane(oldpos, newpos, norm, d, denominator, move, x, intpoint))
+                     {
+                        // Determine whether we're on the tri
+                        float angle = 0.f;
+                        bool forcehit = false;
+      
+                        for (int i = 0; i < 3; ++i)
+                        {
+                           // When intpoint == v[i], we have problems because the dot product below ends up zero, which is wrong
+                           if (intpoint.distance2(v[i]) < .000001)
+                           {
+                              forcehit = true;
+                              break;
+                           }
+                           Vector3 p = intpoint - v[i];
+                           Vector3 p1 = intpoint - v[(i + 1) % 3];
+                           p.normalize();
+                           p1.normalize();
+                           angle += acos(p.dot(p1));
+                        }
+                        if (startside * endside < 0)
+                        {
+                           logout << angle << "  " << (2.f * PI) << endl;
+                           intpoint.print();
+                        }
+      
+                        if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
+                        {
+                           float endside = norm.dot(newpos) + d;
+                           if (endside > -1e-4f)
+                              endside = -1e-4f;
+                           adjust = norm * -endside;
+                           hitpos = intpoint;
+                        }
+                        //logout << "Not on tri " << angle << endl;
+                     }
+                  }
+               }
+               //logout << "end" << endl;
+            }
+         }
+      }
+   }
+   
+   size_t ntsize = neartris.size();
+   
+   // Check edges of polys as well.
+   if (0)//nomove && !adjusted)
+   {
+      for (size_t i = 0; i < ntsize; i++)
+      {
+         Triangle& currtri = *neartris[i];
+         hit = false;
+         hit = PlaneEdgeSphereCollision(temp, currtri, newpos, radius + currtri.radmod);
+         if (hit)
+         {
+            adjust += temp;
+            hittri = &currtri;
+            hitpos = newpos;
+            adjusted++;
+            if (retobjs)
+               retobjs->push_back(trimap[&currtri]);
+         }
+      }
+   }
+   
+   if (!nomove && !adjusted)//extcheck && !nomove && !adjusted)
+   {
+      // TODO: Parts of this comment are out of date
+      // Do another edge check that checks the entire movement path, not just the ending position.
+      // This is necessary because projectiles may move significantly larger distances than their
+      // radius which can make the previous check fail incorrectly.  This is no longer a problem
+      // for on-poly checks because they also check the entire movement path, but the first edge
+      // check does not.  We keep it because this check can miss certain collisions (specifically
+      // if a movement is close to parallel to the edge so the nearest point of the two vectors
+      // falls outside the edge vector, but we still actually touch the edge) which is acceptable
+      // for projectiles because the corner test will catch them, but could be a problem for player
+      // movement.  Whew.
+      Vector3 raystart, rayend;
+      for (size_t i = 0; i < ntsize; i++)
+      {
+         Triangle& currtri = *neartris[i];
+         hit = false;
+         //hit = VectorEdgeCheck(temp, temphitpos, currtri, oldpos, newpos, radius + currtri.radmod);
+         for (size_t j = 0; j < 3; ++j)
+         {
+            raystart = currtri.v[j]->pos;
+            rayend = currtri.v[(j + 1) % 3]->pos;
+            hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod, temp, temphitpos);
+            if (hit)
+            {
+               adjust += temp;
+               if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
+               {
+                  hittri = &currtri;
+                  hitpos = temphitpos;
+               }
+               adjusted++;
+               *exthit = true;
+               if (retobjs)
+                  retobjs->push_back(trimap[&currtri]);
+            }
+         }
+      }
+      
+      // Do a ray-sphere check on each corner of the triangles.  This is to handle
+      // the aforementioned case when we're moving nearly parallel to the edge.
+      if (!adjusted)
+      {
+         for (size_t i = 0; i < ntsize; i++)
+         {
+            Triangle& currtri = *neartris[i];
+            for (int j = 0; j < 3; ++j)
+            {
+               if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod, temp, true))
+               {
+                  if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+                  {
+                     hittri = &currtri;
+                     hitpos = currtri.v[j]->pos;
+                  }
+                  adjust += temp;
+                  adjusted++;
+                  *exthit = true;
+                  if (retobjs)
+                     retobjs->push_back(trimap[&currtri]);
+                  break; // One hit per tri should be enough
                }
             }
          }
@@ -198,86 +367,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       }
    }
    
-   size_t ntsize = neartris.size();
-   
-   // Check edges of polys as well.
-   // This test will almost never hit for fast-moving projectiles, so don't even bother
-   if (!adjusted)
-   {
-      for (size_t i = 0; i < ntsize; i++)
-      {
-         Triangle& currtri = *neartris[i];
-         hit = false;
-         hit = PlaneEdgeSphereCollision(temp, currtri, newpos, radius + currtri.radmod);
-         if (hit)
-         {
-            adjust += temp;
-            hitobj = trimap[&currtri];
-            hitpos = newpos;
-            adjusted++;
-            if (retobjs)
-               retobjs->push_back(trimap[&currtri]);
-         }
-      }
-   }
-   
-   
-   // If we moved a fairly long distance we're probably a projectile and need to do the following
-   if (extcheck && !nomove && !adjusted)
-   {
-      // Do another edge check that checks the entire movement path, not just the ending position.
-      // This is necessary because projectiles may move significantly larger distances than their
-      // radius which can make the previous check fail incorrectly.  This is no longer a problem
-      // for on-poly checks because they also check the entire movement path, but the first edge
-      // check does not.  We keep it because this check can miss certain collisions (specifically
-      // if a movement is close to parallel to the edge so the nearest point of the two vectors
-      // falls outside the edge vector, but we still actually touch the edge) which is acceptable
-      // for projectiles because the corner test will catch them, but could be a problem for player
-      // movement.  Whew.
-      for (size_t i = 0; i < ntsize; i++)
-      {
-         Triangle& currtri = *neartris[i];
-         hit = false;
-         hit = VectorEdgeCheck(temp, temphitpos, currtri, oldpos, newpos, radius + currtri.radmod);
-         if (hit)
-         {
-            adjust += temp;
-            if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
-            {
-               hitobj = trimap[&currtri];
-               hitpos = temphitpos;
-            }
-            adjusted++;
-            *exthit = true;
-            if (retobjs)
-               retobjs->push_back(trimap[&currtri]);
-         }
-      }
-      
-      // Do a ray-sphere check on each corner of the triangles.  This is to handle
-      // the aforementioned case when we're moving nearly parallel to the edge.
-      for (size_t i = 0; i < ntsize; i++)
-      {
-         Triangle& currtri = *neartris[i];
-         for (int j = 0; j < 3; ++j)
-         {
-            if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod, temp))
-            {
-               if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
-               {
-                  hitobj = trimap[&currtri];
-                  hitpos = currtri.v[j]->pos;
-               }
-               adjust -= temp; // The returned vector is going to be backwards in this case, because we inverted the check
-               adjusted++;
-               *exthit = true;
-               if (retobjs)
-                  retobjs->push_back(trimap[&currtri]);
-            }
-         }
-      }
-   }
-   
    if (hittri)
       hitobj = trimap[hittri];
    
@@ -294,7 +383,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    hit using the other detection method, but in some cases (say calculating damage radius for splash damage) we
    need to be able to hit while not moving.
 */
-bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t, const Vector3& pos, const Vector3& pos1,
+bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t, Vector3 pos, const Vector3& pos1,
       const float& radius, Vector3& hitpos, bool nomove, bool debug)
 {
    Vector3vec v(3);
@@ -314,12 +403,9 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
    float d = -norm.dot(v[0]);
    
    float startside = norm.dot(pos) + d;
-   if (startside < -1e-2)
+   if (startside < -1e-4)
    {
-      if (!nomove)
-         return false;
-      else
-         endpos += norm * radius;
+      return false;
    }
    else if (nomove)
       endpos -= norm * radius;
@@ -329,39 +415,6 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
    float x = -1.f;
    Vector3 intpoint;
    
-#if 0
-   if (floatzero(v[0].x - norm.x * radius * .98) && floatzero(v[0].z - norm.z * radius * .98))
-   {
-      float endside = norm.dot(pos1) + d;
-      move = pos1 - pos;
-      denominator = norm.dot(move);
-      norm.print();
-      move.print();
-      x = -(norm.dot(pos) + d) / denominator;
-      intpoint = pos + move * x;
-      if (endside < -.0000001)
-         logout << "Endside Okay" << endl;
-      if (denominator != 0)
-         logout << "Den Okay" << endl;
-      if (x > -1e-4)
-         logout << "X > Okay" << endl;
-      else logout << x << endl;
-      if (x < move.magnitude() + radius)
-         logout << "X < Okay" << endl;
-      else
-      {
-         logout << x << endl;
-         logout << (move.magnitude() + radius) << endl;
-      }
-      /*logout << "Startside: " << startside << endl;
-      logout << "Endside: " << endside << endl;
-      logout << "Den: " << denominator << endl;
-      logout << "X: " << x << endl;*/
-      if (x < -1e-4)
-         logout << "A big WTF to that....................\n";
-      //intpoint.print();
-   }
-#endif
    if (CrossesPlane(pos, endpos, norm, d, denominator, move, x, intpoint))
    {
       // Determine whether we're on the tri
@@ -383,15 +436,20 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
          angle += acos(p.dot(p1));
       }
       
-      if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
+      if (forcehit || (angle > 2.f * PI - .05 && angle < 2.f * PI + .05))
       {
          float endside = norm.dot(endpos) + d;
+         if (endside > -1e-4f)
+            endside = -1e-4f;
          adjust = norm * -endside;
          hitpos = intpoint;
          retval = adjust;
          return true;
       }
+      //logout << "Not on tri " << angle << endl;
    }
+   //else
+      //logout << "Didn't cross plane" << endl;
    return false;
 }
 
@@ -408,10 +466,10 @@ bool CollisionDetection::PlaneEdgeSphereCollision(Vector3& retval, const Triangl
    int numhits = 0;
    for (int i = 0; i < 3; i++)
    {
-      Vector3 ray, raystart, rayend;
+      Vector3 raystart, rayend;
       raystart = v[i];
       rayend = v[(i + 1) % 3];
-      if (RaySphereCheck(raystart, rayend, pos, radius, tempadj))
+      if (RaySphereCheck(raystart, rayend, pos, radius, tempadj, false))
       {
          adjust += tempadj;
          ++numhits;
@@ -498,8 +556,9 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    {
       x = -(norm.dot(start) + d) / denominator;
       intpoint = start + move * x;
-      if (x < 1.f && x > -1e-4f)
+      if (x < 1.0001f && x > -1e-4f)
          return true;
+      //logout << "intpoint not on line " << x << endl;
    }
    return false;
 }
@@ -516,7 +575,7 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    
    float endside = norm.dot(end) + d;
    
-   if (endside < .00001)
+   if (endside < 1e-4f)
    {
       move = end - start;
       denominator = norm.dot(move);
@@ -524,7 +583,9 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
       {
          return true;
       }
+      //logout << "Denominator not zero" << denominator << endl;
    }
+   //logout << "Didn't cross " << endside << endl;
    return false;
 }
 
@@ -561,7 +622,7 @@ float CollisionDetection::DistanceBetweenLines(const Vector3& start, const Vecto
 
 
 bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& rayend,
-                                        const Vector3& spherepos, const float radius, Vector3& adjust)
+                                        const Vector3& spherepos, const float radius, Vector3& adjust, const bool extadj)
 {
    Vector3 ray = rayend - raystart;
    ray.normalize();
@@ -578,26 +639,205 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
       intercept = raystart + ray * t;
       intercept1 = raystart + ray * t1;
       if ((t < maxt && t > 0) ||
-           (t1 < maxt && t1 > 0))
+         (t1 < maxt && t1 > 0))
       {
-         adjust = spherepos - (intercept + intercept1) / 2.f;
-         if (t1 < 0)
-            adjust = spherepos - raystart;
-         else if (t > maxt)
-            adjust = spherepos - rayend;
-         float dist = adjust.magnitude();
-         if (dist > radius - .001)  // For rounding error
-            dist = radius - .001;
-         adjust.normalize();
-         adjust *= radius - dist;
+         if (!extadj)
+         {
+            adjust = spherepos - (intercept + intercept1) / 2.f;
+            if (t < 0 || t1 < 0)
+               adjust = spherepos - raystart;
+            else if (t > maxt || t1 > maxt)
+               adjust = spherepos - rayend;
+            float dist = adjust.magnitude();
+            adjust.normalize();
+            adjust *= radius - dist;
+         }
+         else
+         {
+            // If we started out inside the sphere then consider that a non-hit
+            // This can happen if we start a move very close to a sphere
+            if (t < 0 || t1 < 0)
+               return false;
+            Vector3 nearint, farint;
+            if (t < t1)
+            {
+               nearint = intercept;
+               farint = intercept1;
+            }
+            else
+            {
+               nearint = intercept1;
+               farint = intercept;
+            }
+            Vector3 perp;
+            Vector3 half = (nearint + farint) / 2.f;
+            if (half.distance2(raystart) <= rayend.distance2(raystart))
+               perp = (nearint + half) / 2.f;
+            else
+               perp = (nearint + rayend) / 2.f;
+            perp -= spherepos;
+            perp.normalize();
+            perp *= radius * 1.001f;
+            adjust = (spherepos + perp) - rayend;
+            
+            if (adjust.magnitude() > 10)
+            {
+               logout << "Hit in raysphere check ***********************\n";
+               logout << "adjust ";
+               adjust.print();
+               logout << "perp ";
+               perp.print();
+               logout << "spherepos ";
+               spherepos.print();
+               logout << "nearint ";
+               nearint.print();
+               logout << "farint ";
+               farint.print();
+               logout << "raystart ";
+               raystart.print();
+               logout << "rayend ";
+               rayend.print();
+            }
+         }
          return true;
       }
    }
    // Handles the case for when the poly is completely contained in the circle
+   // This should never happen for extadj, so we don't handle that case
    if (raystart.distance(spherepos) < radius && rayend.distance(spherepos) < radius)
    {
       adjust = spherepos - (raystart + rayend) / 2.f;
       return true;
+   }
+   return false;
+}
+
+
+// Thanks to oliii at http://www.gamedev.net/community/forums/topic.asp?topic_id=173865 for this algorithm
+bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3& rayend,
+                                          const Vector3& cylstart, const Vector3& cylend, const float radius,
+                                          Vector3& adjust, Vector3& hitpos)
+{
+   Vector3 cylray = cylend - cylstart;
+   Vector3 normcylray = cylray;
+   normcylray.normalize();
+   
+   Vector3 ray = rayend - raystart;
+   float maxt = ray.magnitude();
+   ray.normalize();
+   
+   /*Vector3 ab = cylray - cylstart;
+   Vector3 ao = raystart - cylstart;
+   Vector3 aoxab = ao.cross(ab);
+   Vector3 vxab = ray.cross(ab);
+   float ab2 = ab.dot(ab);
+   float a = vxab.dot(vxab);
+   float b = 2.f * vxab.dot(aoxab);
+   float c = aoxab.dot(aoxab) - radius * radius * ab2;*/
+   // I think I want to be using normcylray here, although it's not explicitly mentioned in the reference
+   Vector3 rxc = ray.cross(normcylray);
+   Vector3 rsmcs = raystart - cylstart;
+   Vector3 rcxc = rsmcs.cross(normcylray);
+   float a = rxc.dot(rxc);
+   float b = 2.f * rcxc.dot(rxc);
+   float c = rcxc.dot(rcxc) - radius * radius;
+   
+   float b24ac = b * b - 4.f * a * c;
+   
+   if (b24ac >= 1e-4f)
+   {
+      float t = (-b + sqrt(b24ac)) / (2.f * a);
+      float t1 = (-b - sqrt(b24ac)) / (2.f * a);
+      
+      // If we started out inside the cylinder then consider that a non-hit
+      // This can happen if we start a move very close to a cylinder
+      if ((t < 0 && t1 > 0) || (t > 0 && t1 < 0))
+         return false;
+      
+      if ((t > 0 && t < maxt) ||
+          (t1 > 0 && t1 < maxt))
+      {
+         Vector3 intercept;
+         if (t < 0)
+            intercept = raystart + ray * t1;
+         else if (t1 < 0)
+            intercept = raystart + ray * t;
+         else if (t < t1)
+            intercept = raystart + ray * t;
+         else
+            intercept = raystart + ray * t1;
+         
+         float intproj = (intercept - cylstart).dot(normcylray);
+         if (intproj < 0 || (intproj > cylray.magnitude()))
+            return false;
+         // Now we know the hit was on both the cylinder and the ray
+         hitpos = intercept;
+         Vector3 intoncyl = cylstart + normcylray * intproj;
+         Vector3 perp = intercept - intoncyl;
+         
+         float endproj = (rayend - cylstart).dot(normcylray);
+         Vector3 endoncyl = cylstart + endproj * normcylray;
+         
+         Vector3 maxadj = ray.cross(cylray);
+         maxadj.normalize();
+         maxadj *= radius;
+         Vector3 maxadj1 = -maxadj;
+         if (maxadj.distance2(perp) > maxadj1.distance2(perp))
+            maxadj = maxadj1;
+         
+         float interpval;
+         float half = (t + t1) / 2.f;
+         if (t < t1)
+            interpval = smoothstep(t, half, maxt);
+         else
+            interpval = smoothstep(t1, half, maxt);
+         perp = lerp(maxadj, perp, interpval);
+         perp.normalize();
+         perp *= radius * 1.001f;
+         
+         endoncyl = endoncyl + perp;
+         
+         adjust = endoncyl - rayend;
+         
+         /*Vector3 intray = intercept - cylstart;
+         Vector3 perp = intray.cross(cylray);
+         perp = cylray.cross(perp);
+         perp.normalize();
+         perp *= radius;*/
+         
+         if ((adjust.magnitude() > 10 || radius > 16) && raystart.distance(rayend) < 1000)
+         {
+            logout << "Hit.........................." << endproj << "  " << intproj << endl;
+            logout << radius << "  " << t << "  " << t1 << "  " << maxt << endl;
+            logout << a << "  " << b << "  " << c << endl;
+            logout << "cylstart ";
+            cylstart.print();
+            logout << "cylray ";
+            cylray.print();
+            logout << "cylend ";
+            cylend.print();
+            logout << "perp " << perp.magnitude() << " ";
+            perp.print();
+            logout << "endoncyl ";
+            endoncyl.print();
+            logout << "intercept ";
+            intercept.print();
+            logout << "intoncyl ";
+            intoncyl.print();
+            logout << "intercept dist " << DistanceBetweenPointAndLine(intercept, cylstart, cylray, 1 / cylray.magnitude()) << endl;
+            logout << "raystart ";
+            raystart.print();
+            logout << "rayend ";
+            rayend.print();
+            logout << "adjust ";
+            adjust.print();
+            logout << "interpval " << interpval << endl;
+            logout << "maxadj ";
+            maxadj.print();
+            logout << endl;
+         }
+         return true;
+      }
    }
    return false;
 }
@@ -614,6 +854,12 @@ float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, cons
 
 bool CollisionDetection::UnitTest()
 {
+   Vector3 a(0, 0, 2);
+   Vector3 b(0, 1, 1.5);
+   Vector3 anorm = a;
+   anorm.normalize();
+   float proj = b.dot(anorm);
+   cout << proj;
    
    return true;
 }

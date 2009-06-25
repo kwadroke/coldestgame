@@ -66,7 +66,7 @@ int ToInt(const T &input, std::ios_base& (*f)(std::ios_base&) = std::dec)
 template <typename T>
 T lerp(T x, T y, float a)
 {
-   return (x * a + y * (1 - a));
+   return (x * a + y * (1.f - a));
 }
 
 template <typename T>

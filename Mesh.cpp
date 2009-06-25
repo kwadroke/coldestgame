@@ -449,8 +449,7 @@ void Mesh::Move(const Vector3& v, bool movetris)
    
    position = v;
    trisdirty = true;
-   if (!frameroot.size())
-      updatevbo = true;
+   updatevbo = true;
 }
 
 
@@ -494,8 +493,7 @@ void Mesh::Rotate(const Vector3& v, bool movetris)
    
    rots = v;
    trisdirty = true;
-   if (!frameroot.size())
-      updatevbo = true;
+   updatevbo = true;
 }
 
 
@@ -912,11 +910,12 @@ void Mesh::CalcBounds()
    {
       size = 0.f;
       float dist = 0.f;
-      Vector3 min;
-      Vector3 max;
       float temp;
       Vector3 localpos = GetPosition();
+      Vector3 localwpos, localhpos;
       size_t tsize = tris.size();
+      height = 0;
+      width = 0;
       for (size_t i = 0; i < tsize; ++i)
       {
          for (int j = 0; j < 3; ++j)
@@ -924,20 +923,21 @@ void Mesh::CalcBounds()
             Triangle& currtri = *tris[i];
             dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
             if (dist > size) size = dist;
-            temp = currtri.v[j]->pos.x - localpos.x;
-            if (temp + currtri.radmod > max.x) max.x = temp + currtri.radmod;
-            if (temp - currtri.radmod < min.x) min.x = temp - currtri.radmod;
-            temp = currtri.v[j]->pos.y - localpos.y;
-            if (temp + currtri.radmod > max.y) max.y = temp + currtri.radmod;
-            if (temp - currtri.radmod < min.y) min.y = temp - currtri.radmod;
-            temp = currtri.v[j]->pos.z - localpos.z;
-            if (temp + currtri.radmod > max.z) max.z = temp + currtri.radmod;
-            if (temp - currtri.radmod < min.z) min.z = temp - currtri.radmod;
+            
+            localwpos = currtri.v[j]->pos;
+            localwpos.y = localpos.y;
+            temp = localwpos.distance(localpos) + currtri.radmod;
+            if (temp > width) width = temp;
+            
+            localhpos = currtri.v[j]->pos;
+            localhpos.x = localpos.x;
+            localhpos.z = localpos.z;
+            temp = localhpos.distance(localpos) + currtri.radmod;
+            if (temp > height) height = temp;
          }
       }
-      // I don't think this will do what we want, but I also don't think it's used anywhere right now
-      height = max.y - min.y;
-      width = (max.x - min.x) > (max.z - min.z) ? (max.x - min.x) : (max.z - min.z);
+      height *= 2.f;
+      width *= 2.f;
    }
    boundschanged = false;
    if (childmeshes.size())
