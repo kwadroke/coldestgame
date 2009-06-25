@@ -1,13 +1,11 @@
-TileSize 30
+TileSize 60
 HeightScale 1.4
 ZeroHeight 20
-NumTextures 18
-NumObjects 26
 Stretch 8
 
 LightData
 Direction -1 1 -1
-Diffuse 1.5 1.5 1.5 1
+Diffuse 1 1 1 1
 Specular 1 1 1 1
 Ambient .2 .2 .2 1
 
