@@ -206,9 +206,10 @@ void GetMap(string fn)
       if (editor)
       {
          MeshPtr newmesh = meshcache->GetNewMesh("models/base/base");
-         newmesh->Move(spawntemp.position);
          newmesh->dynamic = true;
-         newmesh->GenVbo();
+         newmesh->SetGL();
+         newmesh->Move(spawntemp.position);
+         newmesh->AdvanceAnimation();
          meshes.push_back(*newmesh);
          spawnmeshes.push_back(&meshes.back());
       }

@@ -34,6 +34,8 @@ Bot::Bot() : botrunning(true), needconnect(true), botconnected(false), bot(dummy
       return;
    }
    thread = SDL_CreateThread(Start, this);
+   timer.start();
+   movetimer.start();
 }
 
 
@@ -64,9 +66,38 @@ void Bot::Loop()
    id = gettid();
    while (botrunning)
    {
+      Update();
       Send();
       Listen();
       SDL_Delay(1);
+   }
+}
+
+
+void Bot::Update()
+{
+   if (bot.moveleft)
+      bot.facing -= .1f * movetimer.elapsed();
+   if (bot.moveright)
+      bot.facing += .1f * movetimer.elapsed();
+   movetimer.start();
+   if (timer.elapsed() > 2000)
+   {
+      if (Random(0, 1) > .5)
+         bot.moveforward = true;
+      else
+         bot.moveforward = false;
+      
+      if (Random(0, 1) > .5)
+         bot.moveleft = true;
+      else
+         bot.moveleft = false;
+      
+      if (Random(0, 1) > .5)
+         bot.moveright = true;
+      else
+         bot.moveright = false;
+      timer.start();
    }
 }
 

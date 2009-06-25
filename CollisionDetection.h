@@ -50,7 +50,7 @@ class CollisionDetection
       vector<Quad> worldbounds;
       
    private:
-      bool PlaneSphereCollision(Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&, Vector3&, const bool nomove, const bool debug = false);
+      bool PlaneSphereCollision(Vector3&, const Triangle&, Vector3, const Vector3&, const float&, Vector3&, const bool nomove, const bool debug = false);
       bool PlaneEdgeSphereCollision(Vector3&, const Triangle&, const Vector3&, const float&);
       bool VectorEdgeCheck(Vector3&, Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&);
       bool InVector(Mesh*, vector<Meshlist::iterator>&);
@@ -59,7 +59,10 @@ class CollisionDetection
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&, float&, Vector3&);
       float DistanceBetweenLines(const Vector3& start, const Vector3& dir, const Vector3& start1, const Vector3& dir1, float&, float&);
       bool RaySphereCheck(const Vector3& raystart, const Vector3& rayend,
-                     const Vector3& spherepos, const float radius, Vector3& adjust);
+                     const Vector3& spherepos, const float radius, Vector3& adjust, const bool extadj);
+      bool RayCylinderCheck(const Vector3&, const Vector3&,
+            const Vector3&, const Vector3&, const float,
+            Vector3&, Vector3&);
 };
 
 // From http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
