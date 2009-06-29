@@ -1544,7 +1544,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 oldlegoffset = old - Vector3(0, mplayer.size, 0);
       Vector3 cushion = oldmainoffset - mainoffset;
       cushion.normalize();
-      cushion *= mplayer.size * .001f;
+      cushion *= mplayer.size * .01f;
       bool exthit;
       
       locks.Write(ml);
@@ -1602,7 +1602,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          legoffset += adjust * (1 + count * slop);
          cushion = oldmainoffset - mainoffset;
          cushion.normalize();
-         cushion *= mplayer.size * .001f;
+         cushion *= mplayer.size * .01f;
          
          adjust = Vector3();//coldet.CheckSphereHit(oldmainoffset + cushion, mainoffset, checksize, check, true, &exthit);
          legadjust = coldet.CheckSphereHit(oldlegoffset + cushion, legoffset, checksize, check, true, &exthit);
