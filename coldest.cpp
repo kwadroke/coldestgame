@@ -1533,7 +1533,12 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    }
    else mplayer.weight = 1.f;
    
-   
+   ValidateMove(mplayer, old, ml, kt);
+}
+
+
+void ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectKDTree& kt)
+{
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost") && mplayer.weight > 0)
    {
@@ -1558,45 +1563,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       int count = 0;
       float slop = .01f;
       
-      if (0)//adjust.distance() > 20 || mplayer.fallvelocity > 5)
-      {
-         logout << "Adjust: " << adjust.distance() << endl;
-         logout << "Move: " << oldmainoffset.distance(mainoffset) << endl;
-         logout << "Numticks: " << numticks << endl;
-         logout << "Speed: " << mplayer.speed << endl;
-         logout << "Moving: " << moving << endl;
-         logout << "Fallvelocity: " << mplayer.fallvelocity << endl;
-         logout << "Position: ";
-         mplayer.pos.print();
-      }
-      
       while (adjust.distance() > 1e-4f) // Not zero vector
       {
-         if ((oldmainoffset - mainoffset).magnitude() > 10)
-         {
-            logout << "Long move...\n";
-            oldmainoffset.print();
-            mainoffset.print();
-            logout << "count " << count << endl;
-         }
-         if (0)//exthit) // This section should almost certainly be removed
-         {
-            // Extended checks occasionally return undesirable hits because they work differently.
-            // However, we don't need them if we travelled less than radius size because it's
-            // impossible to fall through a crack in that case, and this eliminates most of
-            // the hits we don't want.
-            if ((mplayer.pos - old).magnitude() > mplayer.size)
-            {
-               logout << "Warning: Unexpected collision type occurred.  Disallowing movement." << endl;
-               old.print();
-               mplayer.pos.print();
-               (mplayer.pos - old).print();
-               logout << mplayer.fallvelocity << endl;
-               //mplayer.pos = old;
-               mainoffset = old + Vector3(0, mplayer.size, 0);
-               break;
-            }
-         }
          check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 2.f);
          mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
@@ -1611,7 +1579,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          else adjust = adjust + legadjust;
          
          ++count;
-         if (count > 5)
+         if (count > 2)
             slop *= 2.f;
          if (count > 10 && adjust.distance() > 1e-4f) // Damage control in case something goes wrong
          {
@@ -1812,7 +1780,11 @@ void SynchronizePosition()
       posadj *= .1f;
    }
    
+   Vector3 old = player[0].pos;
    player[0].pos += posadj;
+   ValidateMove(player[0], old, meshes, kdtree);
+   posadj = player[0].pos - old;
+   
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
    {
       i->pos += posadj;
