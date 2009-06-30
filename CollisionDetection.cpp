@@ -166,7 +166,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   if (retobjs)
                      retobjs->push_back(current);
                }
-               else if (!nomove) // Debugging
+               else if (0)//!nomove) // Debugging
                {
                   hit = PlaneSphereCollision(temp, currtri, newpos, newpos, radius + currtri.radmod, temphitpos, true);
                   if (hit && temp.magnitude() > 1e-3f)
@@ -278,12 +278,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       }
    }
    
-   if (adjusted && adjust.magnitude() < 1e-4f)
-   {
-      adjusted = 0;
-      adjust = Vector3();
-   }
-   if (!nomove && !adjusted)//extcheck && !nomove && !adjusted)
+   if (!nomove && !adjusted)
    {
       // TODO: Parts of this comment are out of date
       // Do another edge check that checks the entire movement path, not just the ending position.
@@ -300,7 +295,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       {
          Triangle& currtri = *neartris[i];
          hit = false;
-         //hit = VectorEdgeCheck(temp, temphitpos, currtri, oldpos, newpos, radius + currtri.radmod);
+         // TODO: This should probably only take the nearest edge hit if there are multiple hits
          for (size_t j = 0; j < 3; ++j)
          {
             raystart = currtri.v[j]->pos;
@@ -320,12 +315,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   retobjs->push_back(trimap[&currtri]);
             }
          }
-      }
-      
-      if (adjusted && adjust.magnitude() < 1e-4f)
-      {
-         adjusted = 0;
-         adjust = Vector3();
       }
       
       // Do a ray-sphere check on each corner of the triangles.  This is to handle
@@ -354,12 +343,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             }
          }
       }
-   }
-   
-   if (adjusted && adjust.magnitude() < 1e-4f)
-   {
-      adjusted = 0;
-      adjust = Vector3();
    }
    
    Vector3 v, s, t, u;
@@ -472,25 +455,14 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
       if (forcehit || (angle > 2.f * PI - .05 && angle < 2.f * PI + .05))
       {
          float endside = norm.dot(endpos) + d;
-         float oldendside = endside; // REMOVE ME WHEN DONE DEBUGGING!!!
          if (endside > -2e-4f)
             endside = -2e-4f;
          adjust = norm * -endside;
-         if (adjust.magnitude() < 1e-4f)
-         {
-            logout << "Really small adjust value.............\n";
-            adjust.print();
-            logout << "endside " << endside << "  " << oldendside << endl;
-            norm.print();
-         }
          hitpos = intpoint;
          retval = adjust;
          return true;
       }
-      //logout << "Not on tri " << angle << endl;
    }
-   //else
-      //logout << "Didn't cross plane" << endl;
    return false;
 }
 
@@ -624,9 +596,7 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
       {
          return true;
       }
-      //logout << "Denominator not zero" << denominator << endl;
    }
-   //logout << "Didn't cross " << endside << endl;
    return false;
 }
 
@@ -720,25 +690,6 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
             perp.normalize();
             perp *= radius * 1.001f;
             adjust = (spherepos + perp) - rayend;
-            
-            if (adjust.magnitude() > 10 && raystart.distance(rayend) < 1000)
-            {
-               logout << "Hit in raysphere check ***********************\n";
-               logout << "adjust ";
-               adjust.print();
-               logout << "perp ";
-               perp.print();
-               logout << "spherepos ";
-               spherepos.print();
-               logout << "nearint ";
-               nearint.print();
-               logout << "farint ";
-               farint.print();
-               logout << "raystart ";
-               raystart.print();
-               logout << "rayend ";
-               rayend.print();
-            }
          }
          return true;
       }
@@ -767,14 +718,6 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
    float maxt = ray.magnitude();
    ray.normalize();
    
-   /*Vector3 ab = cylray - cylstart;
-   Vector3 ao = raystart - cylstart;
-   Vector3 aoxab = ao.cross(ab);
-   Vector3 vxab = ray.cross(ab);
-   float ab2 = ab.dot(ab);
-   float a = vxab.dot(vxab);
-   float b = 2.f * vxab.dot(aoxab);
-   float c = aoxab.dot(aoxab) - radius * radius * ab2;*/
    // I think I want to be using normcylray here, although it's not explicitly mentioned in the reference
    Vector3 rxc = ray.cross(normcylray);
    Vector3 rsmcs = raystart - cylstart;
@@ -839,44 +782,6 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          endoncyl = endoncyl + perp;
          
          adjust = endoncyl - rayend;
-         
-         /*Vector3 intray = intercept - cylstart;
-         Vector3 perp = intray.cross(cylray);
-         perp = cylray.cross(perp);
-         perp.normalize();
-         perp *= radius;*/
-         
-         if ((adjust.magnitude() > 10 || radius > 16) && raystart.distance(rayend) < 1000)
-         {
-            logout << "Hit.........................." << endproj << "  " << intproj << endl;
-            logout << radius << "  " << t << "  " << t1 << "  " << maxt << endl;
-            logout << a << "  " << b << "  " << c << endl;
-            logout << "cylstart ";
-            cylstart.print();
-            logout << "cylray ";
-            cylray.print();
-            logout << "cylend ";
-            cylend.print();
-            logout << "perp " << perp.magnitude() << " ";
-            perp.print();
-            logout << "endoncyl ";
-            endoncyl.print();
-            logout << "intercept ";
-            intercept.print();
-            logout << "intoncyl ";
-            intoncyl.print();
-            logout << "intercept dist " << DistanceBetweenPointAndLine(intercept, cylstart, cylray, 1 / cylray.magnitude()) << endl;
-            logout << "raystart ";
-            raystart.print();
-            logout << "rayend ";
-            rayend.print();
-            logout << "adjust ";
-            adjust.print();
-            logout << "interpval " << interpval << endl;
-            logout << "maxadj ";
-            maxadj.print();
-            logout << endl;
-         }
          return true;
       }
    }
