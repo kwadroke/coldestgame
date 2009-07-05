@@ -1537,16 +1537,17 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
 }
 
 
-void ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectKDTree& kt)
+bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectKDTree& kt)
 {
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost") && mplayer.weight > 0)
    {
       Vector3 oldmainoffset = old + Vector3(0, mplayer.size, 0);
-      // Check from slightly behind where they actually started to avoid float precision problems
       Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
       Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
       Vector3 oldlegoffset = old - Vector3(0, mplayer.size, 0);
+      
+      // Check from slightly behind where they actually started to avoid float precision problems
       Vector3 cushion = oldmainoffset - mainoffset;
       cushion.normalize();
       cushion *= mplayer.size * .01f;
@@ -1588,7 +1589,7 @@ void ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
             // Simply don't allow the movement at all
             //mplayer.pos = old;
             mainoffset = old + Vector3(0, mplayer.size, 0);
-            break;
+            return false;
          }
       }
       Vector3 tempadjust = coldet.CheckSphereHit(legoffset, legoffset, checksize, check);
@@ -1601,6 +1602,7 @@ void ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
       locks.EndWrite(ml);
       mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
+   return true;
 }
 
 
@@ -1783,7 +1785,6 @@ void SynchronizePosition()
    Vector3 old = player[0].pos;
    player[0].pos += posadj;
    ValidateMove(player[0], old, meshes, kdtree);
-   posadj = player[0].pos - old;
    
    for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
    {

@@ -259,91 +259,93 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    size_t ntsize = neartris.size();
    
    // Check edges of polys as well.
-   if (0)//nomove && !adjusted)
+   if (!adjusted)
    {
-      for (size_t i = 0; i < ntsize; i++)
+      if (nomove)
       {
-         Triangle& currtri = *neartris[i];
-         hit = false;
-         hit = PlaneEdgeSphereCollision(temp, currtri, newpos, radius + currtri.radmod);
-         if (hit)
+         for (size_t i = 0; i < ntsize; i++)
          {
-            adjust += temp;
-            hittri = &currtri;
-            hitpos = newpos;
-            adjusted++;
-            if (retobjs)
-               retobjs->push_back(trimap[&currtri]);
-         }
-      }
-   }
-   
-   if (!nomove && !adjusted)
-   {
-      // TODO: Parts of this comment are out of date
-      // Do another edge check that checks the entire movement path, not just the ending position.
-      // This is necessary because projectiles may move significantly larger distances than their
-      // radius which can make the previous check fail incorrectly.  This is no longer a problem
-      // for on-poly checks because they also check the entire movement path, but the first edge
-      // check does not.  We keep it because this check can miss certain collisions (specifically
-      // if a movement is close to parallel to the edge so the nearest point of the two vectors
-      // falls outside the edge vector, but we still actually touch the edge) which is acceptable
-      // for projectiles because the corner test will catch them, but could be a problem for player
-      // movement.  Whew.
-      Vector3 raystart, rayend;
-      for (size_t i = 0; i < ntsize; i++)
-      {
-         Triangle& currtri = *neartris[i];
-         hit = false;
-         // TODO: This should probably only take the nearest edge hit if there are multiple hits
-         for (size_t j = 0; j < 3; ++j)
-         {
-            raystart = currtri.v[j]->pos;
-            rayend = currtri.v[(j + 1) % 3]->pos;
-            hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod + .001f, temp, temphitpos);
+            Triangle& currtri = *neartris[i];
+            hit = false;
+            hit = PlaneEdgeSphereCollision(temp, currtri, newpos, radius + currtri.radmod);
             if (hit)
             {
                adjust += temp;
-               if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
-               {
-                  hittri = &currtri;
-                  hitpos = temphitpos;
-               }
+               hittri = &currtri;
+               hitpos = newpos;
                adjusted++;
-               *exthit = true;
                if (retobjs)
                   retobjs->push_back(trimap[&currtri]);
             }
          }
       }
-      
-      // Do a ray-sphere check on each corner of the triangles.  This is to handle
-      // the aforementioned case when we're moving nearly parallel to the edge.
-      if (!adjusted)
+      else
       {
+         // TODO: Parts of this comment are out of date
+         // Do another edge check that checks the entire movement path, not just the ending position.
+         // This is necessary because projectiles may move significantly larger distances than their
+         // radius which can make the previous check fail incorrectly.  This is no longer a problem
+         // for on-poly checks because they also check the entire movement path, but the first edge
+         // check does not.  We keep it because this check can miss certain collisions (specifically
+         // if a movement is close to parallel to the edge so the nearest point of the two vectors
+         // falls outside the edge vector, but we still actually touch the edge) which is acceptable
+         // for projectiles because the corner test will catch them, but could be a problem for player
+         // movement.  Whew.
+         Vector3 raystart, rayend;
          for (size_t i = 0; i < ntsize; i++)
          {
             Triangle& currtri = *neartris[i];
-            for (int j = 0; j < 3; ++j)
+            hit = false;
+            // TODO: This should probably only take the nearest edge hit if there are multiple hits
+            for (size_t j = 0; j < 3; ++j)
             {
-               if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod + .001f, temp, true))
+               raystart = currtri.v[j]->pos;
+               rayend = currtri.v[(j + 1) % 3]->pos;
+               hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod + .001f, temp, temphitpos);
+               if (hit)
                {
-                  if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+                  adjust += temp;
+                  if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
                   {
                      hittri = &currtri;
-                     hitpos = currtri.v[j]->pos;
+                     hitpos = temphitpos;
                   }
-                  adjust += temp;
                   adjusted++;
                   *exthit = true;
                   if (retobjs)
                      retobjs->push_back(trimap[&currtri]);
-                  break; // One hit per tri should be enough
+               }
+            }
+         }
+         
+         // Do a ray-sphere check on each corner of the triangles.  This is to handle
+         // the aforementioned case when we're moving nearly parallel to the edge.
+         if (!adjusted)
+         {
+            for (size_t i = 0; i < ntsize; i++)
+            {
+               Triangle& currtri = *neartris[i];
+               for (int j = 0; j < 3; ++j)
+               {
+                  if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod + .001f, temp, true))
+                  {
+                     if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+                     {
+                        hittri = &currtri;
+                        hitpos = currtri.v[j]->pos;
+                     }
+                     adjust += temp;
+                     adjusted++;
+                     *exthit = true;
+                     if (retobjs)
+                        retobjs->push_back(trimap[&currtri]);
+                     break; // One hit per tri should be enough
+                  }
                }
             }
          }
       }
-   }
+   }// !adjusted
    
    Vector3 v, s, t, u;
    for (int i = 0; i < 6; i++)  // Check the world bounding box
@@ -381,10 +383,16 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    if (hittri)
       hitobj = trimap[hittri];
    
+   // Currently this is a problem because the only way to determine whether a hit was detected is to
+   // check the magnitude of the returned vector - this should be changed so this function returns a
+   // bool as all of the internal functions do now, but that will require changes in everything that
+   // calls us so I'm not willing to deal with it right now.
    if (adjusted && adjust.magnitude() < 1e-4f)
    {
       logout << "Warning: adjusting too small amount " << adjusted << endl;
       adjust.print();
+      adjust.normalize();
+      adjust *= 2e-4f;
    }
    if (adjusted <= 1)
       return adjust;
@@ -719,6 +727,7 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
    ray.normalize();
    
    // I think I want to be using normcylray here, although it's not explicitly mentioned in the reference
+   // If not it shouldn't hurt to use it
    Vector3 rxc = ray.cross(normcylray);
    Vector3 rsmcs = raystart - cylstart;
    Vector3 rcxc = rsmcs.cross(normcylray);
@@ -771,7 +780,11 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          
          float interpval;
          float half = (t + t1) / 2.f;
-         if (t < t1)
+         Vector3 maxadjpoint = raystart + ray * half;
+         float maxadjdist = DistanceBetweenPointAndLine(maxadjpoint, cylstart, cylray, 1.f / cylray.magnitude());
+         maxadj.normalize();
+         maxadj *= maxadjdist;
+         if (t < t1 && t > 0)
             interpval = smoothstep(t, half, maxt);
          else
             interpval = smoothstep(t1, half, maxt);
@@ -798,6 +811,8 @@ float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, cons
 #endif
 
 
+// Someday I'm going to get around to writing some actual unit tests for this function rather than just using it as a sandbox
+// to test various parts of the class.  But not today.:-)
 bool CollisionDetection::UnitTest()
 {
    Vector3 a(0, 0, 2);
