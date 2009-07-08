@@ -188,23 +188,26 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                      float startside = norm.dot(oldpos) + d;
                      float endside = norm.dot(newpos) + d;
                      
-                     logout << "*************Error\n";
-                     logout << "sides " << startside << "  " << endside << endl;
-                     logout << "temp.magnitude() " << temp.magnitude() << endl;
-                     logout << "temp ";
-                     temp.print();
-                     logout << "oldpos ";
-                     oldpos.print();
-                     logout << "newpos ";
-                     newpos.print();
-                     logout << "radius " << (radius + currtri.radmod) << endl;
-                     logout << "temphitpos " << endl;
-                     temphitpos.print();
-                     logout << "vertices\n";
-                     for (size_t j = 0; j < 3; ++j)
-                        currtri.v[j]->pos.print();
-                     logout << "midpoint " << endl;
-                     currtri.midpoint.print();
+                     if (0)//startside > -1e-3f)
+                     {
+                        logout << "*************Error\n";
+                        logout << "sides " << startside << "  " << endside << endl;
+                        logout << "temp.magnitude() " << temp.magnitude() << endl;
+                        logout << "temp ";
+                        temp.print();
+                        logout << "oldpos ";
+                        oldpos.print();
+                        logout << "newpos ";
+                        newpos.print();
+                        logout << "radius " << (radius + currtri.radmod) << endl;
+                        logout << "temphitpos ";
+                        temphitpos.print();
+                        logout << "vertices\n";
+                        for (size_t j = 0; j < 3; ++j)
+                           currtri.v[j]->pos.print();
+                        logout << "midpoint " << endl;
+                        currtri.midpoint.print();
+                     }
                      
                      float denominator;
                      Vector3 move;
@@ -220,7 +223,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                         for (int i = 0; i < 3; ++i)
                         {
                            // When intpoint == v[i], we have problems because the dot product below ends up zero, which is wrong
-                           if (intpoint.distance2(v[i]) < .000001)
+                           if (intpoint.distance(v[i]) < 1e-4f)
                            {
                               forcehit = true;
                               break;
@@ -237,7 +240,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                            intpoint.print();
                         }
       
-                        if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05))
+                        if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05) || isnan(angle))
                         {
                            float endside = norm.dot(newpos) + d;
                            if (endside > -1e-4f)
@@ -247,7 +250,27 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                         }
                         else logout << "Not on tri " << angle << endl;
                      }
-                     else logout << "CrossesPlane failed" << endl;
+                     else
+                     {
+                        logout << "CrossesPlane failed" << endl;
+                        logout << "*************Error\n";
+                        logout << "sides " << startside << "  " << endside << endl;
+                        logout << "temp.magnitude() " << temp.magnitude() << endl;
+                        logout << "temp ";
+                        temp.print();
+                        logout << "oldpos ";
+                        oldpos.print();
+                        logout << "newpos ";
+                        newpos.print();
+                        logout << "radius " << (radius + currtri.radmod) << endl;
+                        logout << "temphitpos ";
+                        temphitpos.print();
+                        logout << "vertices\n";
+                        for (size_t j = 0; j < 3; ++j)
+                           currtri.v[j]->pos.print();
+                        logout << "midpoint " << endl;
+                        currtri.midpoint.print();
+                     }
                   }
                }
                //logout << "end" << endl;
@@ -301,7 +324,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
             {
                raystart = currtri.v[j]->pos;
                rayend = currtri.v[(j + 1) % 3]->pos;
-               hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod + .001f, temp, temphitpos);
+               hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod, temp, temphitpos);
                if (hit)
                {
                   adjust += temp;
@@ -389,10 +412,12 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    // calls us so I'm not willing to deal with it right now.
    if (adjusted && adjust.magnitude() < 1e-4f)
    {
-      logout << "Warning: adjusting too small amount " << adjusted << endl;
-      adjust.print();
+      /*logout << "Warning: adjusting too small amount " << adjusted << endl;
+      adjust.print();*/
       adjust.normalize();
       adjust *= 2e-4f;
+      if (adjust.magnitude() < 1e-4f) // Can happen if adjust is the zero vector
+         adjust = Vector3(2e-4f, 2e-4f, 2e-4f);
    }
    if (adjusted <= 1)
       return adjust;
@@ -427,7 +452,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
    float d = -norm.dot(v[0]);
    
    float startside = norm.dot(pos) + d;
-   if (startside < -1e-4)
+   if (startside < -1e-3f)
    {
       return false;
    }
@@ -460,7 +485,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
          angle += acos(p.dot(p1));
       }
       
-      if (forcehit || (angle > 2.f * PI - .05 && angle < 2.f * PI + .05))
+      if (forcehit || (angle > 2.f * PI - .0001 && angle < 2.f * PI + .0001) || isnan(angle))
       {
          float endside = norm.dot(endpos) + d;
          if (endside > -2e-4f)

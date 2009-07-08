@@ -47,8 +47,9 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   //CollisionDetection coldet;
-   //coldet.UnitTest();
+   float a = -1.001;
+   float b = acos(a);
+   cout << b << endl;
    
    exit(0);
 }
@@ -1539,6 +1540,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
 
 bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectKDTree& kt)
 {
+   bool success = true;
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost") && mplayer.weight > 0)
    {
@@ -1550,7 +1552,7 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
       // Check from slightly behind where they actually started to avoid float precision problems
       Vector3 cushion = oldmainoffset - mainoffset;
       cushion.normalize();
-      cushion *= mplayer.size * .01f;
+      cushion *= mplayer.size * .1f;
       bool exthit;
       
       locks.Write(ml);
@@ -1571,7 +1573,7 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
          legoffset += adjust * (1 + count * slop);
          cushion = oldmainoffset - mainoffset;
          cushion.normalize();
-         cushion *= mplayer.size * .01f;
+         cushion *= mplayer.size * .1f;
          
          adjust = Vector3();//coldet.CheckSphereHit(oldmainoffset + cushion, mainoffset, checksize, check, true, &exthit);
          legadjust = coldet.CheckSphereHit(oldlegoffset + cushion, legoffset, checksize, check, true, &exthit);
@@ -1589,7 +1591,9 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
             // Simply don't allow the movement at all
             //mplayer.pos = old;
             mainoffset = old + Vector3(0, mplayer.size, 0);
-            return false;
+            locks.EndWrite(ml);
+            success = false;
+            break;
          }
       }
       Vector3 tempadjust = coldet.CheckSphereHit(legoffset, legoffset, checksize, check);
@@ -1602,7 +1606,7 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
       locks.EndWrite(ml);
       mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
-   return true;
+   return success;
 }
 
 
