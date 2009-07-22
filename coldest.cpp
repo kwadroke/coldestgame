@@ -153,7 +153,11 @@ void CreateAppDir()
 
 void OutputDiagnosticData()
 {
+#ifndef DEDICATED
    logout.SetFile(userpath + "console.log");
+#else
+   logout.SetFile(userpath + "server.log");
+#endif
    logout << "Initializing Coldest\n";
    logout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
 #ifdef __GNUC__
@@ -1552,7 +1556,7 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
       // Check from slightly behind where they actually started to avoid float precision problems
       Vector3 cushion = oldmainoffset - mainoffset;
       cushion.normalize();
-      cushion *= mplayer.size * .1f;
+      cushion *= 0;//mplayer.size * .0005f;
       bool exthit;
       
       locks.Write(ml);
@@ -1573,7 +1577,7 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
          legoffset += adjust * (1 + count * slop);
          cushion = oldmainoffset - mainoffset;
          cushion.normalize();
-         cushion *= mplayer.size * .1f;
+         cushion *= 0;//mplayer.size * .0005f;
          
          adjust = Vector3();//coldet.CheckSphereHit(oldmainoffset + cushion, mainoffset, checksize, check, true, &exthit);
          legadjust = coldet.CheckSphereHit(oldlegoffset + cushion, legoffset, checksize, check, true, &exthit);

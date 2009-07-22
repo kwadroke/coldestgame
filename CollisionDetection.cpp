@@ -22,6 +22,7 @@
 #include "util.h"
 
 #define PI 3.14159265
+//#define VERBOSE 1
 
 // *******************************************************************
 // Here be dragons
@@ -166,7 +167,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                   if (retobjs)
                      retobjs->push_back(current);
                }
-               else if (0)//!nomove) // Debugging
+               else if (!nomove) // Debugging
                {
                   hit = PlaneSphereCollision(temp, currtri, newpos, newpos, radius + currtri.radmod, temphitpos, true);
                   if (hit && temp.magnitude() > 1e-3f)
@@ -234,23 +235,23 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                            p1.normalize();
                            angle += acos(p.dot(p1));
                         }
-                        if (startside * endside < 0)
+                        if (0)//startside * endside < 0)
                         {
-                           logout << angle << "  " << (2.f * PI) << endl;
+                           logout << "Angle: " << angle << "  " << (2.f * PI) << endl;
                            intpoint.print();
                         }
       
-                        if (forcehit || (angle > 2 * PI - .05 && angle < 2 * PI + .05) || isnan(angle))
+                        if (forcehit || (angle > 2 * PI - 2e-3f && angle < 2 * PI + 2e-3f) || isnan(angle))
                         {
                            float endside = norm.dot(newpos) + d;
-                           if (endside > -1e-4f)
-                              endside = -1e-4f;
+                           if (endside > -2e-4f)
+                              endside = -2e-4f;
                            adjust = norm * -endside;
                            hitpos = intpoint;
                         }
-                        else logout << "Not on tri " << angle << endl;
+                        //else if (startside > -1e-3f) logout << "Not on tri " << angle << endl;
                      }
-                     else
+                     else if (startside > -1e-3f)
                      {
                         logout << "CrossesPlane failed" << endl;
                         logout << "*************Error\n";
@@ -315,11 +316,17 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
          // for projectiles because the corner test will catch them, but could be a problem for player
          // movement.  Whew.
          Vector3 raystart, rayend;
+         bool localhit;
+         Vector3 localhitpos, localadjust;
+         float currhitdist;
          for (size_t i = 0; i < ntsize; i++)
          {
             Triangle& currtri = *neartris[i];
             hit = false;
-            // TODO: This should probably only take the nearest edge hit if there are multiple hits
+            localhit = false;
+            localhitpos = Vector3();
+            localadjust = Vector3();
+            currhitdist = 1e38f;
             for (size_t j = 0; j < 3; ++j)
             {
                raystart = currtri.v[j]->pos;
@@ -327,17 +334,27 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod, temp, temphitpos);
                if (hit)
                {
-                  adjust += temp;
-                  if (oldpos.distance2(temphitpos) < oldpos.distance2(hitpos))
+                  localhit = true;
+                  if (oldpos.distance2(temphitpos) < currhitdist)
                   {
-                     hittri = &currtri;
-                     hitpos = temphitpos;
+                     localadjust = temp;
+                     localhitpos = temphitpos;
+                     currhitdist = oldpos.distance2(temphitpos);
                   }
-                  adjusted++;
                   *exthit = true;
-                  if (retobjs)
-                     retobjs->push_back(trimap[&currtri]);
                }
+            }
+            if (localhit)
+            {
+               ++adjusted;
+               adjust += localadjust;
+               if (oldpos.distance2(localhitpos) < oldpos.distance2(hitpos))
+               {
+                  hittri = &currtri;
+                  hitpos = localhitpos;
+               }
+               if (retobjs)
+                  retobjs->push_back(trimap[&currtri]);
             }
          }
          
@@ -350,7 +367,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
                Triangle& currtri = *neartris[i];
                for (int j = 0; j < 3; ++j)
                {
-                  if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod + .001f, temp, true))
+                  if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod, temp, true))
                   {
                      if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
                      {
@@ -452,7 +469,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
    float d = -norm.dot(v[0]);
    
    float startside = norm.dot(pos) + d;
-   if (startside < -1e-3f)
+   if (startside < -1e-2f)
    {
       return false;
    }
@@ -464,6 +481,9 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
    float x = -1.f;
    Vector3 intpoint;
    
+#ifdef VERBOSE
+   logout << "Starting check..........................\n";
+#endif
    if (CrossesPlane(pos, endpos, norm, d, denominator, move, x, intpoint))
    {
       // Determine whether we're on the tri
@@ -473,7 +493,7 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
       for (int i = 0; i < 3; ++i)
       {
          // When intpoint == v[i], we have problems because the dot product below ends up zero, which is wrong
-         if (intpoint.distance2(v[i]) < .000001)
+         if (intpoint.distance(v[i]) < 1e-4f)
          {
             forcehit = true;
             break;
@@ -482,10 +502,13 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
          Vector3 p1 = intpoint - v[(i + 1) % 3];
          p.normalize();
          p1.normalize();
+#ifdef VERBOSE
+         logout << "acos " << acos(p.dot(p1)) << endl;
+#endif
          angle += acos(p.dot(p1));
       }
       
-      if (forcehit || (angle > 2.f * PI - .0001 && angle < 2.f * PI + .0001) || isnan(angle))
+      if (forcehit || (angle > 2.f * PI - .01f && angle < 2.f * PI + .01f) || isnan(angle))
       {
          float endside = norm.dot(endpos) + d;
          if (endside > -2e-4f)
@@ -495,7 +518,25 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
          retval = adjust;
          return true;
       }
+#ifdef VERBOSE
+      logout << "intpoint not on tri " << angle << endl;
+#endif
    }
+#ifdef VERBOSE
+   logout << "Ending check\n";
+   float endside = norm.dot(endpos) + d;
+   if (endside > -1e-2f && endside < 1e-5f && !nomove)
+   {
+      logout << "******************************** " << endside << endl;
+      logout << "startside " << startside << endl;
+      logout << "d " << d << endl;
+      logout << "pos ";
+      pos.print();
+      logout << "endpos ";
+      endpos.print();
+      logout << endl;
+   }
+#endif
    return false;
 }
 
@@ -602,9 +643,12 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    {
       x = -(norm.dot(start) + d) / denominator;
       intpoint = start + move * x;
-      if (x < 1.0001f && x > -1e-4f)
+      //if (x < 1.0002f && x > -2e-4f)
          return true;
-      //logout << "intpoint not on line " << x << endl;
+      //if (x < 0)
+#ifdef VERBOSE
+         logout << "intpoint not on line " << x << endl;
+#endif
    }
    return false;
 }
@@ -629,7 +673,18 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
       {
          return true;
       }
+#ifdef VERBOSE
+      logout << "denominator is 0" << endl;
+#endif
    }
+#ifdef VERBOSE
+   logout << "endside > 0    " << endside << endl;
+   logout << "d " << d << endl;
+   logout << "norm ";
+   norm.print();
+   logout << "end ";
+   end.print();
+#endif
    return false;
 }
 
@@ -672,23 +727,25 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
    ray.normalize();
    float maxt = raystart.distance(rayend);
    //float a = 1; // Just a reminder
-   float b = 2 * ray.dot(raystart - spherepos);
+   float b = 2.f * ray.dot(raystart - spherepos);
    float c = (raystart - spherepos).dot(raystart - spherepos) - radius * radius;
+   float b24ac = b * b - 4.f * c;
+   float cushion = -.01f;
       
-   if ((b * b - 4 * c) > 0)
+   if (b24ac > 1e-4f)
    {
-      float t = (-b + sqrt(b * b - 4 * c)) * .5;
-      float t1 = (-b - sqrt(b * b - 4 * c)) * .5;
+      float t = (-b + sqrt(b24ac)) * .5;
+      float t1 = (-b - sqrt(b24ac)) * .5;
       Vector3 intercept, intercept1;
       intercept = raystart + ray * t;
       intercept1 = raystart + ray * t1;
-      if ((t < maxt && t > 0) ||
-         (t1 < maxt && t1 > 0))
+      if ((t < maxt && t > cushion) ||
+         (t1 < maxt && t1 > cushion))
       {
          if (!extadj)
          {
-            adjust = spherepos - (intercept + intercept1) / 2.f;
-            if (t < 0 || t1 < 0)
+            adjust = spherepos - (intercept + intercept1) * .5f;
+            if (t < cushion || t1 < cushion)
                adjust = spherepos - raystart;
             else if (t > maxt || t1 > maxt)
                adjust = spherepos - rayend;
@@ -700,7 +757,7 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
          {
             // If we started out inside the sphere then consider that a non-hit
             // This can happen if we start a move very close to a sphere
-            if (t < 0 || t1 < 0)
+            if (t < cushion || t1 < cushion)
                return false;
             Vector3 nearint, farint;
             if (t < t1)
@@ -728,8 +785,8 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
       }
    }
    // Handles the case for when the poly is completely contained in the circle
-   // This should never happen for extadj, so we don't handle that case
-   if (raystart.distance(spherepos) < radius && rayend.distance(spherepos) < radius)
+   // This is nonsensical for extadj so we don't handle that case (it's considered a miss)
+   if (!extadj && (raystart.distance(spherepos) < radius && rayend.distance(spherepos) < radius))
    {
       adjust = spherepos - (raystart + rayend) / 2.f;
       return true;
@@ -761,24 +818,26 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
    float c = rcxc.dot(rcxc) - radius * radius;
    
    float b24ac = b * b - 4.f * a * c;
+   float cushion = -.01f;
    
    if (b24ac >= 1e-4f)
    {
-      float t = (-b + sqrt(b24ac)) / (2.f * a);
-      float t1 = (-b - sqrt(b24ac)) / (2.f * a);
+      float a2inv = 1.f / (2.f * a);
+      float t = (-b + sqrt(b24ac)) * a2inv;
+      float t1 = (-b - sqrt(b24ac)) * a2inv;
       
       // If we started out inside the cylinder then consider that a non-hit
       // This can happen if we start a move very close to a cylinder
-      if ((t < 0 && t1 > 0) || (t > 0 && t1 < 0))
+      if ((t < cushion && t1 > cushion) || (t > cushion && t1 < cushion))
          return false;
       
-      if ((t > 0 && t < maxt) ||
-          (t1 > 0 && t1 < maxt))
+      if ((t > cushion && t < maxt) ||
+          (t1 > cushion && t1 < maxt))
       {
          Vector3 intercept;
-         if (t < 0)
+         if (t < cushion)
             intercept = raystart + ray * t1;
-         else if (t1 < 0)
+         else if (t1 < cushion)
             intercept = raystart + ray * t;
          else if (t < t1)
             intercept = raystart + ray * t;
@@ -788,6 +847,15 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          float intproj = (intercept - cylstart).dot(normcylray);
          if (intproj < 0 || (intproj > cylray.magnitude()))
             return false;
+         
+         /*logout << "Hit..................................\n";
+         logout << t1 << "  " << t << "  " << maxt << "  " << radius << endl;
+         logout << "intercept ";
+         intercept.print();
+         logout << "raystart ";
+         raystart.print();
+         logout << "ray ";
+         ray.print();*/
          // Now we know the hit was on both the cylinder and the ray
          hitpos = intercept;
          Vector3 intoncyl = cylstart + normcylray * intproj;
@@ -804,12 +872,13 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
             maxadj = maxadj1;
          
          float interpval;
-         float half = (t + t1) / 2.f;
+         float half = (t + t1) * .5f;
          Vector3 maxadjpoint = raystart + ray * half;
+         
          float maxadjdist = DistanceBetweenPointAndLine(maxadjpoint, cylstart, cylray, 1.f / cylray.magnitude());
          maxadj.normalize();
          maxadj *= maxadjdist;
-         if (t < t1 && t > 0)
+         if (t < t1 && t > cushion)
             interpval = smoothstep(t, half, maxt);
          else
             interpval = smoothstep(t1, half, maxt);
@@ -817,7 +886,8 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          perp.normalize();
          perp *= radius * 1.001f;
          
-         endoncyl = endoncyl + perp;
+         //endoncyl = intoncyl + perp; // or endoncyl + perp - tbd which is better
+         endoncyl = endoncyl + perp; // This is almost certainly better
          
          adjust = endoncyl - rayend;
          return true;
