@@ -643,6 +643,9 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    {
       x = -(norm.dot(start) + d) / denominator;
       intpoint = start + move * x;
+      // Although this check is technically part of the algorithm, if we crossed the plane, then we know
+      // that the intersection point is on the ray, and this check can cause problems when one of the
+      // end points is very near to co-planar.
       //if (x < 1.0002f && x > -2e-4f)
          return true;
       //if (x < 0)
@@ -730,7 +733,7 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
    float b = 2.f * ray.dot(raystart - spherepos);
    float c = (raystart - spherepos).dot(raystart - spherepos) - radius * radius;
    float b24ac = b * b - 4.f * c;
-   float cushion = -.01f;
+   float cushion = 0;//-.0001f;
       
    if (b24ac > 1e-4f)
    {
@@ -778,7 +781,7 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
                perp = (nearint + rayend) / 2.f;
             perp -= spherepos;
             perp.normalize();
-            perp *= radius * 1.001f;
+            perp *= radius * 1.005f;
             adjust = (spherepos + perp) - rayend;
          }
          return true;
@@ -818,7 +821,7 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
    float c = rcxc.dot(rcxc) - radius * radius;
    
    float b24ac = b * b - 4.f * a * c;
-   float cushion = -.01f;
+   float cushion = 0;//-.0001f;
    
    if (b24ac >= 1e-4f)
    {
@@ -884,7 +887,7 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
             interpval = smoothstep(t1, half, maxt);
          perp = lerp(maxadj, perp, interpval);
          perp.normalize();
-         perp *= radius * 1.001f;
+         perp *= radius * 1.005f;
          
          //endoncyl = intoncyl + perp; // or endoncyl + perp - tbd which is better
          endoncyl = endoncyl + perp; // This is almost certainly better
