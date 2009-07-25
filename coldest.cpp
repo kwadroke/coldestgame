@@ -1473,23 +1473,54 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
    {
       bool downslope = false;
       bool flat = false;
+      float movedist = mplayer.pos.distance(old);
+      float hillthreshold = .1f * movedist;
       
       Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
-      Vector3 oldoffset = old - Vector3(0, mplayer.size / 2.f, 0);
-      locks.Write(ml);
-      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, oldoffset, legoffset, mplayer.size * 2.f * (threshold + 1.f));
-         
-      Vector3 downcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * 1.f, check);
+      Vector3 oldoffset = old - Vector3(0, mplayer.size, 0);
+      Vector3 checkpos = legoffset;
       
-      if (downcheck.distance2() < 1e-5f)
+      // Vicious hack to deal with problem where short moves would sometimes fail to properly determine whether they
+      // were moving up or down hill.  This is mostly a problem for unrate-controlled servers.
+      if (movedist < .5f)
+      {
+         Vector3 checkdiff = legoffset - oldoffset;
+         checkdiff.normalize();
+         checkdiff *= .5f;
+         checkpos = oldoffset + checkdiff;
+         hillthreshold = .05f;
+      }
+      
+      locks.Write(ml);
+      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
+      
+      Vector3 downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
+      
+      // Debugging, remove me!
+      /*Vector3 temp;
+      float tempthresh = 0.f;
+      while (temp.magnitude() < 1e-4f)
+      {
+         temp = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + tempthresh, check);
+         tempthresh += .01f;
+      }
+      if (tempthresh > hillthreshold)
+      {
+         logout << "Needed threshold was: " << tempthresh << endl;
+         logout << movedist << endl;
+      }*/
+      
+      if (downcheck.magnitude() < 1e-5f)
       {
          downslope = true;
       }
       if (!downslope)
       {
-         Vector3 upcheck = coldet.CheckSphereHit(oldoffset, legoffset, mplayer.size * .9f, check);
-         if (upcheck.distance2() < 1e-5f)
+         Vector3 upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size - hillthreshold, check);
+         if (upcheck.magnitude() < 1e-5f)
+         {
             flat = true;
+         }
       }
       
       
@@ -1500,7 +1531,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 groundcheck = coldet.CheckSphereHit(old - Vector3(0.f, mplayer.size, 0.f), old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check);
       locks.EndWrite(ml);
       
-      if ((slopecheck.magnitude() > .00001f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
+      if ((slopecheck.magnitude() > 1e-4f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
       {
          // Fall damage if wanted (disabled for now)
 //          if (mplayer.fallvelocity > .00001f)
@@ -1515,13 +1546,18 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          {
             // Give them a little push down to keep them on the ground
             mplayer.pos.y -= step * 2.f;
+            logout << "Downhill " << hillthreshold << endl;
          }
          else if (!floatzero(mplayer.speed) && !flat) // Moving uphill
          {
             mplayer.pos = lerp(mplayer.pos, old, .75f);
+            logout << "Uphill " << hillthreshold << endl;
          }
          else if (!floatzero(mplayer.speed)) // Mostly flat
+         {
             mplayer.pos.y -= step;
+            logout << "Flat" << endl;
+         }
       }
       else
       {
@@ -1600,13 +1636,13 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
             break;
          }
       }
-      Vector3 tempadjust = coldet.CheckSphereHit(legoffset, legoffset, checksize, check);
+      /*Vector3 tempadjust = coldet.CheckSphereHit(legoffset, legoffset, checksize, check);
       if (tempadjust.distance() > 1e-3f && adjust.distance() < 1e-4f)
       {
          logout << "WTF?" << endl;
          logout << tempadjust.distance() << endl;
          logout << adjust.distance() << endl;
-      }
+      }*/
       locks.EndWrite(ml);
       mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
