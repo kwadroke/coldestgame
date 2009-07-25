@@ -1496,20 +1496,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       Vector3 downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
       
-      // Debugging, remove me!
-      /*Vector3 temp;
-      float tempthresh = 0.f;
-      while (temp.magnitude() < 1e-4f)
-      {
-         temp = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + tempthresh, check);
-         tempthresh += .01f;
-      }
-      if (tempthresh > hillthreshold)
-      {
-         logout << "Needed threshold was: " << tempthresh << endl;
-         logout << movedist << endl;
-      }*/
-      
       if (downcheck.magnitude() < 1e-5f)
       {
          downslope = true;
@@ -1546,17 +1532,14 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
          {
             // Give them a little push down to keep them on the ground
             mplayer.pos.y -= step * 2.f;
-            logout << "Downhill " << hillthreshold << endl;
          }
          else if (!floatzero(mplayer.speed) && !flat) // Moving uphill
          {
             mplayer.pos = lerp(mplayer.pos, old, .75f);
-            logout << "Uphill " << hillthreshold << endl;
          }
          else if (!floatzero(mplayer.speed)) // Mostly flat
          {
             mplayer.pos.y -= step;
-            logout << "Flat" << endl;
          }
       }
       else
