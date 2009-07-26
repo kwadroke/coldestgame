@@ -68,5 +68,6 @@ void SendCommand(const string&);
 void SendFire();
 void SendMasterListRequest();
 void SendPassword(const string&);
+void SendKeepalive();
 
 #endif

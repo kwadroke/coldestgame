@@ -226,7 +226,7 @@ void InitGlobals()
    console.Parse("set name Nooblet", false);
    console.Parse("set syncgrace 15", false);
    console.Parse("set maxanimdelay 25", false);
-   console.Parse("set timeout 30", false);
+   console.Parse("set timeout 10", false);
    console.Parse("set numthreads 2", false);
    
    // Variables that cannot be set from the console

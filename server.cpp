@@ -841,6 +841,7 @@ int ServerListen(void* dummy)
          }
          else if (packettype == "L") // Loadout request
          {
+            SDL_mutexP(servermutex);
             vector<SpawnPointData> allspawns = spawnpoints;
             vector<SpawnPointData> itemspawns = GetSpawns(items);
             allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
@@ -850,7 +851,14 @@ int ServerListen(void* dummy)
                serverplayers[oppnum].Kill();
                serverplayers[oppnum].spawntimer = console.GetInt("respawntime");
             }
+            SDL_mutexV(servermutex);
             Ack(packetnum, inpack);
+         }
+         else if (packettype == "k") // Keepalive
+         {
+            SDL_mutexP(servermutex);
+            serverplayers[oppnum].lastupdate = SDL_GetTicks();
+            SDL_mutexV(servermutex);
          }
       }
       //t.stop();

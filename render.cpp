@@ -289,7 +289,7 @@ void RenderObjects(const PlayerData& localplayer)
       if (localdrawdist != currdrawdist && !staticdrawdist)
       {
          currdrawdist = localdrawdist;
-         glFogf(GL_FOG_START, float(localdrawdist) * .5f);
+         glFogf(GL_FOG_START, float(viewdist) * .1f);
          glFogf(GL_FOG_END, float(localdrawdist));
       }
       
