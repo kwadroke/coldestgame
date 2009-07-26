@@ -399,8 +399,12 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
 #endif
          angle += acos(p.dot(p1));
       }
-      
+// More Microsoft stupidity
+#ifndef _WIN32
       if (forcehit || (angle > 2.f * PI - .01f && angle < 2.f * PI + .01f) || isnan(angle))
+#else
+      if (forcehit || (angle > 2.f * PI - .01f && angle < 2.f * PI + .01f) || _isnan(angle))
+#endif
       {
          float endside = norm.dot(endpos) + d;
          if (endside > -2e-4f)
