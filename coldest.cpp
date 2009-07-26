@@ -1572,17 +1572,14 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
       Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
       Vector3 oldlegoffset = old - Vector3(0, mplayer.size, 0);
       
-      // Check from slightly behind where they actually started to avoid float precision problems
-      Vector3 cushion = oldmainoffset - mainoffset;
-      cushion.normalize();
-      cushion *= 0;//mplayer.size * .0005f;
+      // This should be removed from CollisionDetection at some point because we don't use it anymore
       bool exthit;
       
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f);
       float checksize = mplayer.size;
-      Vector3 adjust;// = coldet.CheckSphereHit(oldmainoffset + cushion, mainoffset, checksize, check, true, &exthit, false);
-      Vector3 legadjust = coldet.CheckSphereHit(oldlegoffset + cushion, legoffset, checksize, check, true, &exthit, true);
+      Vector3 adjust;// = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, true, &exthit, false);
+      Vector3 legadjust = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, true, &exthit, true);
       if (!floatzero(adjust.magnitude()) && !floatzero(legadjust.magnitude()))
          adjust = (adjust + legadjust) / 2.f;
       else adjust = adjust + legadjust;
@@ -1594,12 +1591,9 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
          check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 2.f);
          mainoffset += adjust * (1 + count * slop);
          legoffset += adjust * (1 + count * slop);
-         cushion = oldmainoffset - mainoffset;
-         cushion.normalize();
-         cushion *= 0;//mplayer.size * .0005f;
          
-         adjust = Vector3();//coldet.CheckSphereHit(oldmainoffset + cushion, mainoffset, checksize, check, true, &exthit);
-         legadjust = coldet.CheckSphereHit(oldlegoffset + cushion, legoffset, checksize, check, true, &exthit);
+         adjust = Vector3();//coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, true, &exthit);
+         legadjust = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, true, &exthit);
          if (!floatzero(adjust.magnitude()) && !floatzero(legadjust.magnitude()))
             adjust = (adjust + legadjust) / 2.f;
          else adjust = adjust + legadjust;
@@ -1619,13 +1613,6 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
             break;
          }
       }
-      /*Vector3 tempadjust = coldet.CheckSphereHit(legoffset, legoffset, checksize, check);
-      if (tempadjust.distance() > 1e-3f && adjust.distance() < 1e-4f)
-      {
-         logout << "WTF?" << endl;
-         logout << tempadjust.distance() << endl;
-         logout << adjust.distance() << endl;
-      }*/
       locks.EndWrite(ml);
       mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
