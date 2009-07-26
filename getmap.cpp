@@ -32,6 +32,7 @@
 #include "Vector3.h"
 #include "types.h"
 #include "globals.h"
+#include "netdefs.h"
 #include "renderdefs.h"
 #include "editor.h"
 #include "IniReader.h"
@@ -246,6 +247,7 @@ void GetMap(string fn)
             treemap[&meshes.back()] = t;
          }
       }
+      SendKeepalive();
 #endif
    }
    locks.EndWrite(meshes);
@@ -642,6 +644,7 @@ void GetMap(string fn)
          
          currmesh->Add(tempquad);
       }
+      SendKeepalive();
    }
    
    for (size_t i = 0; i < meshits.size(); ++i)
@@ -714,6 +717,7 @@ void GetMap(string fn)
       }
    }
    watermesh->GenVbo();
+   SendKeepalive();
    
    
    // Generate grass - do this after the server has meshes because it doesn't care about grass, but before
@@ -817,6 +821,7 @@ void GetMap(string fn)
                meshes.push_back(grassmesh);
                grasstris += grassmesh.NumTris();
             }
+            SendKeepalive();
          }
       }
       locks.EndWrite(meshes);
@@ -845,11 +850,13 @@ void GetMap(string fn)
    {
       points[i + 4] = coldet.worldbounds[5].GetVertex(i);
    }
+   SendKeepalive();
    locks.Read(meshes);
    kdtree = ObjectKDTree(&meshes, points);
    logout << "Refining KD-Tree..." << flush;
    kdtree.refine(0);
    locks.EndRead(meshes);
+   SendKeepalive();
    logout << "Done\n" << flush;
    
    progress->value = 6;
@@ -857,12 +864,14 @@ void GetMap(string fn)
    Repaint();
    
    RegenFBOList();
+   SendKeepalive();
    
    progress->value = 7;
    progtext->text = "Caching meshes";
    Repaint();
    if (console.GetBool("cache") && !editor)
       CacheMeshes();
+   SendKeepalive();
    
    progress->value = 8;
    progtext->text = "Rendering maps";
@@ -909,6 +918,7 @@ void GetMap(string fn)
    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
    
    resman.texhand.ActiveTexture(0);
+   SendKeepalive();
    
    
    // Render minimap
@@ -969,6 +979,7 @@ void GetMap(string fn)
    
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    minimapfbo.Unbind();
+   SendKeepalive();
    
    // Signal the net thread that we can sync now
    needsync = true;
