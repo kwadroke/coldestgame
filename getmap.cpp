@@ -644,7 +644,9 @@ void GetMap(string fn)
          
          currmesh->Add(tempquad);
       }
+#ifndef DEDICATED
       SendKeepalive();
+#endif
    }
    
    for (size_t i = 0; i < meshits.size(); ++i)
