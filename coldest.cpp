@@ -2434,8 +2434,6 @@ void UpdatePlayer()
    else
    {
       Move(player[0], meshes, kdtree);
-      if (console.GetBool("serversync") && !player[0].spectate)
-         SynchronizePosition();
    }
    PlayerData localplayer = player[0];
       

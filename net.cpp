@@ -479,6 +479,10 @@ int NetListen(void* dummy)
                      }
                   }
                }
+               
+               // Adjust our position toward where the server thinks we are
+               if (console.GetBool("serversync") && !player[0].spectate)
+                  SynchronizePosition();
                SDL_mutexV(clientmutex);
             }
          }
