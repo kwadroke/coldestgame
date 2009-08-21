@@ -458,7 +458,11 @@ void SetupSDL()
 {
    const SDL_VideoInfo* video;
    
-   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) 
+#ifndef DEDICATED
+   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
+#else
+   if (SDL_Init(SDL_INIT_TIMER) < 0)
+#endif
    {
       logout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
       exit(1);
