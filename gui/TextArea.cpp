@@ -54,9 +54,13 @@ void TextArea::RenderWidget()
 {
    RenderBase();
    
-   table->width = width;
-   table->height = height;
-   table->colwidths = ToString(width);
+   if (table->width != width || table->height != height)
+   {
+      table->width = width;
+      table->height = height;
+      table->colwidths = ToString(width);
+      Refresh();
+   }
    table->Render();
 }
 

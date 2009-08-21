@@ -1753,19 +1753,13 @@ void SynchronizePosition()
 #ifndef DEDICATED
    deque<float> diffs;
    float dispdiff = 0.f;
-   static int diffcounter = 0;
    diffs.push_back(difference);
    while (diffs.size() > 10)
       diffs.pop_front();
    for (size_t i = 0; i < diffs.size(); ++i)
       dispdiff += diffs[i];
-   ++diffcounter;
-   if (diffcounter > 10)
-   {
-      GUI* posvariance = gui[statsdisp]->GetWidget("posvariance");
-      posvariance->text = "Pos Variance: " + ToString(difference);
-      diffcounter = 0;
-   }
+   GUI* posvariance = gui[statsdisp]->GetWidget("posvariance");
+   posvariance->text = "Pos Variance: " + ToString(difference);
 #endif
 #endif
    
