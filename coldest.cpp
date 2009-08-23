@@ -349,6 +349,8 @@ void InitGUI()
    gui[editobject] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editobject.xml"));
    gui[editormain] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editormain.xml"));
    gui[serverbrowser] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/serverbrowser.xml"));
+   gui[credits] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/credits.xml"));
+   
    
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
@@ -688,7 +690,13 @@ void InitShaders()
 
 
 // Sets up textures for noise shader
-// Credit to: TODO: Need to look this up again, same source as the noise shader
+/* 
+ * Author: Stefan Gustavson ITN-LiTH (stegu@itn.liu.se) 2004-12-05
+ * Simplex indexing functions by Bill Licea-Kane, ATI (bill@ati.com)
+ *
+ * You may use, modify and redistribute this code free of charge,
+ * provided that the author's names and this notice appear intact.
+ */
 void InitNoise()
 {
 #ifndef DEDICATED
@@ -740,7 +748,7 @@ void InitNoise()
 }
 
 
-void MainLoop() 
+void MainLoop()
 {
    static bool repeat = true;
    SDL_Event event;
@@ -1179,6 +1187,12 @@ bool GUIEventHandler(SDL_Event &event)
    {
       SDL_ShowCursor(1);
       gui[serverbrowser]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[credits]->visible) 
+   {
+      SDL_ShowCursor(1);
+      gui[credits]->ProcessEvent(&event);
       eatevent = true;
    }
    SDL_mutexV(clientmutex);
@@ -2509,7 +2523,7 @@ bool PrimaryGUIVisible()
 #ifndef DEDICATED
    // A bit counterintuitive...
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
-         !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible);
+         !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible && !gui[credits]->visible);
 #endif
    return false;
 }

@@ -223,6 +223,11 @@ void ShowMain()
    ShowGUI(mainmenu);
 }
 
+void ShowCredits()
+{
+   ShowGUI(credits);
+}
+
 void ShowSettings()
 {
    UpdateSettings();
@@ -348,6 +353,8 @@ void Action(const string& action)
       Spectate();
    else if (action == "showmain")
       ShowMain();
+   else if (action == "showcredits")
+      ShowCredits();
    else if (action == "showsettings")
       ShowSettings();
    else if (action == "savesettings")

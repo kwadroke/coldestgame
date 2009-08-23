@@ -63,7 +63,7 @@ ifeq ($(DEDICATED),1)
 else
    OUT=coldest
    OBJS = $(GENERAL) $(GUI)
-   LDLIBS += -lGL -lGLU -lGLEW -lalut -lopenal -lvorbisfile -lboost_filesystem
+   LDLIBS += -lGL -lGLU -lGLEW -lalut -lopenal -lvorbisfile
 endif
 
 #all:
