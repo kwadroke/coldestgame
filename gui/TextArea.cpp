@@ -88,7 +88,7 @@ void TextArea::Refresh()
    bool foundbreak = false;
    bool newline = false;
    table->Clear();
-   for (size_t i = 1; i < working.length(); ++i)
+   for (size_t i = 0; i < working.length(); ++i)
    {
       if (working[i] == ' ' || working[i] == '\n')
       {
@@ -119,7 +119,7 @@ void TextArea::Refresh()
          foundbreak = false;
          newline = false;
          lastbreak = 0;
-         i = 1;
+         i = -1; // Will get incremented to 0 before next loop
       }
    }
 }

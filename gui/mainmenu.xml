@@ -33,6 +33,8 @@
             leftclick="host"/>
       <Button width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="showsettings"/>
+      <Button width="200" height="40" text="Credits" name="settingsbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
+            leftclick="showcredits"/>
       <Button width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="exit"/>
    </Layout>
