@@ -265,7 +265,7 @@ void RenderObjects(const PlayerData& localplayer)
    int localdrawdist = 0;
    if (!staticdrawdist)
    {
-      glFogf(GL_FOG_START, float(viewdist) * .5f);
+      glFogf(GL_FOG_START, float(viewdist) * .1f);
       glFogf(GL_FOG_END, float(viewdist));
    }
    
@@ -311,7 +311,7 @@ void RenderObjects(const PlayerData& localplayer)
    }
    if (!staticdrawdist)
    {
-      glFogf(GL_FOG_START, float(viewdist) * .5f);
+      glFogf(GL_FOG_START, float(viewdist) * .1f);
       glFogf(GL_FOG_END, float(viewdist));
    }
    
@@ -870,6 +870,12 @@ void RenderWater()
    resman.texhand.BindTexture(reflectionfbo.GetTexture());
    resman.shaderman.SetUniform1f("shaders/water", "time", float(SDL_GetTicks()));
    
+   if (!staticdrawdist)
+   {
+      int viewdist = console.GetInt("viewdist");
+      glFogf(GL_FOG_START, float(viewdist) * .1f);
+      glFogf(GL_FOG_END, float(viewdist * watermesh->drawdistmult));
+   }
    watermesh->Render();
    
    glMatrixMode(GL_TEXTURE);

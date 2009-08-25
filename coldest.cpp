@@ -569,8 +569,6 @@ void SetupOpenGL()
    glFogf(GL_FOG_START, viewdist * .8);
    glFogf(GL_FOG_END, viewdist);
    glFogf(GL_FOG_MODE, GL_LINEAR);
-   GLfloat f[4] = {.3, .3, .7, 0};
-   glFogfv(GL_FOG_COLOR, f);
 
    // Do draw back-facing polygons - this can now be done on a per-material basis
    glDisable(GL_CULL_FACE);
