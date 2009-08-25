@@ -21,6 +21,7 @@
 void fog(float dist, inout vec4 color)
 {
    float fogval = (dist - gl_Fog.start) * gl_Fog.scale;
-   //color = mix(color, gl_Fog.color, clamp(fogval, 0.0, 1.0));
-   color.a *= 1. - clamp(fogval, 0., 1.);  // I like this way better
+   color.rgb = mix(color.rgb, gl_Fog.color.rgb, clamp(fogval, 0.0, 1.0));
+   float alphaval = (dist - (gl_Fog.end - 500.)) * .002;
+   color.a *= 1. - clamp(alphaval, 0., 1.);  // Smoothly blend into skybox instead of having a hard edge
 }
