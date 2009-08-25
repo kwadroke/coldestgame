@@ -99,6 +99,7 @@ void GetMap(string fn)
    
    // Read global lighting information
 #ifndef DEDICATED
+   lights.Clear();
    lights.Add();
 #endif
    float diff[4];
@@ -162,6 +163,12 @@ void GetMap(string fn)
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
    skyboxmat = &resman.LoadMaterial(readskybox);
+   
+   float fogcol[3] = {.5f, .5f, .5f};
+   mapdata.Read(fogcol[0], "FogColor", 0);
+   mapdata.Read(fogcol[1], "FogColor", 1);
+   mapdata.Read(fogcol[2], "FogColor", 2);
+   glFogfv(GL_FOG_COLOR, fogcol);
    
    mapdata.Read(waterfile, "Water");
    
@@ -468,7 +475,8 @@ void GetMap(string fn)
          tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
-         tempmesh.drawdistmult = console.GetFloat("terrainmulti");
+         // Have decided I don't like the way this looks
+         tempmesh.drawdistmult = 1.f;//console.GetFloat("terrainmulti");
          tempmesh.terrain = true;
          meshes.push_front(tempmesh);
          meshits.push_back(meshes.begin());
@@ -683,6 +691,7 @@ void GetMap(string fn)
    
    watermesh = new Mesh("models/empty/base", resman);
    watermesh->collide = false;
+   watermesh->drawdistmult = 1.f;//console.GetFloat("terrainmulti"); // Looks weird if we draw terrain without water
    
    for (int i = 0; i < numwaterx; ++i)
    {

@@ -40,6 +40,7 @@ class Light
       Vector3 GetDir(int);
       Vector3 GetRots(int);
       int Add();
+      void Clear();
       void SetDiffuse(int, GLfloat[]);
       void SetAmbient(int, GLfloat[]);
       void SetSpecular(int, GLfloat[]);

@@ -44,6 +44,18 @@ int Light::Add()
 }
 
 
+void Light::Clear()
+{
+   posdir.clear();
+   diffuse.clear();
+   ambient.clear();
+   specular.clear();
+   view.clear();
+   proj.clear();
+   type.clear();
+}
+
+
 /* Note that SetPos and SetDir are mutually exclusive.  If you use one
    then you shouldn't use the other or the type of your light will
    change.
