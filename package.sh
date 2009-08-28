@@ -8,7 +8,8 @@ fi
 
 if [ $1 == "linux" ]
 then
-   tar cjvf $2.tar.bz2 $2
+   tar cjvf $2-`uname -m`.tar.bz2 $2
+   tar cjvf $2-bin-`uname -m`.tar.bz2 $2/coldest $2/coldest.bin $2/lib
 else
    rm $2/coldest*
    rm -rf $2/lib
@@ -20,4 +21,5 @@ else
    rm windlls.zip
    cd ..
    zip -r $2.zip $2
+   zip $2-bin.zip $2/Coldest.exe $2/*.dll $2/vcredist_x86.exe
 fi
