@@ -38,7 +38,9 @@ void main()
    // Texturing
    vec4 base;
    vec4 ambient, diffuse;
-   basiclighting(normal, normalize(vec3(gl_LightSource[0].position)), base, ambient, diffuse, 0.);
+   vec3 localnorm = normal; // Can't modify a varying
+   
+   basiclighting(localnorm, normalize(vec3(gl_LightSource[0].position)), base, ambient, diffuse, 0.);
    base.a = 1.;
    
    shadow(diffuse, vec4(0.), dist, base);
