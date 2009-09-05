@@ -1301,13 +1301,17 @@ void GameEventHandler(SDL_Event &event)
                if (!guncam) 
                   zoomfactor = 1.f;
                
+               // If you change these values, don't forget to update the HUD indicator with the new ones
+               float minrot = -120.f;
+               float maxrot = 120.f;
+               
                player[0].pitch += event.motion.yrel / mousespeed / zoomfactor;
                if (player[0].pitch < -90) player[0].pitch = -90;
                if (player[0].pitch > 90) player[0].pitch = 90;
                
                player[0].rotation += event.motion.xrel / mousespeed / zoomfactor;
-               if (player[0].rotation < -90) player[0].rotation = -90;
-               if (player[0].rotation > 90) player[0].rotation = 90;
+               if (player[0].rotation < minrot) player[0].rotation = minrot;
+               if (player[0].rotation > maxrot) player[0].rotation = maxrot;
                SDL_WarpMouse(screenwidth / 2, screenheight / 2);
             }
             break;
