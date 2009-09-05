@@ -75,11 +75,12 @@ void UpdateUnitSelection()
    totalweight += player[0].item.Weight();
    GUI* weightbox = gui[loadoutmenu]->GetWidget("Weight");
    GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
+   ComboBox* spawnbox = dynamic_cast<ComboBox*>(gui[loadoutmenu]->GetWidget("SpawnPoints"));
    GUI* salvagebox = gui[loadoutmenu]->GetWidget("Salvage");
    weightbox->text = ToString(totalweight) + "/" + ToString(maxweight) + " tons";
    int sweight = CalculatePlayerWeight(player[0]);
    salvagebox->text = ToString(player[0].salvage - sweight) + " tons";
-   if (totalweight > maxweight || sweight > player[0].salvage)
+   if (totalweight > maxweight || sweight > player[0].salvage || spawnbox->Selected() == -1)
       spawnbutton->visible = false;
    else spawnbutton->visible = true;
    SDL_mutexV(clientmutex);
