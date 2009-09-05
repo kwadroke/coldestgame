@@ -67,15 +67,14 @@ void TableItem::Build(string vals, GUI* parentw)
    float pos = 0;
    for (int i = 0; i < len; ++i)
    {
-      GUIPtr newle = GUIPtr(new LineEdit(this, texman));
-      newle->x = pos;
-      newle->y = 0;
-      newle->width = widths[i];
-      newle->height = p->rowheight;
-      newle->text = values[i];
-      newle->readonly = true;
-      newle->textures = defaulttextures[TableCellTex];
-      children.push_back(newle);
+      GUIPtr newline = GUIPtr(new Button(this, texman));
+      newline->x = pos;
+      newline->y = 0;
+      newline->width = widths[i];
+      newline->height = p->rowheight;
+      newline->text = values[i];
+      newline->textures = defaulttextures[TableCellTex];
+      children.push_back(newline);
       pos += widths[i];
    }
    width = pos;

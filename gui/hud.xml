@@ -24,7 +24,7 @@
                 hover="textures/hud/buttonred.png"/>
    <Label x="485" y="800" width="30" height="30" name="facingcenter"
           normal="textures/hud/buttonred.png"/>
-   <Slider x="400" y="800" width="200" height="30" name="facing" min="-90" max="90"
+   <Slider x="400" y="800" width="200" height="30" name="facing" min="-120" max="120"
                 normal="textures/hud/button.png"/>
    
    <Label x="490" y="484" width="20" height="32" text="" name="reticle"
