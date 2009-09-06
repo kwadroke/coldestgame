@@ -775,8 +775,6 @@ void MainLoop()
       
       
 #ifndef DEDICATED
-      GUIUpdate();
-      
       // process pending events
       while(SDL_PollEvent(&event)) 
       {
@@ -792,7 +790,7 @@ void MainLoop()
             repeat = true;
          }
       }
-
+      
       // Can't do this in the event handler because that is called from within the GUI
       if (reloadgui)
       {
@@ -813,6 +811,8 @@ void MainLoop()
       if (!PrimaryGUIVisible())
          UpdatePlayer();
       SDL_mutexV(clientmutex);
+      
+      GUIUpdate();
       
       // Update any animated objects
       Animate();
@@ -982,6 +982,26 @@ void GUIUpdate()
       m.rotatex(-player[0].pitch + rot.x);
       m.rotatey(player[0].rotation + player[0].facing - rot.y);
       dir.transform(m);
+      
+      // Particle for laser sight
+      if (!guncam)
+      {
+         Vector3 sightoffset = units[player[0].unit].weaponoffset[weaponslots[player[0].currweapon]];
+         Weapon tempweap(Weapon::Laser);
+         Vector3 playerrot(player[0].pitch, player[0].facing + player[0].rotation, 0.f);
+         Particle part = CreateShot(tempweap, playerrot, player[0].pos, sightoffset, units[player[0].unit].viewoffset);
+         part.origin = part.pos;
+         part.playernum = 0;
+         part.damage = 0;
+         part.dmgrad = 0;
+         part.collide = true;
+         part.ttl = 1;
+         
+         part.lasttracer = part.pos;
+         part.tracer = MeshPtr(new Mesh("models/laser/base", resman));
+         part.tracertime = 1;
+         particles.push_back(part);
+      }
       
       Vector3 checkstart = player[0].pos + offset;
       Vector3 checkend = checkstart + dir;
@@ -2382,7 +2402,6 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    
    MeshPtr weaponmesh = meshcache->GetNewMesh("models/" + weapon.ModelFile() + "/base");
    Particle part(0, start, dir, vel, acc, w, rad, exp, SDL_GetTicks(), *weaponmesh);
-   part.origin = part.pos;
    part.playernum = pnum;
    part.weapid = weapon.Id();
    part.damage = weapon.Damage();
@@ -2393,6 +2412,7 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    offset.transform(m);
    part.pos += offset;
    part.lasttracer = part.pos;
+   part.origin = part.pos;
       
    // Note: weaponfocus should actually be configurable per-player
    Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
