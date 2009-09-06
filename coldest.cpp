@@ -998,7 +998,7 @@ void GUIUpdate()
          part.ttl = 1;
          
          part.lasttracer = part.pos;
-         part.tracer = MeshPtr(new Mesh("models/laser/base", resman));
+         part.tracer = MeshPtr(new Mesh("models/sight/base", resman));
          part.tracertime = 1;
          particles.push_back(part);
       }
