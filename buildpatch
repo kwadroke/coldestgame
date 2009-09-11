@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ $# != 2 ]
+then
+   echo "Usage: $0 [linux|windows] [release revision]"
+   exit 0
+fi
+
+filelist=`svn diff -r $2:HEAD --summarize | grep -v \\\\.cpp | grep -v \\\\.h | grep -v \\\\.sh | grep -v \\\\.py | grep -v Makefile | grep -v ^D | sed -r -e 's/^.{7}//g'`
+
+svn update
+current=`svn info | grep Revision | cut -f 2 -d " "`
+
+# For now, include ./lib because there were changes and we currently have no way
+# of automatically detecting which lib files actually changed
+cd Coldest$current
+if [ $1 == "linux" ]
+then
+   tar cjvf "../Patch$2-$current.tar.bz2" $filelist coldest.bin lib
+else
+   zip "../Patch$2-$current.zip" $filelist Coldest.exe
+fi
