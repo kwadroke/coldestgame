@@ -14,6 +14,7 @@ fi
 
 echo "Copying libraries"
 mkdir lib
+rm lib/*
 for i in $LIBS
 do
    REALFILE=`ldd ./coldest | grep $i | sed -e 's/[ \t]*\(.*\) *=> *\(.*\) .*/\2/'`
