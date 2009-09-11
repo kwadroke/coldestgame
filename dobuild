@@ -5,7 +5,7 @@
 LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesystem libboost_system libfreetype libgcc_s libogg libopenal libstdc++ libvorbis libvorbisfile libxerces-c libz"
 RELEASE=543
 
-if [ -z `uname -m | grep x86_64` ]
+if [ ! -z `uname -m | grep x86_64` ]
 then
    LIB=lib64
 else
