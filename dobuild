@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Copy libraries from the system folder to our local lib folder
+# This way our lib folder always matches what gets compiled
+LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesystem libboost_system libfreetype libgcc_s libogg libopenal libstdc++ libvorbis libvorbisfile libxerces-c libz"
+RELEASE=543
+
+if [ -z `uname -m | grep x86_64` ]
+then
+   LIB=lib64
+else
+   LIB=lib
+fi
+
+echo "Copying libraries"
+mkdir lib
+for i in $LIBS
+do
+   REALFILE=`ldd ./coldest | grep $i | sed -e 's/[ \t]*\(.*\) *=> *\(.*\) .*/\2/'`
+   cp $REALFILE ./lib || echo "Failed to copy $REALFILE"
+   echo $REALFILE
+done
+
+# This one is not in the ldd output because it is dynamically opened by libSDL_image, so we have to
+# hardcode it.  I don't anticipate it changing much though so that should be okay.
+cp /usr/$LIB/libpng.so.3 ./lib
+echo "/usr/$LIB/libpng.so.3"
+
+echo "Building"
+svn update
+REVISION=`svn info | grep Revision | cut -f 2 -d \ `
+make clean
+make -j3
+rm -rf Coldest$REVISION > /dev/null 2>&1
+echo "Kitting"
+./kit.sh Coldest$REVISION
+echo "Packaging"
+./package.sh linux Coldest$REVISION
+./buildpatch linux $RELEASE
