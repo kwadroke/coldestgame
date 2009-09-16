@@ -995,7 +995,8 @@ void GUIUpdate()
          part.damage = 0;
          part.dmgrad = 0;
          part.collide = true;
-         part.ttl = 1;
+         part.ttl = 100;
+         part.lasttick = SDL_GetTicks() - 100;
          
          part.lasttracer = part.pos;
          part.tracer = MeshPtr(new Mesh("models/sight/base", resman));
