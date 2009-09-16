@@ -1,6 +1,6 @@
 TurnSpeed 1
-Acceleration .05
-MaxSpeed 3
+Acceleration .04
+MaxSpeed 2.5
 Size 15
 Scale .94
 Weight 50
