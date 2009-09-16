@@ -16,7 +16,7 @@ current=`svn info | grep Revision | cut -f 2 -d " "`
 cd Coldest$current
 if [ $1 == "linux" ]
 then
-   tar cjvf "../Patch$2-$current.tar.bz2" $filelist coldest.bin lib
+   tar cjvf "../Patch$2-$current-`uname -m`.tar.bz2" $filelist coldest.bin lib
 else
    zip "../Patch$2-$current.zip" $filelist Coldest.exe
 fi
