@@ -295,7 +295,6 @@ void InitGlobals()
    // Can't create players until after SDL has been init'd in ReadConfig
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    dummy.unit = Nemesis;
-   dummy.spawned = true;
    dummy.name = console.GetString("name");
    player.push_back(dummy);
    

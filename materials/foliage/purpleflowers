@@ -2,7 +2,7 @@ Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 textures/foliage/purpleflowers.png
-Shader shaders/flat
+Shader shaders/foliage
 CullFace 0
 AlphaTest .5
 AlphaToCoverage 1
