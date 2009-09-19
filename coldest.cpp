@@ -946,6 +946,7 @@ void GUIUpdate()
    
    // For some reason killtable->Clear() is extremely slow (2-5 ms), so we can't do this every
    // time through.  Hence the killschanged flag.
+   // This may no longer be true, but there's no reason to change it now
    if (!PrimaryGUIVisible() && killschanged)
    {
       while (killmessages.size() > 6)
@@ -976,7 +977,7 @@ void GUIUpdate()
       // When !guncam this reduces to difference = actualaim
       Vector3 difference = actualaim + rawoffset - units[player[0].unit].viewoffset;
       Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
-      Vector3 dir(0, 0, -2000.f);
+      Vector3 dir(0, 0, -5000.f);
       m.identity();
       m.rotatex(-player[0].pitch + rot.x);
       m.rotatey(player[0].rotation + player[0].facing - rot.y);
@@ -2197,7 +2198,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             if (Rewind)
                Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, &hitmeshes);
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, &hitmeshes, true);
          }
          
          if (partcheck.distance2() < 1e-5) // Didn't hit anything

@@ -175,7 +175,7 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
    size_t ntsize = neartris.size();
    
    // Check edges of polys as well.
-   if (!adjusted)
+   if (!adjusted || extcheck)
    {
       if (nomove)
       {
@@ -198,15 +198,6 @@ Vector3 CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3&
       else
       {
          // TODO: Parts of this comment are out of date
-         // Do another edge check that checks the entire movement path, not just the ending position.
-         // This is necessary because projectiles may move significantly larger distances than their
-         // radius which can make the previous check fail incorrectly.  This is no longer a problem
-         // for on-poly checks because they also check the entire movement path, but the first edge
-         // check does not.  We keep it because this check can miss certain collisions (specifically
-         // if a movement is close to parallel to the edge so the nearest point of the two vectors
-         // falls outside the edge vector, but we still actually touch the edge) which is acceptable
-         // for projectiles because the corner test will catch them, but could be a problem for player
-         // movement.  Whew.
          Vector3 raystart, rayend;
          bool localhit;
          Vector3 localhitpos, localadjust;
