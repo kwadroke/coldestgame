@@ -35,6 +35,7 @@
 #include "tsint.h"
 
 const int netver = 4;
+const long thisversion = 0;
 
 extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;
 extern unsigned long recpacketnum, ackpack;
@@ -61,13 +62,15 @@ extern tsint serverfps;
 extern tsint serverbps;
 extern deque<string> killmessages;
 extern tsint killschanged;
+extern tsint currversion;
 
 void HandleAck(unsigned long);
 void SendPowerdown();
 void SendCommand(const string&);
 void SendFire();
-void SendMasterListRequest();
 void SendPassword(const string&);
 void SendKeepalive();
+void SendMasterListRequest();
+bool SendVersionRequest();
 
 #endif

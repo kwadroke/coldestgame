@@ -932,6 +932,14 @@ int NetListen(void* dummy)
                knownservers.insert(addme); // No need to wrap this, only used in this thread
             }
          }
+         else if (packettype == "v")
+         {
+            logout << "Got v response" << endl;
+            long v;
+            get >> v;
+            currversion = v;
+            Ack(packetnum);
+         }
          else if (packettype != "Y") // It's okay to get here on a Y packet
          {
             logout << "Warning: Unknown packet type received: " << packettype << endl;
@@ -1048,18 +1056,6 @@ void SendFire()
 }
 
 
-void SendMasterListRequest()
-{
-   IPaddress masteraddr;
-   SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011);
-   Packet pack(&masteraddr);
-   pack << "r\n0\n";
-   SDL_mutexP(netmutex);
-   sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
-}
-
-
 void SendPassword(const string& password)
 {
    Packet pack(&addr);
@@ -1081,4 +1077,34 @@ void SendKeepalive()
    SDL_mutexP(netmutex);
    sendqueue.push_back(pack);
    SDL_mutexV(netmutex);
+}
+
+
+// Master server related functions
+void SendMasterListRequest()
+{
+   IPaddress masteraddr;
+   SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011);
+   Packet pack(&masteraddr);
+   pack << "r\n0\n";
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
+   SDL_mutexV(netmutex);
+}
+
+
+bool SendVersionRequest()
+{
+   IPaddress masteraddr;
+   logout << "master: " << console.GetString("master") << endl;
+   if (SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011) < 0)
+      return false;
+   Packet pack(&masteraddr);
+   pack.ack = sendpacketnum;
+   pack << "v\n";
+   pack << pack.ack << eol;
+   SDL_mutexP(netmutex);
+   sendqueue.push_back(pack);
+   SDL_mutexV(netmutex);
+   return true;
 }

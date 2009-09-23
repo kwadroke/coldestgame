@@ -47,9 +47,6 @@
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   float a = -1.001;
-   float b = acos(a);
-   cout << b << endl;
    
    exit(0);
 }
@@ -76,6 +73,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    logout << "Main " << gettid() << endl;
    InitGlobals();
    initialized = true;
+   
+   Updater upd;
+   upd.DoUpdate();
    
 #if !defined(_WIN32) || defined(DEDICATED)
    if (argc < 2)

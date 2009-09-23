@@ -67,6 +67,7 @@
 #include "IniReader.h"
 #include "gui/TextArea.h"
 #include "gui/ComboBox.h"
+#include "Updater.h"
 
 /* Sorry bwkaz, the hassle just isn't worth it :-)
 using std::endl;
