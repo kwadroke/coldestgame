@@ -23,10 +23,10 @@ OPTIONS=-Wno-deprecated
 
 # As it turns out static linking is a gigantic PITA, so I'm not going to bother
 #LDLIBS = -Wl,-v -Wl,-Bstatic -lSDL_ttf -lfreetype -lSDL_image -lSDL_net -L./lib -lxerces-c -lz -lGLEW `sdl-config --static-libs` -ldl -Wl,-Bdynamic -lGL -lGLU
-LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c `sdl-config --libs` -lboost_filesystem
+LDLIBS = -L./lib -lSDL_ttf -lSDL_image -lSDL_net -lxerces-c `sdl-config --libs` `curl-config --libs` -lboost_filesystem
 MASTERLIBS = -lSDL_net `sdl-config --libs`
 CXX = g++
-CXXFLAGS=$(DEBUGOPTS) $(WARNINGS) $(OPTIONS) $(DEFINES) `sdl-config --cflags`
+CXXFLAGS=$(DEBUGOPTS) $(WARNINGS) $(OPTIONS) $(DEFINES) `sdl-config --cflags` `curl-config --cflags`
 DEPEND = makedepend $(CXXFLAGS)
 
 VPATH = .:gui
@@ -39,7 +39,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
-		SoundManager.o ALBuffer.o ALSource.o editor.o Bot.o
+		SoundManager.o ALBuffer.o ALSource.o editor.o Bot.o Updater.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o Layout.o
@@ -54,7 +54,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		MeshNode.o ServerState.o Material.o tsint.o Bot.o
 		
 MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o tsint.o\
-			logout.o Log.o
+			logout.o Log.o IDGen.o
 
 ifeq ($(DEDICATED),1)
    OUT=server
@@ -3103,6 +3103,28 @@ Triangle.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Triangle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 Triangle.o: Material.h TextureManager.h TextureHandler.h
 Triangle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Updater.o: Updater.h /usr/include/curl/curl.h /usr/include/curl/curlver.h
+Updater.o: /usr/include/curl/curlbuild.h /usr/include/sys/types.h
+Updater.o: /usr/include/features.h /usr/include/sys/cdefs.h
+Updater.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
+Updater.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+Updater.o: /usr/include/bits/typesizes.h /usr/include/time.h
+Updater.o: /usr/include/endian.h /usr/include/bits/endian.h
+Updater.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
+Updater.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+Updater.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+Updater.o: /usr/include/bits/pthreadtypes.h /usr/include/sys/socket.h
+Updater.o: /usr/include/sys/uio.h /usr/include/bits/uio.h
+Updater.o: /usr/include/bits/socket.h /usr/include/bits/sockaddr.h
+Updater.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
+Updater.o: /usr/include/curl/curlrules.h /usr/include/stdio.h
+Updater.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
+Updater.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+Updater.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
+Updater.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
+Updater.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Updater.o: /usr/include/sys/time.h /usr/include/curl/easy.h
+Updater.o: /usr/include/curl/multi.h /usr/include/curl/curl.h
 Vector3.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 Vector3.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Vector3.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h

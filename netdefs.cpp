@@ -45,3 +45,4 @@ tsint serverfps;
 tsint serverbps;
 deque<string> killmessages;
 tsint killschanged;
+tsint currversion;

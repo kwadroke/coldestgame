@@ -26,6 +26,7 @@
 #include "Packet.h"
 #include "ServerInfo.h"
 #include "util.h"
+#include "IDGen.h"
 
 using std::cout;
 using std::list;
@@ -35,15 +36,18 @@ using std::vector;
 void InitSDL();
 void Receive(UDPsocket&);
 void Send(UDPsocket&);
+void Ack(unsigned long, UDPpacket*);
 
 // Packet handlers
 void GetAnnounce(stringstream&, UDPpacket*);
 void GetRequest(stringstream&, UDPpacket*);
+void GetVersionRequest(stringstream&, UDPpacket*, unsigned long);
 
 tsint running;
 list<Packet> queue;
 vector<ServerInfo> servers;
 set<ServerInfo> knownservers;
+IDGen masterpacketnum;
 
 int main()
 {
@@ -120,6 +124,10 @@ void Receive(UDPsocket& socket)
       {
          GetRequest(get, pack);
       }
+      else if (packettype == "v")
+      {
+         GetVersionRequest(get, pack, packetnum);
+      }
    }
    SDLNet_FreePacket(pack);
 }
@@ -136,7 +144,7 @@ void GetAnnounce(stringstream& get, UDPpacket* pack)
    {
       logout << "Received announcement packet from ";
       string dotteddec = AddressToDD(pack->address.host);
-      cout << dotteddec << ":" << serverport << endl;
+      logout << dotteddec << ":" << serverport << endl;
       addme.strip = dotteddec;
       servers.push_back(addme);
       knownservers.insert(addme); // No need to wrap this, only used here
@@ -155,6 +163,23 @@ void GetRequest(stringstream& get, UDPpacket* pack)
       response << SDLNet_Read16(&servers[i].address.port) << eol;
       queue.push_back(response);
    }
+}
+
+
+void GetVersionRequest(stringstream& get, UDPpacket* pack, unsigned long packetnum)
+{
+   logout << "Got version request" << endl;
+   ifstream verfile("version");
+   unsigned long version;
+   verfile >> version;
+   
+   Packet response(&pack->address);
+   response.ack = masterpacketnum;
+   response << "v\n";
+   response << response.ack << eol;
+   response << version << eol;
+   queue.push_back(response);
+   Ack(packetnum, pack);
 }
 
 
@@ -179,4 +204,14 @@ void Send(UDPsocket& socket)
       ++i;
    }
    SDLNet_FreePacket(pack);
+}
+
+
+void Ack(unsigned long acknum, UDPpacket* inpack)
+{
+   Packet response(&inpack->address);
+   response << "A\n";
+   response << 0 << eol;
+   response << acknum << eol;
+   queue.push_back(response);
 }
