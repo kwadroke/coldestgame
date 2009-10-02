@@ -3103,28 +3103,289 @@ Triangle.o: /usr/include/boost/detail/sp_counted_impl.hpp
 Triangle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
 Triangle.o: Material.h TextureManager.h TextureHandler.h
 Triangle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-Updater.o: Updater.h /usr/include/curl/curl.h /usr/include/curl/curlver.h
-Updater.o: /usr/include/curl/curlbuild.h /usr/include/sys/types.h
+Updater.o: Updater.h /usr/include/boost/crc.hpp /usr/include/boost/config.hpp
+Updater.o: /usr/include/boost/integer.hpp /usr/include/boost/integer_fwd.hpp
+Updater.o: /usr/include/boost/limits.hpp
+Updater.o: /usr/include/boost/integer_traits.hpp /usr/include/limits.h
 Updater.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Updater.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Updater.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
-Updater.o: /usr/include/bits/typesizes.h /usr/include/time.h
-Updater.o: /usr/include/endian.h /usr/include/bits/endian.h
-Updater.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
-Updater.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
-Updater.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
-Updater.o: /usr/include/bits/pthreadtypes.h /usr/include/sys/socket.h
-Updater.o: /usr/include/sys/uio.h /usr/include/bits/uio.h
-Updater.o: /usr/include/bits/socket.h /usr/include/bits/sockaddr.h
-Updater.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
-Updater.o: /usr/include/curl/curlrules.h /usr/include/stdio.h
-Updater.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
-Updater.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
-Updater.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
+Updater.o: /usr/include/gnu/stubs-64.h /usr/include/bits/posix1_lim.h
 Updater.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
 Updater.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
-Updater.o: /usr/include/sys/time.h /usr/include/curl/easy.h
-Updater.o: /usr/include/curl/multi.h /usr/include/curl/curl.h
+Updater.o: /usr/include/bits/stdio_lim.h /usr/include/wchar.h
+Updater.o: /usr/include/curl/curl.h /usr/include/curl/curlver.h
+Updater.o: /usr/include/curl/curlbuild.h /usr/include/sys/types.h
+Updater.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+Updater.o: /usr/include/time.h /usr/include/endian.h
+Updater.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
+Updater.o: /usr/include/sys/select.h /usr/include/bits/select.h
+Updater.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
+Updater.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
+Updater.o: /usr/include/sys/socket.h /usr/include/sys/uio.h
+Updater.o: /usr/include/bits/uio.h /usr/include/bits/socket.h
+Updater.o: /usr/include/bits/sockaddr.h /usr/include/asm/socket.h
+Updater.o: /usr/include/asm/sockios.h /usr/include/curl/curlrules.h
+Updater.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
+Updater.o: /usr/include/bits/sys_errlist.h /usr/include/sys/time.h
+Updater.o: /usr/include/curl/easy.h /usr/include/curl/multi.h
+Updater.o: /usr/include/curl/curl.h netdefs.h ServerInfo.h
+Updater.o: /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
+Updater.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+Updater.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+Updater.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
+Updater.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
+Updater.o: /usr/include/alloca.h /usr/include/string.h /usr/include/strings.h
+Updater.o: /usr/include/inttypes.h /usr/include/stdint.h
+Updater.o: /usr/include/bits/wchar.h /usr/include/ctype.h
+Updater.o: /usr/include/iconv.h /usr/include/SDL/begin_code.h
+Updater.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
+Updater.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
+Updater.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
+Updater.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
+Updater.o: /usr/include/SDL/SDL_cpuinfo.h /usr/include/SDL/SDL_events.h
+Updater.o: /usr/include/SDL/SDL_active.h /usr/include/SDL/SDL_keyboard.h
+Updater.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+Updater.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
+Updater.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+Updater.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
+Updater.o: CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h glinc.h
+Updater.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Updater.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Updater.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
+Updater.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
+Updater.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
+Updater.o: /usr/include/bits/mathcalls.h logout.h Log.h Triangle.h Vertex.h
+Updater.o: types.h /usr/include/boost/shared_ptr.hpp
+Updater.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Updater.o: /usr/include/boost/config/select_compiler_config.hpp
+Updater.o: /usr/include/boost/config/compiler/gcc.hpp
+Updater.o: /usr/include/boost/config/select_stdlib_config.hpp
+Updater.o: /usr/include/boost/config/no_tr1/utility.hpp
+Updater.o: /usr/include/boost/config/select_platform_config.hpp
+Updater.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
+Updater.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
+Updater.o: /usr/include/bits/confname.h /usr/include/getopt.h
+Updater.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Updater.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
+Updater.o: /usr/include/boost/throw_exception.hpp
+Updater.o: /usr/include/boost/detail/shared_count.hpp
+Updater.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Updater.o: /usr/include/boost/detail/sp_counted_base.hpp
+Updater.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
+Updater.o: /usr/include/boost/detail/sp_typeinfo.hpp
+Updater.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Updater.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Updater.o: Material.h TextureManager.h TextureHandler.h
+Updater.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Updater.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Updater.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Updater.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Updater.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Updater.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+Updater.o: util.h tsint.h Timer.h PlayerData.h Hit.h Weapon.h Item.h
+Updater.o: Particle.h IDGen.h /usr/include/boost/filesystem.hpp
+Updater.o: /usr/include/boost/filesystem/operations.hpp
+Updater.o: /usr/include/boost/filesystem/path.hpp
+Updater.o: /usr/include/boost/filesystem/config.hpp
+Updater.o: /usr/include/boost/config/auto_link.hpp
+Updater.o: /usr/include/boost/system/system_error.hpp
+Updater.o: /usr/include/boost/system/error_code.hpp
+Updater.o: /usr/include/boost/system/config.hpp
+Updater.o: /usr/include/boost/cstdint.hpp /usr/include/boost/operators.hpp
+Updater.o: /usr/include/boost/iterator.hpp /usr/include/boost/noncopyable.hpp
+Updater.o: /usr/include/boost/utility/enable_if.hpp
+Updater.o: /usr/include/boost/cerrno.hpp
+Updater.o: /usr/include/boost/config/abi_prefix.hpp
+Updater.o: /usr/include/boost/config/abi_suffix.hpp
+Updater.o: /usr/include/boost/iterator/iterator_facade.hpp
+Updater.o: /usr/include/boost/iterator/interoperable.hpp
+Updater.o: /usr/include/boost/mpl/bool.hpp
+Updater.o: /usr/include/boost/mpl/bool_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/adl_barrier.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/adl.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/msvc.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/intel.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/gcc.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/workaround.hpp
+Updater.o: /usr/include/boost/mpl/integral_c_tag.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/static_constant.hpp
+Updater.o: /usr/include/boost/mpl/or.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/use_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/aux_/nested_type_wknd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/na_spec.hpp
+Updater.o: /usr/include/boost/mpl/lambda_fwd.hpp
+Updater.o: /usr/include/boost/mpl/void_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/na.hpp
+Updater.o: /usr/include/boost/mpl/aux_/na_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/ctps.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/lambda.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/ttp.hpp
+Updater.o: /usr/include/boost/mpl/int.hpp /usr/include/boost/mpl/int_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/nttp_decl.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/nttp.hpp
+Updater.o: /usr/include/boost/preprocessor/cat.hpp
+Updater.o: /usr/include/boost/preprocessor/config/config.hpp
+Updater.o: /usr/include/boost/mpl/aux_/integral_wrapper.hpp
+Updater.o: /usr/include/boost/mpl/aux_/static_cast.hpp
+Updater.o: /usr/include/boost/mpl/aux_/arity.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/dtp.hpp
+Updater.o: /usr/include/boost/mpl/aux_/template_arity_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/preprocessor/params.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/preprocessor.hpp
+Updater.o: /usr/include/boost/preprocessor/comma_if.hpp
+Updater.o: /usr/include/boost/preprocessor/punctuation/comma_if.hpp
+Updater.o: /usr/include/boost/preprocessor/control/if.hpp
+Updater.o: /usr/include/boost/preprocessor/control/iif.hpp
+Updater.o: /usr/include/boost/preprocessor/logical/bool.hpp
+Updater.o: /usr/include/boost/preprocessor/facilities/empty.hpp
+Updater.o: /usr/include/boost/preprocessor/punctuation/comma.hpp
+Updater.o: /usr/include/boost/preprocessor/repeat.hpp
+Updater.o: /usr/include/boost/preprocessor/repetition/repeat.hpp
+Updater.o: /usr/include/boost/preprocessor/debug/error.hpp
+Updater.o: /usr/include/boost/preprocessor/detail/auto_rec.hpp
+Updater.o: /usr/include/boost/preprocessor/tuple/eat.hpp
+Updater.o: /usr/include/boost/preprocessor/inc.hpp
+Updater.o: /usr/include/boost/preprocessor/arithmetic/inc.hpp
+Updater.o: /usr/include/boost/mpl/aux_/preprocessor/enum.hpp
+Updater.o: /usr/include/boost/mpl/aux_/preprocessor/def_params_tail.hpp
+Updater.o: /usr/include/boost/mpl/limits/arity.hpp
+Updater.o: /usr/include/boost/preprocessor/logical/and.hpp
+Updater.o: /usr/include/boost/preprocessor/logical/bitand.hpp
+Updater.o: /usr/include/boost/preprocessor/identity.hpp
+Updater.o: /usr/include/boost/preprocessor/facilities/identity.hpp
+Updater.o: /usr/include/boost/preprocessor/empty.hpp
+Updater.o: /usr/include/boost/preprocessor/arithmetic/add.hpp
+Updater.o: /usr/include/boost/preprocessor/arithmetic/dec.hpp
+Updater.o: /usr/include/boost/preprocessor/control/while.hpp
+Updater.o: /usr/include/boost/preprocessor/list/fold_left.hpp
+Updater.o: /usr/include/boost/preprocessor/list/detail/fold_left.hpp
+Updater.o: /usr/include/boost/preprocessor/control/expr_iif.hpp
+Updater.o: /usr/include/boost/preprocessor/list/adt.hpp
+Updater.o: /usr/include/boost/preprocessor/detail/is_binary.hpp
+Updater.o: /usr/include/boost/preprocessor/detail/check.hpp
+Updater.o: /usr/include/boost/preprocessor/logical/compl.hpp
+Updater.o: /usr/include/boost/preprocessor/list/fold_right.hpp
+Updater.o: /usr/include/boost/preprocessor/list/detail/fold_right.hpp
+Updater.o: /usr/include/boost/preprocessor/list/reverse.hpp
+Updater.o: /usr/include/boost/preprocessor/control/detail/while.hpp
+Updater.o: /usr/include/boost/preprocessor/tuple/elem.hpp
+Updater.o: /usr/include/boost/preprocessor/arithmetic/sub.hpp
+Updater.o: /usr/include/boost/mpl/aux_/lambda_arity_param.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/eti.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/overload_resolution.hpp
+Updater.o: /usr/include/boost/mpl/aux_/lambda_support.hpp
+Updater.o: /usr/include/boost/mpl/aux_/yes_no.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/arrays.hpp
+Updater.o: /usr/include/boost/preprocessor/tuple/to_list.hpp
+Updater.o: /usr/include/boost/preprocessor/list/for_each_i.hpp
+Updater.o: /usr/include/boost/preprocessor/repetition/for.hpp
+Updater.o: /usr/include/boost/preprocessor/repetition/detail/for.hpp
+Updater.o: /usr/include/boost/preprocessor/tuple/rem.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/compiler.hpp
+Updater.o: /usr/include/boost/preprocessor/stringize.hpp
+Updater.o: /usr/include/boost/type_traits/is_convertible.hpp
+Updater.o: /usr/include/boost/type_traits/detail/yes_no_type.hpp
+Updater.o: /usr/include/boost/type_traits/config.hpp
+Updater.o: /usr/include/boost/type_traits/is_array.hpp
+Updater.o: /usr/include/boost/type_traits/detail/bool_trait_def.hpp
+Updater.o: /usr/include/boost/type_traits/detail/template_arity_spec.hpp
+Updater.o: /usr/include/boost/type_traits/integral_constant.hpp
+Updater.o: /usr/include/boost/mpl/integral_c.hpp
+Updater.o: /usr/include/boost/mpl/integral_c_fwd.hpp
+Updater.o: /usr/include/boost/type_traits/detail/bool_trait_undef.hpp
+Updater.o: /usr/include/boost/type_traits/add_reference.hpp
+Updater.o: /usr/include/boost/type_traits/is_reference.hpp
+Updater.o: /usr/include/boost/type_traits/detail/type_trait_def.hpp
+Updater.o: /usr/include/boost/type_traits/detail/type_trait_undef.hpp
+Updater.o: /usr/include/boost/type_traits/ice.hpp
+Updater.o: /usr/include/boost/type_traits/detail/ice_or.hpp
+Updater.o: /usr/include/boost/type_traits/detail/ice_and.hpp
+Updater.o: /usr/include/boost/type_traits/detail/ice_not.hpp
+Updater.o: /usr/include/boost/type_traits/detail/ice_eq.hpp
+Updater.o: /usr/include/boost/type_traits/is_arithmetic.hpp
+Updater.o: /usr/include/boost/type_traits/is_integral.hpp
+Updater.o: /usr/include/boost/type_traits/is_float.hpp
+Updater.o: /usr/include/boost/type_traits/is_void.hpp
+Updater.o: /usr/include/boost/type_traits/is_abstract.hpp
+Updater.o: /usr/include/boost/static_assert.hpp
+Updater.o: /usr/include/boost/type_traits/is_class.hpp
+Updater.o: /usr/include/boost/type_traits/is_union.hpp
+Updater.o: /usr/include/boost/type_traits/remove_cv.hpp
+Updater.o: /usr/include/boost/type_traits/broken_compiler_spec.hpp
+Updater.o: /usr/include/boost/type_traits/detail/cv_traits_impl.hpp
+Updater.o: /usr/include/boost/type_traits/intrinsics.hpp
+Updater.o: /usr/include/boost/iterator/detail/config_def.hpp
+Updater.o: /usr/include/boost/iterator/detail/config_undef.hpp
+Updater.o: /usr/include/boost/iterator/iterator_traits.hpp
+Updater.o: /usr/include/boost/detail/iterator.hpp
+Updater.o: /usr/include/boost/iterator/detail/facade_iterator_category.hpp
+Updater.o: /usr/include/boost/iterator/iterator_categories.hpp
+Updater.o: /usr/include/boost/mpl/eval_if.hpp /usr/include/boost/mpl/if.hpp
+Updater.o: /usr/include/boost/mpl/aux_/value_wknd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/integral.hpp
+Updater.o: /usr/include/boost/mpl/identity.hpp
+Updater.o: /usr/include/boost/mpl/placeholders.hpp
+Updater.o: /usr/include/boost/mpl/arg.hpp /usr/include/boost/mpl/arg_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/na_assert.hpp
+Updater.o: /usr/include/boost/mpl/aux_/arity_spec.hpp
+Updater.o: /usr/include/boost/mpl/aux_/arg_typedef.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/and.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/assert.hpp /usr/include/boost/mpl/not.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/pp_counter.hpp
+Updater.o: /usr/include/boost/type_traits/is_same.hpp
+Updater.o: /usr/include/boost/type_traits/is_const.hpp
+Updater.o: /usr/include/boost/detail/indirect_traits.hpp
+Updater.o: /usr/include/boost/type_traits/is_function.hpp
+Updater.o: /usr/include/boost/type_traits/detail/false_result.hpp
+Updater.o: /usr/include/boost/type_traits/detail/is_function_ptr_helper.hpp
+Updater.o: /usr/include/boost/type_traits/is_pointer.hpp
+Updater.o: /usr/include/boost/type_traits/is_member_pointer.hpp
+Updater.o: /usr/include/boost/type_traits/is_member_function_pointer.hpp
+Updater.o: /usr/include/boost/type_traits/detail/is_mem_fun_pointer_impl.hpp
+Updater.o: /usr/include/boost/type_traits/is_volatile.hpp
+Updater.o: /usr/include/boost/type_traits/remove_reference.hpp
+Updater.o: /usr/include/boost/type_traits/remove_pointer.hpp
+Updater.o: /usr/include/boost/iterator/detail/enable_if.hpp
+Updater.o: /usr/include/boost/implicit_cast.hpp
+Updater.o: /usr/include/boost/type_traits/add_const.hpp
+Updater.o: /usr/include/boost/type_traits/add_pointer.hpp
+Updater.o: /usr/include/boost/type_traits/remove_const.hpp
+Updater.o: /usr/include/boost/type_traits/is_pod.hpp
+Updater.o: /usr/include/boost/type_traits/is_scalar.hpp
+Updater.o: /usr/include/boost/type_traits/is_enum.hpp
+Updater.o: /usr/include/boost/mpl/always.hpp /usr/include/boost/mpl/apply.hpp
+Updater.o: /usr/include/boost/mpl/apply_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/apply_wrap.hpp
+Updater.o: /usr/include/boost/mpl/aux_/has_apply.hpp
+Updater.o: /usr/include/boost/mpl/has_xxx.hpp
+Updater.o: /usr/include/boost/mpl/aux_/type_wrapper.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/has_xxx.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/msvc_typename.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/has_apply.hpp
+Updater.o: /usr/include/boost/mpl/aux_/msvc_never_true.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/lambda.hpp /usr/include/boost/mpl/bind.hpp
+Updater.o: /usr/include/boost/mpl/bind_fwd.hpp
+Updater.o: /usr/include/boost/mpl/aux_/config/bind.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/next.hpp
+Updater.o: /usr/include/boost/mpl/next_prior.hpp
+Updater.o: /usr/include/boost/mpl/aux_/common_name_wknd.hpp
+Updater.o: /usr/include/boost/mpl/protect.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/aux_/lambda_no_ctps.hpp
+Updater.o: /usr/include/boost/mpl/is_placeholder.hpp
+Updater.o: /usr/include/boost/mpl/aux_/template_arity.hpp
+Updater.o: /usr/include/boost/mpl/aux_/has_rebind.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
+Updater.o: /usr/include/boost/filesystem/convenience.hpp
 Vector3.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 Vector3.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Vector3.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
@@ -3878,10 +4139,18 @@ coldest.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
 coldest.o: gui/XSWrapper.h util.h ALSource.h gui/ProgressBar.h gui/GUI.h
 coldest.o: ServerInfo.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 coldest.o: gui/ScrollView.h gui/Slider.h gui/Button.h gui/TextArea.h
-coldest.o: gui/Table.h gui/ComboBox.h globals.h Console.h renderdefs.h
-coldest.o: gui/Button.h RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h
-coldest.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
-coldest.o: /usr/include/boost/filesystem.hpp
+coldest.o: gui/Table.h gui/ComboBox.h Updater.h /usr/include/boost/crc.hpp
+coldest.o: /usr/include/boost/integer.hpp /usr/include/boost/integer_fwd.hpp
+coldest.o: /usr/include/boost/limits.hpp
+coldest.o: /usr/include/boost/integer_traits.hpp /usr/include/curl/curl.h
+coldest.o: /usr/include/curl/curlver.h /usr/include/curl/curlbuild.h
+coldest.o: /usr/include/sys/socket.h /usr/include/sys/uio.h
+coldest.o: /usr/include/bits/uio.h /usr/include/bits/socket.h
+coldest.o: /usr/include/bits/sockaddr.h /usr/include/asm/socket.h
+coldest.o: /usr/include/asm/sockios.h /usr/include/curl/curlrules.h
+coldest.o: /usr/include/sys/time.h /usr/include/curl/easy.h
+coldest.o: /usr/include/curl/multi.h /usr/include/curl/curl.h netdefs.h
+coldest.o: IDGen.h /usr/include/boost/filesystem.hpp
 coldest.o: /usr/include/boost/filesystem/operations.hpp
 coldest.o: /usr/include/boost/filesystem/path.hpp
 coldest.o: /usr/include/boost/filesystem/config.hpp
@@ -4083,7 +4352,9 @@ coldest.o: /usr/include/boost/mpl/aux_/has_rebind.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
-coldest.o: /usr/include/boost/filesystem/convenience.hpp
+coldest.o: /usr/include/boost/filesystem/convenience.hpp globals.h Console.h
+coldest.o: renderdefs.h gui/Button.h RWLock.h VboWorker.h Packet.h
+coldest.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
 editor.o: editor.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 editor.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 editor.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -4776,7 +5047,7 @@ master.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
 master.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 master.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 master.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
-master.o: /usr/include/bits/mathcalls.h GraphicMatrix.h tsint.h
+master.o: /usr/include/bits/mathcalls.h GraphicMatrix.h tsint.h IDGen.h
 net.o: Particle.h CollisionDetection.h ObjectKDTree.h Mesh.h Vector3.h
 net.o: glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 net.o: /usr/include/features.h /usr/include/sys/cdefs.h

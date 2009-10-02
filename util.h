@@ -41,6 +41,8 @@ Vector3 RotateBetweenVectors(Vector3, const Vector3&);
 int gettid();
 int bitcount();
 void setsighandler();
+vector<string> split(const string&, const string&);
+
 extern tsint running;
 extern Log logout;
 

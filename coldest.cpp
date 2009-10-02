@@ -74,9 +74,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    InitGlobals();
    initialized = true;
    
-   Updater upd;
-   upd.DoUpdate();
-   
 #if !defined(_WIN32) || defined(DEDICATED)
    if (argc < 2)
 #else
@@ -114,6 +111,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
 #endif
+   
+   Updater upd;
+   upd.DoUpdate();
+   
    MainLoop();
 
    return 0;

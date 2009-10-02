@@ -4,6 +4,12 @@
 #include <boost/crc.hpp>
 #include <curl/curl.h>
 #include "netdefs.h"
+#include "defines.h"
+#include <vector>
+#include <string>
+#ifndef _WIN32
+#include <boost/filesystem.hpp>
+#endif
 
 /**
 	@author Ben Nemec <coldest@nemebean.com>
@@ -20,8 +26,14 @@ class Updater
    private:
       Updater(const Updater&);
       Updater& operator=(const Updater&);
+      void BuildFileList();
+      void GetNewFiles();
+      void CreateParentDirectory(const string&);
+      void ReplaceAndRestart();
+      
       CURL* handle;
-
+      vector<string> filelist;
+      static string remotebase;
 };
 
 #endif

@@ -375,7 +375,7 @@ int NetListen(void* dummy)
          if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
             continue;
          if ((connectedaddr.host != inpack->address.host || connectedaddr.port != inpack->address.port) &&
-              packettype != "c" && packettype != "f" && packettype != "i" && packettype != "a")
+              packettype != "c" && packettype != "f" && packettype != "i" && packettype != "a" && packettype != "v")
             continue;
          
          if (packettype == "U") // Update packet
@@ -934,11 +934,12 @@ int NetListen(void* dummy)
          }
          else if (packettype == "v")
          {
-            logout << "Got v response" << endl;
             long v;
+            unsigned long acknum;
             get >> v;
+            get >> acknum;
             currversion = v;
-            Ack(packetnum);
+            HandleAck(acknum);
          }
          else if (packettype != "Y") // It's okay to get here on a Y packet
          {
@@ -987,6 +988,7 @@ int NetListen(void* dummy)
    logout << "NetListen " << runtimes << endl;
    SDLNet_FreePacket(inpack);
    SDLNet_UDP_Close(socket);
+   SDLNet_UDP_Close(annsock);
    return 0;
 }
 
@@ -1096,7 +1098,6 @@ void SendMasterListRequest()
 bool SendVersionRequest()
 {
    IPaddress masteraddr;
-   logout << "master: " << console.GetString("master") << endl;
    if (SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011) < 0)
       return false;
    Packet pack(&masteraddr);
