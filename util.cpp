@@ -131,3 +131,21 @@ int bitcount()
 {
    return sizeof(void*) * 8;
 }
+
+
+vector<string> split(const string& str, const string& sep)
+{
+   string remaining = str;
+   string currval;
+   vector<string> retval;
+   while (remaining.length())
+   {
+      currval = remaining.substr(0, remaining.find(sep));
+      if (remaining.find(sep) != string::npos)
+         remaining = remaining.substr(remaining.find(sep) + 1);
+      else remaining = "";
+      retval.push_back(currval);
+   }
+   return retval;
+}
+

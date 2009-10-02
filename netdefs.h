@@ -35,7 +35,6 @@
 #include "tsint.h"
 
 const int netver = 4;
-const long thisversion = 0;
 
 extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;
 extern unsigned long recpacketnum, ackpack;
