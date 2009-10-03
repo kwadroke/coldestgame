@@ -115,6 +115,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    Updater upd;
    upd.DoUpdate();
    
+   ShowGUI(mainmenu);
+   
    MainLoop();
 
    return 0;
@@ -350,6 +352,7 @@ void InitGUI()
    gui[editormain] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editormain.xml"));
    gui[serverbrowser] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/serverbrowser.xml"));
    gui[credits] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/credits.xml"));
+   gui[updateprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/updateprogress.xml")); 
    
    
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
@@ -1210,6 +1213,12 @@ bool GUIEventHandler(SDL_Event &event)
       eatevent = true;
    }
    else if (gui[credits]->visible) 
+   {
+      SDL_ShowCursor(1);
+      gui[credits]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[updateprogress]->visible)
    {
       SDL_ShowCursor(1);
       gui[credits]->ProcessEvent(&event);
@@ -2547,7 +2556,8 @@ bool PrimaryGUIVisible()
 #ifndef DEDICATED
    // A bit counterintuitive...
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
-         !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible && !gui[credits]->visible);
+         !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible && !gui[credits]->visible &&
+         !gui[updateprogress]->visible);
 #endif
    return false;
 }
