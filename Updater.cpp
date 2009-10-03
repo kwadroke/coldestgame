@@ -170,7 +170,7 @@ void Updater::ReplaceAndRestart()
    Cleanup();
 #ifndef WIN32
    // This is a bit lazy, but it should work on any Unix-like that allows you to replace in-use files
-   system("cp -rf updates/* .");
+   system("mv -f updates/* .");
    system("chmod +x ./coldest*");
    logout << "Restarting" << endl;
    execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
