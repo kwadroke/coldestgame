@@ -3183,7 +3183,146 @@ Updater.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Updater.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Updater.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
 Updater.o: util.h tsint.h Timer.h PlayerData.h Hit.h Weapon.h Item.h
-Updater.o: Particle.h IDGen.h /usr/include/boost/filesystem.hpp
+Updater.o: Particle.h IDGen.h defines.h /usr/include/SDL/SDL_ttf.h
+Updater.o: ProceduralTree.h StableRandom.h Light.h gui/GUI.h
+Updater.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Updater.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+Updater.o: /usr/include/xercesc/dom/DOMDocument.hpp
+Updater.o: /usr/include/xercesc/util/XercesDefs.hpp
+Updater.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
+Updater.o: /usr/include/xercesc/util/XercesVersion.hpp
+Updater.o: /usr/include/xercesc/dom/DOMNode.hpp
+Updater.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+Updater.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+Updater.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+Updater.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+Updater.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+Updater.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+Updater.o: /usr/include/xercesc/util/RefVectorOf.hpp
+Updater.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+Updater.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+Updater.o: /usr/include/xercesc/util/XMLException.hpp
+Updater.o: /usr/include/xercesc/util/XMemory.hpp
+Updater.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+Updater.o: /usr/include/xercesc/dom/DOMError.hpp
+Updater.o: /usr/include/xercesc/util/XMLUni.hpp
+Updater.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+Updater.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+Updater.o: /usr/include/xercesc/util/PlatformUtils.hpp
+Updater.o: /usr/include/xercesc/util/PanicHandler.hpp
+Updater.o: /usr/include/xercesc/util/XMLFileMgr.hpp
+Updater.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
+Updater.o: /usr/include/xercesc/framework/MemoryManager.hpp
+Updater.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+Updater.o: /usr/include/xercesc/util/RefVectorOf.c
+Updater.o: /usr/include/xercesc/framework/XMLAttr.hpp
+Updater.o: /usr/include/xercesc/util/QName.hpp
+Updater.o: /usr/include/xercesc/util/XMLString.hpp
+Updater.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+Updater.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+Updater.o: /usr/include/xercesc/internal/XSerializable.hpp
+Updater.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+Updater.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+Updater.o: /usr/include/xercesc/util/Hashers.hpp
+Updater.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+Updater.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+Updater.o: /usr/include/xercesc/util/RuntimeException.hpp
+Updater.o: /usr/include/xercesc/util/RefHashTableOf.c
+Updater.o: /usr/include/xercesc/util/Janitor.hpp
+Updater.o: /usr/include/xercesc/util/Janitor.c
+Updater.o: /usr/include/xercesc/util/NullPointerException.hpp
+Updater.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+Updater.o: /usr/include/xercesc/util/ValueVectorOf.c
+Updater.o: /usr/include/xercesc/internal/XSerializationException.hpp
+Updater.o: /usr/include/xercesc/internal/XProtoType.hpp
+Updater.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+Updater.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+Updater.o: /usr/include/xercesc/util/KVStringPair.hpp
+Updater.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+Updater.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+Updater.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+Updater.o: /usr/include/xercesc/util/regx/Op.hpp
+Updater.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+Updater.o: /usr/include/xercesc/util/regx/Token.hpp
+Updater.o: /usr/include/xercesc/util/Mutexes.hpp
+Updater.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Updater.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+Updater.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+Updater.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+Updater.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+Updater.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+Updater.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+Updater.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+Updater.o: /usr/include/xercesc/framework/ValidationContext.hpp
+Updater.o: /usr/include/xercesc/util/NameIdPool.hpp
+Updater.o: /usr/include/xercesc/util/NameIdPool.c
+Updater.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+Updater.o: /usr/include/xercesc/util/SecurityManager.hpp
+Updater.o: /usr/include/xercesc/util/ValueStackOf.hpp
+Updater.o: /usr/include/xercesc/util/EmptyStackException.hpp
+Updater.o: /usr/include/xercesc/util/ValueStackOf.c
+Updater.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+Updater.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+Updater.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+Updater.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+Updater.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+Updater.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+Updater.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+Updater.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+Updater.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+Updater.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+Updater.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+Updater.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+Updater.o: /usr/include/xercesc/validators/common/Grammar.hpp
+Updater.o: /usr/include/xercesc/dom/DOM.hpp
+Updater.o: /usr/include/xercesc/dom/DOMAttr.hpp
+Updater.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+Updater.o: /usr/include/xercesc/dom/DOMText.hpp
+Updater.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+Updater.o: /usr/include/xercesc/dom/DOMComment.hpp
+Updater.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+Updater.o: /usr/include/xercesc/dom/DOMElement.hpp
+Updater.o: /usr/include/xercesc/dom/DOMEntity.hpp
+Updater.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+Updater.o: /usr/include/xercesc/dom/DOMException.hpp
+Updater.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+Updater.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSException.hpp
+Updater.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+Updater.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+Updater.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+Updater.o: /usr/include/xercesc/dom/DOMNotation.hpp
+Updater.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Updater.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+Updater.o: /usr/include/xercesc/dom/DOMRange.hpp
+Updater.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Updater.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+Updater.o: /usr/include/xercesc/dom/DOMStringList.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Updater.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+Updater.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
+Updater.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+Updater.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSInput.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLocator.hpp
+Updater.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
+Updater.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+Updater.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
+Updater.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Updater.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+Updater.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+Updater.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Updater.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp TextureManager.h
+Updater.o: gui/XSWrapper.h util.h ALSource.h gui/ProgressBar.h gui/GUI.h
+Updater.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
+Updater.o: gui/Slider.h gui/Button.h gui/TextArea.h gui/Table.h
+Updater.o: gui/ComboBox.h globals.h Console.h renderdefs.h gui/Button.h
+Updater.o: RWLock.h VboWorker.h Packet.h ParticleEmitter.h MeshCache.h
+Updater.o: KeyMap.h LockManager.h /usr/include/boost/filesystem.hpp
 Updater.o: /usr/include/boost/filesystem/operations.hpp
 Updater.o: /usr/include/boost/filesystem/path.hpp
 Updater.o: /usr/include/boost/filesystem/config.hpp
@@ -4150,7 +4289,9 @@ coldest.o: /usr/include/bits/sockaddr.h /usr/include/asm/socket.h
 coldest.o: /usr/include/asm/sockios.h /usr/include/curl/curlrules.h
 coldest.o: /usr/include/sys/time.h /usr/include/curl/easy.h
 coldest.o: /usr/include/curl/multi.h /usr/include/curl/curl.h netdefs.h
-coldest.o: IDGen.h /usr/include/boost/filesystem.hpp
+coldest.o: IDGen.h globals.h Console.h renderdefs.h gui/Button.h RWLock.h
+coldest.o: VboWorker.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
+coldest.o: LockManager.h /usr/include/boost/filesystem.hpp
 coldest.o: /usr/include/boost/filesystem/operations.hpp
 coldest.o: /usr/include/boost/filesystem/path.hpp
 coldest.o: /usr/include/boost/filesystem/config.hpp
@@ -4352,9 +4493,7 @@ coldest.o: /usr/include/boost/mpl/aux_/has_rebind.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
-coldest.o: /usr/include/boost/filesystem/convenience.hpp globals.h Console.h
-coldest.o: renderdefs.h gui/Button.h RWLock.h VboWorker.h Packet.h
-coldest.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
+coldest.o: /usr/include/boost/filesystem/convenience.hpp
 editor.o: editor.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 editor.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 editor.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h

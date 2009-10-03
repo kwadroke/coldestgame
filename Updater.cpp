@@ -109,11 +109,19 @@ void Updater::GetNewFiles()
    FILE* getfile;
    string currfile, localfile;
    
+   GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
+   ProgressBar* updateprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("updateprogressbar"));
+   updateprogressbar->SetRange(0, filelist.size());
+   
    for (size_t i = 0; i < filelist.size(); ++i)
    {
       currfile = remotebase + filelist[i];
       localfile = "updates/" + filelist[i];
       CreateParentDirectory(localfile);
+      
+      progresstext->text = "Downloading " + currfile;
+      updateprogressbar->value = i;
+      Repaint();
       
       getfile = fopen(localfile.c_str(), "wb");
       logout << "Downloading " << currfile << endl;
@@ -123,6 +131,7 @@ void Updater::GetNewFiles()
       curl_easy_perform(handle);
       fclose(getfile);
    }
+   SDL_Delay(5000);
 }
 
 

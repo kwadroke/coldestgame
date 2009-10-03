@@ -81,7 +81,7 @@ void SetupSDL();
 void SetupOpenGL();
 void SetupOpenAL();
 void InitNoise();
-static void MainLoop();
+void MainLoop();
 void GetMap(string);
 void InitGlobals();
 void InitGUI();

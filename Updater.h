@@ -5,6 +5,8 @@
 #include <curl/curl.h>
 #include "netdefs.h"
 #include "defines.h"
+#include "globals.h"
+#include "renderdefs.h"
 #include <vector>
 #include <string>
 #ifndef _WIN32
