@@ -31,7 +31,14 @@ bool Updater::Available()
       return false;
    
    // Wait for response
-   while (!currversion) {SDL_Delay(1);}
+   Timer t;
+   t.start();
+   while (!currversion)
+   {
+      SDL_Delay(1);
+      if (t.elapsed() > 5000)
+         return false;
+   }
    
    long thisversion;
    ifstream getver("version");
@@ -40,7 +47,6 @@ bool Updater::Available()
    else
       thisversion = 0;
    
-   logout << currversion << "  " << thisversion << endl;
    if (currversion > thisversion)
       return true;
    return false;
@@ -165,8 +171,9 @@ void Updater::ReplaceAndRestart()
 #ifndef WIN32
    // This is a bit lazy, but it should work on any Unix-like that allows you to replace in-use files
    system("cp -rf updates/* .");
+   system("chmod +x ./coldest*");
    logout << "Restarting" << endl;
-   execlp("./coldest", "./coldest", (char*) NULL);
+   execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
 #else
    // I'm not positive this will work...
    execlp("./doupdate.bat", "./doupdate.bat", (char*) NULL);
