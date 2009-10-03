@@ -35,7 +35,10 @@ bool Updater::Available()
    
    long thisversion;
    ifstream getver("version");
-   getver >> thisversion;
+   if (getver)
+      getver >> thisversion;
+   else
+      thisversion = 0;
    
    logout << currversion << "  " << thisversion << endl;
    if (currversion > thisversion)
