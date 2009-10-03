@@ -95,8 +95,6 @@ void Updater::BuildFileList()
             getcrc.process_bytes(buffer, in.gcount());
          }
       }
-      else
-         filelist.push_back(currfile);
       
       if (currcrc != getcrc.checksum())
          filelist.push_back(currfile);

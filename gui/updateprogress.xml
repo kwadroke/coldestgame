@@ -5,9 +5,9 @@
           normal="textures/buttonnorm.png"/>
    <ScrollView x="250" y="700" width="500" height="150" name="updateprogress"
                normal="textures/buttonnorm.png">
-      <Label x="10" y="10" width="400" height="30" text="Update Progress..." name="progresstext"
+      <Label x="10" y="10" width="480" height="30" text="Update Progress..." name="progresstext"
               normal="textures/buttonnorm.png"/>
-      <ProgressBar x="10" y="100" width="400" height="30" name="updateprogressbar"
+      <ProgressBar x="10" y="100" width="480" height="30" name="updateprogressbar"
                    normal="textures/buttonhover.png"
                    hover="textures/buttonpressed.png"/>
    </ScrollView>
