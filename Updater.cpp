@@ -175,8 +175,9 @@ void Updater::ReplaceAndRestart()
    logout << "Restarting" << endl;
    execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
 #else
-   // I'm not positive this will work...
-   execlp("./doupdate.bat", "./doupdate.bat", (char*) NULL);
+   // Always copy the doupdate.bat script just in case there are changes needed
+   system("move updates\\doupdate.bat");
+   _execlp("doupdate.bat", "doupdate.bat", (char*) NULL);
 #endif
 }
 

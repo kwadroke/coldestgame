@@ -11,6 +11,8 @@
 #include <string>
 #ifndef _WIN32
 #include <boost/filesystem.hpp>
+#else
+#include <process.h>
 #endif
 
 /**
