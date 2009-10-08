@@ -1,2 +1,2 @@
-XCOPY /Y /E updates/*
+XCOPY /Y /E updates\*
 Coldest.exe
