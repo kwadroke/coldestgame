@@ -18,6 +18,7 @@ else
    cp Coldest.exe $2
    cp windlls.zip $2
    cp vcredist_x86.exe $2
+   cp doupdate.bat $2
    cd $2
    unzip windlls.zip
    rm windlls.zip

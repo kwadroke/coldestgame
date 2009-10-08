@@ -138,7 +138,10 @@ void Updater::GetNewFiles()
       curl_easy_perform(handle);
       fclose(getfile);
    }
-   SDL_Delay(5000);
+   progresstext->text = "Finished Updating";
+   updateprogressbar->value = filelist.size();
+   Repaint();
+   SDL_Delay(1000);
 }
 
 
