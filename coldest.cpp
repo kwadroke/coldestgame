@@ -231,6 +231,7 @@ void InitGlobals()
    console.Parse("set maxanimdelay 25", false);
    console.Parse("set timeout 10", false);
    console.Parse("set numthreads 2", false);
+   console.Parse("set checkupdates 1", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
