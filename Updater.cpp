@@ -26,6 +26,13 @@ Updater::~Updater()
 
 bool Updater::Available()
 {
+   if (!console.GetBool("checkupdates"))
+      return false;
+   GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
+   ProgressBar* updateprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("updateprogressbar"));
+   progresstext->text = "Checking for updates";
+   Repaint();
+   
    currversion = 0;
    if (!SendVersionRequest())
       return false;
@@ -178,7 +185,7 @@ void Updater::ReplaceAndRestart()
    logout << "Restarting" << endl;
    execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
 #else
-   // Always copy the doupdate.bat script just in case there are changes needed
+   // Have to do this here or the doupdate.bat file will be in use
    system("move updates\\doupdate.bat");
    _execlp("doupdate.bat", "doupdate.bat", (char*) NULL);
 #endif
