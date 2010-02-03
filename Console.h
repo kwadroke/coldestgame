@@ -54,7 +54,7 @@ class Console
       
    private:
       size_t NumTokens(const string&);
-      string Token(const string&, int);
+      string Token(const string&, int, bool line = false);
       string SimplifyWhitespace(const string&);
       void Action(const string&);
       void Lock() {SDL_mutexP(mutex);}
