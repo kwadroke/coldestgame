@@ -31,43 +31,48 @@ Console::Console() : consoleout(NULL)
 
 int Console::GetInt(const string& key)
 {
+   int retval = 0;
    Lock();
    if (values.find(key) != values.end())
    {
-      Unlock();
-      return atoi(values[key].c_str());
+      istringstream get(values[key]);
+      get >> retval;
    }
+   else
+      logout << "Console Warning: Key not found " << key << endl;
    Unlock();
-   logout << "Console Warning: Key not found " << key << endl;
-   return 0;
+   return retval;
 }
 
 
 float Console::GetFloat(const string& key)
 {
+   float retval = 0.f;
    Lock();
    if (values.find(key) != values.end())
    {
-      Unlock();
-      return atof(values[key].c_str());
+      istringstream get(values[key]);
+      get >> retval;
    }
+   else
+      logout << "Console Warning: Key not found " << key << endl;
    Unlock();
-   logout << "Console Warning: Key not found " << key << endl;
-   return 0.f;
+   return retval;
 }
 
 
 string Console::GetString(const string& key)
 {
+   string retval = "";
    Lock();
    if (values.find(key) != values.end())
    {
-      Unlock();
-      return values[key];
+      retval = values[key];
    }
+   else
+      logout << "Console Warning: Key not found " << key << endl;
    Unlock();
-   logout << "Console Warning: Key not found " << key << endl;
-   return "";
+   return values[key];
 }
 
 
@@ -76,7 +81,10 @@ bool Console::GetBool(const string& key)
    Lock();
    if (values.find(key) != values.end())
    {
-      if (values[key] == "0" || values[key] == "false")
+      string temp;
+      istringstream get(values[key]);
+      get >> temp;
+      if (temp == "0" || temp == "false")
       {
          Unlock();
          return false;
@@ -84,12 +92,14 @@ bool Console::GetBool(const string& key)
       Unlock();
       return true;
    }
-   Unlock();
    logout << "Console Warning: Key not found " << key << endl;
+   Unlock();
    return false;
 }
 
 
+// Some very stupid things were done implementing this function - particularly reimplementing parts of stringstream
+// I've removed some of it, but I'm leaving parts too because they work well enough for the time being
 void Console::Parse(const string& line, bool echo)
 {
    string simple = SimplifyWhitespace(line);
@@ -102,18 +112,18 @@ void Console::Parse(const string& line, bool echo)
        Token(simple, 0).substr(0, 1) == "#")
       return;
    
-   if (Token(simple, 0) == "set" && NumTokens(simple) == 3)
+   if (Token(simple, 0) == "set" && NumTokens(simple) >= 3)
    {
       Lock();
-      values[Token(simple, 1)] = Token(simple, 2);
+      values[Token(simple, 1)] = Token(simple, 2, true);
       Unlock();
       Action(Token(simple, 1) + " action");
    }
-   if (Token(simple, 0) == "setsave" && NumTokens(simple) == 3)
+   if (Token(simple, 0) == "setsave" && NumTokens(simple) >= 3)
    {
       Lock();
       saveval.insert(Token(simple, 1));
-      values[Token(simple, 1)] = Token(simple, 2);
+      values[Token(simple, 1)] = Token(simple, 2, true);
       Unlock();
       Action(Token(simple, 1) + " action");
    }
@@ -151,6 +161,7 @@ void Console::Parse(const string& line, bool echo)
 
 
 // Just counts spaces, make sure to run through simplifywhitespace first
+// This should have been done with a stringstream
 size_t Console::NumTokens(const string& str)
 {
    int count = 0;
@@ -163,38 +174,32 @@ size_t Console::NumTokens(const string& str)
 }
 
 
-string Console::Token(const string& str, int tokennum)
+// To get the token and the rest of the line, set line to true.
+string Console::Token(const string& str, int tokennum, bool line)
 {
-   bool found = false;
-   int count = 0;
-   string newstr = str;
-   while(!found && newstr.size())
+   istringstream gettoken(str);
+   string currtoken = "";
+   ssize_t stop = tokennum;
+   if (line)
+      --stop;
+
+   for (ssize_t i = 0; i <= stop; ++i)
    {
-      for (size_t i = 0; i < newstr.size(); i++)
-      {
-         if (newstr.substr(i, 1) == " " || i == newstr.size() - 1)
-         {
-            if (count == tokennum)
-            {
-               if (i == newstr.size() - 1)
-                  return newstr;
-               newstr.erase(i);
-               return newstr;
-            }
-            else
-            {
-               newstr.erase(0, i + 1);
-               count++;
-               break;
-            }
-         }
-      }
+      gettoken >> currtoken;
    }
-   return "";
+   if (line)
+   {
+      if (tokennum != 0)
+         gettoken.ignore(); // There should be a leftover whitespace character
+      getline(gettoken, currtoken);
+   }
+
+   return currtoken;
 }
 
 
 // Note: Does not strip all trailing spaces.
+// This shouldn't be necessary, but due to the improper way NumTokens was written it is
 string Console::SimplifyWhitespace(const string& str)
 {
    string newstr = "";
