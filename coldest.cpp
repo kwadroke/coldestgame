@@ -1546,30 +1546,29 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
       
-      Vector3 downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
+      bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
       
-      if (downcheck.magnitude() < 1e-5f)
+      if (!downcheck)
       {
          downslope = true;
       }
       if (!downslope)
       {
-         Vector3 upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size - hillthreshold, check);
-         if (upcheck.magnitude() < 1e-5f)
+         bool upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size - hillthreshold, check);
+         if (!upcheck)
          {
             flat = true;
          }
       }
       
-      
       Vector3 slopecheckpos = old;
       slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
       
-      Vector3 slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check);
-      Vector3 groundcheck = coldet.CheckSphereHit(old - Vector3(0.f, mplayer.size, 0.f), old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check);
+      bool slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check);
+      bool groundcheck = coldet.CheckSphereHit(old - Vector3(0.f, mplayer.size, 0.f), old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check);
       locks.EndWrite(ml);
       
-      if ((slopecheck.magnitude() > 1e-4f && groundcheck.magnitude() > 1e-4f) || mplayer.weight < .99f) // They were on the ground
+      if ((slopecheck && groundcheck) || mplayer.weight < .99f) // They were on the ground
       {
          // Fall damage if wanted (disabled for now)
 //          if (mplayer.fallvelocity > .00001f)
@@ -1597,7 +1596,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       else
       {
          mplayer.fallvelocity += step * gravity;
-         if (groundcheck.magnitude() > 1e-4f && mplayer.fallvelocity > 5)
+         if (groundcheck && mplayer.fallvelocity > 5)
             mplayer.fallvelocity = 5.f;
          mplayer.pos.y -= mplayer.fallvelocity * step;
       }
@@ -1615,7 +1614,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
 
 bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectKDTree& kt)
 {
-   bool success = true;
+   bool nohit = true;
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost") && mplayer.weight > 0)
    {
@@ -1624,51 +1623,56 @@ bool ValidateMove(PlayerData& mplayer, const Vector3& old, Meshlist& ml, ObjectK
       Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
       Vector3 oldlegoffset = old - Vector3(0, mplayer.size, 0);
       
-      // This should be removed from CollisionDetection at some point because we don't use it anymore
-      bool exthit;
-      
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f);
       float checksize = mplayer.size;
-      Vector3 adjust;// = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, true, &exthit, false);
-      Vector3 legadjust = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, true, &exthit, true);
-      if (!floatzero(adjust.magnitude()) && !floatzero(legadjust.magnitude()))
-         adjust = (adjust + legadjust) / 2.f;
-      else adjust = adjust + legadjust;
+      Vector3vec adjust, legadjust;
+      // TODO: Fix this
+      adjust.resize(1, Vector3());
+      bool hit = false;// = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, &adjust);
+      bool leghit = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, &legadjust);
+      if (hit && leghit)
+         adjust[0] = (adjust[0] + legadjust[0]) / 2.f;
+      else adjust[0] = adjust[0] + legadjust[0];
       int count = 0;
       float slop = .01f;
       
-      while (adjust.distance() > 1e-4f) // Not zero vector
+      while (hit || leghit)
       {
+         nohit = false;
          check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 2.f);
-         mainoffset += adjust * (1 + count * slop);
-         legoffset += adjust * (1 + count * slop);
+         mainoffset += adjust[0] * (1 + count * slop);
+         legoffset += adjust[0] * (1 + count * slop);
          
-         adjust = Vector3();//coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, true, &exthit);
-         legadjust = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, true, &exthit);
-         if (!floatzero(adjust.magnitude()) && !floatzero(legadjust.magnitude()))
-            adjust = (adjust + legadjust) / 2.f;
-         else adjust = adjust + legadjust;
+         adjust.clear();
+         legadjust.clear();
+         // TODO: Fix this
+         adjust.resize(1);
+         adjust[0] = Vector3();//hit = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, &adjust);
+         hit = false;
+         leghit = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, &legadjust);
+         if (hit && leghit)
+            adjust[0] = (adjust[0] + legadjust[0]) / 2.f;
+         else adjust[0] = adjust[0] + legadjust[0];
          
          ++count;
          if (count > 2)
             slop *= 2.f;
-         if (count > 10 && adjust.distance() > 1e-4f) // Damage control in case something goes wrong
+         if (count > 10 && (hit || leghit)) // Damage control in case something goes wrong
          {
-            logout << "Collision Detection Error " << adjust.distance() << endl;
-            adjust.print();
+            logout << "Collision Detection Error " << adjust[0].distance() << endl;
+            adjust[0].print();
             // Simply don't allow the movement at all
             //mplayer.pos = old;
             mainoffset = old + Vector3(0, mplayer.size, 0);
             locks.EndWrite(ml);
-            success = false;
             break;
          }
       }
       locks.EndWrite(ml);
       mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
-   return success;
+   return nohit;
 }
 
 
@@ -2192,7 +2196,8 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       particlemesh->Clear();
    }
 #endif
-   Vector3 oldpos, partcheck, hitpos;
+   Vector3 oldpos, hitpos;
+   bool partcheck;
    vector<Mesh*> hitmeshes;
    Mesh* hitmesh;
    if (partupd >= updint)
@@ -2202,17 +2207,17 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       locks.Write(ml);
       while (j != parts.end())
       {
-         partcheck = Vector3();
+         partcheck = false;
          oldpos = j->Update();
          if (j->collide)
          {
             if (Rewind)
                Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, &hitmeshes, true);
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, NULL, &hitmeshes);
          }
          
-         if (partcheck.distance2() < 1e-5) // Didn't hit anything
+         if (!partcheck) // Didn't hit anything
          {
             if (!HitHandler && j->tracer && j->lasttracer.distance2(j->pos) > 10000.f)
             {

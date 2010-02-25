@@ -500,7 +500,7 @@ void GetSelectedMesh(SDL_Event event)
    
    Vector3 dummy;
    selected = NULL;
-   coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected, NULL, true);
+   coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected, NULL);
    
    UpdateEditorGUI();
 }

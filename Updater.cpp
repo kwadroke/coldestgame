@@ -29,7 +29,6 @@ bool Updater::Available()
    if (!console.GetBool("checkupdates"))
       return false;
    GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
-   ProgressBar* updateprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("updateprogressbar"));
    progresstext->text = "Checking for updates";
    Repaint();
    

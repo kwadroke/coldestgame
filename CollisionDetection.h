@@ -38,9 +38,9 @@ class CollisionDetection
    public:
       CollisionDetection();
       CollisionDetection& operator=(const CollisionDetection&);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&, Mesh*&,
-                             vector<Mesh*>* = NULL, const bool extcheck = true, bool* exthit = NULL, const bool debug = false);
-      Vector3 CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, const bool extcheck = true, bool* exthit = NULL, const bool debug = false);
+      bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&, Mesh*&, Vector3vec* retval = NULL, 
+                             vector<Mesh*>* = NULL, const bool debug = false);
+      bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3vec* retval = NULL, const bool debug = false);
       // Useful for external code too
       float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&, const float);
       bool UnitTest();
@@ -59,10 +59,10 @@ class CollisionDetection
       bool CrossesPlane(const Vector3&, const Vector3&, const Vector3&, const float&, float&, Vector3&, float&, Vector3&);
       float DistanceBetweenLines(const Vector3& start, const Vector3& dir, const Vector3& start1, const Vector3& dir1, float&, float&);
       bool RaySphereCheck(const Vector3& raystart, const Vector3& rayend,
-                     const Vector3& spherepos, const float radius, Vector3& adjust, const bool extadj);
+                     const Vector3& spherepos, const float radius, Vector3&, Vector3&, bool extcheck = true);
       bool RayCylinderCheck(const Vector3&, const Vector3&,
             const Vector3&, const Vector3&, const float,
-            Vector3&, Vector3&);
+            Vector3&, Vector3&, Vector3&);
 };
 
 // From http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
