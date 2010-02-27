@@ -663,9 +663,11 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
             // while perp defines our desired adjustment direction.
             Vector3 perp;
             Vector3 half = (nearint + farint) / 2.f;
+            bool overhalf = false;
             if (half.distance2(raystart) <= rayend.distance2(raystart))
             {
                perp = half;//(nearint + half) / 2.f;
+               overhalf = true;
             }
             else
             {
@@ -682,7 +684,14 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
             Vector3 intperp = half * maxadjdist;
             
             adjust = (nearint + intperp) - rayend;
-            adjust1 = (spherepos + perp) - (nearint + intperp);
+            if (overhalf)
+            {
+               adjust1 = (rayend + intperp) - (nearint + intperp);
+            }
+            else
+            {
+               adjust1 = (spherepos + perp) - (nearint + intperp);
+            }
          }
          return true;
       }
@@ -785,7 +794,15 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          endoncyl = endoncyl + perp; // This is almost certainly better
          
          adjust = (intoncyl + perp) - rayend;
-         adjust1 = endoncyl - (intoncyl + perp);
+         if (maxt > half)
+         {
+            maxadj.normalize();
+            adjust1 = (rayend + maxadj * (radius * 1.001f - maxadjdist)) - (intoncyl + perp);
+         }
+         else
+         {
+            adjust1 = endoncyl - (intoncyl + perp);
+         }
 
          return true;
       }
