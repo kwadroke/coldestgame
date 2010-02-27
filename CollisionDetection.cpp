@@ -67,7 +67,9 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
    Vector3vec tempadj;
    if (!retval)
       retval = &tempadj;
+
    Vector3vec& adjust = *retval;
+   adjust.clear();
    adjust.push_back(Vector3());
    
    Vector3 temp, temp1, temphitpos;
@@ -198,7 +200,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
       {
          Vector3 raystart, rayend;
          bool localhit;
-         Vector3 localhitpos, localadjust;
+         Vector3 localhitpos, localadjust, localadjust1;
          float currhitdist;
          for (size_t i = 0; i < ntsize; i++)
          {
@@ -207,6 +209,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
             localhit = false;
             localhitpos = Vector3();
             localadjust = Vector3();
+            localadjust1 = Vector3();
             currhitdist = 1e38f;
             for (size_t j = 0; j < 3; ++j)
             {
@@ -219,6 +222,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
                   if (oldpos.distance2(temphitpos) < currhitdist)
                   {
                      localadjust = temp;
+                     localadjust1 = temp1;
                      localhitpos = temphitpos;
                      currhitdist = oldpos.distance2(temphitpos);
                   }
@@ -226,8 +230,12 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
             }
             if (localhit)
             {
+               adjusted.resize(2, 0);
                ++adjusted[0];
+               ++adjusted[1];
+               adjust.resize(2, Vector3());
                adjust[0] += localadjust;
+               adjust[1] += localadjust1;
                if (oldpos.distance2(localhitpos) < oldpos.distance2(hitpos))
                {
                   hittri = &currtri;
@@ -257,6 +265,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
                      adjust[0] += temp;
                      adjust[1] += temp1;
                      adjusted[0]++;
+                     adjusted[1]++;
                      if (retobjs)
                         retobjs->push_back(trimap[&currtri]);
                      break; // One hit per tri should be enough
@@ -649,17 +658,31 @@ bool CollisionDetection::RaySphereCheck(const Vector3& raystart, const Vector3& 
                nearint = intercept1;
                farint = intercept;
             }
-            
+
+            // As it turns out, this is very poor naming.  half is actually perpendicular to the direction of movement,
+            // while perp defines our desired adjustment direction.
             Vector3 perp;
             Vector3 half = (nearint + farint) / 2.f;
             if (half.distance2(raystart) <= rayend.distance2(raystart))
-               perp = (nearint + half) / 2.f;
+            {
+               perp = half;//(nearint + half) / 2.f;
+            }
             else
-               perp = (nearint + rayend) / 2.f;
+            {
+               perp = rayend;//(nearint + rayend) / 2.f;
+            }
             perp -= spherepos;
+            half -= spherepos;
             perp.normalize();
+            half.normalize();
             perp *= radius * 1.001f;
-            adjust = (spherepos + perp) - rayend;
+
+            Vector3 adjpos = spherepos + perp;
+            float maxadjdist = DistanceBetweenPointAndLine(adjpos, raystart, ray, 1.f / ray.magnitude());
+            Vector3 intperp = half * maxadjdist;
+            
+            adjust = (nearint + intperp) - rayend;
+            adjust1 = (spherepos + perp) - (nearint + intperp);
          }
          return true;
       }
@@ -761,7 +784,8 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          //endoncyl = intoncyl + perp; // or endoncyl + perp - tbd which is better
          endoncyl = endoncyl + perp; // This is almost certainly better
          
-         adjust = endoncyl - rayend;
+         adjust = (intoncyl + perp) - rayend;
+         adjust1 = endoncyl - (intoncyl + perp);
 
          return true;
       }
