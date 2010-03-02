@@ -763,45 +763,39 @@ bool CollisionDetection::RayCylinderCheck(const Vector3& raystart, const Vector3
          // Now we know the hit was on both the cylinder and the ray
          hitpos = intercept;
          Vector3 intoncyl = cylstart + normcylray * intproj;
-         Vector3 perp = intercept - intoncyl;
          
          float endproj = (rayend - cylstart).dot(normcylray);
          Vector3 endoncyl = cylstart + endproj * normcylray;
          
-         Vector3 maxadj = ray.cross(cylray);
-         maxadj.normalize();
-         maxadj *= radius;
-         Vector3 maxadj1 = -maxadj;
-         if (maxadj.distance2(perp) > maxadj1.distance2(perp))
-            maxadj = maxadj1;
-         
-         float interpval;
          float half = (t + t1) * .5f;
          Vector3 maxadjpoint = raystart + ray * half;
-         
-         float maxadjdist = DistanceBetweenPointAndLine(maxadjpoint, cylstart, cylray, 1.f / cylray.magnitude());
-         maxadj.normalize();
-         maxadj *= maxadjdist;
-         if (t < t1 && t > cushion)
-            interpval = smoothstep(t, half, maxt);
-         else
-            interpval = smoothstep(t1, half, maxt);
-         perp = lerp(maxadj, perp, interpval);
-         perp.normalize();
-         perp *= radius * 1.001f;
+         float maxadjdist = radius * 1.001f - DistanceBetweenPointAndLine(maxadjpoint, cylstart, cylray, 1.f / cylray.magnitude());
+         Vector3 perp;
 
-         //endoncyl = intoncyl + perp; // or endoncyl + perp - tbd which is better
-         endoncyl = endoncyl + perp; // This is almost certainly better
-         
-         adjust = (intoncyl + perp) - rayend;
          if (maxt > half)
          {
-            maxadj.normalize();
-            adjust1 = (rayend + maxadj * (radius * 1.001f - maxadjdist)) - (intoncyl + perp);
+            perp = maxadjpoint;
          }
          else
          {
-            adjust1 = endoncyl - (intoncyl + perp);
+            perp = rayend;
+         }
+
+         float perpproj = (perp - cylstart).dot(normcylray);
+         Vector3 perponcyl = cylstart + normcylray * perpproj;
+         perp -= perponcyl;
+         perp.normalize();
+
+         endoncyl = perponcyl + perp * radius * 1.001f;
+         
+         adjust = (intercept + perp * maxadjdist) - rayend;
+         if (maxt > half)
+         {
+            adjust1 = (rayend + perp * maxadjdist) - (intercept + perp * maxadjdist);
+         }
+         else
+         {
+            adjust1 = endoncyl - (intercept + perp * maxadjdist);
          }
 
          return true;

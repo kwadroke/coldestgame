@@ -107,13 +107,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    // Start network threads
 #ifndef DEDICATED
    netin = SDL_CreateThread(NetListen, NULL);
+   Updater upd;
+   upd.DoUpdate();
 #else
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
 #endif
-   
-   Updater upd;
-   upd.DoUpdate();
    
    ShowGUI(mainmenu);
    
@@ -1547,7 +1546,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
       
       bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
-      
+
       if (!downcheck)
       {
          downslope = true;
@@ -1659,11 +1658,6 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
          // TODO: Should limit the number of iterations of this loop in case of problems
          while (!innerdone) // Hit a curved surface, apply composite adjustment
          {
-            if (count > 2)
-            {
-               logout << "Doing curved resolution " << SDL_GetTicks() << endl;
-               logout << "Iteration: " << count << endl;
-            }
             check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0, mplayer.size, 0), mplayer.size * 2.f);
 
             Vector3 saveadj1 = legadjust[1];
@@ -1672,7 +1666,6 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
 
             if (!leghit)
             {
-               innerdone = true;
                old = legoffset; // Half of the move is validated
                mainoffset += saveadj1 * (1 + count * slop);
                legoffset += saveadj1 * (1 + count * slop);
