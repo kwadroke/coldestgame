@@ -23,6 +23,7 @@
 #include "globals.h"
 #include "renderdefs.h"
 #include "util.h"
+#include "Camera.h"
 
 bool shadowrender;      // Whether we are rendering the shadowmap this pass
 bool reflectionrender;  // Ditto for reflections
@@ -31,6 +32,7 @@ GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 set<Mesh*> implist;
 set<Mesh*> visiblemeshes;
 vector<Mesh*> dynmeshes;
+Camera maincam;
 
 //#define THREADVBO
 
@@ -38,11 +40,11 @@ void Repaint()
 {
    static Timer t, ts;
    static bool updateclouds = true;
+   bool shadows = console.GetBool("shadows");
+   PlayerData localplayer(meshes);
    float fov = console.GetFloat("fov");
    if (guncam)
       fov /= console.GetFloat("zoomfactor");
-   bool shadows = console.GetBool("shadows");
-   PlayerData localplayer(meshes);
    t.start();
    
    // Apparently if this is turned off even glClear doesn't override it, so we end up never
@@ -53,6 +55,7 @@ void Repaint()
    
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
+   // This should probably be part of the Camera class, but I'm leaving it alone for now
    gluPerspective(fov, aspect, nearclip, console.GetFloat("viewdist") * 10.f);
    
    glMatrixMode(GL_MODELVIEW);
@@ -65,8 +68,6 @@ void Repaint()
    
    if (!PrimaryGUIVisible())
    {
-      // So a bunch of this stuff doesn't belong here (not rendering related), but it's not
-      // causing problems ATM so it stays.
       gui[chat]->visible = true;
       
       dynmeshes = GetDynamicMeshes(localplayer);
@@ -79,51 +80,9 @@ void Repaint()
          GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo, localplayer);
       }
       
-      // Set the camera's location and orientation
-      Vector3 viewoff;
-      if (!editor)
-      {
-         if (!guncam)
-         {
-            viewoff = units[localplayer.unit].viewoffset + Vector3(0, 0, console.GetFloat("viewoffset"));
-            gluLookAt(viewoff.x, viewoff.y, viewoff.z + .01f, viewoff.x, viewoff.y, viewoff.z, 0, 1, 0);
-         }
-         else
-         {
-            viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
-            gluLookAt(viewoff.x, viewoff.y/* + 1.5f*/, viewoff.z + .01f, viewoff.x, viewoff.y /*+ 1.5f*/, viewoff.z, 0, 1, 0);
-         }
-      }
-      
-      Vector3 rawoffset = viewoff;
-      GraphicMatrix viewm;
-      viewm.rotatex(localplayer.pitch);
-      viewm.rotatey(localplayer.facing + localplayer.rotation);
-      viewoff.transform(viewm);
-      
-      Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
-      // When !guncam this reduces to difference = actualaim
-      Vector3 difference = actualaim + rawoffset - units[localplayer.unit].viewoffset;
-      Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
-         
-      // For debugging third person view
-      if (console.GetBool("thirdperson"))
-      {
-         gluLookAt(0, 0, console.GetFloat("camdist"), 0, 0, 0, 0, 1, 0);
-         glPushMatrix();
-      }
-      
-      glRotatef(localplayer.pitch - rot.x, 1, 0, 0);
-      glRotatef(localplayer.facing + localplayer.rotation - rot.y, 0, 1, 0);
-      glRotatef(localplayer.roll, 0, 0, 1);
-   
-      RenderSkybox();
-      
-      glTranslatef(-localplayer.pos.x, -localplayer.pos.y, -localplayer.pos.z);
-      
-      localplayer.pos += viewoff;
-      Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-      kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), fov, aspect);
+      SetMainCamera(localplayer);
+
+      RenderSkybox(localplayer);
       
       // Place the light(s)
       lights.Place();
@@ -169,7 +128,7 @@ void Repaint()
       lights.Place();
       
       RenderObjects(localplayer);
-      
+
       // This produces bogus reflections, but that's better than rendering no water at all
       //if ((localplayer.pos - viewoff).y > 0)
       {
@@ -225,6 +184,65 @@ void Repaint()
       //t.stop();
    }
    //sleep(1);
+}
+
+
+void SetMainCamera(PlayerData& localplayer)
+{
+   // Set the camera's location and orientation
+   float fov = console.GetFloat("fov");
+   if (guncam)
+      fov /= console.GetFloat("zoomfactor");
+   Vector3 viewoff;
+   
+   if (!editor)
+   {
+      if (!guncam)
+      {
+         viewoff = units[localplayer.unit].viewoffset + Vector3(0, 0, console.GetFloat("viewoffset"));
+      }
+      else
+      {
+         viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
+      }
+   }
+   
+   Vector3 rawoffset = viewoff;
+   GraphicMatrix viewm;
+   viewm.rotatex(localplayer.pitch);
+   viewm.rotatey(localplayer.facing + localplayer.rotation);
+   viewoff.transform(viewm);
+   
+   Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
+   // When !guncam this reduces to difference = actualaim
+   Vector3 difference = actualaim + rawoffset - units[localplayer.unit].viewoffset;
+   Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
+   
+   Vector3 viewdir(0, 0, -1.f);
+   GraphicMatrix m;
+   m.rotatex(-localplayer.pitch + rot.x);
+   m.rotatey(localplayer.facing + localplayer.rotation + rot.y);
+   viewdir.transform(m);
+   if (/*console.GetBool("thirdperson") &&*/ !editor && !guncam)
+   {
+      maincam.SetPosition(localplayer.pos - viewdir * 100.f + Vector3(0.f, 40.f, 0.f));
+      maincam.lookat = localplayer.pos + Vector3(0.f, 40.f, 0.f);
+      maincam.interp = 1.f;
+      maincam.lookinterp = 50.f;
+      maincam.absolute = false;
+   }
+   else
+   {
+      localplayer.pos += viewoff;
+      maincam.SetPosition(localplayer.pos);
+      maincam.lookat = viewdir;
+      maincam.interp = 50.f;
+      maincam.absolute = true;
+   }
+   maincam.Update();
+   maincam.Place();
+
+   kdtree.setfrustum(maincam, nearclip, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), fov, aspect, false);
 }
 
 
@@ -720,12 +738,10 @@ void UpdateReflection(const PlayerData& localplayer)
       glPushMatrix();
       {
          glLoadIdentity();
-         glRotatef(localplayer.pitch, 1, 0, 0);
-         glRotatef(localplayer.facing + localplayer.rotation, 0, 1, 0);
-         glRotatef(localplayer.roll, 0, 0, 1);
+         maincam.Place();
          glScalef(1, -1, 1);
          glViewport(0, 0, reflectionres, reflectionres);
-         RenderSkybox();
+         RenderSkybox(localplayer);
       }
       glPopMatrix();
       
@@ -811,9 +827,8 @@ void RenderClouds()
 
 // We may yet come up with a better way to do this
 // Or maybe this works pretty well
-void RenderSkybox()
+void RenderSkybox(const PlayerData& localplayer)
 {
-   //resman.shaderman.UseShader("none");
    skyboxmat->Use();
    // Render ourselves a gigantic sphere to serve as the skybox
    glDisable(GL_FOG);
@@ -821,12 +836,12 @@ void RenderSkybox()
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_BLEND);
    
-   //resman.texhand.BindTexture(textures[0]);
    glTexCoord3f(0, 0, 0);
    GLUquadricObj *s = gluNewQuadric();
    gluQuadricTexture(s, GL_TRUE);
    
    glPushMatrix();
+   glTranslatef(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z);
    glRotatef(90, 1, 0, 0);
    gluSphere(s, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), 10, 10);
    glPopMatrix();
@@ -1088,16 +1103,13 @@ vector<Mesh*> GetDynamicMeshes(const PlayerData& localplayer)
 
 void SetReflectionFrustum(const PlayerData& localplayer)
 {
-   // Remember, rotations not vector
-   Vector3 invlook(-localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-   Vector3 invpos = localplayer.pos;
-   invpos.y *= -1;
-   kdtree.setfrustum(invpos, invlook, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect);
+   kdtree.setfrustum(maincam, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect, true);
 }
 
 
 void SetShadowFrustum(const float size, const Vector3& look, const PlayerData& localplayer)
 {
+   // This should probably use the Camera class now
    Vector3 p = lights.GetPos(0);
    Vector3 rots = lights.GetRots(0);
    

@@ -45,6 +45,7 @@ void EditorLoop(const string editmap)
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
    SDL_ShowCursor(SDL_DISABLE);
    gui[mainmenu]->visible = false;
+   gui[updateprogress]->visible = false;
    gui[loadprogress]->visible = true;
    GetMap("maps/" + editmap);
    for (list<Mesh>::iterator i = meshes.begin(); i != meshes.end(); ++i)
