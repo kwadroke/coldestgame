@@ -49,7 +49,8 @@ using std::list;
 using std::string;
 
 void Repaint();
-void RenderSkybox();
+void SetMainCamera(PlayerData&);
+void RenderSkybox(const PlayerData&);
 void RenderObjects(const PlayerData&);
 void RenderParticles();
 void RenderHud(const PlayerData&);

@@ -955,10 +955,10 @@ void GetMap(string fn)
    }
    
    glMatrixMode(GL_MODELVIEW);
-   Vector3 cam = center;
-   cam.y = minimapheight;
-   kdtree.setfrustum(cam, Vector3(90, 0, 0), 10, minimapheight * 2.f, 90, 1);
-   gluLookAt(cam.x, cam.y, cam.z, center.x, 0, center.z, 0, 0, -1);
+   PlayerData fake = player[0];
+   fake.pos = center;
+   fake.pos.y = minimapheight;
+   fake.pitch = 89.99f;
    
    glFogf(GL_FOG_START, minimapheight * 2.f);
    glFogf(GL_FOG_END, minimapheight * 2.f);
@@ -969,15 +969,20 @@ void GetMap(string fn)
    
    staticdrawdist = true;
    float saveidm = console.GetFloat("impdistmulti");
+   float saveviewdist = console.GetFloat("viewdist");
    console.Parse("set impdistmulti 10000", false);
+   console.Parse("set viewdist " + ToString(minimapheight * 2.f), false);
+   
+   SetMainCamera(fake);
    lights.Place();
-   RenderObjects(player[0]);
+   RenderObjects(fake);
    UpdateNoise();
-   UpdateReflection(player[0]);
+   UpdateReflection(fake);
    minimapfbo.Bind();
    glViewport(0, 0, 512, 512);
    RenderWater();
    console.Parse("set impdistmulti " + ToString(saveidm), false);
+   console.Parse("set viewdist " + ToString(saveviewdist), false);
    staticdrawdist = false;
    int viewdist = console.GetInt("viewdist");
    glFogf(GL_FOG_START, float(viewdist) * .5f);

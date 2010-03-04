@@ -79,4 +79,12 @@ T smoothstep(T x, T y, T a)
    return ((a - x) / (y - x));
 }
 
+template <typename T>
+T clamp(T min, T max, T val)
+{
+   if (val < min) return min;
+   if (val > max) return max;
+   return val;
+}
+
 #endif

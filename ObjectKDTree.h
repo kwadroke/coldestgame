@@ -28,6 +28,7 @@
 #include <set>
 #include "SDL_thread.h"
 #include "Timer.h"
+#include "Camera.h"
 #include <boost/shared_ptr.hpp>
 #ifdef __GNUG__
 // This may not be ready for primetime yet (or I'm stupid, but either way it's getting commented out)
@@ -81,6 +82,7 @@ class ObjectKDTree
       void erase(Mesh*);
       void setvertices(Vector3vec);
       void setfrustum(Vector3, Vector3, float, float, float, float);
+      void setfrustum(const Camera&, float, float, float, float, bool);
       void setfrustum(Quadvec*);
       bool infrustum(Mesh*);
       vector<Mesh*> getmeshes(const Vector3&, const float);

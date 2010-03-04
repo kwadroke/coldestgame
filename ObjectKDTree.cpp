@@ -481,57 +481,6 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
    fary = 2 * tan(radfov / 2) * farz / 2;
    farx = fary * aspect;
 
-#ifdef OLDKD
-   currpoint.x = nearx;
-   currpoint.y = neary;
-   currpoint.z = near;
-   p[0].SetVertex(0, currpoint);
-   p[2].SetVertex(1, currpoint);
-   p[3].SetVertex(3, currpoint);
-
-   currpoint.x = nearx;
-   currpoint.y = -neary;
-   p[0].SetVertex(1, currpoint);
-   p[3].SetVertex(1, currpoint);
-   p[4].SetVertex(3, currpoint);
-
-   currpoint.x = -nearx;
-   currpoint.y = neary;
-   p[0].SetVertex(2, currpoint);
-   p[2].SetVertex(3, currpoint);
-   p[5].SetVertex(1, currpoint);
-
-   currpoint.x = -nearx;
-   currpoint.y = -neary;
-   p[0].SetVertex(3, currpoint);
-   p[4].SetVertex(1, currpoint);
-   p[5].SetVertex(3, currpoint);
-
-   currpoint.x = -farx;
-   currpoint.y = fary;
-   currpoint.z = far;
-   p[1].SetVertex(0, currpoint);
-   p[2].SetVertex(2, currpoint);
-   p[5].SetVertex(0, currpoint);
-
-   currpoint.x = -farx;
-   currpoint.y = -fary;
-   p[1].SetVertex(1, currpoint);
-   p[4].SetVertex(0, currpoint);
-   p[5].SetVertex(2, currpoint);
-
-   currpoint.x = farx;
-   currpoint.y = fary;
-   p[1].SetVertex(2, currpoint);
-   p[2].SetVertex(0, currpoint);
-   p[3].SetVertex(2, currpoint);
-
-   currpoint.x = farx;
-   currpoint.y = -fary;
-   p[1].SetVertex(3, currpoint);
-   p[3].SetVertex(0, currpoint);
-   p[4].SetVertex(2, currpoint);
-#endif
    currpoint.x = nearx;
    currpoint.y = neary;
    currpoint.z = nearz;
@@ -599,6 +548,23 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
          p[i].SetVertex(j, currv);
       }
    }
+}
+
+
+void ObjectKDTree::setfrustum(const Camera& cam, float nearz, float farz, float fov, float aspect, bool reflection)
+{
+   Vector3 actual = cam.GetActual();
+   Vector3 look = cam.GetActualLook();
+   // We always need the look direction, not the point
+   look -= actual;
+
+   Vector3 rots = RotateBetweenVectors(Vector3(0, 0, -1), look);
+   if (reflection)
+   {
+      rots.x *= -1.f;
+      actual.y *= -1.f;
+   }
+   setfrustum(actual, rots, nearz, farz, fov, aspect);
 }
 
 
