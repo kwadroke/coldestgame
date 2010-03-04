@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Coldest.  If not, see <http://www.gnu.org/licenses/>.
 //
-// Copyright 2008, 2009 Ben Nemec
+// Copyright 2008, 2010 Ben Nemec
 // @End License@
 
 #include "Layout.h"
