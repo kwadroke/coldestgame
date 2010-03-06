@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+import os, sys, zlib
+
+#revision = os.popen('svn info | grep Revision | cut -f 2 -d \ ').read()
+
+filelist = []
+simplelist = []
+startdir = '.'
+
+#os.chdir('Coldest' + revision[:-1])
+
+for root, folders, files in os.walk(startdir):
+   for file in files:
+      print file
+      filelist.append(os.path.join(root, file))
+
+for i in filelist:
+   simple = i[2:]
+   simplelist.append(simple)
+
+crcfile = open('crcfile', 'w')
+
+for i in simplelist:
+   if i != "crcfile":
+      currfile = open(i)
+      crc = zlib.crc32(currfile.read()) & 0xffffffffL
+      crcfile.write('f\n')
+      crcfile.write(' File ' + i + '\n')
+      crcfile.write(' CRC ' + str(crc) + '\n')
