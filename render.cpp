@@ -227,8 +227,8 @@ void SetMainCamera(PlayerData& localplayer)
    {
       maincam.SetPosition(localplayer.pos - viewdir * 100.f + Vector3(0.f, 40.f, 0.f));
       maincam.lookat = localplayer.pos + Vector3(0.f, 40.f, 0.f);
-      maincam.interp = 1.f;
-      maincam.lookinterp = 50.f;
+      maincam.interp = console.GetFloat("caminterp");
+      maincam.lookinterp = console.GetFloat("caminterp");
       maincam.absolute = false;
    }
    else
@@ -237,6 +237,7 @@ void SetMainCamera(PlayerData& localplayer)
       maincam.SetPosition(localplayer.pos);
       maincam.lookat = viewdir;
       maincam.interp = 50.f;
+      maincam.lookinterp = 50.f;
       maincam.absolute = true;
    }
    maincam.Update();
