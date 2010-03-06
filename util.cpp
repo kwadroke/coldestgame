@@ -83,7 +83,7 @@ Vector3 RotateBetweenVectors(Vector3 start, const Vector3& end)
    start.normalize();
    dir.y = 0;
    dir.normalize();
-   ret.y = acos(start.dot(dir)) * 180.f / 3.14159265f;
+   ret.y = acos(clamp(-1.f, 1.f, start.dot(dir))) * 180.f / 3.14159265f;
    if (start.cross(dir).y >= 0)
       ret.y *= -1;
    dir = end;
@@ -91,7 +91,7 @@ Vector3 RotateBetweenVectors(Vector3 start, const Vector3& end)
    GraphicMatrix rotm;
    rotm.rotatey(ret.y);
    start.transform(rotm);
-   ret.x = acos(start.dot(dir)) * 180.f / 3.14159265f;
+   ret.x = acos(clamp(-1.f, 1.f, start.dot(dir))) * 180.f / 3.14159265f;
    if (dir.y >= 0)
       ret.x *= -1;
    return ret;

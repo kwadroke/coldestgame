@@ -231,6 +231,7 @@ void InitGlobals()
    console.Parse("set timeout 10", false);
    console.Parse("set numthreads 2", false);
    console.Parse("set checkupdates 1", false);
+   console.Parse("set caminterp 1", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -1488,7 +1489,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       maxspeed /= 1.5f;
       acceleration /= 1.5f;
    }
-   
+
    if (moving) // Accelerate or decelerate properly
    {
       if (fabs(oldspeed) > maxspeed) accmodifier = -1;
@@ -1544,7 +1545,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
-      
+
       bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
 
       if (!downcheck)
@@ -1697,6 +1698,12 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
                if (legadjust.size() < 2)
                   innerdone = true;
             }
+
+            ++count;
+            if (count > 2)
+               slop *= 2.f;
+            if (count > 10 && leghit)
+               innerdone = true;
          }
          
          ++count;

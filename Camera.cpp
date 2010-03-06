@@ -18,7 +18,7 @@
 // @End License@
 #include "Camera.h"
 
-Camera::Camera() : interp(1.f), lookinterp(1.f), absolute(false)
+Camera::Camera() : interp(50.f), lookinterp(50.f), absolute(false)
 {
 }
 
