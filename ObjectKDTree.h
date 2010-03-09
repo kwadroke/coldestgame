@@ -82,7 +82,9 @@ class ObjectKDTree
       void erase(Mesh*);
       void setvertices(Vector3vec);
       void setfrustum(Vector3, Vector3, float, float, float, float);
+#ifndef DEDICATED
       void setfrustum(const Camera&, float, float, float, float, bool);
+#endif
       void setfrustum(Quadvec*);
       bool infrustum(Mesh*);
       vector<Mesh*> getmeshes(const Vector3&, const float);

@@ -1528,25 +1528,23 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       float movedist = mplayer.pos.distance(old);
       float hillthreshold = .1f * movedist;
       
-      Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
-      Vector3 oldoffset = old - Vector3(0, mplayer.size, 0);
-      Vector3 checkpos = legoffset;
-      
+      Vector3 checkpos = mplayer.pos;
+
       // Vicious hack to deal with problem where short moves would sometimes fail to properly determine whether they
       // were moving up or down hill.  This is mostly a problem for unrate-controlled servers.
       if (movedist < .5f)
       {
-         Vector3 checkdiff = legoffset - oldoffset;
+         Vector3 checkdiff = mplayer.pos - old;
          checkdiff.normalize();
          checkdiff *= .5f;
-         checkpos = oldoffset + checkdiff;
+         checkpos = old + checkdiff;
          hillthreshold = .05f;
       }
       
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
 
-      bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size + hillthreshold, check);
+      bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f + hillthreshold, check);
 
       if (!downcheck)
       {
@@ -1554,7 +1552,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       }
       if (!downslope)
       {
-         bool upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size - hillthreshold, check);
+         bool upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f - hillthreshold, check);
          if (!upcheck)
          {
             flat = true;
@@ -1562,10 +1560,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       }
       
       Vector3 slopecheckpos = old;
-      slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * threshold;
+      slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * 2.f * threshold;
       
       bool slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check);
-      bool groundcheck = coldet.CheckSphereHit(old - Vector3(0.f, mplayer.size, 0.f), old - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 1.05f, check);
+      bool groundcheck = coldet.CheckSphereHit(old, old, mplayer.size * 2.05f, check);
       locks.EndWrite(ml);
       
       if ((slopecheck && groundcheck) || mplayer.weight < .99f) // They were on the ground
@@ -1618,73 +1616,56 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
    // Did we hit something?  If so, deal with it
    if (!console.GetBool("ghost") && mplayer.weight > 0)
    {
-      Vector3 oldmainoffset = old + Vector3(0, mplayer.size, 0);
-      Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
-      Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
-      Vector3 oldlegoffset = old - Vector3(0, mplayer.size, 0);
-      float checksize = mplayer.size;
-      Vector3vec adjust, legadjust;
+      Vector3 newpos = mplayer.pos;
+      float checksize = mplayer.size * 2.f;
+      Vector3vec adjust;
       int count = 0;
       float slop = .01f;
 
       locks.Write(ml);
 
-      // TODO: For the moment this is only implemented for the leg sphere - TBD whether we're going to add back in the second one
       bool done = false;
       while (!done)
       {
-         vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0, mplayer.size, 0), mplayer.size * 2.f);
+         vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-         bool hit = false;// = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, &adjust);
-         bool leghit = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, &legadjust);
-         //TODO: Fix this - related to comment above
-         adjust.resize(1, Vector3());
-         adjust[0] = Vector3();
+         bool hit = coldet.CheckSphereHit(old, newpos, checksize, check, &adjust);
 
-         if (hit && leghit)
-            adjust[0] = (adjust[0] + legadjust[0]) / 2.f;
-         else
-            adjust[0] = adjust[0] + legadjust[0];
-
-         if (!hit && !leghit) // Move is okay
+         if (!hit) // Move is okay
          {
             break;
          }
          // Need to adjust move
-         mainoffset += adjust[0] * (1 + count * slop);
-         legoffset += adjust[0] * (1 + count * slop);
+         newpos += adjust[0] * (1.f + count * slop);
          nohit = false;
 
-         bool innerdone = (legadjust.size() < 2);
-         // TODO: Should limit the number of iterations of this loop in case of problems
+         bool innerdone = (adjust.size() < 2);
          while (!innerdone) // Hit a curved surface, apply composite adjustment
          {
-            check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0, mplayer.size, 0), mplayer.size * 2.f);
+            check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-            Vector3 saveadj1 = legadjust[1];
+            Vector3 saveadj1 = adjust[1];
 
-            leghit = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, &legadjust);
+            hit = coldet.CheckSphereHit(old, newpos, checksize, check, &adjust);
 
-            if (!leghit)
+            if (!hit)
             {
-               old = legoffset; // Half of the move is validated
-               mainoffset += saveadj1 * (1 + count * slop);
-               legoffset += saveadj1 * (1 + count * slop);
+               old = newpos; // Half of the move is validated
+               newpos += saveadj1;// * (1.f + count * slop); // This one has to be exact
 
-               check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, legoffset, mplayer.size * 2.f);
+               check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-               leghit = coldet.CheckSphereHit(old, legoffset, checksize, check, &legadjust);
+               hit = coldet.CheckSphereHit(old, newpos, checksize, check, &adjust);
 
-               if (!leghit) // Our position is now collision-free
+               if (!hit) // Our position is now collision-free
                {
                   innerdone = true;
                   done = true;
                }
                else // Check whether to stay in curved surface loop, or return to normal collision detection
                {
-                  mainoffset += legadjust[0];
-                  legoffset += legadjust[0];
-                  if (legadjust.size() < 2) // We didn't hit a curved surface, go back to normal collision detection
+                  newpos += adjust[0];// * (1.f + count * slop);
+                  if (adjust.size() < 2) // We didn't hit a curved surface, go back to normal collision detection
                   {
                      innerdone = true;
                   }
@@ -1693,109 +1674,34 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
             }
             else // We hit something, if it wasn't curved then break the inner loop
             {
-               mainoffset += legadjust[0];
-               legoffset += legadjust[0];
-               if (legadjust.size() < 2)
+               newpos += adjust[0];// * (1.f + count * slop);
+               if (adjust.size() < 2)
                   innerdone = true;
             }
 
             ++count;
             if (count > 2)
                slop *= 2.f;
-            if (count > 10 && leghit)
+            if ((count > 10) && hit)
                innerdone = true;
          }
          
          ++count;
          if (count > 2)
             slop *= 2.f;
-         if (count > 10 && (hit || leghit)) // Damage control in case something goes wrong
+         if ((count > 10) && hit) // Damage control in case something goes wrong
          {
             logout << "Collision Detection Error " << adjust[0].distance() << endl;
             adjust[0].print();
             // Simply don't allow the movement at all
-            //mplayer.pos = old;
-            mainoffset = old + Vector3(0, mplayer.size, 0);
+            newpos = old;
             break;
          }
       }
+      mplayer.pos = newpos;
       locks.EndWrite(ml);
-      mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
    }
    return nohit;
-
-
-   
-   /*
-   if (!console.GetBool("ghost") && mplayer.weight > 0)
-   {
-      Vector3 oldmainoffset = old + Vector3(0, mplayer.size, 0);
-      Vector3 legoffset = mplayer.pos - Vector3(0, mplayer.size, 0);
-      Vector3 mainoffset = mplayer.pos + Vector3(0, mplayer.size, 0);
-      Vector3 oldlegoffset = old - Vector3(0, mplayer.size, 0);
-      
-      locks.Write(ml);
-      vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f);
-      float checksize = mplayer.size;
-      Vector3vec adjust, legadjust;
-      // TODO: Fix this
-      adjust.resize(1, Vector3());
-      bool hit = false;// = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, &adjust);
-      bool leghit = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, &legadjust);
-      if (hit && leghit)
-         adjust[0] = (adjust[0] + legadjust[0]) / 2.f;
-      else adjust[0] = adjust[0] + legadjust[0];
-      int count = 0;
-      float slop = .01f;
-      
-      while (hit || leghit)
-      {
-         nohit = false;
-         mainoffset += adjust[0] * (1 + count * slop);
-         legoffset += adjust[0] * (1 + count * slop);
-         
-         check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mainoffset - Vector3(0.f, mplayer.size, 0.f), mplayer.size * 2.f);
-         
-         adjust.clear();
-         legadjust.clear();
-         // TODO: Fix this
-         adjust.resize(1);
-         adjust[0] = Vector3();//hit = coldet.CheckSphereHit(oldmainoffset, mainoffset, checksize, check, &adjust);
-         hit = false;
-         leghit = coldet.CheckSphereHit(oldlegoffset, legoffset, checksize, check, &legadjust);
-         if (hit && leghit)
-            adjust[0] = (adjust[0] + legadjust[0]) / 2.f;
-         else adjust[0] = adjust[0] + legadjust[0];
-
-         // We hit a curved surface, apply the combination adjustment
-         if ((hit || leghit) && adjust.size() > 1)
-         {
-            mainoffset += adjust[0] * (1 + count * slop);
-            legoffset += adjust[0] * (1 + count * slop);
-            
-            if (hit && leghit)
-               adjust[1] = (adjust[1] + legadjust[1]) / 2.f;
-            else adjust[1] = adjust[1] + legadjust[1];
-         }
-         
-         ++count;
-         if (count > 2)
-            slop *= 2.f;
-         if (count > 10 && (hit || leghit)) // Damage control in case something goes wrong
-         {
-            logout << "Collision Detection Error " << adjust[0].distance() << endl;
-            adjust[0].print();
-            // Simply don't allow the movement at all
-            //mplayer.pos = old;
-            mainoffset = old + Vector3(0, mplayer.size, 0);
-            locks.EndWrite(ml);
-            break;
-         }
-      }
-      locks.EndWrite(ml);
-      mplayer.pos = mainoffset - Vector3(0, mplayer.size, 0);
-   }
-   return nohit;*/
 }
 
 

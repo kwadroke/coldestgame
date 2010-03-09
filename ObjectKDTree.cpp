@@ -551,6 +551,7 @@ void ObjectKDTree::setfrustum(Vector3 pos, Vector3 rots, float nearz, float farz
 }
 
 
+#ifndef DEDICATED
 void ObjectKDTree::setfrustum(const Camera& cam, float nearz, float farz, float fov, float aspect, bool reflection)
 {
    Vector3 actual = cam.GetActual();
@@ -566,6 +567,7 @@ void ObjectKDTree::setfrustum(const Camera& cam, float nearz, float farz, float 
    }
    setfrustum(actual, rots, nearz, farz, fov, aspect);
 }
+#endif
 
 
 void ObjectKDTree::setfrustum(Quadvec* newp)

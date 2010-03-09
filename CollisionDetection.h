@@ -29,7 +29,7 @@
 #include "Timer.h"
 #include "SDL_thread.h"
 
-#define INLINE_COLDET
+//#define INLINE_COLDET
 
 using namespace std;
 
