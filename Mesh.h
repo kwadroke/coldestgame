@@ -61,7 +61,7 @@ class Mesh
       void UnbindAttribs();
       void Render(Material* overridemat = NULL);
       void RenderImpostor(Mesh&, FBO&, const Vector3&);
-      void Add(TrianglePtr&);
+      void Add(Triangle&);
       void Add(Quad&);
       void Add(Mesh&);
       void Add(Mesh*);
@@ -87,7 +87,7 @@ class Mesh
       
       void Begin() {next = 0;}
       bool HasNext() const {return next < tris.size();}
-      Triangle& Next() {++next; return *tris[next - 1];}
+      Triangle& Next() {++next; return tris[next - 1];}
       
       int NumTris() const;
       void AdvanceAnimation(const Vector3& campos = Vector3());
@@ -118,8 +118,8 @@ class Mesh
       void GenIboData();
       void UploadVbo();
       
-      TrianglePtrvec tris;
-      TrianglePtrvec trantris; // Currently not used
+      Trianglevec tris;
+      Trianglevec trantris; // Currently not used
       VertexPtrvec vertices;
       intvec vbosteps;
       intvec minindex, maxindex;

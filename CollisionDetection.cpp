@@ -72,7 +72,6 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
    adjust.clear();
    adjust.push_back(Vector3());
    
-   Vector3 temp, temp1, temphitpos;
    Vector3 midpoint = (oldpos + newpos) / 2.f;
    Vector3 move = newpos - oldpos;
    bool nomove = false;
@@ -123,16 +122,104 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
       }
    }
    
-   size_t osize = objs.size();
    vector<Triangle*> neartris;
-   neartris.reserve(osize * 200);
+   neartris.reserve(objs.size() * 200);
    map<Triangle*, Mesh*> trimap;
    Triangle* hittri = NULL;
 //    logout << "Checking " << objs.size() << endl;
 //    logout << "Radius " << radius << endl;
 //    logout << "Dist " << oldpos.distance(newpos) << endl;
    
-   bool hit;
+   CheckMain(oldpos,
+             newpos,
+             radius,
+             move,
+             movemaginv,
+             objs,
+             retobjs,
+             nomove,
+             adjust,
+             adjusted,
+             neartris,
+             trimap,
+             hittri,
+             hitpos);
+   
+   // Check edges of polys as well.
+   if (!adjusted[0])
+   {
+      CheckEdges(oldpos,
+                 newpos,
+                 radius,
+                 move,
+                 movemaginv,
+                 retobjs,
+                 nomove,
+                 adjust,
+                 adjusted,
+                 neartris,
+                 trimap,
+                 hittri,
+                 hitpos);
+         
+      // Do a ray-sphere check on each corner of the triangles.
+      if (!adjusted[0] && !nomove)
+      {
+         CheckCorners(oldpos,
+                      newpos,
+                      radius,
+                      move,
+                      movemaginv,
+                      retobjs,
+                      nomove,
+                      adjust,
+                      adjusted,
+                      neartris,
+                      trimap,
+                      hittri,
+                      hitpos);
+      }
+   }// !adjusted
+   
+   CheckWorldBounds(oldpos,
+                    newpos,
+                    radius,
+                    adjust,
+                    adjusted,
+                    hitpos);
+   
+   if (hittri)
+      hitobj = trimap[hittri];
+   
+   if (adjusted[0])
+   {
+      adjust[0] /= adjusted[0];
+      if (adjusted[1])
+         adjust[1] /= adjusted[1];
+      return true;
+   }
+   return false;
+}
+
+
+void CollisionDetection::CheckMain(const Vector3& oldpos,
+                                   const Vector3& newpos,
+                                   const float radius,
+                                   const Vector3& move,
+                                   const float movemaginv,
+                                   vector<Mesh*>& objs,
+                                   vector<Mesh*>* retobjs,
+                                   bool nomove,
+                                   Vector3vec& adjust,
+                                   intvec& adjusted,
+                                   vector<Triangle*>& neartris,
+                                   map<Triangle*, Mesh*>& trimap,
+                                   Triangle* hittri,
+                                   Vector3& hitpos)
+{
+   bool hit = false;
+   Vector3 temp, temphitpos;
+   size_t osize = objs.size();
    for (size_t i = 0; i < osize; i++)
    {
       Mesh* current = objs[i];
@@ -147,7 +234,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
             float checkrad = currtri.maxdim + radius;
             
             if ((!nomove && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, move, movemaginv) < checkrad) ||
-                  oldpos.distance(currtri.midpoint) < checkrad)
+               oldpos.distance(currtri.midpoint) < checkrad)
             {
                // Cache the results of the previous calculations for later use
                neartris.push_back(&currtri);
@@ -172,110 +259,149 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
          }
       }
    }
-   
+   //logout << "Checking " << neartris.size() << endl;
+}
+
+
+void CollisionDetection::CheckEdges(const Vector3& oldpos,
+                                    const Vector3& newpos,
+                                    const float radius,
+                                    const Vector3& move,
+                                    const float movemaginv,
+                                    vector<Mesh*>* retobjs,
+                                    bool nomove,
+                                    Vector3vec& adjust,
+                                    intvec& adjusted,
+                                    vector<Triangle*>& neartris,
+                                    map<Triangle*, Mesh*>& trimap,
+                                    Triangle* hittri,
+                                    Vector3& hitpos)
+{
+   bool hit = false;
    size_t ntsize = neartris.size();
+   Vector3 temp, temp1, temphitpos;
    
-   // Check edges of polys as well.
-   if (!adjusted[0])
+   if (nomove)
    {
-      if (nomove)
+      for (size_t i = 0; i < ntsize; i++)
       {
-         for (size_t i = 0; i < ntsize; i++)
+         Triangle& currtri = *neartris[i];
+         hit = false;
+         hit = PlaneEdgeSphereCollision(temp, currtri, newpos, radius + currtri.radmod);
+         if (hit)
          {
-            Triangle& currtri = *neartris[i];
-            hit = false;
-            hit = PlaneEdgeSphereCollision(temp, currtri, newpos, radius + currtri.radmod);
+            adjust[0] += temp;
+            hittri = &currtri;
+            hitpos = newpos;
+            adjusted[0]++;
+            if (retobjs)
+               retobjs->push_back(trimap[&currtri]);
+         }
+      }
+   }
+   else
+   {
+      Vector3 raystart, rayend;
+      bool localhit;
+      Vector3 localhitpos, localadjust, localadjust1;
+      float currhitdist;
+      for (size_t i = 0; i < ntsize; i++)
+      {
+         Triangle& currtri = *neartris[i];
+         hit = false;
+         localhit = false;
+         localhitpos = Vector3();
+         localadjust = Vector3();
+         localadjust1 = Vector3();
+         currhitdist = 1e38f;
+         for (size_t j = 0; j < 3; ++j)
+         {
+            raystart = currtri.v[j]->pos;
+            rayend = currtri.v[(j + 1) % 3]->pos;
+            hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod, temp, temp1, temphitpos);
             if (hit)
             {
-               adjust[0] += temp;
+               localhit = true;
+               if (oldpos.distance2(temphitpos) < currhitdist)
+               {
+                  localadjust = temp;
+                  localadjust1 = temp1;
+                  localhitpos = temphitpos;
+                  currhitdist = oldpos.distance2(temphitpos);
+               }
+            }
+         }
+         if (localhit)
+         {
+            adjusted.resize(2, 0);
+            ++adjusted[0];
+            ++adjusted[1];
+            adjust.resize(2, Vector3());
+            adjust[0] += localadjust;
+            adjust[1] += localadjust1;
+            if (oldpos.distance2(localhitpos) < oldpos.distance2(hitpos))
+            {
                hittri = &currtri;
-               hitpos = newpos;
-               adjusted[0]++;
-               if (retobjs)
-                  retobjs->push_back(trimap[&currtri]);
+               hitpos = localhitpos;
             }
+            if (retobjs)
+               retobjs->push_back(trimap[&currtri]);
          }
       }
-      else
-      {
-         Vector3 raystart, rayend;
-         bool localhit;
-         Vector3 localhitpos, localadjust, localadjust1;
-         float currhitdist;
-         for (size_t i = 0; i < ntsize; i++)
-         {
-            Triangle& currtri = *neartris[i];
-            hit = false;
-            localhit = false;
-            localhitpos = Vector3();
-            localadjust = Vector3();
-            localadjust1 = Vector3();
-            currhitdist = 1e38f;
-            for (size_t j = 0; j < 3; ++j)
-            {
-               raystart = currtri.v[j]->pos;
-               rayend = currtri.v[(j + 1) % 3]->pos;
-               hit = RayCylinderCheck(oldpos, newpos, raystart, rayend, radius + currtri.radmod, temp, temp1, temphitpos);
-               if (hit)
-               {
-                  localhit = true;
-                  if (oldpos.distance2(temphitpos) < currhitdist)
-                  {
-                     localadjust = temp;
-                     localadjust1 = temp1;
-                     localhitpos = temphitpos;
-                     currhitdist = oldpos.distance2(temphitpos);
-                  }
-               }
-            }
-            if (localhit)
-            {
-               adjusted.resize(2, 0);
-               ++adjusted[0];
-               ++adjusted[1];
-               adjust.resize(2, Vector3());
-               adjust[0] += localadjust;
-               adjust[1] += localadjust1;
-               if (oldpos.distance2(localhitpos) < oldpos.distance2(hitpos))
-               {
-                  hittri = &currtri;
-                  hitpos = localhitpos;
-               }
-               if (retobjs)
-                  retobjs->push_back(trimap[&currtri]);
-            }
-         }
-         
-         // Do a ray-sphere check on each corner of the triangles.
-         if (!adjusted[0])
-         {
-            for (size_t i = 0; i < ntsize; i++)
-            {
-               Triangle& currtri = *neartris[i];
-               for (int j = 0; j < 3; ++j)
-               {
-                  if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod, temp, temp1, true))
-                  {
-                     if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
-                     {
-                        hittri = &currtri;
-                        hitpos = currtri.v[j]->pos;
-                     }
-                     adjust.resize(2, Vector3()); // Ensure there are two spots available
-                     adjust[0] += temp;
-                     adjust[1] += temp1;
-                     adjusted[0]++;
-                     adjusted[1]++;
-                     if (retobjs)
-                        retobjs->push_back(trimap[&currtri]);
-                     break; // One hit per tri should be enough
-                  }
-               }
-            }
-         }
-      }
-   }// !adjusted
+   }
+}
+
+
+void CollisionDetection::CheckCorners(const Vector3& oldpos,
+                                      const Vector3& newpos,
+                                      const float radius,
+                                      const Vector3& move,
+                                      const float movemaginv,
+                                      vector<Mesh*>* retobjs,
+                                      bool nomove,
+                                      Vector3vec& adjust,
+                                      intvec& adjusted,
+                                      vector<Triangle*>& neartris,
+                                      map<Triangle*, Mesh*>& trimap,
+                                      Triangle* hittri,
+                                      Vector3& hitpos)
+{
+   size_t ntsize = neartris.size();
+   Vector3 temp, temp1;
    
+   for (size_t i = 0; i < ntsize; i++)
+   {
+      Triangle& currtri = *neartris[i];
+      for (int j = 0; j < 3; ++j)
+      {
+         if (RaySphereCheck(oldpos, newpos, currtri.v[j]->pos, radius + currtri.radmod, temp, temp1, true))
+         {
+            if (oldpos.distance2(hitpos) > oldpos.distance2(currtri.v[j]->pos))
+            {
+               hittri = &currtri;
+               hitpos = currtri.v[j]->pos;
+            }
+            adjust.resize(2, Vector3()); // Ensure there are two spots available
+            adjust[0] += temp;
+            adjust[1] += temp1;
+            adjusted[0]++;
+            adjusted[1]++;
+            if (retobjs)
+               retobjs->push_back(trimap[&currtri]);
+            break; // One hit per tri should be enough
+         }
+      }
+   }
+}
+
+
+void CollisionDetection::CheckWorldBounds(const Vector3& oldpos,
+                                          const Vector3& newpos,
+                                          const float radius,
+                                          Vector3vec& adjust,
+                                          intvec& adjusted,
+                                          Vector3& hitpos)
+{
    Vector3 v, s, t, u;
    for (int i = 0; i < 6; i++)  // Check the world bounding box
    {
@@ -283,7 +409,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
       s = worldbounds[i].GetVertex(1);
       t = worldbounds[i].GetVertex(2);
       u = worldbounds[i].GetVertex(3);
-            
+      
       Vector3 norm;
       norm = (t - v).cross(s - v);
       norm.normalize();
@@ -309,21 +435,8 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
       }
    }
    
-   if (hittri)
-      hitobj = trimap[hittri];
-   
-   if (adjusted[0])
-   {
-      adjust[0] /= adjusted[0];
-      if (adjusted[1])
-         adjust[1] /= adjusted[1];
-      return true;
-   }
-   return false;
 }
 
-
-// May want to precalculate normals where we can to speed things up
 
 /* If nomove is true (which should imply that pos == pos1), then this will just check if the sphere intersects
    the triangle, regardless of the side its on.  This is necessary because if pos isn't moving we can't possibly

@@ -107,6 +107,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    // Start network threads
 #ifndef DEDICATED
    netin = SDL_CreateThread(NetListen, NULL);
+   
+   ShowGUI(updateprogress);
    Updater upd;
    upd.DoUpdate();
 #else

@@ -279,7 +279,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          coltri->radmod = radius;
          coltri->collide = true;
          coltri->material = bark;
-         mesh->Add(coltri);
+         mesh->Add(*coltri);
       }
       int newind, newind1;
       for (size_t j = 0; j < oldpts.size(); ++j)

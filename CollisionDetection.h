@@ -50,6 +50,53 @@ class CollisionDetection
       vector<Quad> worldbounds;
       
    private:
+      void CheckMain(const Vector3& oldpos,
+                     const Vector3& newpos,
+                     const float radius,
+                     const Vector3& move,
+                     const float movemaginv,
+                     vector<Mesh*>& objs,
+                     vector<Mesh*>* retobjs,
+                     bool nomove,
+                     Vector3vec& adjust,
+                     intvec& adjusted,
+                     vector<Triangle*>& neartris,
+                     map<Triangle*, Mesh*>& trimap,
+                     Triangle* hittri,
+                     Vector3& hitpos);
+      void CheckEdges(const Vector3& oldpos,
+                     const Vector3& newpos,
+                     const float radius,
+                     const Vector3& move,
+                     const float movemaginv,
+                     vector<Mesh*>* retobjs,
+                     bool nomove,
+                     Vector3vec& adjust,
+                     intvec& adjusted,
+                     vector<Triangle*>& neartris,
+                     map<Triangle*, Mesh*>& trimap,
+                     Triangle* hittri,
+                     Vector3& hitpos);
+      void CheckCorners(const Vector3& oldpos,
+                        const Vector3& newpos,
+                        const float radius,
+                        const Vector3& move,
+                        const float movemaginv,
+                        vector<Mesh*>* retobjs,
+                        bool nomove,
+                        Vector3vec& adjust,
+                        intvec& adjusted,
+                        vector<Triangle*>& neartris,
+                        map<Triangle*, Mesh*>& trimap,
+                        Triangle* hittri,
+                        Vector3& hitpos);
+      void CheckWorldBounds(const Vector3& oldpos,
+                           const Vector3& newpos,
+                           const float radius,
+                           Vector3vec& adjust,
+                           intvec& adjusted,
+                           Vector3& hitpos);
+      
       bool PlaneSphereCollision(Vector3&, const Triangle&, Vector3, const Vector3&, const float&, Vector3&, const bool nomove, const bool debug = false);
       bool PlaneEdgeSphereCollision(Vector3&, const Triangle&, const Vector3&, const float&);
       bool VectorEdgeCheck(Vector3&, Vector3&, const Triangle&, const Vector3&, const Vector3&, const float&);
