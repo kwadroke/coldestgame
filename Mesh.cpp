@@ -56,7 +56,7 @@ Mesh::~Mesh()
 
 Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain),
            drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist), impostortex(m.impostortex),
-           debug(m.debug), updatedelay(m.updatedelay), vbosteps(m.vbosteps), minindex(m.minindex), maxindex(m.maxindex), 
+           debug(m.debug), updatedelay(m.updatedelay), tris(m.tris), vbosteps(m.vbosteps), minindex(m.minindex), maxindex(m.maxindex),
            vbo(0), ibo(0), frametime(m.frametime),
            hasvbo(false), childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe),
            lastanimtick(m.lastanimtick), animspeed(m.animspeed), curranimation(m.curranimation),
@@ -88,12 +88,10 @@ Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.coll
    }
    for (size_t i = 0; i < m.tris.size(); ++i)
    {
-      TrianglePtr p(new Triangle(*m.tris[i]));
       for (size_t j = 0; j < 3; ++j)
       {
-         p->v[j] = vertices[p->v[j]->id];
+         tris[i].v[j] = vertices[tris[i].v[j]->id];
       }
-      tris.push_back(p);
    }
    for (size_t i = 0; i < m.frameroot.size(); ++i)
    {
@@ -177,15 +175,13 @@ Mesh& Mesh::operator=(const Mesh& m)
       VertexPtr p(new Vertex(**i));
       vertices.push_back(p);
    }
-   tris.clear();
+   tris = m.tris;
    for (size_t i = 0; i < m.tris.size(); ++i)
    {
-      TrianglePtr p(new Triangle(*m.tris[i]));
       for (size_t j = 0; j < 3; ++j)
       {
-         p->v[j] = vertices[p->v[j]->id];
+         tris[i].v[j] = vertices[tris[i].v[j]->id];
       }
-      tris.push_back(p);
    }
    frameroot.clear();
    for (size_t i = 0; i < m.frameroot.size(); ++i)
@@ -379,7 +375,7 @@ void Mesh::Load(const IniReader& reader)
                curr.Read(newtri->collide, "Collide");
                curr.Read(newtri->id, "ID");
                
-               tris.push_back(newtri);
+               tris.push_back(*newtri);
             }
          }
          
@@ -390,19 +386,19 @@ void Mesh::Load(const IniReader& reader)
          
          for (size_t k = 0; k < tris.size(); ++k)
          {
-            TrianglePtr newtri = tris[k];
-            Vector3 one = newtri->v[1]->pos - newtri->v[0]->pos;
-            Vector3 two = newtri->v[2]->pos - newtri->v[0]->pos;
-            float tcone = newtri->v[1]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
-            float tctwo = newtri->v[2]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
+            Triangle& newtri = tris[k];
+            Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
+            Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
+            float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
+            float tctwo = newtri.v[2]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
             Vector3 tangent = one * -tctwo + two * tcone;
             for (size_t j = 0; j < 3; ++j)
-               newtri->v[j]->tangent += tangent;
+               newtri.v[j]->tangent += tangent;
             // Apply tangents to nodes' vertices
             for (size_t j = 0; j < 3; ++j)
             {
-               newtri->v[j]->tangent.normalize();
-               frameroot[currf]->SetTangent(newtri->v[j]->id, newtri->v[j]->tangent);
+               newtri.v[j]->tangent.normalize();
+               frameroot[currf]->SetTangent(newtri.v[j]->id, newtri.v[j]->tangent);
             }
          }
       }
@@ -541,7 +537,7 @@ void Mesh::GenVboData()
          currmesh = childmeshes[m - 1];
       VertexPtrvec& currvertices = currmesh->vertices;
       VertexPtrvec::iterator cvend = currvertices.end();
-      TrianglePtrvec& currtris = currmesh->tris;
+      Trianglevec& currtris = currmesh->tris;
       size_t ctsize = currtris.size();
       if (newchildren && m > 0)
       {
@@ -568,7 +564,7 @@ void Mesh::GenIboData()
    // Build IBO
    if (updateibo)
    {
-      sort(tris.begin(), tris.end(), Triangle::TriPtrComp);
+      sort(tris.begin(), tris.end());
       // Shouldn't clear these for efficiency reasons, but for the moment I'm not worrying about it
       indexdata.clear();
       vbosteps.clear();
@@ -576,11 +572,11 @@ void Mesh::GenIboData()
       maxindex.clear();
       int counter = 0;
       unsigned short currmin = 0, currmax = 0;
-      TrianglePtrvec::iterator last = tris.begin();
-      TrianglePtrvec::iterator tend = tris.end();
-      for (TrianglePtrvec::iterator i = tris.begin(); i != tend; ++i)
+      Trianglevec::iterator last = tris.begin();
+      Trianglevec::iterator tend = tris.end();
+      for (Trianglevec::iterator i = tris.begin(); i != tend; ++i)
       {
-         if ((*last)->material != (*i)->material)
+         if (last->material != i->material)
          {
             vbosteps.push_back(counter);
             minindex.push_back(currmin);
@@ -589,7 +585,7 @@ void Mesh::GenIboData()
             currmin = 0;
             currmax = 0;
          }
-         ushortvec ind = (*i)->GetIndices();
+         ushortvec ind = i->GetIndices();
          indexdata.insert(indexdata.end(), ind.begin(), ind.end());
          last = i;
          ++counter;
@@ -722,11 +718,11 @@ void Mesh::Render(Material* overridemat)
       overridemat->Use();
    for (size_t i = 0; i < vbosteps.size(); ++i)
    {
-      if (tris[currindex]->material)
+      if (tris[currindex].material)
       {
          if (!overridemat)
-            tris[currindex]->material->Use();
-         else tris[currindex]->material->UseTextureOnly();
+            tris[currindex].material->Use();
+         else tris[currindex].material->UseTextureOnly();
       }
       BindAttribs();
       void* offset = (void*)(ptrdiff_t(&indexdata[currindex * 3]) - ptrdiff_t(&indexdata[0]));
@@ -795,14 +791,11 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    if (!impostor)
    {
       impostor = MeshPtr(new Mesh("models/impostor/base", resman));
-      TrianglePtr first = impostor->tris[0];
-      TrianglePtr second = impostor->tris[1];
-      first->material = impmat.get();
-      second->material = impmat.get();
+      Triangle& first = impostor->tris[0];
+      Triangle& second = impostor->tris[1];
+      first.material = impmat.get();
+      second.material = impmat.get();
    }
-   
-   TrianglePtr first = impostor->tris[0];
-   TrianglePtr second = impostor->tris[1];
    
    impmat->SetTexture(0, impfbo.GetTexture());
    float width2 = width / 2.f;
@@ -920,7 +913,7 @@ void Mesh::CalcBounds()
       {
          for (int j = 0; j < 3; ++j)
          {
-            Triangle& currtri = *tris[i];
+            Triangle& currtri = tris[i];
             dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
             if (dist > size) size = dist;
             
@@ -994,8 +987,8 @@ void Mesh::LoadMaterials()
    if (havemats) return;
    for (size_t i = 0; i < tris.size(); ++i)
    {
-      if (!tris[i]->material && tris[i]->matname != "")
-         tris[i]->material = &resman.LoadMaterial(tris[i]->matname);
+      if (!tris[i].material && tris[i].matname != "")
+         tris[i].material = &resman.LoadMaterial(tris[i].matname);
    }
    impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
    havemats = true;
@@ -1008,14 +1001,14 @@ void Mesh::GenTangents()
 {
    for (size_t k = 0; k < tris.size(); ++k)
    {
-      TrianglePtr newtri = tris[k];
-      Vector3 one = newtri->v[1]->pos - newtri->v[0]->pos;
-      Vector3 two = newtri->v[2]->pos - newtri->v[0]->pos;
-      float tcone = newtri->v[1]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
-      float tctwo = newtri->v[2]->texcoords[0][1] - newtri->v[0]->texcoords[0][1];
+      Triangle& newtri = tris[k];
+      Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
+      Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
+      float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
+      float tctwo = newtri.v[2]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
       Vector3 tangent = one * -tctwo + two * tcone;
       for (size_t j = 0; j < 3; ++j)
-         newtri->v[j]->tangent += tangent;
+         newtri.v[j]->tangent += tangent;
    }
    for (size_t i = 0; i < vertices.size(); ++i)
    {
@@ -1079,19 +1072,20 @@ void Mesh::ResetTriMaxDims()
 {
    size_t s = tris.size();
    for (size_t i = 0; i < s; ++i)
-      tris[i]->maxdim = -1.f;
+      tris[i].maxdim = -1.f;
 }
 
 
-void Mesh::Add(TrianglePtr& tri)
+void Mesh::Add(Triangle& triangle)
 {
-   tris.push_back(tri);
+   tris.push_back(triangle);
+   Triangle& tri = tris.back();
    for (size_t i = 0; i < 3; ++i)
    {
-      if (find(vertices.begin(), vertices.end(), tri->v[i]) == vertices.end())
+      if (find(vertices.begin(), vertices.end(), tri.v[i]) == vertices.end())
       {
-         vertices.push_back(tri->v[i]);
-         tri->v[i]->id = vertices.size() - 1;
+         vertices.push_back(tri.v[i]);
+         tri.v[i]->id = vertices.size() - 1;
       }
    }
    boundschanged = true;
@@ -1101,9 +1095,9 @@ void Mesh::Add(TrianglePtr& tri)
 void Mesh::Add(Quad& quad)
 {
    TrianglePtr temp = quad.First();
-   Add(temp);
+   Add(*temp);
    temp = quad.Second();
-   Add(temp);
+   Add(*temp);
 }
 
 
