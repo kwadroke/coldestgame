@@ -566,7 +566,7 @@ int ServerListen(void* dummy)
             bool found = false;
             spawnpointreq.y += 50.f;
             float maxsize = 100.f;
-            // Since this check isn't actually moving doing the extended collision checks is pointless
+
             if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 30.f, check))
             {
                for (float ycheck = spawnpointreq.y; ycheck <= 100000.f; ycheck += 100.f)
@@ -576,7 +576,7 @@ int ServerListen(void* dummy)
                      for (float zcheck = spawnpointreq.z - maxsize; zcheck <= spawnpointreq.z + maxsize + 1.f; zcheck += maxsize)
                      {
                         checkvec = Vector3(xcheck, ycheck, zcheck);
-                        if (coldet.CheckSphereHit(checkvec, checkvec, 30.f, check) && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
+                        if (!coldet.CheckSphereHit(checkvec, checkvec, 30.f, check) && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
                         {
                            spawnpointreq = checkvec;
                            found = true;
