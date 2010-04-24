@@ -676,7 +676,7 @@ void Mesh::BindVbo()
    glClientActiveTextureARB(GL_TEXTURE1_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
    glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[1]) - (ptrdiff_t)&dummy));
-   glClientActiveTextureARB(GL_TEXTURE2_ARB);
+   /*glClientActiveTextureARB(GL_TEXTURE2_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
    glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[2]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE3_ARB);
@@ -687,7 +687,7 @@ void Mesh::BindVbo()
    glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[4]) - (ptrdiff_t)&dummy));
    glClientActiveTextureARB(GL_TEXTURE5_ARB);
    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[5]) - (ptrdiff_t)&dummy));
+   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[5]) - (ptrdiff_t)&dummy));*/
    
    glVertexPointer(3, GL_FLOAT, sizeof(VBOData), 0); // Apparently putting this last helps performance somewhat
    
@@ -704,7 +704,7 @@ void Mesh::Render(Material* overridemat)
 #ifndef DEDICATED
    if (!render)
       return;
-   if (updatevbo)// && !hasvbo) // For checking VBO generation performance
+   if (updatevbo)
       GenVbo();
    if (!havemats)
       LoadMaterials();

@@ -423,6 +423,11 @@ void Console::Action(const string& action)
       }
 #endif
    }
+   else if (action == "record action")
+   {
+      if (connected)
+         recorder->SetActive(GetBool("record"));
+   }
    else if (action == "kill")
    {
       sendkill = true;

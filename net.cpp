@@ -622,7 +622,7 @@ int NetListen(void* dummy)
                // Add tracer if necessary
                if (dummy.Tracer() != "")
                {
-                  temppart.tracer = MeshPtr(new Mesh("models/" + dummy.Tracer() + "/base", resman));
+                  temppart.tracer = meshcache->GetNewMesh("models/" + dummy.Tracer() + "/base");
                   temppart.tracertime = dummy.TracerTime();
                }
                SDL_mutexP(clientmutex);

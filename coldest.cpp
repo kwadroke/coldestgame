@@ -234,6 +234,9 @@ void InitGlobals()
    console.Parse("set numthreads 2", false);
    console.Parse("set checkupdates 1", false);
    console.Parse("set caminterp 1", false);
+
+   recorder = RecorderPtr(new Recorder(player, items));
+   console.Parse("set record 0", false); // This requires the recorder pointer to have been set
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -775,6 +778,7 @@ void MainLoop()
 #ifndef DEDICATED
          ShowGUI(loadoutmenu);
 #endif
+         recorder->SetActive(console.GetBool("record"));
          SDL_mutexP(clientmutex); // Prevent double unlock, not sure it's necessary
       }
       SDL_mutexV(clientmutex);
@@ -825,6 +829,9 @@ void MainLoop()
       
       // update the screen
       Repaint();
+
+      // Write replay file if active
+      recorder->WriteFrame();
 
 #else
       SDL_Delay(1);
