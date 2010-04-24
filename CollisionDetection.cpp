@@ -37,6 +37,7 @@ CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
 }
 
 
+// Why is this implemented?
 CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 {
    intmethod = o.intmethod;
@@ -46,6 +47,7 @@ CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
 }
 
 
+// Simplified version of the below, for situations where we don't need to know what we hit
 bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, Vector3vec* retval, const bool debug)
 {
    Vector3 dummy;
@@ -190,6 +192,10 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
    
    if (hittri)
       hitobj = trimap[hittri];
+   if (debug)
+   {
+      logout << "adjusted: " << adjusted[0] << endl;
+   }
    
    if (adjusted[0])
    {
@@ -499,14 +505,9 @@ bool CollisionDetection::PlaneSphereCollision(Vector3& retval, const Triangle& t
 #ifdef VERBOSE
          logout << "acos " << acos(p.dot(p1)) << endl;
 #endif
-         angle += acos(p.dot(p1));
+         angle += acos(clamp(-1.f, 1.f, p.dot(p1)));
       }
-// More Microsoft stupidity
-#ifndef _WIN32
-      if (forcehit || (angle > 2.f * PI - .01f && angle < 2.f * PI + .01f) || isnan(angle))
-#else
-      if (forcehit || (angle > 2.f * PI - .01f && angle < 2.f * PI + .01f) || _isnan(angle))
-#endif
+      if (forcehit || (angle > 2.f * PI - .01f && angle < 2.f * PI + .01f))
       {
          float endside = norm.dot(endpos) + d;
          if (endside > -2e-4f)
@@ -666,7 +667,7 @@ bool CollisionDetection::CrossesPlane(const Vector3& start, const Vector3& end, 
    
    float endside = norm.dot(end) + d;
    
-   if (endside < 1e-4f)
+   if (endside < 0.f)
    {
       move = end - start;
       denominator = norm.dot(move);

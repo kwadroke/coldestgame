@@ -96,8 +96,11 @@ void Material::Use() const
 #ifndef DEDICATED
    for (int i = 0; i < 6; ++i) // At this time, textures 7 and 8 are reserved for shadowmaps
    {
-      texman->texhand->ActiveTexture(i);
-      texman->texhand->BindTexture(texid[i]);
+      if (texid[i])
+      {
+         texman->texhand->ActiveTexture(i);
+         texman->texhand->BindTexture(texid[i]);
+      }
    }
 
    texman->texhand->ActiveTexture(0);

@@ -46,7 +46,7 @@ struct VBOData
    GLfloat tx;
    GLfloat ty;
    GLfloat tz;
-   GLfloat tc[8][2]; // [Texture unit][x/y]
+   GLfloat tc[2][2]; // [Texture unit][x/y]
    GLubyte r;
    GLubyte g;
    GLubyte b;

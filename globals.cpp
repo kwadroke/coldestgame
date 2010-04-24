@@ -55,3 +55,4 @@ KeyMap keys;
 bool reloadgui;
 string userpath;
 LockManager locks;
+RecorderPtr recorder;
