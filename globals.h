@@ -40,6 +40,7 @@
 #include "KeyMap.h"
 #include "LockManager.h"
 #include "Recorder.h"
+#include "Replayer.h"
 
 
 #define PI 3.14159265
@@ -95,6 +96,8 @@ extern bool reloadgui;
 extern string userpath;
 extern LockManager locks;
 extern RecorderPtr recorder;
+extern ReplayerPtr replayer;
+extern bool replaying;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

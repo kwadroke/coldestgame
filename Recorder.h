@@ -14,21 +14,21 @@ using boost::shared_ptr;
 class Recorder
 {
    public:
-      Recorder(vector<PlayerData>&, vector<Item>&);
+      Recorder();
       void SetActive(bool);
       void AddShot(unsigned long);
 
       void WriteFrame(bool reset = true);
       void Reset();
 
+      static size_t CountSpawnedPlayers();
+
       static const int version, minor;
 
    private:
       string GetFilename();
       
-      vector<PlayerData>& players;
       vector<unsigned long> shots;
-      vector<Item>& items;
       Uint32 starttick;
       bool active;
 

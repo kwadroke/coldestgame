@@ -214,7 +214,6 @@ void Spectate()
    SDL_mutexV(clientmutex);
    changeteam = 0;
    spectateplayer = 0;
-   player[0].spectate = true;
    SpectateNext();
 }
 

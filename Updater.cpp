@@ -193,17 +193,31 @@ void Updater::CreateParentDirectory(const string& filename)
 
 void Updater::ReplaceAndRestart()
 {
+   int error;
+   
    // Need to release our network ports
    Cleanup();
 #ifndef WIN32
    // This is a bit lazy, but it should work on any Unix-like that allows you to replace in-use files
-   system("mv -f updates/* .");
-   system("chmod +x ./coldest*");
+   error = system("mv -f updates/* .");
+   if (error)
+   {
+      logout << "Error moving update files: " << error << endl;
+   }
+   error = system("chmod +x ./coldest*");
+   if (error)
+   {
+      logout << "Error setting execute bit: " << error << endl;
+   }
    logout << "Restarting" << endl;
    execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
 #else
    // Have to do this here or the doupdate.bat file will be in use
-   system("move updates\\doupdate.bat");
+   error = system("move updates\\doupdate.bat");
+   if (error)
+   {
+      logout << "Error moving update files: " << error << endl;
+   }
    _execlp("doupdate.bat", "doupdate.bat", (char*) NULL);
 #endif
 }

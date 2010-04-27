@@ -1,10 +1,11 @@
 #include "Recorder.h"
+#include "globals.h"
 #include <ctime>
 
 const int Recorder::version = 1;
 const int Recorder::minor = 0;
 
-Recorder::Recorder(vector<PlayerData>& p, vector<Item>& i) : players(p), items(i), starttick(0)
+Recorder::Recorder() : starttick(0), active(false)
 {
 }
 
@@ -20,6 +21,7 @@ void Recorder::SetActive(bool a)
       write.open(GetFilename().c_str());
       write << version << endl;
       write << minor << endl;
+      write << mapname << endl;
    }
    else
    {
@@ -40,23 +42,24 @@ void Recorder::WriteFrame(bool reset)
    if (!active)
       return;
    
-   write << "Frame start\n";
+   write << "FrameStart\n";
 
    Uint32 currtick = SDL_GetTicks();
    Uint32 virtualtick = currtick - starttick;
    write << virtualtick << endl;
-   
-   for (size_t i = 1; i < players.size(); ++i)
+
+   write << CountSpawnedPlayers() << endl;
+   for (size_t i = 1; i < player.size(); ++i)
    {
-      if (players[i].spawned)
+      if (player[i].spawned)
       {
          write << i << endl;
-         write << players[i].pos.x << endl;
-         write << players[i].pos.y << endl;
-         write << players[i].pos.z << endl;
-         write << players[i].rotation << endl;
-         write << players[i].facing << endl;
-         write << players[i].pitch << endl;
+         write << player[i].pos.x << endl;
+         write << player[i].pos.y << endl;
+         write << player[i].pos.z << endl;
+         write << player[i].rotation << endl;
+         write << player[i].facing << endl;
+         write << player[i].pitch << endl;
       }
    }
 
@@ -95,5 +98,17 @@ string Recorder::GetFilename()
    string retval = "Coldest";
    retval += buffer;
    retval += ".cor";
+   return retval;
+}
+
+// static
+size_t Recorder::CountSpawnedPlayers()
+{
+   size_t retval = 0;
+   for (size_t i = 1; i < player.size(); ++i)
+   {
+      if (player[i].spawned)
+         ++retval;
+   }
    return retval;
 }

@@ -235,8 +235,10 @@ void InitGlobals()
    console.Parse("set checkupdates 1", false);
    console.Parse("set caminterp 1", false);
 
-   recorder = RecorderPtr(new Recorder(player, items));
+   recorder = RecorderPtr(new Recorder());
    console.Parse("set record 0", false); // This requires the recorder pointer to have been set
+   replayer = ReplayerPtr(new Replayer());
+   console.Parse("set replay @none@", false);
    
    // Variables that cannot be set from the console
 #ifndef DEDICATED
@@ -763,6 +765,20 @@ void MainLoop()
    {
       if (!running)
          Quit();
+
+      // Check if a replay was requested
+      string replayname;
+      replayname = console.GetString("replay");
+      if (replayname != "@none@")
+      {
+         replayer->SetActive(replayname, true);
+      }
+      else
+      {
+         replayer->SetActive("", false);
+      }
+
+      // Check if the current map has changed
       SDL_mutexP(clientmutex);
       if (nextmap != mapname)
       {
@@ -776,9 +792,13 @@ void MainLoop()
          SDL_mutexV(clientmutex);
          winningteam = 0;
 #ifndef DEDICATED
-         ShowGUI(loadoutmenu);
+         if (!replaying)
+            ShowGUI(loadoutmenu);
+         else
+            gui[loadprogress]->visible = false;
 #endif
-         recorder->SetActive(console.GetBool("record"));
+         if (!replayer->Active())
+            recorder->SetActive(console.GetBool("record"));
          SDL_mutexP(clientmutex); // Prevent double unlock, not sure it's necessary
       }
       SDL_mutexV(clientmutex);
@@ -816,12 +836,14 @@ void MainLoop()
          gotext->text = "Team " + ToString(winningteam) + " wins!";
          ShowGUI(endgame);
       }
-      
+
+      replayer->Update();
+
       SDL_mutexP(clientmutex);
       if (!PrimaryGUIVisible())
          UpdatePlayer();
       SDL_mutexV(clientmutex);
-      
+
       GUIUpdate();
       
       // Update any animated objects
@@ -2517,8 +2539,8 @@ void UpdatePlayer()
 {
    // Update player position
    SDL_mutexP(clientmutex);
-      
-   if (player[0].spectate && (size_t)spectateplayer != servplayernum && player[0].spawned)
+
+   if (player[0].spectate && player[0].spawned)
       UpdateSpectatePosition();
    else
    {
