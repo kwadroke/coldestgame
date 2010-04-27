@@ -56,3 +56,5 @@ bool reloadgui;
 string userpath;
 LockManager locks;
 RecorderPtr recorder;
+ReplayerPtr replayer;
+bool replaying;

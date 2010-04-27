@@ -40,7 +40,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
 		SoundManager.o ALBuffer.o ALSource.o editor.o Bot.o Updater.o\
-		Camera.o Recorder.o
+		Camera.o Recorder.o Replayer.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o Layout.o
@@ -457,7 +457,7 @@ Bot.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h gui/TextArea.h
 Bot.o: gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 Bot.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
 Bot.o: gui/Button.h RWLock.h VboWorker.h netdefs.h ParticleEmitter.h
-Bot.o: MeshCache.h KeyMap.h LockManager.h
+Bot.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 Camera.o: Camera.h Vector3.h glinc.h /usr/include/GL/glew.h
 Camera.o: /usr/include/stdint.h /usr/include/features.h
 Camera.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -815,7 +815,8 @@ Console.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 Console.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 Console.o: ALSource.h gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h
 Console.o: netdefs.h ServerInfo.h IDGen.h Packet.h globals.h
-Console.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
+Console.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h Recorder.h
+Console.o: Replayer.h
 FBO.o: FBO.h glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 FBO.o: /usr/include/features.h /usr/include/sys/cdefs.h
 FBO.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
@@ -1204,7 +1205,8 @@ Item.o: ALSource.h PlayerData.h Hit.h Weapon.h Console.h gui/TextArea.h
 Item.o: gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 Item.o: gui/Slider.h gui/Button.h renderdefs.h Light.h gui/ProgressBar.h
 Item.o: gui/Button.h RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h
-Item.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h
+Item.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h Recorder.h
+Item.o: Replayer.h
 Light.o: Light.h Vector3.h glinc.h /usr/include/GL/glew.h
 Light.o: /usr/include/stdint.h /usr/include/features.h
 Light.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -1494,7 +1496,7 @@ Material.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 Material.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 Material.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 Material.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-Material.o: MeshCache.h KeyMap.h LockManager.h
+Material.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 Mesh.o: Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 Mesh.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Mesh.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
@@ -1880,7 +1882,7 @@ MeshNode.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 MeshNode.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 MeshNode.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 MeshNode.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-MeshNode.o: MeshCache.h KeyMap.h LockManager.h
+MeshNode.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/stdint.h
 ObjectKDTree.o: /usr/include/features.h /usr/include/sys/cdefs.h
@@ -2221,7 +2223,7 @@ Particle.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 Particle.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 Particle.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 Particle.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-Particle.o: MeshCache.h KeyMap.h LockManager.h
+Particle.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 ParticleEmitter.o: ParticleEmitter.h Particle.h CollisionDetection.h
 ParticleEmitter.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ParticleEmitter.o: /usr/include/GL/glew.h /usr/include/stdint.h
@@ -2459,7 +2461,7 @@ ParticleEmitter.o: gui/Table.h gui/TableItem.h gui/LineEdit.h
 ParticleEmitter.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h
 ParticleEmitter.o: Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 ParticleEmitter.o: VboWorker.h netdefs.h IDGen.h Packet.h MeshCache.h
-ParticleEmitter.o: KeyMap.h LockManager.h
+ParticleEmitter.o: KeyMap.h LockManager.h Recorder.h Replayer.h
 PlayerData.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
 PlayerData.o: /usr/include/stdint.h /usr/include/features.h
 PlayerData.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -2686,7 +2688,7 @@ PlayerData.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 PlayerData.o: gui/Slider.h gui/Button.h renderdefs.h Light.h
 PlayerData.o: gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h netdefs.h
 PlayerData.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-PlayerData.o: LockManager.h
+PlayerData.o: LockManager.h Recorder.h Replayer.h
 PrimitiveOctree.o: PrimitiveOctree.h glinc.h /usr/include/GL/glew.h
 PrimitiveOctree.o: /usr/include/stdint.h /usr/include/features.h
 PrimitiveOctree.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -2933,46 +2935,7 @@ Quaternion.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
 Quaternion.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 Quaternion.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 Quaternion.o: GraphicMatrix.h
-Recorder.o: Recorder.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-Recorder.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-Recorder.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
-Recorder.o: /usr/include/features.h /usr/include/sys/cdefs.h
-Recorder.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
-Recorder.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
-Recorder.o: /usr/include/bits/typesizes.h /usr/include/time.h
-Recorder.o: /usr/include/endian.h /usr/include/bits/endian.h
-Recorder.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
-Recorder.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
-Recorder.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
-Recorder.o: /usr/include/bits/pthreadtypes.h /usr/include/stdio.h
-Recorder.o: /usr/include/libio.h /usr/include/_G_config.h
-Recorder.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
-Recorder.o: /usr/include/bits/sys_errlist.h /usr/include/stdlib.h
-Recorder.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
-Recorder.o: /usr/include/xlocale.h /usr/include/alloca.h
-Recorder.o: /usr/include/string.h /usr/include/strings.h
-Recorder.o: /usr/include/inttypes.h /usr/include/stdint.h
-Recorder.o: /usr/include/bits/wchar.h /usr/include/ctype.h
-Recorder.o: /usr/include/iconv.h /usr/include/SDL/begin_code.h
-Recorder.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
-Recorder.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
-Recorder.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
-Recorder.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
-Recorder.o: /usr/include/SDL/SDL_cpuinfo.h /usr/include/SDL/SDL_events.h
-Recorder.o: /usr/include/SDL/SDL_active.h /usr/include/SDL/SDL_keyboard.h
-Recorder.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
-Recorder.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
-Recorder.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
-Recorder.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
-Recorder.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
-Recorder.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-Recorder.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
-Recorder.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
-Recorder.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
-Recorder.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
-Recorder.o: /usr/include/bits/mathcalls.h logout.h Log.h
-Recorder.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
-Recorder.o: /usr/include/boost/shared_ptr.hpp
+Recorder.o: Recorder.h /usr/include/boost/shared_ptr.hpp
 Recorder.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Recorder.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Recorder.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2982,9 +2945,13 @@ Recorder.o: /usr/include/boost/config/no_tr1/utility.hpp
 Recorder.o: /usr/include/boost/config/select_platform_config.hpp
 Recorder.o: /usr/include/boost/config/platform/linux.hpp
 Recorder.o: /usr/include/boost/config/posix_features.hpp
-Recorder.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
-Recorder.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
-Recorder.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
+Recorder.o: /usr/include/unistd.h /usr/include/features.h
+Recorder.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+Recorder.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+Recorder.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
+Recorder.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+Recorder.o: /usr/include/bits/confname.h /usr/include/getopt.h
+Recorder.o: /usr/include/boost/config/suffix.hpp
 Recorder.o: /usr/include/boost/config/no_tr1/memory.hpp
 Recorder.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Recorder.o: /usr/include/boost/checked_delete.hpp
@@ -3003,10 +2970,45 @@ Recorder.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
 Recorder.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
 Recorder.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
 Recorder.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Recorder.o: /usr/include/pthread.h /usr/include/sched.h
+Recorder.o: /usr/include/pthread.h /usr/include/endian.h
+Recorder.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
+Recorder.o: /usr/include/sched.h /usr/include/time.h
 Recorder.o: /usr/include/bits/sched.h /usr/include/signal.h
+Recorder.o: /usr/include/bits/sigset.h /usr/include/bits/pthreadtypes.h
 Recorder.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 Recorder.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
+Recorder.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Recorder.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+Recorder.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+Recorder.o: /usr/include/sys/select.h /usr/include/bits/select.h
+Recorder.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+Recorder.o: /usr/include/stdio.h /usr/include/libio.h
+Recorder.o: /usr/include/_G_config.h /usr/include/wchar.h
+Recorder.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+Recorder.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
+Recorder.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
+Recorder.o: /usr/include/alloca.h /usr/include/string.h
+Recorder.o: /usr/include/strings.h /usr/include/inttypes.h
+Recorder.o: /usr/include/stdint.h /usr/include/bits/wchar.h
+Recorder.o: /usr/include/ctype.h /usr/include/iconv.h
+Recorder.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+Recorder.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+Recorder.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+Recorder.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+Recorder.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+Recorder.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+Recorder.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+Recorder.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+Recorder.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+Recorder.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+Recorder.o: /usr/include/SDL/SDL_version.h PlayerData.h Vector3.h glinc.h
+Recorder.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Recorder.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Recorder.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
+Recorder.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
+Recorder.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
+Recorder.o: /usr/include/bits/mathcalls.h logout.h Log.h
+Recorder.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
 Recorder.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
 Recorder.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Recorder.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
@@ -3015,7 +3017,374 @@ Recorder.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Recorder.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Recorder.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
 Recorder.o: FBO.h util.h tsint.h Timer.h Hit.h Weapon.h Item.h Particle.h
-Recorder.o: CollisionDetection.h ObjectKDTree.h Camera.h
+Recorder.o: CollisionDetection.h ObjectKDTree.h Camera.h globals.h
+Recorder.o: ServerInfo.h gui/GUI.h
+Recorder.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Recorder.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMDocument.hpp
+Recorder.o: /usr/include/xercesc/util/XercesDefs.hpp
+Recorder.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
+Recorder.o: /usr/include/xercesc/util/XercesVersion.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMNode.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+Recorder.o: /usr/include/xercesc/util/RefVectorOf.hpp
+Recorder.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+Recorder.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+Recorder.o: /usr/include/xercesc/util/XMLException.hpp
+Recorder.o: /usr/include/xercesc/util/XMemory.hpp
+Recorder.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMError.hpp
+Recorder.o: /usr/include/xercesc/util/XMLUni.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+Recorder.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+Recorder.o: /usr/include/xercesc/util/PlatformUtils.hpp
+Recorder.o: /usr/include/xercesc/util/PanicHandler.hpp
+Recorder.o: /usr/include/xercesc/util/XMLFileMgr.hpp
+Recorder.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
+Recorder.o: /usr/include/xercesc/framework/MemoryManager.hpp
+Recorder.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+Recorder.o: /usr/include/xercesc/util/RefVectorOf.c
+Recorder.o: /usr/include/xercesc/framework/XMLAttr.hpp
+Recorder.o: /usr/include/xercesc/util/QName.hpp
+Recorder.o: /usr/include/xercesc/util/XMLString.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+Recorder.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+Recorder.o: /usr/include/xercesc/internal/XSerializable.hpp
+Recorder.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+Recorder.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+Recorder.o: /usr/include/xercesc/util/Hashers.hpp
+Recorder.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+Recorder.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+Recorder.o: /usr/include/xercesc/util/RuntimeException.hpp
+Recorder.o: /usr/include/xercesc/util/RefHashTableOf.c
+Recorder.o: /usr/include/xercesc/util/Janitor.hpp
+Recorder.o: /usr/include/xercesc/util/Janitor.c
+Recorder.o: /usr/include/xercesc/util/NullPointerException.hpp
+Recorder.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+Recorder.o: /usr/include/xercesc/util/ValueVectorOf.c
+Recorder.o: /usr/include/xercesc/internal/XSerializationException.hpp
+Recorder.o: /usr/include/xercesc/internal/XProtoType.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+Recorder.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+Recorder.o: /usr/include/xercesc/util/KVStringPair.hpp
+Recorder.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+Recorder.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+Recorder.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+Recorder.o: /usr/include/xercesc/util/regx/Op.hpp
+Recorder.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+Recorder.o: /usr/include/xercesc/util/regx/Token.hpp
+Recorder.o: /usr/include/xercesc/util/Mutexes.hpp
+Recorder.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Recorder.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+Recorder.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+Recorder.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+Recorder.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+Recorder.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+Recorder.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+Recorder.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+Recorder.o: /usr/include/xercesc/framework/ValidationContext.hpp
+Recorder.o: /usr/include/xercesc/util/NameIdPool.hpp
+Recorder.o: /usr/include/xercesc/util/NameIdPool.c
+Recorder.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+Recorder.o: /usr/include/xercesc/util/SecurityManager.hpp
+Recorder.o: /usr/include/xercesc/util/ValueStackOf.hpp
+Recorder.o: /usr/include/xercesc/util/EmptyStackException.hpp
+Recorder.o: /usr/include/xercesc/util/ValueStackOf.c
+Recorder.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+Recorder.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+Recorder.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+Recorder.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+Recorder.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+Recorder.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+Recorder.o: /usr/include/xercesc/validators/common/Grammar.hpp
+Recorder.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
+Recorder.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
+Recorder.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Recorder.o: /usr/include/xercesc/dom/DOM.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMAttr.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMText.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMComment.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMElement.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMEntity.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMException.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSException.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMNotation.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMRange.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMStringList.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSInput.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLocator.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Recorder.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
+Recorder.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
+Recorder.o: util.h ALSource.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
+Recorder.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
+Recorder.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
+Recorder.o: RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+Recorder.o: MeshCache.h KeyMap.h LockManager.h Replayer.h
+Replayer.o: Replayer.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Replayer.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+Replayer.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+Replayer.o: /usr/include/features.h /usr/include/sys/cdefs.h
+Replayer.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
+Replayer.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+Replayer.o: /usr/include/bits/typesizes.h /usr/include/time.h
+Replayer.o: /usr/include/endian.h /usr/include/bits/endian.h
+Replayer.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
+Replayer.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+Replayer.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+Replayer.o: /usr/include/bits/pthreadtypes.h /usr/include/stdio.h
+Replayer.o: /usr/include/libio.h /usr/include/_G_config.h
+Replayer.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
+Replayer.o: /usr/include/bits/sys_errlist.h /usr/include/stdlib.h
+Replayer.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
+Replayer.o: /usr/include/xlocale.h /usr/include/alloca.h
+Replayer.o: /usr/include/string.h /usr/include/strings.h
+Replayer.o: /usr/include/inttypes.h /usr/include/stdint.h
+Replayer.o: /usr/include/bits/wchar.h /usr/include/ctype.h
+Replayer.o: /usr/include/iconv.h /usr/include/SDL/begin_code.h
+Replayer.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
+Replayer.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
+Replayer.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
+Replayer.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
+Replayer.o: /usr/include/SDL/SDL_cpuinfo.h /usr/include/SDL/SDL_events.h
+Replayer.o: /usr/include/SDL/SDL_active.h /usr/include/SDL/SDL_keyboard.h
+Replayer.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+Replayer.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
+Replayer.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+Replayer.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
+Replayer.o: /usr/include/boost/shared_ptr.hpp
+Replayer.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
+Replayer.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Replayer.o: /usr/include/boost/config/select_compiler_config.hpp
+Replayer.o: /usr/include/boost/config/compiler/gcc.hpp
+Replayer.o: /usr/include/boost/config/select_stdlib_config.hpp
+Replayer.o: /usr/include/boost/config/no_tr1/utility.hpp
+Replayer.o: /usr/include/boost/config/select_platform_config.hpp
+Replayer.o: /usr/include/boost/config/platform/linux.hpp
+Replayer.o: /usr/include/boost/config/posix_features.hpp
+Replayer.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
+Replayer.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
+Replayer.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
+Replayer.o: /usr/include/boost/config/no_tr1/memory.hpp
+Replayer.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+Replayer.o: /usr/include/boost/checked_delete.hpp
+Replayer.o: /usr/include/boost/throw_exception.hpp
+Replayer.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
+Replayer.o: /usr/include/boost/config.hpp
+Replayer.o: /usr/include/boost/detail/workaround.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
+Replayer.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Replayer.o: /usr/include/boost/detail/sp_typeinfo.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
+Replayer.o: /usr/include/pthread.h /usr/include/sched.h
+Replayer.o: /usr/include/bits/sched.h /usr/include/signal.h
+Replayer.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
+Replayer.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
+Replayer.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
+Replayer.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
+Replayer.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Replayer.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
+Replayer.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
+Replayer.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
+Replayer.o: /usr/include/bits/mathcalls.h logout.h Log.h
+Replayer.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
+Replayer.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+Replayer.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Replayer.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Replayer.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Replayer.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Replayer.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Replayer.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
+Replayer.o: FBO.h util.h tsint.h Timer.h Hit.h Weapon.h Item.h Particle.h
+Replayer.o: CollisionDetection.h ObjectKDTree.h Camera.h Recorder.h globals.h
+Replayer.o: ServerInfo.h gui/GUI.h
+Replayer.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Replayer.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMDocument.hpp
+Replayer.o: /usr/include/xercesc/util/XercesDefs.hpp
+Replayer.o: /usr/include/xercesc/util/Xerces_autoconf_config.hpp
+Replayer.o: /usr/include/xercesc/util/XercesVersion.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMNode.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMDocumentRange.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMDocumentTraversal.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMNodeFilter.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMXPathEvaluator.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMXPathResult.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLDocumentHandler.hpp
+Replayer.o: /usr/include/xercesc/util/RefVectorOf.hpp
+Replayer.o: /usr/include/xercesc/util/BaseRefVectorOf.hpp
+Replayer.o: /usr/include/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+Replayer.o: /usr/include/xercesc/util/XMLException.hpp
+Replayer.o: /usr/include/xercesc/util/XMemory.hpp
+Replayer.o: /usr/include/xercesc/util/XMLExceptMsgs.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMError.hpp
+Replayer.o: /usr/include/xercesc/util/XMLUni.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLErrorReporter.hpp
+Replayer.o: /usr/include/xercesc/util/XMLEnumerator.hpp
+Replayer.o: /usr/include/xercesc/util/PlatformUtils.hpp
+Replayer.o: /usr/include/xercesc/util/PanicHandler.hpp
+Replayer.o: /usr/include/xercesc/util/XMLFileMgr.hpp
+Replayer.o: /usr/include/xercesc/util/XMLMutexMgr.hpp
+Replayer.o: /usr/include/xercesc/framework/MemoryManager.hpp
+Replayer.o: /usr/include/xercesc/util/BaseRefVectorOf.c
+Replayer.o: /usr/include/xercesc/util/RefVectorOf.c
+Replayer.o: /usr/include/xercesc/framework/XMLAttr.hpp
+Replayer.o: /usr/include/xercesc/util/QName.hpp
+Replayer.o: /usr/include/xercesc/util/XMLString.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLBuffer.hpp
+Replayer.o: /usr/include/xercesc/util/XMLUniDefs.hpp
+Replayer.o: /usr/include/xercesc/internal/XSerializable.hpp
+Replayer.o: /usr/include/xercesc/internal/XSerializeEngine.hpp
+Replayer.o: /usr/include/xercesc/util/RefHashTableOf.hpp
+Replayer.o: /usr/include/xercesc/util/Hashers.hpp
+Replayer.o: /usr/include/xercesc/util/IllegalArgumentException.hpp
+Replayer.o: /usr/include/xercesc/util/NoSuchElementException.hpp
+Replayer.o: /usr/include/xercesc/util/RuntimeException.hpp
+Replayer.o: /usr/include/xercesc/util/RefHashTableOf.c
+Replayer.o: /usr/include/xercesc/util/Janitor.hpp
+Replayer.o: /usr/include/xercesc/util/Janitor.c
+Replayer.o: /usr/include/xercesc/util/NullPointerException.hpp
+Replayer.o: /usr/include/xercesc/util/ValueVectorOf.hpp
+Replayer.o: /usr/include/xercesc/util/ValueVectorOf.c
+Replayer.o: /usr/include/xercesc/internal/XSerializationException.hpp
+Replayer.o: /usr/include/xercesc/internal/XProtoType.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLAttDef.hpp
+Replayer.o: /usr/include/xercesc/validators/datatype/DatatypeValidator.hpp
+Replayer.o: /usr/include/xercesc/util/KVStringPair.hpp
+Replayer.o: /usr/include/xercesc/util/regx/RegularExpression.hpp
+Replayer.o: /usr/include/xercesc/util/RefArrayVectorOf.hpp
+Replayer.o: /usr/include/xercesc/util/RefArrayVectorOf.c
+Replayer.o: /usr/include/xercesc/util/regx/Op.hpp
+Replayer.o: /usr/include/xercesc/util/regx/TokenFactory.hpp
+Replayer.o: /usr/include/xercesc/util/regx/Token.hpp
+Replayer.o: /usr/include/xercesc/util/Mutexes.hpp
+Replayer.o: /usr/include/xercesc/util/regx/BMPattern.hpp
+Replayer.o: /usr/include/xercesc/util/regx/OpFactory.hpp
+Replayer.o: /usr/include/xercesc/util/regx/RegxUtil.hpp
+Replayer.o: /usr/include/xercesc/validators/schema/SchemaSymbols.hpp
+Replayer.o: /usr/include/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+Replayer.o: /usr/include/xercesc/framework/psvi/XSTypeDefinition.hpp
+Replayer.o: /usr/include/xercesc/framework/psvi/XSObject.hpp
+Replayer.o: /usr/include/xercesc/framework/psvi/XSConstants.hpp
+Replayer.o: /usr/include/xercesc/framework/ValidationContext.hpp
+Replayer.o: /usr/include/xercesc/util/NameIdPool.hpp
+Replayer.o: /usr/include/xercesc/util/NameIdPool.c
+Replayer.o: /usr/include/xercesc/framework/XMLEntityHandler.hpp
+Replayer.o: /usr/include/xercesc/util/SecurityManager.hpp
+Replayer.o: /usr/include/xercesc/util/ValueStackOf.hpp
+Replayer.o: /usr/include/xercesc/util/EmptyStackException.hpp
+Replayer.o: /usr/include/xercesc/util/ValueStackOf.c
+Replayer.o: /usr/include/xercesc/validators/DTD/DocTypeHandler.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLNotationDecl.hpp
+Replayer.o: /usr/include/xercesc/validators/DTD/DTDAttDef.hpp
+Replayer.o: /usr/include/xercesc/validators/DTD/DTDElementDecl.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLElementDecl.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLAttDefList.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLContentModel.hpp
+Replayer.o: /usr/include/xercesc/validators/DTD/DTDEntityDecl.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLEntityDecl.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMDocumentType.hpp
+Replayer.o: /usr/include/xercesc/framework/XMLBufferMgr.hpp
+Replayer.o: /usr/include/xercesc/framework/psvi/PSVIHandler.hpp
+Replayer.o: /usr/include/xercesc/validators/common/Grammar.hpp
+Replayer.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
+Replayer.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
+Replayer.o: /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h
+Replayer.o: /usr/include/xercesc/dom/DOM.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMAttr.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMCDATASection.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMText.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMCharacterData.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMComment.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMDocumentFragment.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMElement.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMEntity.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMEntityReference.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMException.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMImplementation.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMImplementationLS.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSException.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMRangeException.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMNamedNodeMap.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMNodeList.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMNotation.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMProcessingInstruction.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMNodeIterator.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMRange.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMTreeWalker.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSParser.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMConfiguration.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMStringList.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSParserFilter.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSResourceResolver.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMErrorHandler.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMImplementationList.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMImplementationRegistry.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMImplementationSource.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSInput.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSOutput.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLocator.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMPSVITypeInfo.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMTypeInfo.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMUserDataHandler.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSSerializer.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMLSSerializerFilter.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMXPathException.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
+Replayer.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
+Replayer.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h
+Replayer.o: util.h ALSource.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
+Replayer.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
+Replayer.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
+Replayer.o: RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
+Replayer.o: MeshCache.h KeyMap.h LockManager.h
 ResourceManager.o: ResourceManager.h Material.h glinc.h
 ResourceManager.o: /usr/include/GL/glew.h /usr/include/stdint.h
 ResourceManager.o: /usr/include/features.h /usr/include/sys/cdefs.h
@@ -3749,7 +4118,8 @@ Updater.o: gui/Table.h gui/TableItem.h gui/LineEdit.h gui/ScrollView.h
 Updater.o: gui/Slider.h gui/Button.h gui/TextArea.h gui/Table.h
 Updater.o: gui/ComboBox.h globals.h Console.h renderdefs.h gui/Button.h
 Updater.o: RWLock.h VboWorker.h Packet.h ParticleEmitter.h MeshCache.h
-Updater.o: KeyMap.h LockManager.h /usr/include/boost/filesystem.hpp
+Updater.o: KeyMap.h LockManager.h Recorder.h Replayer.h
+Updater.o: /usr/include/boost/filesystem.hpp
 Updater.o: /usr/include/boost/filesystem/operations.hpp
 Updater.o: /usr/include/boost/filesystem/path.hpp
 Updater.o: /usr/include/boost/filesystem/config.hpp
@@ -4349,8 +4719,8 @@ actions.o: util.h tsint.h Timer.h Hit.h Weapon.h Item.h Particle.h
 actions.o: CollisionDetection.h ObjectKDTree.h Camera.h globals.h Console.h
 actions.o: renderdefs.h Light.h gui/Button.h RWLock.h VboWorker.h netdefs.h
 actions.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-actions.o: LockManager.h editor.h ProceduralTree.h StableRandom.h
-actions.o: /usr/include/boost/tokenizer.hpp
+actions.o: LockManager.h Recorder.h Replayer.h editor.h ProceduralTree.h
+actions.o: StableRandom.h /usr/include/boost/tokenizer.hpp
 actions.o: /usr/include/boost/token_iterator.hpp
 actions.o: /usr/include/boost/iterator/iterator_adaptor.hpp
 actions.o: /usr/include/boost/static_assert.hpp
@@ -4777,7 +5147,8 @@ coldest.o: /usr/include/sys/time.h /usr/include/curl/easy.h
 coldest.o: /usr/include/curl/multi.h /usr/include/curl/curl.h netdefs.h
 coldest.o: IDGen.h globals.h Console.h renderdefs.h gui/Button.h RWLock.h
 coldest.o: VboWorker.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-coldest.o: LockManager.h /usr/include/boost/filesystem.hpp
+coldest.o: LockManager.h Recorder.h Replayer.h
+coldest.o: /usr/include/boost/filesystem.hpp
 coldest.o: /usr/include/boost/filesystem/operations.hpp
 coldest.o: /usr/include/boost/filesystem/path.hpp
 coldest.o: /usr/include/boost/filesystem/config.hpp
@@ -5202,7 +5573,7 @@ editor.o: Weapon.h Item.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
 editor.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
 editor.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
 editor.o: RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-editor.o: MeshCache.h KeyMap.h LockManager.h
+editor.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 getmap.o: gui/ProgressBar.h gui/GUI.h gui/GUI.h
 getmap.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 getmap.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
@@ -5424,7 +5795,8 @@ getmap.o: /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h Item.h
 getmap.o: Console.h gui/TextArea.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 getmap.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h
 getmap.o: gui/Button.h RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h
-getmap.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h editor.h
+getmap.o: ParticleEmitter.h MeshCache.h KeyMap.h LockManager.h Recorder.h
+getmap.o: Replayer.h editor.h
 globals.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 globals.o: /usr/include/stdint.h /usr/include/features.h
 globals.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -5647,7 +6019,7 @@ globals.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 globals.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 globals.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 globals.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-globals.o: MeshCache.h KeyMap.h LockManager.h
+globals.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 logout.o: logout.h Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 logout.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 logout.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -5935,7 +6307,7 @@ net.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
 net.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 net.o: ALSource.h Console.h gui/TextArea.h renderdefs.h Light.h
 net.o: gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h ParticleEmitter.h
-net.o: MeshCache.h KeyMap.h LockManager.h
+net.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 netdefs.o: netdefs.h ServerInfo.h /usr/include/SDL/SDL_net.h
 netdefs.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 netdefs.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -6239,7 +6611,7 @@ render.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h
 render.o: gui/ScrollView.h gui/Slider.h gui/Button.h renderdefs.h Light.h
 render.o: gui/ProgressBar.h gui/Button.h RWLock.h VboWorker.h netdefs.h
 render.o: IDGen.h Packet.h ParticleEmitter.h MeshCache.h KeyMap.h
-render.o: LockManager.h
+render.o: LockManager.h Recorder.h Replayer.h
 renderdefs.o: renderdefs.h glinc.h /usr/include/GL/glew.h
 renderdefs.o: /usr/include/stdint.h /usr/include/features.h
 renderdefs.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -6687,7 +7059,8 @@ server.o: ALSource.h Console.h gui/TextArea.h gui/GUI.h gui/Table.h
 server.o: gui/TableItem.h gui/LineEdit.h gui/ScrollView.h gui/Slider.h
 server.o: gui/Button.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
 server.o: RWLock.h VboWorker.h netdefs.h IDGen.h ParticleEmitter.h
-server.o: MeshCache.h KeyMap.h LockManager.h ServerState.h Bot.h
+server.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
+server.o: ServerState.h Bot.h
 settings.o: globals.h Mesh.h Vector3.h glinc.h /usr/include/GL/glew.h
 settings.o: /usr/include/stdint.h /usr/include/features.h
 settings.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -6911,7 +7284,8 @@ settings.o: gui/TextArea.h gui/GUI.h gui/Table.h gui/TableItem.h
 settings.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 settings.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 settings.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-settings.o: MeshCache.h KeyMap.h LockManager.h gui/Slider.h gui/ComboBox.h
+settings.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
+settings.o: gui/Slider.h gui/ComboBox.h
 tsint.o: tsint.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 tsint.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 tsint.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
@@ -7204,7 +7578,7 @@ gui/GUI.o: /usr/include/SDL/SDL_ttf.h TextureManager.h gui/XSWrapper.h util.h
 gui/GUI.o: ALSource.h PlayerData.h Hit.h Weapon.h Item.h Console.h
 gui/GUI.o: gui/TextArea.h renderdefs.h Light.h gui/ProgressBar.h gui/Button.h
 gui/GUI.o: RWLock.h VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
-gui/GUI.o: MeshCache.h KeyMap.h LockManager.h
+gui/GUI.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
 gui/Layout.o: gui/Layout.h gui/GUI.h
 gui/LineEdit.o: gui/LineEdit.h gui/GUI.h
 gui/ProgressBar.o: gui/ProgressBar.h gui/GUI.h
