@@ -63,6 +63,24 @@ void Recorder::WriteFrame(bool reset)
       }
    }
 
+   if (occtimer.elapsed() > 1000)
+   {
+      write << player.size() << endl;
+      for (size_t i = 1; i < player.size(); ++i)
+      {
+         write << player[i].team << endl;
+         write << player[i].unit << endl;
+         write << player[i].kills << endl;
+         write << player[i].deaths << endl;
+         write << player[i].name << endl;
+      }
+      occtimer.start();
+   }
+   else
+   {
+      write << 0 << endl;
+   }
+
    write << "Shots" << endl;
    write << shots.size() << endl;
    for (size_t i = 0; i < shots.size(); ++i)

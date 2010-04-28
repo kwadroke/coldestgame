@@ -6,6 +6,7 @@
 #include <boost/shared_ptr.hpp>
 #include "PlayerData.h"
 #include "Item.h"
+#include "Timer.h"
 
 using boost::shared_ptr;
 
@@ -20,9 +21,12 @@ class Replayer
    private:
       void ReadPlayers();
       void ReadShots();
+      void EnsurePlayerSize(const size_t);
       
       bool active;
       Uint32 starttick, filetick;
+      Timer timer;
+      size_t framecount;
 
       ifstream read;
 };
