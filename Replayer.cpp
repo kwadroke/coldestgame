@@ -40,6 +40,8 @@ void Replayer::SetActive(const string& filename, const bool a)
       read >> dummy;
       read >> filetick;
 
+      timer.start();
+
       replaying = true;
       servplayernum = 0;
       mapname = "";
@@ -73,8 +75,15 @@ void Replayer::Update()
       string dummy;
       read >> dummy;
       if (!(read >> filetick))
+      {
+         // Output performance stats
+         logout << "Time: " << (timer.elapsed() / 1000.f) << " seconds" << endl;;
+         logout << "Frames: " << framecount << endl;
+         logout << "Avg. FPS: " << ((float)framecount / (float)timer.elapsed() * 1000.f) << endl;
          break;
+      }
    }
+   ++framecount;
 }
 
 
@@ -90,12 +99,7 @@ void Replayer::ReadPlayers()
    {
       size_t pnum;
       read >> pnum;
-      while (pnum >= player.size())  // Make sure we have the requisite number of players
-      {
-         PlayerData dummy(meshes);
-         player.push_back(dummy);
-         logout << "Replay adding player " << (player.size() - 1) << endl;
-      }
+      EnsurePlayerSize(pnum);
 
       // Position
       read >> player[pnum].pos.x >> player[pnum].pos.y >> player[pnum].pos.z;
@@ -103,6 +107,23 @@ void Replayer::ReadPlayers()
       read >> player[pnum].rotation >> player[pnum].facing >> player[pnum].pitch;
 
       player[pnum].spawned = true; // Only players updated in the current frame are spawned
+   }
+
+   // Occasional updates
+   size_t occ;
+   read >> occ;
+   if (occ)
+   {
+      for (size_t i = 1; i < occ; ++i)
+      {
+         EnsurePlayerSize(i);
+         read >> player[i].team;
+         read >> player[i].unit;
+         read >> player[i].kills;
+         read >> player[i].deaths;
+         read.ignore(); // Skip \n
+         getline(read, player[i].name);
+      }
    }
 }
 
@@ -114,4 +135,16 @@ void Replayer::ReadShots()
    read >> dummy;
 
    read >> dummy;
+}
+
+
+// Make sure that there are at least s players in the player vector
+void Replayer::EnsurePlayerSize(const size_t s)
+{
+   while (s >= player.size())  // Make sure we have the requisite number of players
+   {
+      PlayerData dummy(meshes);
+      player.push_back(dummy);
+      logout << "Replay adding player " << (player.size() - 1) << endl;
+   }
 }

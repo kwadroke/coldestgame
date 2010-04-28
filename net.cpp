@@ -522,7 +522,7 @@ int NetListen(void* dummy)
                   if (oppnum < player.size())
                   {
                      player[oppnum].team = getteam;
-                     player[oppnum].unit = getunit; // Check that this hasn't changed?
+                     player[oppnum].unit = getunit; // Check that this hasn't changed?  Probably should, although it's unlikely anyone could respawn fast enough to cause problems.
                      player[oppnum].kills = getkills;
                      player[oppnum].deaths = getdeaths;
                      for (size_t i = 0; i < numbodyparts; ++i)

@@ -2,13 +2,16 @@
 #define RECORDER_H
 
 #include <vector>
+#include <set>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
 #include "SDL.h"
 #include "PlayerData.h"
 #include "Particle.h"
+#include "Timer.h"
 
 using std::vector;
+using std::set;
 using boost::shared_ptr;
 
 class Recorder
@@ -31,6 +34,7 @@ class Recorder
       vector<unsigned long> shots;
       Uint32 starttick;
       bool active;
+      Timer occtimer;
 
       ofstream write;
       ifstream read;
