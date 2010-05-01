@@ -197,7 +197,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
       logout << "adjusted: " << adjusted[0] << endl;
    }
    
-   if (adjusted[0])
+   if (adjusted[0] && adjust[0].magnitude() > 1e-5f)
    {
       adjust[0] /= adjusted[0];
       if (adjusted[1])
