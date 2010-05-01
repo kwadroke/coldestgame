@@ -602,37 +602,11 @@ int NetListen(void* dummy)
                partids.insert(id);
                get >> weapid;
                Weapon dummy(weapid);
-               MeshPtr tempmesh = meshcache->GetNewMesh("models/" + dummy.ModelFile() + "/base");
-               Particle temppart(*tempmesh);
-               temppart.id = id;
-               temppart.weapid = weapid;  // Not sure this is necessary, but it won't hurt
-               get >> temppart.pos.x >> temppart.pos.y >> temppart.pos.z;
-               temppart.origin = temppart.pos;
-               temppart.lasttracer = temppart.pos;
-               get >> temppart.dir.x >> temppart.dir.y >> temppart.dir.z;
-               get >> temppart.playernum;
-               temppart.velocity = dummy.Velocity();
-               temppart.accel = dummy.Acceleration();
-               temppart.weight = dummy.ProjectileWeight();
-               temppart.radius = dummy.Radius();
-               temppart.explode = dummy.Explode();
-               temppart.collide = true;
-               temppart.lasttick = SDL_GetTicks();
-               
-               // Add tracer if necessary
-               if (dummy.Tracer() != "")
-               {
-                  temppart.tracer = meshcache->GetNewMesh("models/" + dummy.Tracer() + "/base");
-                  temppart.tracertime = dummy.TracerTime();
-               }
+               size_t pnum;
+               get >> pnum;
                SDL_mutexP(clientmutex);
-#ifndef DEDICATED
-               // Add sound
-               if (dummy.Id() != Weapon::NoWeapon)
-                  resman.soundman.PlaySound(dummy.FireSound(), player[temppart.playernum].pos);
-#endif
-               
-               particles.push_back(temppart);
+               ClientCreateShot(player[pnum], dummy);
+               recorder->AddShot(pnum, weapid);
                SDL_mutexV(clientmutex);
             }
             Ack(packetnum);

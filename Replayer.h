@@ -10,6 +10,8 @@
 
 using boost::shared_ptr;
 
+// For the most part, this class does not need to grab the clientmutex because there will be nothing going on in the network threads
+// while replays are going on.
 class Replayer
 {
    public:

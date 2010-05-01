@@ -19,7 +19,7 @@ class Recorder
    public:
       Recorder();
       void SetActive(bool);
-      void AddShot(unsigned long);
+      void AddShot(size_t, unsigned long);
 
       void WriteFrame(bool reset = true);
       void Reset();
@@ -30,7 +30,8 @@ class Recorder
 
    private:
       string GetFilename();
-      
+
+      vector<size_t> shotplayer;
       vector<unsigned long> shots;
       Uint32 starttick;
       bool active;
