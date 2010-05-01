@@ -851,7 +851,9 @@ void Mesh::UpdateTris()
    if (!trisdirty || !frameroot.size() ||
       (currkeyframe < startframe[curranimation] || currkeyframe >= startframe[curranimation] + numframes[curranimation]) ||
       (currtick - lasttick < updatedelay))
+   {
       return;
+   }
    lasttick = currtick;
    float interpval;
    if (frametime.size() > 0)

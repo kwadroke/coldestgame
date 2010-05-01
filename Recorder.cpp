@@ -39,7 +39,7 @@ void Recorder::AddShot(unsigned long weapid)
 // TODO: Clean up the unnecessary headings once this is all working
 void Recorder::WriteFrame(bool reset)
 {
-   if (!active)
+   if (!active || frametimer.elapsed() < 50)
       return;
    
    write << "FrameStart\n";
@@ -60,6 +60,7 @@ void Recorder::WriteFrame(bool reset)
          write << player[i].rotation << endl;
          write << player[i].facing << endl;
          write << player[i].pitch << endl;
+         write << player[i].speed << endl;
       }
    }
 
@@ -90,6 +91,7 @@ void Recorder::WriteFrame(bool reset)
    
    if (reset)
       Reset();
+   frametimer.start();
 }
 
 

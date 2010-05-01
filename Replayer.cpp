@@ -105,6 +105,7 @@ void Replayer::ReadPlayers()
       read >> player[pnum].pos.x >> player[pnum].pos.y >> player[pnum].pos.z;
       // Rotations
       read >> player[pnum].rotation >> player[pnum].facing >> player[pnum].pitch;
+      read >> player[pnum].speed;
 
       player[pnum].spawned = true; // Only players updated in the current frame are spawned
    }

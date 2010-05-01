@@ -183,7 +183,6 @@ void Repaint()
       //logout << "Average ms/frame: " << (1000.f / fps) << endl;
       //t.stop();
    }
-   //sleep(1);
 }
 
 
