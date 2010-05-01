@@ -19,7 +19,8 @@ class Recorder
    public:
       Recorder();
       void SetActive(bool);
-      void AddShot(size_t, unsigned long);
+      void AddShot(const size_t, const unsigned long);
+      void AddHit(const Vector3&, const int);
 
       void WriteFrame(bool reset = true);
       void Reset();
@@ -30,9 +31,16 @@ class Recorder
 
    private:
       string GetFilename();
+      void WritePlayers();
+      void WriteOccasional();
+      void WriteShots();
+      void WriteHits();
 
       vector<size_t> shotplayer;
       vector<unsigned long> shots;
+      Vector3vec hitpos;
+      intvec hittype;
+      
       Uint32 starttick;
       bool active;
       Timer frametimer, occtimer;

@@ -72,5 +72,6 @@ void SendKeepalive();
 void SendMasterListRequest();
 bool SendVersionRequest();
 void ClientCreateShot(const PlayerData&, const Weapon&);
+void AddHit(const Vector3&, const int);
 
 #endif

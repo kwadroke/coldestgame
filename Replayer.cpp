@@ -36,8 +36,6 @@ void Replayer::SetActive(const string& filename, const bool a)
       }
 
       read >> nextmap;
-      string dummy;
-      read >> dummy;
       read >> filetick;
 
       timer.start();
@@ -72,8 +70,8 @@ void Replayer::Update()
 
       ReadShots();
 
-      string dummy;
-      read >> dummy;
+      ReadHits();
+
       if (!(read >> filetick))
       {
          // Output performance stats
@@ -129,11 +127,8 @@ void Replayer::ReadPlayers()
 }
 
 
-// Not currently implemented for the sake of testing
 void Replayer::ReadShots()
 {
-   string dummy;
-   read >> dummy;
    size_t numshots;
    read >> numshots;
 
@@ -144,6 +139,21 @@ void Replayer::ReadShots()
       read >> pnum >> weapid;
 
       ClientCreateShot(player[pnum], weapid);
+   }
+}
+
+void Replayer::ReadHits()
+{
+   size_t numhits;
+   read >> numhits;
+   for (size_t i = 0; i < numhits; ++i)
+   {
+      Vector3 pos;
+      int type;
+      read >> pos.x >> pos.y >> pos.z;
+      read >> type;
+
+      AddHit(pos, type);
    }
 }
 
