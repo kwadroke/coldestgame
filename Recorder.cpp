@@ -39,6 +39,15 @@ void Recorder::AddShot(size_t p, unsigned long weapid)
    shots.push_back(weapid);
 }
 
+void Recorder::AddHit(const Vector3& pos, const int type)
+{
+   if (!active)
+      return;
+
+   hitpos.push_back(pos);
+   hittype.push_back(type);
+}
+
 
 // TODO: Clean up the unnecessary headings once this is all working
 void Recorder::WriteFrame(bool reset)
@@ -46,12 +55,26 @@ void Recorder::WriteFrame(bool reset)
    if (!active || frametimer.elapsed() < 50)
       return;
    
-   write << "FrameStart\n";
-
    Uint32 currtick = SDL_GetTicks();
    Uint32 virtualtick = currtick - starttick;
    write << virtualtick << endl;
 
+   WritePlayers();
+
+   WriteOccasional();
+
+   WriteShots();
+
+   WriteHits();
+   
+   if (reset)
+      Reset();
+   frametimer.start();
+}
+
+
+void Recorder::WritePlayers()
+{
    write << CountSpawnedPlayers() << endl;
    for (size_t i = 1; i < player.size(); ++i)
    {
@@ -67,7 +90,10 @@ void Recorder::WriteFrame(bool reset)
          write << player[i].speed << endl;
       }
    }
+}
 
+void Recorder::WriteOccasional()
+{
    if (occtimer.elapsed() > 1000)
    {
       write << player.size() << endl;
@@ -85,18 +111,26 @@ void Recorder::WriteFrame(bool reset)
    {
       write << 0 << endl;
    }
+}
 
-   write << "Shots" << endl;
+void Recorder::WriteShots()
+{
    write << shots.size() << endl;
    for (size_t i = 0; i < shots.size(); ++i)
    {
       write << shotplayer[i] << endl;
       write << shots[i] << endl;
    }
-   
-   if (reset)
-      Reset();
-   frametimer.start();
+}
+
+void Recorder::WriteHits()
+{
+   write << hitpos.size() << endl;
+   for (size_t i = 0; i < hitpos.size(); ++i)
+   {
+      write << hitpos[i].x << endl << hitpos[i].y << endl << hitpos[i].z << endl;
+      write << hittype[i] << endl;
+   }
 }
 
 
@@ -104,6 +138,8 @@ void Recorder::Reset()
 {
    shotplayer.clear();
    shots.clear();
+   hitpos.clear();
+   hittype.clear();
    items.clear();
 }
 

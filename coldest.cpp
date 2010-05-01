@@ -2612,6 +2612,17 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
 }
 
 
+void AddHit(const Vector3& pos, const int type)
+{
+   Weapon dummy(type);
+   ParticleEmitter newemitter(dummy.ExpFile(), resman);
+   newemitter.position = pos;
+   SDL_mutexP(clientmutex);
+   emitters.push_back(newemitter);
+   SDL_mutexV(clientmutex);
+}
+
+
 PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p, Meshlist::iterator invalid)
 {
    size_t psize = p.size();

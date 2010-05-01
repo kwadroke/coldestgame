@@ -623,12 +623,8 @@ int NetListen(void* dummy)
                get >> hitpos.x >> hitpos.y >> hitpos.z;
                get >> type;
                
-               Weapon dummy(type);
-               ParticleEmitter newemitter(dummy.ExpFile(), resman);
-               newemitter.position = hitpos;
-               SDL_mutexP(clientmutex);
-               emitters.push_back(newemitter);
-               SDL_mutexV(clientmutex);
+               AddHit(hitpos, type);
+               recorder->AddHit(hitpos, type);
             }
             
             Ack(packetnum);
