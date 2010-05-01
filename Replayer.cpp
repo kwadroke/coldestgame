@@ -134,8 +134,17 @@ void Replayer::ReadShots()
 {
    string dummy;
    read >> dummy;
+   size_t numshots;
+   read >> numshots;
 
-   read >> dummy;
+   for (size_t i = 0; i < numshots; ++i)
+   {
+      size_t pnum;
+      int weapid;
+      read >> pnum >> weapid;
+
+      ClientCreateShot(player[pnum], weapid);
+   }
 }
 
 

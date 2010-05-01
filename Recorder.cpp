@@ -30,8 +30,12 @@ void Recorder::SetActive(bool a)
    active = a;
 }
 
-void Recorder::AddShot(unsigned long weapid)
+void Recorder::AddShot(size_t p, unsigned long weapid)
 {
+   if (!active)
+      return;
+   
+   shotplayer.push_back(p);
    shots.push_back(weapid);
 }
 
@@ -86,6 +90,7 @@ void Recorder::WriteFrame(bool reset)
    write << shots.size() << endl;
    for (size_t i = 0; i < shots.size(); ++i)
    {
+      write << shotplayer[i] << endl;
       write << shots[i] << endl;
    }
    
@@ -97,6 +102,7 @@ void Recorder::WriteFrame(bool reset)
 
 void Recorder::Reset()
 {
+   shotplayer.clear();
    shots.clear();
    items.clear();
 }

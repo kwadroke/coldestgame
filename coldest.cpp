@@ -2578,26 +2578,37 @@ void UpdatePlayer()
 #endif
       SDL_mutexP(clientmutex);
 #ifndef DEDICATED
-      if (currplayerweapon.Id() != Weapon::NoWeapon)
-         resman.soundman.PlaySound(currplayerweapon.FireSound(), player[0].pos);
+
 #endif
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
       if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
          player[0].weapons[weaponslot].ammo--;
          
-      Vector3 startpos = localplayer.pos;
-      Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
-      Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
-      Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[localplayer.unit].viewoffset);
-      // Add tracer if necessary
-      if (currplayerweapon.Tracer() != "")
-      {
-         part.tracer = MeshPtr(new Mesh("models/" + currplayerweapon.Tracer() + "/base", resman));
-         part.tracertime = currplayerweapon.TracerTime();
-      }
-      particles.push_back(part);
+      ClientCreateShot(localplayer, currplayerweapon);
+      recorder->AddShot(0, currplayerweapon.Id());
       SDL_mutexV(clientmutex);
    }
+}
+
+
+// Should have the client mutex before calling this
+void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerweapon)
+{
+   int weaponslot = weaponslots[localplayer.currweapon];
+   Vector3 startpos = localplayer.pos;
+   Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
+   Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
+   Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[localplayer.unit].viewoffset);
+   // Add tracer if necessary
+   if (currplayerweapon.Tracer() != "")
+   {
+      part.tracer = MeshPtr(new Mesh("models/" + currplayerweapon.Tracer() + "/base", resman));
+      part.tracertime = currplayerweapon.TracerTime();
+   }
+   particles.push_back(part);
+
+   if (currplayerweapon.Id() != Weapon::NoWeapon)
+      resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
 }
 
 

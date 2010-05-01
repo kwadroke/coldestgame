@@ -71,5 +71,6 @@ void SendPassword(const string&);
 void SendKeepalive();
 void SendMasterListRequest();
 bool SendVersionRequest();
+void ClientCreateShot(const PlayerData&, const Weapon&);
 
 #endif
