@@ -123,11 +123,24 @@ int NetSend(void* dummy)
       }
       if (doconnect)
       {
+         // Get hostname for telling players at the same IP apart
+         char hn[256];
+         string hostname;
+         if (gethostname(hn, 255) == 0)
+         {
+            hostname = hn;
+         }
+         else
+         {
+            hostname = "Failed";
+         }
+         
          SDLNet_ResolveHost(&addr, console.GetString("serveraddr").c_str(), console.GetInt("serverport"));
          Packet p(&addr);
          p.ack = sendpacketnum;
          p << "C\n";
          p << p.ack << eol;
+         p << hostname << eol;
          p << player[0].unit << eol;
          p << player[0].name << eol;
          p << netver << eol;

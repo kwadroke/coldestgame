@@ -427,8 +427,11 @@ int ServerListen(void* dummy)
          else if (packettype == "C")
          {
             short unit;
-            string name;
+            string name, hostname;
             int clientver;
+            get.ignore();
+            getline(get, hostname);
+            logout << "Player connecting from " << hostname << endl;
             get >> unit;
             get.ignore();
             getline(get, name);
@@ -441,16 +444,19 @@ int ServerListen(void* dummy)
             {
                for (size_t i = 1; i < serverplayers.size(); ++i)
                {
-                  if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].addr.port == inpack->address.port)
+                  if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].hostname == hostname)
                   {
                      respondto = i;
                      add = false;
                   }
                }
+               // Always do this, in case a player is reconnecting from a different port
+               validaddrs.insert(SortableIPaddress(inpack->address));
                if (add)
                {
                   PlayerData temp(servermeshes);
                   temp.addr = inpack->address;
+                  temp.hostname = hostname;
                   temp.unit = unit;
                   temp.acked.insert(packetnum);
                   temp.salvage = console.GetInt("startsalvage");
@@ -458,7 +464,6 @@ int ServerListen(void* dummy)
                   
                   serverplayers.push_back(temp);
                   respondto = serverplayers.size() - 1;
-                  validaddrs.insert(SortableIPaddress(inpack->address));
                   
                   // Choose a team for them
                   vector<int> teamcount(2, 0);
@@ -467,7 +472,7 @@ int ServerListen(void* dummy)
                      if (serverplayers[i].team != 0 && serverplayers[i].connected)
                         ++teamcount[serverplayers[i].team - 1];
                   }
-                  logout << teamcount[0] << " " << teamcount[1] << endl;
+                  logout << "Team 1: " << teamcount[0] << " Team 2: " << teamcount[1] << endl;
                   int newteam = teamcount[0] > teamcount[1] ? 2 : 1;
                   serverplayers[respondto].team = newteam;
                }
