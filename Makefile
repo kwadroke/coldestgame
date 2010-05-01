@@ -52,7 +52,8 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
 		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
-		MeshNode.o ServerState.o Material.o tsint.o Bot.o
+		MeshNode.o ServerState.o Material.o tsint.o Bot.o Recorder.o\
+		Replayer.o
 		
 MASTER = master.o util.o Packet.o ServerInfo.o Vector3.o GraphicMatrix.o tsint.o\
 			logout.o Log.o IDGen.o

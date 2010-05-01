@@ -2607,8 +2607,10 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
    }
    particles.push_back(part);
 
+#ifndef DEDICATED
    if (currplayerweapon.Id() != Weapon::NoWeapon)
       resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
+#endif
 }
 
 

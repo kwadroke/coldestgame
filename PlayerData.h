@@ -71,6 +71,7 @@ class PlayerData
       float fallvelocity;
       short id;
       IPaddress addr;
+      string hostname;
       bool connected;
       unsigned long recpacketnum;
       short unit;
