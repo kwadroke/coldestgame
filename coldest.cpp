@@ -845,10 +845,10 @@ void MainLoop()
       SDL_mutexV(clientmutex);
 
       GUIUpdate();
-      
+
       // Update any animated objects
       Animate();
-      
+
       // update the screen
       Repaint();
 
@@ -2004,6 +2004,15 @@ void Animate()
       spawnschanged = true;
    }
    additems.clear();
+
+
+   // Also need to update player models because they can be changed by the net thread
+   // Note that they are inserted into meshes so they should be automatically animated
+   for (size_t k = 1; k < player.size(); ++k)
+   {
+      if (k != (size_t)servplayernum)
+         UpdatePlayerModel(player[k], meshes);
+   }
    
    
    // Meshes
@@ -2056,14 +2065,6 @@ void Animate()
    }
    static int partupd = 100;
    UpdateParticles(particles, partupd, kdtree, meshes, player, player[0].pos);
-   
-   // Also need to update player models because they can be changed by the net thread
-   // Note that they are inserted into meshes so they should be automatically animated
-   for (size_t k = 1; k < player.size(); ++k)
-   {
-      if (k != (size_t)servplayernum)
-         UpdatePlayerModel(player[k], meshes);
-   }
    SDL_mutexV(clientmutex);
 }
 
@@ -2098,7 +2099,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 {
    if (!p.spawned || p.unit == numunits)
       return;
-   
+
    locks.Write(ml);
    if (p.rendermesh == ml.end())
    {
@@ -2140,7 +2141,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[Hips]->Scale(units[p.unit].scale);
       p.rendermesh->Add(&ml.front());
    }
-   
+
    p.rendermesh->Move(p.pos); // Or our bounding box will get huge
    
    p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
@@ -2214,7 +2215,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    // Add a particle to enemies to indicate their affiliation
    if (gl) // No reason to do this on the server
    {
-      if (p.team != player[servplayernum].team)
+      if ((!player[0].spectate && p.team != player[servplayernum].team) || p.team != player[spectateplayer].team)
       {
          if (!p.indicator)
          {
@@ -2588,7 +2589,7 @@ void UpdatePlayer()
       Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
       Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
       Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[localplayer.unit].viewoffset);
-         // Add tracer if necessary
+      // Add tracer if necessary
       if (currplayerweapon.Tracer() != "")
       {
          part.tracer = MeshPtr(new Mesh("models/" + currplayerweapon.Tracer() + "/base", resman));

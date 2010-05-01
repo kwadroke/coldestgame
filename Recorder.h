@@ -34,7 +34,7 @@ class Recorder
       vector<unsigned long> shots;
       Uint32 starttick;
       bool active;
-      Timer occtimer;
+      Timer frametimer, occtimer;
 
       ofstream write;
       ifstream read;
