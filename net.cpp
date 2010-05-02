@@ -779,6 +779,22 @@ int NetListen(void* dummy)
                SDL_mutexV(clientmutex);
             }
          }
+         else if (packettype == "m") // General server message
+         {
+            if (messagesreceived.find(packetnum) == messagesreceived.end())
+            {
+               messagesreceived.insert(packetnum);
+               string message;
+               get.ignore();
+               getline(get, message);
+               logout << "Got message " << message << endl;
+               SDL_mutexP(clientmutex);
+               servermessages.push_back(message);
+               messageschanged = 1;
+               SDL_mutexV(clientmutex);
+            }
+            Ack(packetnum);
+         }
          else if (packettype == "d") // Somebody died
          {
             if (killsreceived.find(packetnum) == killsreceived.end())
@@ -797,8 +813,8 @@ int NetListen(void* dummy)
                   ResetKeys();
                }
                string message = player[killer].name + " killed " + player[killed].name;
-               killmessages.push_back(message);
-               killschanged = 1;
+               servermessages.push_back(message);
+               messageschanged = 1;
                SDL_mutexV(clientmutex);
             }
             // Ack it

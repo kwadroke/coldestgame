@@ -981,18 +981,18 @@ void GUIUpdate()
    }
    
    // For some reason killtable->Clear() is extremely slow (2-5 ms), so we can't do this every
-   // time through.  Hence the killschanged flag.
+   // time through.  Hence the messageschanged flag.
    // This may no longer be true, but there's no reason to change it now
-   if (!PrimaryGUIVisible() && killschanged)
+   if (!PrimaryGUIVisible() && messageschanged)
    {
-      while (killmessages.size() > 6)
-         killmessages.pop_front();
+      while (servermessages.size() > 6)
+         servermessages.pop_front();
       
-      Table* killtable = dynamic_cast<Table*>(gui[hud]->GetWidget("killmessages"));
-      killtable->Clear();
-      for (size_t i = 0; i < killmessages.size(); ++i)
-         killtable->Add(killmessages[i]);
-      killschanged = 0;
+      Table* messagetable = dynamic_cast<Table*>(gui[hud]->GetWidget("servermessages"));
+      messagetable->Clear();
+      for (size_t i = 0; i < servermessages.size(); ++i)
+         messagetable->Add(servermessages[i]);
+      messageschanged = 0;
    }
    
    // Check to see if anyone is under our crosshair and display their info
