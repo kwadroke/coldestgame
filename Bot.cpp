@@ -83,7 +83,7 @@ void Bot::Update()
    movetimer.start();
    if (timer.elapsed() > 2000)
    {
-      if (Random(0, 1) > .5)
+      if (Random(0, 1) > .2)
          bot.moveforward = true;
       else
          bot.moveforward = false;
@@ -113,8 +113,9 @@ void Bot::Send()
       p.ack = sendpacketnum;
       p << "C\n";
       p << p.ack << eol;
+      p << "Bot " << id << eol;
       p << 0 << eol; // Unit
-      p << "Bot" << eol; // Name
+      p << "Bot " << id << eol; // Name
       p << netver << eol;
       sendqueue.push_back(p);
       needconnect = false;

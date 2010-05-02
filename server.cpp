@@ -264,7 +264,7 @@ void ServerLoop()
          {
             validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
             serverplayers[i].Disconnect();
-            logout << "Player " << i << " timed out.\n" << flush;
+            SendMessage(serverplayers[i].name + " timed out.");
          }
          else if (serverplayers[i].connected)
          {
@@ -486,11 +486,10 @@ int ServerListen(void* dummy)
                   serverplayers[respondto].addr = inpack->address;
                   validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
                   serverplayers[respondto].needsync = true;
-                  logout << "Player " << respondto << " connected\n" << flush;
                }
                serverplayers[respondto].connected = true;
                serverplayers[respondto].name = name;
-               
+
                Packet fill;
                fill << "c\n";
                fill << packetnum << eol;
@@ -520,7 +519,6 @@ int ServerListen(void* dummy)
          {
             SDL_mutexP(servermutex);
             serverplayers[oppnum].ping = SDL_GetTicks() - serverplayers[oppnum].pingtick;
-            //logout << oppnum << " ping: " << serverplayers[oppnum].ping << endl;
             SDL_mutexV(servermutex);
          }
          else if (packettype == "i")
@@ -1693,6 +1691,8 @@ void SendMessage(const string& message)
    pack << "m\n";
    pack << pack.ack << eol;
    pack << message << eol;
+
+   logout << message << endl;
 
    SendToAll(pack);
 }

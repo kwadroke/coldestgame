@@ -529,7 +529,8 @@ int NetListen(void* dummy)
                   get >> getping;
                   get >> getspawned;
                   get >> getconnected;
-                  get >> getname;
+                  get.ignore();
+                  getline(get, getname);
                   get >> getsalvage;
                   get >> getspawntimer;
                   if (oppnum < player.size())
@@ -787,7 +788,6 @@ int NetListen(void* dummy)
                string message;
                get.ignore();
                getline(get, message);
-               logout << "Got message " << message << endl;
                SDL_mutexP(clientmutex);
                servermessages.push_back(message);
                messageschanged = 1;
