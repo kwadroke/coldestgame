@@ -31,7 +31,7 @@
           normal="textures/reticle.png"/>
    <Label x="250" y="520" width="500" height="30" text="" name="targetplayer" align="center"/>
    
-   <Table x="10" y="650" width="300" height="150" name="killmessages" columns="1" colwidths="300" rowheight="20"/>
+   <Table x="10" y="650" width="300" height="150" name="servermessages" columns="1" colwidths="300" rowheight="20"/>
    
    <Label x="800" y="700" width="190" height="290" text="" name="minimapback"
           normal="textures/black.png"/>

@@ -55,12 +55,13 @@ extern vector<Item> additems;
 extern set<unsigned long> itemsreceived;
 extern set<unsigned long> hitsreceived;
 extern set<unsigned long> killsreceived;
+extern set<unsigned long> messagesreceived;
 extern unsigned long lastsyncpacket;
 extern tsint lasthit;
 extern tsint serverfps;
 extern tsint serverbps;
-extern deque<string> killmessages;
-extern tsint killschanged;
+extern deque<string> servermessages;
+extern tsint messageschanged;
 extern tsint currversion;
 
 void HandleAck(unsigned long);

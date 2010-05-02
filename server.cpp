@@ -61,12 +61,14 @@ void SendItem(const Item&, const int);
 vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
 void SendKill(size_t, size_t);
 void RemoveTeam(int);
+void SendToAll(Packet, const size_t exclude = 0);
 void SendSyncPacket(PlayerData&, unsigned long);
 void SendGameOver(PlayerData&, int);
 void SendShot(const Particle&);
 void SendHit(const Vector3&, const Particle& p);
 void SendDamage(const int);
-void SendRemove(PlayerData&, const int, const int);
+void SendRemove(const int, const int);
+void SendMessage(const string&);
 string AddressToDD(Uint32);
 void LoadMapList();
 void Ack(unsigned long acknum, UDPpacket* inpack);
@@ -431,7 +433,6 @@ int ServerListen(void* dummy)
             int clientver;
             get.ignore();
             getline(get, hostname);
-            logout << "Player connecting from " << hostname << endl;
             get >> unit;
             get.ignore();
             getline(get, name);
@@ -499,6 +500,11 @@ int ServerListen(void* dummy)
                
                fill.addr = serverplayers[respondto].addr;
                servqueue.push_back(fill);
+
+               if (add)
+               {
+                  SendMessage(name + " connected"); // Has to happen after connection is completed
+               }
             }
             else
             {
@@ -1226,10 +1232,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
                      serverplayers[i].rendermesh->Remove(&(*serverplayers[i].mesh[part]));
                      servermeshes.erase(serverplayers[i].mesh[part]);
                      serverplayers[i].mesh[part] = servermeshes.end();
-                     for (size_t j = 1; j < serverplayers.size(); ++j)
-                     {
-                        SendRemove(serverplayers[j], i, part);
-                     }
+                     SendRemove(i, part);
                   }
                }
             }
@@ -1588,6 +1591,19 @@ void RemoveTeam(int num)
 }
 
 
+void SendToAll(Packet p, const size_t exclude)
+{
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      if (serverplayers[i].connected && i != exclude)
+      {
+         p.addr = serverplayers[i].addr;
+         servqueue.push_back(p);
+      }
+   }
+}
+
+
 void SendSyncPacket(PlayerData& p, unsigned long packetnum)
 {
    Packet pack(&p.addr);
@@ -1619,42 +1635,30 @@ void SendGameOver(PlayerData& p, const int winner)
 
 void SendShot(const Particle& p)
 {
-   for (size_t i = 1; i < serverplayers.size(); ++i)
-   {
-      if (serverplayers[i].connected && i != p.playernum)
-      {
-         Packet pack(&serverplayers[i].addr);
-         pack.ack = servsendpacketnum;
-         pack << "s\n";
-         pack << pack.ack << eol;
-         pack << p.id << eol;
-         pack << p.weapid << eol;
-         pack << p.playernum << eol;
-         
-         servqueue.push_back(pack);
-      }
-   }
+   Packet pack;
+   pack.ack = servsendpacketnum;
+   pack << "s\n";
+   pack << pack.ack << eol;
+   pack << p.id << eol;
+   pack << p.weapid << eol;
+   pack << p.playernum << eol;
+
+   SendToAll(pack, p.playernum);
 }
 
 
 void SendHit(const Vector3& hitpos, const Particle& p)
 {
    unsigned long hid = nexthitid;
-   for (size_t i = 1; i < serverplayers.size(); ++i)
-   {
-      if (serverplayers[i].connected)
-      {
-         Packet pack(&serverplayers[i].addr);
-         pack.ack = servsendpacketnum;
-         pack << "h\n";
-         pack << pack.ack << eol;
-         pack << hid << eol;
-         pack << hitpos.x << eol << hitpos.y << eol << hitpos.z << eol;
-         pack << p.weapid << eol;
-         
-         servqueue.push_back(pack);
-      }
-   }
+   Packet pack;
+   pack.ack = servsendpacketnum;
+   pack << "h\n";
+   pack << pack.ack << eol;
+   pack << hid << eol;
+   pack << hitpos.x << eol << hitpos.y << eol << hitpos.z << eol;
+   pack << p.weapid << eol;
+
+   SendToAll(pack);
 }
 
 
@@ -1669,16 +1673,28 @@ void SendDamage(const int i)
 }
 
 
-void SendRemove(PlayerData& p, const int i, const int part)
+void SendRemove(const int i, const int part)
 {
-   Packet pack(&p.addr);
+   Packet pack;
    pack.ack = servsendpacketnum;
    pack << "r\n";
    pack << pack.ack << eol;
    pack << i << eol;
    pack << part << eol;
-   
-   servqueue.push_back(pack);
+
+   SendToAll(pack);
+}
+
+
+void SendMessage(const string& message)
+{
+   Packet pack;
+   pack.ack = servsendpacketnum;
+   pack << "m\n";
+   pack << pack.ack << eol;
+   pack << message << eol;
+
+   SendToAll(pack);
 }
 
 
