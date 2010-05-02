@@ -21,6 +21,7 @@ class Recorder
       void SetActive(bool);
       void AddShot(const size_t, const unsigned long);
       void AddHit(const Vector3&, const int);
+      void AddItem(const Item&);
 
       void WriteFrame(bool reset = true);
       void Reset();
@@ -35,11 +36,13 @@ class Recorder
       void WriteOccasional();
       void WriteShots();
       void WriteHits();
+      void WriteItems();
 
       vector<size_t> shotplayer;
       vector<unsigned long> shots;
       Vector3vec hitpos;
       intvec hittype;
+      vector<Item> newitem;
       
       Uint32 starttick;
       bool active;

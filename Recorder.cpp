@@ -48,6 +48,14 @@ void Recorder::AddHit(const Vector3& pos, const int type)
    hittype.push_back(type);
 }
 
+void Recorder::AddItem(const Item& item)
+{
+   if (!active)
+      return;
+   
+   newitem.push_back(item);
+}
+
 
 // TODO: Clean up the unnecessary headings once this is all working
 void Recorder::WriteFrame(bool reset)
@@ -66,6 +74,8 @@ void Recorder::WriteFrame(bool reset)
    WriteShots();
 
    WriteHits();
+
+   WriteItems();
    
    if (reset)
       Reset();
@@ -133,6 +143,18 @@ void Recorder::WriteHits()
    }
 }
 
+void Recorder::WriteItems()
+{
+   write << newitem.size() << endl;
+   for (size_t i = 0; i < newitem.size(); ++i)
+   {
+      write << newitem[i].position.x << endl << newitem[i].position.y << endl << newitem[i].position.z << endl;
+      write << newitem[i].Type() << endl;
+      write << newitem[i].team << endl;
+      write << newitem[i].id << endl;
+   }
+}
+
 
 void Recorder::Reset()
 {
@@ -140,7 +162,7 @@ void Recorder::Reset()
    shots.clear();
    hitpos.clear();
    hittype.clear();
-   items.clear();
+   newitem.clear();
 }
 
 

@@ -24,6 +24,7 @@ class Replayer
       void ReadPlayers();
       void ReadShots();
       void ReadHits();
+      void ReadItems();
       void EnsurePlayerSize(const size_t);
       
       bool active;
