@@ -72,6 +72,8 @@ void Replayer::Update()
 
       ReadHits();
 
+      ReadItems();
+
       if (!(read >> filetick))
       {
          // Output performance stats
@@ -154,6 +156,27 @@ void Replayer::ReadHits()
       read >> type;
 
       AddHit(pos, type);
+   }
+}
+
+void Replayer::ReadItems()
+{
+   size_t numitems;
+   read >> numitems;
+   for (size_t i = 0; i < numitems; ++i)
+   {
+      Vector3 pos;
+      unsigned long id;
+      int type, team;
+
+      read >> pos.x >> pos.y >> pos.z;
+      read >> type >> team >> id;
+
+      Item newitem(type, meshes);
+      newitem.position = pos;
+      newitem.team = team;
+      newitem.id = id;
+      additems.push_back(newitem);
    }
 }
 

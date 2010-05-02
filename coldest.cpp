@@ -1988,7 +1988,8 @@ void Animate()
          meshes.erase(deletemeshes[i]);
    }
    deletemeshes.clear();
-   
+
+   // Add items
    for (size_t i = 0; i < additems.size(); ++i)
    {
       Item& newitem = additems[i];
@@ -2000,8 +2001,8 @@ void Animate()
       items.push_back(newitem);
       Item& curritem = items.back();
       curritem.mesh = meshes.begin();
-      SDL_mutexV(clientmutex);
       spawnschanged = true;
+      recorder->AddItem(newitem);
    }
    additems.clear();
 

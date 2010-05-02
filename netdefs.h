@@ -34,7 +34,7 @@
 #include "IDGen.h"
 #include "tsint.h"
 
-const int netver = 4;
+const int netver = 5;
 
 extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;
 extern unsigned long recpacketnum, ackpack;
