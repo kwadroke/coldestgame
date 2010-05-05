@@ -110,42 +110,29 @@ ALBuffer.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
 ALBuffer.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
 ALBuffer.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
 ALBuffer.o: /usr/include/bits/pthreadtypes.h /usr/include/ogg/config_types.h
-ALBuffer.o: /usr/include/boost/shared_ptr.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-ALBuffer.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+ALBuffer.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+ALBuffer.o: /usr/include/boost/config/user.hpp
 ALBuffer.o: /usr/include/boost/config/select_compiler_config.hpp
 ALBuffer.o: /usr/include/boost/config/compiler/gcc.hpp
 ALBuffer.o: /usr/include/boost/config/select_stdlib_config.hpp
 ALBuffer.o: /usr/include/boost/config/no_tr1/utility.hpp
 ALBuffer.o: /usr/include/boost/config/select_platform_config.hpp
-ALBuffer.o: /usr/include/boost/config/platform/linux.hpp
 ALBuffer.o: /usr/include/boost/config/posix_features.hpp
 ALBuffer.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ALBuffer.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 ALBuffer.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-ALBuffer.o: /usr/include/boost/config/no_tr1/memory.hpp
 ALBuffer.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ALBuffer.o: /usr/include/boost/checked_delete.hpp
 ALBuffer.o: /usr/include/boost/throw_exception.hpp
-ALBuffer.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ALBuffer.o: /usr/include/boost/config.hpp
-ALBuffer.o: /usr/include/boost/detail/workaround.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ALBuffer.o: /usr/include/boost/detail/shared_count.hpp
+ALBuffer.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ALBuffer.o: /usr/include/boost/detail/sp_counted_base.hpp
+ALBuffer.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ALBuffer.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ALBuffer.o: /usr/include/pthread.h /usr/include/sched.h
-ALBuffer.o: /usr/include/bits/sched.h /usr/include/signal.h
-ALBuffer.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-ALBuffer.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp logout.h
-ALBuffer.o: Log.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+ALBuffer.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ALBuffer.o: /usr/include/boost/detail/workaround.hpp logout.h Log.h
+ALBuffer.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 ALBuffer.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
 ALBuffer.o: /usr/include/SDL/SDL_platform.h /usr/include/stdlib.h
 ALBuffer.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
@@ -206,49 +193,34 @@ ALSource.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 ALSource.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 ALSource.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 ALSource.o: /usr/include/ogg/config_types.h /usr/include/boost/shared_ptr.hpp
-ALSource.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ALSource.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 ALSource.o: /usr/include/boost/config/select_compiler_config.hpp
 ALSource.o: /usr/include/boost/config/compiler/gcc.hpp
 ALSource.o: /usr/include/boost/config/select_stdlib_config.hpp
 ALSource.o: /usr/include/boost/config/no_tr1/utility.hpp
 ALSource.o: /usr/include/boost/config/select_platform_config.hpp
-ALSource.o: /usr/include/boost/config/platform/linux.hpp
 ALSource.o: /usr/include/boost/config/posix_features.hpp
 ALSource.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ALSource.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 ALSource.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-ALSource.o: /usr/include/boost/config/no_tr1/memory.hpp
 ALSource.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ALSource.o: /usr/include/boost/checked_delete.hpp
 ALSource.o: /usr/include/boost/throw_exception.hpp
-ALSource.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ALSource.o: /usr/include/boost/config.hpp
-ALSource.o: /usr/include/boost/detail/workaround.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ALSource.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ALSource.o: /usr/include/boost/detail/shared_count.hpp
+ALSource.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ALSource.o: /usr/include/boost/detail/sp_counted_base.hpp
+ALSource.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ALSource.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ALSource.o: /usr/include/pthread.h /usr/include/sched.h
-ALSource.o: /usr/include/bits/sched.h /usr/include/signal.h
-ALSource.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-ALSource.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Bot.o: Bot.h /usr/include/boost/shared_ptr.hpp
-Bot.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Bot.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+ALSource.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ALSource.o: /usr/include/boost/detail/workaround.hpp
+Bot.o: Bot.h /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Bot.o: /usr/include/boost/config/user.hpp
 Bot.o: /usr/include/boost/config/select_compiler_config.hpp
 Bot.o: /usr/include/boost/config/compiler/gcc.hpp
 Bot.o: /usr/include/boost/config/select_stdlib_config.hpp
 Bot.o: /usr/include/boost/config/no_tr1/utility.hpp
 Bot.o: /usr/include/boost/config/select_platform_config.hpp
-Bot.o: /usr/include/boost/config/platform/linux.hpp
 Bot.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Bot.o: /usr/include/features.h /usr/include/sys/cdefs.h
 Bot.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
@@ -256,37 +228,25 @@ Bot.o: /usr/include/gnu/stubs-64.h /usr/include/bits/posix_opt.h
 Bot.o: /usr/include/bits/environments.h /usr/include/bits/types.h
 Bot.o: /usr/include/bits/typesizes.h /usr/include/bits/confname.h
 Bot.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-Bot.o: /usr/include/boost/config/no_tr1/memory.hpp
 Bot.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Bot.o: /usr/include/boost/checked_delete.hpp
-Bot.o: /usr/include/boost/throw_exception.hpp
-Bot.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-Bot.o: /usr/include/boost/config.hpp /usr/include/boost/detail/workaround.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Bot.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Bot.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Bot.o: /usr/include/boost/detail/shared_count.hpp
+Bot.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Bot.o: /usr/include/boost/detail/sp_counted_base.hpp
+Bot.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Bot.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Bot.o: /usr/include/pthread.h /usr/include/endian.h
-Bot.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
-Bot.o: /usr/include/sched.h /usr/include/time.h /usr/include/bits/sched.h
-Bot.o: /usr/include/signal.h /usr/include/bits/sigset.h
-Bot.o: /usr/include/bits/pthreadtypes.h /usr/include/bits/setjmp.h
-Bot.o: /usr/include/boost/memory_order.hpp
-Bot.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Bot.o: /usr/include/SDL/SDL_net.h /usr/include/SDL/SDL.h
-Bot.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-Bot.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-Bot.o: /usr/include/sys/types.h /usr/include/sys/select.h
-Bot.o: /usr/include/bits/select.h /usr/include/bits/time.h
-Bot.o: /usr/include/sys/sysmacros.h /usr/include/stdio.h /usr/include/libio.h
-Bot.o: /usr/include/_G_config.h /usr/include/wchar.h
+Bot.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Bot.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL_net.h
+Bot.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+Bot.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+Bot.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
+Bot.o: /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h
+Bot.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
+Bot.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+Bot.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+Bot.o: /usr/include/bits/pthreadtypes.h /usr/include/stdio.h
+Bot.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
 Bot.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
 Bot.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
 Bot.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
@@ -549,7 +509,6 @@ CollisionDetection.o: /usr/include/SDL/SDL_loadso.h
 CollisionDetection.o: /usr/include/SDL/SDL_timer.h
 CollisionDetection.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h
 CollisionDetection.o: types.h /usr/include/boost/shared_ptr.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 CollisionDetection.o: /usr/include/boost/config.hpp
 CollisionDetection.o: /usr/include/boost/config/user.hpp
 CollisionDetection.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -557,35 +516,22 @@ CollisionDetection.o: /usr/include/boost/config/compiler/gcc.hpp
 CollisionDetection.o: /usr/include/boost/config/select_stdlib_config.hpp
 CollisionDetection.o: /usr/include/boost/config/no_tr1/utility.hpp
 CollisionDetection.o: /usr/include/boost/config/select_platform_config.hpp
-CollisionDetection.o: /usr/include/boost/config/platform/linux.hpp
 CollisionDetection.o: /usr/include/boost/config/posix_features.hpp
 CollisionDetection.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 CollisionDetection.o: /usr/include/bits/environments.h
 CollisionDetection.o: /usr/include/bits/confname.h /usr/include/getopt.h
 CollisionDetection.o: /usr/include/boost/config/suffix.hpp
-CollisionDetection.o: /usr/include/boost/config/no_tr1/memory.hpp
 CollisionDetection.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 CollisionDetection.o: /usr/include/boost/checked_delete.hpp
 CollisionDetection.o: /usr/include/boost/throw_exception.hpp
-CollisionDetection.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 CollisionDetection.o: /usr/include/boost/config.hpp
-CollisionDetection.o: /usr/include/boost/detail/workaround.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+CollisionDetection.o: /usr/include/boost/detail/shared_count.hpp
+CollisionDetection.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+CollisionDetection.o: /usr/include/boost/detail/sp_counted_base.hpp
+CollisionDetection.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 CollisionDetection.o: /usr/include/boost/detail/sp_typeinfo.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-CollisionDetection.o: /usr/include/pthread.h /usr/include/sched.h
-CollisionDetection.o: /usr/include/bits/sched.h /usr/include/signal.h
-CollisionDetection.o: /usr/include/bits/setjmp.h
-CollisionDetection.o: /usr/include/boost/memory_order.hpp
-CollisionDetection.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
+CollisionDetection.o: /usr/include/boost/detail/sp_counted_impl.hpp
+CollisionDetection.o: /usr/include/boost/detail/workaround.hpp
 CollisionDetection.o: GraphicMatrix.h Material.h TextureManager.h
 CollisionDetection.o: TextureHandler.h /usr/include/SDL/SDL_image.h
 CollisionDetection.o: IniReader.h Shader.h ResourceManager.h SoundManager.h
@@ -635,41 +581,27 @@ Console.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 Console.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
 Console.o: Log.h /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h
 Console.o: types.h /usr/include/boost/shared_ptr.hpp
-Console.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Console.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Console.o: /usr/include/boost/config/select_compiler_config.hpp
 Console.o: /usr/include/boost/config/compiler/gcc.hpp
 Console.o: /usr/include/boost/config/select_stdlib_config.hpp
 Console.o: /usr/include/boost/config/no_tr1/utility.hpp
 Console.o: /usr/include/boost/config/select_platform_config.hpp
-Console.o: /usr/include/boost/config/platform/linux.hpp
 Console.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Console.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Console.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Console.o: /usr/include/boost/config/suffix.hpp
-Console.o: /usr/include/boost/config/no_tr1/memory.hpp
-Console.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Console.o: /usr/include/boost/checked_delete.hpp
+Console.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Console.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 Console.o: /usr/include/boost/throw_exception.hpp
-Console.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Console.o: /usr/include/boost/config.hpp
-Console.o: /usr/include/boost/detail/workaround.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Console.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Console.o: /usr/include/boost/detail/shared_count.hpp
+Console.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Console.o: /usr/include/boost/detail/sp_counted_base.hpp
+Console.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Console.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Console.o: /usr/include/pthread.h /usr/include/sched.h
-Console.o: /usr/include/bits/sched.h /usr/include/signal.h
-Console.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Console.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Console.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+Console.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Console.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Console.o: Material.h TextureManager.h TextureHandler.h
 Console.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Console.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Console.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -954,40 +886,27 @@ IniReader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 IniReader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 IniReader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 IniReader.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-IniReader.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 IniReader.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 IniReader.o: /usr/include/boost/config/select_compiler_config.hpp
 IniReader.o: /usr/include/boost/config/compiler/gcc.hpp
 IniReader.o: /usr/include/boost/config/select_stdlib_config.hpp
 IniReader.o: /usr/include/boost/config/no_tr1/utility.hpp
 IniReader.o: /usr/include/boost/config/select_platform_config.hpp
-IniReader.o: /usr/include/boost/config/platform/linux.hpp
 IniReader.o: /usr/include/boost/config/posix_features.hpp
 IniReader.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 IniReader.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 IniReader.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-IniReader.o: /usr/include/boost/config/no_tr1/memory.hpp
 IniReader.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 IniReader.o: /usr/include/boost/checked_delete.hpp
 IniReader.o: /usr/include/boost/throw_exception.hpp
-IniReader.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 IniReader.o: /usr/include/boost/config.hpp
-IniReader.o: /usr/include/boost/detail/workaround.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-IniReader.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+IniReader.o: /usr/include/boost/detail/shared_count.hpp
+IniReader.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+IniReader.o: /usr/include/boost/detail/sp_counted_base.hpp
+IniReader.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 IniReader.o: /usr/include/boost/detail/sp_typeinfo.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-IniReader.o: /usr/include/pthread.h /usr/include/sched.h
-IniReader.o: /usr/include/bits/sched.h /usr/include/signal.h
-IniReader.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
+IniReader.o: /usr/include/boost/detail/sp_counted_impl.hpp
+IniReader.o: /usr/include/boost/detail/workaround.hpp
 Item.o: Item.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
 Item.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Item.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1018,56 +937,41 @@ Item.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Item.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Item.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Item.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Item.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Item.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Item.o: /usr/include/boost/config/select_compiler_config.hpp
 Item.o: /usr/include/boost/config/compiler/gcc.hpp
 Item.o: /usr/include/boost/config/select_stdlib_config.hpp
 Item.o: /usr/include/boost/config/no_tr1/utility.hpp
 Item.o: /usr/include/boost/config/select_platform_config.hpp
-Item.o: /usr/include/boost/config/platform/linux.hpp
 Item.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Item.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Item.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Item.o: /usr/include/boost/config/suffix.hpp
-Item.o: /usr/include/boost/config/no_tr1/memory.hpp
-Item.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Item.o: /usr/include/boost/checked_delete.hpp
-Item.o: /usr/include/boost/throw_exception.hpp
-Item.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-Item.o: /usr/include/boost/config.hpp
-Item.o: /usr/include/boost/detail/workaround.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Item.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Item.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Item.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
+Item.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Item.o: /usr/include/boost/detail/shared_count.hpp
+Item.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Item.o: /usr/include/boost/detail/sp_counted_base.hpp
+Item.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Item.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Item.o: /usr/include/pthread.h /usr/include/sched.h /usr/include/bits/sched.h
-Item.o: /usr/include/signal.h /usr/include/bits/setjmp.h
-Item.o: /usr/include/boost/memory_order.hpp
-Item.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp Mesh.h
-Item.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-Item.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-Item.o: /usr/include/math.h /usr/include/bits/huge_val.h
-Item.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
-Item.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
-Item.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h Triangle.h
-Item.o: Vertex.h types.h GraphicMatrix.h Material.h TextureManager.h
-Item.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
-Item.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-Item.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
-Item.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
-Item.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
-Item.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
-Item.o: util.h tsint.h Timer.h globals.h Particle.h CollisionDetection.h
-Item.o: ObjectKDTree.h Camera.h ServerInfo.h /usr/include/SDL/SDL_net.h
-Item.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
+Item.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Item.o: /usr/include/boost/detail/workaround.hpp Mesh.h Vector3.h glinc.h
+Item.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Item.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+Item.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
+Item.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
+Item.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
+Item.o: /usr/include/bits/mathcalls.h Triangle.h Vertex.h types.h
+Item.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+Item.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
+Item.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
+Item.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
+Item.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
+Item.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
+Item.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h globals.h
+Item.o: Particle.h CollisionDetection.h ObjectKDTree.h Camera.h ServerInfo.h
+Item.o: /usr/include/SDL/SDL_net.h gui/GUI.h
+Item.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
 Item.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 Item.o: /usr/include/xercesc/dom/DOMDocument.hpp
 Item.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -1313,43 +1217,30 @@ Material.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 Material.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 Material.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 Material.o: /usr/include/bits/mathcalls.h IniReader.h
-Material.o: /usr/include/boost/shared_ptr.hpp
-Material.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Material.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Material.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Material.o: /usr/include/boost/config/user.hpp
 Material.o: /usr/include/boost/config/select_compiler_config.hpp
 Material.o: /usr/include/boost/config/compiler/gcc.hpp
 Material.o: /usr/include/boost/config/select_stdlib_config.hpp
 Material.o: /usr/include/boost/config/no_tr1/utility.hpp
 Material.o: /usr/include/boost/config/select_platform_config.hpp
-Material.o: /usr/include/boost/config/platform/linux.hpp
 Material.o: /usr/include/boost/config/posix_features.hpp
 Material.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 Material.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 Material.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-Material.o: /usr/include/boost/config/no_tr1/memory.hpp
 Material.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Material.o: /usr/include/boost/checked_delete.hpp
 Material.o: /usr/include/boost/throw_exception.hpp
-Material.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Material.o: /usr/include/boost/config.hpp
-Material.o: /usr/include/boost/detail/workaround.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Material.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Material.o: /usr/include/boost/detail/shared_count.hpp
+Material.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Material.o: /usr/include/boost/detail/sp_counted_base.hpp
+Material.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Material.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Material.o: /usr/include/pthread.h /usr/include/sched.h
-Material.o: /usr/include/bits/sched.h /usr/include/signal.h
-Material.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Material.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp Shader.h
-Material.o: globals.h Mesh.h Triangle.h Vertex.h GraphicMatrix.h
-Material.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+Material.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Material.o: /usr/include/boost/detail/workaround.hpp Shader.h globals.h
+Material.o: Mesh.h Triangle.h Vertex.h GraphicMatrix.h ResourceManager.h
+Material.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Material.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Material.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Material.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
@@ -1534,58 +1425,40 @@ Mesh.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Mesh.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Mesh.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Mesh.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-Mesh.o: /usr/include/boost/shared_ptr.hpp
-Mesh.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Mesh.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Mesh.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Mesh.o: /usr/include/boost/config/user.hpp
 Mesh.o: /usr/include/boost/config/select_compiler_config.hpp
 Mesh.o: /usr/include/boost/config/compiler/gcc.hpp
 Mesh.o: /usr/include/boost/config/select_stdlib_config.hpp
 Mesh.o: /usr/include/boost/config/no_tr1/utility.hpp
 Mesh.o: /usr/include/boost/config/select_platform_config.hpp
-Mesh.o: /usr/include/boost/config/platform/linux.hpp
 Mesh.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Mesh.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Mesh.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Mesh.o: /usr/include/boost/config/suffix.hpp
-Mesh.o: /usr/include/boost/config/no_tr1/memory.hpp
-Mesh.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Mesh.o: /usr/include/boost/checked_delete.hpp
-Mesh.o: /usr/include/boost/throw_exception.hpp
-Mesh.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-Mesh.o: /usr/include/boost/config.hpp
-Mesh.o: /usr/include/boost/detail/workaround.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Mesh.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Mesh.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Mesh.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
+Mesh.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Mesh.o: /usr/include/boost/detail/shared_count.hpp
+Mesh.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Mesh.o: /usr/include/boost/detail/sp_counted_base.hpp
+Mesh.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Mesh.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Mesh.o: /usr/include/pthread.h /usr/include/sched.h /usr/include/bits/sched.h
-Mesh.o: /usr/include/signal.h /usr/include/bits/setjmp.h
-Mesh.o: /usr/include/boost/memory_order.hpp
-Mesh.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp GraphicMatrix.h
-Mesh.o: Material.h TextureManager.h TextureHandler.h
-Mesh.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
-Mesh.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
-Mesh.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-Mesh.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-Mesh.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
-Mesh.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
-Mesh.o: ProceduralTree.h StableRandom.h
+Mesh.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Mesh.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+Mesh.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+Mesh.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+Mesh.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+Mesh.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+Mesh.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+Mesh.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+Mesh.o: util.h tsint.h Timer.h ProceduralTree.h StableRandom.h
 MeshCache.o: MeshCache.h /usr/include/boost/shared_ptr.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 MeshCache.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 MeshCache.o: /usr/include/boost/config/select_compiler_config.hpp
 MeshCache.o: /usr/include/boost/config/compiler/gcc.hpp
 MeshCache.o: /usr/include/boost/config/select_stdlib_config.hpp
 MeshCache.o: /usr/include/boost/config/no_tr1/utility.hpp
 MeshCache.o: /usr/include/boost/config/select_platform_config.hpp
-MeshCache.o: /usr/include/boost/config/platform/linux.hpp
 MeshCache.o: /usr/include/boost/config/posix_features.hpp
 MeshCache.o: /usr/include/unistd.h /usr/include/features.h
 MeshCache.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -1594,32 +1467,18 @@ MeshCache.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 MeshCache.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 MeshCache.o: /usr/include/bits/confname.h /usr/include/getopt.h
 MeshCache.o: /usr/include/boost/config/suffix.hpp
-MeshCache.o: /usr/include/boost/config/no_tr1/memory.hpp
 MeshCache.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 MeshCache.o: /usr/include/boost/checked_delete.hpp
 MeshCache.o: /usr/include/boost/throw_exception.hpp
-MeshCache.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 MeshCache.o: /usr/include/boost/config.hpp
-MeshCache.o: /usr/include/boost/detail/workaround.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+MeshCache.o: /usr/include/boost/detail/shared_count.hpp
+MeshCache.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+MeshCache.o: /usr/include/boost/detail/sp_counted_base.hpp
+MeshCache.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 MeshCache.o: /usr/include/boost/detail/sp_typeinfo.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-MeshCache.o: /usr/include/pthread.h /usr/include/endian.h
-MeshCache.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
-MeshCache.o: /usr/include/sched.h /usr/include/time.h
-MeshCache.o: /usr/include/bits/sched.h /usr/include/signal.h
-MeshCache.o: /usr/include/bits/sigset.h /usr/include/bits/pthreadtypes.h
-MeshCache.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-MeshCache.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp Mesh.h
-MeshCache.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
+MeshCache.o: /usr/include/boost/detail/sp_counted_impl.hpp
+MeshCache.o: /usr/include/boost/detail/workaround.hpp Mesh.h Vector3.h
+MeshCache.o: glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 MeshCache.o: /usr/include/bits/wchar.h /usr/include/GL/glu.h
 MeshCache.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
 MeshCache.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -1629,9 +1488,12 @@ MeshCache.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 MeshCache.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
 MeshCache.o: logout.h Log.h /usr/include/SDL/SDL.h
 MeshCache.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-MeshCache.o: /usr/include/sys/types.h /usr/include/sys/select.h
-MeshCache.o: /usr/include/bits/select.h /usr/include/bits/time.h
-MeshCache.o: /usr/include/sys/sysmacros.h /usr/include/stdio.h
+MeshCache.o: /usr/include/sys/types.h /usr/include/time.h
+MeshCache.o: /usr/include/endian.h /usr/include/bits/endian.h
+MeshCache.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
+MeshCache.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+MeshCache.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+MeshCache.o: /usr/include/bits/pthreadtypes.h /usr/include/stdio.h
 MeshCache.o: /usr/include/libio.h /usr/include/_G_config.h
 MeshCache.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
 MeshCache.o: /usr/include/bits/sys_errlist.h /usr/include/stdlib.h
@@ -1697,42 +1559,29 @@ MeshNode.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 MeshNode.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 MeshNode.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 MeshNode.o: /usr/include/SDL/SDL_version.h types.h
-MeshNode.o: /usr/include/boost/shared_ptr.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-MeshNode.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+MeshNode.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+MeshNode.o: /usr/include/boost/config/user.hpp
 MeshNode.o: /usr/include/boost/config/select_compiler_config.hpp
 MeshNode.o: /usr/include/boost/config/compiler/gcc.hpp
 MeshNode.o: /usr/include/boost/config/select_stdlib_config.hpp
 MeshNode.o: /usr/include/boost/config/no_tr1/utility.hpp
 MeshNode.o: /usr/include/boost/config/select_platform_config.hpp
-MeshNode.o: /usr/include/boost/config/platform/linux.hpp
 MeshNode.o: /usr/include/boost/config/posix_features.hpp
 MeshNode.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 MeshNode.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 MeshNode.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-MeshNode.o: /usr/include/boost/config/no_tr1/memory.hpp
 MeshNode.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 MeshNode.o: /usr/include/boost/checked_delete.hpp
 MeshNode.o: /usr/include/boost/throw_exception.hpp
-MeshNode.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 MeshNode.o: /usr/include/boost/config.hpp
-MeshNode.o: /usr/include/boost/detail/workaround.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+MeshNode.o: /usr/include/boost/detail/shared_count.hpp
+MeshNode.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+MeshNode.o: /usr/include/boost/detail/sp_counted_base.hpp
+MeshNode.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 MeshNode.o: /usr/include/boost/detail/sp_typeinfo.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-MeshNode.o: /usr/include/pthread.h /usr/include/sched.h
-MeshNode.o: /usr/include/bits/sched.h /usr/include/signal.h
-MeshNode.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-MeshNode.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-MeshNode.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+MeshNode.o: /usr/include/boost/detail/sp_counted_impl.hpp
+MeshNode.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+MeshNode.o: Material.h TextureManager.h TextureHandler.h
 MeshNode.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 MeshNode.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 MeshNode.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -1924,7 +1773,6 @@ ObjectKDTree.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ObjectKDTree.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 ObjectKDTree.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
 ObjectKDTree.o: /usr/include/boost/shared_ptr.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ObjectKDTree.o: /usr/include/boost/config.hpp
 ObjectKDTree.o: /usr/include/boost/config/user.hpp
 ObjectKDTree.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -1932,35 +1780,22 @@ ObjectKDTree.o: /usr/include/boost/config/compiler/gcc.hpp
 ObjectKDTree.o: /usr/include/boost/config/select_stdlib_config.hpp
 ObjectKDTree.o: /usr/include/boost/config/no_tr1/utility.hpp
 ObjectKDTree.o: /usr/include/boost/config/select_platform_config.hpp
-ObjectKDTree.o: /usr/include/boost/config/platform/linux.hpp
 ObjectKDTree.o: /usr/include/boost/config/posix_features.hpp
 ObjectKDTree.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ObjectKDTree.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 ObjectKDTree.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-ObjectKDTree.o: /usr/include/boost/config/no_tr1/memory.hpp
 ObjectKDTree.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ObjectKDTree.o: /usr/include/boost/checked_delete.hpp
 ObjectKDTree.o: /usr/include/boost/throw_exception.hpp
-ObjectKDTree.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ObjectKDTree.o: /usr/include/boost/config.hpp
-ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ObjectKDTree.o: /usr/include/boost/detail/shared_count.hpp
+ObjectKDTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base.hpp
+ObjectKDTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ObjectKDTree.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ObjectKDTree.o: /usr/include/pthread.h /usr/include/sched.h
-ObjectKDTree.o: /usr/include/bits/sched.h /usr/include/signal.h
-ObjectKDTree.o: /usr/include/bits/setjmp.h
-ObjectKDTree.o: /usr/include/boost/memory_order.hpp
-ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-ObjectKDTree.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+ObjectKDTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ObjectKDTree.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ObjectKDTree.o: Material.h TextureManager.h TextureHandler.h
 ObjectKDTree.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 ObjectKDTree.o: ResourceManager.h SoundManager.h ALBuffer.h
 ObjectKDTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
@@ -2039,42 +1874,29 @@ Particle.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Particle.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Particle.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Particle.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-Particle.o: /usr/include/boost/shared_ptr.hpp
-Particle.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Particle.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Particle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Particle.o: /usr/include/boost/config/user.hpp
 Particle.o: /usr/include/boost/config/select_compiler_config.hpp
 Particle.o: /usr/include/boost/config/compiler/gcc.hpp
 Particle.o: /usr/include/boost/config/select_stdlib_config.hpp
 Particle.o: /usr/include/boost/config/no_tr1/utility.hpp
 Particle.o: /usr/include/boost/config/select_platform_config.hpp
-Particle.o: /usr/include/boost/config/platform/linux.hpp
 Particle.o: /usr/include/boost/config/posix_features.hpp
 Particle.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 Particle.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 Particle.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-Particle.o: /usr/include/boost/config/no_tr1/memory.hpp
 Particle.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Particle.o: /usr/include/boost/checked_delete.hpp
 Particle.o: /usr/include/boost/throw_exception.hpp
-Particle.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Particle.o: /usr/include/boost/config.hpp
-Particle.o: /usr/include/boost/detail/workaround.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Particle.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Particle.o: /usr/include/boost/detail/shared_count.hpp
+Particle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Particle.o: /usr/include/boost/detail/sp_counted_base.hpp
+Particle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Particle.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Particle.o: /usr/include/pthread.h /usr/include/sched.h
-Particle.o: /usr/include/bits/sched.h /usr/include/signal.h
-Particle.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Particle.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Particle.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+Particle.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Particle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Particle.o: Material.h TextureManager.h TextureHandler.h
 Particle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Particle.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Particle.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -2272,7 +2094,6 @@ ParticleEmitter.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 ParticleEmitter.o: /usr/include/SDL/SDL_timer.h
 ParticleEmitter.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
 ParticleEmitter.o: /usr/include/boost/shared_ptr.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ParticleEmitter.o: /usr/include/boost/config.hpp
 ParticleEmitter.o: /usr/include/boost/config/user.hpp
 ParticleEmitter.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2280,38 +2101,25 @@ ParticleEmitter.o: /usr/include/boost/config/compiler/gcc.hpp
 ParticleEmitter.o: /usr/include/boost/config/select_stdlib_config.hpp
 ParticleEmitter.o: /usr/include/boost/config/no_tr1/utility.hpp
 ParticleEmitter.o: /usr/include/boost/config/select_platform_config.hpp
-ParticleEmitter.o: /usr/include/boost/config/platform/linux.hpp
 ParticleEmitter.o: /usr/include/boost/config/posix_features.hpp
 ParticleEmitter.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ParticleEmitter.o: /usr/include/bits/environments.h
 ParticleEmitter.o: /usr/include/bits/confname.h /usr/include/getopt.h
 ParticleEmitter.o: /usr/include/boost/config/suffix.hpp
-ParticleEmitter.o: /usr/include/boost/config/no_tr1/memory.hpp
 ParticleEmitter.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ParticleEmitter.o: /usr/include/boost/checked_delete.hpp
 ParticleEmitter.o: /usr/include/boost/throw_exception.hpp
-ParticleEmitter.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ParticleEmitter.o: /usr/include/boost/config.hpp
-ParticleEmitter.o: /usr/include/boost/detail/workaround.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ParticleEmitter.o: /usr/include/boost/detail/shared_count.hpp
+ParticleEmitter.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ParticleEmitter.o: /usr/include/boost/detail/sp_counted_base.hpp
+ParticleEmitter.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ParticleEmitter.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ParticleEmitter.o: /usr/include/pthread.h /usr/include/sched.h
-ParticleEmitter.o: /usr/include/bits/sched.h /usr/include/signal.h
-ParticleEmitter.o: /usr/include/bits/setjmp.h
-ParticleEmitter.o: /usr/include/boost/memory_order.hpp
-ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-ParticleEmitter.o: GraphicMatrix.h Material.h TextureManager.h
-ParticleEmitter.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
-ParticleEmitter.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+ParticleEmitter.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ParticleEmitter.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ParticleEmitter.o: Material.h TextureManager.h TextureHandler.h
+ParticleEmitter.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+ParticleEmitter.o: ResourceManager.h SoundManager.h ALBuffer.h
 ParticleEmitter.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ParticleEmitter.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ParticleEmitter.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -2502,43 +2310,29 @@ PlayerData.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
 PlayerData.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 PlayerData.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 PlayerData.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
-PlayerData.o: /usr/include/boost/shared_ptr.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-PlayerData.o: /usr/include/boost/config.hpp
+PlayerData.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 PlayerData.o: /usr/include/boost/config/user.hpp
 PlayerData.o: /usr/include/boost/config/select_compiler_config.hpp
 PlayerData.o: /usr/include/boost/config/compiler/gcc.hpp
 PlayerData.o: /usr/include/boost/config/select_stdlib_config.hpp
 PlayerData.o: /usr/include/boost/config/no_tr1/utility.hpp
 PlayerData.o: /usr/include/boost/config/select_platform_config.hpp
-PlayerData.o: /usr/include/boost/config/platform/linux.hpp
 PlayerData.o: /usr/include/boost/config/posix_features.hpp
 PlayerData.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 PlayerData.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 PlayerData.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-PlayerData.o: /usr/include/boost/config/no_tr1/memory.hpp
 PlayerData.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 PlayerData.o: /usr/include/boost/checked_delete.hpp
 PlayerData.o: /usr/include/boost/throw_exception.hpp
-PlayerData.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 PlayerData.o: /usr/include/boost/config.hpp
-PlayerData.o: /usr/include/boost/detail/workaround.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+PlayerData.o: /usr/include/boost/detail/shared_count.hpp
+PlayerData.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+PlayerData.o: /usr/include/boost/detail/sp_counted_base.hpp
+PlayerData.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 PlayerData.o: /usr/include/boost/detail/sp_typeinfo.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-PlayerData.o: /usr/include/pthread.h /usr/include/sched.h
-PlayerData.o: /usr/include/bits/sched.h /usr/include/signal.h
-PlayerData.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-PlayerData.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-PlayerData.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+PlayerData.o: /usr/include/boost/detail/sp_counted_impl.hpp
+PlayerData.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+PlayerData.o: Material.h TextureManager.h TextureHandler.h
 PlayerData.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 PlayerData.o: ResourceManager.h SoundManager.h ALBuffer.h
 PlayerData.o: /usr/include/AL/al.h /usr/include/AL/alut.h
@@ -2777,7 +2571,6 @@ ProceduralTree.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ProceduralTree.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 ProceduralTree.o: /usr/include/SDL/SDL_version.h IniReader.h
 ProceduralTree.o: /usr/include/boost/shared_ptr.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
 ProceduralTree.o: /usr/include/boost/config/user.hpp
 ProceduralTree.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -2785,41 +2578,27 @@ ProceduralTree.o: /usr/include/boost/config/compiler/gcc.hpp
 ProceduralTree.o: /usr/include/boost/config/select_stdlib_config.hpp
 ProceduralTree.o: /usr/include/boost/config/no_tr1/utility.hpp
 ProceduralTree.o: /usr/include/boost/config/select_platform_config.hpp
-ProceduralTree.o: /usr/include/boost/config/platform/linux.hpp
 ProceduralTree.o: /usr/include/boost/config/posix_features.hpp
 ProceduralTree.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ProceduralTree.o: /usr/include/bits/environments.h
 ProceduralTree.o: /usr/include/bits/confname.h /usr/include/getopt.h
 ProceduralTree.o: /usr/include/boost/config/suffix.hpp
-ProceduralTree.o: /usr/include/boost/config/no_tr1/memory.hpp
 ProceduralTree.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ProceduralTree.o: /usr/include/boost/checked_delete.hpp
 ProceduralTree.o: /usr/include/boost/throw_exception.hpp
-ProceduralTree.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
-ProceduralTree.o: /usr/include/boost/detail/workaround.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ProceduralTree.o: /usr/include/boost/detail/shared_count.hpp
+ProceduralTree.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ProceduralTree.o: /usr/include/boost/detail/sp_counted_base.hpp
+ProceduralTree.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ProceduralTree.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ProceduralTree.o: /usr/include/pthread.h /usr/include/sched.h
-ProceduralTree.o: /usr/include/bits/sched.h /usr/include/signal.h
-ProceduralTree.o: /usr/include/bits/setjmp.h
-ProceduralTree.o: /usr/include/boost/memory_order.hpp
-ProceduralTree.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-ProceduralTree.o: Mesh.h Triangle.h Vertex.h types.h Material.h
-ProceduralTree.o: TextureManager.h TextureHandler.h
-ProceduralTree.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
-ProceduralTree.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
-ProceduralTree.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
-ProceduralTree.o: /usr/include/vorbis/vorbisfile.h
+ProceduralTree.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ProceduralTree.o: /usr/include/boost/detail/workaround.hpp Mesh.h Triangle.h
+ProceduralTree.o: Vertex.h types.h Material.h TextureManager.h
+ProceduralTree.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
+ProceduralTree.o: ResourceManager.h SoundManager.h ALBuffer.h
+ProceduralTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+ProceduralTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ProceduralTree.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ProceduralTree.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
 ProceduralTree.o: ALSource.h Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h
@@ -2860,43 +2639,28 @@ Quad.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Quad.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Quad.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Quad.o: /usr/include/SDL/SDL_version.h types.h
-Quad.o: /usr/include/boost/shared_ptr.hpp
-Quad.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Quad.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Quad.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Quad.o: /usr/include/boost/config/user.hpp
 Quad.o: /usr/include/boost/config/select_compiler_config.hpp
 Quad.o: /usr/include/boost/config/compiler/gcc.hpp
 Quad.o: /usr/include/boost/config/select_stdlib_config.hpp
 Quad.o: /usr/include/boost/config/no_tr1/utility.hpp
 Quad.o: /usr/include/boost/config/select_platform_config.hpp
-Quad.o: /usr/include/boost/config/platform/linux.hpp
 Quad.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Quad.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Quad.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Quad.o: /usr/include/boost/config/suffix.hpp
-Quad.o: /usr/include/boost/config/no_tr1/memory.hpp
-Quad.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Quad.o: /usr/include/boost/checked_delete.hpp
-Quad.o: /usr/include/boost/throw_exception.hpp
-Quad.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-Quad.o: /usr/include/boost/config.hpp
-Quad.o: /usr/include/boost/detail/workaround.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Quad.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Quad.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Quad.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
+Quad.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+Quad.o: /usr/include/boost/detail/shared_count.hpp
+Quad.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Quad.o: /usr/include/boost/detail/sp_counted_base.hpp
+Quad.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Quad.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Quad.o: /usr/include/pthread.h /usr/include/sched.h /usr/include/bits/sched.h
-Quad.o: /usr/include/signal.h /usr/include/bits/setjmp.h
-Quad.o: /usr/include/boost/memory_order.hpp
-Quad.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp GraphicMatrix.h
-Quad.o: Material.h TextureManager.h TextureHandler.h
-Quad.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Quad.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Quad.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+Quad.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+Quad.o: IniReader.h Shader.h
 Quaternion.o: Quaternion.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quaternion.o: /usr/include/stdint.h /usr/include/features.h
 Quaternion.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -2937,14 +2701,12 @@ Quaternion.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 Quaternion.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 Quaternion.o: GraphicMatrix.h
 Recorder.o: Recorder.h /usr/include/boost/shared_ptr.hpp
-Recorder.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Recorder.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Recorder.o: /usr/include/boost/config/select_compiler_config.hpp
 Recorder.o: /usr/include/boost/config/compiler/gcc.hpp
 Recorder.o: /usr/include/boost/config/select_stdlib_config.hpp
 Recorder.o: /usr/include/boost/config/no_tr1/utility.hpp
 Recorder.o: /usr/include/boost/config/select_platform_config.hpp
-Recorder.o: /usr/include/boost/config/platform/linux.hpp
 Recorder.o: /usr/include/boost/config/posix_features.hpp
 Recorder.o: /usr/include/unistd.h /usr/include/features.h
 Recorder.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -2953,57 +2715,46 @@ Recorder.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Recorder.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
 Recorder.o: /usr/include/bits/confname.h /usr/include/getopt.h
 Recorder.o: /usr/include/boost/config/suffix.hpp
-Recorder.o: /usr/include/boost/config/no_tr1/memory.hpp
 Recorder.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Recorder.o: /usr/include/boost/checked_delete.hpp
 Recorder.o: /usr/include/boost/throw_exception.hpp
-Recorder.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Recorder.o: /usr/include/boost/config.hpp
-Recorder.o: /usr/include/boost/detail/workaround.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Recorder.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Recorder.o: /usr/include/boost/detail/shared_count.hpp
+Recorder.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Recorder.o: /usr/include/boost/detail/sp_counted_base.hpp
+Recorder.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Recorder.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Recorder.o: /usr/include/pthread.h /usr/include/endian.h
-Recorder.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
-Recorder.o: /usr/include/sched.h /usr/include/time.h
-Recorder.o: /usr/include/bits/sched.h /usr/include/signal.h
-Recorder.o: /usr/include/bits/sigset.h /usr/include/bits/pthreadtypes.h
-Recorder.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Recorder.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Recorder.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-Recorder.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-Recorder.o: /usr/include/SDL/SDL_platform.h /usr/include/sys/types.h
-Recorder.o: /usr/include/sys/select.h /usr/include/bits/select.h
+Recorder.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Recorder.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
+Recorder.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+Recorder.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+Recorder.o: /usr/include/sys/types.h /usr/include/time.h
+Recorder.o: /usr/include/endian.h /usr/include/bits/endian.h
+Recorder.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
+Recorder.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
 Recorder.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
-Recorder.o: /usr/include/stdio.h /usr/include/libio.h
-Recorder.o: /usr/include/_G_config.h /usr/include/wchar.h
-Recorder.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
-Recorder.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
-Recorder.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
-Recorder.o: /usr/include/alloca.h /usr/include/string.h
-Recorder.o: /usr/include/strings.h /usr/include/inttypes.h
-Recorder.o: /usr/include/stdint.h /usr/include/bits/wchar.h
-Recorder.o: /usr/include/ctype.h /usr/include/iconv.h
-Recorder.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-Recorder.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-Recorder.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-Recorder.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-Recorder.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-Recorder.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-Recorder.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-Recorder.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-Recorder.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-Recorder.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-Recorder.o: /usr/include/SDL/SDL_version.h PlayerData.h Vector3.h glinc.h
-Recorder.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+Recorder.o: /usr/include/bits/pthreadtypes.h /usr/include/stdio.h
+Recorder.o: /usr/include/libio.h /usr/include/_G_config.h
+Recorder.o: /usr/include/wchar.h /usr/include/bits/stdio_lim.h
+Recorder.o: /usr/include/bits/sys_errlist.h /usr/include/stdlib.h
+Recorder.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
+Recorder.o: /usr/include/xlocale.h /usr/include/alloca.h
+Recorder.o: /usr/include/string.h /usr/include/strings.h
+Recorder.o: /usr/include/inttypes.h /usr/include/stdint.h
+Recorder.o: /usr/include/bits/wchar.h /usr/include/ctype.h
+Recorder.o: /usr/include/iconv.h /usr/include/SDL/begin_code.h
+Recorder.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
+Recorder.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
+Recorder.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
+Recorder.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
+Recorder.o: /usr/include/SDL/SDL_cpuinfo.h /usr/include/SDL/SDL_events.h
+Recorder.o: /usr/include/SDL/SDL_active.h /usr/include/SDL/SDL_keyboard.h
+Recorder.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+Recorder.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
+Recorder.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+Recorder.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
+Recorder.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
+Recorder.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
 Recorder.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
 Recorder.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 Recorder.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
@@ -3192,53 +2943,39 @@ Replayer.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
 Replayer.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
 Replayer.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 Replayer.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
-Replayer.o: /usr/include/boost/shared_ptr.hpp
-Replayer.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Replayer.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Replayer.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Replayer.o: /usr/include/boost/config/user.hpp
 Replayer.o: /usr/include/boost/config/select_compiler_config.hpp
 Replayer.o: /usr/include/boost/config/compiler/gcc.hpp
 Replayer.o: /usr/include/boost/config/select_stdlib_config.hpp
 Replayer.o: /usr/include/boost/config/no_tr1/utility.hpp
 Replayer.o: /usr/include/boost/config/select_platform_config.hpp
-Replayer.o: /usr/include/boost/config/platform/linux.hpp
 Replayer.o: /usr/include/boost/config/posix_features.hpp
 Replayer.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 Replayer.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 Replayer.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-Replayer.o: /usr/include/boost/config/no_tr1/memory.hpp
 Replayer.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Replayer.o: /usr/include/boost/checked_delete.hpp
 Replayer.o: /usr/include/boost/throw_exception.hpp
-Replayer.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Replayer.o: /usr/include/boost/config.hpp
-Replayer.o: /usr/include/boost/detail/workaround.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Replayer.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Replayer.o: /usr/include/boost/detail/shared_count.hpp
+Replayer.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Replayer.o: /usr/include/boost/detail/sp_counted_base.hpp
+Replayer.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Replayer.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Replayer.o: /usr/include/pthread.h /usr/include/sched.h
-Replayer.o: /usr/include/bits/sched.h /usr/include/signal.h
-Replayer.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Replayer.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Replayer.o: PlayerData.h Vector3.h glinc.h /usr/include/GL/glew.h
-Replayer.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
-Replayer.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
-Replayer.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
-Replayer.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
-Replayer.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
-Replayer.o: /usr/include/bits/mathcalls.h logout.h Log.h
-Replayer.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
-Replayer.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Replayer.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-Replayer.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-Replayer.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+Replayer.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Replayer.o: /usr/include/boost/detail/workaround.hpp PlayerData.h Vector3.h
+Replayer.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
+Replayer.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
+Replayer.o: /usr/include/math.h /usr/include/bits/huge_val.h
+Replayer.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
+Replayer.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
+Replayer.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
+Replayer.o: logout.h Log.h /usr/include/SDL/SDL_net.h Mesh.h Triangle.h
+Replayer.o: Vertex.h types.h GraphicMatrix.h Material.h TextureManager.h
+Replayer.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
+Replayer.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+Replayer.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 Replayer.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 Replayer.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 Replayer.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h
@@ -3434,7 +3171,6 @@ ResourceManager.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 ResourceManager.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 ResourceManager.o: /usr/include/bits/mathcalls.h IniReader.h
 ResourceManager.o: /usr/include/boost/shared_ptr.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ResourceManager.o: /usr/include/boost/config.hpp
 ResourceManager.o: /usr/include/boost/config/user.hpp
 ResourceManager.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3442,36 +3178,23 @@ ResourceManager.o: /usr/include/boost/config/compiler/gcc.hpp
 ResourceManager.o: /usr/include/boost/config/select_stdlib_config.hpp
 ResourceManager.o: /usr/include/boost/config/no_tr1/utility.hpp
 ResourceManager.o: /usr/include/boost/config/select_platform_config.hpp
-ResourceManager.o: /usr/include/boost/config/platform/linux.hpp
 ResourceManager.o: /usr/include/boost/config/posix_features.hpp
 ResourceManager.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ResourceManager.o: /usr/include/bits/environments.h
 ResourceManager.o: /usr/include/bits/confname.h /usr/include/getopt.h
 ResourceManager.o: /usr/include/boost/config/suffix.hpp
-ResourceManager.o: /usr/include/boost/config/no_tr1/memory.hpp
 ResourceManager.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ResourceManager.o: /usr/include/boost/checked_delete.hpp
 ResourceManager.o: /usr/include/boost/throw_exception.hpp
-ResourceManager.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ResourceManager.o: /usr/include/boost/config.hpp
-ResourceManager.o: /usr/include/boost/detail/workaround.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ResourceManager.o: /usr/include/boost/detail/shared_count.hpp
+ResourceManager.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ResourceManager.o: /usr/include/boost/detail/sp_counted_base.hpp
+ResourceManager.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ResourceManager.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ResourceManager.o: /usr/include/pthread.h /usr/include/sched.h
-ResourceManager.o: /usr/include/bits/sched.h /usr/include/signal.h
-ResourceManager.o: /usr/include/bits/setjmp.h
-ResourceManager.o: /usr/include/boost/memory_order.hpp
-ResourceManager.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-ResourceManager.o: Shader.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+ResourceManager.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ResourceManager.o: /usr/include/boost/detail/workaround.hpp Shader.h
+ResourceManager.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 ResourceManager.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 ResourceManager.o: /usr/include/vorbis/vorbisfile.h
 ResourceManager.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -3549,7 +3272,6 @@ ServerState.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 ServerState.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 ServerState.o: PlayerData.h /usr/include/SDL/SDL_net.h Mesh.h Triangle.h
 ServerState.o: Vertex.h types.h /usr/include/boost/shared_ptr.hpp
-ServerState.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ServerState.o: /usr/include/boost/config.hpp
 ServerState.o: /usr/include/boost/config/user.hpp
 ServerState.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3557,34 +3279,22 @@ ServerState.o: /usr/include/boost/config/compiler/gcc.hpp
 ServerState.o: /usr/include/boost/config/select_stdlib_config.hpp
 ServerState.o: /usr/include/boost/config/no_tr1/utility.hpp
 ServerState.o: /usr/include/boost/config/select_platform_config.hpp
-ServerState.o: /usr/include/boost/config/platform/linux.hpp
 ServerState.o: /usr/include/boost/config/posix_features.hpp
 ServerState.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 ServerState.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 ServerState.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-ServerState.o: /usr/include/boost/config/no_tr1/memory.hpp
 ServerState.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 ServerState.o: /usr/include/boost/checked_delete.hpp
 ServerState.o: /usr/include/boost/throw_exception.hpp
-ServerState.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 ServerState.o: /usr/include/boost/config.hpp
-ServerState.o: /usr/include/boost/detail/workaround.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-ServerState.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+ServerState.o: /usr/include/boost/detail/shared_count.hpp
+ServerState.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+ServerState.o: /usr/include/boost/detail/sp_counted_base.hpp
+ServerState.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 ServerState.o: /usr/include/boost/detail/sp_typeinfo.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-ServerState.o: /usr/include/pthread.h /usr/include/sched.h
-ServerState.o: /usr/include/bits/sched.h /usr/include/signal.h
-ServerState.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-ServerState.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-ServerState.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+ServerState.o: /usr/include/boost/detail/sp_counted_impl.hpp
+ServerState.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+ServerState.o: Material.h TextureManager.h TextureHandler.h
 ServerState.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 ServerState.o: ResourceManager.h SoundManager.h ALBuffer.h
 ServerState.o: /usr/include/AL/al.h /usr/include/AL/alut.h
@@ -3644,7 +3354,6 @@ SoundManager.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
 SoundManager.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
 SoundManager.o: /usr/include/ogg/config_types.h
 SoundManager.o: /usr/include/boost/shared_ptr.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 SoundManager.o: /usr/include/boost/config.hpp
 SoundManager.o: /usr/include/boost/config/user.hpp
 SoundManager.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -3652,60 +3361,47 @@ SoundManager.o: /usr/include/boost/config/compiler/gcc.hpp
 SoundManager.o: /usr/include/boost/config/select_stdlib_config.hpp
 SoundManager.o: /usr/include/boost/config/no_tr1/utility.hpp
 SoundManager.o: /usr/include/boost/config/select_platform_config.hpp
-SoundManager.o: /usr/include/boost/config/platform/linux.hpp
 SoundManager.o: /usr/include/boost/config/posix_features.hpp
 SoundManager.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 SoundManager.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 SoundManager.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-SoundManager.o: /usr/include/boost/config/no_tr1/memory.hpp
 SoundManager.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 SoundManager.o: /usr/include/boost/checked_delete.hpp
 SoundManager.o: /usr/include/boost/throw_exception.hpp
-SoundManager.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 SoundManager.o: /usr/include/boost/config.hpp
-SoundManager.o: /usr/include/boost/detail/workaround.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+SoundManager.o: /usr/include/boost/detail/shared_count.hpp
+SoundManager.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+SoundManager.o: /usr/include/boost/detail/sp_counted_base.hpp
+SoundManager.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 SoundManager.o: /usr/include/boost/detail/sp_typeinfo.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-SoundManager.o: /usr/include/pthread.h /usr/include/sched.h
-SoundManager.o: /usr/include/bits/sched.h /usr/include/signal.h
-SoundManager.o: /usr/include/bits/setjmp.h
-SoundManager.o: /usr/include/boost/memory_order.hpp
-SoundManager.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-SoundManager.o: logout.h Log.h /usr/include/SDL/SDL.h
-SoundManager.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-SoundManager.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-SoundManager.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
-SoundManager.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
-SoundManager.o: /usr/include/alloca.h /usr/include/string.h
-SoundManager.o: /usr/include/strings.h /usr/include/inttypes.h
-SoundManager.o: /usr/include/stdint.h /usr/include/bits/wchar.h
-SoundManager.o: /usr/include/ctype.h /usr/include/iconv.h
-SoundManager.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-SoundManager.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-SoundManager.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-SoundManager.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-SoundManager.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-SoundManager.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-SoundManager.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-SoundManager.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-SoundManager.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-SoundManager.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-SoundManager.o: /usr/include/SDL/SDL_version.h ALSource.h types.h Vector3.h
-SoundManager.o: glinc.h /usr/include/GL/glew.h /usr/include/GL/glu.h
-SoundManager.o: /usr/include/GL/gl.h /usr/include/SDL/SDL_opengl.h
-SoundManager.o: /usr/include/math.h /usr/include/bits/huge_val.h
-SoundManager.o: /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h
-SoundManager.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
-SoundManager.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
+SoundManager.o: /usr/include/boost/detail/sp_counted_impl.hpp
+SoundManager.o: /usr/include/boost/detail/workaround.hpp logout.h Log.h
+SoundManager.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
+SoundManager.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
+SoundManager.o: /usr/include/SDL/SDL_platform.h /usr/include/stdlib.h
+SoundManager.o: /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h
+SoundManager.o: /usr/include/xlocale.h /usr/include/alloca.h
+SoundManager.o: /usr/include/string.h /usr/include/strings.h
+SoundManager.o: /usr/include/inttypes.h /usr/include/stdint.h
+SoundManager.o: /usr/include/bits/wchar.h /usr/include/ctype.h
+SoundManager.o: /usr/include/iconv.h /usr/include/SDL/begin_code.h
+SoundManager.o: /usr/include/SDL/close_code.h /usr/include/SDL/SDL_audio.h
+SoundManager.o: /usr/include/SDL/SDL_error.h /usr/include/SDL/SDL_endian.h
+SoundManager.o: /usr/include/SDL/SDL_mutex.h /usr/include/SDL/SDL_thread.h
+SoundManager.o: /usr/include/SDL/SDL_rwops.h /usr/include/SDL/SDL_cdrom.h
+SoundManager.o: /usr/include/SDL/SDL_cpuinfo.h /usr/include/SDL/SDL_events.h
+SoundManager.o: /usr/include/SDL/SDL_active.h /usr/include/SDL/SDL_keyboard.h
+SoundManager.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
+SoundManager.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
+SoundManager.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
+SoundManager.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
+SoundManager.o: ALSource.h types.h Vector3.h glinc.h /usr/include/GL/glew.h
+SoundManager.o: /usr/include/GL/glu.h /usr/include/GL/gl.h
+SoundManager.o: /usr/include/SDL/SDL_opengl.h /usr/include/math.h
+SoundManager.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
+SoundManager.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
+SoundManager.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
+SoundManager.o: /usr/include/bits/mathcalls.h
 StableRandom.o: StableRandom.h
 TextureHandler.o: TextureHandler.h glinc.h /usr/include/GL/glew.h
 TextureHandler.o: /usr/include/stdint.h /usr/include/features.h
@@ -3849,42 +3545,29 @@ Triangle.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Triangle.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Triangle.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Triangle.o: /usr/include/SDL/SDL_version.h types.h
-Triangle.o: /usr/include/boost/shared_ptr.hpp
-Triangle.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Triangle.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Triangle.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Triangle.o: /usr/include/boost/config/user.hpp
 Triangle.o: /usr/include/boost/config/select_compiler_config.hpp
 Triangle.o: /usr/include/boost/config/compiler/gcc.hpp
 Triangle.o: /usr/include/boost/config/select_stdlib_config.hpp
 Triangle.o: /usr/include/boost/config/no_tr1/utility.hpp
 Triangle.o: /usr/include/boost/config/select_platform_config.hpp
-Triangle.o: /usr/include/boost/config/platform/linux.hpp
 Triangle.o: /usr/include/boost/config/posix_features.hpp
 Triangle.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 Triangle.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 Triangle.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-Triangle.o: /usr/include/boost/config/no_tr1/memory.hpp
 Triangle.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 Triangle.o: /usr/include/boost/checked_delete.hpp
 Triangle.o: /usr/include/boost/throw_exception.hpp
-Triangle.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Triangle.o: /usr/include/boost/config.hpp
-Triangle.o: /usr/include/boost/detail/workaround.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Triangle.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Triangle.o: /usr/include/boost/detail/shared_count.hpp
+Triangle.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Triangle.o: /usr/include/boost/detail/sp_counted_base.hpp
+Triangle.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Triangle.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Triangle.o: /usr/include/pthread.h /usr/include/sched.h
-Triangle.o: /usr/include/bits/sched.h /usr/include/signal.h
-Triangle.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Triangle.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Triangle.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+Triangle.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Triangle.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Triangle.o: Material.h TextureManager.h TextureHandler.h
 Triangle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Updater.o: Updater.h /usr/include/boost/crc.hpp /usr/include/boost/config.hpp
 Updater.o: /usr/include/boost/integer.hpp /usr/include/boost/integer_fwd.hpp
@@ -3939,40 +3622,26 @@ Updater.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 Updater.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 Updater.o: /usr/include/bits/mathcalls.h logout.h Log.h Triangle.h Vertex.h
 Updater.o: types.h /usr/include/boost/shared_ptr.hpp
-Updater.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Updater.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Updater.o: /usr/include/boost/config/select_compiler_config.hpp
 Updater.o: /usr/include/boost/config/compiler/gcc.hpp
 Updater.o: /usr/include/boost/config/select_stdlib_config.hpp
 Updater.o: /usr/include/boost/config/no_tr1/utility.hpp
 Updater.o: /usr/include/boost/config/select_platform_config.hpp
-Updater.o: /usr/include/boost/config/platform/linux.hpp
 Updater.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Updater.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Updater.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Updater.o: /usr/include/boost/config/suffix.hpp
-Updater.o: /usr/include/boost/config/no_tr1/memory.hpp
-Updater.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Updater.o: /usr/include/boost/checked_delete.hpp
+Updater.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Updater.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 Updater.o: /usr/include/boost/throw_exception.hpp
-Updater.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-Updater.o: /usr/include/boost/detail/workaround.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Updater.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Updater.o: /usr/include/boost/detail/shared_count.hpp
+Updater.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Updater.o: /usr/include/boost/detail/sp_counted_base.hpp
+Updater.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Updater.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Updater.o: /usr/include/pthread.h /usr/include/sched.h
-Updater.o: /usr/include/bits/sched.h /usr/include/signal.h
-Updater.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Updater.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Updater.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+Updater.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Updater.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+Updater.o: Material.h TextureManager.h TextureHandler.h
 Updater.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 Updater.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Updater.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -4222,9 +3891,8 @@ Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 Updater.o: /usr/include/boost/mpl/aux_/config/compiler.hpp
 Updater.o: /usr/include/boost/preprocessor/stringize.hpp
 Updater.o: /usr/include/boost/type_traits/is_convertible.hpp
-Updater.o: /usr/include/boost/type_traits/intrinsics.hpp
-Updater.o: /usr/include/boost/type_traits/config.hpp
 Updater.o: /usr/include/boost/type_traits/detail/yes_no_type.hpp
+Updater.o: /usr/include/boost/type_traits/config.hpp
 Updater.o: /usr/include/boost/type_traits/is_array.hpp
 Updater.o: /usr/include/boost/type_traits/detail/bool_trait_def.hpp
 Updater.o: /usr/include/boost/type_traits/detail/template_arity_spec.hpp
@@ -4252,6 +3920,7 @@ Updater.o: /usr/include/boost/type_traits/is_union.hpp
 Updater.o: /usr/include/boost/type_traits/remove_cv.hpp
 Updater.o: /usr/include/boost/type_traits/broken_compiler_spec.hpp
 Updater.o: /usr/include/boost/type_traits/detail/cv_traits_impl.hpp
+Updater.o: /usr/include/boost/type_traits/intrinsics.hpp
 Updater.o: /usr/include/boost/iterator/detail/config_def.hpp
 Updater.o: /usr/include/boost/iterator/detail/config_undef.hpp
 Updater.o: /usr/include/boost/iterator/iterator_traits.hpp
@@ -4322,7 +3991,6 @@ Updater.o: /usr/include/boost/mpl/aux_/has_rebind.hpp
 Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 Updater.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
-Updater.o: /usr/include/boost/detail/scoped_enum_emulation.hpp
 Updater.o: /usr/include/boost/filesystem/convenience.hpp
 Vector3.o: Vector3.h glinc.h /usr/include/GL/glew.h /usr/include/stdint.h
 Vector3.o: /usr/include/features.h /usr/include/sys/cdefs.h
@@ -4397,41 +4065,27 @@ Vertex.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
 Vertex.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
 Vertex.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 Vertex.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h types.h
-Vertex.o: /usr/include/boost/shared_ptr.hpp
-Vertex.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-Vertex.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+Vertex.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+Vertex.o: /usr/include/boost/config/user.hpp
 Vertex.o: /usr/include/boost/config/select_compiler_config.hpp
 Vertex.o: /usr/include/boost/config/compiler/gcc.hpp
 Vertex.o: /usr/include/boost/config/select_stdlib_config.hpp
 Vertex.o: /usr/include/boost/config/no_tr1/utility.hpp
 Vertex.o: /usr/include/boost/config/select_platform_config.hpp
-Vertex.o: /usr/include/boost/config/platform/linux.hpp
 Vertex.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Vertex.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Vertex.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Vertex.o: /usr/include/boost/config/suffix.hpp
-Vertex.o: /usr/include/boost/config/no_tr1/memory.hpp
-Vertex.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Vertex.o: /usr/include/boost/checked_delete.hpp
+Vertex.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Vertex.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 Vertex.o: /usr/include/boost/throw_exception.hpp
-Vertex.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Vertex.o: /usr/include/boost/config.hpp
-Vertex.o: /usr/include/boost/detail/workaround.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Vertex.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Vertex.o: /usr/include/boost/detail/shared_count.hpp
+Vertex.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Vertex.o: /usr/include/boost/detail/sp_counted_base.hpp
+Vertex.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Vertex.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Vertex.o: /usr/include/pthread.h /usr/include/sched.h
-Vertex.o: /usr/include/bits/sched.h /usr/include/signal.h
-Vertex.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Vertex.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
+Vertex.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Vertex.o: /usr/include/boost/detail/workaround.hpp
 Weapon.o: Weapon.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
 Weapon.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Weapon.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
@@ -4463,40 +4117,26 @@ Weapon.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 Weapon.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 Weapon.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 Weapon.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-Weapon.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Weapon.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 Weapon.o: /usr/include/boost/config/select_compiler_config.hpp
 Weapon.o: /usr/include/boost/config/compiler/gcc.hpp
 Weapon.o: /usr/include/boost/config/select_stdlib_config.hpp
 Weapon.o: /usr/include/boost/config/no_tr1/utility.hpp
 Weapon.o: /usr/include/boost/config/select_platform_config.hpp
-Weapon.o: /usr/include/boost/config/platform/linux.hpp
 Weapon.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 Weapon.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 Weapon.o: /usr/include/bits/confname.h /usr/include/getopt.h
-Weapon.o: /usr/include/boost/config/suffix.hpp
-Weapon.o: /usr/include/boost/config/no_tr1/memory.hpp
-Weapon.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-Weapon.o: /usr/include/boost/checked_delete.hpp
+Weapon.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+Weapon.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 Weapon.o: /usr/include/boost/throw_exception.hpp
-Weapon.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 Weapon.o: /usr/include/boost/config.hpp
-Weapon.o: /usr/include/boost/detail/workaround.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-Weapon.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+Weapon.o: /usr/include/boost/detail/shared_count.hpp
+Weapon.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+Weapon.o: /usr/include/boost/detail/sp_counted_base.hpp
+Weapon.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 Weapon.o: /usr/include/boost/detail/sp_typeinfo.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-Weapon.o: /usr/include/pthread.h /usr/include/sched.h
-Weapon.o: /usr/include/bits/sched.h /usr/include/signal.h
-Weapon.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-Weapon.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
+Weapon.o: /usr/include/boost/detail/sp_counted_impl.hpp
+Weapon.o: /usr/include/boost/detail/workaround.hpp
 actions.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 actions.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 actions.o: /usr/include/xercesc/dom/DOMDocument.hpp
@@ -4645,47 +4285,32 @@ actions.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 actions.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-actions.o: /usr/include/boost/shared_ptr.hpp
-actions.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-actions.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+actions.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+actions.o: /usr/include/boost/config/user.hpp
 actions.o: /usr/include/boost/config/select_compiler_config.hpp
 actions.o: /usr/include/boost/config/compiler/gcc.hpp
 actions.o: /usr/include/boost/config/select_stdlib_config.hpp
 actions.o: /usr/include/boost/config/no_tr1/utility.hpp
 actions.o: /usr/include/boost/config/select_platform_config.hpp
-actions.o: /usr/include/boost/config/platform/linux.hpp
 actions.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 actions.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 actions.o: /usr/include/bits/confname.h /usr/include/getopt.h
-actions.o: /usr/include/boost/config/suffix.hpp
-actions.o: /usr/include/boost/config/no_tr1/memory.hpp
-actions.o: /usr/include/boost/assert.hpp
+actions.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
 actions.o: /usr/include/boost/checked_delete.hpp
 actions.o: /usr/include/boost/throw_exception.hpp
-actions.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 actions.o: /usr/include/boost/config.hpp
-actions.o: /usr/include/boost/detail/workaround.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-actions.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+actions.o: /usr/include/boost/detail/shared_count.hpp
+actions.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+actions.o: /usr/include/boost/detail/sp_counted_base.hpp
+actions.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 actions.o: /usr/include/boost/detail/sp_typeinfo.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-actions.o: /usr/include/pthread.h /usr/include/sched.h
-actions.o: /usr/include/bits/sched.h /usr/include/signal.h
-actions.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-actions.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-actions.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-actions.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-actions.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-actions.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
-actions.o: /usr/include/bits/sys_errlist.h /usr/include/strings.h
-actions.o: /usr/include/ctype.h /usr/include/iconv.h
+actions.o: /usr/include/boost/detail/sp_counted_impl.hpp
+actions.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
+actions.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+actions.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+actions.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
+actions.o: /usr/include/wchar.h /usr/include/bits/sys_errlist.h
+actions.o: /usr/include/strings.h /usr/include/ctype.h /usr/include/iconv.h
 actions.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
 actions.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
 actions.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
@@ -4822,9 +4447,8 @@ actions.o: /usr/include/boost/mpl/aux_/config/compiler.hpp
 actions.o: /usr/include/boost/preprocessor/stringize.hpp
 actions.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 actions.o: /usr/include/boost/type_traits/is_convertible.hpp
-actions.o: /usr/include/boost/type_traits/intrinsics.hpp
-actions.o: /usr/include/boost/type_traits/config.hpp
 actions.o: /usr/include/boost/type_traits/detail/yes_no_type.hpp
+actions.o: /usr/include/boost/type_traits/config.hpp
 actions.o: /usr/include/boost/type_traits/is_array.hpp
 actions.o: /usr/include/boost/type_traits/detail/bool_trait_def.hpp
 actions.o: /usr/include/boost/type_traits/detail/template_arity_spec.hpp
@@ -4851,6 +4475,7 @@ actions.o: /usr/include/boost/type_traits/is_union.hpp
 actions.o: /usr/include/boost/type_traits/remove_cv.hpp
 actions.o: /usr/include/boost/type_traits/broken_compiler_spec.hpp
 actions.o: /usr/include/boost/type_traits/detail/cv_traits_impl.hpp
+actions.o: /usr/include/boost/type_traits/intrinsics.hpp
 actions.o: /usr/include/boost/iterator/detail/config_undef.hpp
 actions.o: /usr/include/boost/iterator/iterator_facade.hpp
 actions.o: /usr/include/boost/iterator/interoperable.hpp
@@ -4953,41 +4578,27 @@ coldest.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 coldest.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
 coldest.o: TextureHandler.h logout.h Log.h Vector3.h GraphicMatrix.h
 coldest.o: ObjectKDTree.h Mesh.h Triangle.h Vertex.h types.h
-coldest.o: /usr/include/boost/shared_ptr.hpp
-coldest.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-coldest.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+coldest.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+coldest.o: /usr/include/boost/config/user.hpp
 coldest.o: /usr/include/boost/config/select_compiler_config.hpp
 coldest.o: /usr/include/boost/config/compiler/gcc.hpp
 coldest.o: /usr/include/boost/config/select_stdlib_config.hpp
 coldest.o: /usr/include/boost/config/no_tr1/utility.hpp
 coldest.o: /usr/include/boost/config/select_platform_config.hpp
-coldest.o: /usr/include/boost/config/platform/linux.hpp
 coldest.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 coldest.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 coldest.o: /usr/include/bits/confname.h /usr/include/getopt.h
-coldest.o: /usr/include/boost/config/suffix.hpp
-coldest.o: /usr/include/boost/config/no_tr1/memory.hpp
-coldest.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-coldest.o: /usr/include/boost/checked_delete.hpp
+coldest.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+coldest.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 coldest.o: /usr/include/boost/throw_exception.hpp
-coldest.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 coldest.o: /usr/include/boost/config.hpp
-coldest.o: /usr/include/boost/detail/workaround.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-coldest.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+coldest.o: /usr/include/boost/detail/shared_count.hpp
+coldest.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+coldest.o: /usr/include/boost/detail/sp_counted_base.hpp
+coldest.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 coldest.o: /usr/include/boost/detail/sp_typeinfo.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-coldest.o: /usr/include/pthread.h /usr/include/sched.h
-coldest.o: /usr/include/bits/sched.h /usr/include/signal.h
-coldest.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-coldest.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp Material.h
+coldest.o: /usr/include/boost/detail/sp_counted_impl.hpp
+coldest.o: /usr/include/boost/detail/workaround.hpp Material.h
 coldest.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
 coldest.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 coldest.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -5251,9 +4862,8 @@ coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/config/compiler.hpp
 coldest.o: /usr/include/boost/preprocessor/stringize.hpp
 coldest.o: /usr/include/boost/type_traits/is_convertible.hpp
-coldest.o: /usr/include/boost/type_traits/intrinsics.hpp
-coldest.o: /usr/include/boost/type_traits/config.hpp
 coldest.o: /usr/include/boost/type_traits/detail/yes_no_type.hpp
+coldest.o: /usr/include/boost/type_traits/config.hpp
 coldest.o: /usr/include/boost/type_traits/is_array.hpp
 coldest.o: /usr/include/boost/type_traits/detail/bool_trait_def.hpp
 coldest.o: /usr/include/boost/type_traits/detail/template_arity_spec.hpp
@@ -5281,6 +4891,7 @@ coldest.o: /usr/include/boost/type_traits/is_union.hpp
 coldest.o: /usr/include/boost/type_traits/remove_cv.hpp
 coldest.o: /usr/include/boost/type_traits/broken_compiler_spec.hpp
 coldest.o: /usr/include/boost/type_traits/detail/cv_traits_impl.hpp
+coldest.o: /usr/include/boost/type_traits/intrinsics.hpp
 coldest.o: /usr/include/boost/iterator/detail/config_def.hpp
 coldest.o: /usr/include/boost/iterator/detail/config_undef.hpp
 coldest.o: /usr/include/boost/iterator/iterator_traits.hpp
@@ -5351,7 +4962,6 @@ coldest.o: /usr/include/boost/mpl/aux_/has_rebind.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
 coldest.o: /usr/include/boost/mpl/aux_/include_preprocessed.hpp
-coldest.o: /usr/include/boost/detail/scoped_enum_emulation.hpp
 coldest.o: /usr/include/boost/filesystem/convenience.hpp
 editor.o: editor.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
 editor.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
@@ -5389,44 +4999,30 @@ editor.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 editor.o: /usr/include/bits/mathcalls.h GraphicMatrix.h glinc.h
 editor.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
 editor.o: /usr/include/SDL/SDL_opengl.h Vector3.h logout.h Log.h IniReader.h
-editor.o: /usr/include/boost/shared_ptr.hpp
-editor.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-editor.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+editor.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+editor.o: /usr/include/boost/config/user.hpp
 editor.o: /usr/include/boost/config/select_compiler_config.hpp
 editor.o: /usr/include/boost/config/compiler/gcc.hpp
 editor.o: /usr/include/boost/config/select_stdlib_config.hpp
 editor.o: /usr/include/boost/config/no_tr1/utility.hpp
 editor.o: /usr/include/boost/config/select_platform_config.hpp
-editor.o: /usr/include/boost/config/platform/linux.hpp
 editor.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 editor.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 editor.o: /usr/include/bits/confname.h /usr/include/getopt.h
-editor.o: /usr/include/boost/config/suffix.hpp
-editor.o: /usr/include/boost/config/no_tr1/memory.hpp
-editor.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-editor.o: /usr/include/boost/checked_delete.hpp
+editor.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+editor.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 editor.o: /usr/include/boost/throw_exception.hpp
-editor.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 editor.o: /usr/include/boost/config.hpp
-editor.o: /usr/include/boost/detail/workaround.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-editor.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+editor.o: /usr/include/boost/detail/shared_count.hpp
+editor.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+editor.o: /usr/include/boost/detail/sp_counted_base.hpp
+editor.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 editor.o: /usr/include/boost/detail/sp_typeinfo.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-editor.o: /usr/include/pthread.h /usr/include/sched.h
-editor.o: /usr/include/bits/sched.h /usr/include/signal.h
-editor.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-editor.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp Mesh.h
-editor.o: Triangle.h Vertex.h types.h Material.h TextureManager.h
-editor.o: TextureHandler.h /usr/include/SDL/SDL_image.h Shader.h
-editor.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
+editor.o: /usr/include/boost/detail/sp_counted_impl.hpp
+editor.o: /usr/include/boost/detail/workaround.hpp Mesh.h Triangle.h Vertex.h
+editor.o: types.h Material.h TextureManager.h TextureHandler.h
+editor.o: /usr/include/SDL/SDL_image.h Shader.h ResourceManager.h
+editor.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 editor.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 editor.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 editor.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
@@ -5724,46 +5320,32 @@ getmap.o: /usr/include/xercesc/dom/DOMXPathNSResolver.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathException.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathExpression.hpp
 getmap.o: /usr/include/xercesc/dom/DOMXPathNamespace.hpp
-getmap.o: /usr/include/boost/shared_ptr.hpp
-getmap.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-getmap.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+getmap.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+getmap.o: /usr/include/boost/config/user.hpp
 getmap.o: /usr/include/boost/config/select_compiler_config.hpp
 getmap.o: /usr/include/boost/config/compiler/gcc.hpp
 getmap.o: /usr/include/boost/config/select_stdlib_config.hpp
 getmap.o: /usr/include/boost/config/no_tr1/utility.hpp
 getmap.o: /usr/include/boost/config/select_platform_config.hpp
-getmap.o: /usr/include/boost/config/platform/linux.hpp
 getmap.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 getmap.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 getmap.o: /usr/include/bits/confname.h /usr/include/getopt.h
-getmap.o: /usr/include/boost/config/suffix.hpp
-getmap.o: /usr/include/boost/config/no_tr1/memory.hpp
-getmap.o: /usr/include/boost/assert.hpp /usr/include/boost/checked_delete.hpp
+getmap.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+getmap.o: /usr/include/boost/checked_delete.hpp
 getmap.o: /usr/include/boost/throw_exception.hpp
-getmap.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 getmap.o: /usr/include/boost/config.hpp
-getmap.o: /usr/include/boost/detail/workaround.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-getmap.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+getmap.o: /usr/include/boost/detail/shared_count.hpp
+getmap.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+getmap.o: /usr/include/boost/detail/sp_counted_base.hpp
+getmap.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 getmap.o: /usr/include/boost/detail/sp_typeinfo.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-getmap.o: /usr/include/pthread.h /usr/include/sched.h
-getmap.o: /usr/include/bits/sched.h /usr/include/signal.h
-getmap.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-getmap.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-getmap.o: /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h
-getmap.o: /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h
-getmap.o: /usr/include/SDL/SDL_platform.h /usr/include/stdio.h
-getmap.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h
-getmap.o: /usr/include/bits/sys_errlist.h /usr/include/strings.h
-getmap.o: /usr/include/ctype.h /usr/include/iconv.h
+getmap.o: /usr/include/boost/detail/sp_counted_impl.hpp
+getmap.o: /usr/include/boost/detail/workaround.hpp /usr/include/SDL/SDL.h
+getmap.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+getmap.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+getmap.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
+getmap.o: /usr/include/wchar.h /usr/include/bits/sys_errlist.h
+getmap.o: /usr/include/strings.h /usr/include/ctype.h /usr/include/iconv.h
 getmap.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
 getmap.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
 getmap.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
@@ -5835,42 +5417,28 @@ globals.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 globals.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 globals.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 globals.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-globals.o: /usr/include/boost/shared_ptr.hpp
-globals.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-globals.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+globals.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+globals.o: /usr/include/boost/config/user.hpp
 globals.o: /usr/include/boost/config/select_compiler_config.hpp
 globals.o: /usr/include/boost/config/compiler/gcc.hpp
 globals.o: /usr/include/boost/config/select_stdlib_config.hpp
 globals.o: /usr/include/boost/config/no_tr1/utility.hpp
 globals.o: /usr/include/boost/config/select_platform_config.hpp
-globals.o: /usr/include/boost/config/platform/linux.hpp
 globals.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 globals.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 globals.o: /usr/include/bits/confname.h /usr/include/getopt.h
-globals.o: /usr/include/boost/config/suffix.hpp
-globals.o: /usr/include/boost/config/no_tr1/memory.hpp
-globals.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-globals.o: /usr/include/boost/checked_delete.hpp
+globals.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+globals.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 globals.o: /usr/include/boost/throw_exception.hpp
-globals.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 globals.o: /usr/include/boost/config.hpp
-globals.o: /usr/include/boost/detail/workaround.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-globals.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+globals.o: /usr/include/boost/detail/shared_count.hpp
+globals.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+globals.o: /usr/include/boost/detail/sp_counted_base.hpp
+globals.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 globals.o: /usr/include/boost/detail/sp_typeinfo.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-globals.o: /usr/include/pthread.h /usr/include/sched.h
-globals.o: /usr/include/bits/sched.h /usr/include/signal.h
-globals.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-globals.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-globals.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+globals.o: /usr/include/boost/detail/sp_counted_impl.hpp
+globals.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+globals.o: Material.h TextureManager.h TextureHandler.h
 globals.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 globals.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 globals.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -6126,52 +5694,37 @@ net.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 net.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 net.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 net.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-net.o: /usr/include/boost/shared_ptr.hpp
-net.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-net.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+net.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+net.o: /usr/include/boost/config/user.hpp
 net.o: /usr/include/boost/config/select_compiler_config.hpp
 net.o: /usr/include/boost/config/compiler/gcc.hpp
 net.o: /usr/include/boost/config/select_stdlib_config.hpp
 net.o: /usr/include/boost/config/no_tr1/utility.hpp
 net.o: /usr/include/boost/config/select_platform_config.hpp
-net.o: /usr/include/boost/config/platform/linux.hpp
 net.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 net.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 net.o: /usr/include/bits/confname.h /usr/include/getopt.h
-net.o: /usr/include/boost/config/suffix.hpp
-net.o: /usr/include/boost/config/no_tr1/memory.hpp
-net.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-net.o: /usr/include/boost/checked_delete.hpp
-net.o: /usr/include/boost/throw_exception.hpp
-net.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-net.o: /usr/include/boost/config.hpp /usr/include/boost/detail/workaround.hpp
-net.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-net.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-net.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-net.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-net.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+net.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+net.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
+net.o: /usr/include/boost/throw_exception.hpp /usr/include/boost/config.hpp
+net.o: /usr/include/boost/detail/shared_count.hpp
+net.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+net.o: /usr/include/boost/detail/sp_counted_base.hpp
+net.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 net.o: /usr/include/boost/detail/sp_typeinfo.hpp
-net.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-net.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-net.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-net.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-net.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-net.o: /usr/include/pthread.h /usr/include/sched.h /usr/include/bits/sched.h
-net.o: /usr/include/signal.h /usr/include/bits/setjmp.h
-net.o: /usr/include/boost/memory_order.hpp
-net.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp GraphicMatrix.h
-net.o: Material.h TextureManager.h TextureHandler.h
-net.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
-net.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
-net.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
-net.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
-net.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h ALSource.h
-net.o: Quad.h MeshNode.h FBO.h util.h tsint.h Timer.h Camera.h
-net.o: /usr/include/SDL/SDL_net.h PlayerData.h Hit.h Weapon.h Item.h Packet.h
-net.o: ServerInfo.h gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h
-net.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h netdefs.h
-net.o: IDGen.h globals.h gui/GUI.h
-net.o: /usr/include/xercesc/parsers/XercesDOMParser.hpp
+net.o: /usr/include/boost/detail/sp_counted_impl.hpp
+net.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+net.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+net.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+net.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
+net.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
+net.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
+net.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
+net.o: util.h tsint.h Timer.h Camera.h /usr/include/SDL/SDL_net.h
+net.o: PlayerData.h Hit.h Weapon.h Item.h Packet.h ServerInfo.h
+net.o: gui/ComboBox.h gui/GUI.h gui/Table.h gui/TableItem.h gui/LineEdit.h
+net.o: gui/ScrollView.h gui/Slider.h gui/Button.h netdefs.h IDGen.h globals.h
+net.o: gui/GUI.h /usr/include/xercesc/parsers/XercesDOMParser.hpp
 net.o: /usr/include/xercesc/parsers/AbstractDOMParser.hpp
 net.o: /usr/include/xercesc/dom/DOMDocument.hpp
 net.o: /usr/include/xercesc/util/XercesDefs.hpp
@@ -6348,41 +5901,27 @@ netdefs.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 netdefs.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 netdefs.o: /usr/include/bits/mathcalls.h logout.h Log.h Triangle.h Vertex.h
 netdefs.o: types.h /usr/include/boost/shared_ptr.hpp
-netdefs.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 netdefs.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 netdefs.o: /usr/include/boost/config/select_compiler_config.hpp
 netdefs.o: /usr/include/boost/config/compiler/gcc.hpp
 netdefs.o: /usr/include/boost/config/select_stdlib_config.hpp
 netdefs.o: /usr/include/boost/config/no_tr1/utility.hpp
 netdefs.o: /usr/include/boost/config/select_platform_config.hpp
-netdefs.o: /usr/include/boost/config/platform/linux.hpp
 netdefs.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 netdefs.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 netdefs.o: /usr/include/bits/confname.h /usr/include/getopt.h
-netdefs.o: /usr/include/boost/config/suffix.hpp
-netdefs.o: /usr/include/boost/config/no_tr1/memory.hpp
-netdefs.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-netdefs.o: /usr/include/boost/checked_delete.hpp
+netdefs.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+netdefs.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 netdefs.o: /usr/include/boost/throw_exception.hpp
-netdefs.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 netdefs.o: /usr/include/boost/config.hpp
-netdefs.o: /usr/include/boost/detail/workaround.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-netdefs.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+netdefs.o: /usr/include/boost/detail/shared_count.hpp
+netdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+netdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
+netdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 netdefs.o: /usr/include/boost/detail/sp_typeinfo.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-netdefs.o: /usr/include/pthread.h /usr/include/sched.h
-netdefs.o: /usr/include/bits/sched.h /usr/include/signal.h
-netdefs.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-netdefs.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-netdefs.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+netdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
+netdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+netdefs.o: Material.h TextureManager.h TextureHandler.h
 netdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 netdefs.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 netdefs.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -6428,44 +5967,29 @@ render.o: /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h
 render.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 render.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 render.o: Triangle.h Vertex.h types.h /usr/include/boost/shared_ptr.hpp
-render.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 render.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 render.o: /usr/include/boost/config/select_compiler_config.hpp
 render.o: /usr/include/boost/config/compiler/gcc.hpp
 render.o: /usr/include/boost/config/select_stdlib_config.hpp
 render.o: /usr/include/boost/config/no_tr1/utility.hpp
 render.o: /usr/include/boost/config/select_platform_config.hpp
-render.o: /usr/include/boost/config/platform/linux.hpp
 render.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 render.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 render.o: /usr/include/bits/confname.h /usr/include/getopt.h
-render.o: /usr/include/boost/config/suffix.hpp
-render.o: /usr/include/boost/config/no_tr1/memory.hpp
-render.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-render.o: /usr/include/boost/checked_delete.hpp
+render.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+render.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 render.o: /usr/include/boost/throw_exception.hpp
-render.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 render.o: /usr/include/boost/config.hpp
-render.o: /usr/include/boost/detail/workaround.hpp
-render.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-render.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-render.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-render.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-render.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+render.o: /usr/include/boost/detail/shared_count.hpp
+render.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+render.o: /usr/include/boost/detail/sp_counted_base.hpp
+render.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 render.o: /usr/include/boost/detail/sp_typeinfo.hpp
-render.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-render.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-render.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-render.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-render.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-render.o: /usr/include/pthread.h /usr/include/sched.h
-render.o: /usr/include/bits/sched.h /usr/include/signal.h
-render.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-render.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-render.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-render.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
-render.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
-render.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+render.o: /usr/include/boost/detail/sp_counted_impl.hpp
+render.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+render.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+render.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+render.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 render.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 render.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 render.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -6653,43 +6177,29 @@ renderdefs.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 renderdefs.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 renderdefs.o: /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_net.h
 renderdefs.o: Mesh.h Triangle.h Vertex.h types.h
-renderdefs.o: /usr/include/boost/shared_ptr.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-renderdefs.o: /usr/include/boost/config.hpp
+renderdefs.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
 renderdefs.o: /usr/include/boost/config/user.hpp
 renderdefs.o: /usr/include/boost/config/select_compiler_config.hpp
 renderdefs.o: /usr/include/boost/config/compiler/gcc.hpp
 renderdefs.o: /usr/include/boost/config/select_stdlib_config.hpp
 renderdefs.o: /usr/include/boost/config/no_tr1/utility.hpp
 renderdefs.o: /usr/include/boost/config/select_platform_config.hpp
-renderdefs.o: /usr/include/boost/config/platform/linux.hpp
 renderdefs.o: /usr/include/boost/config/posix_features.hpp
 renderdefs.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 renderdefs.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 renderdefs.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-renderdefs.o: /usr/include/boost/config/no_tr1/memory.hpp
 renderdefs.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 renderdefs.o: /usr/include/boost/checked_delete.hpp
 renderdefs.o: /usr/include/boost/throw_exception.hpp
-renderdefs.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 renderdefs.o: /usr/include/boost/config.hpp
-renderdefs.o: /usr/include/boost/detail/workaround.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+renderdefs.o: /usr/include/boost/detail/shared_count.hpp
+renderdefs.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+renderdefs.o: /usr/include/boost/detail/sp_counted_base.hpp
+renderdefs.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 renderdefs.o: /usr/include/boost/detail/sp_typeinfo.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-renderdefs.o: /usr/include/pthread.h /usr/include/sched.h
-renderdefs.o: /usr/include/bits/sched.h /usr/include/signal.h
-renderdefs.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-renderdefs.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-renderdefs.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+renderdefs.o: /usr/include/boost/detail/sp_counted_impl.hpp
+renderdefs.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+renderdefs.o: Material.h TextureManager.h TextureHandler.h
 renderdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 renderdefs.o: ResourceManager.h SoundManager.h ALBuffer.h
 renderdefs.o: /usr/include/AL/al.h /usr/include/AL/alut.h
@@ -6875,45 +6385,30 @@ server.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 server.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 server.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 server.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-server.o: /usr/include/boost/shared_ptr.hpp
-server.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-server.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+server.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+server.o: /usr/include/boost/config/user.hpp
 server.o: /usr/include/boost/config/select_compiler_config.hpp
 server.o: /usr/include/boost/config/compiler/gcc.hpp
 server.o: /usr/include/boost/config/select_stdlib_config.hpp
 server.o: /usr/include/boost/config/no_tr1/utility.hpp
 server.o: /usr/include/boost/config/select_platform_config.hpp
-server.o: /usr/include/boost/config/platform/linux.hpp
 server.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 server.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 server.o: /usr/include/bits/confname.h /usr/include/getopt.h
-server.o: /usr/include/boost/config/suffix.hpp
-server.o: /usr/include/boost/config/no_tr1/memory.hpp
-server.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-server.o: /usr/include/boost/checked_delete.hpp
+server.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+server.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 server.o: /usr/include/boost/throw_exception.hpp
-server.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 server.o: /usr/include/boost/config.hpp
-server.o: /usr/include/boost/detail/workaround.hpp
-server.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-server.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-server.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-server.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-server.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+server.o: /usr/include/boost/detail/shared_count.hpp
+server.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+server.o: /usr/include/boost/detail/sp_counted_base.hpp
+server.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 server.o: /usr/include/boost/detail/sp_typeinfo.hpp
-server.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-server.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-server.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-server.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-server.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-server.o: /usr/include/pthread.h /usr/include/sched.h
-server.o: /usr/include/bits/sched.h /usr/include/signal.h
-server.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-server.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-server.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-server.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
-server.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
-server.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+server.o: /usr/include/boost/detail/sp_counted_impl.hpp
+server.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h Material.h
+server.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
+server.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+server.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 server.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 server.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 server.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -7100,42 +6595,29 @@ settings.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 settings.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 settings.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 settings.o: /usr/include/SDL/SDL_version.h Triangle.h Vertex.h types.h
-settings.o: /usr/include/boost/shared_ptr.hpp
-settings.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-settings.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
+settings.o: /usr/include/boost/shared_ptr.hpp /usr/include/boost/config.hpp
+settings.o: /usr/include/boost/config/user.hpp
 settings.o: /usr/include/boost/config/select_compiler_config.hpp
 settings.o: /usr/include/boost/config/compiler/gcc.hpp
 settings.o: /usr/include/boost/config/select_stdlib_config.hpp
 settings.o: /usr/include/boost/config/no_tr1/utility.hpp
 settings.o: /usr/include/boost/config/select_platform_config.hpp
-settings.o: /usr/include/boost/config/platform/linux.hpp
 settings.o: /usr/include/boost/config/posix_features.hpp
 settings.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
 settings.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
 settings.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-settings.o: /usr/include/boost/config/no_tr1/memory.hpp
 settings.o: /usr/include/boost/assert.hpp /usr/include/assert.h
 settings.o: /usr/include/boost/checked_delete.hpp
 settings.o: /usr/include/boost/throw_exception.hpp
-settings.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 settings.o: /usr/include/boost/config.hpp
-settings.o: /usr/include/boost/detail/workaround.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-settings.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+settings.o: /usr/include/boost/detail/shared_count.hpp
+settings.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+settings.o: /usr/include/boost/detail/sp_counted_base.hpp
+settings.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 settings.o: /usr/include/boost/detail/sp_typeinfo.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-settings.o: /usr/include/pthread.h /usr/include/sched.h
-settings.o: /usr/include/bits/sched.h /usr/include/signal.h
-settings.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-settings.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-settings.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+settings.o: /usr/include/boost/detail/sp_counted_impl.hpp
+settings.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+settings.o: Material.h TextureManager.h TextureHandler.h
 settings.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 settings.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 settings.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
@@ -7397,41 +6879,27 @@ gui/GUI.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 gui/GUI.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 gui/GUI.o: /usr/include/bits/mathcalls.h logout.h Log.h Triangle.h Vertex.h
 gui/GUI.o: types.h /usr/include/boost/shared_ptr.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 gui/GUI.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 gui/GUI.o: /usr/include/boost/config/select_compiler_config.hpp
 gui/GUI.o: /usr/include/boost/config/compiler/gcc.hpp
 gui/GUI.o: /usr/include/boost/config/select_stdlib_config.hpp
 gui/GUI.o: /usr/include/boost/config/no_tr1/utility.hpp
 gui/GUI.o: /usr/include/boost/config/select_platform_config.hpp
-gui/GUI.o: /usr/include/boost/config/platform/linux.hpp
 gui/GUI.o: /usr/include/boost/config/posix_features.hpp /usr/include/unistd.h
 gui/GUI.o: /usr/include/bits/posix_opt.h /usr/include/bits/environments.h
 gui/GUI.o: /usr/include/bits/confname.h /usr/include/getopt.h
-gui/GUI.o: /usr/include/boost/config/suffix.hpp
-gui/GUI.o: /usr/include/boost/config/no_tr1/memory.hpp
-gui/GUI.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-gui/GUI.o: /usr/include/boost/checked_delete.hpp
+gui/GUI.o: /usr/include/boost/config/suffix.hpp /usr/include/boost/assert.hpp
+gui/GUI.o: /usr/include/assert.h /usr/include/boost/checked_delete.hpp
 gui/GUI.o: /usr/include/boost/throw_exception.hpp
-gui/GUI.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
 gui/GUI.o: /usr/include/boost/config.hpp
-gui/GUI.o: /usr/include/boost/detail/workaround.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+gui/GUI.o: /usr/include/boost/detail/shared_count.hpp
+gui/GUI.o: /usr/include/boost/detail/bad_weak_ptr.hpp
+gui/GUI.o: /usr/include/boost/detail/sp_counted_base.hpp
+gui/GUI.o: /usr/include/boost/detail/sp_counted_base_gcc_x86.hpp
 gui/GUI.o: /usr/include/boost/detail/sp_typeinfo.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-gui/GUI.o: /usr/include/pthread.h /usr/include/sched.h
-gui/GUI.o: /usr/include/bits/sched.h /usr/include/signal.h
-gui/GUI.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-gui/GUI.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-gui/GUI.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
+gui/GUI.o: /usr/include/boost/detail/sp_counted_impl.hpp
+gui/GUI.o: /usr/include/boost/detail/workaround.hpp GraphicMatrix.h
+gui/GUI.o: Material.h TextureManager.h TextureHandler.h
 gui/GUI.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
 gui/GUI.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 gui/GUI.o: /usr/include/AL/alut.h /usr/include/AL/alc.h

@@ -30,6 +30,7 @@ echo "/usr/$LIB/libpng.so.3"
 echo "Building"
 svn update
 REVISION=`svn info | grep Revision | cut -f 2 -d \ `
+make depend
 make clean
 make -j3
 rm -rf Coldest$REVISION > /dev/null 2>&1
@@ -37,4 +38,6 @@ echo "Kitting"
 ./kit.sh Coldest$REVISION
 echo "Packaging"
 ./package.sh linux Coldest$REVISION
-./buildpatch linux $RELEASE
+#./buildpatch linux $RELEASE
+./uploadbuild.sh
+
