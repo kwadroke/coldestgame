@@ -2,7 +2,7 @@
 
 # Copy libraries from the system folder to our local lib folder
 # This way our lib folder always matches what gets compiled
-LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesystem libboost_system libfreetype libgcc_s libogg libopenal libstdc++ libvorbis libvorbisfile libxerces-c libz"
+LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesystem libboost_system libfreetype libgcc_s libogg libopenal libstdc++ libvorbis libvorbisfile libxerces-c libz libcurl"
 RELEASE=543
 
 if [ ! -z `uname -m | grep x86_64` ]
