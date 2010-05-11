@@ -34,6 +34,9 @@
 #include "IDGen.h"
 #include "tsint.h"
 
+using std::string;
+using std::deque;
+
 const int netver = 5;
 
 extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;

@@ -46,7 +46,6 @@
 #include "../util.h"
 #include "../ALSource.h"
 
-using namespace std;
 using xercesc::DOMElement;
 using xercesc::XercesDOMParser;
 using xercesc::XMLPlatformUtils;
@@ -57,6 +56,9 @@ using xercesc::DOMNodeList;
 using xercesc::DOMNamedNodeMap;
 using xercesc::XMLString;
 using boost::shared_ptr;
+using std::list;
+using std::vector;
+using std::string;
 
 enum {Normal, Hover, Clicked, numstates};
 enum {ButtonTex, GutterTex, SliderTex, BackgroundTex, TableCellTex, TableRowTex, CursorTex, numdefaults};

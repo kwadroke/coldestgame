@@ -978,7 +978,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             }
             SDL_mutexV(servermutex);
          }
-         else logout << "Error: data too long\n" << flush;
+         else logout << "Error: data too long\n" << std::flush;
          
          // Send pings to monitor network performance
          // Also use this opportunity to send occasional updates

@@ -26,8 +26,6 @@
 #include <SDL_net.h>
 #include "logout.h"
 
-using namespace std;
-
 class Packet
 {
    public:

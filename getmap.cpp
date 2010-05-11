@@ -39,8 +39,6 @@
 #include "Quad.h"
 #include "Mesh.h"
 
-using namespace std;
-
 vector<Vector3vec> lightmap; // Terrain lightmap
 
 struct TerrainParams
@@ -625,10 +623,10 @@ void GetMap(string fn)
          
          float tri1 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(1), tempquad.GetVertex(3));
          float tri2 = Triangle::Perimeter(tempquad.GetVertex(1), tempquad.GetVertex(2), tempquad.GetVertex(3));
-         float size1 = min(tri1, tri2);
+         float size1 = std::min(tri1, tri2);
          tri1 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(1), tempquad.GetVertex(2));
          tri2 = Triangle::Perimeter(tempquad.GetVertex(0), tempquad.GetVertex(2), tempquad.GetVertex(3));
-         float size2 = min(tri1, tri2);
+         float size2 = std::min(tri1, tri2);
          if (size1 - size2 > float(tilesize) * .2f || 
              (mid1.y < mid2.y && size1 - size2 > -float(tilesize) * .2f))// Then rotate the quad so the triangle split happens on the other axis
          {
@@ -864,11 +862,11 @@ void GetMap(string fn)
    SendKeepalive();
    locks.Read(meshes);
    kdtree = ObjectKDTree(&meshes, points);
-   logout << "Refining KD-Tree..." << flush;
+   logout << "Refining KD-Tree..." << std::flush;
    kdtree.refine(0);
    locks.EndRead(meshes);
    SendKeepalive();
-   logout << "Done\n" << flush;
+   logout << "Done" << endl;
    
    progress->value = 6;
    progtext->text = "Generating buffers";

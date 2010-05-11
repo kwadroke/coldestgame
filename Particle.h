@@ -29,7 +29,6 @@
 #include "SDL.h"
 #include "SDL_thread.h"
 
-using namespace std;
 using boost::shared_ptr;
 
 class Particle

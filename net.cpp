@@ -38,8 +38,6 @@
 #include "globals.h"
 #include "util.h"
 
-using namespace std;
-
 int NetSend(void*);
 int NetListen(void*);
 string FillUpdatePacket();

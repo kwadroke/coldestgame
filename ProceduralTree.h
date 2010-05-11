@@ -34,8 +34,6 @@
 #include "Quad.h"
 #include "StableRandom.h"
 
-using namespace std;
-
 class ProceduralTree
 {
    public:

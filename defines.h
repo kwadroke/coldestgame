@@ -69,10 +69,9 @@
 #include "gui/ComboBox.h"
 #include "Updater.h"
 
-/* Sorry bwkaz, the hassle just isn't worth it :-)
+/*
 using std::endl;
 using std::flush;*/
-using namespace std;
 
 // Function definitions
 void CreateAppDir();

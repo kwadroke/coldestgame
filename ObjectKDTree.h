@@ -43,8 +43,6 @@
 
 #define PI 3.14159265
 
-using namespace std;
-
 struct eqptr
 {
    bool operator()(Mesh* p1, Mesh* p2) const
