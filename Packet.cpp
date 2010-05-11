@@ -20,6 +20,8 @@
 
 #include "Packet.h"
 
+using std::endl;
+
 int Packet::laghax = 0;
 
 Packet::Packet(IPaddress* inaddr, string s) : data(s), ack(0),

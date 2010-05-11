@@ -31,8 +31,6 @@
 
 //#define INLINE_COLDET
 
-using namespace std;
-
 class CollisionDetection
 {
    public:

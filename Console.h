@@ -26,6 +26,7 @@
 #include <string>
 #include <deque>
 #include <set>
+#include <iterator>
 #include "gui/TextArea.h"
 #include "renderdefs.h"
 #include "netdefs.h"

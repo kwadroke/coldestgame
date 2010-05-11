@@ -20,6 +20,8 @@
 
 #include "FBO.h"
 
+using std::endl;
+
 // Note: the FBO is not ready for use after running this constructor
 FBO::FBO()
 {
@@ -119,7 +121,7 @@ void FBO::init()
    }
    
    if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
-      logout << "Failed to create framebuffer.\n" << hex << glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) << endl;
+      logout << "Failed to create framebuffer.\n" << std::hex << glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) << endl;
    
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
    valid = true;

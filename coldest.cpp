@@ -38,6 +38,8 @@
 #include <shlobj.h>
 #endif
 
+using std::ios_base;
+
 // Notes: Currently seems to be detrimental to performance, will need updates to
 // work if it is needed in the future because these worker threads have been
 // repurposed to thread VBO updates in the render code.
@@ -133,7 +135,8 @@ void CreateAppDir()
 
    if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, szPath))) 
 {
-   userpath = szPath;
+   // Hmm, this cast might be a bad idea...
+   userpath = (char*)szPath;
 }
    else
 {
@@ -150,7 +153,7 @@ void CreateAppDir()
       boost::filesystem::create_directory(userpath);
 #else
    // This will fail most of the time because the directory already exists, but oh well.
-   CreateDirectory(userpath.c_str(), NULL);
+   CreateDirectory((TCHAR*)userpath.c_str(), NULL);
 #endif
 }
 
@@ -598,33 +601,33 @@ void SetupOpenGL()
    GLenum err = glewInit();
    if (err != GLEW_OK)
    {
-      logout << "Failed to init glew: " << glewGetErrorString(err) << endl << flush;
+      logout << "Failed to init glew: " << glewGetErrorString(err) << endl;
       exit(-2);
    }
-   logout << "Glew init successful, using version: " << glewGetString(GLEW_VERSION) << endl << flush;
+   logout << "Glew init successful, using version: " << glewGetString(GLEW_VERSION) << endl;
    if (!GLEW_EXT_framebuffer_object)
    {
-      logout << "We don't have EXT_framebuffer_object.  This is fatal.\n" << flush;
+      logout << "We don't have EXT_framebuffer_object.  This is fatal." << endl;
       exit(-3);
    }
    if (!GLEW_ARB_vertex_buffer_object)
    {
-      logout << "We don't have ARB_vertex_buffer_object.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_vertex_buffer_object.  This is fatal." << endl;
       exit(-4);
    }
    if (!GLEW_ARB_depth_texture)
    {
-      logout << "We don't have ARB_depth_texture.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_depth_texture.  This is fatal." << endl;
       exit(-5);
    }
    if (!GLEW_ARB_shadow)
    {
-      logout << "We don't have ARB_shadow.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_shadow.  This is fatal." << endl;
       exit(-6);
    }
    if (!GLEW_ARB_fragment_shader)
    {
-      logout << "We don't have ARB_fragment_shader.  This is fatal.\n" << flush;
+      logout << "We don't have ARB_fragment_shader.  This is fatal." << endl;
       exit(-7);
    }
    if (!GLEW_ARB_multitexture)
@@ -1179,7 +1182,7 @@ bool GUIEventHandler(SDL_Event &event)
                      boost::filesystem::create_directory(userpath + "screenshots/");
 #else
                   string screenpath = userpath + "screenshots/";
-                  CreateDirectory(screenpath.c_str(), NULL);
+                  CreateDirectory((TCHAR*)screenpath.c_str(), NULL);
 #endif
                   while (!finished)
                   {

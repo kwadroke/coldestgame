@@ -26,8 +26,6 @@
 #include "GraphicMatrix.h"
 #include "glinc.h"
 
-using namespace std;
-
 typedef vector<GLfloat> glfvec;
 
 class Light

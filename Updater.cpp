@@ -185,7 +185,7 @@ void Updater::CreateParentDirectory(const string& filename)
       if (!boost::filesystem::is_directory(curr))
          boost::filesystem::create_directory(curr);
 #else
-      CreateDirectory(curr.c_str(), NULL);
+      CreateDirectory((TCHAR*)curr.c_str(), NULL);
 #endif
    }
 }

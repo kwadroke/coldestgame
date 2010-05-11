@@ -20,6 +20,10 @@
 
 #include "Shader.h"
 
+using std::make_pair;
+using std::endl;
+using std::ifstream;
+
 Shader::Shader() : currshader(0), shadows(true)
 {
    programs.insert(make_pair("none", 0));

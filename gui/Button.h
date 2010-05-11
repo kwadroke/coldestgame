@@ -24,8 +24,6 @@
 #include <string>
 #include "GUI.h"
 
-using namespace std;
-
 class Button : public GUI
 {
    friend class GUI;

@@ -32,6 +32,7 @@ using std::cout;
 using std::list;
 using std::set;
 using std::vector;
+using std::ifstream;
 
 void InitSDL();
 void Receive(UDPsocket&);
@@ -77,6 +78,7 @@ int main()
       Send(socket);
    }
    logout << "Coldest master server ending" << endl;
+   return 0;
 }
 
 

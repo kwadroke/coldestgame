@@ -33,6 +33,8 @@
 #include "Layout.h"
 #include "../globals.h"
 
+using std::hex;
+
 
 GUI::GUI(float aw, float ah, TextureManager* texm, const string file)
 {
@@ -391,7 +393,7 @@ void GUI::InitFromFile(string filename)
    catch(xercesc::XMLException& e)
    {
       char* message = xercesc::XMLString::transcode( e.getMessage() );
-      cerr << "Error parsing file: " << message << flush;
+      cerr << "Error parsing file: " << message << endl;
       XMLString::release( &message );
    }
    try

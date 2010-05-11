@@ -29,7 +29,7 @@ ObjectKDTree::ObjectKDTree(Meshlist *objs, Vector3vec v) : haschildren(false), v
    {
       members.push_back(&(*i));
    }
-   logout << "KD-Tree Objects: " << members.size() << endl << flush;
+   logout << "KD-Tree Objects: " << members.size() << endl;
 
    vertices[1].x = v[0].x;
    vertices[1].y = v[0].y;

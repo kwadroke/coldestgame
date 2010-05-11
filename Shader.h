@@ -29,7 +29,7 @@
 #include <iostream>
 #include "logout.h"
 
-using namespace std;
+using std::map;
 
 typedef map<string, GLhandleARB> progmap;
 

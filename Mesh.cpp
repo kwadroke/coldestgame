@@ -260,7 +260,7 @@ void Mesh::Load(const IniReader& reader)
          currframe.Read(currver, "Version");
          if (currver != objectfilever)
          {
-            logout << "Object file version mismatch for file: " << currfile << endl << flush;
+            logout << "Object file version mismatch for file: " << currfile << endl;
             logout << currver << endl;
             return;
          }

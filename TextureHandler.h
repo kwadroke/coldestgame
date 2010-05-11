@@ -28,8 +28,6 @@
 #include "SDL_image.h"
 #include "logout.h"
 
-using namespace std;
-
 class TextureHandler
 {
    public:

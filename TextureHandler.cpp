@@ -20,6 +20,8 @@
 
 #include "TextureHandler.h"
 
+using std::endl;
+
 TextureHandler::TextureHandler() : af(1.f)
 {
    for (int i = 0; i < 8; ++i)
