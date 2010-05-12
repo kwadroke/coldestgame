@@ -4,6 +4,9 @@
 # This way our lib folder always matches what gets compiled
 LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesystem libboost_system libfreetype libgcc_s libogg libopenal libstdc++ libvorbis libvorbisfile libxerces-c libz libcurl"
 RELEASE=543
+outfile=buildoutput
+
+rm $outfile
 
 if [ ! -z `uname -m | grep x86_64` ]
 then
@@ -13,32 +16,33 @@ else
 fi
 
 echo "Copying libraries"
-mkdir lib
-rm lib/*
+mkdir lib >> $outfile 2>&1
+rm lib/* >> $outfile 2>&1
 for i in $LIBS
 do
    REALFILE=`ldd ./coldest | grep $i | sed -e 's/[ \t]*\(.*\) *=> *\(.*\) .*/\2/'`
-   cp $REALFILE ./lib || echo "Failed to copy $REALFILE"
-   echo $REALFILE
+   cp $REALFILE ./lib || echo "Failed to copy $REALFILE" >> $outfile 2>&1
+   echo $REALFILE >> $outfile 2>&1
 done
 
 # This one is not in the ldd output because it is dynamically opened by libSDL_image, so we have to
 # hardcode it.  I don't anticipate it changing much though so that should be okay.
-cp /usr/$LIB/libpng.so.3 ./lib
-echo "/usr/$LIB/libpng.so.3"
+cp /usr/$LIB/libpng.so.3 ./lib >> $outfile 2>&1
+echo "/usr/$LIB/libpng.so.3" >> $outfile 2>&1
 
 echo "Building"
-svn update
+svn update >> $outfile 2>&1
 REVISION=`svn info | grep Revision | cut -f 2 -d \ `
-make depend
-make clean
-make -j3
-rm -rf Coldest$REVISION > /dev/null 2>&1
+make depend >> $outfile 2>&1
+make clean >> $outfile 2>&1
+make -j3 >> $outfile 2>&1
+rm -rf Coldest$REVISION >> $outfile 2>&1
 echo $REVISION > version
 echo "Kitting"
-./kit.sh Coldest$REVISION
+./kit.sh Coldest$REVISION >> $outfile 2>&1
 echo "Packaging"
-./package.sh linux Coldest$REVISION
-./buildpatch linux $RELEASE
-./uploadbuild.sh
+./package.sh linux Coldest$REVISION >> $outfile 2>&1
+echo "Building Patch"
+./buildpatch linux $RELEASE >> $outfile 2>&1
+./uploadbuild.sh >> $outfile 2>&1
 
