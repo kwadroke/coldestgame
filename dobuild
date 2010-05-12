@@ -40,5 +40,5 @@ echo "Kitting"
 echo "Packaging"
 ./package.sh linux Coldest$REVISION
 ./buildpatch linux $RELEASE
-#./uploadbuild.sh
+./uploadbuild.sh
 
