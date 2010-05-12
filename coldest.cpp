@@ -237,6 +237,7 @@ void InitGlobals()
    console.Parse("set numthreads 2", false);
    console.Parse("set checkupdates 1", false);
    console.Parse("set caminterp 1", false);
+   console.Parse("set recordfps 30", false);
 
    recorder = RecorderPtr(new Recorder());
    console.Parse("set record 0", false); // This requires the recorder pointer to have been set

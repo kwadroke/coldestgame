@@ -60,7 +60,7 @@ void Recorder::AddItem(const Item& item)
 // TODO: Clean up the unnecessary headings once this is all working
 void Recorder::WriteFrame(bool reset)
 {
-   if (!active || frametimer.elapsed() < 50)
+   if (!active || frametimer.elapsed() < 1000.f / console.GetFloat("recordfps"))
       return;
    
    Uint32 currtick = SDL_GetTicks();
