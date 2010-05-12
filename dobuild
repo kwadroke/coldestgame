@@ -44,5 +44,6 @@ echo "Packaging"
 ./package.sh linux Coldest$REVISION >> $outfile 2>&1
 echo "Building Patch"
 ./buildpatch linux $RELEASE >> $outfile 2>&1
+echo "Uploading"
 ./uploadbuild.sh >> $outfile 2>&1
 
