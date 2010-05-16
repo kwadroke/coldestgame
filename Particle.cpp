@@ -81,9 +81,9 @@ Vector3 Particle::Update()
    dir.y -= weight * float(interval) / 1000.f;
    pos += dir * (velocity * interval);
    mesh.Move(pos);
-   if (ttl > 0)
+   if (ttl >= 0)
    {
-      if (t.elapsed() > ttl)
+      if (t.elapsed() > Uint32(ttl))
          expired = true;
    }
    

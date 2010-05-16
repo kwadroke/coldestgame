@@ -58,7 +58,7 @@ class Particle
       Mesh mesh;
       int rewind;
       bool collide;
-      Uint32 ttl;
+      int ttl;
       bool expired;
       int weapid;
       bool clientonly;

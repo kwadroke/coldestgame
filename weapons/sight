@@ -8,5 +8,5 @@ Name Sight
 Heat 0
 Model empty
 Tracer sight
-TracerTime 1
+TracerTime 0
 ExplosionEmitter particles/emitters/sighthit
