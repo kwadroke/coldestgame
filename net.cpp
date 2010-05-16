@@ -130,7 +130,7 @@ int NetSend(void* dummy)
          }
          else
          {
-            hostname = "Failed";
+            hostname = "Failed"; // This is no big deal as long as it doesn't happen to two people from the same public IP
          }
          
          SDLNet_ResolveHost(&addr, console.GetString("serveraddr").c_str(), console.GetInt("serverport"));

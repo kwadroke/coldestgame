@@ -49,7 +49,7 @@ class Weapon
       int TracerTime() const {return tracertime;}
       string ExpFile() const {return expfile;}
       
-      enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, Rocket, numweapons};
+      enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, Rocket, Sight, numweapons};
       
       int ammo;
       

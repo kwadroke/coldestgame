@@ -24,7 +24,7 @@
 
 Particle::Particle(Mesh& meshin) : playernum(0), id(0), velocity(0.f), accel(0.f),
                    weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f), mesh(meshin), 
-                   rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
+                   rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), clientonly(false), tracertime(10000)
 {
    t.start();
    mesh.dynamic = true;
@@ -35,7 +35,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
                    float rad, bool exp, Uint32 tick, Mesh& meshin) : playernum(0), id(nid),
                    dir(v), pos(p), origin(p), lasttracer(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
                    lasttick(tick), damage(0), dmgrad(0.f), mesh(meshin), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1),
-                   tracertime(10000)
+                   clientonly(false), tracertime(10000)
 {
    dir.normalize();
    t.start();
@@ -45,7 +45,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 
 Particle::Particle(const string& filename, ResourceManager& resman) : playernum(0), id(0),
                    velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f), mesh(meshcache->GetMesh("models/empty")),
-                   rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), tracertime(10000)
+                   rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), clientonly(false), tracertime(10000)
 {
    IniReader read(filename);
    read.Read(velocity, "Velocity");
@@ -97,7 +97,7 @@ void Particle::Render(Mesh* rendermesh, const Vector3& campos)
 {
    mesh.AdvanceAnimation(campos);
    // By default materials are not loaded until GenVbo is called (so that the server doesn't
-   // make GL calls, but that causes issues here because Mesh::Add(Mesh&) copies tris
+   // make GL calls), but that causes issues here because Mesh::Add(Mesh&) copies tris
    // directly, so if the materials haven't been loaded those materials will still be NULL
    // and when we try to render rendermesh it will not show up
    if (rendermesh)

@@ -1027,20 +1027,18 @@ void GUIUpdate()
       if (!guncam)
       {
          Vector3 sightoffset = units[player[0].unit].weaponoffset[weaponslots[player[0].currweapon]];
-         Weapon tempweap(Weapon::Laser);
+         Weapon tempweap(Weapon::Sight);
          Vector3 playerrot(player[0].pitch, player[0].facing + player[0].rotation, 0.f);
          Particle part = CreateShot(tempweap, playerrot, player[0].pos, sightoffset, units[player[0].unit].viewoffset);
          part.origin = part.pos;
          part.playernum = 0;
-         part.damage = 0;
-         part.dmgrad = 0;
          part.collide = true;
          part.ttl = 100;
-         part.lasttick = SDL_GetTicks() - 100;
+         part.lasttick = SDL_GetTicks();
          
          part.lasttracer = part.pos;
          part.tracer = MeshPtr(new Mesh("models/sight/base", resman));
-         part.tracertime = 1;
+         part.clientonly = true;
          particles.push_back(part);
       }
       
@@ -2273,6 +2271,14 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       locks.Write(ml);
       while (j != parts.end())
       {
+         // Erase particles that hit something the next time through this function so that they still get rendered
+         // This is particularly important for things like the laser sight that have a very short ttl
+         if (j->expired)
+         {
+            j = parts.erase(j);
+            continue;
+         }
+         
          partcheck = false;
          oldpos = j->Update();
          if (j->collide)
@@ -2290,7 +2296,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                AddTracer(*j);
                j->lasttracer = j->pos;
             }
-            if (j->expired)
+            if (0)// j->expired)  Don't erase expired particles until the next frame
             {
                j = parts.erase(j);
             }
@@ -2316,8 +2322,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                   j->pos = hitpos;
                   AddTracer(*j);
                }
+               if (j->clientonly)
+                  AddHit(hitpos, j->weapid);
             }
-            j = parts.erase(j);
+            j->expired = true;
          }
       }
       locks.EndWrite(ml);
@@ -2495,9 +2503,10 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    offset.transform(m);
    part.pos += offset;
    part.lasttracer = part.pos;
+   part.tracertime = weapon.TracerTime();
    part.origin = part.pos;
       
-   // Note: weaponfocus should actually be configurable per-player
+   // TODO: weaponfocus should be handled some other way
    Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
    Vector3 difference = actualaim + rawoffset - viewoffset;
    Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
@@ -2554,7 +2563,7 @@ void UpdatePlayer()
    }
    PlayerData localplayer = player[0];
       
-      // Set position for sound listener
+   // Set position for sound listener
    GraphicMatrix r;
    r.rotatex(-localplayer.pitch);
    r.rotatey(localplayer.facing + localplayer.rotation);
@@ -2582,9 +2591,6 @@ void UpdatePlayer()
       SendFire();
 #endif
       SDL_mutexP(clientmutex);
-#ifndef DEDICATED
-
-#endif
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
       if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
          player[0].weapons[weaponslot].ammo--;
@@ -2599,6 +2605,7 @@ void UpdatePlayer()
 // Should have the client mutex before calling this
 void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerweapon)
 {
+#ifndef DEDICATED
    int weaponslot = weaponslots[localplayer.currweapon];
    Vector3 startpos = localplayer.pos;
    Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
@@ -2612,7 +2619,6 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
    }
    particles.push_back(part);
 
-#ifndef DEDICATED
    if (currplayerweapon.Id() != Weapon::NoWeapon)
       resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
 #endif
