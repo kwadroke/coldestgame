@@ -61,6 +61,7 @@ class Particle
       Uint32 ttl;
       bool expired;
       int weapid;
+      bool clientonly;
       
       MeshPtr tracer;
       Uint32 tracertime;

@@ -22,7 +22,7 @@
 
 Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), radius(1.f), velocity(1.f), acceleration(0.f),
                splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50000), explode(true), modelfile("empty"),
-               name("None"), tracerfile(""), expfile("particles/emitters/none"), firesound("sounds/beep-3.ogg"), tracertime(10000)
+               name("None"), tracerfile(""), expfile("particles/emitters/none"), firesound(""), tracertime(10000)
 {
    switch (newid)
    {
@@ -48,6 +48,9 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), rad
          break;
       case Weapon::Rocket:
          LoadFromFile("weapons/rocket");
+         break;
+      case Weapon::Sight:
+         LoadFromFile("weapons/sight");
          break;
       default:
          logout << "Warning: attempted to create non-existent weapon." << endl;
