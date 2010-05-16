@@ -2247,7 +2247,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                      void (*HitHandler)(Particle&, Mesh*, const Vector3&),
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float))
 {
-   list<Particle> newparts;
    int updint = console.GetInt("partupdateinterval");
 #ifndef DEDICATED
    if (!HitHandler && partupd >= updint)
@@ -2296,20 +2295,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                AddTracer(*j);
                j->lasttracer = j->pos;
             }
-            if (0)// j->expired)  Don't erase expired particles until the next frame
-            {
-               j = parts.erase(j);
-            }
-            else
-            {
-#ifndef DEDICATED
-               if (!HitHandler)
-               {
-                  j->Render(particlemesh.get(), player[0].pos);
-               }
-#endif
-               ++j;
-            }
          }
          else
          {
@@ -2323,19 +2308,24 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                   AddTracer(*j);
                }
                if (j->clientonly)
+               {
                   AddHit(hitpos, j->weapid);
+                  emitters.back().Update(particles);
+               }
             }
             j->expired = true;
          }
+
+#ifndef DEDICATED
+         if (!HitHandler)
+         {
+            j->Render(particlemesh.get(), player[0].pos);
+         }
+#endif
+         ++j;
       }
       locks.EndWrite(ml);
       partupd = 0;
-#ifndef DEDICATED
-      if (!HitHandler)
-      {
-         particles.insert(particles.end(), newparts.begin(), newparts.end());
-      }
-#endif
    }
    else ++partupd;
    if (Rewind)
@@ -2614,7 +2604,7 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
    // Add tracer if necessary
    if (currplayerweapon.Tracer() != "")
    {
-      part.tracer = MeshPtr(new Mesh("models/" + currplayerweapon.Tracer() + "/base", resman));
+      part.tracer = meshcache->GetNewMesh("models/" + currplayerweapon.Tracer() + "/base");
       part.tracertime = currplayerweapon.TracerTime();
    }
    particles.push_back(part);
