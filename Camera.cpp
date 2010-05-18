@@ -31,7 +31,7 @@ void Camera::SetPosition(const Vector3& newpos)
 
 void Camera::Place()
 {
-   gluLookAt(actual.x, actual.y, actual.z, actuallook.x, actuallook.y, actuallook.z, 0, 1, 0);
+   gluLookAt(actual.x, actual.y, actual.z, actuallook.x, actuallook.y, actuallook.z, 0.f, 1.f, 0.f);
 }
 
 

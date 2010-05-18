@@ -1061,6 +1061,23 @@ void GUIUpdate()
       {
          targetplayer->text = "";
       }
+
+      GUI* reticle = gui[hud]->GetWidget("reticle");
+      if (!reticle)
+      {
+         logout << "Error getting reticle widget" << endl;
+      }
+      else
+      {
+         if (!guncam && !editor)
+         {
+            reticle->visible = false;
+         }
+         else
+         {
+            reticle->visible = true;
+         }
+      }
    }
    
    SDL_mutexV(clientmutex);
@@ -2495,17 +2512,47 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    part.lasttracer = part.pos;
    part.tracertime = weapon.TracerTime();
    part.origin = part.pos;
-      
+
    // TODO: weaponfocus should be handled some other way
-   Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
+   part.dir = GetShotVector(console.GetFloat("weaponfocus"), rawoffset, viewoffset, rots);
+   return part;
+}
+
+
+Vector3 GetShotVector(const float focus, const Vector3& rawoffset, const Vector3& viewoffset, const Vector3& rots)
+{
+   Vector3 actualaim = Vector3(0, 0, -focus);
    Vector3 difference = actualaim + rawoffset - viewoffset;
    Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
-   m.identity();
+   GraphicMatrix m;
    m.rotatex(-rots.x + rot.x);
    m.rotatey(rots.y - rot.y);
-   part.dir = Vector3(0, 0, -1);
-   part.dir.transform(m);
-   return part;
+   Vector3 retval(0.f, 0.f, -1.f);
+   retval.transform(m);
+   return retval;
+}
+
+
+// Should have the client mutex before calling this
+void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerweapon)
+{
+   #ifndef DEDICATED
+   int weaponslot = weaponslots[localplayer.currweapon];
+   Vector3 startpos = localplayer.pos;
+   Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
+   Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
+   Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[localplayer.unit].viewoffset);
+   // Add tracer if necessary
+   if (currplayerweapon.Tracer() != "")
+   {
+      part.tracer = meshcache->GetNewMesh("models/" + currplayerweapon.Tracer() + "/base");
+      part.tracertime = currplayerweapon.TracerTime();
+   }
+   particles.push_back(part);
+   
+   if (currplayerweapon.Id() != Weapon::NoWeapon)
+      resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
+   #endif
 }
 
 
@@ -2589,29 +2636,6 @@ void UpdatePlayer()
       recorder->AddShot(0, currplayerweapon.Id());
       SDL_mutexV(clientmutex);
    }
-}
-
-
-// Should have the client mutex before calling this
-void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerweapon)
-{
-#ifndef DEDICATED
-   int weaponslot = weaponslots[localplayer.currweapon];
-   Vector3 startpos = localplayer.pos;
-   Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
-   Vector3 offset = units[localplayer.unit].weaponoffset[weaponslot];
-   Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[localplayer.unit].viewoffset);
-   // Add tracer if necessary
-   if (currplayerweapon.Tracer() != "")
-   {
-      part.tracer = meshcache->GetNewMesh("models/" + currplayerweapon.Tracer() + "/base");
-      part.tracertime = currplayerweapon.TracerTime();
-   }
-   particles.push_back(part);
-
-   if (currplayerweapon.Id() != Weapon::NoWeapon)
-      resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
-#endif
 }
 
 
