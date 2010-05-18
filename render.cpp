@@ -193,47 +193,42 @@ void SetMainCamera(PlayerData& localplayer)
    if (guncam)
       fov /= console.GetFloat("zoomfactor");
    Vector3 viewoff;
+   Vector3 rawoffset;
+   Vector3 rots(localplayer.pitch, localplayer.rotation + localplayer.facing, 0.f);
    
    if (!editor)
    {
-      if (!guncam)
-      {
-         viewoff = units[localplayer.unit].viewoffset + Vector3(0, 0, console.GetFloat("viewoffset"));
-      }
-      else
-      {
-         viewoff = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
-      }
+      viewoff = units[localplayer.unit].viewoffset;
+      rawoffset = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
+   }
+
+   Vector3 viewdir;
+   GraphicMatrix m;
+   m.rotatex(-localplayer.pitch);
+   m.rotatey(localplayer.rotation + localplayer.facing);
+   Vector3 offset = rawoffset;
+   offset.transform(m);
+
+   // TODO: Fix weaponfocus here too
+   if (guncam)
+      viewdir = GetShotVector(console.GetFloat("weaponfocus"), rawoffset, viewoff, rots);
+   else
+   {
+      viewdir = Vector3(0.f, 0.f, -1.f);
+      viewdir.transform(m);
    }
    
-   Vector3 rawoffset = viewoff;
-   GraphicMatrix viewm;
-   viewm.rotatex(localplayer.pitch);
-   viewm.rotatey(localplayer.facing + localplayer.rotation);
-   viewoff.transform(viewm);
-   
-   Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
-   // When !guncam this reduces to difference = actualaim
-   Vector3 difference = actualaim + rawoffset - units[localplayer.unit].viewoffset;
-   Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
-   
-   Vector3 viewdir(0, 0, -1.f);
-   GraphicMatrix m;
-   m.rotatex(-localplayer.pitch + rot.x);
-   m.rotatey(localplayer.facing + localplayer.rotation + rot.y);
-   viewdir.transform(m);
    if (/*console.GetBool("thirdperson") &&*/ !editor && !guncam)
    {
       maincam.SetPosition(localplayer.pos - viewdir * 100.f + Vector3(0.f, 40.f, 0.f));
-      maincam.lookat = localplayer.pos + Vector3(0.f, 40.f, 0.f);
+      maincam.lookat = localplayer.pos + Vector3(0.f, localplayer.size * 2.f, 0.f);
       maincam.interp = console.GetFloat("caminterp");
       maincam.lookinterp = console.GetFloat("caminterp");
       maincam.absolute = false;
    }
    else
    {
-      localplayer.pos += viewoff;
-      maincam.SetPosition(localplayer.pos);
+      maincam.SetPosition(localplayer.pos + offset);
       maincam.lookat = viewdir;
       maincam.interp = 50.f;
       maincam.lookinterp = 50.f;

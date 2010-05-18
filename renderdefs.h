@@ -76,6 +76,7 @@ vector<Mesh*> GetDynamicMeshes(const PlayerData&);
 void SetShadowFrustum(const float, const Vector3&, const PlayerData&);
 Vector3 GetShadowLook(const float, const PlayerData&);
 void SetReflectionFrustum(const PlayerData&);
+Vector3 GetShotVector(const float, const Vector3&, const Vector3&, const Vector3&);
 
 extern Meshlist meshes;
 
