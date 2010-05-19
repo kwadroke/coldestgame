@@ -56,8 +56,8 @@ Mesh::~Mesh()
 
 Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain),
            drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist), impostortex(m.impostortex),
-           debug(m.debug), updatedelay(m.updatedelay), tris(m.tris), vbosteps(m.vbosteps), minindex(m.minindex), maxindex(m.maxindex),
-           vbo(0), ibo(0), frametime(m.frametime),
+           debug(m.debug), updatedelay(m.updatedelay), tris(m.tris), vbosteps(m.vbosteps), offsets(m.offsets), minindex(m.minindex),
+           maxindex(m.maxindex), vbo(0), ibo(0), frametime(m.frametime),
            hasvbo(false), childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe),
            lastanimtick(m.lastanimtick), animspeed(m.animspeed), curranimation(m.curranimation),
            nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe),
@@ -109,6 +109,7 @@ Mesh& Mesh::operator=(const Mesh& m)
    
    //resman = m.resman; Reference, can't be reseated.  Should be okay to leave it since it has to be set though.
    vbosteps = m.vbosteps;
+   offsets = m.offsets;
    minindex = m.minindex;
    maxindex = m.maxindex;
    impdist = m.impdist;
@@ -521,13 +522,13 @@ void Mesh::GenVboData()
    {
       numverts += childmeshes[m]->vertices.size();
    }
-   
+
    if (vbodata.size() != numverts)
    {
       updateibo = true;
       vbodata.resize(numverts);
    }
-   
+
    for (size_t m = 0; m < childmeshes.size() + 1; ++m)
    {
       Mesh* currmesh;
@@ -574,11 +575,17 @@ void Mesh::GenIboData()
       unsigned short currmin = 0, currmax = 0;
       Trianglevec::iterator last = tris.begin();
       Trianglevec::iterator tend = tris.end();
+      offsets.push_back((void*)0);
       for (Trianglevec::iterator i = tris.begin(); i != tend; ++i)
       {
          if (last->material != i->material)
          {
             vbosteps.push_back(counter);
+            
+            ptrdiff_t current = ptrdiff_t(&indexdata[indexdata.size() - 1]) + ptrdiff_t(sizeof(indexdata[0]));
+            ptrdiff_t start = ptrdiff_t(&indexdata[0]);
+            offsets.push_back( (void*)(current - start) );
+            
             minindex.push_back(currmin);
             maxindex.push_back(currmax);
             counter = 0;
@@ -725,7 +732,7 @@ void Mesh::Render(Material* overridemat)
          else tris[currindex].material->UseTextureOnly();
       }
       BindAttribs();
-      void* offset = (void*)(ptrdiff_t(&indexdata[currindex * 3]) - ptrdiff_t(&indexdata[0]));
+      void* offset = offsets[i];
       glDrawRangeElements(GL_TRIANGLES, minindex[i], maxindex[i], vbosteps[i] * 3, GL_UNSIGNED_SHORT, offset);
       UnbindAttribs();
       currindex += vbosteps[i];

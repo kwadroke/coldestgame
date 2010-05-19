@@ -473,7 +473,8 @@ void GetMap(string fn)
          tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
-         // Have decided I don't like the way this looks
+         // Have decided I don't like the way terrainmulti looks
+         // Note that if it ever goes back in, changes will need to be made to the render code too
          tempmesh.drawdistmult = 1.f;//console.GetFloat("terrainmulti");
          tempmesh.terrain = true;
          meshes.push_front(tempmesh);
@@ -654,7 +655,8 @@ void GetMap(string fn)
       SendKeepalive();
 #endif
    }
-   
+
+   // Average out mesh positions
    for (size_t i = 0; i < meshits.size(); ++i)
    {
       Vector3 currpos = meshits[i]->GetPosition();
