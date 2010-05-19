@@ -2235,16 +2235,18 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    // Add a particle to enemies to indicate their affiliation
    if (gl) // No reason to do this on the server
    {
-      if ((!player[0].spectate && p.team != player[servplayernum].team) || p.team != player[spectateplayer].team)
+      if ((!player[0].spectate && p.team != player[servplayernum].team) ||
+         (player[0].spectate && p.team != player[spectateplayer].team))
       {
          if (!p.indicator)
          {
             MeshPtr indicatormesh = meshcache->GetNewMesh("models/enemyindicator");
             Particle part(*indicatormesh);
-            part.ttl = 0;
+            part.ttl = -1;
             particles.push_back(part);
             p.indicator = &particles.back();
          }
+         // This has caused memory corruption multiple times - find a better way to do it?
          p.indicator->pos = p.pos;
       }
       else if (p.indicator) // Also remove in case we switched teams

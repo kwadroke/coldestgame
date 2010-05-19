@@ -122,6 +122,7 @@ class Mesh
       Trianglevec trantris; // Currently not used
       VertexPtrvec vertices;
       intvec vbosteps;
+      vector<void*> offsets;
       intvec minindex, maxindex;
       GLuint vbo;
       GLuint ibo;

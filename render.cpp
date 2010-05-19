@@ -237,7 +237,7 @@ void SetMainCamera(PlayerData& localplayer)
    maincam.Update();
    maincam.Place();
 
-   kdtree.setfrustum(maincam, nearclip, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), fov, aspect, false);
+   kdtree.setfrustum(maincam, nearclip, console.GetFloat("viewdist"), fov, aspect, false);
 }
 
 
@@ -838,7 +838,7 @@ void RenderSkybox(const PlayerData& localplayer)
    glPushMatrix();
    glTranslatef(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z);
    glRotatef(90, 1, 0, 0);
-   gluSphere(s, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), 10, 10);
+   gluSphere(s, console.GetFloat("viewdist"), 10, 10);
    glPopMatrix();
    
    gluDeleteQuadric(s);
@@ -1063,7 +1063,7 @@ vector<Mesh*> GetDynamicMeshes(const PlayerData& localplayer)
 {
    set<Mesh*> retval;
    Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
-   kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist") * console.GetFloat("terrainmulti"), console.GetFloat("fov"), aspect);
+   kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect);
    
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
