@@ -60,7 +60,7 @@ class CollisionDetection
                      intvec& adjusted,
                      vector<Triangle*>& neartris,
                      map<Triangle*, Mesh*>& trimap,
-                     Triangle* hittri,
+                     Triangle*& hittri,
                      Vector3& hitpos);
       void CheckEdges(const Vector3& oldpos,
                      const Vector3& newpos,
@@ -73,7 +73,7 @@ class CollisionDetection
                      intvec& adjusted,
                      vector<Triangle*>& neartris,
                      map<Triangle*, Mesh*>& trimap,
-                     Triangle* hittri,
+                     Triangle*& hittri,
                      Vector3& hitpos);
       void CheckCorners(const Vector3& oldpos,
                         const Vector3& newpos,
@@ -86,7 +86,7 @@ class CollisionDetection
                         intvec& adjusted,
                         vector<Triangle*>& neartris,
                         map<Triangle*, Mesh*>& trimap,
-                        Triangle* hittri,
+                        Triangle*& hittri,
                         Vector3& hitpos);
       void CheckWorldBounds(const Vector3& oldpos,
                            const Vector3& newpos,

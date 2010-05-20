@@ -1010,40 +1010,32 @@ void GUIUpdate()
          offset = units[player[0].unit].viewoffset;
       else
          offset = units[player[0].unit].weaponoffset[weaponslots[player[0].currweapon]];
-      Vector3 rawoffset = offset;
       offset.transform(m);
+
+      // Always create the sight particle so we can use it for collision detection, but only add it to the particle list if necessary
+      Vector3 sightoffset = units[player[0].unit].weaponoffset[weaponslots[player[0].currweapon]];
+      Weapon tempweap(Weapon::Sight);
+      Vector3 playerrot(player[0].pitch, player[0].facing + player[0].rotation, 0.f);
+      Particle part = CreateShot(tempweap, playerrot, player[0].pos, sightoffset, units[player[0].unit].viewoffset);
+      part.origin = part.pos;
+      part.playernum = 0;
+      part.collide = true;
+      part.ttl = 100;
+      part.lasttick = SDL_GetTicks();
       
-      Vector3 actualaim = Vector3(0, 0, -console.GetFloat("weaponfocus"));
-      // When !guncam this reduces to difference = actualaim
-      Vector3 difference = actualaim + rawoffset - units[player[0].unit].viewoffset;
-      Vector3 rot = RotateBetweenVectors(Vector3(0, 0, -1), difference);
-      Vector3 dir(0, 0, -5000.f);
-      m.identity();
-      m.rotatex(-player[0].pitch + rot.x);
-      m.rotatey(player[0].rotation + player[0].facing - rot.y);
-      dir.transform(m);
+      part.lasttracer = part.pos;
+      part.tracer = MeshPtr(new Mesh("models/sight/base", resman));
+      part.clientonly = true;
       
-      // Particle for laser sight
       if (!guncam)
       {
-         Vector3 sightoffset = units[player[0].unit].weaponoffset[weaponslots[player[0].currweapon]];
-         Weapon tempweap(Weapon::Sight);
-         Vector3 playerrot(player[0].pitch, player[0].facing + player[0].rotation, 0.f);
-         Particle part = CreateShot(tempweap, playerrot, player[0].pos, sightoffset, units[player[0].unit].viewoffset);
-         part.origin = part.pos;
-         part.playernum = 0;
-         part.collide = true;
-         part.ttl = 100;
-         part.lasttick = SDL_GetTicks();
-         
-         part.lasttracer = part.pos;
-         part.tracer = MeshPtr(new Mesh("models/sight/base", resman));
-         part.clientonly = true;
          particles.push_back(part);
       }
-      
-      Vector3 checkstart = player[0].pos + offset;
-      Vector3 checkend = checkstart + dir;
+
+      Vector3 dir = part.dir;
+      dir.normalize();
+      Vector3 checkstart = part.pos;
+      Vector3 checkend = checkstart + dir * 5000.f;
       locks.Write(meshes);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&player[servplayernum], meshes, kdtree, checkstart, checkend, .01f);
       Vector3 dummy;
@@ -1051,6 +1043,7 @@ void GUIUpdate()
       coldet.CheckSphereHit(checkstart, checkend, .01f, check, dummy, hitmesh);
       PlayerData* p = PlayerFromMesh(hitmesh, player, meshes.end());
       locks.EndWrite(meshes);
+
       // Populate GUI object
       GUI* targetplayer = gui[hud]->GetWidget("targetplayer");
       if (p)
@@ -2658,11 +2651,15 @@ PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p, Meshlist::iterator in
    for (size_t i = 1; i < psize; ++i)
    {
       if ((p[i].rendermesh != invalid) && (&(*p[i].rendermesh) == m))
+      {
          return &p[i];
+      }
       for (size_t j = 0; j < numbodyparts; ++j)
       {
          if ((p[i].mesh[j] != invalid) && (&(*p[i].mesh[j]) == m))
+         {
             return &p[i];
+         }
       }
    }
    return NULL;

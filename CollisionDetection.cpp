@@ -220,7 +220,7 @@ void CollisionDetection::CheckMain(const Vector3& oldpos,
                                    intvec& adjusted,
                                    vector<Triangle*>& neartris,
                                    map<Triangle*, Mesh*>& trimap,
-                                   Triangle* hittri,
+                                   Triangle*& hittri,
                                    Vector3& hitpos)
 {
    bool hit = false;
@@ -280,7 +280,7 @@ void CollisionDetection::CheckEdges(const Vector3& oldpos,
                                     intvec& adjusted,
                                     vector<Triangle*>& neartris,
                                     map<Triangle*, Mesh*>& trimap,
-                                    Triangle* hittri,
+                                    Triangle*& hittri,
                                     Vector3& hitpos)
 {
    bool hit = false;
@@ -369,7 +369,7 @@ void CollisionDetection::CheckCorners(const Vector3& oldpos,
                                       intvec& adjusted,
                                       vector<Triangle*>& neartris,
                                       map<Triangle*, Mesh*>& trimap,
-                                      Triangle* hittri,
+                                      Triangle*& hittri,
                                       Vector3& hitpos)
 {
    size_t ntsize = neartris.size();

@@ -34,6 +34,7 @@
 #include "util.h"
 #include "Timer.h" // Debugging
 
+using std::list;
 using std::map;
 
 /**

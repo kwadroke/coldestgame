@@ -1474,7 +1474,7 @@ int ServerInput(void* dummy)
       if (WaitForSingleObject(h, 0) == WAIT_OBJECT_0)
 #endif
       {
-         getline(cin, command);
+         getline(std::cin, command);
          console.Parse(command, false);
       }
    }
