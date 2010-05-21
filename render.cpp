@@ -395,7 +395,8 @@ void RenderParticles()
    if (particlemesh)
    {
       Material* override = NULL;
-      if (shadowrender) override = shadowmat;
+      if (shadowrender)
+         override = shadowmat;
       particlemesh->GenVbo();
       particlemesh->Render(override);
       trislastframe += particlemesh->NumTris();

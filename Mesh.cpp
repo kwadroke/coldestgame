@@ -523,9 +523,9 @@ void Mesh::GenVboData()
       numverts += childmeshes[m]->vertices.size();
    }
 
+   updateibo = true;
    if (vbodata.size() != numverts)
    {
-      updateibo = true;
       vbodata.resize(numverts);
    }
 
@@ -566,9 +566,9 @@ void Mesh::GenIboData()
    if (updateibo)
    {
       sort(tris.begin(), tris.end());
-      // Shouldn't clear these for efficiency reasons, but for the moment I'm not worrying about it
       indexdata.clear();
       vbosteps.clear();
+      offsets.clear();
       minindex.clear();
       maxindex.clear();
       int counter = 0;
@@ -730,6 +730,10 @@ void Mesh::Render(Material* overridemat)
          if (!overridemat)
             tris[currindex].material->Use();
          else tris[currindex].material->UseTextureOnly();
+      }
+      else
+      {
+         logout << "NULL material?" << endl;
       }
       BindAttribs();
       void* offset = offsets[i];
