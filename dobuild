@@ -45,8 +45,9 @@ echo "Kitting"
 ./kit.sh Coldest$REVISION >> $outfile 2>&1
 echo "Packaging"
 ./package.sh linux Coldest$REVISION >> $outfile 2>&1
-echo "Building Patch"
-./buildpatch linux $RELEASE >> $outfile 2>&1
+# Patches should no longer be necessary thanks to the updater
+#echo "Building Patch"
+#./buildpatch linux $RELEASE >> $outfile 2>&1
 echo "Uploading"
 ./uploadbuild.sh linux $1 >> $outfile 2>&1
 

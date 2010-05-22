@@ -19,7 +19,7 @@ else
    filename=Coldest$REVISION*.zip
 fi
 
-rsync -avz -e ssh Coldest$REVISION/* coldestgame:$path
+rsync -avz -e ssh Coldest$REVISION/* coldestgame.com:$path
 
 if [ $# == 2 -a $1 != "nofull" ]
 then
