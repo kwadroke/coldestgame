@@ -34,7 +34,7 @@ Material::Material(string filename, TextureManager& tm, Shader& s) : diffuse(4, 
       logout << "Failed to load material " << filename << endl;
       filename = "materials/default";
    }
-   IniReader reader(filename);
+   NTreeReader reader(filename);
 
    for (int i = 0; i < 4; ++i)
       reader.Read(diffuse[i], "Diffuse", i);

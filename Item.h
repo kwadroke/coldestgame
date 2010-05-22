@@ -21,11 +21,11 @@
 #ifndef __ITEM_H
 #define __ITEM_H
 
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "Mesh.h"
 
 /**
-	@author Ben Nemec <cybertron@nemebean.com>
+   @author Ben Nemec <cybertron@nemebean.com>
 */
 class Item
 {

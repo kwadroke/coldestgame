@@ -398,7 +398,7 @@ void InitUnits()
    units[Omega].file = "omega";
    for (size_t i = 0; i < numunits; ++i)
    {
-      IniReader read("units/" + units[i].file);
+      NTreeReader read("units/" + units[i].file);
       read.Read(units[i].turnspeed, "TurnSpeed");
       read.Read(units[i].acceleration, "Acceleration");
       read.Read(units[i].maxspeed, "MaxSpeed");

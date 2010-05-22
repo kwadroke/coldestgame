@@ -105,13 +105,13 @@ void Updater::DoUpdate()
 
 void Updater::BuildFileList()
 {
-   IniReader crcs("crcfile");
+   NTreeReader crcs("crcfile");
    uint32_t currcrc;
    string currfile;
    
    for (size_t i = 0; i < crcs.NumChildren(); ++i)
    {
-      const IniReader& current = crcs.GetItem(i);
+      const NTreeReader& current = crcs.GetItem(i);
       
       current.Read(currcrc, "CRC");
       current.Read(currfile, "File");

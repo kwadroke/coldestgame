@@ -59,7 +59,7 @@ Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(
 
 void Item::LoadFromFile(const string& file)
 {
-   IniReader read(file);
+   NTreeReader read(file);
    
    read.Read(usesleft, "Uses");
    read.Read(coolmultiplier, "CoolMult");

@@ -47,7 +47,7 @@ Particle::Particle(const string& filename, ResourceManager& resman) : playernum(
                    velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f), mesh(meshcache->GetMesh("models/empty")),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), clientonly(false), tracertime(10000)
 {
-   IniReader read(filename);
+   NTreeReader read(filename);
    read.Read(velocity, "Velocity");
    read.Read(accel, "Accel");
    read.Read(weight, "Weight");

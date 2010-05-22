@@ -21,7 +21,7 @@
 #include "Mesh.h"
 #include "ProceduralTree.h" // Circular dependency
 
-Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl) : render(true), dynamic(false),
+Mesh::Mesh(const string& filename, ResourceManager &rm, NTreeReader read, bool gl) : render(true), dynamic(false),
            collide(true), terrain(false), drawdistmult(-1.f), impdist(0.f), dist(0.f), impostortex(0), debug(false),
            updatedelay(0), vbo(0), ibo(0), hasvbo(false), vbosize(0), ibosize(0), animtime(0), currkeyframe(0),
            lastanimtick(SDL_GetTicks()), animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false),
@@ -35,7 +35,7 @@ Mesh::Mesh(const string& filename, ResourceManager &rm, IniReader read, bool gl)
 #endif
    if (filename != "")
    {
-      IniReader reader(filename);
+      NTreeReader reader(filename);
       Load(reader);
    }
    else Load(read);
@@ -195,7 +195,7 @@ Mesh& Mesh::operator=(const Mesh& m)
 }
 
 
-void Mesh::Load(const IniReader& reader)
+void Mesh::Load(const NTreeReader& reader)
 {
    string material;
    
@@ -224,7 +224,7 @@ void Mesh::Load(const IniReader& reader)
       if (basefile != "")
       {
          basepath = basefile;
-         IniReader base(basefile);
+         NTreeReader base(basefile);
          for (size_t i = 0; i < 10; ++i)
          {
             base.Read(numframes[i], "NumFrames", i);
@@ -255,7 +255,7 @@ void Mesh::Load(const IniReader& reader)
       for (int i = 0; i < numkeyframes; ++i)
       {
          currfile = basepath + "/frame" + PadNum(i, 4);
-         IniReader currframe(currfile);
+         NTreeReader currframe(currfile);
          
          string currver("");
          currframe.Read(currver, "Version");
@@ -275,7 +275,7 @@ void Mesh::Load(const IniReader& reader)
          MeshNodeMap nodes;
          for (int j = 0; j < currframe.GetItemIndex("Triangles"); ++j)
          {
-            IniReader currcon = currframe.GetItem(j);
+            NTreeReader currcon = currframe.GetItem(j);
             MeshNodePtr newnode(new MeshNode());
             
             currcon.Read(newnode->id, "ID");
@@ -295,7 +295,7 @@ void Mesh::Load(const IniReader& reader)
             // Read vertices
             for (size_t k = 0; k < currcon.NumChildren(); ++k)
             {
-               const IniReader& currvert = currcon(k);
+               const NTreeReader& currvert = currcon(k);
                Vertex newv;
                currvert.Read(newv.id, "ID");
                currvert.Read(newv.pos.x, "Pos", 0);
@@ -358,10 +358,10 @@ void Mesh::Load(const IniReader& reader)
          {
             string matname;
             size_t vid;
-            const IniReader& readtris = currframe.GetItemByName("Triangles");
+            const NTreeReader& readtris = currframe.GetItemByName("Triangles");
             for (size_t j = 0; j < readtris.NumChildren(); ++j)
             {
-               const IniReader& curr = readtris(j);
+               const NTreeReader& curr = readtris(j);
                TrianglePtr newtri(new Triangle());
                for (int k = 0; k < 3; ++k)
                {

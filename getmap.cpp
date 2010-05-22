@@ -35,7 +35,7 @@
 #include "netdefs.h"
 #include "renderdefs.h"
 #include "editor.h"
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "Quad.h"
 #include "Mesh.h"
 
@@ -85,7 +85,7 @@ void GetMap(string fn)
    progname->text = "Loading " + fn;
 #endif
    
-   IniReader mapdata(dataname);
+   NTreeReader mapdata(dataname);
    
    mapdata.Read(tilesize, "TileSize");
 //   coldet.tilesize = tilesize;
@@ -156,7 +156,7 @@ void GetMap(string fn)
    player.push_back(local);
    ResetKeys();
    
-   IniReader currnode;
+   NTreeReader currnode;
 #ifndef DEDICATED
    string readskybox;
    mapdata.Read(readskybox, "SkyBox");
@@ -175,7 +175,7 @@ void GetMap(string fn)
    string nodename;
    string terrainmaterial;
    mapdata.Read(terrainmaterial, "TerrainMaterial");
-   IniReader texnode = mapdata.GetItemByName("TerrainParams");
+   NTreeReader texnode = mapdata.GetItemByName("TerrainParams");
    maxterrainparams = texnode.NumChildren();
    for (int i = 0; i < maxterrainparams; ++i)
    {
@@ -197,7 +197,7 @@ void GetMap(string fn)
    // Read spawnpoints
    spawnpoints.clear();
    SpawnPointData spawntemp;
-   IniReader spawnnode = mapdata.GetItemByName("SpawnPoints");
+   NTreeReader spawnnode = mapdata.GetItemByName("SpawnPoints");
    
    for (size_t i = 0; i < spawnnode.NumChildren(); ++i)
    {
@@ -231,7 +231,7 @@ void GetMap(string fn)
    Repaint();
 #endif
    
-   IniReader objectlist = mapdata.GetItemByName("Objects");
+   NTreeReader objectlist = mapdata.GetItemByName("Objects");
    string currmaterial;
    locks.Write(meshes);
    for (size_t i = 0; i < objectlist.NumChildren(); ++i)
@@ -736,7 +736,7 @@ void GetMap(string fn)
    progress->value = 4;
    progtext->text = "Generating grass";
    Repaint();
-   IniReader grassnode = mapdata.GetItemByName("GrassData");
+   NTreeReader grassnode = mapdata.GetItemByName("GrassData");
    size_t grasstris = 0;
    for (size_t i = 0; i < grassnode.NumChildren(); ++i)
    {

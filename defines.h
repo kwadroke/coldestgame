@@ -64,7 +64,7 @@
 #include "ServerInfo.h"
 #include "gui/Table.h"
 #include "types.h"
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "gui/TextArea.h"
 #include "gui/ComboBox.h"
 #include "Updater.h"

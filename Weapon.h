@@ -21,7 +21,7 @@
 #ifndef __WEAPON_H
 #define __WEAPON_H
 
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "logout.h"
 
 /**
