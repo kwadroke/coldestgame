@@ -9,6 +9,11 @@ LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesy
 RELEASE=543
 outfile=buildoutput
 
+if [ $# != 1 ]
+then
+   echo "Warning: Will upload full build.  This can take a while."
+fi
+
 rm $outfile
 
 if [ ! -z `uname -m | grep x86_64` ]

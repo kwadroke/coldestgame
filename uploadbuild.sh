@@ -5,7 +5,7 @@ then
    echo "Usage: $0 <linux|windows> [nofull]"
    exit 0
 fi
- 
+
 REVISION=`svn info | grep Revision | cut -f 2 -d \ `
 
 arch=`uname -m`
@@ -21,7 +21,7 @@ fi
 
 rsync -avz -e ssh Coldest$REVISION/* coldestgame.com:$path
 
-if [ $# == 2 -a $1 != "nofull" ]
+if [[ $# != 2 || $2 != "nofull" ]]
 then
    echo "Uploading full build"
    rsync -avz -e ssh $filename coldestgame.com:/var/www/files
