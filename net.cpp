@@ -25,6 +25,9 @@
 #include <vector>
 #include <list>
 #include <set>
+#ifdef WIN32
+#include <WinSock2.h>
+#endif
 #include "Particle.h"
 #include "SDL.h"
 #include "SDL_net.h"
@@ -38,6 +41,7 @@
 #include "globals.h"
 #include "util.h"
 
+
 int NetSend(void*);
 int NetListen(void*);
 string FillUpdatePacket();
@@ -48,7 +52,7 @@ void Ack(unsigned long);
 void Action(const string&);
 
 list<Packet> sendqueue;
-UDPsocket socket;
+UDPsocket sock;
 UDPpacket *outpack;
 IPaddress addr;
 // netmutex protects both the send queue and the socket shared by the send and receive threads
@@ -255,7 +259,7 @@ int NetSend(void* dummy)
       {
          if (i->sendtick <= currnettick)
          {
-            i->Send(outpack, socket);
+            i->Send(outpack, sock);
             if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
             {
                i = sendqueue.erase(i);
@@ -348,7 +352,7 @@ int NetListen(void* dummy)
       //return -1;
    }
    
-   if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
+   if (!(sock = SDLNet_UDP_Open(0)))  // Use any open port
    {
       logout << "Listen SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
@@ -372,7 +376,7 @@ int NetListen(void* dummy)
       SDL_Delay(1); // See comments for NetSend loop
       
       while ((SDL_mutexP(netmutex) == 0) && 
-              SDLNet_UDP_Recv(socket, inpack) && 
+              SDLNet_UDP_Recv(sock, inpack) && 
               (SDL_mutexV(netmutex) == 0))
       {
          getdata = (char*)inpack->data;
@@ -984,7 +988,7 @@ int NetListen(void* dummy)
    
    logout << "NetListen " << runtimes << endl;
    SDLNet_FreePacket(inpack);
-   SDLNet_UDP_Close(socket);
+   SDLNet_UDP_Close(sock);
    SDLNet_UDP_Close(annsock);
    return 0;
 }
