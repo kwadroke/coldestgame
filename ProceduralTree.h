@@ -29,7 +29,7 @@
 #include <string>
 #include <fstream>
 #include "GraphicMatrix.h"
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "Mesh.h"
 #include "Quad.h"
 #include "StableRandom.h"
@@ -39,7 +39,7 @@ class ProceduralTree
    public:
       ProceduralTree();
       size_t GenTree(Mesh*, Material*, Material*);
-      void ReadParams(const IniReader&);
+      void ReadParams(const NTreeReader&);
       
       int numlevels;
       int firstleaflevel;

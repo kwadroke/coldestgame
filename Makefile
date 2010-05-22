@@ -37,7 +37,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		ObjectKDTree.o Light.o Shader.o net.o FBO.o TextureManager.o Packet.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
-		IniReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
+		NTreeReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
 		SoundManager.o ALBuffer.o ALSource.o editor.o Bot.o Updater.o\
 		Camera.o Recorder.o Replayer.o
@@ -51,7 +51,7 @@ DEDOBJS = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		ObjectKDTree.o Packet.o MeshCache.o\
 		Timer.o ServerInfo.o getmap.o ParticleEmitter.o StableRandom.o\
 		renderdefs.o globals.o netdefs.o PlayerData.o Log.o logout.o\
-		IniReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
+		NTreeReader.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o ServerState.o Material.o tsint.o Bot.o Recorder.o\
 		Replayer.o
 		
@@ -311,7 +311,7 @@ Bot.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 Bot.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 Bot.o: /usr/include/bits/mathcalls.h GraphicMatrix.h tsint.h globals.h Mesh.h
 Bot.o: Triangle.h Vertex.h types.h Material.h TextureManager.h
-Bot.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Bot.o: TextureHandler.h /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Bot.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Bot.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Bot.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -588,7 +588,7 @@ CollisionDetection.o: /usr/include/boost/memory_order.hpp
 CollisionDetection.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 CollisionDetection.o: GraphicMatrix.h Material.h TextureManager.h
 CollisionDetection.o: TextureHandler.h /usr/include/SDL/SDL_image.h
-CollisionDetection.o: IniReader.h Shader.h ResourceManager.h SoundManager.h
+CollisionDetection.o: NTreeReader.h Shader.h ResourceManager.h SoundManager.h
 CollisionDetection.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 CollisionDetection.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 CollisionDetection.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -670,7 +670,7 @@ Console.o: /usr/include/bits/sched.h /usr/include/signal.h
 Console.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 Console.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 Console.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Console.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Console.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Console.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Console.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Console.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -922,73 +922,7 @@ IDGen.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
 IDGen.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 IDGen.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
 IDGen.o: /usr/include/SDL/SDL_version.h
-IniReader.o: IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
-IniReader.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
-IniReader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
-IniReader.o: /usr/include/sys/types.h /usr/include/features.h
-IniReader.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
-IniReader.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
-IniReader.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
-IniReader.o: /usr/include/time.h /usr/include/endian.h
-IniReader.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
-IniReader.o: /usr/include/sys/select.h /usr/include/bits/select.h
-IniReader.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
-IniReader.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
-IniReader.o: /usr/include/stdio.h /usr/include/libio.h
-IniReader.o: /usr/include/_G_config.h /usr/include/wchar.h
-IniReader.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
-IniReader.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
-IniReader.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
-IniReader.o: /usr/include/alloca.h /usr/include/string.h
-IniReader.o: /usr/include/strings.h /usr/include/inttypes.h
-IniReader.o: /usr/include/stdint.h /usr/include/bits/wchar.h
-IniReader.o: /usr/include/ctype.h /usr/include/iconv.h
-IniReader.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
-IniReader.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
-IniReader.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
-IniReader.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
-IniReader.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
-IniReader.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
-IniReader.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
-IniReader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
-IniReader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
-IniReader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-IniReader.o: /usr/include/SDL/SDL_version.h /usr/include/boost/shared_ptr.hpp
-IniReader.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
-IniReader.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
-IniReader.o: /usr/include/boost/config/select_compiler_config.hpp
-IniReader.o: /usr/include/boost/config/compiler/gcc.hpp
-IniReader.o: /usr/include/boost/config/select_stdlib_config.hpp
-IniReader.o: /usr/include/boost/config/no_tr1/utility.hpp
-IniReader.o: /usr/include/boost/config/select_platform_config.hpp
-IniReader.o: /usr/include/boost/config/platform/linux.hpp
-IniReader.o: /usr/include/boost/config/posix_features.hpp
-IniReader.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
-IniReader.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
-IniReader.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
-IniReader.o: /usr/include/boost/config/no_tr1/memory.hpp
-IniReader.o: /usr/include/boost/assert.hpp /usr/include/assert.h
-IniReader.o: /usr/include/boost/checked_delete.hpp
-IniReader.o: /usr/include/boost/throw_exception.hpp
-IniReader.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
-IniReader.o: /usr/include/boost/config.hpp
-IniReader.o: /usr/include/boost/detail/workaround.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
-IniReader.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
-IniReader.o: /usr/include/boost/detail/sp_typeinfo.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
-IniReader.o: /usr/include/pthread.h /usr/include/sched.h
-IniReader.o: /usr/include/bits/sched.h /usr/include/signal.h
-IniReader.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
-IniReader.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Item.o: Item.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
+Item.o: Item.h NTreeReader.h logout.h Log.h /usr/include/SDL/SDL.h
 Item.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Item.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Item.o: /usr/include/sys/types.h /usr/include/features.h
@@ -1312,7 +1246,7 @@ Material.o: logout.h Log.h types.h Vector3.h /usr/include/math.h
 Material.o: /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h
 Material.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 Material.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
-Material.o: /usr/include/bits/mathcalls.h IniReader.h
+Material.o: /usr/include/bits/mathcalls.h NTreeReader.h
 Material.o: /usr/include/boost/shared_ptr.hpp
 Material.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 Material.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
@@ -1570,7 +1504,7 @@ Mesh.o: /usr/include/signal.h /usr/include/bits/setjmp.h
 Mesh.o: /usr/include/boost/memory_order.hpp
 Mesh.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp GraphicMatrix.h
 Mesh.o: Material.h TextureManager.h TextureHandler.h
-Mesh.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
+Mesh.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h ResourceManager.h
 Mesh.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 Mesh.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 Mesh.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -1652,8 +1586,8 @@ MeshCache.o: /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h
 MeshCache.o: /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h
 MeshCache.o: Triangle.h Vertex.h types.h GraphicMatrix.h Material.h
 MeshCache.o: TextureManager.h TextureHandler.h /usr/include/SDL/SDL_image.h
-MeshCache.o: IniReader.h Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-MeshCache.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+MeshCache.o: NTreeReader.h Shader.h ResourceManager.h SoundManager.h
+MeshCache.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 MeshCache.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 MeshCache.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 MeshCache.o: /usr/include/ogg/os_types.h /usr/include/ogg/config_types.h
@@ -1733,7 +1667,7 @@ MeshNode.o: /usr/include/bits/sched.h /usr/include/signal.h
 MeshNode.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 MeshNode.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 MeshNode.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-MeshNode.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+MeshNode.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 MeshNode.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 MeshNode.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 MeshNode.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -1884,6 +1818,74 @@ MeshNode.o: gui/LineEdit.h gui/ScrollView.h gui/Slider.h gui/Button.h
 MeshNode.o: renderdefs.h Light.h gui/ProgressBar.h gui/Button.h RWLock.h
 MeshNode.o: VboWorker.h netdefs.h IDGen.h Packet.h ParticleEmitter.h
 MeshNode.o: MeshCache.h KeyMap.h LockManager.h Recorder.h Replayer.h
+NTreeReader.o: NTreeReader.h logout.h Log.h /usr/include/SDL/SDL.h
+NTreeReader.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
+NTreeReader.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
+NTreeReader.o: /usr/include/sys/types.h /usr/include/features.h
+NTreeReader.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+NTreeReader.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+NTreeReader.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+NTreeReader.o: /usr/include/time.h /usr/include/endian.h
+NTreeReader.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
+NTreeReader.o: /usr/include/sys/select.h /usr/include/bits/select.h
+NTreeReader.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
+NTreeReader.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
+NTreeReader.o: /usr/include/stdio.h /usr/include/libio.h
+NTreeReader.o: /usr/include/_G_config.h /usr/include/wchar.h
+NTreeReader.o: /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h
+NTreeReader.o: /usr/include/stdlib.h /usr/include/bits/waitflags.h
+NTreeReader.o: /usr/include/bits/waitstatus.h /usr/include/xlocale.h
+NTreeReader.o: /usr/include/alloca.h /usr/include/string.h
+NTreeReader.o: /usr/include/strings.h /usr/include/inttypes.h
+NTreeReader.o: /usr/include/stdint.h /usr/include/bits/wchar.h
+NTreeReader.o: /usr/include/ctype.h /usr/include/iconv.h
+NTreeReader.o: /usr/include/SDL/begin_code.h /usr/include/SDL/close_code.h
+NTreeReader.o: /usr/include/SDL/SDL_audio.h /usr/include/SDL/SDL_error.h
+NTreeReader.o: /usr/include/SDL/SDL_endian.h /usr/include/SDL/SDL_mutex.h
+NTreeReader.o: /usr/include/SDL/SDL_thread.h /usr/include/SDL/SDL_rwops.h
+NTreeReader.o: /usr/include/SDL/SDL_cdrom.h /usr/include/SDL/SDL_cpuinfo.h
+NTreeReader.o: /usr/include/SDL/SDL_events.h /usr/include/SDL/SDL_active.h
+NTreeReader.o: /usr/include/SDL/SDL_keyboard.h /usr/include/SDL/SDL_keysym.h
+NTreeReader.o: /usr/include/SDL/SDL_mouse.h /usr/include/SDL/SDL_video.h
+NTreeReader.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
+NTreeReader.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
+NTreeReader.o: /usr/include/SDL/SDL_version.h
+NTreeReader.o: /usr/include/boost/shared_ptr.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
+NTreeReader.o: /usr/include/boost/config.hpp
+NTreeReader.o: /usr/include/boost/config/user.hpp
+NTreeReader.o: /usr/include/boost/config/select_compiler_config.hpp
+NTreeReader.o: /usr/include/boost/config/compiler/gcc.hpp
+NTreeReader.o: /usr/include/boost/config/select_stdlib_config.hpp
+NTreeReader.o: /usr/include/boost/config/no_tr1/utility.hpp
+NTreeReader.o: /usr/include/boost/config/select_platform_config.hpp
+NTreeReader.o: /usr/include/boost/config/platform/linux.hpp
+NTreeReader.o: /usr/include/boost/config/posix_features.hpp
+NTreeReader.o: /usr/include/unistd.h /usr/include/bits/posix_opt.h
+NTreeReader.o: /usr/include/bits/environments.h /usr/include/bits/confname.h
+NTreeReader.o: /usr/include/getopt.h /usr/include/boost/config/suffix.hpp
+NTreeReader.o: /usr/include/boost/config/no_tr1/memory.hpp
+NTreeReader.o: /usr/include/boost/assert.hpp /usr/include/assert.h
+NTreeReader.o: /usr/include/boost/checked_delete.hpp
+NTreeReader.o: /usr/include/boost/throw_exception.hpp
+NTreeReader.o: /usr/include/boost/exception/detail/attribute_noreturn.hpp
+NTreeReader.o: /usr/include/boost/config.hpp
+NTreeReader.o: /usr/include/boost/detail/workaround.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/shared_count.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/bad_weak_ptr.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp
+NTreeReader.o: /usr/include/boost/detail/sp_typeinfo.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/sp_convertible.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/spinlock.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/spinlock_pt.hpp
+NTreeReader.o: /usr/include/pthread.h /usr/include/sched.h
+NTreeReader.o: /usr/include/bits/sched.h /usr/include/signal.h
+NTreeReader.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
+NTreeReader.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 ObjectKDTree.o: ObjectKDTree.h Mesh.h Vector3.h glinc.h
 ObjectKDTree.o: /usr/include/GL/glew.h /usr/include/stdint.h
 ObjectKDTree.o: /usr/include/features.h /usr/include/sys/cdefs.h
@@ -1961,7 +1963,7 @@ ObjectKDTree.o: /usr/include/bits/setjmp.h
 ObjectKDTree.o: /usr/include/boost/memory_order.hpp
 ObjectKDTree.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 ObjectKDTree.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-ObjectKDTree.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+ObjectKDTree.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 ObjectKDTree.o: ResourceManager.h SoundManager.h ALBuffer.h
 ObjectKDTree.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ObjectKDTree.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
@@ -2075,7 +2077,7 @@ Particle.o: /usr/include/bits/sched.h /usr/include/signal.h
 Particle.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 Particle.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 Particle.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Particle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Particle.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Particle.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Particle.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Particle.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -2310,9 +2312,9 @@ ParticleEmitter.o: /usr/include/bits/setjmp.h
 ParticleEmitter.o: /usr/include/boost/memory_order.hpp
 ParticleEmitter.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 ParticleEmitter.o: GraphicMatrix.h Material.h TextureManager.h
-ParticleEmitter.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h
-ParticleEmitter.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
-ParticleEmitter.o: /usr/include/AL/al.h /usr/include/AL/alut.h
+ParticleEmitter.o: TextureHandler.h /usr/include/SDL/SDL_image.h
+ParticleEmitter.o: NTreeReader.h Shader.h ResourceManager.h SoundManager.h
+ParticleEmitter.o: ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 ParticleEmitter.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 ParticleEmitter.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
 ParticleEmitter.o: /usr/include/ogg/os_types.h
@@ -2539,7 +2541,7 @@ PlayerData.o: /usr/include/bits/sched.h /usr/include/signal.h
 PlayerData.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 PlayerData.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 PlayerData.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-PlayerData.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+PlayerData.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 PlayerData.o: ResourceManager.h SoundManager.h ALBuffer.h
 PlayerData.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 PlayerData.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
@@ -2775,7 +2777,7 @@ ProceduralTree.o: /usr/include/SDL/SDL_keysym.h /usr/include/SDL/SDL_mouse.h
 ProceduralTree.o: /usr/include/SDL/SDL_video.h
 ProceduralTree.o: /usr/include/SDL/SDL_joystick.h /usr/include/SDL/SDL_quit.h
 ProceduralTree.o: /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h
-ProceduralTree.o: /usr/include/SDL/SDL_version.h IniReader.h
+ProceduralTree.o: /usr/include/SDL/SDL_version.h NTreeReader.h
 ProceduralTree.o: /usr/include/boost/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ProceduralTree.o: /usr/include/boost/config.hpp
@@ -2896,7 +2898,7 @@ Quad.o: /usr/include/signal.h /usr/include/bits/setjmp.h
 Quad.o: /usr/include/boost/memory_order.hpp
 Quad.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp GraphicMatrix.h
 Quad.o: Material.h TextureManager.h TextureHandler.h
-Quad.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Quad.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Quaternion.o: Quaternion.h Vector3.h glinc.h /usr/include/GL/glew.h
 Quaternion.o: /usr/include/stdint.h /usr/include/features.h
 Quaternion.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
@@ -3011,7 +3013,7 @@ Recorder.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 Recorder.o: /usr/include/bits/mathcalls.h logout.h Log.h
 Recorder.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
 Recorder.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Recorder.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Recorder.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Recorder.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Recorder.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Recorder.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -3236,7 +3238,7 @@ Replayer.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 Replayer.o: /usr/include/bits/mathcalls.h logout.h Log.h
 Replayer.o: /usr/include/SDL/SDL_net.h Mesh.h Triangle.h Vertex.h types.h
 Replayer.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Replayer.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Replayer.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Replayer.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Replayer.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Replayer.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -3432,7 +3434,7 @@ ResourceManager.o: Vector3.h /usr/include/math.h /usr/include/bits/huge_val.h
 ResourceManager.o: /usr/include/bits/huge_valf.h
 ResourceManager.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 ResourceManager.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
-ResourceManager.o: /usr/include/bits/mathcalls.h IniReader.h
+ResourceManager.o: /usr/include/bits/mathcalls.h NTreeReader.h
 ResourceManager.o: /usr/include/boost/shared_ptr.hpp
 ResourceManager.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 ResourceManager.o: /usr/include/boost/config.hpp
@@ -3585,7 +3587,7 @@ ServerState.o: /usr/include/bits/sched.h /usr/include/signal.h
 ServerState.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 ServerState.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 ServerState.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-ServerState.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+ServerState.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 ServerState.o: ResourceManager.h SoundManager.h ALBuffer.h
 ServerState.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 ServerState.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
@@ -3885,7 +3887,7 @@ Triangle.o: /usr/include/bits/sched.h /usr/include/signal.h
 Triangle.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 Triangle.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 Triangle.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Triangle.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Triangle.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Updater.o: Updater.h /usr/include/boost/crc.hpp /usr/include/boost/config.hpp
 Updater.o: /usr/include/boost/integer.hpp /usr/include/boost/integer_fwd.hpp
 Updater.o: /usr/include/boost/limits.hpp
@@ -3973,7 +3975,7 @@ Updater.o: /usr/include/bits/sched.h /usr/include/signal.h
 Updater.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 Updater.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 Updater.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-Updater.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+Updater.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 Updater.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 Updater.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 Updater.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -4432,7 +4434,7 @@ Vertex.o: /usr/include/pthread.h /usr/include/sched.h
 Vertex.o: /usr/include/bits/sched.h /usr/include/signal.h
 Vertex.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 Vertex.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
-Weapon.o: Weapon.h IniReader.h logout.h Log.h /usr/include/SDL/SDL.h
+Weapon.o: Weapon.h NTreeReader.h logout.h Log.h /usr/include/SDL/SDL.h
 Weapon.o: /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h
 Weapon.o: /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h
 Weapon.o: /usr/include/sys/types.h /usr/include/features.h
@@ -4710,7 +4712,7 @@ actions.o: /usr/include/bits/inf.h /usr/include/bits/nan.h
 actions.o: /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h logout.h
 actions.o: Log.h Mesh.h Triangle.h Vertex.h types.h GraphicMatrix.h
 actions.o: Material.h TextureManager.h TextureHandler.h
-actions.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+actions.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 actions.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 actions.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 actions.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -4988,7 +4990,7 @@ coldest.o: /usr/include/pthread.h /usr/include/sched.h
 coldest.o: /usr/include/bits/sched.h /usr/include/signal.h
 coldest.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 coldest.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp Material.h
-coldest.o: TextureManager.h IniReader.h Shader.h ResourceManager.h
+coldest.o: TextureManager.h NTreeReader.h Shader.h ResourceManager.h
 coldest.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
 coldest.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 coldest.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -5388,8 +5390,8 @@ editor.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 editor.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 editor.o: /usr/include/bits/mathcalls.h GraphicMatrix.h glinc.h
 editor.o: /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
-editor.o: /usr/include/SDL/SDL_opengl.h Vector3.h logout.h Log.h IniReader.h
-editor.o: /usr/include/boost/shared_ptr.hpp
+editor.o: /usr/include/SDL/SDL_opengl.h Vector3.h logout.h Log.h
+editor.o: NTreeReader.h /usr/include/boost/shared_ptr.hpp
 editor.o: /usr/include/boost/smart_ptr/shared_ptr.hpp
 editor.o: /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp
 editor.o: /usr/include/boost/config/select_compiler_config.hpp
@@ -5784,9 +5786,9 @@ getmap.o: /usr/include/bits/huge_vall.h /usr/include/bits/inf.h
 getmap.o: /usr/include/bits/nan.h /usr/include/bits/mathdef.h
 getmap.o: /usr/include/bits/mathcalls.h logout.h Log.h Triangle.h Vertex.h
 getmap.o: types.h GraphicMatrix.h Material.h TextureManager.h
-getmap.o: TextureHandler.h /usr/include/SDL/SDL_image.h IniReader.h Shader.h
-getmap.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
-getmap.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
+getmap.o: TextureHandler.h /usr/include/SDL/SDL_image.h NTreeReader.h
+getmap.o: Shader.h ResourceManager.h SoundManager.h ALBuffer.h
+getmap.o: /usr/include/AL/al.h /usr/include/AL/alut.h /usr/include/AL/alc.h
 getmap.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 getmap.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
 getmap.o: /usr/include/ogg/config_types.h ALSource.h Quad.h MeshNode.h FBO.h
@@ -5871,7 +5873,7 @@ globals.o: /usr/include/bits/sched.h /usr/include/signal.h
 globals.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 globals.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 globals.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-globals.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+globals.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 globals.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 globals.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 globals.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -6161,7 +6163,7 @@ net.o: /usr/include/signal.h /usr/include/bits/setjmp.h
 net.o: /usr/include/boost/memory_order.hpp
 net.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp GraphicMatrix.h
 net.o: Material.h TextureManager.h TextureHandler.h
-net.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
+net.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h ResourceManager.h
 net.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h /usr/include/AL/alut.h
 net.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
 net.o: /usr/include/vorbis/codec.h /usr/include/ogg/ogg.h
@@ -6383,7 +6385,7 @@ netdefs.o: /usr/include/bits/sched.h /usr/include/signal.h
 netdefs.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 netdefs.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 netdefs.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-netdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+netdefs.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 netdefs.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 netdefs.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 netdefs.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -6463,8 +6465,8 @@ render.o: /usr/include/bits/sched.h /usr/include/signal.h
 render.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 render.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 render.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-render.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
-render.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+render.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
+render.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 render.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 render.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 render.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
@@ -6690,7 +6692,7 @@ renderdefs.o: /usr/include/bits/sched.h /usr/include/signal.h
 renderdefs.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 renderdefs.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 renderdefs.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-renderdefs.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+renderdefs.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 renderdefs.o: ResourceManager.h SoundManager.h ALBuffer.h
 renderdefs.o: /usr/include/AL/al.h /usr/include/AL/alut.h
 renderdefs.o: /usr/include/AL/alc.h /usr/include/vorbis/vorbisfile.h
@@ -6911,8 +6913,8 @@ server.o: /usr/include/bits/sched.h /usr/include/signal.h
 server.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 server.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 server.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-server.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h ResourceManager.h
-server.o: SoundManager.h ALBuffer.h /usr/include/AL/al.h
+server.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
+server.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 server.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 server.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
 server.o: /usr/include/ogg/ogg.h /usr/include/ogg/os_types.h
@@ -7136,7 +7138,7 @@ settings.o: /usr/include/bits/sched.h /usr/include/signal.h
 settings.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 settings.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 settings.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-settings.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+settings.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 settings.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 settings.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 settings.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h
@@ -7432,7 +7434,7 @@ gui/GUI.o: /usr/include/bits/sched.h /usr/include/signal.h
 gui/GUI.o: /usr/include/bits/setjmp.h /usr/include/boost/memory_order.hpp
 gui/GUI.o: /usr/include/boost/smart_ptr/detail/operator_bool.hpp
 gui/GUI.o: GraphicMatrix.h Material.h TextureManager.h TextureHandler.h
-gui/GUI.o: /usr/include/SDL/SDL_image.h IniReader.h Shader.h
+gui/GUI.o: /usr/include/SDL/SDL_image.h NTreeReader.h Shader.h
 gui/GUI.o: ResourceManager.h SoundManager.h ALBuffer.h /usr/include/AL/al.h
 gui/GUI.o: /usr/include/AL/alut.h /usr/include/AL/alc.h
 gui/GUI.o: /usr/include/vorbis/vorbisfile.h /usr/include/vorbis/codec.h

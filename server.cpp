@@ -1700,11 +1700,11 @@ void SendMessage(const string& message)
 
 void LoadMapList()
 {
-   IniReader readmaps("maps/maplist");
+   NTreeReader readmaps("maps/maplist");
    
    for (size_t i = 0; i < readmaps.NumChildren(); ++i)
    {
-      const IniReader& currmap = readmaps(i);
+      const NTreeReader& currmap = readmaps(i);
       string buffer;
       currmap.Read(buffer, "File");
       maplist.push_back(buffer);

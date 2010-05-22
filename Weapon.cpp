@@ -61,7 +61,7 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), rad
 
 void Weapon::LoadFromFile(const string& file)
 {
-   IniReader read(file);
+   NTreeReader read(file);
    
    read.Read(ammo, "Ammo");
    read.Read(damage, "Damage");

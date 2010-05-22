@@ -495,7 +495,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
 
 
 // Reads tree parameters from the designated IniReader
-void ProceduralTree::ReadParams(const IniReader &get)
+void ProceduralTree::ReadParams(const NTreeReader &get)
 {
    get.Read(barkfile, "Materials", 0);
    get.Read(leavesfile, "Materials", 1);

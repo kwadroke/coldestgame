@@ -26,7 +26,7 @@
 #include "Triangle.h"
 #include "types.h"
 #include "SDL.h"
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "ResourceManager.h"
 #include "Quad.h"
 #include "MeshNode.h"
@@ -44,14 +44,14 @@ class Mesh
 {
    friend class MeshCache;
    public:
-      Mesh(const string&, ResourceManager&, IniReader read = IniReader(), bool gl = false);
+      Mesh(const string&, ResourceManager&, NTreeReader read = NTreeReader(), bool gl = false);
       ~Mesh();
       Mesh(const Mesh&);
       Mesh& operator=(const Mesh&);
       bool operator<(const Mesh&) const;
       bool operator>(const Mesh&) const;
       void CalcBounds();
-      void Load(const IniReader&);
+      void Load(const NTreeReader&);
       void UpdateTris();
       void Move(const Vector3&, bool movetris = false);
       const Vector3 GetPosition() const;

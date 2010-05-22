@@ -31,7 +31,7 @@ ParticleEmitter::ParticleEmitter(const Vector3& pos, Particle& p, Uint32 etime, 
 ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman) : 
                                  particle("particles/explosion", resman), lastupdate(SDL_GetTicks()), firstupdate(true)
 {
-   IniReader read(filename);
+   NTreeReader read(filename);
    string partfile;
    read.Read(partfile, "Particle");
    particle = Particle(partfile, resman);

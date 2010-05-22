@@ -26,7 +26,7 @@
 #include <string>
 #include "TextureManager.h"
 #include "types.h"
-#include "IniReader.h"
+#include "NTreeReader.h"
 #include "Shader.h"
 #include <boost/shared_ptr.hpp>
 
