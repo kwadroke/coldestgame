@@ -1,13 +1,32 @@
 #!/bin/bash
+
+if [ $# != 1 -a $# != 2 ]
+then
+   echo "Usage: $0 <linux|windows> [nofull]"
+   exit 0
+fi
  
 REVISION=`svn info | grep Revision | cut -f 2 -d \ `
 
 arch=`uname -m`
 
-rsync -avz -e ssh Coldest$REVISION/* coldestgame.com:/var/www/files/updates/linux/$arch
+if [ $1 == "linux" ]
+then
+   path=/var/www/files/updates/linux/$arch
+   filename=Coldest$REVISION*.tar.bz2
+else
+   path=/var/www/files/updates/windows/32bit
+   filename=Coldest$REVISION*.zip
+fi
 
-rsync -avz -e ssh Coldest$REVISION*.tar.bz2 coldestgame.com:/var/www/files
+rsync -avz -e ssh Coldest$REVISION/* coldestgame:$path
 
-ssh coldestgame.com "cd /var/www/files/updates/linux/$arch && /usr/local/sbin/gencrcfile"
+if [ $# == 2 -a $1 != "nofull" ]
+then
+   echo "Uploading full build"
+   rsync -avz -e ssh $filename coldestgame.com:/var/www/files
+fi
+
+ssh coldestgame.com "cd $path && /usr/local/sbin/gencrcfile"
 
 
