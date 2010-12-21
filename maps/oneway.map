@@ -11,30 +11,29 @@ Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 
-TerrainMaterial materials/terrain/snowy
 Node
    TerrainParams
    Node
       Texture0
-      File textures/snow.png
+      File textures/ground/Snow.png
       HeightRange -10000 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/rock/snowyrock.png
+      File textures/rock/SnowyRock.png
       HeightRange -10000 -10000
       SlopeRange .7 .9
       RandRange 0 50
    Node
       Texture2
-      File textures/Rockt.png
+      File textures/rock/Rock.png
       HeightRange -10000 -10000
       SlopeRange 0 .70
       RandRange 500 500
    Node
       Texture3
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 -10000
       SlopeRange 0 0
       RandRange 500 500
