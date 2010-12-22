@@ -48,7 +48,7 @@ void TextureHandler::LoadTexture(string filename, GLuint texnum, bool mipmap, bo
    if (!loadtex)
    {
       logout << "Error loading texture: " << filename << endl;
-      return;
+      loadtex = IMG_Load("textures/test.png");
    }
    SDL_LockSurface(loadtex);
    
