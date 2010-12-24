@@ -48,6 +48,7 @@ void SaveObject();
 void AddObject();
 void AddTree();
 void DeleteObject();
+void RandomizeSeed();
 
 extern map<Mesh*, ProceduralTree> treemap;
 extern vector<Mesh*> spawnmeshes;

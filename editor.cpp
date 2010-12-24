@@ -864,6 +864,14 @@ void AddTree()
 }
 
 
+void RandomizeSeed()
+{
+   int seed = int(Random(0, 1024));
+   guip.seed->text = ToString(seed);
+   SaveObject();
+}
+
+
 void DeleteObject()
 {
    if (selected)
