@@ -12,32 +12,33 @@ Ambient .4 .4 .4 1
 SkyBox materials/sky
 FogColor .5 .5 .6
 
-TerrainMaterial materials/terrain/riverside
 Node
    TerrainParams
    Node
       Texture0
-      File textures/grass/mixedgrass.png
+      File textures/grass/Grass.png
       HeightRange 5 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/rock/rocksanddirt.png
+       File textures/rock/rocksanddirt.png
+      File textures/grass/Grass.png
       HeightRange -10000 -10000
       SlopeRange .75 .94
       RandRange 20 100
       Blend .1
    Node
       Texture2
-      File textures/rock/layered.png
+      #File textures/rock/layered.png
+      File textures/rock/Rock.png
       HeightRange -10000 -10000
       SlopeRange 0 .82
       RandRange 500 500
       Blend .05
    Node
       Texture3
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 15
       SlopeRange 0 0
       RandRange 50 50

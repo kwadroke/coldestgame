@@ -2,8 +2,8 @@ Diffuse .6 .6 .6 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
 Shininess 128
-Texture0 textures/BrownBark.png
-Texture1 textures/BrownBarknorm.png
+Texture0 textures/Bark.png
+Texture1 textures/BarkNorm.png
 Texture2 textures/black.png
 Shader shaders/bump
 CullFace 1

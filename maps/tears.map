@@ -11,24 +11,23 @@ Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 Water materials/water
-TerrainMaterial materials/terrain/tropical
 Node
    TerrainParams
    Node
       Texture0
-      File textures/grass/greengrass.png
+      File textures/grass/GreenGrass.png
       HeightRange -10000 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/rock/mossyrock.png
+      File textures/rock/YellowstoneRock.png
       HeightRange -10000 -10000
       SlopeRange 0 .80
       RandRange 500 500
    Node
       Texture2
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 5
       SlopeRange 0 0
       RandRange 500 500
