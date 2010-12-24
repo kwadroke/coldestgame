@@ -49,6 +49,7 @@
             <Layout x="0" y="0" padding="0" xmargin="10" ymargin="10">
                <Label width="150" height="30" text="Seed">
                   <LineEdit x="150" y="0" width="150" height="30" name="Seed"/>
+                  <Button x="300" y="0" width="100" height="30" text="Random" leftclick="randomseed"/>
                </Label>
                <Label width="150" height="30" text="Impostor Dist.">
                   <LineEdit x="150" y="0" width="150" height="30" name="ImpostorDistance"/>

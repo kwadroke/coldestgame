@@ -22,15 +22,13 @@ Node
       RandRange 0 10
    Node
       Texture1
-       File textures/rock/rocksanddirt.png
-      File textures/grass/Grass.png
+      File textures/ground/MixedDirt.png
       HeightRange -10000 -10000
       SlopeRange .75 .94
       RandRange 20 100
       Blend .1
    Node
       Texture2
-      #File textures/rock/layered.png
       File textures/rock/Rock.png
       HeightRange -10000 -10000
       SlopeRange 0 .82

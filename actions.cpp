@@ -371,6 +371,8 @@ void Action(const string& action)
       DeleteObject();
    else if (action == "savemap")
       SaveMap();
+   else if (action == "randomseed")
+      RandomizeSeed();
    else if (action == "bindforward")
       BindForward();
    else if (action == "bindback")
