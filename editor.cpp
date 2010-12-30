@@ -757,6 +757,7 @@ void SaveObject()
          newmesh->name = guip.objectname->text;
          newmesh->dynamic = true;
          newmesh->GenVbo();
+         newmesh->AdvanceAnimation();
          
          meshes.push_back(*newmesh);
       }
@@ -812,6 +813,7 @@ void AddObject()
    newmesh->dynamic = true;
    newmesh->GenVbo();
    newmesh->Move(end);
+   newmesh->AdvanceAnimation();
    meshes.push_back(*newmesh);
 }
 
