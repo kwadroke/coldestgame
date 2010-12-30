@@ -11,12 +11,10 @@ Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 Water materials/water
-TerrainMaterial materials/terrain/tropical
 Node
    TerrainParams
    Node
       Texture0
-      //File textures/grass/greengrass.png
       File textures/test.png
       HeightRange -10000 10000
       SlopeRange 0 0
@@ -29,7 +27,7 @@ Node
       RandRange 500 500
    Node
       Texture2
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 5
       SlopeRange 0 0
       RandRange 500 500
@@ -50,3 +48,11 @@ Node
 
 Node
    Objects
+   Node
+      Type External
+      Name Unnamed
+      BaseFile models/nemesis/torso/base
+      Position 695.363 489.491 728.744
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
