@@ -21,6 +21,7 @@
 #include "editor.h"
 #include "globals.h"
 #include "renderdefs.h"
+#include "defines.h"
 
 using std::vector;
 
@@ -162,6 +163,10 @@ void EditorEventHandler(SDL_Event event)
          else if (event.key.keysym.sym == SDLK_DELETE)
          {
             DeleteObject();
+         }
+         else if (event.key.keysym.sym == SDLK_F12)
+         {
+            TakeScreenshot();
          }
          else if (event.key.keysym.sym == SDLK_ESCAPE)
          {

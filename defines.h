@@ -104,5 +104,6 @@ bool GUIEventHandler(SDL_Event&);
 void GameEventHandler(SDL_Event&);
 void AddTracer(const Particle&);
 void UpdatePlayer();
+void TakeScreenshot();
 
 #endif
