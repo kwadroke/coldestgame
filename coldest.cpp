@@ -1166,50 +1166,7 @@ bool GUIEventHandler(SDL_Event &event)
                eatevent = true;
                break;
             case SDLK_F12:
-               {
-                  logout << "Saving screenshot" << endl;
-                  glPixelStorei(GL_PACK_ALIGNMENT,1);
-                  int screenwidth = console.GetInt("screenwidth");
-                  int screenheight = console.GetInt("screenheight");
-                  GLubytevec pixels(screenwidth * screenheight * 3);
-               
-                  glReadPixels(0, 0, screenwidth, screenheight, GL_BGR, GL_UNSIGNED_BYTE, &pixels[0]);
-                  vector<unsigned char> header(12, 0);
-                  header[2] = 2;
-                  header.push_back(screenwidth % 256);
-                  header.push_back(screenwidth / 256);
-                  header.push_back(screenheight % 256);
-                  header.push_back(screenheight / 256);
-                  header.push_back(24);
-                  header.push_back(0);
-               
-                  int num = 0;
-                  string filename;
-                  bool finished = false;
-#ifndef _WIN32
-                  if (!boost::filesystem::is_directory(userpath + "screenshots/"))
-                     boost::filesystem::create_directory(userpath + "screenshots/");
-#else
-                  string screenpath = userpath + "screenshots/";
-                  CreateDirectory((TCHAR*)screenpath.c_str(), NULL);
-#endif
-                  while (!finished)
-                  {
-                     string padded = PadNum(num, 5);
-                     filename = userpath + "screenshots/screenshot" + padded + ".tga";
-                     ifstream test(filename.c_str());
-                     if (!test)
-                        finished = true;
-                     test.close();
-                     ++num;
-                  }
-                  ofstream screenshot(filename.c_str());
-                  for (size_t i = 0; i < header.size(); ++i)
-                     screenshot << header[i];
-                  for (size_t i = 0; i < pixels.size(); ++i)
-                     screenshot << pixels[i];
-                  screenshot.close();
-               }
+               TakeScreenshot();
                break;
             default:
                break;
@@ -2751,6 +2708,53 @@ vector<SpawnPointData> GetSpawns(vector<Item>& allitems)
       }
    }
    return retval;
+}
+
+
+void TakeScreenshot()
+{
+   logout << "Saving screenshot" << endl;
+   glPixelStorei(GL_PACK_ALIGNMENT,1);
+   int screenwidth = console.GetInt("screenwidth");
+   int screenheight = console.GetInt("screenheight");
+   GLubytevec pixels(screenwidth * screenheight * 3);
+   
+   glReadPixels(0, 0, screenwidth, screenheight, GL_BGR, GL_UNSIGNED_BYTE, &pixels[0]);
+   vector<unsigned char> header(12, 0);
+   header[2] = 2;
+   header.push_back(screenwidth % 256);
+   header.push_back(screenwidth / 256);
+   header.push_back(screenheight % 256);
+   header.push_back(screenheight / 256);
+   header.push_back(24);
+   header.push_back(0);
+   
+   int num = 0;
+   string filename;
+   bool finished = false;
+   #ifndef _WIN32
+   if (!boost::filesystem::is_directory(userpath + "screenshots/"))
+      boost::filesystem::create_directory(userpath + "screenshots/");
+   #else
+   string screenpath = userpath + "screenshots/";
+   CreateDirectory((TCHAR*)screenpath.c_str(), NULL);
+   #endif
+   while (!finished)
+   {
+      string padded = PadNum(num, 5);
+      filename = userpath + "screenshots/screenshot" + padded + ".tga";
+      ifstream test(filename.c_str());
+      if (!test)
+         finished = true;
+      test.close();
+      ++num;
+   }
+   ofstream screenshot(filename.c_str());
+   for (size_t i = 0; i < header.size(); ++i)
+      screenshot << header[i];
+   for (size_t i = 0; i < pixels.size(); ++i)
+      screenshot << pixels[i];
+   screenshot.close();
 }
 
 

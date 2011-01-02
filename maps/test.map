@@ -56,3 +56,27 @@ Node
       Rotations 0 0 0
       AnimSpeed 1
       Scale 0.01
+   Node
+      Type External
+      Name Unnamed
+      BaseFile models/nemesis/legs/base
+      Position 569.938 437.139 682.785
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name Unnamed
+      BaseFile models/nemesis/larm/base
+      Position 573.668 470.795 900.218
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.01
+   Node
+      Type External
+      Name Unnamed
+      BaseFile models/spawn/base
+      Position 512.729 348.568 943.595
+      Rotations 0 0 0
+      AnimSpeed 1
+      Scale 0.02
