@@ -16,47 +16,33 @@
 //
 // Copyright 2008, 2011 Ben Nemec
 // @End License@
+#ifndef VBO_H
+#define VBO_H
 
+#include "glinc.h"
+#include "types.h"
+#include "Vertex.h"
+#include <vector>
 
-#ifndef __ALBUFFER_H
-#define __ALBUFFER_H
-
-#include <AL/al.h>
-#include <AL/alut.h>
-#include <vorbis/vorbisfile.h>
-#include <boost/shared_ptr.hpp>
-#include <string>
-#include <iostream>
-#include "logout.h"
-
-using std::string;
-using std::endl;
-using boost::shared_ptr;
-
-/**
-	@author Ben Nemec <cybertron@nemebean.com>
-*/
-class ALBuffer
+// This always gets created with a mesh, regardless of whether the mesh was created by the server or not.
+// That means we can't always make GL calls, so we only do them when requested (which won't happen on the server).
+class VBO
 {
-   friend class ALSource;
    public:
-      ALBuffer(const string&);
-      ~ALBuffer();
-      static void CheckError();
-      
-   private:
-      ALBuffer(const ALBuffer&); // No copying allowed
-      ALBuffer& operator=(const ALBuffer&);
-      
-      ALuint id;
-      ALenum format;
-      ALsizei size;
-      ALvoid* data;
-      ALsizei freq;
-      ALboolean loop;
+      VBO();
+      ~VBO();
+      VBO(const VBO&);
+      VBO& operator=(const VBO&);
+      void CreateBuffers();
+      void UploadVBO(const bool);
+      void Bind();
 
+      vector<VBOData> vbodata;
+      ushortvec indexdata;
+
+   private:
+      GLuint vbo, ibo;
+      bool dummy;
 };
 
-typedef shared_ptr<ALBuffer> ALBufferPtr;
-
-#endif
+#endif // VBO_H

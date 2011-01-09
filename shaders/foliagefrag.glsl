@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Coldest.  If not, see <http://www.gnu.org/licenses/>.
 //
-// Copyright 2008, 2010 Ben Nemec
+// Copyright 2008, 2011 Ben Nemec
 // @End License@
 void basiclighting(inout vec3, in vec3, out vec4, out vec4, out vec4, in float);
 void shadow(vec4, vec4, float, inout vec4);

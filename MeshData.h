@@ -16,47 +16,38 @@
 //
 // Copyright 2008, 2011 Ben Nemec
 // @End License@
+#ifndef MESHDATA_H
+#define MESHDATA_H
 
-
-#ifndef __ALBUFFER_H
-#define __ALBUFFER_H
-
-#include <AL/al.h>
-#include <AL/alut.h>
-#include <vorbis/vorbisfile.h>
+#include "ResourceManager.h"
+#include "Triangle.h"
+#include "Vertex.h"
+#include "MeshNode.h"
 #include <boost/shared_ptr.hpp>
-#include <string>
-#include <iostream>
-#include "logout.h"
 
-using std::string;
-using std::endl;
-using boost::shared_ptr;
+class Mesh;  // Forward declaration because of the circular reference
 
-/**
-	@author Ben Nemec <cybertron@nemebean.com>
-*/
-class ALBuffer
+// A class to hold all of the mesh data that cannot be default copy-constructed so we don't have to write a huge
+// copy constructor for the main Mesh class.
+class MeshData
 {
-   friend class ALSource;
+   friend class Mesh;
    public:
-      ALBuffer(const string&);
-      ~ALBuffer();
-      static void CheckError();
-      
-   private:
-      ALBuffer(const ALBuffer&); // No copying allowed
-      ALBuffer& operator=(const ALBuffer&);
-      
-      ALuint id;
-      ALenum format;
-      ALsizei size;
-      ALvoid* data;
-      ALsizei freq;
-      ALboolean loop;
+      MeshData(ResourceManager&);
+      MeshData(const MeshData&);
+      MeshData& operator=(const MeshData&);
+      void EnsureMaterials();
 
+   private:
+      void DeepCopy(const MeshData&);
+      
+      ResourceManager& resman;
+      Trianglevec tris;
+      VertexPtrvec vertices;
+      vector<MeshNodePtr> frameroot;
+
+      MaterialPtr impmat;
+      shared_ptr<Mesh> impostor;
 };
 
-typedef shared_ptr<ALBuffer> ALBufferPtr;
-
-#endif
+#endif // MESHDATA_H
