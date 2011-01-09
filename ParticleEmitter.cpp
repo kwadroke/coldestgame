@@ -23,13 +23,13 @@
 
 ParticleEmitter::ParticleEmitter(const Vector3& pos, Particle& p, Uint32 etime, float d, int maxcount) : 
                                  position(pos), particle(p), emittertime(etime), lastupdate(SDL_GetTicks()), density(d), count(maxcount),
-                                 firstupdate(true)
+                                 firstupdate(true), debug(false)
 {
 }
 
 
 ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman) : 
-                                 particle("particles/explosion", resman), lastupdate(SDL_GetTicks()), firstupdate(true)
+                                 particle("particles/explosion", resman), lastupdate(SDL_GetTicks()), firstupdate(true), debug(false)
 {
    NTreeReader read(filename);
    string partfile;

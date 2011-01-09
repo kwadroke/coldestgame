@@ -68,6 +68,7 @@ class Particle
    private:
       Timer t;
       Mesh mesh;
+      bool debug;
 };
 
 

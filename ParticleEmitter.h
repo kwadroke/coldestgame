@@ -46,6 +46,8 @@ class ParticleEmitter
       string soundfile;
       bool firstupdate;
 
+      bool debug;
+
 };
 
 #endif
