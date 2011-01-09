@@ -151,7 +151,7 @@ void Material::Use() const
       glEnable(GL_BLEND);
    }
 
-   glDisable(GL_COLOR_MATERIAL); // TODO: This should probably be removed at some point
+   //glDisable(GL_COLOR_MATERIAL); // TODO: This should probably be removed at some point
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &ambient[0]);
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &diffuse[0]);
    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, &specular[0]);

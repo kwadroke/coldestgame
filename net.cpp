@@ -478,8 +478,6 @@ int NetListen(void* dummy)
                            addemitter = true;
                         }
                      }
-                     deletemeshes.push_back(i->rendermesh);
-                     i->rendermesh = meshes.end();
                      locks.EndRead(meshes);
                      if (addemitter)
                      {
@@ -904,7 +902,6 @@ int NetListen(void* dummy)
             
             SDL_mutexP(clientmutex);
             locks.Read(meshes);
-            player[num].rendermesh->Remove(&(*player[num].mesh[part]));
             deletemeshes.push_back(player[num].mesh[part]);
             player[num].mesh[part] = meshes.end();
             player[num].hp[part] = 0;

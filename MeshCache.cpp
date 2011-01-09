@@ -46,7 +46,7 @@ Mesh MeshCache::GetMesh(string filename)
    MeshPtr retval = meshes[filename];
    
    SDL_mutexV(mutex);
-   retval->lastanimtick = SDL_GetTicks();
+   retval->animtimer.start();
    return *retval;
 }
 
@@ -65,7 +65,7 @@ MeshPtr MeshCache::GetNewMesh(string filename)
    MeshPtr retval = MeshPtr(new Mesh(*meshes[filename]));
    
    SDL_mutexV(mutex);
-   retval->lastanimtick = SDL_GetTicks();
+   retval->animtimer.start();
    return retval;
 }
 

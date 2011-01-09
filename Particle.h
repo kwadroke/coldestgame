@@ -55,7 +55,6 @@ class Particle
       Uint32 lasttick;
       int damage;
       float dmgrad;
-      Mesh mesh;
       int rewind;
       bool collide;
       int ttl;
@@ -68,6 +67,7 @@ class Particle
       
    private:
       Timer t;
+      Mesh mesh;
 };
 
 

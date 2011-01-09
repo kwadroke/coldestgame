@@ -59,6 +59,8 @@ void SoundManager::SetListenDir(Vector3& v)
 
 void SoundManager::PlaySound(const string& filename, const Vector3& pos)
 {
+   if (filename == "")
+      return;
    ALSourcePtr selected;
    selected = SelectSource(pos);
    if (selected)

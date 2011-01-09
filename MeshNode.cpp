@@ -22,9 +22,7 @@
 #include "globals.h" // Causes problems if included in header
 #include "Mesh.h"
 
-MeshNode::MeshNode() : id(0), parentid(0), facing(false), gl(false), rot1(Vector3()), rot2(Vector3()),
-                  trans(Vector3()),
-                  name(""), parent(NULL)
+MeshNode::MeshNode() : id(0), parentid(0), facing(false), gl(false), parent(NULL)
 {
 }
 

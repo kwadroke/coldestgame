@@ -79,6 +79,9 @@ void EditorLoop(const string editmap)
       EditorMove();
       
       gui[editormain]->visible = true;
+
+      for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+         i->Update();
       
       Repaint();
    }
@@ -748,7 +751,6 @@ void SaveObject()
          t.GenTree(newmesh.get(), &resman.LoadMaterial(t.barkfile), &resman.LoadMaterial(t.leavesfile));
          
          meshes.push_back(*newmesh);
-         meshes.back().GenVbo();
          treemap[&meshes.back()] = t;
       }
       else
@@ -761,8 +763,7 @@ void SaveObject()
             newmesh->Scale(atof(guip.scale->text.c_str()) / newmesh->GetScale());
          newmesh->name = guip.objectname->text;
          newmesh->dynamic = true;
-         newmesh->GenVbo();
-         newmesh->AdvanceAnimation();
+         newmesh->Update();
          
          meshes.push_back(*newmesh);
       }
@@ -816,9 +817,8 @@ void AddObject()
    MeshPtr newmesh = meshcache->GetNewMesh("models/teapot");
    newmesh->name = "Unnamed";
    newmesh->dynamic = true;
-   newmesh->GenVbo();
    newmesh->Move(end);
-   newmesh->AdvanceAnimation();
+   newmesh->Update();
    meshes.push_back(*newmesh);
 }
 
@@ -863,10 +863,9 @@ void AddTree()
    t.leavesfile = "materials/leaves";
    
    t.GenTree(newmesh.get(), &resman.LoadMaterial("materials/bark"), &resman.LoadMaterial("materials/leaves"));
-   newmesh->CalcBounds();
+   newmesh->Update();
    
    meshes.push_back(*newmesh);
-   meshes.back().GenVbo();
    treemap[&meshes.back()] = t;
 }
 
@@ -951,7 +950,6 @@ void Paste()
       MeshPtr newmesh(new Mesh(*copymesh));
       newmesh->Move(end, true);
       meshes.push_back(*newmesh);
-      meshes.back().GenVbo();
       selected = &meshes.back();
       
       if (copyistree)
