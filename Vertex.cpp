@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Coldest.  If not, see <http://www.gnu.org/licenses/>.
 //
-// Copyright 2008, 2010 Ben Nemec
+// Copyright 2008, 2011 Ben Nemec
 // @End License@
 
 
@@ -48,7 +48,7 @@ void Vertex::GetVboData(VBOData& vbodata, const bool dynamic)
    vbodata.ty = tangent.y;
    vbodata.tz = tangent.z;
    
-   for (int i = 0; i < 8; ++i)
+   for (int i = 0; i < 2; ++i)
    {
       vbodata.tc[i][0] = texcoords[i][0];
       vbodata.tc[i][1] = texcoords[i][1];
