@@ -105,11 +105,11 @@ size_t ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leav
    for (; i < numbranches[0]; ++i)
       GenBranch(m, 0, 0, pts, true, 0);
    currmesh->GenTangents();
+   currmesh->Update();
    // Center the mesh location
-   currmesh->CalcBounds();
    currmesh->Move(currmesh->GetPosition() + Vector3(0, currmesh->GetHeight() / 2.f, 0));
    // Force reset of dimensions
-   currmesh->Move(currmesh->GetPosition(), true);
+   currmesh->Update();
    return totalprims;
 }
 

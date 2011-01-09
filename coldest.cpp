@@ -49,7 +49,6 @@ using std::ios_base;
    in a more limited context than the entire engine.*/
 void Debug()
 {
-   
    exit(0);
 }
 
@@ -325,12 +324,6 @@ void InitGlobals()
       console.Parse("setsave shadowres 1024", false);
    
    InitGUI();
-   
-   for (size_t i = 0; i < vboworkers.size(); ++i)
-   {
-      if (!vboworkers[i])
-         vboworkers[i] = VboWorkerPtr(new VboWorker());
-   }
 #endif
    InitUnits();
 }
@@ -1024,7 +1017,7 @@ void GUIUpdate()
       part.lasttick = SDL_GetTicks();
       
       part.lasttracer = part.pos;
-      part.tracer = MeshPtr(new Mesh("models/sight/base", resman));
+      part.tracer = MeshPtr(new Mesh(NTreeReader("models/sight/base"), resman));
       part.clientonly = true;
       
       if (!guncam)
@@ -1720,8 +1713,6 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, Ob
             check.erase(remove(check.begin(), check.end(), &(*mplayer->mesh[part])), check.end());
          }
       }
-      if (mplayer->rendermesh != ml.end())
-         check.erase(remove(check.begin(), check.end(), &(*mplayer->rendermesh)), check.end());
    }
    locks.EndRead(ml);
    return check;
@@ -1964,7 +1955,6 @@ void Animate()
       Item& newitem = additems[i];
       MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
       newmesh->Move(newitem.position);
-      newmesh->SetGL();
       newmesh->dynamic = true;
       meshes.push_front(*newmesh);
       items.push_back(newitem);
@@ -2008,7 +1998,7 @@ void Animate()
       }
       ++counter;
 #else
-      i->AdvanceAnimation(player[0].pos);
+      i->Update(player[0].pos);
 #endif
    }
 #if defined(THREADANIM) && !defined(DEDICATED)
@@ -2071,49 +2061,31 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       return;
 
    locks.Write(ml);
-   if (p.rendermesh == ml.end())
-   {
-      MeshPtr newmesh = meshcache->GetNewMesh("models/empty");
-      newmesh->dynamic = true;
-      newmesh->collide = false;
-      if (gl)
-         newmesh->SetGL();
-      ml.push_front(*newmesh);
-      p.rendermesh = ml.begin();
-   }
    if (p.mesh[Legs] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/legs");
       newmesh->dynamic = true;
-      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[Legs] = ml.begin();
       p.mesh[Legs]->Scale(units[p.unit].scale);
-      p.rendermesh->Add(&ml.front());
    }
    if (p.mesh[Torso] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/torso");
       newmesh->dynamic = true;
-      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[Torso] = ml.begin();
       p.mesh[Torso]->Scale(units[p.unit].scale);
-      p.rendermesh->Add(&ml.front());
    }
    if (p.mesh[Hips] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/hips");
       newmesh->dynamic = true;
-      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[Hips] = ml.begin();
       p.mesh[Hips]->Scale(units[p.unit].scale);
-      p.rendermesh->Add(&ml.front());
    }
 
-   p.rendermesh->Move(p.pos); // Or our bounding box will get huge
-   
    p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
    p.mesh[Legs]->Move(p.pos);
    
@@ -2127,21 +2099,17 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
       newmesh->dynamic = true;
-      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[LArm] = ml.begin();
       p.mesh[LArm]->Scale(units[p.unit].scale);
-      p.rendermesh->Add(&ml.front());
    }
    if (p.mesh[RArm] == ml.end() && p.hp[RArm] > 0)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/rarm");
       newmesh->dynamic = true;
-      newmesh->render = false;
       ml.push_front(*newmesh);
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
-      p.rendermesh->Add(&ml.front());
    }
    
    if (p.mesh[LArm] != ml.end())
@@ -2157,7 +2125,6 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    }
    
    p.size = units[p.unit].size;
-   p.rendermesh->CalcBounds();
    
    for (size_t i = 0; i < numbodyparts; ++i)
    {
@@ -2170,11 +2137,13 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          }
          else if (p.speed > 0.f)
          {
+            p.mesh[i]->reverseanim = false;
             p.mesh[i]->SetAnimSpeed(p.speed);
             p.mesh[i]->SetAnimation(1);
          }
          else
          {
+            p.mesh[i]->reverseanim = true;
             p.mesh[i]->SetAnimSpeed(-p.speed);
             p.mesh[i]->SetAnimation(2);
          }
@@ -2223,7 +2192,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       if (!particlemesh)
       {
          particlemesh = meshcache->GetNewMesh("models/empty");
-         particlemesh->dynamic = true;
       }
       particlemesh->Clear();
    }
@@ -2288,7 +2256,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 #ifndef DEDICATED
          if (!HitHandler)
          {
-            j->Render(particlemesh.get(), player[0].pos);
+            j->Render(particlemesh.get(), maincam.GetActual());
          }
 #endif
          ++j;
@@ -2607,10 +2575,6 @@ PlayerData* PlayerFromMesh(Mesh* m, vector<PlayerData>& p, Meshlist::iterator in
    size_t psize = p.size();
    for (size_t i = 1; i < psize; ++i)
    {
-      if ((p[i].rendermesh != invalid) && (&(*p[i].rendermesh) == m))
-      {
-         return &p[i];
-      }
       for (size_t j = 0; j < numbodyparts; ++j)
       {
          if ((p[i].mesh[j] != invalid) && (&(*p[i].mesh[j]) == m))
@@ -2673,7 +2637,7 @@ void RegenFBOList()
          impmeshes.push_back(&(*i));
          ++counter;
       }
-      i->GenVbo();
+      i->Update();
    }
    locks.EndWrite(meshes);
 #endif

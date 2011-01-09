@@ -150,7 +150,6 @@ void GetMap(string fn)
    {
       player[0].mesh[i] = meshes.end();
    }
-   player[0].rendermesh = meshes.end();
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);
@@ -213,9 +212,8 @@ void GetMap(string fn)
       {
          MeshPtr newmesh = meshcache->GetNewMesh("models/base/base");
          newmesh->dynamic = true;
-         newmesh->SetGL();
          newmesh->Move(spawntemp.position);
-         newmesh->AdvanceAnimation();
+         newmesh->Update();
          meshes.push_back(*newmesh);
          spawnmeshes.push_back(&meshes.back());
       }
@@ -237,7 +235,9 @@ void GetMap(string fn)
    for (size_t i = 0; i < objectlist.NumChildren(); ++i)
    {
       currnode = objectlist(i);
-      Mesh currmesh("", resman, currnode);
+      Mesh currmesh(currnode, resman);
+      if (!editor)
+         currmesh.dynamic = false;
       meshes.push_back(currmesh);
 #ifndef DEDICATED
       if (editor)
@@ -462,7 +462,7 @@ void GetMap(string fn)
    int numobjsx = mapw / terrobjsize;
    int numobjsy = maph / terrobjsize;
    vector<Meshlist::iterator> meshits;
-   Mesh baseterrain("models/terrain/base", resman);
+   Mesh baseterrain(NTreeReader("models/terrain/base"), resman);
    
    locks.Write(meshes);
    for (int y = 0; y < numobjsy; ++y)
@@ -473,10 +473,8 @@ void GetMap(string fn)
          tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
-         // Have decided I don't like the way terrainmulti looks
-         // Note that if it ever goes back in, changes will need to be made to the render code too
-         tempmesh.drawdistmult = 1.f;//console.GetFloat("terrainmulti");
          tempmesh.terrain = true;
+         tempmesh.dynamic = false;
          meshes.push_front(tempmesh);
          meshits.push_back(meshes.begin());
       }
@@ -689,9 +687,8 @@ void GetMap(string fn)
    
    if (watermesh) delete watermesh;
    
-   watermesh = new Mesh("models/empty/base", resman);
+   watermesh = new Mesh(NTreeReader("models/empty/base"), resman);
    watermesh->collide = false;
-   watermesh->drawdistmult = 1.f;//console.GetFloat("terrainmulti"); // Looks weird if we draw terrain without water
    
    for (int i = 0; i < numwaterx; ++i)
    {
@@ -727,7 +724,7 @@ void GetMap(string fn)
          watermesh->Add(tempquad);
       }
    }
-   watermesh->GenVbo();
+   watermesh->Update();
    SendKeepalive();
    
    
@@ -783,7 +780,7 @@ void GetMap(string fn)
       {
          for (int y = 0; y < grassh; y += groupsize)
          {
-            Mesh grassmesh("models/empty/base", resman);
+            Mesh grassmesh = meshcache->GetMesh("models/empty");
             // Iterate over each group
             for (int ix = 0; ix < groupsize && ix + x < grassw; ++ix)
             {
@@ -812,8 +809,8 @@ void GetMap(string fn)
                         newmesh.Scale(sqrt(d / density) * gscale);
                         newmesh.Move(newpos);
                         newmesh.Rotate(rots);
-                        newmesh.LoadMaterials();
-                        newmesh.AdvanceAnimation();
+                        newmesh.EnsureMaterials();
+                        newmesh.Update();
                         
                         grassmesh.Add(newmesh);
                      }
@@ -825,7 +822,7 @@ void GetMap(string fn)
                float mx = (x + (float)groupsize / 2.f) * grasssizex;
                float my = (y + (float)groupsize / 2.f) * grasssizey;
                grassmesh.Move(Vector3(mx, 0, my));
-               grassmesh.CalcBounds();
+               grassmesh.Update();
                grassmesh.collide = false;
                grassmesh.terrain = true;
                grassmesh.drawdistmult = console.GetFloat("grassdrawdist") / console.GetFloat("viewdist");
@@ -847,7 +844,7 @@ void GetMap(string fn)
    // Must be done here so it's available for KDTree creation
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
-      i->CalcBounds();
+      i->Update();
    }
    locks.EndWrite(meshes);
    

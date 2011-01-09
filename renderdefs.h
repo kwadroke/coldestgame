@@ -42,7 +42,6 @@
 #include "SDL_ttf.h"
 #include "Mesh.h"
 #include "RWLock.h"
-#include "VboWorker.h"
 
 using std::vector;
 using std::list;
@@ -104,7 +103,7 @@ extern Material* skyboxmat;
 extern Material* shadowmat;
 extern MeshPtr particlemesh;
 extern vector<GUIPtr> spawnbuttons;
-extern vector<VboWorkerPtr> vboworkers;
+extern Camera maincam;
 #endif
 
 #endif

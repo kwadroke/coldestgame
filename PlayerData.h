@@ -53,7 +53,6 @@ class PlayerData
       bool spawned;
       bool needsync;
       vector<Meshlist::iterator> mesh;
-      Meshlist::iterator rendermesh;
       Particle* indicator;
       set<unsigned long> partids;
       set<unsigned long> acked;

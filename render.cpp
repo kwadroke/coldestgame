@@ -32,7 +32,6 @@ GraphicMatrix cameraproj, cameraview, lightproj, lightview;
 set<Mesh*> implist;
 set<Mesh*> visiblemeshes;
 vector<Mesh*> dynmeshes;
-Camera maincam;
 
 //#define THREADVBO
 
@@ -146,10 +145,8 @@ void Repaint()
    else
    {
       // Make sure materials are loaded.  Otherwise we have a long delay on the first spawn.
-      // Note that LoadMaterials is a very cheap call if the materials have already been loaded
-      // so it shouldn't be a problem to always do this.
       for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
-         i->LoadMaterials();
+         i->EnsureMaterials();
       
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       resman.shaderman.UseShader("none");
@@ -287,10 +284,7 @@ void RenderObjects(const PlayerData& localplayer)
       Mesh* i = *iptr;
       float adjustedimpdist = i->impdist * console.GetFloat("impdistmulti");
       adjustedimpdist *= adjustedimpdist;
-      if (i->drawdistmult > 0.f)
-         localdrawdist = int(viewdist * i->drawdistmult);
-      else
-         localdrawdist = viewdist;
+      localdrawdist = int(viewdist * i->drawdistmult);
       
       float isize = i->GetSize();
       if (i->dist > (localdrawdist + isize) * (localdrawdist + isize)
@@ -313,7 +307,7 @@ void RenderObjects(const PlayerData& localplayer)
       }
       else
       {
-         Uint32 ticks = SDL_GetTicks() - i->lastimpupdate;
+         Uint32 ticks = i->ImpTimer.elapsed();
          dist = i->dist;
          i->RenderImpostor(*impostormesh, impfbolist[i->impostorfbo], localplayer.pos);
          if ((ticks * ticks) > dist / (impmod * impmod / dist) && !reflectionrender)
@@ -397,7 +391,6 @@ void RenderParticles()
       Material* override = NULL;
       if (shadowrender)
          override = shadowmat;
-      particlemesh->GenVbo();
       particlemesh->Render(override);
       trislastframe += particlemesh->NumTris();
    }
@@ -536,7 +529,7 @@ void UpdateFBO(const PlayerData& localplayer)
       lights.Place();
       
       // Should really do this last so time to update isn't included
-      i->lastimpupdate = SDL_GetTicks();
+      i->ImpTimer.start();
    }
 }
 
@@ -885,7 +878,7 @@ void RenderWater()
    {
       int viewdist = console.GetInt("viewdist");
       glFogf(GL_FOG_START, float(viewdist) * .1f);
-      glFogf(GL_FOG_END, float(viewdist * watermesh->drawdistmult));
+      glFogf(GL_FOG_END, float(viewdist));
    }
    watermesh->Render();
    

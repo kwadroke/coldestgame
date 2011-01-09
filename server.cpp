@@ -277,7 +277,7 @@ void ServerLoop()
       SDL_mutexP(servermutex);
       for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
       {
-         i->AdvanceAnimation();
+         i->Update();
       }
       SDL_mutexV(servermutex);
       
@@ -634,7 +634,7 @@ int ServerListen(void* dummy)
                   for (size_t i = 0; i < numbodyparts; ++i)
                   {
                      if (serverplayers[oppnum].mesh[i] != servermeshes.end())
-                        serverplayers[oppnum].mesh[i]->AdvanceAnimation();
+                        serverplayers[oppnum].mesh[i]->Update();
                   }
                }
             }
@@ -1133,7 +1133,7 @@ void ServerLoadMap()
    // Must be done here so it's available for KDTree creation
    for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
    {
-      i->CalcBounds();
+      i->Update();
    }
    
    Vector3vec points(8, Vector3());
@@ -1227,7 +1227,6 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
                      dead = true;
                   else
                   {
-                     serverplayers[i].rendermesh->Remove(&(*serverplayers[i].mesh[part]));
                      servermeshes.erase(serverplayers[i].mesh[part]);
                      serverplayers[i].mesh[part] = servermeshes.end();
                      SendRemove(i, part);

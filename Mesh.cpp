@@ -1,197 +1,14 @@
-// @Begin License@
-// This file is part of Coldest.
-//
-// Coldest is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Coldest is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Coldest.  If not, see <http://www.gnu.org/licenses/>.
-//
-// Copyright 2008, 2010 Ben Nemec
-// @End License@
-
-
 #include "Mesh.h"
-#include "ProceduralTree.h" // Circular dependency
+#include "util.h"
+#include "ProceduralTree.h"
 
-Mesh::Mesh(const string& filename, ResourceManager &rm, NTreeReader read, bool gl) : render(true), dynamic(false),
-           collide(true), terrain(false), drawdistmult(-1.f), impdist(0.f), dist(0.f), impostortex(0), debug(false),
-           updatedelay(0), vbo(0), ibo(0), hasvbo(false), vbosize(0), ibosize(0), animtime(0), currkeyframe(0),
-           lastanimtick(SDL_GetTicks()), animspeed(1.f), curranimation(0), nextanimation(0), newchildren(false),
-           boundschanged(true), position(Vector3()), rots(Vector3()), size(100.f), height(0.f), width(0.f),
-           resman(rm), next(0), glops(gl), havemats(false), updatevbo(true), updateibo(false), scale(.01f), trisdirty(true),
-           parent(NULL), lasttick(0)
+Mesh::Mesh(NTreeReader reader, ResourceManager& rm) : render(true), dynamic(true), collide(true), terrain(false), dist(0.f), impdist(0.f),
+   impostorfbo(0), updatedelay(0), drawdistmult(1.f), meshdata(rm),
+   next(0), size(0.f), height(0.f), width(0.f), scale(1.f), trismoved(false),
+   trischanged(true), boundschanged(false), updatevbo(true), animtime(0), currkeyframe(0), animspeed(1.f), curranimation(0), nextanimation(0)
 {
-#ifndef DEDICATED
-   if (gl)
-      impmat = MaterialPtr(new Material("materials/impostor", rm.texman, rm.shaderman));
-#endif
-   if (filename != "")
-   {
-      NTreeReader reader(filename);
-      Load(reader);
-   }
-   else Load(read);
-}
-
-
-Mesh::~Mesh()
-{
-   if (hasvbo)
-   {
-#ifndef DEDICATED
-      glDeleteBuffers(1, &vbo);
-      glDeleteBuffers(1, &ibo);
-#endif
-   }
-}
-
-
-Mesh::Mesh(const Mesh& m) : render(m.render), dynamic(m.dynamic), collide(m.collide), terrain(m.terrain),
-           drawdistmult(m.drawdistmult), name(m.name), impdist(m.impdist), dist(m.dist), impostortex(m.impostortex),
-           debug(m.debug), updatedelay(m.updatedelay), tris(m.tris), vbosteps(m.vbosteps), offsets(m.offsets), minindex(m.minindex),
-           maxindex(m.maxindex), vbo(0), ibo(0), frametime(m.frametime),
-           hasvbo(false), childmeshes(m.childmeshes), animtime(m.animtime), currkeyframe(m.currkeyframe),
-           lastanimtick(m.lastanimtick), animspeed(m.animspeed), curranimation(m.curranimation),
-           nextanimation(m.nextanimation), numframes(m.numframes), startframe(m.startframe),
-           newchildren(m.newchildren), boundschanged(m.boundschanged), position(m.position), rots(m.rots),
-           size(m.size), height(m.height), width(m.width), resman(m.resman), next(m.next), glops(m.glops),
-           havemats(m.havemats), updatevbo(m.updatevbo), updateibo(m.updateibo), basefile(m.basefile), scale(m.scale),
-           campos(m.campos), trisdirty(m.trisdirty), parent(m.parent), lasttick(m.lasttick)
-{
-#ifndef DEDICATED
-   if (m.impmat)
-   {
-      impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
-      impmat->SetTexture(0, m.impmat->GetTexture(0));
-   }
-   if (m.impostor)
-   {
-      impostor = MeshPtr(new Mesh(*m.impostor));
-   }
-#endif
-   // The following containers hold smart pointers, which means that when we copy them
-   // the objects are still shared.  That's a bad thing, so we manually copy every
-   // object to the new container
-   VertexPtrvec localvert = m.vertices;
-   for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
-   {
-      VertexPtr p(new Vertex(**i));
-      vertices.push_back(p);
-   }
-   for (size_t i = 0; i < m.tris.size(); ++i)
-   {
-      for (size_t j = 0; j < 3; ++j)
-      {
-         tris[i].v[j] = vertices[tris[i].v[j]->id];
-      }
-   }
-   for (size_t i = 0; i < m.frameroot.size(); ++i)
-   {
-      frameroot.push_back(m.frameroot[i]->Clone());
-      framecontainer.push_back(map<string, MeshNodePtr>());
-      frameroot[i]->GetContainers(framecontainer[i], frameroot[i]);
-   }
-}
-
-
-Mesh& Mesh::operator=(const Mesh& m)
-{
-   if (this == &m)
-      return *this;
-   
-   //resman = m.resman; Reference, can't be reseated.  Should be okay to leave it since it has to be set though.
-   vbosteps = m.vbosteps;
-   offsets = m.offsets;
-   minindex = m.minindex;
-   maxindex = m.maxindex;
-   impdist = m.impdist;
-   render = m.render;
-   animtime = m.animtime;
-   lastanimtick = m.lastanimtick;
-   position = m.position;
-   rots = m.rots;
-   size = m.size;
-   drawdistmult = m.drawdistmult;
-   name = m.name;
-   debug = m.debug;
-   width = m.width;
-   height = m.height;
-   impostortex = m.impostortex;
-   vbo = 0;
-   ibo = 0;
-   hasvbo = false;
-   next = m.next;
-   childmeshes = m.childmeshes;
-   boundschanged = m.boundschanged;
-   currkeyframe = m.currkeyframe;
-   frametime = m.frametime;
-   glops = m.glops;
-   havemats = m.havemats;
-   basefile = m.basefile;
-   dynamic = m.dynamic;
-   collide = m.collide;
-   terrain = m.terrain;
-   dist = m.dist;
-   animspeed = m.animspeed;
-   curranimation = m.curranimation;
-   nextanimation = m.nextanimation;
-   newchildren = m.newchildren;
-   numframes = m.numframes;
-   startframe = m.startframe;
-   scale = m.scale;
-   updatevbo = m.updatevbo;
-   updateibo = m.updateibo;
-   campos = m.campos;
-   trisdirty = m.trisdirty;
-   parent = m.parent;
-   updatedelay = m.updatedelay;
-   lasttick = m.lasttick;
-   
-#ifndef DEDICATED
-   if (m.impmat)
-   {
-      impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
-      impmat->SetTexture(0, m.impmat->GetTexture(0));
-   }
-   if (m.impostor)
-   {
-      impostor = MeshPtr(new Mesh(*m.impostor));
-   }
-#endif
-   // The following containers hold smart pointers, which means that when we copy them
-   // the objects are still shared.  That's a bad thing, so we manually copy every
-   // object to the new container
-   vertices.clear();
-   VertexPtrvec localvert = m.vertices;
-   for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
-   {
-      VertexPtr p(new Vertex(**i));
-      vertices.push_back(p);
-   }
-   tris = m.tris;
-   for (size_t i = 0; i < m.tris.size(); ++i)
-   {
-      for (size_t j = 0; j < 3; ++j)
-      {
-         tris[i].v[j] = vertices[tris[i].v[j]->id];
-      }
-   }
-   frameroot.clear();
-   for (size_t i = 0; i < m.frameroot.size(); ++i)
-   {
-      frameroot.push_back(m.frameroot[i]->Clone());
-      framecontainer.push_back(map<string, MeshNodePtr>());
-      frameroot[i]->GetContainers(framecontainer[i], frameroot[i]);
-   }
-   return *this;
+   ImpTimer.start();
+   Load(reader);
 }
 
 
@@ -205,9 +22,9 @@ void Mesh::Load(const NTreeReader& reader)
    reader.Read(position.x, "Position", 0);
    reader.Read(position.y, "Position", 1);
    reader.Read(position.z, "Position", 2);
-   reader.Read(rots.x, "Rotations", 0);
-   reader.Read(rots.y, "Rotations", 1);
-   reader.Read(rots.z, "Rotations", 2);
+   reader.Read(rotation.x, "Rotations", 0);
+   reader.Read(rotation.y, "Rotations", 1);
+   reader.Read(rotation.z, "Rotations", 2);
    reader.Read(size, "Size");
    reader.Read(impdist, "ImpostorDistance");
    reader.Read(scale, "Scale");
@@ -270,8 +87,6 @@ void Mesh::Load(const NTreeReader& reader)
          currframe.Read(currft, "TimeToNextFrame");
          frametime.push_back(currft);
          
-         framecontainer.push_back(map<string, MeshNodePtr>());
-         
          MeshNodeMap nodes;
          for (int j = 0; j < currframe.GetItemIndex("Triangles"); ++j)
          {
@@ -320,16 +135,15 @@ void Mesh::Load(const NTreeReader& reader)
                newnode->vertices.push_back(newv);
                if (!i)
                {
-                  vertices.push_back(VertexPtr(new Vertex(newv)));
-                  vertmap[newv.id] = vertices.size() - 1;
-                  vertices.back()->id = vertices.size() - 1;
+                  meshdata.vertices.push_back(VertexPtr(new Vertex(newv)));
+                  vertmap[newv.id] = meshdata.vertices.size() - 1;
+                  meshdata.vertices.back()->id = meshdata.vertices.size() - 1;
                }
                newnode->vertices.back().id = vertmap[newv.id];
             }
             currcon.Read(newnode->facing, "Facing");
             currcon.Read(newnode->name, "Name");
             nodes[newnode->id] = newnode;
-            framecontainer[i][newnode->name] = newnode;
          }
          
          // Now that the nodes are loaded, rebuild the tree to get their proper positions
@@ -349,7 +163,7 @@ void Mesh::Load(const NTreeReader& reader)
             }
             else
             {
-               frameroot.push_back(it->second);
+               meshdata.frameroot.push_back(it->second);
             }
          }
          
@@ -366,28 +180,26 @@ void Mesh::Load(const NTreeReader& reader)
                for (int k = 0; k < 3; ++k)
                {
                   curr.Read(vid, "Verts", k);
-                  newtri->v[k] = vertices[vertmap[vid]];
+                  newtri->v[k] = meshdata.vertices[vertmap[vid]];
                   string tempid;
                   curr.Read(tempid, "ID");
                }
                curr.Read(newtri->matname, "Material");
-               if (glops)
-                  newtri->material = &resman.LoadMaterial(newtri->matname);
                curr.Read(newtri->collide, "Collide");
                curr.Read(newtri->id, "ID");
                
-               tris.push_back(*newtri);
+               meshdata.tris.push_back(*newtri);
             }
          }
          
          // Generate tangents for triangles
-         size_t currf = frameroot.size() - 1;
+         size_t currf = meshdata.frameroot.size() - 1;
          GraphicMatrix m;
-         frameroot[currf]->Transform(frameroot[currf], 0.f, vertices, m, Vector3());
+         meshdata.frameroot[currf]->Transform(meshdata.frameroot[currf], 0.f, meshdata.vertices, m, Vector3());
          
-         for (size_t k = 0; k < tris.size(); ++k)
+         for (size_t k = 0; k < meshdata.tris.size(); ++k)
          {
-            Triangle& newtri = tris[k];
+            Triangle& newtri = meshdata.tris[k];
             Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
             Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
             float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
@@ -399,11 +211,10 @@ void Mesh::Load(const NTreeReader& reader)
             for (size_t j = 0; j < 3; ++j)
             {
                newtri.v[j]->tangent.normalize();
-               frameroot[currf]->SetTangent(newtri.v[j]->id, newtri.v[j]->tangent);
+               meshdata.frameroot[currf]->SetTangent(newtri.v[j]->id, newtri.v[j]->tangent);
             }
          }
       }
-      UpdateTris();
    }
    else if (type == "proctree")
    {
@@ -413,7 +224,7 @@ void Mesh::Load(const NTreeReader& reader)
       t.ReadParams(reader);
       reader.Read(barkmat, "Materials", 0);
       reader.Read(leafmat, "Materials", 1);
-      size_t save = t.GenTree(this, &resman.LoadMaterial(barkmat), &resman.LoadMaterial(leafmat));
+      size_t save = t.GenTree(this, &meshdata.resman.LoadMaterial(barkmat), &meshdata.resman.LoadMaterial(leafmat));
       collide = true;
       logout << "Tree primitives: " << save << endl;
    }
@@ -421,285 +232,208 @@ void Mesh::Load(const NTreeReader& reader)
    else
    {
       logout << "Warning: Attempted to load unknown object type " << type;
-	   logout << " from file " << reader.GetPath() << endl;
+      logout << " from file " << reader.GetPath() << endl;
    }
-   CalcBounds();
-   for (size_t i = 0; i < frameroot.size(); ++i)
-      frameroot[i]->SetGL(glops);
+   trischanged = true;
+   boundschanged = true;
+   Update();
 }
 
 
-// Note, if this mesh has child meshes they need to have Move(GetPosition()) called on them
-// to force an update on their geometry
-void Mesh::Move(const Vector3& v, bool movetris)
+void Mesh::Move(const Vector3& v, const bool movetris)
 {
    if (movetris)
    {
       Vector3 move = v - position;
       
-      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      for (VertexPtrvec::iterator i = meshdata.vertices.begin(); i != meshdata.vertices.end(); ++i)
       {
          (*i)->pos += move;
       }
-      CalcBounds();
+      updatevbo = true;
+      ResetTriMaxDims();
    }
-   
    position = v;
-   trisdirty = true;
-   updatevbo = true;
+   trismoved = true;
 }
 
 
-const Vector3 Mesh::GetPosition() const
+void Mesh::Rotate(const Vector3& v, const bool movetris)
 {
-   if (frameroot.size() && frameroot[currkeyframe]->parent)
-   {
-      GraphicMatrix m = frameroot[currkeyframe]->parent->m;
-      Vector3 p = position;
-      p.transform(m);
-      return p; 
-   }
-   return position;
-}
-
-
-void Mesh::Rotate(const Vector3& v, bool movetris)
-{
-   if (rots.distance2(v) > 1.f)
-      boundschanged = true;
    if (movetris)
    {
       Vector3 pos = GetPosition();
       GraphicMatrix m;
       
       m.translate(-pos);
-      m.rotatez(-rots.z);
-      m.rotatey(-rots.y);
-      m.rotatex(-rots.x);
+      m.rotatez(-rotation.z);
+      m.rotatey(-rotation.y);
+      m.rotatex(-rotation.x);
       m.rotatex(v.x);
       m.rotatey(v.y);
       m.rotatez(v.z);
       m.translate(pos);
       
-      for (VertexPtrvec::iterator i = vertices.begin(); i != vertices.end(); ++i)
+      for (VertexPtrvec::iterator i = meshdata.vertices.begin(); i != meshdata.vertices.end(); ++i)
       {
          (*i)->pos.transform(m);
       }
+      updatevbo = true;
+      ResetTriMaxDims();
+   }
+   rotation = v;
+   trismoved = true;
+   boundschanged = true;
+}
+
+
+void Mesh::Scale(const float& sval)
+{
+   for (size_t i = 0; i < meshdata.frameroot.size(); ++i)
+      meshdata.frameroot[i]->Scale(sval);
+   ResetTriMaxDims();
+   scale *= sval;
+   trismoved = true;
+   boundschanged = true;
+}
+
+
+void Mesh::ScaleZ(const float& sval)
+{
+   for (size_t i = 0; i < meshdata.frameroot.size(); ++i)
+      meshdata.frameroot[i]->ScaleZ(sval);
+   ResetTriMaxDims();
+   trismoved = true;
+   boundschanged = true;
+}
+
+
+// Most of what goes on in Update should maybe be moved to MeshData, but for the moment I'm leaving it alone.
+// Something to think about in the future though.
+void Mesh::Update(const Vector3& campos, bool noanimation)
+{
+   if (!noanimation)
+      AdvanceAnimation();
+   if (trismoved || trischanged)
+      UpdateTris(campos);
+   if (boundschanged)
       CalcBounds();
-   }
-   
-   rots = v;
-   trisdirty = true;
-   updatevbo = true;
 }
 
 
-void Mesh::GenVbo(const int type)
+void Mesh::AdvanceAnimation()
 {
-#ifndef DEDICATED
-   if ((tris.size() || childmeshes.size()) && render)
+   if (meshdata.frameroot.size() < 2)
+      return;
+
+   animtime += static_cast<int>(fabs(animspeed) * static_cast<float>(animtimer.elapsed()));
+   animtimer.start();
+
+   while (animtime > frametime[currkeyframe])
    {
-      if (type != OnlyUpload)
+      animtime -= frametime[currkeyframe];
+      if (curranimation != nextanimation)
       {
-         GenVboData();
-         GenIboData();
+         curranimation = nextanimation;
+         currkeyframe = startframe[curranimation];
       }
-      if (type != OnlyData)
-      {
-         UploadVbo();
-      }
-   }
-#endif
-}
-
-
-void Mesh::GenVboData()
-{
-   size_t currindex = 0;
-   
-   size_t numverts = vertices.size();
-   for (size_t m = 0; m < childmeshes.size(); ++m)
-   {
-      numverts += childmeshes[m]->vertices.size();
-   }
-
-   updateibo = true;
-   if (vbodata.size() != numverts)
-   {
-      vbodata.resize(numverts);
-   }
-
-   for (size_t m = 0; m < childmeshes.size() + 1; ++m)
-   {
-      Mesh* currmesh;
-      if (m < 1)
-         currmesh = this;
       else
-         currmesh = childmeshes[m - 1];
-      VertexPtrvec& currvertices = currmesh->vertices;
-      VertexPtrvec::iterator cvend = currvertices.end();
-      Trianglevec& currtris = currmesh->tris;
-      size_t ctsize = currtris.size();
-      if (newchildren && m > 0)
       {
-         for (size_t i = 0; i < ctsize; ++i)
-         {
-            tris.push_back(currtris[i]);
-         }
+         ++currkeyframe;
       }
-      
-      // Build VBO
-      for (VertexPtrvec::iterator i = currvertices.begin(); i != cvend; ++i)
-      {
-         Vertex& currv = **i;
-         currv.index = currindex;
-         currv.GetVboData(vbodata[currindex], dynamic);
-         ++currindex;
-      }
+
+      //Loop
+      if (currkeyframe >= startframe[curranimation] + numframes[curranimation] - 1)
+         currkeyframe = startframe[curranimation];
    }
-   newchildren = false;
+
+   trismoved = true;
+   boundschanged = true;
 }
 
-void Mesh::GenIboData()
-{
-   // Build IBO
-   if (updateibo)
-   {
-      sort(tris.begin(), tris.end());
-      indexdata.clear();
-      vbosteps.clear();
-      offsets.clear();
-      minindex.clear();
-      maxindex.clear();
-      int counter = 0;
-      unsigned short currmin = 0, currmax = 0;
-      Trianglevec::iterator last = tris.begin();
-      Trianglevec::iterator tend = tris.end();
-      offsets.push_back((void*)0);
-      for (Trianglevec::iterator i = tris.begin(); i != tend; ++i)
-      {
-         if (last->material != i->material)
-         {
-            vbosteps.push_back(counter);
-            
-            ptrdiff_t current = ptrdiff_t(&indexdata[indexdata.size() - 1]) + ptrdiff_t(sizeof(indexdata[0]));
-            ptrdiff_t start = ptrdiff_t(&indexdata[0]);
-            offsets.push_back( (void*)(current - start) );
-            
-            minindex.push_back(currmin);
-            maxindex.push_back(currmax);
-            counter = 0;
-            currmin = 0;
-            currmax = 0;
-         }
-         ushortvec ind = i->GetIndices();
-         indexdata.insert(indexdata.end(), ind.begin(), ind.end());
-         last = i;
-         ++counter;
-         for (size_t j = 0; j < ind.size(); ++j)
-         {
-            currmin = std::min(currmin, ind[j]);
-            currmax = std::max(currmax, ind[j]);
-         }
-      }
-      vbosteps.push_back(counter);
-      minindex.push_back(currmin);
-      maxindex.push_back(currmax);
-      updateibo = false;
-   }
-}
 
-void Mesh::UploadVbo()
+void Mesh::UpdateTris(const Vector3& campos)
 {
-#ifndef DEDICATED
-   if (!hasvbo)
+   if (!meshdata.frameroot.size() || (currkeyframe < startframe[curranimation] || currkeyframe >= startframe[curranimation] + numframes[curranimation]))
+      return;
+
+   float interpval;
+   if (frametime.size() > 0)
+      interpval = float(animtime) / float(frametime[currkeyframe]);
+   else
+      interpval = 0.f;
+
+   GraphicMatrix m;
+   m.rotatex(rotation.x);
+   m.rotatey(rotation.y);
+   m.rotatez(rotation.z);
+   m.translate(position);
+
+   if (curranimation != nextanimation)
    {
-      glGenBuffersARB(1, &vbo);
-      glGenBuffersARB(1, &ibo);
-      hasvbo = true;
-   }
-   
-   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, ibo);
-   glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
-   
-   if (frameroot.size() <= 1 && !dynamic)
-   {
-      glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                        NULL, GL_STATIC_DRAW_ARB);
-      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
-                        vbodata.size() * sizeof(VBOData), 
-                        NULL, GL_STATIC_DRAW_ARB);
+      meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[startframe[nextanimation]], interpval, meshdata.vertices, m, campos);
    }
    else
    {
-      // Apparently it's faster to discard the old buffer and create a new one than to update the old one.
-      // I haven't noticed, but it seems my bottleneck is elsewhere so once that's fixed maybe it will matter.
-      glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, indexdata.size() * sizeof(unsigned short),
-                        NULL, GL_DYNAMIC_DRAW_ARB);
-      glBufferDataARB(GL_ARRAY_BUFFER_ARB, 
-                        vbodata.size() * sizeof(VBOData), 
-                        NULL, GL_DYNAMIC_DRAW_ARB);
+      if (currkeyframe == startframe[curranimation] + numframes[curranimation] - 1) // For meshes that are not animated
+      {
+         meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[currkeyframe], interpval, meshdata.vertices, m, campos);
+      }
+      else
+      {
+         meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[currkeyframe + 1], interpval, meshdata.vertices, m, campos);
+      }
    }
-   
-   glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, indexdata.size() * sizeof(unsigned short), &indexdata[0]);
-   glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0, vbodata.size() * sizeof(VBOData), &vbodata[0]);
-   
-   if (frameroot.size() <= 1 && !dynamic)
-   {
-      vbodata.clear();
-      indexdata.clear();
-   }
-   
-   vbosize = vbodata.size() * sizeof(VBOData);
-   ibosize = indexdata.size() * sizeof(unsigned short);
-   updatevbo = false;
-   if (!glops)
-      SetGL();
-#endif
+   trismoved = false;
+   updatevbo = true; // Let the render code know that what it has is out of date
 }
 
 
-void Mesh::BindVbo()
+// Note that UpdateTris needs to be called before this so we're not working with old tris
+void Mesh::CalcBounds()
 {
-#ifndef DEDICATED
-   if (!hasvbo)
+   // If we just translated the mesh then we don't need to do this.
+   size = 0.f;
+   float dist = 0.f;
+   float temp;
+   Vector3 localpos = GetPosition();
+   Vector3 localwpos, localhpos;
+   size_t tsize = meshdata.tris.size();
+   height = 0;
+   width = 0;
+   for (size_t i = 0; i < tsize; ++i)
    {
-      logout << "Hey dummy, you have to call GenVbo first" << endl;
-      return;
+      for (int j = 0; j < 3; ++j)
+      {
+         Triangle& currtri = meshdata.tris[i];
+         dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
+         if (dist > size) size = dist;
+
+         localwpos = currtri.v[j]->pos;
+         localwpos.y = localpos.y;
+         temp = localwpos.distance(localpos) + currtri.radmod;
+         if (temp > width) width = temp;
+
+         localhpos = currtri.v[j]->pos;
+         localhpos.x = localpos.x;
+         localhpos.z = localpos.z;
+         temp = localhpos.distance(localpos) + currtri.radmod;
+         if (temp > height) height = temp;
+      }
    }
-   VBOData dummy;
-   
-   glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ibo);
-   glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
-   
-   glEnableClientState(GL_VERTEX_ARRAY);
-   glEnableClientState(GL_NORMAL_ARRAY);
-   glEnableClientState(GL_COLOR_ARRAY);
-   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   
-   glNormalPointer(GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.nx) - (ptrdiff_t)&dummy));
-   glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.r) - (ptrdiff_t)&dummy));
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[0]) - (ptrdiff_t)&dummy));
-   glClientActiveTextureARB(GL_TEXTURE1_ARB);
-   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[1]) - (ptrdiff_t)&dummy));
-   /*glClientActiveTextureARB(GL_TEXTURE2_ARB);
-   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[2]) - (ptrdiff_t)&dummy));
-   glClientActiveTextureARB(GL_TEXTURE3_ARB);
-   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[3]) - (ptrdiff_t)&dummy));
-   glClientActiveTextureARB(GL_TEXTURE4_ARB);
-   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[4]) - (ptrdiff_t)&dummy));
-   glClientActiveTextureARB(GL_TEXTURE5_ARB);
-   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-   glTexCoordPointer(2, GL_FLOAT, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tc[5]) - (ptrdiff_t)&dummy));*/
-   
-   glVertexPointer(3, GL_FLOAT, sizeof(VBOData), 0); // Apparently putting this last helps performance somewhat
-   
-   glClientActiveTextureARB(GL_TEXTURE0_ARB);
-#endif
+   height *= 2.f;
+   width *= 2.f;
+   boundschanged = false;
+}
+
+
+// Note: This needs to be done even if tris just moved without changing size because this also triggers
+// the collision detection code to regenerate the midpoint of the tri for culling calculations
+void Mesh::ResetTriMaxDims()
+{
+   size_t s = meshdata.tris.size();
+   for (size_t i = 0; i < s; ++i)
+      meshdata.tris[i].maxdim = -1.f;
 }
 
 
@@ -709,27 +443,24 @@ void Mesh::BindVbo()
 void Mesh::Render(Material* overridemat)
 {
 #ifndef DEDICATED
-   if (!render)
+   if (!render || !meshdata.tris.size())
       return;
+   SetGL();
    if (updatevbo)
       GenVbo();
-   if (!havemats)
-      LoadMaterials();
-   if (!tris.size() || !hasvbo)
-   {
-      return;
-   }
-   BindVbo();
+
+   vbo.Bind();
+
    size_t currindex = 0;
    if (overridemat)
       overridemat->Use();
    for (size_t i = 0; i < vbosteps.size(); ++i)
    {
-      if (tris[currindex].material)
+      if (meshdata.tris[currindex].material)
       {
          if (!overridemat)
-            tris[currindex].material->Use();
-         else tris[currindex].material->UseTextureOnly();
+            meshdata.tris[currindex].material->Use();
+         else meshdata.tris[currindex].material->UseTextureOnly();
       }
       else
       {
@@ -745,363 +476,195 @@ void Mesh::Render(Material* overridemat)
 }
 
 
-void Mesh::BindAttribs()
+void Mesh::GenVbo()
 {
 #ifndef DEDICATED
-   if (resman.shaderman.CurrentShader() == 0) return;
+   if (meshdata.tris.size())
+   {
+      GenVboData();
+      if (trischanged)
+         GenIboData();
+      vbo.UploadVBO(dynamic || meshdata.frameroot.size() > 1);
+   }
+   updatevbo = false;
+#endif
+}
+
+
+void Mesh::GenVboData()
+{
+   size_t currindex = 0;
+   
+   size_t numverts = meshdata.vertices.size();
+   
+   if (vbo.vbodata.size() != numverts)
+   {
+      vbo.vbodata.resize(numverts);
+   }
+   
+   VertexPtrvec::iterator vend = meshdata.vertices.end();
+
+   // Build VBO
+   for (VertexPtrvec::iterator i = meshdata.vertices.begin(); i != vend; ++i)
+   {
+      Vertex& currv = **i;
+      if (currv.index != currindex)
+      {
+         currv.index = currindex;
+         trischanged = true;
+      }
+      currv.GetVboData(vbo.vbodata[currindex], dynamic);
+      ++currindex;
+   }
+}
+
+
+void Mesh::GenIboData()
+{
+   // Build IBO
+   sort(meshdata.tris.begin(), meshdata.tris.end());
+   vbo.indexdata.clear();
+   vbosteps.clear();
+   offsets.clear();
+   minindex.clear();
+   maxindex.clear();
+   int counter = 0;
+   unsigned short currmin = 0, currmax = 0;
+   Trianglevec::iterator last = meshdata.tris.begin();
+   Trianglevec::iterator tend = meshdata.tris.end();
+   offsets.push_back((void*)0);
+   for (Trianglevec::iterator i = meshdata.tris.begin(); i != tend; ++i)
+   {
+      if (last->material != i->material)
+      {
+         vbosteps.push_back(counter);
+
+         ptrdiff_t current = ptrdiff_t(&vbo.indexdata[vbo.indexdata.size() - 1]) + ptrdiff_t(sizeof(vbo.indexdata[0]));
+         ptrdiff_t start = ptrdiff_t(&vbo.indexdata[0]);
+         offsets.push_back( (void*)(current - start) );
+
+         minindex.push_back(currmin);
+         maxindex.push_back(currmax);
+         counter = 0;
+         currmin = 0;
+         currmax = 0;
+      }
+      ushortvec ind = i->GetIndices();
+      vbo.indexdata.insert(vbo.indexdata.end(), ind.begin(), ind.end());
+      last = i;
+      ++counter;
+      for (size_t j = 0; j < ind.size(); ++j)
+      {
+         currmin = std::min(currmin, ind[j]);
+         currmax = std::max(currmax, ind[j]);
+      }
+   }
+   vbosteps.push_back(counter);
+   minindex.push_back(currmin);
+   maxindex.push_back(currmax);
+
+   trischanged = false;
+}
+
+
+void Mesh::BindAttribs()
+{
+   #ifndef DEDICATED
+   if (meshdata.resman.shaderman.CurrentShader() == 0) return;
    VBOData dummy;
    int location;
-   location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
+   location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "terrainwt");
    if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.terrainwt[0]) - (ptrdiff_t)&dummy));
    }
-   location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt1");
+   location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "terrainwt1");
    if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.terrainwt1[0]) - (ptrdiff_t)&dummy));
    }
-   location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "tangent");
+   location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "tangent");
    if (location >= 0)
    {
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tx) - (ptrdiff_t)&dummy));
    }
-#endif
+   #endif
 }
 
 
 void Mesh::UnbindAttribs()
 {
-#ifndef DEDICATED
-   if (resman.shaderman.CurrentShader() == 0) return;
-   int location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt");
+   #ifndef DEDICATED
+   if (meshdata.resman.shaderman.CurrentShader() == 0) return;
+   int location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "terrainwt");
    if (location >= 0)
    {
       glDisableVertexAttribArrayARB(location);
    }
-   location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "terrainwt1");
+   location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "terrainwt1");
    if (location >= 0)
    {
       glDisableVertexAttribArrayARB(location);
    }
-   location = resman.shaderman.GetAttribLocation(resman.shaderman.CurrentShader(), "tangent");
+   location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "tangent");
    if (location >= 0)
    {
       glDisableVertexAttribArrayARB(location);
    }
-#endif
+   #endif
 }
 
 
 void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 {
-#ifndef DEDICATED
-   if (!impostor)
+   #ifndef DEDICATED
+   if (!meshdata.impmat)
    {
-      impostor = MeshPtr(new Mesh("models/impostor/base", resman));
-      Triangle& first = impostor->tris[0];
-      Triangle& second = impostor->tris[1];
-      first.material = impmat.get();
-      second.material = impmat.get();
+      meshdata.impmat = MaterialPtr(new Material("materials/impostor", meshdata.resman.texman, meshdata.resman.shaderman));
+   }
+   if (!meshdata.impostor)
+   {
+      meshdata.impostor = MeshPtr(new Mesh(NTreeReader("models/impostor/base"), meshdata.resman));
+      Triangle& first = meshdata.impostor->meshdata.tris[0];
+      Triangle& second = meshdata.impostor->meshdata.tris[1];
+      first.material = meshdata.impmat.get();
+      second.material = meshdata.impmat.get();
    }
    
-   impmat->SetTexture(0, impfbo.GetTexture());
+   meshdata.impmat->SetTexture(0, impfbo.GetTexture());
    float width2 = width / 2.f;
    float height2 = height / 2.f;
-   impostor->frameroot[0]->vertices[0].pos = Vector3(-width2, height2, 0);
-   impostor->frameroot[0]->vertices[1].pos = Vector3(-width2, -height2, 0);
-   impostor->frameroot[0]->vertices[2].pos = Vector3(width2, height2, 0);
-   impostor->frameroot[0]->vertices[3].pos = Vector3(width2, -height2, 0);
+   meshdata.impostor->meshdata.frameroot[0]->vertices[0].pos = Vector3(-width2, height2, 0);
+   meshdata.impostor->meshdata.frameroot[0]->vertices[1].pos = Vector3(-width2, -height2, 0);
+   meshdata.impostor->meshdata.frameroot[0]->vertices[2].pos = Vector3(width2, height2, 0);
+   meshdata.impostor->meshdata.frameroot[0]->vertices[3].pos = Vector3(width2, -height2, 0);
    
    Vector3 moveto = position;
-   impostor->Move(moveto);
-   impostor->AdvanceAnimation(campos);
-   rendermesh.Add(*impostor);
-#endif
-}
-
-
-void Mesh::AdvanceAnimation(const Vector3& cpos)
-{
-   // Ideally this would be < 2, but it causes some problems ATM
-   if (frameroot.size() < 1) // || frameroot.size() < 2 && !dynamic
-      return;
-   
-   Uint32 currtick = SDL_GetTicks();
-   animtime += static_cast<int>(fabs(animspeed) * static_cast<float>(currtick - lastanimtick));
-   lastanimtick = currtick;
-   while (animtime > frametime[currkeyframe])
-   {
-      animtime -= frametime[currkeyframe];
-      // Move to next frame
-      if (curranimation != nextanimation)
-      {
-         curranimation = nextanimation;
-         currkeyframe = startframe[curranimation];
-      }
-      else
-         ++currkeyframe;
-      
-      // Loop
-      if (currkeyframe >= startframe[curranimation] + numframes[curranimation] - 1)
-         currkeyframe = startframe[curranimation];
-   }
-   trisdirty = true;
-   campos = cpos;
-   UpdateTris();
-}
-
-
-// TODO: Doesn't currently update transparent tris (but then neither does anything else ATM)
-void Mesh::UpdateTris()
-{
-   Uint32 currtick = SDL_GetTicks();
-   if (!trisdirty || !frameroot.size() ||
-      (currkeyframe < startframe[curranimation] || currkeyframe >= startframe[curranimation] + numframes[curranimation]) ||
-      (currtick - lasttick < updatedelay))
-   {
-      return;
-   }
-   lasttick = currtick;
-   float interpval;
-   if (frametime.size() > 0)
-      interpval = (float)animtime / (float)frametime[currkeyframe];
-   else 
-      interpval = 0.f;
-   
-   if (glops && !hasvbo) // Means we set glops with SetGL
-      LoadMaterials(); // Need to do this before Transform
-   
-   GraphicMatrix m;
-   
-   m.rotatex(rots.x);
-   m.rotatey(rots.y);
-   m.rotatez(rots.z);
-   
-   m.translate(position);
-   
-   if (curranimation != nextanimation)
-   {
-      frameroot[currkeyframe]->Transform(frameroot[startframe[nextanimation]], interpval, vertices, m, campos);
-      boundschanged = true;
-   }
-   else
-   {
-      if (currkeyframe == startframe[curranimation] + numframes[curranimation] - 1)
-      {
-         frameroot[currkeyframe]->Transform(frameroot[currkeyframe], interpval, vertices, m, campos);
-      }
-      else
-      {
-         frameroot[currkeyframe]->Transform(frameroot[currkeyframe + 1], interpval, vertices, m, campos);
-         boundschanged = true;
-      }
-   }
-   
-   CalcBounds();
-   ResetTriMaxDims();
-   if (!childmeshes.size())
-      trisdirty = false; // We don't know this if we have child meshes
-   updatevbo = true;
-}
-
-
-void Mesh::CalcBounds()
-{
-   // If we just translated the mesh then we don't need to do this.
-   if (boundschanged && !childmeshes.size())
-   {
-      size = 0.f;
-      float dist = 0.f;
-      float temp;
-      Vector3 localpos = GetPosition();
-      Vector3 localwpos, localhpos;
-      size_t tsize = tris.size();
-      height = 0;
-      width = 0;
-      for (size_t i = 0; i < tsize; ++i)
-      {
-         for (int j = 0; j < 3; ++j)
-         {
-            Triangle& currtri = tris[i];
-            dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
-            if (dist > size) size = dist;
-            
-            localwpos = currtri.v[j]->pos;
-            localwpos.y = localpos.y;
-            temp = localwpos.distance(localpos) + currtri.radmod;
-            if (temp > width) width = temp;
-            
-            localhpos = currtri.v[j]->pos;
-            localhpos.x = localpos.x;
-            localhpos.z = localpos.z;
-            temp = localhpos.distance(localpos) + currtri.radmod;
-            if (temp > height) height = temp;
-         }
-      }
-      height *= 2.f;
-      width *= 2.f;
-   }
-   boundschanged = false;
-   if (childmeshes.size())
-   {
-      for (size_t i = 0; i < childmeshes.size(); ++i)
-         childmeshes[i]->CalcBounds();
-      size = 0;
-      height = 0;
-      width = 0;
-      for (size_t i = 0; i < childmeshes.size(); ++i)
-      {
-         size = std::max(size, childmeshes[i]->size);
-         height = std::max(height, childmeshes[i]->height);
-         width = std::max(width, childmeshes[i]->width);
-      }
-   }
-}
-
-
-// I am not at all certain that animspeed needs to be part of the state, we'll see
-void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, const int atime, const float aspeed)
-{
-   if (frameroot.size() < 1) return;
-   
-   rots = rot;
-   currkeyframe = keyframe;
-   animtime = atime;
-   SetAnimSpeed(aspeed);
-   
-   if (!frameroot[currkeyframe]->parent) // If we're a child mesh our position should be set by the parent
-   {
-      position = pos;
-   }
-   
-   trisdirty = true;
-   UpdateTris();
-}
-
-
-void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, float& aspeed, float& getsize)
-{
-   pos = GetPosition();
-   rot = rots;
-   keyframe = currkeyframe;
-   atime = animtime;
-   aspeed = animspeed;
-   getsize = size;
-}
-
-
-void Mesh::LoadMaterials()
-{
-#ifndef DEDICATED
-   if (havemats) return;
-   for (size_t i = 0; i < tris.size(); ++i)
-   {
-      if (!tris[i].material && tris[i].matname != "")
-         tris[i].material = &resman.LoadMaterial(tris[i].matname);
-   }
-   impmat = MaterialPtr(new Material("materials/impostor", resman.texman, resman.shaderman));
-   havemats = true;
-#endif
-}
-
-
-// Only for meshes that are built out of raw triangles - meshes loaded from a file should already have this done
-void Mesh::GenTangents()
-{
-   for (size_t k = 0; k < tris.size(); ++k)
-   {
-      Triangle& newtri = tris[k];
-      Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
-      Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
-      float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
-      float tctwo = newtri.v[2]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
-      Vector3 tangent = one * -tctwo + two * tcone;
-      for (size_t j = 0; j < 3; ++j)
-         newtri.v[j]->tangent += tangent;
-   }
-   for (size_t i = 0; i < vertices.size(); ++i)
-   {
-      vertices[i]->tangent.normalize();
-   }
-}
-
-
-void Mesh::Scale(const float& sval)
-{
-   for (size_t i = 0; i < frameroot.size(); ++i)
-      frameroot[i]->Scale(sval);
-   ResetTriMaxDims();
-   scale *= sval;
-}
-
-
-void Mesh::ScaleZ(const float& sval)
-{
-   for (size_t i = 0; i < frameroot.size(); ++i)
-      frameroot[i]->ScaleZ(sval);
-   ResetTriMaxDims();
-}
-
-
-// The insertion happens conceptually, but m remains a separate Mesh
-// Note: Any time you move a parent you must call Move(mesh.GetPosition()) on the
-// child mesh so that the geometry knows it needs to reset (mostly for collision detection).
-// Eventually this should probably be done automatically
-void Mesh::InsertIntoContainer(const string& name, Mesh& m)
-{
-   if (frameroot.size() != m.frameroot.size())
-   {
-      logout << "Warning: Not inserting mesh.  Keyframe mismatch." << endl;
-      return;
-   }
-   
-   for (size_t i = 0; i < frameroot.size(); ++i)
-   {
-      m.frameroot[i]->parent = &(*framecontainer[i][name]);
-   }
-   m.parent = this;
-}
-
-
-void Mesh::SetAnimSpeed(const float newas)
-{
-   animspeed = newas;
-}
-
-
-void Mesh::ResetAnimation()
-{
-   animspeed = 0.f;
-   currkeyframe = 0;
-   animtime = 0;
-}
-
-
-void Mesh::ResetTriMaxDims()
-{
-   size_t s = tris.size();
-   for (size_t i = 0; i < s; ++i)
-      tris[i].maxdim = -1.f;
+   meshdata.impostor->Move(moveto);
+   meshdata.impostor->Update(campos);
+   rendermesh.Add(*meshdata.impostor);
+   #endif
 }
 
 
 void Mesh::Add(Triangle& triangle)
 {
-   tris.push_back(triangle);
-   Triangle& tri = tris.back();
+   meshdata.tris.push_back(triangle);
+   Triangle& tri = meshdata.tris.back();
    for (size_t i = 0; i < 3; ++i)
    {
-      if (find(vertices.begin(), vertices.end(), tri.v[i]) == vertices.end())
+      if (find(meshdata.vertices.begin(), meshdata.vertices.end(), tri.v[i]) == meshdata.vertices.end())
       {
-         vertices.push_back(tri.v[i]);
-         tri.v[i]->id = vertices.size() - 1;
+         meshdata.vertices.push_back(tri.v[i]);
+         tri.v[i]->id = meshdata.vertices.size() - 1;
       }
    }
    boundschanged = true;
+   trischanged = true;
+   updatevbo = true;
 }
 
 
@@ -1116,52 +679,78 @@ void Mesh::Add(Quad& quad)
 
 void Mesh::Add(Mesh &mesh)
 {
-   mesh.UpdateTris();
-   if (glops)
-      mesh.SetGL();
-   for (size_t i = 0; i < mesh.tris.size(); ++i)
+   for (size_t i = 0; i < mesh.meshdata.tris.size(); ++i)
    {
-      Add(mesh.tris[i]);
+      Add(mesh.meshdata.tris[i]);
    }
-}
-
-
-void Mesh::Add(Mesh* mesh)
-{
-   mesh->UpdateTris();
-   if (glops)
-      mesh->SetGL();
-   childmeshes.push_back(mesh);
-   newchildren = true;
-   if (tris.size() && !childmeshes.size())
-      logout << "Warning: Adding mesh pointers to non-empty mesh.  This erases all of its existing triangles.\n";
-   tris.clear();
-   updateibo = true;
-   boundschanged = true;
-}
-
-
-void Mesh::Remove(Mesh* mesh)
-{
-   childmeshes.erase(remove(childmeshes.begin(), childmeshes.end(), mesh), childmeshes.end());
-   tris.clear();
-   newchildren = true;
-   boundschanged = true;
-}
-
-
-int Mesh::NumTris() const
-{
-   return tris.size();
 }
 
 
 void Mesh::Clear()
 {
-   tris.clear();
-   vertices.clear();
-   childmeshes.clear();
-   vbosize = 0;
+   meshdata.tris.clear();
+   meshdata.vertices.clear();
+   trischanged = true;
+   updatevbo = true;
+}
+
+
+// Only for meshes that are built out of raw triangles - meshes loaded from a file should already have this done
+void Mesh::GenTangents()
+{
+   for (size_t k = 0; k < meshdata.tris.size(); ++k)
+   {
+      Triangle& newtri = meshdata.tris[k];
+      Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
+      Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
+      float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
+      float tctwo = newtri.v[2]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
+      Vector3 tangent = one * -tctwo + two * tcone;
+      for (size_t j = 0; j < 3; ++j)
+         newtri.v[j]->tangent += tangent;
+   }
+   for (size_t i = 0; i < meshdata.vertices.size(); ++i)
+   {
+      meshdata.vertices[i]->tangent.normalize();
+   }
+}
+
+
+void Mesh::EnsureMaterials()
+{
+   if (trischanged)
+      meshdata.EnsureMaterials();
+}
+
+
+// There's a good chance animspeed doesn't actually need to be part of the state, but it doesn't really hurt to have it either.
+void Mesh::SetState(const Vector3& pos, const Vector3& rot, const int keyframe, const int atime, const float aspeed)
+{
+   if (meshdata.frameroot.size() < 1) return;
+   
+   rotation = rot;
+   currkeyframe = keyframe;
+   animtime = atime;
+   SetAnimSpeed(aspeed);
+   position = pos;
+   Update(Vector3(), true); // We don't want the animation code to run because it would alter the state
+}
+
+
+void Mesh::ReadState(Vector3& pos, Vector3& rot, int& keyframe, int& atime, float& aspeed, float& getsize)
+{
+   pos = GetPosition();
+   rot = rotation;
+   keyframe = currkeyframe;
+   atime = animtime;
+   aspeed = animspeed;
+   getsize = size;
+}
+
+
+void Mesh::SetAnimSpeed(const float newas)
+{
+   animspeed = newas;
 }
 
 
@@ -1174,14 +763,28 @@ void Mesh::SetAnimation(const int newanim)
 
 void Mesh::SetGL()
 {
-   glops = true;
-   LoadMaterials();
-   for (size_t i = 0; i < frameroot.size(); ++i)
-      frameroot[i]->SetGL(true);
+   meshdata.EnsureMaterials();
+   if (trischanged)
+   {
+      for (size_t i = 0; i < meshdata.frameroot.size(); ++i)
+         meshdata.frameroot[i]->SetGL(true);
+   }
 }
 
 
-
-
-
+void Mesh::debug()
+{
+   if (basefile == "models/sighthit/base")
+   {
+      logout << "debug" << endl;
+      for (size_t i = 0; i < meshdata.tris.size(); ++i)
+      {
+         for (size_t j = 0; j < 3; ++j)
+         {
+            logout << meshdata.tris[i].v[j]->texcoords[0][0] << endl;
+            logout << meshdata.tris[i].v[j]->texcoords[0][1] << endl;
+         }
+      }
+   }
+}
 

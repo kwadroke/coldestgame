@@ -40,7 +40,7 @@ GENERAL = coldest.o Vector3.o GraphicMatrix.o CollisionDetection.o\
 		NTreeReader.o Material.o ResourceManager.o Mesh.o Triangle.o Quad.o\
 		MeshNode.o XSWrapper.o ServerState.o MeshCache.o settings.o tsint.o\
 		SoundManager.o ALBuffer.o ALSource.o editor.o Bot.o Updater.o\
-		Camera.o Recorder.o Replayer.o
+		Camera.o Recorder.o Replayer.o VBO.o MeshData.o
       
 GUI = GUI.o Button.o LineEdit.o ScrollView.o ProgressBar.o TabWidget.o\
 		actions.o Table.o TableItem.o ComboBox.o TextArea.o Slider.o Layout.o

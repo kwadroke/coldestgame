@@ -1,174 +1,120 @@
-// @Begin License@
-// This file is part of Coldest.
-//
-// Coldest is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Coldest is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Coldest.  If not, see <http://www.gnu.org/licenses/>.
-//
-// Copyright 2008, 2010 Ben Nemec
-// @End License@
+#ifndef MESH_H
+#define MESH_H
 
-
-#ifndef __MESH_H
-#define __MESH_H
-
-#include <map>
-#include "Vector3.h"
-#include "Triangle.h"
-#include "types.h"
-#include "SDL.h"
+#include "MeshData.h"
 #include "NTreeReader.h"
+#include "Timer.h"
+#include "types.h"
 #include "ResourceManager.h"
-#include "Quad.h"
 #include "MeshNode.h"
+#include "Triangle.h"
+#include "Quad.h"
+#include "VBO.h"
 #include "FBO.h"
-#include "util.h"
-#include "Timer.h" // Debugging
+#include <SDL/SDL.h>
 
-using std::list;
-using std::map;
-
-/**
-	@author Ben Nemec <cybertron@nemebean.com>
-*/
 class Mesh
 {
-   friend class MeshCache;
+   friend class MeshCache;  // So the cache can reset internal timers
    public:
-      Mesh(const string&, ResourceManager&, NTreeReader read = NTreeReader(), bool gl = false);
-      ~Mesh();
-      Mesh(const Mesh&);
-      Mesh& operator=(const Mesh&);
-      bool operator<(const Mesh&) const;
-      bool operator>(const Mesh&) const;
-      void CalcBounds();
-      void Load(const NTreeReader&);
-      void UpdateTris();
-      void Move(const Vector3&, bool movetris = false);
-      const Vector3 GetPosition() const;
-      void Rotate(const Vector3&, bool movetris = false);
-      const Vector3 GetRotation() const {return rots;}
-      void GenVbo(const int type = 0);
-      void BindAttribs();
-      void UnbindAttribs();
+      Mesh(NTreeReader, ResourceManager&);
+      
+      void Move(const Vector3&, const bool movetris = false);
+      void Rotate(const Vector3&, const bool movetris = false);
+      void Scale(const float&);
+      void ScaleZ(const float&);
+
+      const Vector3 GetPosition() const {return position;}
+      const Vector3 GetRotation() const {return rotation;}
+      string GetFile() const {return basefile;}
+      float GetAnimSpeed() const{return animspeed;}
+      float GetScale() const {return scale;}
+
       void Render(Material* overridemat = NULL);
+      void SetAnimation(const int);
+      void Update(const Vector3& campos = Vector3(), bool noanimation = false);
       void RenderImpostor(Mesh&, FBO&, const Vector3&);
+
       void Add(Triangle&);
       void Add(Quad&);
       void Add(Mesh&);
-      void Add(Mesh*);
-      void Remove(Mesh*);
       void Clear();
-      void InsertIntoContainer(const string&, Mesh&);
-      void LoadMaterials();
-      void Scale(const float&);
-      void ScaleZ(const float&);
-      void SetAnimSpeed(const float);
-      void ResetAnimation();
-      void SetAnimation(const int);
+      void GenTangents();
+      void EnsureMaterials();
+
+      void Begin() {next = 0;}
+      bool HasNext() const {return next < NumTris();}
+      Triangle& Next() {++next; return meshdata.tris[next - 1];}
+      size_t NumTris() const {return meshdata.tris.size();}
+      float GetHeight() {return height;}
+      float GetWidth() {return width;}
+      float GetSize() {return size;}
+
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
       void ReadState(Vector3&, Vector3&, int&, int&, float&, float&);
-      float GetWidth(){return width;}
-      float GetHeight(){return height;}
-      float GetSize(){return size;}
+      void SetAnimSpeed(const float);
       void SetGL();
-      string GetFile() const{return basefile;}
-      float GetAnimSpeed() const{return animspeed;}
-      float GetScale() const{return scale;}
-      bool VboDirty() const{return updatevbo;}
-      
-      void Begin() {next = 0;}
-      bool HasNext() const {return next < tris.size();}
-      Triangle& Next() {++next; return tris[next - 1];}
-      
-      int NumTris() const;
-      void AdvanceAnimation(const Vector3& campos = Vector3());
-      void GenTangents();
-      
+
+      void debug();
+
       bool render;
       bool dynamic;
       bool collide;
       bool terrain;
-      float drawdistmult;
+      bool reverseanim;
       string name;
-      
-      float impdist;
       float dist;
-      int impostorfbo;
-      GLuint impostortex;
-      Uint32 lastimpupdate;
-      bool debug;
+      float impdist;
+      Timer ImpTimer;
+      size_t impostorfbo;
+      unsigned int updatedelay;
+      float drawdistmult;
       
-      Uint32 updatedelay;
-      
-      enum UpdateType{All, OnlyData, OnlyUpload};
-      
+
    private:
-      void BindVbo();
+      void Load(const NTreeReader&);
+      void CalcBounds();
       void ResetTriMaxDims();
+
+      void AdvanceAnimation();
+      void UpdateTris(const Vector3& campos = Vector3(.003, .004, .005));
+      void GenVbo();
       void GenVboData();
       void GenIboData();
-      void UploadVbo();
-      
-      Trianglevec tris;
-      Trianglevec trantris; // Currently not used
-      VertexPtrvec vertices;
+      void BindAttribs();
+      void UnbindAttribs();
+
+      // Primary Mesh data
+      MeshData meshdata;
       intvec vbosteps;
       vector<void*> offsets;
       intvec minindex, maxindex;
-      GLuint vbo;
-      GLuint ibo;
-      vector<VBOData> vbodata;
-      ushortvec indexdata;
-      vector<MeshNodePtr> frameroot;
+      vector<Material*> materials;
+      VBO vbo;
+
+      // Mesh state
       intvec frametime;
-      vector<map<string, MeshNodePtr> > framecontainer;
-      bool hasvbo;
-      size_t vbosize, ibosize;
-      vector<Mesh*> childmeshes;
-      
+      Vector3 position;
+      Vector3 rotation;
+      size_t next;
+      float size, height, width;
+      float scale;
+      string basefile;
+
+      // Flags
+      bool trismoved;
+      bool trischanged;
+      bool boundschanged;
+      bool updatevbo;
+
+      // Animation data
+      Timer animtimer;
       int animtime;
       int currkeyframe;
-      Uint32 lastanimtick;
       float animspeed;
       int curranimation, nextanimation;
       intvec numframes;
       intvec startframe;
-      bool newchildren;
-      bool boundschanged;
-      
-      Vector3 position;
-      Vector3 rots;
-      float size;
-      float height, width;
-      Vector3 max, min;
-      
-      ResourceManager& resman;
-      
-      shared_ptr<Mesh> impostor;
-      MaterialPtr impmat;
-
-      size_t next;
-      
-      bool glops;
-      bool havemats;
-      bool updatevbo, updateibo;
-      string basefile;
-      float scale;
-      
-      Vector3 campos;
-      bool trisdirty;
-      Mesh* parent;
-      Uint32 lasttick;
 };
 
 typedef list<Mesh> Meshlist;
@@ -177,4 +123,4 @@ typedef shared_ptr<Mesh> MeshPtr;
 
 const string objectfilever = "Version4";
 
-#endif
+#endif // MESH_H

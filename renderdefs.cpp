@@ -48,5 +48,5 @@ Material* skyboxmat;
 Material* shadowmat;
 MeshPtr particlemesh;
 vector<GUIPtr> spawnbuttons;
-vector<VboWorkerPtr> vboworkers;
+Camera maincam;
 #endif

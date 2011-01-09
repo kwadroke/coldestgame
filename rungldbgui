@@ -1,2 +1,2 @@
 #!/bin/bash
-BUGLE_CHAIN=pass LD_PRELOAD=libbugle.so SDL_VIDEO_GL_DRIVER=libbugle.so gldb-gui ./coldet
+BUGLE_CHAIN=pass LD_PRELOAD=libbugle.so SDL_VIDEO_GL_DRIVER=libbugle.so gldb-gui ./coldest
