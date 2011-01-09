@@ -49,7 +49,7 @@ class Camera
    private:
       Vector3 actual, actuallook;
       Timer timer;
-
+      Vector3 adjustment;
 };
 
 #endif

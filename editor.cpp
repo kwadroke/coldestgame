@@ -22,6 +22,7 @@
 #include "globals.h"
 #include "renderdefs.h"
 #include "defines.h"
+#include <stdio.h>
 
 using std::vector;
 
@@ -603,8 +604,11 @@ void SaveMap()
    oldmap.close();
    bakmap.close();
    
-   // Output new map
-   ofstream newmap(saveto.c_str(), ios::trunc);
+   // Output new map - write it to a temporary location first so if there is a problem saving (not that that would _ever_ happen),
+   // we don't trash the original map file.
+   // Note, tmpnam has some potential bad security implications.  In this case I don't think it's a big deal, but keep it in mind.
+   string tempname = tmpnam(NULL);
+   ofstream newmap(tempname.c_str(), ios::trunc);
    newmap << olddata;
    
    // Write spawn points
@@ -688,6 +692,16 @@ void SaveMap()
       }
    }
    newmap.close();
+
+   ifstream tempmap(tempname.c_str());
+   ofstream realmap(saveto.c_str(), ios::trunc);
+   while (getline(tempmap, getdata))
+   {
+      realmap << getdata << endl;
+   }
+   tempmap.close();
+   realmap.close();
+   
 }
 
 

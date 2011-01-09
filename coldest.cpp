@@ -1508,7 +1508,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       mplayer.pos.x += d.x * step * mplayer.speed;
       mplayer.pos.z -= d.z * step * mplayer.speed;
    }
-   
+
    static const float threshold = .3f;
    static float gravity = .15f;
    
@@ -1976,40 +1976,15 @@ void Animate()
    
    
    // Meshes
-#if defined(THREADANIM) && !defined(DEDICATED)
-   size_t workercount = meshes.size() / console.GetInt("numthreads");
-   size_t counter = 0, currworker = 0;
-   Meshlist::iterator workerstart = meshes.begin();
-#endif
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 30.f);
       size_t maxdelay = console.GetInt("maxanimdelay");
       if (i->updatedelay > maxdelay)
          i->updatedelay = maxdelay;
-#if defined(THREADANIM) && !defined(DEDICATED)
-      if (counter == workercount)
-      {
-         vboworkers[currworker]->Run(workerstart, i, player[0].pos);
-         if (currworker != (size_t)console.GetInt("numthreads") - 1)
-            workerstart = i;
-         ++currworker;
-         counter = 0;
-      }
-      ++counter;
-#else
       i->Update(player[0].pos);
-#endif
    }
-#if defined(THREADANIM) && !defined(DEDICATED)
-   animworkers.back()->Run(workerstart, meshes.end(), player[0].pos);
    
-   // Wait for worker threads to finish
-   for (size_t i = 0; i < animworkers.size(); ++i)
-   {
-      animworkers[i]->wait();
-   }
-#endif
    locks.EndWrite(meshes);
    
    
