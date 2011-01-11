@@ -217,8 +217,8 @@ void EditorEventHandler(SDL_Event event)
                float mousespeed = console.GetFloat("mousespeed") / 100.f;
                
                player[0].pitch += event.motion.yrel / mousespeed / zoomfactor;
-               if (player[0].pitch < -90) player[0].pitch = -90;
-               if (player[0].pitch > 90) player[0].pitch = 90;
+               if (player[0].pitch <= -89.99) player[0].pitch = -89.99;
+               if (player[0].pitch >= 89.99) player[0].pitch = 89.99;
                
                player[0].rotation += event.motion.xrel / mousespeed / zoomfactor;
                if (player[0].rotation < 0) player[0].rotation += 360;

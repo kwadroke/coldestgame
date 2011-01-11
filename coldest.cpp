@@ -1335,8 +1335,8 @@ void GameEventHandler(SDL_Event &event)
                float maxrot = 120.f;
                
                player[0].pitch += event.motion.yrel / mousespeed / zoomfactor;
-               if (player[0].pitch < -90) player[0].pitch = -90;
-               if (player[0].pitch > 90) player[0].pitch = 90;
+               if (player[0].pitch <= -89.99) player[0].pitch = -89.99;
+               if (player[0].pitch >= 89.99) player[0].pitch = 89.99;
                
                player[0].rotation += event.motion.xrel / mousespeed / zoomfactor;
                if (player[0].rotation < minrot) player[0].rotation = minrot;
@@ -1853,14 +1853,15 @@ void SynchronizePosition()
    // Limit the max adjustment to syncmax in general so that we don't get nasty hitching while
    // moving.  The exception is if we're way off in which case some hitching is necessary
    float syncmax = console.GetFloat("syncmax") / 100.f;
-   if (difference < 30.f || wayoffcount < console.GetInt("syncgrace"))
+   float maxdiff = 30.f;
+   if (difference < maxdiff || wayoffcount < console.GetInt("syncgrace"))
    {
       if (difference > syncmax)
       {
          posadj.normalize();
-         posadj *= syncmax;
+         posadj *= syncmax * 10 * (difference / maxdiff);
       }
-      if (difference < 30.f)
+      if (difference < maxdiff)
          wayoffcount = 0;
       else
          ++wayoffcount;
@@ -1869,14 +1870,17 @@ void SynchronizePosition()
    {
       posadj *= .1f;
    }
-   
-   Vector3 old = player[0].pos;
-   player[0].pos += posadj;
-   ValidateMove(player[0], old, meshes, kdtree);
-   
-   for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
+
+   if (!floatzero(player[0].speed))
    {
-      i->pos += posadj;
+      Vector3 old = player[0].pos;
+      player[0].pos += posadj;
+      ValidateMove(player[0], old, meshes, kdtree);
+
+      for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
+      {
+         i->pos += posadj;
+      }
    }
    
    temp.tick = currtick;
