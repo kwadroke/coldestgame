@@ -228,7 +228,7 @@ void InitGlobals()
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 0", false);
    console.Parse("set overheat 1", false);
-   console.Parse("set syncmax 50", false);
+   console.Parse("set syncmax 10", false);
    console.Parse("set name Nooblet", false);
    console.Parse("set syncgrace 15", false);
    console.Parse("set maxanimdelay 25", false);
@@ -303,7 +303,11 @@ void InitGlobals()
    }
    
    ReadConfig();
-   
+
+   // Cvars where we want to change the default value
+   if (console.GetInt("syncmax") == 50)
+      console.Parse("setsave syncmax 10");
+
    locks.Register(meshes);
    
    // Can't create players until after SDL has been init'd in ReadConfig
