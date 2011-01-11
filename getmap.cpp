@@ -150,6 +150,7 @@ void GetMap(string fn)
    {
       player[0].mesh[i] = meshes.end();
    }
+   player[0].spawned = false;
    PlayerData local = player[0];
    player.clear();
    player.push_back(local);
@@ -952,10 +953,13 @@ void GetMap(string fn)
    }
    
    glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
    PlayerData fake = player[0];
    fake.pos = center;
    fake.pos.y = minimapheight;
    fake.pitch = 89.99f;
+   fake.rotation = 0;
+   fake.facing = 0;
    
    glFogf(GL_FOG_START, minimapheight * 2.f);
    glFogf(GL_FOG_END, minimapheight * 2.f);
