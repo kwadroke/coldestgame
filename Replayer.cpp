@@ -20,7 +20,7 @@
 #include "Recorder.h"
 #include "globals.h"
 
-Replayer::Replayer() : active(false), starttick(0), filetick(0)
+Replayer::Replayer() : active(false), first(true), starttick(0), filetick(0)
 {}
 
 
@@ -34,7 +34,6 @@ void Replayer::SetActive(const string& filename, const bool a)
       player[0].spawned = true;
       items.clear();
       SDL_mutexV(clientmutex);
-      starttick = SDL_GetTicks();
 
       int version, minor;
       read.close();
@@ -56,9 +55,8 @@ void Replayer::SetActive(const string& filename, const bool a)
       read >> nextmap;
       read >> filetick;
 
-      timer.start();
-
       replaying = true;
+      first = true;
       servplayernum = 0;
       mapname = "";
    }
@@ -74,11 +72,22 @@ void Replayer::SetActive(const string& filename, const bool a)
 
 void Replayer::Update()
 {
-   if (!active || !read)
+   if (!active || !read || mapname != nextmap)
       return;
+
+   player[0].spawned = true; // This gets reset when the map loads
 
    if (!spectateplayer && player.size() > 1)
       spectateplayer = 1;
+
+   // The map will load after we call SetActive, and we don't want to include that time in our replay
+   // calculations, so we don't start the timers until the first time through update
+   if (first)
+   {
+      starttick = SDL_GetTicks();
+      timer.start();
+      first = false;
+   }
    
    Uint32 currtick = SDL_GetTicks();
    Uint32 virtualtick = currtick - starttick;

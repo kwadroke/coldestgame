@@ -45,7 +45,7 @@ class Replayer
       void ReadItems();
       void EnsurePlayerSize(const size_t);
       
-      bool active;
+      bool active, first;
       Uint32 starttick, filetick;
       Timer timer;
       size_t framecount;
