@@ -690,6 +690,7 @@ void GetMap(string fn)
    
    watermesh = new Mesh(NTreeReader("models/empty/base"), resman);
    watermesh->collide = false;
+   watermesh->dynamic = false;
    
    for (int i = 0; i < numwaterx; ++i)
    {
@@ -772,7 +773,7 @@ void GetMap(string fn)
       SDL_LockSurface(loadgrass);
       data = (unsigned char*)loadgrass->pixels;
       
-      Mesh basemesh(model, resman); // Don't need GL because this is a temp mesh
+      Mesh basemesh(model, resman);
       
       logout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
@@ -826,6 +827,7 @@ void GetMap(string fn)
                grassmesh.Update();
                grassmesh.collide = false;
                grassmesh.terrain = true;
+               grassmesh.dynamic = false;
                grassmesh.drawdistmult = console.GetFloat("grassdrawdist") / console.GetFloat("viewdist");
                meshes.push_back(grassmesh);
                grasstris += grassmesh.NumTris();

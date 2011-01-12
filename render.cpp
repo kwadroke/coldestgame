@@ -262,7 +262,7 @@ void RenderObjects(const PlayerData& localplayer)
       i->dist = localplayer.pos.distance2(i->GetPosition());
       visiblemeshes.insert(i);
    }
-   
+
    m.sort(meshptrcomp);
    
    MeshPtr impostormesh = meshcache->GetNewMesh("models/empty/base");
@@ -325,46 +325,6 @@ void RenderObjects(const PlayerData& localplayer)
    UpdateFBO(localplayer);
    
    // Render all dynamic meshes (since they won't show up in the KDTree)
-#if defined(THREADVBO) && !defined(DEDICATED)
-   if (firstpass)
-   {
-      size_t workerstouse = console.GetInt("numthreads");
-      size_t workercount = dynmeshes.size() / workerstouse;
-      size_t counter = 0, currworker = 0;
-      vector<Mesh*>::iterator workerstart = dynmeshes.begin();
-      for (vector<Mesh*>::iterator i = dynmeshes.begin(); i != dynmeshes.end(); ++i)
-      {
-         if (counter == workercount)
-         {
-            vboworkers[currworker]->Run(workerstart, i);
-            workerstart = i;
-            ++currworker;
-            if (currworker == workerstouse - 1)
-               break;
-            counter = 0;
-         }
-         ++counter;
-      }
-      vboworkers[workerstouse - 1]->Run(workerstart, dynmeshes.end());
-      
-      // Wait for worker threads to finish
-      for (size_t i = 0; i < workerstouse; ++i)
-      {
-         vboworkers[i]->wait();
-      }
-      firstpass = false;
-   }
-   // This part has to be done from this thread because it does OpenGL calls
-   for (vector<Mesh*>::iterator i = dynmeshes.begin(); i != dynmeshes.end(); ++i)
-   {
-      Mesh& curr = **i;
-      if (curr.VboDirty())
-         curr.GenVbo(Mesh::OnlyUpload);
-      if (kdtree.infrustum(&curr))
-         curr.Render(override);
-      trislastframe += curr.NumTris();
-   }
-#else
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (i->dynamic && kdtree.infrustum(&(*i)))
@@ -373,7 +333,6 @@ void RenderObjects(const PlayerData& localplayer)
          trislastframe += i->NumTris();
       }
    }
-#endif
    locks.EndWrite(meshes);
    
    impostormesh->Render(override);
