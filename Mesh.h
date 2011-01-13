@@ -95,6 +95,7 @@ class Mesh
       void ResetTriMaxDims();
 
       void AdvanceAnimation();
+      size_t NextKeyFrame();
       void UpdateTris(const Vector3& campos = Vector3(.003, .004, .005));
       void GenVbo();
       void GenVboData();
