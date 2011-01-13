@@ -350,23 +350,42 @@ void Mesh::AdvanceAnimation()
    while (animtime > frametime[currkeyframe])
    {
       animtime -= frametime[currkeyframe];
-      if (curranimation != nextanimation)
-      {
-         curranimation = nextanimation;
-         currkeyframe = startframe[curranimation];
-      }
-      else
-      {
-         ++currkeyframe;
-      }
 
-      //Loop
-      if (currkeyframe >= startframe[curranimation] + numframes[curranimation] - 1)
-         currkeyframe = startframe[curranimation];
+      currkeyframe = NextKeyFrame();
    }
 
    trismoved = true;
    boundschanged = true;
+}
+
+
+size_t Mesh::NextKeyFrame()
+{
+   int retval = currkeyframe;
+   if (curranimation != nextanimation)
+   {
+      curranimation = nextanimation;
+      return startframe[curranimation];
+   }
+   else
+   {
+      if (reverseanim)
+         --retval;
+      else
+         ++retval;
+   }
+   
+   if (reverseanim)
+   {
+      if (retval < startframe[curranimation])
+         retval = startframe[curranimation] + numframes[curranimation] - 1;
+   }
+   else
+   {
+      if (retval > startframe[curranimation] + numframes[curranimation] - 1)
+         retval = startframe[curranimation];
+   }
+   return retval;
 }
 
 
@@ -393,13 +412,17 @@ void Mesh::UpdateTris(const Vector3& campos)
    }
    else
    {
-      if (currkeyframe == startframe[curranimation] + numframes[curranimation] - 1) // For meshes that are not animated
+      if (numframes[curranimation] == 1) // Unanimated meshes
       {
          meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[currkeyframe], interpval, meshdata.vertices, m, campos);
       }
+      else if (reverseanim)
+      {
+         meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[NextKeyFrame()], interpval, meshdata.vertices, m, campos);
+      }
       else
       {
-         meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[currkeyframe + 1], interpval, meshdata.vertices, m, campos);
+         meshdata.frameroot[currkeyframe]->Transform(meshdata.frameroot[NextKeyFrame()], interpval, meshdata.vertices, m, campos);
       }
    }
    trismoved = false;

@@ -2128,7 +2128,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          {
             p.mesh[i]->reverseanim = true;
             p.mesh[i]->SetAnimSpeed(-p.speed);
-            p.mesh[i]->SetAnimation(2);
+            p.mesh[i]->SetAnimation(1);
          }
       }
    }
