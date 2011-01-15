@@ -1,4 +1,4 @@
-Version Version4
+Version Version5
 NextID 7
 TimeToNextFrame 1000
 Container
@@ -29,8 +29,7 @@ Container
       Pos 2000 -1000 0
       Norm 0 0 1
       TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-Node
-   Triangles
+Triangles
    Tri
       ID 5
       Verts 1 2 3

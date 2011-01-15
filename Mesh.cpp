@@ -26,6 +26,7 @@ Mesh::Mesh(NTreeReader reader, ResourceManager& rm) : render(true), dynamic(true
    trischanged(true), boundschanged(false), updatevbo(true), animtime(0), currkeyframe(0), animspeed(1.f), curranimation(0), nextanimation(0)
 {
    ImpTimer.start();
+   animtimer.start();
    Load(reader);
 }
 
@@ -359,7 +360,7 @@ void Mesh::AdvanceAnimation()
 }
 
 
-size_t Mesh::NextKeyFrame()
+int Mesh::NextKeyFrame()
 {
    int retval = currkeyframe;
    if (curranimation != nextanimation)

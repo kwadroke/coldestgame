@@ -11,8 +11,7 @@ Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 Water materials/water
-Node
-   TerrainParams
+TerrainParams
    Node
       Texture0
       File textures/test.png
@@ -32,11 +31,10 @@ Node
       SlopeRange 0 0
       RandRange 500 500
       
-Node
-   GrassData
+GrassData
+   Node
 
-Node
-   SpawnPoints
+SpawnPoints
    Node
       Team 1
       Location 315.966 102 356.074
@@ -46,5 +44,5 @@ Node
       Location 2540.86 94 2556.12
       Name Base2
 
-Node
-   Objects
+Objects
+   Node

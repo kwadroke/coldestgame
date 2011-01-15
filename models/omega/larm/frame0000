@@ -1,4 +1,4 @@
-Version Version4
+Version Version5
 NextID 185
 TimeToNextFrame 30
 Container
@@ -765,8 +765,7 @@ Container
       Norm 0.0 0.0 0.0
       TC 0.544792 0.465453
       Color 255 255 255 255
-Node
-   Triangles
+Triangles
    Tri
       ID 1
       Verts 3 4 6 

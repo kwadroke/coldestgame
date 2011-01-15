@@ -95,7 +95,7 @@ class Mesh
       void ResetTriMaxDims();
 
       void AdvanceAnimation();
-      size_t NextKeyFrame();
+      int NextKeyFrame();
       void UpdateTris(const Vector3& campos = Vector3(.003, .004, .005));
       void GenVbo();
       void GenVboData();
@@ -140,6 +140,6 @@ typedef list<Mesh> Meshlist;
 typedef map<int, MeshNodePtr> MeshNodeMap;
 typedef shared_ptr<Mesh> MeshPtr;
 
-const string objectfilever = "Version4";
+const string objectfilever = "Version5";
 
 #endif // MESH_H

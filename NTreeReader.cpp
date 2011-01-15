@@ -20,7 +20,7 @@
 
 #include "NTreeReader.h"
 
-NTreeReader::NTreeReader(int lev) : level(lev), name(""), path("")
+NTreeReader::NTreeReader(int lev, const string& n) : level(lev), name(n), path("")
 {
 }
 
@@ -53,8 +53,8 @@ void NTreeReader::Parse(istringstream& in)
    string currline = "";
    size_t linelevel = level;
    string valname = "";
+   string nextname = "";
    istringstream line;
-   bool firstline = true;
    size_t strpos = 0;
 
    while(getline(in, currline))
@@ -65,15 +65,9 @@ void NTreeReader::Parse(istringstream& in)
          continue;
       }
 
-      if (firstline)
-      {
-         name = currline.substr(linelevel);
-         firstline = false;
-      }
-
       if (linelevel > level)
       {
-         NTreeReaderPtr newreader(new NTreeReader(linelevel));
+         NTreeReaderPtr newreader(new NTreeReader(linelevel, nextname));
          in.seekg(strpos);
          newreader->Parse(in);
          children.push_back(newreader);
@@ -91,6 +85,7 @@ void NTreeReader::Parse(istringstream& in)
          values[valname] = currline;
       }
       strpos = in.tellg();
+      nextname = currline.substr(linelevel);
    }
    // No need for a return statement here anymore, but the comment is useful.
    return; // Means we reached the end of the file
