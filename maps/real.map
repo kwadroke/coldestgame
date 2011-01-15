@@ -11,39 +11,35 @@ Ambient .2 .2 .2 1
 
 SkyBox materials/sky
 
-TerrainMaterial materials/terrain/basic
-Node
-   TerrainParams
+TerrainParams
    Node
       Texture0
-      File textures/grass/Grass1.png
+      File textures/grass/Grass.png
       HeightRange -10000 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/Rockt.png
+      File textures/rock/Rock.png
       HeightRange -10000 -10000
       SlopeRange 0 .8
       RandRange 500 500
    Node
       Texture2
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 5
       SlopeRange 0 0
       RandRange 500 500
       
-Node
-   GrassData
-ENDOFGRASS
+GrassData
    Node
+EOG
       File grass
       Model models/grass/base
       GroupSize 20
       Density 3
 
-Node
-   SpawnPoints
+SpawnPoints
    Node
       Team 1
       Location 150 450 150
@@ -53,5 +49,5 @@ Node
       Location 250 550 250
       Name Team2Spawn
       
-Node
-   Objects
+Objects
+   Node

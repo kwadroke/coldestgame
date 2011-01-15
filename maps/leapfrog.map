@@ -11,38 +11,34 @@ Ambient .5 .5 .5 1
 
 SkyBox materials/sky
 
-TerrainMaterial materials/terrain/basic
-Node
-   TerrainParams
+TerrainParams
    Node
       Texture0
-      File textures/grass/Grass1.png
+      File textures/grass/Grass.png
       HeightRange -10000 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/Rockt.png
+      File textures/rock/Rock.png
       HeightRange -10000 -10000
       SlopeRange 0 .8
       RandRange 500 500
    Node
       Texture2
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 5
       SlopeRange 0 0
       RandRange 500 500
       
-Node
-   GrassData
+GrassData
    Node
       File grass
       Model models/grass/base
       GroupSize 10
       Density 35
 
-Node
-   SpawnPoints
+SpawnPoints
    Node
       Team 1
       Location 600 550 1500
@@ -52,81 +48,5 @@ Node
       Location 3600 550 6000
       Name Base2
       
-Node
-   Objects
+Objects
    Node
-      Type proctree
-      Materials materials/bark materials/leaves
-      seed 11
-      numlevels 2
-      numslices 3
-      numbranches0 12
-      numbranches1 3
-      numbranches2 3
-      numbranches3 2
-      numsegs 6
-      numleaves 1
-      maxangle 70
-      minangle 2
-      maxbranchangle 15
-      initrad 8
-      radreductionperc .2
-      initheight 50
-      heightreductionperc .8
-      firstleaflevel 2
-      leafsize 30
-      trunkrad 10
-      trunknumslices 10
-      trunktaper .8
-      trunknumsegs 5
-      branchevery 999
-      sidebranches 999
-      maxsidebranchangle 10
-      split 1
-      continuebranch 0
-      multitrunk 0
-      branchwithleaves 0
-      curvecoeff .02
-      endopts
-      ImpostorDistance 150
-      size 160
-      Position 1550 90 1350
-      Rotations 0 0 0
-   Node
-      Type proctree
-      Materials materials/bark materials/leaves
-      seed 11
-      numlevels 2
-      numslices 3
-      numbranches0 12
-      numbranches1 3
-      numbranches2 3
-      numbranches3 2
-      numsegs 6
-      numleaves 1
-      maxangle 70
-      minangle 2
-      maxbranchangle 15
-      initrad 8
-      radreductionperc .2
-      initheight 50
-      heightreductionperc .8
-      firstleaflevel 2
-      leafsize 30
-      trunkrad 10
-      trunknumslices 10
-      trunktaper .8
-      trunknumsegs 5
-      branchevery 999
-      sidebranches 999
-      maxsidebranchangle 10
-      split 1
-      continuebranch 0
-      multitrunk 0
-      branchwithleaves 0
-      curvecoeff .02
-      endopts
-      ImpostorDistance 150
-      size 160
-      Position 1700 85 1300
-      Rotations 0 0 0

@@ -52,7 +52,7 @@ using boost::shared_ptr;
 class NTreeReader
 {
    public:
-      explicit NTreeReader(int lev = 0);
+      explicit NTreeReader(int lev = 0, const string& n = "");
       NTreeReader(string); // Allow implicit conversion from string though
       const NTreeReader& GetItem(const int) const;
       const NTreeReader& operator()(const int) const;

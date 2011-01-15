@@ -13,38 +13,34 @@ Ambient .2 .2 .2 1
 
 SkyBox materials/sky
 
-TerrainMaterial materials/terrain/basic
-Node
-   TerrainParams
+TerrainParams
    Node
       Texture0
-      File textures/grass/Grass1.png
+      File textures/grass/Grass.png
       HeightRange -10000 10000
       SlopeRange 0 0
       RandRange 0 10
    Node
       Texture1
-      File textures/Rockt.png
+      File textures/rock/Rock.png
       HeightRange -10000 -10000
       SlopeRange 0 .8
       RandRange 500 500
    Node
       Texture2
-      File textures/dirt.png
+      File textures/ground/Dirt.png
       HeightRange -10000 5
       SlopeRange 0 0
       RandRange 500 500
       
-Node
-   GrassData
+GrassData
    Node
       File grass
       Model models/grass/base
       GroupSize 20
       Density 3
 
-Node
-   SpawnPoints
+SpawnPoints
    Node
       Team 1
       Location 150 150 150
@@ -54,8 +50,7 @@ Node
       Location 650 250 1000
       Name Team2Spawn
 
-Node
-   Objects
+Objects
    Node
       Type External
       BaseFile models/unittest/torso/base
@@ -63,6 +58,7 @@ Node
       Rotations -45 25 0
       AnimSpeed 5
       Scale .01
+EOF  Anything after this doesn't work correctly anyway`
    Node
       Type bush
       Materials materials/leaves1

@@ -11,8 +11,7 @@ Ambient .4 .4 .4 1
 
 SkyBox materials/sky
 
-Node
-   TerrainParams
+TerrainParams
    Node
       Texture0
       File textures/ground/Snow.png
@@ -38,16 +37,14 @@ Node
       SlopeRange 0 0
       RandRange 500 500
       
-Node
-   GrassData
+GrassData
    Node
       File grass
       Model models/grass/base
       GroupSize 10
       Density 5
 
-Node
-   SpawnPoints
+SpawnPoints
    Node
       Team 1
       Location 893.498 106 890.227
@@ -65,8 +62,7 @@ Node
       Location 6741.17 105 6598.16
       Name Base2
 
-Node
-   Objects
+Objects
    Node
       Type proctree
       Position 2113.06 146.757 2678.24
