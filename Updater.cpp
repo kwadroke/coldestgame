@@ -52,7 +52,10 @@ bool Updater::Available()
    
    currversion = 0;
    if (!SendVersionRequest())
+   {
+      logout << "Updater: Failed to contact master server" << endl;
       return false;
+   }
    
    // Wait for response
    Timer t;
@@ -70,7 +73,7 @@ bool Updater::Available()
       getver >> thisversion;
    else
       thisversion = 0;
-   
+
    if (currversion > thisversion)
       return true;
    return false;

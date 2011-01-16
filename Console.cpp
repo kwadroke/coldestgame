@@ -145,15 +145,7 @@ void Console::Parse(const string& line, bool echo)
    }
    if (Token(simple, 0) == "include")
    {
-      string fullpath = userpath + Token(simple, 1);
-      ifstream getconf(fullpath.c_str(), std::ios_base::in);
-      string buffer;
-   
-      while (!getconf.eof())
-      {
-         getline(getconf, buffer);
-         console.Parse(buffer, echo);
-      }
+      // This is now a no-op because it doesn't work well with the current console
    }
 #endif
    else Action(Token(simple, 0));
@@ -310,7 +302,6 @@ void Console::SaveToFile(const string& filename, const bool forcesave)
    {
       save << "# restartgl must be included to initialize OpenGL\n";
       save << "restartgl\n";
-      save << "include keys.cfg\n";
    }
    save.close();
    Unlock();
