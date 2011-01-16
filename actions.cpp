@@ -272,11 +272,11 @@ void DoBind(SDLKey& key)
    GUI* message = gui[settings]->GetWidget("bindmessage");
    message->visible = true;
    SDL_Event event;
-   while (!SDL_PollEvent(&event) && event.type != SDL_KEYDOWN){Repaint();}
+   while (!SDL_PollEvent(&event) || event.type != SDL_KEYDOWN){Repaint();}
 
    if (event.type == SDL_KEYDOWN && event.key.keysym.sym != SDLK_ESCAPE)
       key = event.key.keysym.sym;
-      
+
    message->visible = false;
    
    GUI* forwardbutton = gui[settings]->GetWidget("forwardbutton");
