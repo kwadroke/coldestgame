@@ -19,7 +19,7 @@
 
 
 #include "Material.h"
-#include "globals.h"
+#include "util.h"
 
 int Material::nummats = 0;
 

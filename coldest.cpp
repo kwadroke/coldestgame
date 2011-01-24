@@ -1009,7 +1009,7 @@ void GUIUpdate()
       part.lasttick = SDL_GetTicks();
       
       part.lasttracer = part.pos;
-      part.tracer = MeshPtr(new Mesh(NTreeReader("models/sight/base"), resman));
+      part.tracer = "models/sight/base";
       part.clientonly = true;
       
       if (!guncam)
@@ -2198,7 +2198,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
          
          if (!partcheck) // Didn't hit anything
          {
-            if (!HitHandler && j->tracer && j->lasttracer.distance2(j->pos) > 10000.f)
+            if (!HitHandler && j->tracer != "" && j->lasttracer.distance2(j->pos) > 10000.f)
             {
                AddTracer(*j);
                j->lasttracer = j->pos;
@@ -2210,7 +2210,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                HitHandler(*j, hitmesh, hitpos);
             else
             {
-               if (j->tracer)
+               if (j->tracer != "")
                {
                   j->pos = hitpos;
                   AddTracer(*j);
@@ -2243,13 +2243,13 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 
 void AddTracer(const Particle& p)
 {
-   Mesh newmesh(*p.tracer);
+   MeshPtr newmesh = meshcache->GetNewMesh(p.tracer);
    Vector3 move = p.lasttracer - p.pos;
    float msize = move.magnitude();
-   newmesh.ScaleZ(msize);
+   newmesh->ScaleZ(msize);
    Vector3 rots = RotateBetweenVectors(Vector3(0, 0, 1), move);
-   newmesh.Rotate(rots);
-   Particle tracepart(newmesh);
+   newmesh->Rotate(rots);
+   Particle tracepart(*newmesh);
    tracepart.ttl = p.tracertime;
    tracepart.pos = p.pos;
    particles.push_back(tracepart);
@@ -2436,7 +2436,7 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
    // Add tracer if necessary
    if (currplayerweapon.Tracer() != "")
    {
-      part.tracer = meshcache->GetNewMesh("models/" + currplayerweapon.Tracer() + "/base");
+      part.tracer = "models/" + currplayerweapon.Tracer() + "/base";
       part.tracertime = currplayerweapon.TracerTime();
    }
    particles.push_back(part);

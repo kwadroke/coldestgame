@@ -29,7 +29,7 @@
 #include <Winsock2.h>
 #endif
 #include "Particle.h"
-#include "SDL_net.h"
+#include <SDL/SDL_net.h>
 #include "PlayerData.h"
 #include "Vector3.h"
 #include "Packet.h"
@@ -43,6 +43,7 @@
 #include "IDGen.h"
 #include "util.h"
 #include "Bot.h"
+#include "Mutex.h"
 
 // Necessary declarations
 void ServerLoop();
@@ -82,7 +83,7 @@ UDPsocket servsock;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 vector<Item> serveritems;
-SDL_mutex* servermutex;
+MutexPtr servermutex;
 IDGen servsendpacketnum;
 IDGen nextservparticleid;
 IDGen serveritemid;
@@ -190,7 +191,7 @@ int Server(void* dummy)
    if (console.GetString("map") == "")
       console.Parse("set map riverside");
    LoadMapList();
-   servermutex = SDL_CreateMutex();
+   servermutex = MutexPtr(new Mutex());
    locks.Register(servermeshes);
    if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
@@ -227,14 +228,17 @@ void ServerLoop()
    
    while (running)
    {
-      SDL_Delay(1); // Otherwise if we turn off limitserverrate this will hog CPU
       if (console.GetBool("limitserverrate"))
       {
          while (frametimer.elapsed() < Uint32(1000 / servertickrate - 1))
             SDL_Delay(1);
       }
+      else
+      {
+         SDL_Delay(1); // Otherwise if we turn off limitserverrate this will hog CPU
+      }
       frametimer.start();
-      
+
       // Grabbing clientmutex can take a long time, so don't check every time through
       if (checkmap % 5 == 0)
       {
@@ -254,8 +258,8 @@ void ServerLoop()
          SDL_mutexV(clientmutex);
       }
       checkmap = (checkmap + 1) % 5;
-      
-      SDL_mutexP(servermutex);
+
+      servermutex->lock();
       Uint32 timeout = console.GetInt("timeout");
       for (size_t i = 1; i < serverplayers.size(); ++i)
       {
@@ -271,24 +275,24 @@ void ServerLoop()
             ServerUpdatePlayer(i);
          }
       }
-      SDL_mutexV(servermutex);
+      servermutex->unlock();
          
       // Update server meshes
-      SDL_mutexP(servermutex);
+      servermutex->lock();
       for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
       {
          i->Update();
       }
-      SDL_mutexV(servermutex);
+      servermutex->unlock();
       
-      SDL_mutexP(servermutex);
+      servermutex->lock();
       // Save state so we can recall it for collision detection
       SaveState();
-      SDL_mutexV(servermutex);
+      servermutex->unlock();
          
       // Update particles
       int updinterval = 100;
-      SDL_mutexP(servermutex);
+      servermutex->lock();
       UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
          
       // Update server FPS
@@ -301,7 +305,7 @@ void ServerLoop()
          lastfpsupdate = currtick;
       }
          
-      SDL_mutexV(servermutex);
+      servermutex->unlock();
    }
 }
 
@@ -361,9 +365,9 @@ int ServerListen(void* dummy)
             p << "C\n";
             p << 0 << eol;
             
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             servqueue.push_back(p);
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             continue;
          }
          
@@ -380,7 +384,7 @@ int ServerListen(void* dummy)
          
          if (packettype == "U") // Update packet
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (oppnum < serverplayers.size() && (packetnum > serverplayers[oppnum].recpacketnum))  // Ignore out of order packets
             {
                serverplayers[oppnum].recpacketnum = packetnum;
@@ -424,7 +428,7 @@ int ServerListen(void* dummy)
                   logout << checksum << "  " << value << endl;
                }
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "C")
          {
@@ -439,7 +443,7 @@ int ServerListen(void* dummy)
             get >> clientver;
             bool add = true;
             int respondto = 0;
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             
             if (CountPlayers() < maxplayers && clientver == netver)
             {
@@ -513,26 +517,26 @@ int ServerListen(void* dummy)
                servqueue.push_back(respond);
             }
             
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "p")
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             serverplayers[oppnum].ping = SDL_GetTicks() - serverplayers[oppnum].pingtick;
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "i")
          {
             Packet response(&inpack->address);
             response << "i\n";
             response << 0 << eol; // Don't care about the packet number
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             response << servername << eol;
             response << console.GetString("map") << eol;
             response << CountPlayers() << eol;
             response << maxplayers << eol;
             servqueue.push_back(response);
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "S")
          {
@@ -540,7 +544,7 @@ int ServerListen(void* dummy)
             Vector3 spawnpointreq;
             
             logout << "Player " << oppnum << " is spawning" << endl;
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             get >> serverplayers[oppnum].unit;
             int weapid;
             for (int i = 0; i < numbodyparts; ++i)
@@ -649,7 +653,7 @@ int ServerListen(void* dummy)
             response << spawnpointreq.x << eol << spawnpointreq.y << eol << spawnpointreq.z << eol;
             
             servqueue.push_back(response);
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "T")  // Chat packet
          {
@@ -658,7 +662,7 @@ int ServerListen(void* dummy)
             get >> team;
             get.ignore(); // \n is still in buffer
             getline(get, line);
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (serverplayers[oppnum].acked.find(packetnum) == serverplayers[oppnum].acked.end())
             {
                serverplayers[oppnum].acked.insert(packetnum);
@@ -682,14 +686,14 @@ int ServerListen(void* dummy)
                   }
                }
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "A")  // Ack
          {
             unsigned long acknum;
             get >> acknum;
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             for (list<Packet>::iterator i = servqueue.begin(); i != servqueue.end(); ++i)
             {
                if (i->ack == acknum)
@@ -698,7 +702,7 @@ int ServerListen(void* dummy)
                   break;
                }
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "M")  // Team switch request
          {
@@ -712,7 +716,7 @@ int ServerListen(void* dummy)
             response << packetnum << eol;
             response << 1 << eol;
             response << newteam << eol;
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             serverplayers[oppnum].team = newteam;
             for (size_t i = 0; i < spawnpoints.size(); ++i)
             {
@@ -728,11 +732,11 @@ int ServerListen(void* dummy)
             response << 0 << eol; // No more spawn points
             
             servqueue.push_back(response);
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "I") // Player wants to use item
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (serverplayers[oppnum].item.usesleft > 0)
             {
                AddItem(serverplayers[oppnum].item, oppnum);
@@ -740,12 +744,12 @@ int ServerListen(void* dummy)
                if (serverplayers[oppnum].item.Type() == Item::SpawnPoint)
                   serverplayers[oppnum].item = Item(Item::NoItem, servermeshes);
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "K")
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (serverplayers[oppnum].spawned)
             {
                serverplayers[oppnum].spawned = false;
@@ -754,12 +758,12 @@ int ServerListen(void* dummy)
                   serverplayers[oppnum].salvage = 100;
                SendKill(oppnum, oppnum);
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "Y") // Client is ready to sync
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (serverplayers[oppnum].needsync)
             {
                logout << "Syncing with " << oppnum << endl;
@@ -768,11 +772,11 @@ int ServerListen(void* dummy)
                   SendItem(serveritems[i], oppnum);
                serverplayers[oppnum].needsync = false;
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else if (packettype == "P") // Powerdown - be careful, we send this type as a ping packet, but don't receive it
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             // Note: Theoretically this could cause someone to accidentally power down when they don't
             // want to, but if their packets are delayed 5+ seconds then the game is probably not
             // playable anyway.  I suppose a single packet could for some reason get delayed, but
@@ -791,23 +795,23 @@ int ServerListen(void* dummy)
                   }
                }
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "c") // Console command
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end() && serverplayers[oppnum].admin)
             {
                serverplayers[oppnum].commandids.insert(packetnum);
-               SDL_mutexV(servermutex); // Don't hold two mutexes at a time
+               servermutex->unlock(); // Don't hold two mutexes at a time
                string command;
                get.ignore();
                getline(get, command);
                SDL_mutexP(clientmutex);
                console.Parse(command, false);
                SDL_mutexV(clientmutex);
-               SDL_mutexP(servermutex);
+               servermutex->lock();
                for (size_t i = 0; i < serverplayers.size(); ++i)
                   SendSyncPacket(serverplayers[i], 0);
                
@@ -816,25 +820,25 @@ int ServerListen(void* dummy)
             {
                logout << "Command received from non-admin player" << endl;
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "f") // Fire request
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (serverplayers[oppnum].fireids.find(packetnum) == serverplayers[oppnum].fireids.end())
             {
                serverplayers[oppnum].fireids.insert(packetnum);
                serverplayers[oppnum].firerequests++;
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "t") // Authenticate admin
          {
             string password;
             get >> password;
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             if (password == console.GetString("serverpwd"))
             {
                if (!serverplayers[oppnum].admin)
@@ -845,12 +849,12 @@ int ServerListen(void* dummy)
             {
                logout << "Password incorrect" << endl;
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "L") // Loadout request
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             vector<SpawnPointData> allspawns = spawnpoints;
             vector<SpawnPointData> itemspawns = GetSpawns(items);
             allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
@@ -860,14 +864,14 @@ int ServerListen(void* dummy)
                serverplayers[oppnum].Kill();
                serverplayers[oppnum].spawntimer = console.GetInt("respawntime");
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
             Ack(packetnum, inpack);
          }
          else if (packettype == "k") // Keepalive
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             serverplayers[oppnum].lastupdate = SDL_GetTicks();
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
       }
       //t.stop();
@@ -928,7 +932,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
    
          temp << "U" << eol;
          temp << servsendpacketnum << eol;
-         SDL_mutexP(servermutex);
+         servermutex->lock();
          for (size_t i = 1; i < serverplayers.size(); ++i)
          {
             temp << i << eol;
@@ -953,7 +957,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          }
          temp << 0 << eol; // Indicates end of player data
          
-         SDL_mutexV(servermutex);
+         servermutex->unlock();
          
          // Quick and dirty checksumming
          unsigned long value = 0;
@@ -967,7 +971,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          // Add updates to send queue
          if (temp.data.length() < 5000)
          {
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
@@ -976,7 +980,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
                   servqueue.push_back(temp);
                }
             }
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
          else logout << "Error: data too long\n" << std::flush;
          
@@ -989,7 +993,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
             
             pingpack << "P\n";
             pingpack << servsendpacketnum << eol;
-            SDL_mutexP(servermutex);
+            servermutex->lock();
             for (size_t i = 1; i < serverplayers.size(); ++i)
             {
                if (serverplayers[i].connected)
@@ -1052,11 +1056,11 @@ int ServerSend(void* dummy)  // Thread for sending updates
             SDLNet_ResolveHost(&bcpack.addr, console.GetString("master").c_str(), 12011);
             bcpack.Send(servoutpack, servsock);
             
-            SDL_mutexV(servermutex);
+            servermutex->unlock();
          }
       }
       
-      SDL_mutexP(servermutex);
+      servermutex->lock();
       list<Packet>::iterator i = servqueue.begin();
       while (i != servqueue.end())
       {
@@ -1078,7 +1082,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
          sentbytes = 0;
          sentbytestimer.start();
       }
-      SDL_mutexV(servermutex);
+      servermutex->unlock();
       //t.stop();
    }
    logout << "Server Send " << runtimes << endl;
@@ -1102,7 +1106,7 @@ void ServerLoadMap()
    }
    SDL_mutexV(clientmutex);
    
-   SDL_mutexP(servermutex); // Grab this so the send thread doesn't do something funny on us
+   servermutex->lock(); // Grab this so the send thread doesn't do something funny on us
    locks.Read(meshes);
    servermeshes = meshes;
    locks.EndRead(meshes);
@@ -1156,7 +1160,7 @@ void ServerLoadMap()
    size_t numbots = console.GetInt("bots");
    for (size_t i = 0; i < numbots; ++i)
       bots.push_back(BotPtr(new Bot()));
-   SDL_mutexV(servermutex);
+   servermutex->unlock();
 }
 
 
@@ -1717,9 +1721,9 @@ void Ack(unsigned long acknum, UDPpacket* inpack)
    response << "A\n";
    response << 0 << eol;
    response << acknum << eol;
-   SDL_mutexP(servermutex);
+   servermutex->lock();
    servqueue.push_back(response);
-   SDL_mutexV(servermutex);
+   servermutex->unlock();
 }
 
 

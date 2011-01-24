@@ -62,7 +62,7 @@ class Particle
       int weapid;
       bool clientonly;
       
-      MeshPtr tracer;
+      string tracer;
       Uint32 tracertime;
       
    private:
