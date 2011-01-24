@@ -99,7 +99,7 @@ void MeshNode::TransformLoop(const MeshNodePtr& interpnode, const float interpva
                              const GraphicMatrix& parentm, const Vector3& campos)
 {
    size_t vsize = vertices.size();
-   if (gl)
+   if (1)//gl)
    {
       for (size_t i = 0; i < vsize; ++i)
       {

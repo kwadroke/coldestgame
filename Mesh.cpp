@@ -20,7 +20,7 @@
 #include "util.h"
 #include "ProceduralTree.h"
 
-Mesh::Mesh(NTreeReader reader, ResourceManager& rm) : render(true), dynamic(true), collide(true), terrain(false), dist(0.f), impdist(0.f),
+Mesh::Mesh(NTreeReader reader, ResourceManager& rm) : render(true), dynamic(true), collide(true), terrain(false), reverseanim(false), dist(0.f), impdist(0.f),
    impostorfbo(0), updatedelay(0), drawdistmult(1.f), meshdata(rm),
    next(0), size(0.f), height(0.f), width(0.f), scale(1.f), trismoved(false),
    trischanged(true), boundschanged(false), updatevbo(true), animtime(0), currkeyframe(0), animspeed(1.f), curranimation(0), nextanimation(0)

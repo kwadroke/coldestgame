@@ -10,4 +10,4 @@ ReloadTime 600
 Model projectile
 ExplosionEmitter particles/emitters/explosion
 Tracer smoke
-TracerTime 4000
+TracerTime 1000

@@ -47,7 +47,9 @@ class ResourceManager
       TextureHandler texhand;
       TextureManager texman;
       Shader shaderman;
+#ifndef EDITOR
       SoundManager soundman;
+#endif
 #endif
       
    private:
