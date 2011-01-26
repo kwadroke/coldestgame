@@ -31,14 +31,17 @@ Mutex& Mutex::operator=(const Mutex& other)
 }
 
 
-void Mutex::lock()
+int Mutex::lock()
 {
-   SDL_mutexP(mutex);
+   int retval = SDL_mutexP(mutex);
+   return retval;
 }
 
 
-void Mutex::unlock()
+int Mutex::unlock()
 {
-   SDL_mutexV(mutex);
+   int retval = SDL_mutexV(mutex);
+   SDL_Delay(0); // Prevent thread starvation
+   return retval;
 }
 

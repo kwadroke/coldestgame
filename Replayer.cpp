@@ -29,11 +29,11 @@ void Replayer::SetActive(const string& filename, const bool a)
    if (a && !active) // Read header information
    {
       logout << "Loading replay " << filename << endl;
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       player[0].spectate = true;
       player[0].spawned = true;
       items.clear();
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
 
       int version, minor;
       read.close();

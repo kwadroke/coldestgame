@@ -178,6 +178,9 @@ void OutputDiagnosticData()
 
 void InitGlobals()
 {
+   // This has to come before some of the console code below
+   clientmutex = MutexPtr(new Mutex());
+   
    // Default cvars
    console.Parse("set screenwidth 800", false);
    console.Parse("set screenheight 600", false);
@@ -270,7 +273,6 @@ void InitGlobals()
    doconnect = false;
    connected = false;
    nextmap = mapname = "";
-   clientmutex = SDL_CreateMutex();
    spawnschanged = true;
    winningteam = 0;
    weaponslots.push_back(Torso);
@@ -768,17 +770,17 @@ void MainLoop()
       }
 
       // Check if the current map has changed
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       if (nextmap != mapname)
       {
-         SDL_mutexV(clientmutex);
+         clientmutex->unlock();
 #ifndef DEDICATED
          ShowGUI(loadprogress);
          Repaint();
 #endif
-         SDL_mutexP(clientmutex);
+         clientmutex->lock();
          GetMap(nextmap);
-         SDL_mutexV(clientmutex);
+         clientmutex->unlock();
          winningteam = 0;
 #ifndef DEDICATED
          if (!replaying)
@@ -788,9 +790,9 @@ void MainLoop()
 #endif
          if (!replayer->Active())
             recorder->SetActive(console.GetBool("record"));
-         SDL_mutexP(clientmutex); // Prevent double unlock, not sure it's necessary
+         clientmutex->lock(); // Prevent double unlock, not sure it's necessary
       }
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
       
       
 #ifndef DEDICATED
@@ -813,9 +815,9 @@ void MainLoop()
       // Can't do this in the event handler because that is called from within the GUI
       if (reloadgui)
       {
-         SDL_mutexP(clientmutex);
+         clientmutex->lock();
          InitGUI();
-         SDL_mutexV(clientmutex);
+         clientmutex->unlock();
       }
       
       // Check for end of game
@@ -828,10 +830,10 @@ void MainLoop()
 
       replayer->Update();
 
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       if (!PrimaryGUIVisible())
          UpdatePlayer();
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
 
       GUIUpdate();
 
@@ -857,7 +859,7 @@ void GUIUpdate()
    static Uint32 servupdatecounter = SDL_GetTicks();
    static Uint32 statupdatecounter = SDL_GetTicks();
    Uint32 currtick;
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    if (gui[serverbrowser]->visible)
    {
       currtick = SDL_GetTicks();
@@ -1058,7 +1060,7 @@ void GUIUpdate()
       }
    }
    
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 #endif
 }
 
@@ -1066,14 +1068,14 @@ void GUIUpdate()
 bool GUIEventHandler(SDL_Event &event)
 {
 #ifndef DEDICATED
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    // Mini keyboard handler to deal with the console and chat
    bool eatevent = false;
    GUI* chatin = gui[chat]->GetWidget("chatinput");
    if (!chatin)
    {
       logout << "Error getting chat input widget" << endl;
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
       return false;
    }
    switch (event.type)
@@ -1139,10 +1141,10 @@ bool GUIEventHandler(SDL_Event &event)
                      logout << "Error getting chat input widget" << endl;
                      break;
                   }
-                  SDL_mutexP(clientmutex);
+                  clientmutex->lock();
                   chatstring = chatin->text;
                   AppendToChat(0, chatin->text);
-                  SDL_mutexV(clientmutex);
+                  clientmutex->unlock();
                   chatin->text = "";
                   chatin->visible = false;
                   GUI* teamlabel = gui[chat]->GetWidget("chatteam");
@@ -1158,11 +1160,11 @@ bool GUIEventHandler(SDL_Event &event)
          }
       
    };
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    
    if (eatevent) return eatevent;
    
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    if (gui[consolegui]->visible)
    {
       SDL_ShowCursor(1);
@@ -1210,7 +1212,7 @@ bool GUIEventHandler(SDL_Event &event)
       gui[credits]->ProcessEvent(&event);
       eatevent = true;
    }
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    
    
    return eatevent;
@@ -1225,7 +1227,7 @@ void GameEventHandler(SDL_Event &event)
    SDL_ShowCursor(0);
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    if (!player[servplayernum].powerdowntime)
    {
       switch(event.type) 
@@ -1369,14 +1371,14 @@ void GameEventHandler(SDL_Event &event)
             Quit();
       }
    }
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 #endif
 }
 
 
 void Quit()
 {
-   SDL_mutexV(clientmutex); // This was probably grabbed by GUI update code before calling us
+   clientmutex->unlock(); // This was probably grabbed by GUI update code before calling us
    Cleanup();
    exit(0);
 }
@@ -1393,7 +1395,6 @@ void Cleanup()
 #endif
    logout << "Waiting for server to end" << endl;
    SDL_WaitThread(serverthread, NULL);
-   SDL_DestroyMutex(clientmutex);
    console.SaveToFile(userpath + "autoexec.cfg");
 }
 
@@ -1934,7 +1935,7 @@ void SpectatePrev()
 
 void Animate()
 {
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    // Delete meshes as requested by the net thread
    locks.Write(meshes);
    
@@ -1996,7 +1997,7 @@ void Animate()
    }
    static int partupd = 100;
    UpdateParticles(particles, partupd, kdtree, meshes, player, player[0].pos);
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 }
 
 
@@ -2011,7 +2012,7 @@ void UpdateServerList()
       logout << "Failed to get pointer to serverlist" << endl;
       exit(-10);
    }
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    for (i = servers.begin(); i != servers.end(); ++i)
    {
       if (!i->inlist && i->haveinfo)
@@ -2021,7 +2022,7 @@ void UpdateServerList()
          i->inlist = true;
       }
    }
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 #endif
 }
 
@@ -2285,7 +2286,7 @@ float GetTerrainHeight(const float x, const float y)
 void UpdatePlayerList()
 {
 #ifndef DEDICATED
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    
    Table* playerlist = dynamic_cast<Table*>(gui[ingamestatus]->GetWidget("playerlist"));
    Table* lplayerlist = dynamic_cast<Table*>(gui[loadoutmenu]->GetWidget("playerlist"));
@@ -2322,7 +2323,7 @@ void UpdatePlayerList()
       }
    }
    
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 #endif
 }
 
@@ -2348,23 +2349,23 @@ void AppendToChat(int playernum, string line)
 void ShowGUI(int toshow)
 {
 #ifndef DEDICATED
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    for (size_t i = 0; i < gui.size(); ++i)
       gui[i]->visible = false;
    gui[toshow]->visible = true;
    if (console.GetBool("showfps"))
       gui[statsdisp]->visible = true;
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 #endif
 }
 
 
 void ResetKeys()
 {
-   SDL_mutexP(clientmutex); // Otherwise we can end up firing after we respawn
+   clientmutex->lock(); // Otherwise we can end up firing after we respawn
    player[0].leftclick = player[0].rightclick = false;
    player[0].moveforward = player[0].moveback = player[0].moveleft = player[0].moveright = false;
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 }
 
 
@@ -2484,7 +2485,7 @@ void CacheMeshes()
 void UpdatePlayer()
 {
    // Update player position
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
 
    if (player[0].spectate && player[0].spawned)
       UpdateSpectatePosition();
@@ -2510,7 +2511,7 @@ void UpdatePlayer()
       UpdatePlayerModel(player[0], meshes);
    }
       
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
       
    int weaponslot = weaponslots[localplayer.currweapon];
    Weapon& currplayerweapon = localplayer.weapons[weaponslot];
@@ -2521,14 +2522,14 @@ void UpdatePlayer()
 #ifndef DEDICATED
       SendFire();
 #endif
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
       if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
          player[0].weapons[weaponslot].ammo--;
          
       ClientCreateShot(localplayer, currplayerweapon);
       recorder->AddShot(0, currplayerweapon.Id());
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
    }
 }
 
@@ -2538,9 +2539,9 @@ void AddHit(const Vector3& pos, const int type)
    Weapon dummy(type);
    ParticleEmitter newemitter(dummy.ExpFile(), resman);
    newemitter.position = pos;
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    emitters.push_back(newemitter);
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 }
 
 
