@@ -64,10 +64,11 @@ class Particle
       
       string tracer;
       Uint32 tracertime;
+
+      Mesh mesh;
       
    private:
       Timer t;
-      Mesh mesh;
       bool debug;
 };
 

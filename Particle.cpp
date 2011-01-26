@@ -95,8 +95,8 @@ void Particle::Render(Mesh* rendermesh, const Vector3& campos)
 {
    if (rendermesh)
    {
-      mesh.Update(campos);
       mesh.EnsureMaterials();
+      mesh.Update(campos);
       rendermesh->Add(mesh);
    }
    else

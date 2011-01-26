@@ -487,7 +487,7 @@ void Mesh::Render(Material* overridemat)
 #ifndef DEDICATED
    if (!render || !meshdata.tris.size())
       return;
-   SetGL();
+   EnsureMaterials();
    if (updatevbo)
       GenVbo();
 
@@ -761,7 +761,12 @@ void Mesh::GenTangents()
 void Mesh::EnsureMaterials()
 {
    if (trischanged)
+   {
       meshdata.EnsureMaterials();
+      // This also means we need color, normal, etc. to be calculated by the MeshNodes
+      for (size_t i = 0; i < meshdata.frameroot.size(); ++i)
+         meshdata.frameroot[i]->SetGL(true);
+   }
 }
 
 
@@ -800,17 +805,6 @@ void Mesh::SetAnimation(const int newanim)
 {
    if (newanim < 10 && numframes[newanim] != 0)
       nextanimation = newanim;
-}
-
-
-void Mesh::SetGL()
-{
-   meshdata.EnsureMaterials();
-   if (trischanged)
-   {
-      for (size_t i = 0; i < meshdata.frameroot.size(); ++i)
-         meshdata.frameroot[i]->SetGL(true);
-   }
 }
 
 

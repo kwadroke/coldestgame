@@ -1006,12 +1006,12 @@ void GUIUpdate()
       part.playernum = 0;
       part.collide = true;
       part.ttl = 100;
-      part.lasttick = SDL_GetTicks();
+      part.lasttick = SDL_GetTicks() - 1; // Ensure that we do a real update, otherwise the update can happen after 0 ticks and the sight is invisible
       
       part.lasttracer = part.pos;
       part.tracer = "models/sight/base";
       part.clientonly = true;
-      
+
       if (!guncam)
       {
          particles.push_back(part);
@@ -2235,7 +2235,10 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       locks.EndWrite(ml);
       partupd = 0;
    }
-   else ++partupd;
+   else
+   {
+      ++partupd;
+   }
    if (Rewind)
       Rewind(0, Vector3(), Vector3(), 1e38f); // Rewind all to 0
 }

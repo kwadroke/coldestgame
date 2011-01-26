@@ -71,7 +71,6 @@ class Mesh
       void SetState(const Vector3&, const Vector3&, const int, const int, const float);
       void ReadState(Vector3&, Vector3&, int&, int&, float&, float&);
       void SetAnimSpeed(const float);
-      void SetGL();
 
       void debug();
 

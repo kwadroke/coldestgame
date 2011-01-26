@@ -45,6 +45,7 @@ class ParticleEmitter
       ALSourcePtr soundsource;
       string soundfile;
       bool firstupdate;
+      bool one;
 
       bool debug;
 
