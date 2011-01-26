@@ -14,8 +14,8 @@ class Mutex
       virtual ~Mutex();
       virtual Mutex& operator=(const Mutex& other);
 
-      void lock();
-      void unlock();
+      int lock();
+      int unlock();
 
    private:
       SDL_mutex *mutex;

@@ -668,10 +668,13 @@ void GetMap(string fn)
    // This has to happen before generating buffers because OpenGL is not threadsafe, so when the server
    // copies the meshes they cannot have had GenVbo run on them yet
    mapname = fn; // Signal server that the map data is available
-   SDL_mutexV(clientmutex);
    if (server)   // Then wait for the server to copy the data before generating buffers
+   {
+      clientmutex->unlock();
       while (!serverhasmap) SDL_Delay(1);
-   SDL_mutexP(clientmutex);
+      clientmutex->lock();
+   }
+   
    
 #ifndef DEDICATED
    // All meshes added from here on out will not be present on the server

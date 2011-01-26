@@ -61,9 +61,9 @@ void Repaint()
    glLoadIdentity();
    trislastframe = 0;
    firstpass = true;
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    localplayer = player[0];
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    
    if (!PrimaryGUIVisible())
    {
@@ -853,7 +853,7 @@ void RenderHud(const PlayerData& localplayer)
 {
    // GetWidget can be time-consuming so it may make sense to cache these (note that making them static makes it
    // impossible to reload the GUI).  As always profiling is the key.
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
    GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
    GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
@@ -992,7 +992,7 @@ void RenderHud(const PlayerData& localplayer)
       gui[i]->Render();
    }
    
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    SDL_GL_Exit2dMode();
 }
 

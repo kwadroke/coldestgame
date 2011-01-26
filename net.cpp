@@ -108,7 +108,7 @@ int NetSend(void* dummy)
       if (occpacketcounter > 100)
       {
          // Send a request for the server's information
-         SDL_mutexP(clientmutex);
+         clientmutex->lock();
          vector<ServerInfo>::iterator i;
          for (i = servers.begin(); i != servers.end(); ++i)
          {
@@ -120,7 +120,7 @@ int NetSend(void* dummy)
             SDL_mutexV(netmutex);
             i->tick = SDL_GetTicks();
          }
-         SDL_mutexV(clientmutex);
+         clientmutex->unlock();
          occpacketcounter = 0;
       }
       if (doconnect)
@@ -158,7 +158,7 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "S\n";
          p << p.ack << eol;
-         SDL_mutexP(clientmutex);
+         clientmutex->lock();
          p << player[0].unit << eol;
          for (int i = 0; i < numbodyparts; ++i)
          {
@@ -171,13 +171,13 @@ int NetSend(void* dummy)
          p << availablespawns[sel].position.y << eol;
          p << availablespawns[sel].position.z << eol;
          
-         SDL_mutexV(clientmutex);
+         clientmutex->unlock();
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
          spawnrequest = false;
       }
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       if (chatstring != "")
       {
          Packet p(&addr);
@@ -187,12 +187,12 @@ int NetSend(void* dummy)
          p << chatteam << eol;
          p << chatstring << eol;
          chatstring = "";
-         SDL_mutexV(clientmutex); // Just to be safe, don't hold both mutexes at once
+         clientmutex->unlock(); // Just to be safe, don't hold both mutexes at once
          SDL_mutexP(netmutex);
          sendqueue.push_back(p);
          SDL_mutexV(netmutex);
       }
-      SDL_mutexV(clientmutex); // Not sure a double unlock is allowed, but we'll see (so far so good)
+      clientmutex->unlock(); // Not sure a double unlock is allowed, but we'll see (so far so good)
       
       if (changeteam != -1)
       {
@@ -284,7 +284,7 @@ string FillUpdatePacket()
    
    temp << "U" << eol;
    temp << sendpacketnum << eol;
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    temp << player[0].pos.x << eol;
    temp << player[0].pos.y << eol;
    temp << player[0].pos.z << eol;
@@ -301,7 +301,7 @@ string FillUpdatePacket()
    temp << player[0].run << eol;
    temp << player[0].unit << eol;
    temp << player[0].currweapon << eol;
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    
    // Quick and dirty checksumming
    unsigned long value = 0;
@@ -399,7 +399,7 @@ int NetListen(void* dummy)
             {
                recpacketnum = packetnum;
                oppnum = 0;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                
                get >> oppnum;
                while (oppnum != 0)
@@ -496,7 +496,7 @@ int NetListen(void* dummy)
                // Adjust our position toward where the server thinks we are
                if (console.GetBool("serversync") && !player[0].spectate && player[0].spawned)
                   SynchronizePosition();
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
             }
          }
          else if (packettype == "u") // Occasional updates
@@ -517,7 +517,7 @@ int NetListen(void* dummy)
                int getping;
                bool getspawned, getconnected;
                string getname;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                while (oppnum != 0)
                {
                   get >> getteam;
@@ -562,7 +562,7 @@ int NetListen(void* dummy)
                   if (gui[loadoutmenu]->visible)
                      Action("updateunitselection");
                }
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
             }
          }
          else if (packettype == "c") // Connect packet
@@ -570,7 +570,7 @@ int NetListen(void* dummy)
             if (!connected)
             {
                connectedaddr = inpack->address;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                get >> servplayernum;
                get >> nextmap;
                long newteam;
@@ -583,7 +583,7 @@ int NetListen(void* dummy)
                connected = true;
                logout << "We are server player " << servplayernum << endl;
                logout << "Map is: " << nextmap << endl;
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
                itemsreceived.clear();
                hitsreceived.clear();
             }
@@ -592,9 +592,9 @@ int NetListen(void* dummy)
          else if (packettype == "f") // Server was full or our netcode doesn't match theirs
          {
             logout << "Error: Server is full or netcode version mismatch\n";
-            SDL_mutexP(clientmutex);
+            clientmutex->lock();
             ShowGUI(mainmenu);
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
             HandleAck(packetnum);
          }
          else if (packettype == "P") // Ping
@@ -618,10 +618,10 @@ int NetListen(void* dummy)
                Weapon dummy(weapid);
                size_t pnum;
                get >> pnum;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                ClientCreateShot(player[pnum], dummy);
                recorder->AddShot(pnum, weapid);
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
             }
             Ack(packetnum);
          }
@@ -651,7 +651,7 @@ int NetListen(void* dummy)
          else if (packettype == "i")  // Server info
          {
             vector<ServerInfo>::iterator i;
-            SDL_mutexP(clientmutex);
+            clientmutex->lock();
             for (i = servers.begin(); i != servers.end(); ++i)
             {
                if (i->address.host == inpack->address.host)
@@ -666,7 +666,7 @@ int NetListen(void* dummy)
                   break;
                }
             }
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
          }
          else if (packettype == "S") // Spawn request ack
          {
@@ -677,7 +677,7 @@ int NetListen(void* dummy)
             get >> acknum;
             get >> newpos.x >> newpos.y >> newpos.z;
             
-            SDL_mutexP(clientmutex);
+            clientmutex->lock();
             if (gui[loadoutmenu]->visible)
             {
                if (accepted)
@@ -697,7 +697,7 @@ int NetListen(void* dummy)
                   logout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
                }
             }
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
             HandleAck(acknum);
          }
          else if (packettype == "A") // Ack packet
@@ -708,7 +708,7 @@ int NetListen(void* dummy)
          }
          else if (packettype == "T") // Text packet
          {
-            SDL_mutexP(clientmutex);
+            clientmutex->lock();
             string line;
             get >> oppnum;
             if (oppnum < player.size())
@@ -724,7 +724,7 @@ int NetListen(void* dummy)
                // Ack it
                Ack(packetnum); // Danger: this grabs the net mutex while we hold the clientmutex
             }
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
          }
          else if (packettype == "M") // Team change request
          {
@@ -737,7 +737,7 @@ int NetListen(void* dummy)
             if (accepted)
             {
                get >> newteam;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                if (player[0].team != newteam)
                {
                   logout << "Joined team " << newteam << endl;
@@ -777,7 +777,7 @@ int NetListen(void* dummy)
                   team2button->togglestate = 0;
                   specbutton->togglestate = 1;
                }
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
             }
          }
          else if (packettype == "m") // General server message
@@ -788,10 +788,10 @@ int NetListen(void* dummy)
                string message;
                get.ignore();
                getline(get, message);
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                servermessages.push_back(message);
                messageschanged = 1;
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
             }
             Ack(packetnum);
          }
@@ -803,7 +803,7 @@ int NetListen(void* dummy)
                size_t killed, killer;
                get >> killed >> killer;
                
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                if (killed == servplayernum)
                {
                   player[0].weight = -1.f;
@@ -815,7 +815,7 @@ int NetListen(void* dummy)
                string message = player[killer].name + " killed " + player[killed].name;
                servermessages.push_back(message);
                messageschanged = 1;
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
             }
             // Ack it
             Ack(packetnum);
@@ -836,9 +836,9 @@ int NetListen(void* dummy)
                newitem.id = id;
                newitem.team = team;
                newitem.position = itempos;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                additems.push_back(newitem);
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
                itemsreceived.insert(id);
             }
             Ack(packetnum);
@@ -851,11 +851,11 @@ int NetListen(void* dummy)
             {
                if (i->id == id)
                {
-                  SDL_mutexP(clientmutex);
+                  clientmutex->lock();
                   deletemeshes.push_back(i->mesh);
                   items.erase(i);
                   spawnschanged = true;
-                  SDL_mutexV(clientmutex);
+                  clientmutex->unlock();
                   break;
                }
             }
@@ -869,12 +869,12 @@ int NetListen(void* dummy)
             HandleAck(acknum);
             lastsyncpacket = packetnum;
             string buffer;
-            SDL_mutexP(clientmutex);
+            clientmutex->lock();
             while (getline(get, buffer) && buffer != "endofcommands")
             {
                console.Parse(buffer, false);
             }
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
             Ack(packetnum);
             needsync = false;
          }
@@ -900,13 +900,13 @@ int NetListen(void* dummy)
             if (num == servplayernum)
                num = 0;
             
-            SDL_mutexP(clientmutex);
+            clientmutex->lock();
             locks.Read(meshes);
             deletemeshes.push_back(player[num].mesh[part]);
             player[num].mesh[part] = meshes.end();
             player[num].hp[part] = 0;
             locks.EndRead(meshes);
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
             
             Ack(packetnum);
          }
@@ -924,9 +924,9 @@ int NetListen(void* dummy)
                string dotteddec = AddressToDD(addme.address.host);
                logout << dotteddec << ":" << serverport << endl;
                addme.strip = dotteddec;
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                servers.push_back(addme);
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
                knownservers.insert(addme); // No need to wrap this, only used in this thread
             }
          }
@@ -973,9 +973,9 @@ int NetListen(void* dummy)
                   string dotteddec = AddressToDD(inpack->address.host);
                   logout << dotteddec << ":" << serverport << endl;
                   addme.strip = dotteddec;
-                  SDL_mutexP(clientmutex);
+                  clientmutex->lock();
                   servers.push_back(addme);
-                  SDL_mutexV(clientmutex);
+                  clientmutex->unlock();
                   knownservers.insert(addme); // No need to wrap this, only used in this thread
                }
             }

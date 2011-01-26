@@ -47,7 +47,7 @@ void UpdateUnitSelection()
    ComboBox* rarmbox = (ComboBox*)gui[loadoutmenu]->GetWidget("Right Arm");
    ComboBox* itembox = (ComboBox*)gui[loadoutmenu]->GetWidget("Item");
    
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    player[0].unit = unitbox->Selected();
    int weapid;
    weapid = torsobox->Selected();
@@ -83,7 +83,7 @@ void UpdateUnitSelection()
    if (totalweight > maxweight || sweight > player[0].salvage || spawnbox->Selected() == -1)
       spawnbutton->visible = false;
    else spawnbutton->visible = true;
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 }
 
 
@@ -96,7 +96,7 @@ void Connect()
    int currsel = servlist->Selected();
    if (currsel == -1) return;
    int counter = 0;
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    for (i = servers.begin(); i != servers.end(); ++i)
    {
       if (i->inlist)
@@ -110,7 +110,7 @@ void Connect()
          ++counter;
       }
    }
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    console.Parse("set serveraddr " + serveraddress, false);
    console.Parse("set serverport " + ToString(serverport), false);
    console.Parse("connect");
@@ -163,18 +163,18 @@ void Join()
 
 void Resume()
 {
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    if (player[servplayernum].spawned)
       ShowGUI(hud);
    else
       ShowGUI(loadoutmenu);
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 }
 
 
 void Spawn()
 {
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    if (player[servplayernum].spawned)
    {
       gui[loadoutmenu]->visible = false;
@@ -184,7 +184,7 @@ void Spawn()
    {
       spawnrequest = true;
    }
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
 }
 
 
@@ -209,9 +209,9 @@ void SelectTeam(int team)
 
 void Spectate()
 {
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    player[0].spectate = true;
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    changeteam = 0;
    spectateplayer = 0;
    SpectateNext();

@@ -41,6 +41,7 @@
 #include "LockManager.h"
 #include "Recorder.h"
 #include "Replayer.h"
+#include "Mutex.h"
 
 
 #define PI 3.14159265
@@ -59,7 +60,7 @@ const int terrobjsize = 16; // Terrain objects are terrobjsize x terrobjsize til
 enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, serverbrowser, credits, updateprogress, statsdisp, consolegui, 
    ingamestatus, chat, endgame, loadoutmessage, editobject, editormain, numguis};
 
-extern SDL_mutex* clientmutex;// Make sure client threads don't interfere with each other
+extern MutexPtr clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
 extern vector<ParticleEmitter> emitters;

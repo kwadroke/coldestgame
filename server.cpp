@@ -242,7 +242,7 @@ void ServerLoop()
       // Grabbing clientmutex can take a long time, so don't check every time through
       if (checkmap % 5 == 0)
       {
-         SDL_mutexP(clientmutex); // Have to have clientmutex before touching mapname
+         clientmutex->lock(); // Have to have clientmutex before touching mapname
          if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
          {
             if (gameover && SDL_GetTicks() > nextmaptime)
@@ -251,11 +251,11 @@ void ServerLoop()
                int choosemap = (int)Random(0, maplist.size());
                console.Parse("set map " + maplist[choosemap], false);
             }
-            SDL_mutexV(clientmutex);
+            clientmutex->unlock();
             ServerLoadMap();
-            SDL_mutexP(clientmutex); // Avoid double unlock.  Necessary?  Eh.
+            clientmutex->lock(); // Avoid double unlock.  Necessary?  Eh.
          }
-         SDL_mutexV(clientmutex);
+         clientmutex->unlock();
       }
       checkmap = (checkmap + 1) % 5;
 
@@ -808,9 +808,9 @@ int ServerListen(void* dummy)
                string command;
                get.ignore();
                getline(get, command);
-               SDL_mutexP(clientmutex);
+               clientmutex->lock();
                console.Parse(command, false);
-               SDL_mutexV(clientmutex);
+               clientmutex->unlock();
                servermutex->lock();
                for (size_t i = 0; i < serverplayers.size(); ++i)
                   SendSyncPacket(serverplayers[i], 0);
@@ -1094,17 +1094,17 @@ int ServerSend(void* dummy)  // Thread for sending updates
 void ServerLoadMap()
 {
    serverhasmap = 0;
-   SDL_mutexP(clientmutex);
+   clientmutex->lock();
    nextmap = "maps/" + console.GetString("map");
    mapname = "";
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    // I suspect that this while loop is no longer necessary because getmap locks the clientmutex
    // until it's done running, so waiting on that is sufficient.
-   while ((SDL_mutexP(clientmutex) == 0) && mapname != nextmap && (SDL_mutexV(clientmutex) == 0))
+   while ((clientmutex->lock() == 0) && mapname != nextmap && (clientmutex->unlock() == 0))
    {
       SDL_Delay(1); // Wait for main thread to load map
    }
-   SDL_mutexV(clientmutex);
+   clientmutex->unlock();
    
    servermutex->lock(); // Grab this so the send thread doesn't do something funny on us
    locks.Read(meshes);

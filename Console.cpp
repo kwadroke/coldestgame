@@ -322,10 +322,10 @@ void Console::Action(const string& action)
       // I think to avoid race conditions it's necessary to reset both of these here.  If we only
       // set mapname, we risk reloading the current map, which may not be desirable.  If we only
       // set nextmap, we risk loading the map "", which would obviously be bad.:-)
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       mapname = "";
       nextmap = "";
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
    }
    else if (action == "restartgl")
    {
@@ -334,9 +334,9 @@ void Console::Action(const string& action)
    }
    else if (action == "reloadres")
    {
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       mapname = "";
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
    }
    else if (action == "laghax action")
    {
@@ -384,10 +384,10 @@ void Console::Action(const string& action)
    }
    else if (action == "name action")
    {
-      SDL_mutexP(clientmutex);
+      clientmutex->lock();
       if (player.size())
          player[0].name = GetString("name");
-      SDL_mutexV(clientmutex);
+      clientmutex->unlock();
    }
    else if (action == "af action")
    {
