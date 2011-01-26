@@ -23,4 +23,18 @@ class Mutex
 
 typedef boost::shared_ptr<Mutex> MutexPtr;
 
+inline int Mutex::lock()
+{
+   int retval = SDL_mutexP(mutex);
+   return retval;
+}
+
+
+inline int Mutex::unlock()
+{
+   int retval = SDL_mutexV(mutex);
+   SDL_Delay(0); // Prevent thread starvation
+   return retval;
+}
+
 #endif // MUTEX_H

@@ -30,18 +30,3 @@ Mutex& Mutex::operator=(const Mutex& other)
    return *this;
 }
 
-
-int Mutex::lock()
-{
-   int retval = SDL_mutexP(mutex);
-   return retval;
-}
-
-
-int Mutex::unlock()
-{
-   int retval = SDL_mutexV(mutex);
-   SDL_Delay(0); // Prevent thread starvation
-   return retval;
-}
-
