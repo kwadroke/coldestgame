@@ -384,10 +384,15 @@ void Console::Action(const string& action)
    }
    else if (action == "name action")
    {
-      clientmutex->lock();
-      if (player.size())
-         player[0].name = GetString("name");
-      clientmutex->unlock();
+      // If SDL wasn't initialized yet, we won't have created any of these objects yet so we can't use them, but that's okay
+      // because they'll be properly initialized later.
+      if (SDL_WasInit(0))
+      {
+         clientmutex->lock();
+         if (player.size())
+            player[0].name = GetString("name");
+         clientmutex->unlock();
+      }
    }
    else if (action == "af action")
    {

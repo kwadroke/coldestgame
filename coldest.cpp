@@ -178,9 +178,6 @@ void OutputDiagnosticData()
 
 void InitGlobals()
 {
-   // This has to come before some of the console code below
-   clientmutex = MutexPtr(new Mutex());
-   
    // Default cvars
    console.Parse("set screenwidth 800", false);
    console.Parse("set screenheight 600", false);
@@ -300,7 +297,9 @@ void InitGlobals()
 
    locks.Register(meshes);
    
-   // Can't create players until after SDL has been init'd in ReadConfig
+   // Can't create players until after SDL has been init'd in ReadConfig - ditto for the mutex
+   clientmutex = MutexPtr(new Mutex());
+   
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    dummy.unit = Nemesis;
    dummy.name = console.GetString("name");
