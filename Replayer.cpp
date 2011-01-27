@@ -36,11 +36,12 @@ void Replayer::SetActive(const string& filename, const bool a)
       clientmutex->unlock();
 
       int version, minor;
+      string fullpath = userpath + Recorder::savepath + filename;
       read.close();
-      read.open(filename.c_str());
+      read.open(fullpath.c_str());
       if (!read)
       {
-         logout << "Failed to open replay file " << filename << endl;
+         logout << "Failed to open replay file " << fullpath << endl;
          return;
       }
       

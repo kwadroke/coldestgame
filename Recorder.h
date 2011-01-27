@@ -47,6 +47,7 @@ class Recorder
       static size_t CountSpawnedPlayers();
 
       static const int version, minor;
+      static const string savepath;
 
    private:
       string GetFilename();
