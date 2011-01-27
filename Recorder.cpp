@@ -19,12 +19,21 @@
 #include "Recorder.h"
 #include "globals.h"
 #include <ctime>
+#include <boost/filesystem.hpp>
 
 const int Recorder::version = 1;
 const int Recorder::minor = 0;
+const string Recorder::savepath = "replays/";
 
 Recorder::Recorder() : starttick(0), active(false)
 {
+   string path = userpath + savepath;
+#ifndef WIN32
+   if (!boost::filesystem::is_directory(path))
+      boost::filesystem::create_directory(path);
+#else
+   CreateDirectory((TCHAR*)path.c_str(), NULL);
+#endif
 }
 
 
@@ -197,7 +206,7 @@ string Recorder::GetFilename()
    char buffer[buffersize];
    strftime(buffer, buffersize - 1, "%Y-%m-%d-%H%M%S", timeinfo);
 
-   string retval = "Coldest";
+   string retval = userpath + savepath + "Coldest";
    retval += buffer;
    retval += ".cor";
    return retval;
