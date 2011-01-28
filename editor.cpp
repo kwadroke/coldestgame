@@ -82,7 +82,9 @@ void EditorLoop(const string editmap)
       gui[editormain]->visible = true;
 
       for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+      {
          i->Update();
+      }
       
       Repaint();
    }
@@ -511,7 +513,7 @@ void GetSelectedMesh(SDL_Event event)
    Vector3 dummy;
    selected = NULL;
    coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected, NULL);
-   
+
    UpdateEditorGUI();
 }
 
