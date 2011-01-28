@@ -624,8 +624,7 @@ void SaveMap()
    }
    
    // Write objects
-   newmap << "\nNode\n";
-   newmap << "   Objects\n";
+   newmap << "Objects\n";
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain && 
@@ -906,6 +905,14 @@ void DeleteObject()
                treemap.erase(selected);
             meshes.erase(i);
             kdtree.erase(selected);
+            for (vector<Mesh*>::iterator j = impmeshes.begin(); j < impmeshes.end(); ++j)
+            {
+               if (*j == selected)
+               {
+                  impmeshes.erase(j);
+                  break;
+               }
+            }
             selected = NULL;
             break;
          }
