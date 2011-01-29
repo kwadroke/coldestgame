@@ -1,5 +1,5 @@
 Particle particles/explosion
 EmitterTime 1000
 Density 100
-Count 1
+Count 10
 Sound sounds/explosion.ogg
