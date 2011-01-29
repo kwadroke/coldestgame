@@ -23,7 +23,7 @@
 
 #include <list>
 #include <boost/shared_ptr.hpp>
-#include "SDL_net.h"
+#include <SDL/SDL_net.h>
 #include "IDGen.h"
 #include "Packet.h"
 #include "util.h"

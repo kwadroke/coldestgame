@@ -21,7 +21,7 @@
 #ifndef __SERVERINFO_H
 #define __SERVERINFO_H
 
-#include "SDL_net.h"
+#include <SDL/SDL_net.h>
 #include <string>
 
 using std::string;
