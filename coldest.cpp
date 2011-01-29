@@ -2096,7 +2096,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    }
    
    p.size = units[p.unit].size;
-   
+
    for (size_t i = 0; i < numbodyparts; ++i)
    {
       if (p.mesh[i] != ml.end())

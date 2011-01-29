@@ -270,6 +270,7 @@ void Mesh::Move(const Vector3& v, const bool movetris)
       updatevbo = true;
       ResetTriMaxDims();
    }
+   ResetTriMaxDims();
    position = v;
    trismoved = true;
 }
@@ -296,8 +297,8 @@ void Mesh::Rotate(const Vector3& v, const bool movetris)
          (*i)->pos.transform(m);
       }
       updatevbo = true;
-      ResetTriMaxDims();
    }
+   ResetTriMaxDims();
    rotation = v;
    trismoved = true;
    boundschanged = true;
