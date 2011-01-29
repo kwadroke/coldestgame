@@ -24,7 +24,7 @@
 #include "Vector3.h"
 #include <vector>
 #include <string>
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 using std::vector;
 using std::string;

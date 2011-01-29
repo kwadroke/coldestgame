@@ -21,7 +21,7 @@
 #ifndef __TSINT_H
 #define __TSINT_H
 
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>

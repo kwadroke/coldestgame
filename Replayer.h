@@ -20,7 +20,7 @@
 #define REPLAYER_H
 
 #include <fstream>
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <boost/shared_ptr.hpp>
 #include "PlayerData.h"
 #include "Item.h"

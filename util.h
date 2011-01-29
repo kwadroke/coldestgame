@@ -24,7 +24,7 @@
 #include <string>
 #include <sstream>
 #include <csignal>
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "Vector3.h"
 #include "GraphicMatrix.h"
 #include "tsint.h"

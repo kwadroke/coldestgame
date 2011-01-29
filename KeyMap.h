@@ -20,7 +20,7 @@
 
 #ifndef __KEYMAP_H
 #define __KEYMAP_H
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 /* When you add another key to this class, you need to add the appropriate connections in
    settings.xml, actions.cpp, and settings.cpp */

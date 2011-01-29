@@ -39,8 +39,8 @@
 #include <set>
 #include <vector>
 #include <string>
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include "../TextureManager.h"
 #include "XSWrapper.h"
 #include "../util.h"

@@ -23,7 +23,7 @@
 #include <set>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "PlayerData.h"
 #include "Particle.h"
 #include "Timer.h"
