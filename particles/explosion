@@ -1,3 +1,4 @@
-Velocity 0
-TTL 50000
+Velocity .2
+Acceleration .8
+TTL 300
 Mesh models/explosion/base

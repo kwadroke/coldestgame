@@ -4,5 +4,5 @@ Specular 1 1 1 1
 Texture0 textures/explosions/expatlas.png
 Shader shaders/flat
 CullFace 0
-Additive 1
+Additive 0
 DepthWrite 0
