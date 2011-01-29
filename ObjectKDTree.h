@@ -26,7 +26,7 @@
 #include <list>
 #include <vector>
 #include <set>
-#include "SDL_thread.h"
+#include <SDL/SDL_thread.h>
 #include "Timer.h"
 #include "Camera.h"
 #include <boost/shared_ptr.hpp>

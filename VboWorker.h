@@ -21,7 +21,7 @@
 #define VBOWORKER_H
 
 #include "Mesh.h"
-#include <SDL_thread.h>
+#include <SDL/SDL_thread.h>
 #include <boost/shared_ptr.hpp>
 
 // Set start, end, and position to the appropriate locations, then set go to 1.

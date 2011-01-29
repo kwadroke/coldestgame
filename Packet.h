@@ -23,7 +23,7 @@
 
 #include <string>
 #include <sstream>
-#include <SDL_net.h>
+#include <SDL/SDL_net.h>
 #include "logout.h"
 
 using std::stringstream;
