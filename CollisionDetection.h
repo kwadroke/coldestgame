@@ -27,7 +27,7 @@
 #include "Vector3.h"
 #include "Quad.h"
 #include "Timer.h"
-#include "SDL_thread.h"
+#include <SDL/SDL_thread.h>
 
 //#define INLINE_COLDET
 

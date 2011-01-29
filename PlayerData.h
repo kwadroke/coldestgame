@@ -24,7 +24,7 @@
 #include "Vector3.h"
 #include <list>
 #include <set>
-#include "SDL_net.h"
+#include <SDL/SDL_net.h>
 #include "Mesh.h"
 #include "Hit.h"
 #include "types.h"
