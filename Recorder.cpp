@@ -19,7 +19,9 @@
 #include "Recorder.h"
 #include "globals.h"
 #include <ctime>
+#ifndef _WIN32
 #include <boost/filesystem.hpp>
+#endif
 
 const int Recorder::version = 1;
 const int Recorder::minor = 0;
