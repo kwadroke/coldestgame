@@ -19,7 +19,7 @@
 
 
 #include "util.h"
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 int PowerOf2(int input)
 {
