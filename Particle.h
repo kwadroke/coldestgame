@@ -26,8 +26,8 @@
 #include "CollisionDetection.h"
 #include "Vector3.h"
 #include "Timer.h"
-#include "SDL.h"
-#include "SDL_thread.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 
 using boost::shared_ptr;
 

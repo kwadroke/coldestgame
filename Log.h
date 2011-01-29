@@ -25,7 +25,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 using std::vector;
 using std::ofstream;

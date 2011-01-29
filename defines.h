@@ -24,11 +24,11 @@
 // Odds are that a lot of these includes are no longer needed since globals were
 // moved to different files
 #include "glinc.h"
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
-#include "SDL_net.h"
-#include "SDL_thread.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_net.h>
+#include <SDL/SDL_thread.h>
 
 #include <stdio.h>
 #include <stdlib.h>

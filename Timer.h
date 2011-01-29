@@ -21,7 +21,7 @@
 #ifndef __TIMER_H
 #define __TIMER_H
 
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include <iostream>
 #include "logout.h"
 

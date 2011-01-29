@@ -30,7 +30,7 @@
 #include "CollisionDetection.h"
 #include "PlayerData.h"
 #include "Particle.h"
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "IDGen.h"
 #include "tsint.h"
 

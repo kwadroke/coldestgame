@@ -24,7 +24,7 @@
 #include <map>
 #include <string>
 #include <set>
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "ProceduralTree.h"
 #include "gui/GUI.h"
 

@@ -21,8 +21,8 @@
 #define __RWLOCK_H
 
 #include "tsint.h"
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 #include <boost/shared_ptr.hpp>
 
 // A multiple readers, single writer lock class that gives fair access to everyone.

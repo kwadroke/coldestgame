@@ -21,8 +21,8 @@
 #ifndef __IDGEN_H
 #define __IDGEN_H
 
-#include "SDL.h"
-#include "SDL_thread.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>

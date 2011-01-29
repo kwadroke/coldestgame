@@ -23,7 +23,7 @@
 
 #include "GUI.h"
 #include "Table.h"
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include <string>
 #include <deque>
 
