@@ -56,7 +56,7 @@ UDPsocket sock;
 UDPpacket *outpack;
 IPaddress addr;
 // netmutex protects both the send queue and the socket shared by the send and receive threads
-SDL_mutex* netmutex;
+MutexPtr netmutex;
 bool socketopen;
 
 // Gets split off as a separate thread to handle sending network packets
@@ -99,9 +99,9 @@ int NetSend(void* dummy)
             lastnettick = currnettick;
             Packet p(&addr);
             p << FillUpdatePacket();
-            SDL_mutexP(netmutex);
+            netmutex->lock();
             sendqueue.push_back(p);
-            SDL_mutexV(netmutex);
+            netmutex->unlock();
          }
          occpacketcounter++;
       }
@@ -115,9 +115,9 @@ int NetSend(void* dummy)
             Packet p(&i->address);
             p << "i\n";
             p << sendpacketnum;
-            SDL_mutexP(netmutex);
+            netmutex->lock();
             sendqueue.push_back(p);
-            SDL_mutexV(netmutex);
+            netmutex->unlock();
             i->tick = SDL_GetTicks();
          }
          clientmutex->unlock();
@@ -146,9 +146,9 @@ int NetSend(void* dummy)
          p << player[0].unit << eol;
          p << player[0].name << eol;
          p << netver << eol;
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          doconnect = false;
          logout << "Sending connect to " << console.GetString("serveraddr") << ":" << console.GetInt("serverport") << endl;
       }
@@ -172,9 +172,9 @@ int NetSend(void* dummy)
          p << availablespawns[sel].position.z << eol;
          
          clientmutex->unlock();
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          spawnrequest = false;
       }
       clientmutex->lock();
@@ -188,9 +188,9 @@ int NetSend(void* dummy)
          p << chatstring << eol;
          chatstring = "";
          clientmutex->unlock(); // Just to be safe, don't hold both mutexes at once
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
       }
       clientmutex->unlock(); // Not sure a double unlock is allowed, but we'll see (so far so good)
       
@@ -202,9 +202,9 @@ int NetSend(void* dummy)
          p << "M\n";
          p << p.ack << eol;
          p << changeteam << eol;
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          changeteam = -1;
       }
       if (useitem)
@@ -213,9 +213,9 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "I\n";
          p << p.ack << eol;
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          useitem = false;
       }
       if (sendkill)
@@ -224,9 +224,9 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "K\n";
          p << p.ack << eol;
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          sendkill = false;
       }
       if (needsync)
@@ -235,9 +235,9 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "Y\n";
          p << p.ack << eol;
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          needsync = false;
       }
       if (sendloadout)
@@ -246,14 +246,14 @@ int NetSend(void* dummy)
          p.ack = sendpacketnum;
          p << "L\n";
          p << p.ack << eol;
-         SDL_mutexP(netmutex);
+         netmutex->lock();
          sendqueue.push_back(p);
-         SDL_mutexV(netmutex);
+         netmutex->unlock();
          sendloadout = 0;
       }
       
       
-      SDL_mutexP(netmutex);
+      netmutex->lock();
       list<Packet>::iterator i = sendqueue.begin();
       while (i != sendqueue.end())
       {
@@ -268,7 +268,7 @@ int NetSend(void* dummy)
          }
          ++i;
       }
-      SDL_mutexV(netmutex);
+      netmutex->unlock();
       //t.stop();
    }
    
@@ -341,7 +341,7 @@ int NetListen(void* dummy)
    Timer t;
    unsigned long runtimes = 0;
    
-   netmutex = SDL_CreateMutex();
+   netmutex = MutexPtr(new Mutex());
    
    // Note: This socket should be opened before the other, on the off chance that it would choose
    // this port.  No, I didn't learn that the hard way, but I did almost forget.
@@ -375,9 +375,9 @@ int NetListen(void* dummy)
       //t.start();
       SDL_Delay(1); // See comments for NetSend loop
       
-      while ((SDL_mutexP(netmutex) == 0) && 
+      while ((netmutex->lock() == 0) &&
               SDLNet_UDP_Recv(sock, inpack) && 
-              (SDL_mutexV(netmutex) == 0))
+              (netmutex->unlock() == 0))
       {
          getdata = (char*)inpack->data;
          stringstream get(getdata);
@@ -602,9 +602,9 @@ int NetListen(void* dummy)
             Packet p(&addr);
             p << "p\n";
             p << sendpacketnum << eol;
-            SDL_mutexP(netmutex);
+            netmutex->lock();
             sendqueue.push_back(p);
-            SDL_mutexV(netmutex);
+            netmutex->unlock();
          }
          else if (packettype == "s") // Shots
          {
@@ -945,7 +945,7 @@ int NetListen(void* dummy)
          }
       }
       // After the while loop we have to unlock the mutex, since we didn't get to that stage before
-      SDL_mutexV(netmutex);
+      netmutex->unlock();
       //t.stop();
       
       // Have to listen on a specific port for server announcements.  Since this is only for LAN play
@@ -993,7 +993,7 @@ int NetListen(void* dummy)
 
 void HandleAck(unsigned long acknum)
 {
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    for (list<Packet>::iterator i = sendqueue.begin(); i != sendqueue.end(); ++i)
    {
       if (i->ack == acknum)
@@ -1002,7 +1002,7 @@ void HandleAck(unsigned long acknum)
          break;
       }
    }
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1013,9 +1013,9 @@ void Ack(unsigned long acknum)
    response << "A\n";
    response << 0 << eol;
    response << acknum << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(response);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1025,9 +1025,9 @@ void SendPowerdown()
    pack.ack = sendpacketnum;
    pack << "P\n";
    pack << pack.ack << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1038,9 +1038,9 @@ void SendCommand(const string& command)
    pack << "c\n";
    pack << pack.ack << eol;
    pack << command << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1050,9 +1050,9 @@ void SendFire()
    pack.ack = sendpacketnum;
    pack << "f\n";
    pack << pack.ack << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1063,9 +1063,9 @@ void SendPassword(const string& password)
    pack << "t\n";
    pack << pack.ack << eol;
    pack << password << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1074,9 +1074,9 @@ void SendKeepalive()
    Packet pack(&addr);
    pack << "k\n";
    pack << 0 << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1087,9 +1087,9 @@ void SendMasterListRequest()
    SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011);
    Packet pack(&masteraddr);
    pack << "r\n0\n";
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
 }
 
 
@@ -1102,8 +1102,8 @@ bool SendVersionRequest()
    pack.ack = sendpacketnum;
    pack << "v\n";
    pack << pack.ack << eol;
-   SDL_mutexP(netmutex);
+   netmutex->lock();
    sendqueue.push_back(pack);
-   SDL_mutexV(netmutex);
+   netmutex->unlock();
    return true;
 }

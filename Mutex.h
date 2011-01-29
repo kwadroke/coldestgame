@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 #include <boost/shared_ptr.hpp>
+#include "Timer.h"
 
 
 class Mutex
@@ -25,7 +26,11 @@ typedef boost::shared_ptr<Mutex> MutexPtr;
 
 inline int Mutex::lock()
 {
+   Timer t;
+   t.start();
    int retval = SDL_mutexP(mutex);
+   if (t.elapsed() > 250)
+      logout << "Long mutex lock " << t.elapsed() << endl;
    return retval;
 }
 
