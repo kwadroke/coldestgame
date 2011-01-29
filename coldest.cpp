@@ -227,6 +227,7 @@ void InitGlobals()
    console.Parse("set servername @none@", false);
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 0", false);
+   console.Parse("set botsmove 1", false);
    console.Parse("set overheat 1", false);
    console.Parse("set syncmax 10", false);
    console.Parse("set name Nooblet", false);

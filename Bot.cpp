@@ -81,7 +81,7 @@ void Bot::Update()
    if (bot.moveright)
       bot.facing += .1f * movetimer.elapsed();
    movetimer.start();
-   if (timer.elapsed() > 2000)
+   if (console.GetBool("botsmove") && timer.elapsed() > 2000)
    {
       if (Random(0, 1) > .2)
          bot.moveforward = true;
