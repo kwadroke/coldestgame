@@ -22,7 +22,7 @@
 #include <list>
 #include <set>
 #include <vector>
-#include "SDL_net.h"
+#include <SDL/SDL_net.h>
 #include "Packet.h"
 #include "ServerInfo.h"
 #include "util.h"

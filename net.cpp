@@ -29,8 +29,8 @@
 #include <WinSock2.h>
 #endif
 #include "Particle.h"
-#include "SDL.h"
-#include "SDL_net.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_net.h>
 #include "PlayerData.h"
 #include "CollisionDetection.h"
 #include "Packet.h"
