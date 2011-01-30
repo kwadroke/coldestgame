@@ -236,7 +236,7 @@ void InitGlobals()
    console.Parse("set timeout 10", false);
    console.Parse("set numthreads 2", false);
    console.Parse("set checkupdates 1", false);
-   console.Parse("set caminterp 1", false);
+   console.Parse("set caminterp 50", false);
    console.Parse("set recordfps 30", false);
 
    // Default keybindings
@@ -295,6 +295,8 @@ void InitGlobals()
    // Cvars where we want to change the default value
    if (console.GetInt("syncmax") == 50)
       console.Parse("setsave syncmax 10");
+   if (console.GetInt("caminterp") == 1)
+      console.Parse("setsave caminterp 50");
 
    locks.Register(meshes);
    
