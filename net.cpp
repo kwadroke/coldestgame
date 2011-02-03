@@ -1102,6 +1102,7 @@ bool SendVersionRequest()
    pack.ack = sendpacketnum;
    pack << "v\n";
    pack << pack.ack << eol;
+   pack.sendinterval = 5000;
    netmutex->lock();
    sendqueue.push_back(pack);
    netmutex->unlock();
