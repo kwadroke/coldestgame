@@ -117,7 +117,7 @@ void Updater::BuildFileList()
       const NTreeReader& current = crcs.GetItem(i);
       
       current.Read(currcrc, "CRC");
-      current.Read(currfile, "File");
+      currfile = current.GetName();
       
       boost::crc_32_type getcrc;
       ifstream in(currfile.c_str(), ios::binary);
@@ -202,10 +202,15 @@ void Updater::ReplaceAndRestart()
    Cleanup();
 #ifndef WIN32
    // This is a bit lazy, but it should work on any Unix-like that allows you to replace in-use files
-   error = system("mv -f updates/* .");
+   error = system("cp -r updates/* .");
    if (error)
    {
       logout << "Error moving update files: " << error << endl;
+   }
+   error = system("rm -rf updates/*");
+   if (error)
+   {
+      logout << "Error removing temporary update files: " << error << endl;
    }
    error = system("chmod +x ./coldest*");
    if (error)

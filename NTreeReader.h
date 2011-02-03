@@ -63,6 +63,7 @@ class NTreeReader
       string ReadLine(string&, const string) const;
       size_t NumChildren() const;
       string GetPath() const;
+      string GetName() const {return name;}
 
    private:
       void Parse(istringstream&);
