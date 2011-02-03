@@ -49,7 +49,8 @@ bool Updater::Available()
    GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
    progresstext->text = "Checking for updates";
    Repaint();
-   
+
+   logout << "Sending version request" << endl;
    currversion = 0;
    if (!SendVersionRequest())
    {
@@ -58,13 +59,17 @@ bool Updater::Available()
    }
    
    // Wait for response
+   logout << "Waiting for master server version" << endl;
    Timer t;
    t.start();
    while (!currversion)
    {
       SDL_Delay(1);
-      if (t.elapsed() > 5000)
+      if (t.elapsed() > 15000)
+      {
+         logout << "Timed out waiting for master server version" << endl;
          return false;
+      }
    }
    
    long thisversion;
@@ -111,7 +116,7 @@ void Updater::BuildFileList()
    NTreeReader crcs("crcfile");
    uint32_t currcrc;
    string currfile;
-   
+
    for (size_t i = 0; i < crcs.NumChildren(); ++i)
    {
       const NTreeReader& current = crcs.GetItem(i);
