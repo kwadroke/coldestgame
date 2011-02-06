@@ -300,9 +300,7 @@ void InitGlobals()
 
    locks.Register(meshes);
    
-   // Can't create players until after SDL has been init'd in ReadConfig - ditto for the mutex
-   clientmutex = MutexPtr(new Mutex());
-   
+   // Can't create players until after SDL has been init'd in ReadConfig
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    dummy.unit = Nemesis;
    dummy.name = console.GetString("name");
@@ -476,6 +474,7 @@ void SetupSDL()
    
    SDL_EnableUNICODE(1);
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+   clientmutex = MutexPtr(new Mutex()); // Make sure this gets created at the same time SDL is init'd
    
    atexit(SDL_Quit);
    
