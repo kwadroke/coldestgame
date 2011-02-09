@@ -74,7 +74,7 @@ list(APPEND LIBS ${Boost_LIBRARIES})
 
 # Find all the libs that don't require extra parameters
 #TODO: All are not needed for dedicated server?
-foreach(lib SDL SDL_image SDL_net SDL_ttf GLEW OpenAL ALUT OGG Vorbis VorbisFile XercesC CURL)
+foreach(lib SDL SDL_image SDL_net SDL_ttf GLEW OpenGL OpenAL ALUT OGG Vorbis VorbisFile XercesC CURL)
 	find_package(${lib} REQUIRED)
 	include_directories(${${lib}_INCLUDE_DIRS})
 	list(APPEND LIBS ${${lib}_LIBRARIES})
