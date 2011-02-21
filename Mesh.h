@@ -31,6 +31,9 @@
 #include "FBO.h"
 #include <SDL/SDL.h>
 
+using std::list;
+using std::map;
+
 class Mesh
 {
    friend class MeshCache;  // So the cache can reset internal timers
