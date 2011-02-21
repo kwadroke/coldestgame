@@ -71,16 +71,31 @@ set(MASTER_SERVER_SOURCES
 find_package(Boost 1.36 REQUIRED COMPONENTS filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 list(APPEND LIBS ${Boost_LIBRARIES})
+list(APPEND CLIENTLIBS ${Boost_LIBRARIES})
+
+set(FINDLIBS SDL SDL_image SDL_net SDL_ttf XercesC CURL)
+# These aren't needed (and cause problems) for the dedicated server
+set(FINDCLIENTLIBS GLEW OpenGL OpenAL ALUT OGG Vorbis VorbisFile)
 
 # Find all the libs that don't require extra parameters
-#TODO: All are not needed for dedicated server?
-foreach(lib SDL SDL_image SDL_net SDL_ttf GLEW OpenGL OpenAL ALUT OGG Vorbis VorbisFile XercesC CURL)
+foreach(lib ${FINDLIBS})
 	find_package(${lib} REQUIRED)
 	include_directories(${${lib}_INCLUDE_DIRS})
 	list(APPEND LIBS ${${lib}_LIBRARIES})
+	list(APPEND CLIENTLIBS ${${lib}_LIBRARIES})
 	add_definitions(${${lib}_DEFINITIONS})
 	# Poor modules don't do this automatically :(
 	mark_as_advanced(${lib}_INCLUDE_DIRS ${lib}_LIBRARIES ${lib}_LIBRARIES_DEBUG)
+endforeach(lib)
+
+# Client only libs
+foreach(lib ${FINDCLIENTLIBS})
+   find_package(${lib} REQUIRED)
+   include_directories(${${lib}_INCLUDE_DIRS})
+   list(APPEND CLIENTLIBS ${${lib}_LIBRARIES})
+   add_definitions(${${lib}_DEFINITIONS})
+   # Poor modules don't do this automatically :(
+   mark_as_advanced(${lib}_INCLUDE_DIRS ${lib}_LIBRARIES ${lib}_LIBRARIES_DEBUG)
 endforeach(lib)
 
 # Master server has fewer deps
@@ -92,7 +107,7 @@ list(APPEND MASTER_SERVER_LIBS ${SDL_net_LIBRARIES})
 if(BUILD_CLIENT)
 	add_executable(${EXENAME} ${CLIENT_SOURCES} ${COMMON_SOURCES} ${GUI_SOURCES})
 	set_target_properties(${EXENAME} PROPERTIES COMPILE_FLAGS "-UDEDICATED")
-	target_link_libraries(${EXENAME} ${LIBS})
+	target_link_libraries(${EXENAME} ${CLIENTLIBS})
 endif(BUILD_CLIENT)
 
 if(BUILD_DEDICATED_SERVER)
