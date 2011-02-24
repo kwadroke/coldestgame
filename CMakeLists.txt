@@ -48,7 +48,7 @@ set(COMMON_SOURCES
 	renderdefs.cpp globals.cpp netdefs.cpp PlayerData.cpp Log.cpp logout.cpp
 	NTreeReader.cpp Material.cpp ResourceManager.cpp Mesh.cpp Triangle.cpp
 	Quad.cpp MeshNode.cpp ServerState.cpp MeshCache.cpp tsint.cpp Bot.cpp
-	Item.cpp util.cpp Mutex.cpp
+	Item.cpp util.cpp Mutex.cpp Map.cpp
 	)
 
 set(CLIENT_SOURCES
@@ -57,7 +57,7 @@ set(CLIENT_SOURCES
 	Updater.cpp
 	)
 
-set(DEDICATED_SERVER_SOURCES "") # Nothing apparantly
+set(DEDICATED_SERVER_SOURCES "") # Nothing apparently
 
 set(MASTER_SERVER_SOURCES
 	master.cpp util.cpp Packet.cpp ServerInfo.cpp Vector3.cpp GraphicMatrix.cpp
