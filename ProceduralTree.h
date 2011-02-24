@@ -82,7 +82,7 @@ class ProceduralTree
       string barkfile, leavesfile;
       
    private:
-      void GenBranch(GraphicMatrix, int, int, vector<Vector3>, bool, int);
+      void GenBranch(GraphicMatrix, int, int, vector<Vector3>, int);
       float Random(float, float);
       Material *bark, *leaves;
       StableRandom random;

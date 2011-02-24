@@ -103,7 +103,7 @@ size_t ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leav
    if (!multitrunk)
       i = numbranches[0] - 1;
    for (; i < numbranches[0]; ++i)
-      GenBranch(m, 0, 0, pts, true, 0);
+      GenBranch(m, 0, 0, pts, 0);
    currmesh->GenTangents();
    currmesh->Update();
    // Center the mesh location
@@ -114,7 +114,7 @@ size_t ProceduralTree::GenTree(Mesh* currmesh, Material* barkmat, Material* leav
 }
 
 
-void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vector3> oldpts, bool trunk, int side)
+void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vector3> oldpts, int side)
 {
    if (lev > numlevels) return;
    vector<Vector3> newpts;
@@ -454,7 +454,7 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
          m.rotatey(angley);
          m.rotatez(anglez);
          m *= trans;
-         GenBranch(m, lev + 1, seg, newpts, false, 1);
+         GenBranch(m, lev + 1, seg, newpts, 1);
       }
    }
    
@@ -474,23 +474,23 @@ void ProceduralTree::GenBranch(GraphicMatrix trans, int lev, int seg, vector<Vec
       if (seg >= locnumsegs - 1 && split)  // Split ends:-)
       {
          for (int i = 0; i < locnumbranches; ++i)
-            GenBranch(m, lev + 1, 0, newpts, false, 0);
+            GenBranch(m, lev + 1, 0, newpts, 0);
       }
       else if (seg < locnumsegs)  // This branch, next segment
-         GenBranch(m, lev, seg + 1, newpts, false, 0);
+         GenBranch(m, lev, seg + 1, newpts, 0);
    }
    else
    {
       if (side < locnumsegs)  // Side branch next segment (?)
-         GenBranch(m, lev, seg, newpts, false, side + 1);
+         GenBranch(m, lev, seg, newpts, side + 1);
       else if (split)
       {
          for (int i = 0; i < locnumbranches; ++i)
-            GenBranch(m, lev + 1, 0, newpts, false, 0);
+            GenBranch(m, lev + 1, 0, newpts, 0);
       }
    }
    if (continuebranch && seg >= locnumsegs)  // Continue, probably pretty useless
-      GenBranch(m, lev + 1, 0, newpts, true, 0);
+      GenBranch(m, lev + 1, 0, newpts, 0);
 }
 
 
