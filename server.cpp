@@ -44,13 +44,13 @@
 #include "util.h"
 #include "Bot.h"
 #include "Mutex.h"
+#include "serverdefs.h"
 
 // Necessary declarations
 void ServerLoop();
 int ServerSend(void*);
 int ServerListen(void*);
 int ServerInput(void*);
-void ServerLoadMap();
 void HandleHit(Particle&, Mesh*, const Vector3&);
 void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
 void ApplyDamage(Mesh*, const float, const size_t, const bool teamdamage = false);
@@ -80,10 +80,13 @@ SDL_Thread* serversend;
 SDL_Thread* serverlisten;
 SDL_Thread* serverinput;
 UDPsocket servsock;
+MapPtr servermap;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 vector<Item> serveritems;
 MutexPtr servermutex;
+tsint serverloadmap;
+string servermapname;
 IDGen servsendpacketnum;
 IDGen nextservparticleid;
 IDGen serveritemid;
@@ -198,7 +201,7 @@ int Server(void* dummy)
       logout << "Server SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       return -1;
    }
-   ServerLoadMap();
+   ServerLoadMap(console.GetString("map"));
    serversend = SDL_CreateThread(ServerSend, NULL);
    serverlisten = SDL_CreateThread(ServerListen, NULL);
    serverinput = SDL_CreateThread(ServerInput, NULL);
@@ -222,7 +225,6 @@ void ServerLoop()
    logout << "ServerLoop " << gettid() << endl;
    
    Uint32 currtick;
-   int checkmap = 0;
    Timer frametimer;
    frametimer.start();
    
@@ -239,25 +241,12 @@ void ServerLoop()
       }
       frametimer.start();
 
-      // Grabbing clientmutex can take a long time, so don't check every time through
-      if (checkmap % 5 == 0)
+      if (gameover && SDL_GetTicks() > nextmaptime)
       {
-         clientmutex->lock(); // Have to have clientmutex before touching mapname
-         if ("maps/" + console.GetString("map") != mapname || (gameover && SDL_GetTicks() > nextmaptime)) // If the server changed maps load the new one
-         {
-            if (gameover && SDL_GetTicks() > nextmaptime)
-            {
-               srand(time(0));
-               int choosemap = (int)Random(0, maplist.size());
-               console.Parse("set map " + maplist[choosemap], false);
-            }
-            clientmutex->unlock();
-            ServerLoadMap();
-            clientmutex->lock(); // Avoid double unlock.  Necessary?  Eh.
-         }
-         clientmutex->unlock();
+         srand(time(0));
+         int choosemap = (int) Random(0, maplist.size());
+         ServerLoadMap(maplist[choosemap]);
       }
-      checkmap = (checkmap + 1) % 5;
 
       servermutex->lock();
       Uint32 timeout = console.GetInt("timeout");
@@ -559,7 +548,7 @@ int ServerListen(void* dummy)
             get >> spawnpointreq.y;
             get >> spawnpointreq.z;
             
-            vector<SpawnPointData> allspawns = spawnpoints;
+            vector<SpawnPointData> allspawns = servermap->SpawnPoints();
             vector<SpawnPointData> itemspawns = GetSpawns(serveritems);
             allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
             for (size_t i = 0; i < allspawns.size(); ++i)
@@ -580,7 +569,7 @@ int ServerListen(void* dummy)
             spawnpointreq.y += 50.f;
             float maxsize = 100.f;
 
-            if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 30.f, check))
+            if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 30.f, check, servermap))
             {
                for (float ycheck = spawnpointreq.y; ycheck <= 100000.f; ycheck += 100.f)
                {
@@ -589,7 +578,7 @@ int ServerListen(void* dummy)
                      for (float zcheck = spawnpointreq.z - maxsize; zcheck <= spawnpointreq.z + maxsize + 1.f; zcheck += maxsize)
                      {
                         checkvec = Vector3(xcheck, ycheck, zcheck);
-                        if (!coldet.CheckSphereHit(checkvec, checkvec, 30.f, check) && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
+                        if (!coldet.CheckSphereHit(checkvec, checkvec, 30.f, check, servermap) && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
                         {
                            spawnpointreq = checkvec;
                            found = true;
@@ -718,15 +707,15 @@ int ServerListen(void* dummy)
             response << newteam << eol;
             servermutex->lock();
             serverplayers[oppnum].team = newteam;
-            for (size_t i = 0; i < spawnpoints.size(); ++i)
+            for (size_t i = 0; i < servermap->SpawnPoints().size(); ++i)
             {
-               if ((spawnpoints[i].team == serverplayers[oppnum].team) || serverplayers[oppnum].team == 0)
+               if ((servermap->SpawnPoints(i).team == serverplayers[oppnum].team) || serverplayers[oppnum].team == 0)
                {
                   response << "1\n"; // Indicate that there are more spawn points to be read
-                  response << spawnpoints[i].position.x << eol;
-                  response << spawnpoints[i].position.y << eol;
-                  response << spawnpoints[i].position.z << eol;
-                  response << spawnpoints[i].name << eol;
+                  response << servermap->SpawnPoints(i).position.x << eol;
+                  response << servermap->SpawnPoints(i).position.y << eol;
+                  response << servermap->SpawnPoints(i).position.z << eol;
+                  response << servermap->SpawnPoints(i).name << eol;
                }
             }
             response << 0 << eol; // No more spawn points
@@ -855,7 +844,7 @@ int ServerListen(void* dummy)
          else if (packettype == "L") // Loadout request
          {
             servermutex->lock();
-            vector<SpawnPointData> allspawns = spawnpoints;
+            vector<SpawnPointData> allspawns = servermap->SpawnPoints();
             vector<SpawnPointData> itemspawns = GetSpawns(items);
             allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
             if (serverplayers[oppnum].spawned && NearSpawn(serverplayers[oppnum], allspawns))
@@ -1090,48 +1079,35 @@ int ServerSend(void* dummy)  // Thread for sending updates
 }
 
 
-// Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
-void ServerLoadMap()
+void ServerLoadMap(const string& mn)
 {
-   serverhasmap = 0;
-   clientmutex->lock();
-   nextmap = "maps/" + console.GetString("map");
-   mapname = "";
-   clientmutex->unlock();
-   // I suspect that this while loop is no longer necessary because getmap locks the clientmutex
-   // until it's done running, so waiting on that is sufficient.
-   while ((clientmutex->lock() == 0) && mapname != nextmap && (clientmutex->unlock() == 0))
-   {
-      SDL_Delay(1); // Wait for main thread to load map
-   }
-   clientmutex->unlock();
-   
-   servermutex->lock(); // Grab this so the send thread doesn't do something funny on us
-   locks.Read(meshes);
-   servermeshes = meshes;
-   locks.EndRead(meshes);
-   
+   gameover = 0;
    serveritems.clear();
-   
    serverplayers.clear();
    PlayerData local(servermeshes); // Dummy placeholder for the local player
    serverplayers.push_back(local);
    validaddrs.clear();
-   
    servparticles.clear();
+
+   // Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
+   servermapname = mn;
+   serverloadmap = 1;
+
+   // Wait for main thread to load the map - after this completes servermap should be properly populated
+   while (serverloadmap) {SDL_Delay(1);}
    
    // Generate main base items
-   for (size_t i = 0; i < spawnpoints.size(); ++i)
+   for (size_t i = 0; i < servermap->SpawnPoints().size(); ++i)
    {
       Item newitem(Item::Base, servermeshes);
       MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
-      newmesh->Move(spawnpoints[i].position);
+      newmesh->Move(servermap->SpawnPoints(i).position);
       servermeshes.push_front(*newmesh);
       serveritems.push_back(newitem);
       Item& curritem = serveritems.back();
       curritem.mesh = servermeshes.begin();
       curritem.id = serveritemid;
-      curritem.team = spawnpoints[i].team;
+      curritem.team = servermap->SpawnPoints(i).team;
    }
    
    // Must be done here so it's available for KDTree creation
@@ -1143,18 +1119,16 @@ void ServerLoadMap()
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {
-      points[i] = coldet.worldbounds[0].GetVertex(i);
+      points[i] = servermap->WorldBounds(0).GetVertex(i);
    }
    for (int i = 0; i < 4; ++i)
    {
-      points[i + 4] = coldet.worldbounds[5].GetVertex(i);
+      points[i + 4] = servermap->WorldBounds(0).GetVertex(i);
    }
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
    
-   logout << "Map loaded" << endl;
-   serverhasmap = 1;
-   gameover = 0;
+   logout << "Server map loaded" << endl;
    
    bots.clear();
    size_t numbots = console.GetInt("bots");
@@ -1197,7 +1171,7 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
       AppendDynamicMeshes(check, servermeshes);
       
       Mesh* dummymesh;
-      coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, dummy, dummymesh, NULL, &hitmeshes);
+      coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, servermap, dummy, dummymesh, NULL, &hitmeshes);
       sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
       
@@ -1259,11 +1233,11 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
          if (i->hp < 0)
          {
             doremove = true;
-            for (size_t j = 0; j < spawnpoints.size(); ++j)
+            for (size_t j = 0; j < servermap->SpawnPoints().size(); ++j)
             {
                if (&(*serveritems[j].mesh) == curr)
                {
-                  RemoveTeam(spawnpoints[j].team);
+                  RemoveTeam(servermap->SpawnPoints(j).team);
                   doremove = false;
                }
             }
@@ -1349,7 +1323,7 @@ void ServerUpdatePlayer(int i)
    if (!serverplayers[i].powerdowntime)
    {
       //Rewind(serverplayers[i].ping);
-      Move(serverplayers[i], servermeshes, serverkdtree);
+      Move(serverplayers[i], servermeshes, serverkdtree, servermap);
       //Rewind(0);
       UpdatePlayerModel(serverplayers[i], servermeshes, false);
    }

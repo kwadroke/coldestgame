@@ -31,28 +31,18 @@
 // and quick to break
 // *******************************************************************
 
-CollisionDetection::CollisionDetection() : worldbounds(6, Quad())
+CollisionDetection::CollisionDetection()
 {
    intmethod = 0;
 }
 
 
-// Why is this implemented?
-CollisionDetection& CollisionDetection::operator=(const CollisionDetection& o)
-{
-   intmethod = o.intmethod;
-   tilesize = o.tilesize;
-   worldbounds = o.worldbounds;
-   return *this;
-}
-
-
 // Simplified version of the below, for situations where we don't need to know what we hit
-bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, Vector3vec* retval, const bool debug)
+bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& objs, MapPtr map, Vector3vec* retval, const bool debug)
 {
    Vector3 dummy;
    Mesh* dummymesh;
-   return CheckSphereHit(oldpos, newpos, radius, objs, dummy, dummymesh, retval, NULL, debug);
+   return CheckSphereHit(oldpos, newpos, radius, objs, map, dummy, dummymesh, retval, NULL, debug);
 }
 
 
@@ -63,7 +53,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
 
    If you don't care about finding out what objects (if any) were hit, pass in
    NULL for retobjs, otherwise pass in the appropriate pointer*/
-bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& allobjs,
+bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& newpos, const float& radius, vector<Mesh*>& allobjs, MapPtr currmap,
                                            Vector3& hitpos, Mesh*& hitobj, Vector3vec* retval, vector<Mesh*>* retobjs, const bool debug)
 {
    Vector3vec tempadj;
@@ -186,6 +176,7 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
    CheckWorldBounds(oldpos,
                     newpos,
                     radius,
+                    currmap,
                     adjust,
                     adjusted,
                     hitpos);
@@ -404,6 +395,7 @@ void CollisionDetection::CheckCorners(const Vector3& oldpos,
 void CollisionDetection::CheckWorldBounds(const Vector3& oldpos,
                                           const Vector3& newpos,
                                           const float radius,
+                                          MapPtr map,
                                           Vector3vec& adjust,
                                           intvec& adjusted,
                                           Vector3& hitpos)
@@ -411,10 +403,10 @@ void CollisionDetection::CheckWorldBounds(const Vector3& oldpos,
    Vector3 v, s, t, u;
    for (int i = 0; i < 6; i++)  // Check the world bounding box
    {
-      v = worldbounds[i].GetVertex(0);
-      s = worldbounds[i].GetVertex(1);
-      t = worldbounds[i].GetVertex(2);
-      u = worldbounds[i].GetVertex(3);
+      v = map->WorldBounds(i).GetVertex(0);
+      s = map->WorldBounds(i).GetVertex(1);
+      t = map->WorldBounds(i).GetVertex(2);
+      u = map->WorldBounds(i).GetVertex(3);
       
       Vector3 norm;
       norm = (t - v).cross(s - v);

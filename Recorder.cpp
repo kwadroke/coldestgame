@@ -23,7 +23,7 @@
 #include <boost/filesystem.hpp>
 #endif
 
-const int Recorder::version = 1;
+const int Recorder::version = 2;
 const int Recorder::minor = 0;
 const string Recorder::savepath = "replays/";
 
@@ -50,7 +50,7 @@ void Recorder::SetActive(bool a)
       write.open(GetFilename().c_str());
       write << version << endl;
       write << minor << endl;
-      write << mapname << endl;
+      write << currmap->MapName() << endl;
    }
    else
    {

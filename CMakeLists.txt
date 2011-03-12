@@ -44,7 +44,7 @@ set(COMMON_SOURCES
 	Particle.cpp ProceduralTree.cpp TextureHandler.cpp Hit.cpp Vertex.cpp
 	Console.cpp server.cpp IDGen.cpp Weapon.cpp Recorder.cpp Replayer.cpp
 	ObjectKDTree.cpp TextureManager.cpp Packet.cpp VBO.cpp MeshData.cpp
-	Timer.cpp ServerInfo.cpp getmap.cpp ParticleEmitter.cpp StableRandom.cpp
+	Timer.cpp ServerInfo.cpp ParticleEmitter.cpp StableRandom.cpp
 	renderdefs.cpp globals.cpp netdefs.cpp PlayerData.cpp Log.cpp logout.cpp
 	NTreeReader.cpp Material.cpp ResourceManager.cpp Mesh.cpp Triangle.cpp
 	Quad.cpp MeshNode.cpp ServerState.cpp MeshCache.cpp tsint.cpp Bot.cpp
@@ -54,7 +54,7 @@ set(COMMON_SOURCES
 set(CLIENT_SOURCES
 	actions.cpp ALBuffer.cpp ALSource.cpp Camera.cpp editor.cpp FBO.cpp Light.cpp
 	net.cpp render.cpp settings.cpp Shader.cpp SoundManager.cpp TextureHandler.cpp
-	Updater.cpp
+	Updater.cpp ClientMap.cpp
 	)
 
 set(DEDICATED_SERVER_SOURCES "") # Nothing apparently

@@ -41,16 +41,6 @@
 
 vector<Vector3vec> lightmap; // Terrain lightmap
 
-struct TerrainParams
-{
-   string file;
-   int texture;
-   float minheight, maxheight;
-   float minslope, maxslope;
-   float minrand, maxrand;
-   float blend;
-};
-
 vector<TerrainParams> terrparams;
 int terrainstretch;
 

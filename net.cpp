@@ -570,15 +570,14 @@ int NetListen(void* dummy)
             if (!connected)
             {
                connectedaddr = inpack->address;
+               string nextmap;
                clientmutex->lock();
                get >> servplayernum;
                get >> nextmap;
                long newteam;
                get >> newteam;
                changeteam = newteam;
-               if (!server)
-                  mapname = ""; // Force reload of the map even if same name
-               nextmap = "maps/" + nextmap;
+               LoadMap(nextmap);
                doconnect = false;
                connected = true;
                logout << "We are server player " << servplayernum << endl;
@@ -743,7 +742,7 @@ int NetListen(void* dummy)
                   logout << "Joined team " << newteam << endl;
                   player[0].team = newteam;
                   
-                  mapspawns.clear();
+                  teamspawns.clear();
                   bool morespawns;
                   SpawnPointData read;
                   while (get >> morespawns && morespawns)
@@ -751,7 +750,7 @@ int NetListen(void* dummy)
                      get >> read.position.x >> read.position.y >> read.position.z;
                      get.ignore(); // Throw out \n
                      getline(get, read.name);
-                     mapspawns.push_back(read);
+                     teamspawns.push_back(read);
                   }
                   spawnschanged = true;
                }

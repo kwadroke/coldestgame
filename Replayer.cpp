@@ -53,13 +53,14 @@ void Replayer::SetActive(const string& filename, const bool a)
          return;
       }
 
+      string nextmap;
       read >> nextmap;
       read >> filetick;
 
       replaying = true;
       first = true;
       servplayernum = 0;
-      mapname = "";
+      LoadMap(nextmap);
    }
    else if (!a)
    {
@@ -73,7 +74,7 @@ void Replayer::SetActive(const string& filename, const bool a)
 
 void Replayer::Update()
 {
-   if (!active || !read || mapname != nextmap)
+   if (!active || !read)
       return;
 
    player[0].spawned = true; // This gets reset when the map loads

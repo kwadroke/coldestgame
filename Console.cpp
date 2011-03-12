@@ -20,6 +20,7 @@
 
 #include "Console.h"
 #include "globals.h"
+#include "serverdefs.h"
 
 // Ditto the comment in the Log class.  At this time Console is created once and destroyed only at exit,
 // so we're not properly handling copy/destruction for the mutex.
@@ -315,17 +316,19 @@ void Console::Action(const string& action)
       WriteToConsole(string("set <variable name> <value>"));
       WriteToConsole(string("help"));
    }
+   else if (action == "map")
+   {
+#ifndef DEDICATED
+      LoadMap(GetString("map"));
+#endif
+      if (server)
+         ServerLoadMap(GetString("map"));
+      
+   }
    else if (action == "connect")
    {
       connected = false;
       doconnect = true;
-      // I think to avoid race conditions it's necessary to reset both of these here.  If we only
-      // set mapname, we risk reloading the current map, which may not be desirable.  If we only
-      // set nextmap, we risk loading the map "", which would obviously be bad.:-)
-      clientmutex->lock();
-      mapname = "";
-      nextmap = "";
-      clientmutex->unlock();
    }
    else if (action == "restartgl")
    {
@@ -335,7 +338,7 @@ void Console::Action(const string& action)
    else if (action == "reloadres")
    {
       clientmutex->lock();
-      mapname = "";
+      LoadMap(GetString("map"));
       clientmutex->unlock();
    }
    else if (action == "laghax action")

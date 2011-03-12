@@ -4,9 +4,12 @@
 #include "types.h"
 #include "gui/ProgressBar.h"
 #include "NTreeReader.h"
+#include "Quad.h"
+#include "Mesh.h"
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+
 
 using std::string;
 using std::vector;
@@ -24,34 +27,45 @@ struct TerrainParams
 class Map
 {
    public:
+      Map(){}
       Map(const string&);
-      void ClientLoad();
+      string MapName() {return mapname;}
+      string DataName() {return dataname;}
+      vector<SpawnPointData> SpawnPoints() {return spawnpoints;}
+      SpawnPointData SpawnPoints(const size_t i) {return spawnpoints[i];}
+      Quad WorldBounds(const int i) {return worldbounds[i];}
 
-      tsint waitingforserver;
-
-   private:
-      void Load(const string&);
-      void LoadLight();
-      void ResetGlobals();
-      void ReadMisc();
-      void ReadTerrParams();
+   protected:
+      void Init(const string&);
+      void Load();
+      virtual void InitGui(const string&){}
+      virtual void LoadLight(){}
+      virtual void ResetGlobals(){}
+      virtual void ReadMisc(){}
+      virtual void ReadTerrParams(){}
+      virtual void CalcMapTextures(){}
       void ReadSpawnPoints();
-      void LoadObjects();
-      void SetProgress(const string& text, const int step);
+      virtual void ReadSpawnPointsExtra(){}
+      virtual void LoadObjects();
+      virtual void SetProgress(const string& text, const int step){}
       void LoadMapData();
+      virtual void SetTerrainTextures(int x, int y, Quad&){}
       void BuildTerrain();
 
       Vector3 GetTerrainNormal(int, int, int, int);
       float GetSmoothedTerrain(int, int, int, int, vector< floatvec >&);
-      void Keepalive();
-      void LoadWater();
-      void CreateGrass();
-      void GenerateKDTree();
+      virtual void Keepalive(){}
+      virtual void LoadWater(){}
+      virtual void CreateGrass(){}
+      virtual void GenerateKDTree();
+      virtual void GenBuffers(){}
       void CreateCache();
-      void CreateShadowmap();
-      void CreateMinimap();
+      virtual void CreateShadowmap(){}
+      virtual void CreateMinimap(){}
+      Vector3 ChooseNormal(const Vector3&, const Vector3&);
 
       NTreeReader mapdata;
+      Meshlist* mapmeshes;
 
       int numtextures;
       int numobjects;
@@ -61,21 +75,26 @@ class Map
       float zeroheight;
       float heightscale;
 
+      string base;
       string mapname;
       string dataname;
       string heightmapname;
       string lightmapname;
       string waterfile;
 
+      Vector3 center;
+
+      // TODO These should all be cleared after loading is complete
       vector<floatvec> maparray;  // Heightmap data scaled by heightscale
       vector<Vector3vec> lightmap; // Terrain lightmap
       vector<TerrainParams> terrparams; // Parameters that determine how we texture terrain
-
-#ifndef DEDICATED
-      ProgressBar* progress;
-      GUI* progtext;
-      GUI* progname;
-#endif
+      vector<Vector3vec> normals;
+      vector<gluintvec> tex1;
+      vector<gluintvec> tex2;
+      vector<floatvec> texpercent;
+      // These should not
+      vector<SpawnPointData> spawnpoints;
+      vector<Quad> worldbounds;
 };
 
 typedef boost::shared_ptr<Map> MapPtr;

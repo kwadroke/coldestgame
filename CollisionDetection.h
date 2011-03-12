@@ -27,6 +27,7 @@
 #include "Vector3.h"
 #include "Quad.h"
 #include "Timer.h"
+#include "Map.h"
 #include <SDL/SDL_thread.h>
 
 //#define INLINE_COLDET
@@ -35,17 +36,14 @@ class CollisionDetection
 {
    public:
       CollisionDetection();
-      CollisionDetection& operator=(const CollisionDetection&);
-      bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3&, Mesh*&, Vector3vec* retval = NULL, 
+      bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, MapPtr, Vector3&, Mesh*&, Vector3vec* retval = NULL, 
                              vector<Mesh*>* = NULL, const bool debug = false);
-      bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, Vector3vec* retval = NULL, const bool debug = false);
+      bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, MapPtr, Vector3vec* retval = NULL, const bool debug = false);
       // Useful for external code too
       float DistanceBetweenPointAndLine(const Vector3&, const Vector3&, const Vector3&, const float);
       bool UnitTest();
       
       int intmethod;
-      int tilesize;
-      vector<Quad> worldbounds;
       
    private:
       void CheckMain(const Vector3& oldpos,
@@ -91,6 +89,7 @@ class CollisionDetection
       void CheckWorldBounds(const Vector3& oldpos,
                            const Vector3& newpos,
                            const float radius,
+                           MapPtr map,
                            Vector3vec& adjust,
                            intvec& adjusted,
                            Vector3& hitpos);

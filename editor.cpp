@@ -22,6 +22,7 @@
 #include "globals.h"
 #include "renderdefs.h"
 #include "defines.h"
+#include "ClientMap.h"
 #include <stdio.h>
 
 using std::vector;
@@ -49,7 +50,7 @@ void EditorLoop(const string editmap)
    gui[mainmenu]->visible = false;
    gui[updateprogress]->visible = false;
    gui[loadprogress]->visible = true;
-   GetMap("maps/" + editmap);
+   currmap = MapPtr(new ClientMap(editmap));
    for (list<Mesh>::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain)
@@ -512,7 +513,7 @@ void GetSelectedMesh(SDL_Event event)
    
    Vector3 dummy;
    selected = NULL;
-   coldet.CheckSphereHit(start, end, 1.f, check, dummy, selected, NULL);
+   coldet.CheckSphereHit(start, end, 1.f, check, currmap, dummy, selected, NULL);
 
    UpdateEditorGUI();
 }
@@ -583,7 +584,7 @@ void UpdateEditorGUI()
 
 void SaveMap()
 {
-   string saveto = mapname + ".map";
+   string saveto = currmap->DataName();
    logout << "Saving to " << saveto << endl;
    string olddata;
    string getdata;
@@ -618,9 +619,9 @@ void SaveMap()
    {
       Vector3 pos = spawnmeshes[i]->GetPosition();
       newmap << "   Node\n";
-      newmap << "      Team " << spawnpoints[i].team << endl;
+      newmap << "      Team " << currmap->SpawnPoints(i).team << endl;
       newmap << "      Location " << pos.x << " " << pos.y << " " << pos.z << endl;
-      newmap << "      Name " << spawnpoints[i].name << endl;
+      newmap << "      Name " << currmap->SpawnPoints(i).name << endl;
    }
    
    // Write objects

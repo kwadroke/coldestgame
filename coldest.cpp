@@ -26,6 +26,8 @@
 #include "globals.h"
 #include "renderdefs.h"
 #include "netdefs.h"
+#include "ClientMap.h"
+#include "serverdefs.h"
 #ifndef _WIN32
 // I hate Windows so much...boost::filesystem is apparently broken with STLPort,
 // and the Visual C++ STL performance is terrible compared to STLPort for me
@@ -270,7 +272,6 @@ void InitGlobals()
    ackpack = 0;
    doconnect = false;
    connected = false;
-   nextmap = mapname = "";
    spawnschanged = true;
    winningteam = 0;
    weaponslots.push_back(Torso);
@@ -769,32 +770,6 @@ void MainLoop()
       {
          replayer->SetActive("", false);
       }
-
-      // Check if the current map has changed
-      clientmutex->lock();
-      if (nextmap != mapname)
-      {
-         clientmutex->unlock();
-#ifndef DEDICATED
-         ShowGUI(loadprogress);
-         Repaint();
-#endif
-         clientmutex->lock();
-         GetMap(nextmap);
-         clientmutex->unlock();
-         winningteam = 0;
-#ifndef DEDICATED
-         if (!replaying)
-            ShowGUI(loadoutmenu);
-         else
-            gui[loadprogress]->visible = false;
-#endif
-         if (!replayer->Active())
-            recorder->SetActive(console.GetBool("record"));
-         clientmutex->lock(); // Prevent double unlock, not sure it's necessary
-      }
-      clientmutex->unlock();
-      
       
 #ifndef DEDICATED
       // process pending events
@@ -827,6 +802,13 @@ void MainLoop()
          GUI* gotext = gui[endgame]->GetWidget("GameOverText");
          gotext->text = "Team " + ToString(winningteam) + " wins!";
          ShowGUI(endgame);
+      }
+
+      // Maps have to be loaded in this thread, so the server signals us to do it
+      if (serverloadmap)
+      {
+         servermap = MapPtr(new Map(servermapname));
+         serverloadmap = 0;
       }
 
       replayer->Update();
@@ -894,7 +876,7 @@ void GUIUpdate()
          spawnpointsbox->Clear();
          maplabel->ClearChildren();
          spawnbuttons.clear();
-         availablespawns = mapspawns;
+         availablespawns = teamspawns;
          for (size_t i = 0; i < items.size(); ++i)
          {
             if (items[i].Type() == Item::SpawnPoint && items[i].team == player[0].team)
@@ -1028,7 +1010,7 @@ void GUIUpdate()
       vector<Mesh*> check = GetMeshesWithoutPlayer(&player[servplayernum], meshes, kdtree, checkstart, checkend, .01f);
       Vector3 dummy;
       Mesh* hitmesh;
-      coldet.CheckSphereHit(checkstart, checkend, .01f, check, dummy, hitmesh);
+      coldet.CheckSphereHit(checkstart, checkend, .01f, check, currmap, dummy, hitmesh);
       PlayerData* p = PlayerFromMesh(hitmesh, player, meshes.end());
       locks.EndWrite(meshes);
 
@@ -1256,7 +1238,7 @@ void GameEventHandler(SDL_Event &event)
             }
             else if (event.key.keysym.sym == keys.keyloadout)
             {
-               vector<SpawnPointData> allspawns = spawnpoints;
+               vector<SpawnPointData> allspawns = currmap->SpawnPoints();
                vector<SpawnPointData> itemspawns = GetSpawns(items);
                allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
                if (!player[0].spawned || NearSpawn(player[0], allspawns))
@@ -1400,7 +1382,7 @@ void Cleanup()
 }
 
 
-void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
+void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
 {
    // In case we run into problems
    Vector3 old = mplayer.pos;
@@ -1531,7 +1513,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
 
-      bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f + hillthreshold, check);
+      bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f + hillthreshold, check, movemap);
 
       if (!downcheck)
       {
@@ -1539,7 +1521,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       }
       if (!downslope)
       {
-         bool upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f - hillthreshold, check);
+         bool upcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f - hillthreshold, check, movemap);
          if (!upcheck)
          {
             flat = true;
@@ -1549,8 +1531,8 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt)
       Vector3 slopecheckpos = old;
       slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * 2.f * threshold;
       
-      bool slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check);
-      bool groundcheck = coldet.CheckSphereHit(old, old, mplayer.size * 2.05f, check);
+      bool slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check, movemap);
+      bool groundcheck = coldet.CheckSphereHit(old, old, mplayer.size * 2.05f, check, movemap);
       locks.EndWrite(ml);
       
       if ((slopecheck && groundcheck) || mplayer.weight < .99f) // They were on the ground
@@ -1616,7 +1598,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
       {
          vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-         bool hit = coldet.CheckSphereHit(old, newpos, checksize, check, &adjust);
+         bool hit = coldet.CheckSphereHit(old, newpos, checksize, check, currmap, &adjust);
 
          if (!hit) // Move is okay
          {
@@ -1633,7 +1615,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
 
             Vector3 saveadj1 = adjust[1];
 
-            hit = coldet.CheckSphereHit(old, newpos, checksize, check, &adjust);
+            hit = coldet.CheckSphereHit(old, newpos, checksize, check, currmap, &adjust);
 
             if (!hit)
             {
@@ -1642,7 +1624,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
 
                check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-               hit = coldet.CheckSphereHit(old, newpos, checksize, check, &adjust);
+               hit = coldet.CheckSphereHit(old, newpos, checksize, check, currmap, &adjust);
 
                if (!hit) // Our position is now collision-free
                {
@@ -2195,7 +2177,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             if (Rewind)
                Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, hitpos, hitmesh, NULL, &hitmeshes);
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, currmap, hitpos, hitmesh, NULL, &hitmeshes);
          }
          
          if (!partcheck) // Didn't hit anything
@@ -2492,7 +2474,7 @@ void UpdatePlayer()
       UpdateSpectatePosition();
    else
    {
-      Move(player[0], meshes, kdtree);
+      Move(player[0], meshes, kdtree, currmap);
    }
    PlayerData localplayer = player[0];
       
@@ -2695,6 +2677,31 @@ void TakeScreenshot()
    for (size_t i = 0; i < pixels.size(); ++i)
       screenshot << pixels[i];
    screenshot.close();
+}
+
+
+void LoadMap(const string& map)
+{
+#ifndef DEDICATED
+   ShowGUI(loadprogress);
+   Repaint();
+#endif
+   clientmutex->lock();
+   currmap = MapPtr(new ClientMap(map));
+   clientmutex->unlock();
+
+   winningteam = 0;
+   // Signal the net thread that we can sync now
+   needsync = true;
+
+#ifndef DEDICATED
+   if (!replaying)
+      ShowGUI(loadoutmenu);
+   else
+      gui[loadprogress]->visible = false;
+#endif
+   if (!replayer->Active())
+      recorder->SetActive(console.GetBool("record"));
 }
 
 

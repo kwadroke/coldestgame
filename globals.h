@@ -42,6 +42,7 @@
 #include "Recorder.h"
 #include "Replayer.h"
 #include "Mutex.h"
+#include "Map.h"
 
 
 #define PI 3.14159265
@@ -65,8 +66,7 @@ extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
 extern vector<ParticleEmitter> emitters;
 extern vector<Item> items;
-extern string nextmap;         // Used to signal the main thread to load a new map
-extern string mapname;         // The name of the current map
+extern MapPtr currmap;
 extern ResourceManager resman; // Handles loading and organizing different resources
 #ifndef DEDICATED
 extern vector<GUIPtr> gui;
@@ -79,12 +79,10 @@ extern SDL_Thread* serverthread;
 extern ObjectKDTree kdtree;
 extern vector<floatvec> heightmap;  // Smoothed heightmap data
 extern int tilesize;
-extern vector<SpawnPointData> spawnpoints;
+extern vector<SpawnPointData> teamspawns;
 extern vector<SpawnPointData> availablespawns;
-extern vector<SpawnPointData> mapspawns;
 extern bool initialized;
 extern Meshlist meshes;
-extern tsint serverhasmap;
 extern Console console;
 extern tsint winningteam;
 extern vector<BodyParts> weaponslots;
@@ -106,7 +104,7 @@ void AppendToChat(int, string);
 void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, vector<PlayerData>&, const Vector3& campos = Vector3(),
                      void (*HitHandler)(Particle&, Mesh*, const Vector3&) = NULL,
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float) = NULL);
-void Move(PlayerData&, Meshlist&, ObjectKDTree&);
+void Move(PlayerData&, Meshlist&, ObjectKDTree&, MapPtr);
 bool ValidateMove(PlayerData&, Vector3, Meshlist&, ObjectKDTree&);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);
@@ -127,5 +125,6 @@ PlayerData* PlayerFromMesh(Mesh*, vector<PlayerData>&, Meshlist::iterator);
 void StartBGMusic();
 bool NearSpawn(PlayerData&, vector<SpawnPointData>&);
 vector<SpawnPointData> GetSpawns(vector<Item>&);
+void LoadMap(const string&);
 
 #endif

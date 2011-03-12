@@ -29,6 +29,7 @@ vector<Item> items;
 vector<GUIPtr> gui(numguis);
 string nextmap;         // Used to signal the main thread to load a new map
 string mapname;         // The name of the current map
+MapPtr currmap;
 
 ResourceManager resman; // Handles loading and organizing different resources
 vector<PlayerData> player;
@@ -39,11 +40,9 @@ SDL_Thread* serverthread;
 ObjectKDTree kdtree;
 vector<floatvec> heightmap;  // Smoothed heightmap data
 int tilesize;
-vector<SpawnPointData> spawnpoints;
+vector<SpawnPointData> teamspawns;
 vector<SpawnPointData> availablespawns;
-vector<SpawnPointData> mapspawns;
 bool initialized;
-tsint serverhasmap;
 Console console;
 tsint winningteam;
 vector<BodyParts> weaponslots;
