@@ -20,7 +20,7 @@ class NetCode
 
    protected:
       // No copying
-      NetCode& NetCode(const NetCode&);
+      NetCode(const NetCode&);
       NetCode& operator=(const NetCode&);
       virtual void PreInit(){}
       virtual void HandlePacket(stringstream&){}

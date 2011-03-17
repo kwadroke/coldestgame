@@ -18,7 +18,7 @@ ClientNetCode::~ClientNetCode()
 }
 
 
-ClientNetCode::PreInit()
+void ClientNetCode::PreInit()
 {
    // Note: This socket should be opened before the other, on the off chance that it would choose
    // this port.  No, I didn't learn that the hard way, but I did almost forget.
@@ -36,7 +36,7 @@ ClientNetCode::PreInit()
 }
 
 
-ClientNetCode::Send()
+void ClientNetCode::Send()
 {
    currnettick = SDL_GetTicks();
    if (currnettick - lastnettick >= 1000 / (Uint32)console.GetInt("tickrate"))
@@ -59,7 +59,7 @@ ClientNetCode::Send()
          Packet p(&i->address);
          p << "i\n";
          p << sendpacketnum;
-         sendqueue.push_back(p);
+         SendPacket(p);
          i->tick = SDL_GetTicks();
       }
       occpacketcounter = 0;
@@ -253,7 +253,7 @@ void ClientNetCode::SendFire()
    pack.ack = sendpacketnum;
    pack << "f\n";
    pack << pack.ack << eol;
-   sendqueue.push_back(pack);
+   SendPacket(pack);
 }
 
 
@@ -270,7 +270,7 @@ void ClientNetCode::SendPassword(const string& password)
 
 void ClientNetCode::SendKeepalive()
 {
-   Packet pack(&addr);
+   Packet pack(&address);
    pack << "k\n";
    pack << 0 << eol;
    SendPacket(pack);
@@ -907,7 +907,6 @@ void ClientNetCode::ReadSync(stringstream& get)
       }
       clientmutex->unlock();
       Ack(packetnum);
-      needsync = false;
    }
 }
 
@@ -915,11 +914,11 @@ void ClientNetCode::ReadSync(stringstream& get)
 void ClientNetCode::ReadReconnect()
 {
    connected = false;
-   doconnect = true;
+   Connect();
 }
 
 
-void ClientNetCode::ReadGameover(stringstream& get)
+void ClientNetCode::ReadGameOver(stringstream& get)
 {
    long getteam;
    get >> getteam;

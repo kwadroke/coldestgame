@@ -54,7 +54,7 @@ set(COMMON_SOURCES
 set(CLIENT_SOURCES
 	actions.cpp ALBuffer.cpp ALSource.cpp Camera.cpp editor.cpp FBO.cpp Light.cpp
 	net.cpp render.cpp settings.cpp Shader.cpp SoundManager.cpp TextureHandler.cpp
-	Updater.cpp ClientMap.cpp
+	Updater.cpp ClientMap.cpp ClientNetCode.cpp
 	)
 
 set(DEDICATED_SERVER_SOURCES "") # Nothing apparently

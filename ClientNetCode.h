@@ -7,6 +7,7 @@ class ClientNetCode : public NetCode
 {
    public:
       ClientNetCode();
+      virtual ~ClientNetCode();
 
       void Connect();
       void SpawnRequest();
@@ -16,6 +17,13 @@ class ClientNetCode : public NetCode
       void SendKill();
       void SendSync();
       void SendLoadout();
+      void SendMasterListRequest();
+      void SendPowerdown();
+      void SendCommand(const string&);
+      void SendFire();
+      void SendPassword(const string&);
+      void SendKeepalive();
+      bool SendVersionRequest();
 
    protected:
       virtual void PreInit();

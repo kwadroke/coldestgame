@@ -97,6 +97,7 @@ extern LockManager locks;
 extern RecorderPtr recorder;
 extern ReplayerPtr replayer;
 extern bool replaying;
+extern bool spawnschanged;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

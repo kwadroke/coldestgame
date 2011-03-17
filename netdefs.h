@@ -39,7 +39,6 @@ using std::deque;
 
 const int netver = 5;
 
-extern tsint running, connected, doconnect, spawnrequest, spawnschanged, sendkill, needsync, sendloadout;
 extern unsigned long recpacketnum, ackpack;
 extern IDGen sendpacketnum;
 extern set<unsigned long> partids;
