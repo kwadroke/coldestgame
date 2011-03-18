@@ -5,8 +5,17 @@
 
 using std::endl;
 
-ClientNetCode::ClientNetCode() : connected(false),
-                                 occpacketcounter(0)
+const int ClientNetCode::version = 5;
+
+ClientNetCode::ClientNetCode() : serverfps(0),
+                                 serverbps(0),
+                                 lasthit(0),
+                                 messageschanged(false),
+                                 connected(false),
+                                 occpacketcounter(0),
+                                 recpacketnum(0),
+                                 lastsyncpacket(0),
+                                 currversion(0)
 {
    SendMasterListRequest();
 }
@@ -104,6 +113,7 @@ string ClientNetCode::FillUpdatePacket()
 
 void ClientNetCode::Connect()
 {
+   connected = false;
    // Get hostname for telling players at the same IP apart
    char hn[256];
    string hostname;
@@ -124,7 +134,7 @@ void ClientNetCode::Connect()
    p << hostname << eol;
    p << player[0].unit << eol;
    p << player[0].name << eol;
-   p << netver << eol;
+   p << version << eol;
    SendPacket(p);
    logout << "Sending connect to " << console.GetString("serveraddr") << ":" << console.GetInt("serverport") << endl;
 }
@@ -152,7 +162,7 @@ void ClientNetCode::SpawnRequest()
 }
 
 
-void ClientNetCode::SendChat(const string& chatstring, const int chatteam)
+void ClientNetCode::SendChat(const string& chatstring, const bool chatteam)
 {
    Packet p(&address);
    p.ack = sendpacketnum;
@@ -389,6 +399,13 @@ void ClientNetCode::HandlePacket(stringstream& get)
 }
 
 
+void ClientNetCode::DeleteMesh(Meshlist::iterator& mesh)
+{
+   if (mesh != meshes.end())
+      meshes.erase(mesh);
+}
+
+
 void ClientNetCode::ReadUpdate(stringstream& get)
 {
    if (packetnum > recpacketnum) // Ignore older out of order packets
@@ -472,7 +489,7 @@ void ClientNetCode::ReadUpdate(stringstream& get)
             {
                if (i->mesh[part] != meshes.end())
                {
-                  deletemeshes.push_back(i->mesh[part]);
+                  DeleteMesh(i->mesh[part]);
                   i->mesh[part] = meshes.end();
                   addemitter = true;
                }
@@ -578,7 +595,7 @@ void ClientNetCode::ReadConnect(stringstream& get)
       get >> nextmap;
       long newteam;
       get >> newteam;
-      changeteam = newteam;
+      ChangeTeam(newteam);
       LoadMap(nextmap);
       connected = true;
       logout << "We are server player " << servplayernum << endl;
@@ -735,8 +752,7 @@ void ClientNetCode::ReadText(stringstream& get)
          player[oppnum].acked.insert(packetnum);
          getline(get, line);
          getline(get, line);
-         newchatlines.push_back(line);
-         newchatplayers.push_back(oppnum);
+         AppendToChat(oppnum, line, false); // TODO Right now all chats appear to be global, this should be fixed
       }
       // Ack it
       Ack(packetnum); // Danger: this grabs the net mutex while we hold the clientmutex
@@ -810,8 +826,8 @@ void ClientNetCode::ReadServerMessage(stringstream& get)
       get.ignore();
       getline(get, message);
       clientmutex->lock();
+      messageschanged = true;
       servermessages.push_back(message);
-      messageschanged = 1;
       clientmutex->unlock();
    }
    Ack(packetnum);
@@ -837,7 +853,6 @@ void ClientNetCode::ReadDeath(stringstream& get)
       }
       string message = player[killer].name + " killed " + player[killed].name;
       servermessages.push_back(message);
-      messageschanged = 1;
       clientmutex->unlock();
    }
    // Ack it
@@ -862,11 +877,25 @@ void ClientNetCode::ReadItem(stringstream& get)
       newitem.team = team;
       newitem.position = itempos;
       clientmutex->lock();
-      additems.push_back(newitem);
+      AddItem(newitem);
       clientmutex->unlock();
       itemsreceived.insert(id);
    }
    Ack(packetnum);
+}
+
+
+void ClientNetCode::AddItem(Item& newitem)
+{
+   MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
+   newmesh->Move(newitem.position);
+   newmesh->dynamic = true;
+   meshes.push_front(*newmesh);
+   items.push_back(newitem);
+   Item& curritem = items.back();
+   curritem.mesh = meshes.begin();
+   spawnschanged = true;
+   recorder->AddItem(newitem);
 }
 
 
@@ -879,7 +908,7 @@ void ClientNetCode::ReadRemoveItem(stringstream& get)
       if (i->id == id)
       {
          clientmutex->lock();
-         deletemeshes.push_back(i->mesh);
+         DeleteMesh(i->mesh);
          items.erase(i);
          spawnschanged = true;
          clientmutex->unlock();
@@ -939,7 +968,7 @@ void ClientNetCode::ReadRemovePart(stringstream& get)
    
    clientmutex->lock();
    locks.Read(meshes);
-   deletemeshes.push_back(player[num].mesh[part]);
+   DeleteMesh(player[num].mesh[part]);
    player[num].mesh[part] = meshes.end();
    player[num].hp[part] = 0;
    locks.EndRead(meshes);

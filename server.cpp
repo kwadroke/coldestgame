@@ -38,7 +38,6 @@
 #include "ProceduralTree.h"
 #include "Timer.h"
 #include "globals.h"
-#include "netdefs.h"
 #include "ServerState.h"
 #include "IDGen.h"
 #include "util.h"
@@ -434,7 +433,7 @@ int ServerListen(void* dummy)
             int respondto = 0;
             servermutex->lock();
             
-            if (CountPlayers() < maxplayers && clientver == netver)
+            if (CountPlayers() < maxplayers && clientver == ClientNetCode::Version())
             {
                for (size_t i = 1; i < serverplayers.size(); ++i)
                {

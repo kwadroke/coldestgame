@@ -2,16 +2,30 @@
 #define CLIENTNETCODE_H
 
 #include "NetCode.h"
+#include "ServerInfo.h"
+#include "Mesh.h"
+#include "Item.h"
+#include <boost/shared_ptr.hpp>
+#include <set>
+#include <deque>
+
+extern tsint serverfps;
+using std::set;
+using std::deque;
 
 class ClientNetCode : public NetCode
 {
    public:
       ClientNetCode();
       virtual ~ClientNetCode();
+      static int Version(){return version;}
+      bool Connected(){return connected;}
+      int CurrVersion(){return currversion;}
+      void AddItem(Item&);
 
       void Connect();
       void SpawnRequest();
-      void SendChat(const string&, const int);
+      void SendChat(const string&, const bool);
       void ChangeTeam(const int);
       void UseItem();
       void SendKill();
@@ -25,6 +39,13 @@ class ClientNetCode : public NetCode
       void SendKeepalive();
       bool SendVersionRequest();
 
+      vector<ServerInfo> servers;
+      int serverfps;
+      int serverbps;
+      Uint32 lasthit;
+      deque<string> servermessages;
+      bool messageschanged;
+
    protected:
       virtual void PreInit();
       virtual void Send();
@@ -32,6 +53,7 @@ class ClientNetCode : public NetCode
 
       virtual void ReceiveExtended();
       virtual void HandlePacket(stringstream&);
+      virtual void DeleteMesh(Meshlist::iterator&);
       // Functions to read from individual packets
       void ReadUpdate(stringstream&);
       void ReadOccUpdate(stringstream&);
@@ -59,9 +81,23 @@ class ClientNetCode : public NetCode
 
       bool connected;
       int occpacketcounter;
+      unsigned long recpacketnum;
+      unsigned long lastsyncpacket;
 
       UDPsocket annsocket;
       bool annlisten;
+
+      const static int version;
+      int currversion;  // The version we get from the master server
+      
+      set<ServerInfo> knownservers;
+      set<unsigned long> partids;
+      set<unsigned long> itemsreceived;
+      set<unsigned long> hitsreceived;
+      set<unsigned long> killsreceived;
+      set<unsigned long> messagesreceived;
 };
+
+typedef boost::shared_ptr<ClientNetCode> ClientNetCodePtr;
 
 #endif // CLIENTNETCODE_H

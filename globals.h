@@ -43,6 +43,7 @@
 #include "Replayer.h"
 #include "Mutex.h"
 #include "Map.h"
+#include "ClientNetCode.h"
 
 
 #define PI 3.14159265
@@ -98,10 +99,11 @@ extern RecorderPtr recorder;
 extern ReplayerPtr replayer;
 extern bool replaying;
 extern bool spawnschanged;
+extern ClientNetCodePtr netcode;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
-void AppendToChat(int, string);
+void AppendToChat(int, string, bool);
 void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, vector<PlayerData>&, const Vector3& campos = Vector3(),
                      void (*HitHandler)(Particle&, Mesh*, const Vector3&) = NULL,
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float) = NULL);
@@ -127,5 +129,7 @@ void StartBGMusic();
 bool NearSpawn(PlayerData&, vector<SpawnPointData>&);
 vector<SpawnPointData> GetSpawns(vector<Item>&);
 void LoadMap(const string&);
+void ClientCreateShot(const PlayerData&, const Weapon&);
+void AddHit(const Vector3&, const int);
 
 #endif

@@ -28,6 +28,7 @@
 #include "Vector3.h"
 #include "GraphicMatrix.h"
 #include "tsint.h"
+#include "logout.h"
 
 using std::string;
 using std::stringstream;
@@ -43,8 +44,7 @@ int bitcount();
 void setsighandler();
 vector<string> split(const string&, const string&);
 
-extern tsint running;
-extern Log logout;
+extern bool running;
 
 template <typename T>
 string ToString(const T &input)

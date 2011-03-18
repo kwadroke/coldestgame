@@ -205,7 +205,7 @@ void Replayer::ReadItems()
       newitem.position = pos;
       newitem.team = team;
       newitem.id = id;
-      additems.push_back(newitem);
+      netcode->AddItem(newitem);
    }
 }
 

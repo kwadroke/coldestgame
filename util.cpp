@@ -21,6 +21,8 @@
 #include "util.h"
 #include <SDL/SDL.h>
 
+bool running;
+
 int PowerOf2(int input)
 {
    int value = 1;

@@ -51,8 +51,7 @@ bool Updater::Available()
    Repaint();
 
    logout << "Sending version request" << endl;
-   currversion = 0;
-   if (!SendVersionRequest())
+   if (!netcode->SendVersionRequest())
    {
       logout << "Updater: Failed to contact master server" << endl;
       return false;
@@ -62,8 +61,9 @@ bool Updater::Available()
    logout << "Waiting for master server version" << endl;
    Timer t;
    t.start();
-   while (!currversion)
+   while (!netcode->CurrVersion())
    {
+      netcode->Update();
       SDL_Delay(1);
       if (t.elapsed() > 15000)
       {
@@ -79,7 +79,7 @@ bool Updater::Available()
    else
       thisversion = 0;
 
-   if (currversion > thisversion)
+   if (netcode->CurrVersion() > thisversion)
       return true;
    return false;
 }

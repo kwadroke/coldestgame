@@ -25,7 +25,6 @@
 #include "defines.h"
 #include "globals.h"
 #include "renderdefs.h"
-#include "netdefs.h"
 #include "ClientMap.h"
 #include "serverdefs.h"
 #ifndef _WIN32
@@ -78,6 +77,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    initialized = true;
    
 #if !defined(_WIN32) || defined(DEDICATED)
+   // Ahh, something is wrong here.  I assume this if was to prevent starting the music when editing, but if so it's still
+   // not right because it should be coming after the Windows-specific stuff.
    if (argc < 2)
 #else
    // This is an overly simplistic command line handler, but for the moment it suffices
@@ -109,7 +110,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    
    // Start network threads
 #ifndef DEDICATED
-   netin = SDL_CreateThread(NetListen, NULL);
+   netcode = ClientNetCodePtr(new ClientNetCode());
    
    ShowGUI(updateprogress);
    Updater upd;
@@ -267,18 +268,12 @@ void InitGlobals()
    staticdrawdist = false;
 #endif
    running = true;
-   sendpacketnum.next();  // 0 has special meaning
-   recpacketnum = 0;
-   ackpack = 0;
-   doconnect = false;
-   connected = false;
    spawnschanged = true;
    winningteam = 0;
    weaponslots.push_back(Torso);
    weaponslots.push_back(LArm);
    weaponslots.push_back(RArm);
    meshcache = MeshCachePtr(new MeshCache(resman));
-   lasthit = 0;
    
 #ifndef DEDICATED
    standardshader = "shaders/standard";
@@ -862,11 +857,6 @@ void GUIUpdate()
       }
    }
    
-   for (size_t i = 0; i < newchatlines.size(); ++i)
-      AppendToChat(newchatplayers[i], newchatlines[i]);
-   newchatlines.clear();
-   newchatplayers.clear();
-   
    if (gui[loadoutmenu]->visible)
    {
       if (spawnschanged)
@@ -933,7 +923,7 @@ void GUIUpdate()
       gui[loadoutmessage]->visible = false;
    
    GUI* hitind = gui[hud]->GetWidget("hitind");
-   if (SDL_GetTicks() - lasthit < console.GetInt("hitindtime"))
+   if (SDL_GetTicks() - netcode->lasthit < console.GetInt("hitindtime"))
    {
       hitind->visible = true;
    }
@@ -941,14 +931,14 @@ void GUIUpdate()
       hitind->visible = false;
    
    GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
-   servfps->text = "Server FPS: " + ToString(serverfps);
+   servfps->text = "Server FPS: " + ToString(netcode->serverfps);
    GUI* bpslabel = gui[statsdisp]->GetWidget("serverbps");
-   bpslabel->text = "Server BPS: " + ToString(serverbps);
+   bpslabel->text = "Server BPS: " + ToString(netcode->serverbps);
    
    if (gui[mainmenu]->visible)
    {
       GUI* resumebutton = gui[mainmenu]->GetWidget("resumebutton");
-      if (connected)
+      if (netcode->Connected())
          resumebutton->visible = true;
       else
          resumebutton->visible = false;
@@ -957,16 +947,16 @@ void GUIUpdate()
    // For some reason killtable->Clear() is extremely slow (2-5 ms), so we can't do this every
    // time through.  Hence the messageschanged flag.
    // This may no longer be true, but there's no reason to change it now
-   if (!PrimaryGUIVisible() && messageschanged)
+   if (!PrimaryGUIVisible() && netcode->messageschanged)
    {
-      while (servermessages.size() > 6)
-         servermessages.pop_front();
+      while (netcode->servermessages.size() > 6)
+         netcode->servermessages.pop_front();
       
       Table* messagetable = dynamic_cast<Table*>(gui[hud]->GetWidget("servermessages"));
       messagetable->Clear();
-      for (size_t i = 0; i < servermessages.size(); ++i)
-         messagetable->Add(servermessages[i]);
-      messageschanged = 0;
+      for (size_t i = 0; i < netcode->servermessages.size(); ++i)
+         messagetable->Add(netcode->servermessages[i]);
+      netcode->messageschanged = 0;
    }
    
    // Check to see if anyone is under our crosshair and display their info
@@ -1106,12 +1096,7 @@ bool GUIEventHandler(SDL_Event &event)
                   GUI* teamlabel = gui[chat]->GetWidget("chatteam");
                   if (event.key.keysym.mod & KMOD_SHIFT)
                   {
-                     chatteam = true;
                      teamlabel->visible = true;
-                  }
-                  else
-                  {
-                     chatteam = false;
                   }
                   chatin->visible = true;
                   chatin->SetActive();
@@ -1125,12 +1110,12 @@ bool GUIEventHandler(SDL_Event &event)
                      break;
                   }
                   clientmutex->lock();
-                  chatstring = chatin->text;
-                  AppendToChat(0, chatin->text);
+                  GUI* teamlabel = gui[chat]->GetWidget("chatteam");
+                  netcode->SendChat(chatin->text, teamlabel->visible);
+                  AppendToChat(0, chatin->text, teamlabel->visible);
                   clientmutex->unlock();
                   chatin->text = "";
                   chatin->visible = false;
-                  GUI* teamlabel = gui[chat]->GetWidget("chatteam");
                   teamlabel->visible = false;
                }
                eatevent = true;
@@ -1245,12 +1230,12 @@ void GameEventHandler(SDL_Event &event)
                {
                   gui[loadoutmenu]->visible = true;
                   gui[hud]->visible = false;
-                  sendloadout = 1;
+                  netcode->SendLoadout();
                }
             }
             else if (event.key.keysym.sym == keys.keyuseitem)
             {
-               useitem = true;
+               netcode->UseItem();
             }
             else if (event.key.keysym.sym == SDLK_LSHIFT)
             {
@@ -1262,7 +1247,7 @@ void GameEventHandler(SDL_Event &event)
             }
             else if (event.key.keysym.sym == SDLK_p)
             {
-               SendPowerdown();
+               netcode->SendPowerdown();
             }
             break;
             
@@ -1335,7 +1320,7 @@ void GameEventHandler(SDL_Event &event)
             }
             else if (event.button.button == keys.mouseuse)
             {
-               useitem = true;
+               netcode->UseItem();
             }
             else if (event.button.button == keys.mousezoom)
             {
@@ -1370,12 +1355,6 @@ void Quit()
 void Cleanup()
 {
    running = false;
-#ifndef DEDICATED
-   logout << "Waiting for netout thread to end" << endl;
-   SDL_WaitThread(netout, NULL);
-   logout << "Waiting for netin thread to end" << endl;
-   SDL_WaitThread(netin, NULL);
-#endif
    logout << "Waiting for server to end" << endl;
    SDL_WaitThread(serverthread, NULL);
    console.SaveToFile(userpath + "autoexec.cfg");
@@ -1922,30 +1901,6 @@ void Animate()
    // Delete meshes as requested by the net thread
    locks.Write(meshes);
    
-   for (size_t i = 0; i < deletemeshes.size(); ++i)
-   {
-      if (deletemeshes[i] != meshes.end())
-         meshes.erase(deletemeshes[i]);
-   }
-   deletemeshes.clear();
-
-   // Add items
-   for (size_t i = 0; i < additems.size(); ++i)
-   {
-      Item& newitem = additems[i];
-      MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
-      newmesh->Move(newitem.position);
-      newmesh->dynamic = true;
-      meshes.push_front(*newmesh);
-      items.push_back(newitem);
-      Item& curritem = items.back();
-      curritem.mesh = meshes.begin();
-      spawnschanged = true;
-      recorder->AddItem(newitem);
-   }
-   additems.clear();
-
-
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
    for (size_t k = 1; k < player.size(); ++k)
@@ -1996,7 +1951,7 @@ void UpdateServerList()
       exit(-10);
    }
    clientmutex->lock();
-   for (i = servers.begin(); i != servers.end(); ++i)
+   for (i = netcode->servers.begin(); i != netcode->servers.end(); ++i)
    {
       if (!i->inlist && i->haveinfo)
       {
@@ -2312,7 +2267,7 @@ void UpdatePlayerList()
 
 
 // Must grab clientmutex before calling this function
-void AppendToChat(int playernum, string line)
+void AppendToChat(int playernum, string line, bool chatteam)
 {
 #ifndef DEDICATED
    TextArea *chatout = (TextArea*)gui[chat]->GetWidget("chatoutput");
@@ -2503,7 +2458,7 @@ void UpdatePlayer()
        (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
    {
 #ifndef DEDICATED
-      SendFire();
+      netcode->SendFire();
 #endif
       clientmutex->lock();
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
@@ -2691,8 +2646,7 @@ void LoadMap(const string& map)
    clientmutex->unlock();
 
    winningteam = 0;
-   // Signal the net thread that we can sync now
-   needsync = true;
+   netcode->SendSync();
 
 #ifndef DEDICATED
    if (!replaying)

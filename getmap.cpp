@@ -32,7 +32,6 @@
 #include "Vector3.h"
 #include "types.h"
 #include "globals.h"
-#include "netdefs.h"
 #include "renderdefs.h"
 #include "editor.h"
 #include "NTreeReader.h"

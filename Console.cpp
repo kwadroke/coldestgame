@@ -138,11 +138,11 @@ void Console::Parse(const string& line, bool echo)
          if (i != NumTokens(simple) - 1)
             remote += " ";
       }
-      SendCommand(remote);
+      netcode->SendCommand(remote);
    }
    if (Token(simple, 0) == "auth")
    {
-      SendPassword(Token(simple, 1));
+      netcode->SendPassword(Token(simple, 1));
    }
    if (Token(simple, 0) == "include")
    {
@@ -327,8 +327,7 @@ void Console::Action(const string& action)
    }
    else if (action == "connect")
    {
-      connected = false;
-      doconnect = true;
+      netcode->Connect();
    }
    else if (action == "restartgl")
    {
@@ -409,12 +408,12 @@ void Console::Action(const string& action)
    }
    else if (action == "record action")
    {
-      if (connected)
+      if (netcode->Connected())
          recorder->SetActive(GetBool("record"));
    }
    else if (action == "kill")
    {
-      sendkill = true;
+      netcode->SendKill();
    }
    else if (action == "exit" || action == "quit")
    {

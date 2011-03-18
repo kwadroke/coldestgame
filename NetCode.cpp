@@ -12,6 +12,7 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
                      error(false)
 {
    PreInit();
+   sendpacketnum.next(); // 0 has special meaning
    if (!(packet = SDLNet_AllocPacket(5000))) // 5000 is somewhat arbitrary
    {
       logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
@@ -24,7 +25,7 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
 NetCode::~NetCode()
 {
    running = 0;
-   SDL_WaitThread(thread);
+   SDL_WaitThread(thread, NULL);
    SDLNet_FreePacket(packet);
    SDLNet_UDP_Close(socket);
 }

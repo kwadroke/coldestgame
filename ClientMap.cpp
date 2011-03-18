@@ -73,7 +73,6 @@ void ClientMap::ResetGlobals()
    LoadMaterials();
    particlemesh = MeshPtr();  // Otherwise we may try to render it later and that will be bad
    particles.clear();
-   deletemeshes.clear(); // Also a problem if not empty when we load a new map
    for (size_t i = 0; i < numbodyparts; ++i) // We deleted all the meshes, so we need to clear these iterators
    {
       player[0].mesh[i] = mapmeshes->end();

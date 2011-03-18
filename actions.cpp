@@ -28,7 +28,6 @@
 #include "PlayerData.h"
 #include "types.h"
 #include "globals.h"
-#include "netdefs.h"
 #include "renderdefs.h"
 #include "editor.h" // Editor actions are defined here
 #include <boost/tokenizer.hpp>
@@ -97,7 +96,7 @@ void Connect()
    if (currsel == -1) return;
    int counter = 0;
    clientmutex->lock();
-   for (i = servers.begin(); i != servers.end(); ++i)
+   for (i = netcode->servers.begin(); i != netcode->servers.end(); ++i)
    {
       if (i->inlist)
       {
@@ -182,7 +181,7 @@ void Spawn()
    }
    else
    {
-      spawnrequest = true;
+      netcode->SpawnRequest();
    }
    clientmutex->unlock();
 }
@@ -202,7 +201,7 @@ void SubmitCommand()
 
 void SelectTeam(int team)
 {
-   changeteam = team;
+   netcode->ChangeTeam(team);
    player[0].spectate = false;
 }
 
@@ -212,7 +211,7 @@ void Spectate()
    clientmutex->lock();
    player[0].spectate = true;
    clientmutex->unlock();
-   changeteam = 0;
+   netcode->ChangeTeam(0);
    spectateplayer = 0;
    SpectateNext();
 }
@@ -260,7 +259,7 @@ void RefreshServers()
       exit(-10);
    }
    serverlist->Clear();
-   for (i = servers.begin(); i != servers.end(); ++i)
+   for (i = netcode->servers.begin(); i != netcode->servers.end(); ++i)
    {
       i->inlist = false;
    }

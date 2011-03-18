@@ -21,7 +21,6 @@
 
 #include <boost/crc.hpp>
 #include <curl/curl.h>
-#include "netdefs.h"
 #include "defines.h"
 #include "globals.h"
 #include "renderdefs.h"

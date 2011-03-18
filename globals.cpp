@@ -58,3 +58,4 @@ RecorderPtr recorder;
 ReplayerPtr replayer;
 bool replaying;
 bool spawnschanged;
+ClientNetCodePtr netcode;

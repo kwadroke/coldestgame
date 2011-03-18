@@ -29,7 +29,6 @@
 #include <iterator>
 #include "gui/TextArea.h"
 #include "renderdefs.h"
-#include "netdefs.h"
 #include "Packet.h"
 
 using std::map;
