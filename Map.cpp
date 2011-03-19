@@ -318,6 +318,8 @@ void Map::BuildTerrain()
          tempquad.SetNormal(3, tempnorm);
 
          tempquad.SetCollide(true);
+
+         SetTerrainTextures(x, y, tempquad);
          
          // Smooth things out a bit by intelligently splitting quads
          Vector3 mid1 = tempquad.GetVertex(0) + tempquad.GetVertex(2);
@@ -343,8 +345,6 @@ void Map::BuildTerrain()
 
          }
 
-         SetTerrainTextures(x, y, tempquad);
-            
          // Need the mesh center to be somewhere near the actual center of the tris or the object
          // ends up getting collision detected too often
          Vector3 midpoint;
