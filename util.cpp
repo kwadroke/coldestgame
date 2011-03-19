@@ -20,6 +20,7 @@
 
 #include "util.h"
 #include <SDL/SDL.h>
+#include <sys/syscall.h>
 
 bool running;
 
@@ -117,11 +118,7 @@ void setsighandler()
 int gettid()
 {
 #ifdef linux
-#ifndef __amd64__
-      return syscall(224);
-#else
-      return syscall(186);
-#endif
+   return syscall(SYS_gettid);
 #endif
    return 0;
 }

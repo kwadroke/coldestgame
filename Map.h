@@ -29,6 +29,7 @@ class Map
    public:
       Map(){}
       Map(const string&);
+      void Load();
       string MapName() {return mapname;}
       string DataName() {return dataname;}
       vector<SpawnPointData> SpawnPoints() {return spawnpoints;}
@@ -37,7 +38,8 @@ class Map
 
    protected:
       void Init(const string&);
-      void Load();
+      void ReadBasics();
+      virtual void Finish(){}
       virtual void InitGui(const string&){}
       virtual void LoadLight(){}
       virtual void ResetGlobals(){}

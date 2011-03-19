@@ -7,7 +7,6 @@ Map::Map(const string& mn)
 {
    mapmeshes = &servermeshes;
    Init(mn);
-   Load();
 }
 
 // This is particularly important in the base Map class because both client and server use some of this code
@@ -30,24 +29,13 @@ void Map::Init(const string& mn)
 }
 
 
+// Load must be called after constructing the object because it calls virtual functions, which won't work
+// if we call it directly from the constructor
 void Map::Load()
 {
    InitGui(mapname);
-   
-   logout << "Loading map " << mapname << endl;
-   base = "maps/" + mapname;
-   dataname = base + ".map";
-   heightmapname = base + ".png";
-   lightmapname = base + "light.png";
-   
-   mapdata = NTreeReader(dataname);
 
-   mapdata.Read(tilesize, "TileSize");
-   mapdata.Read(heightscale, "HeightScale");
-   mapdata.Read(zeroheight, "ZeroHeight");
-   mapdata.Read(numtextures, "NumTextures");
-   mapdata.Read(numobjects, "NumObjects");
-   mapdata.Read(terrainstretch, "Stretch");
+   ReadBasics();
 
    LoadLight();
 
@@ -76,6 +64,25 @@ void Map::Load()
    // These two functions really don't belong here, but I don't feel like messing with them right now
    CreateShadowmap();
    CreateMinimap();
+   Finish();
+}
+
+
+void Map::ReadBasics()
+{
+   base = "maps/" + mapname;
+   dataname = base + ".map";
+   heightmapname = base + ".png";
+   lightmapname = base + "light.png";
+
+   mapdata = NTreeReader(dataname);
+
+   mapdata.Read(tilesize, "TileSize");
+   mapdata.Read(heightscale, "HeightScale");
+   mapdata.Read(zeroheight, "ZeroHeight");
+   mapdata.Read(numtextures, "NumTextures");
+   mapdata.Read(numobjects, "NumObjects");
+   mapdata.Read(terrainstretch, "Stretch");
 }
 
 

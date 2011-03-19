@@ -408,7 +408,7 @@ void Console::Action(const string& action)
    }
    else if (action == "record action")
    {
-      if (netcode->Connected())
+      if (netcode && netcode->Connected())
          recorder->SetActive(GetBool("record"));
    }
    else if (action == "kill")

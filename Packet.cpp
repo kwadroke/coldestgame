@@ -41,7 +41,7 @@ size_t Packet::Send(UDPpacket* packet, UDPsocket& socket)
       logout << "Send Error: null packet" << endl;
       return 0;
    }
-   
+
    Uint32 currtick = SDL_GetTicks();
    if (currtick - lastsent < sendinterval) // Don't swamp the receiver with ack packets
       return 0;

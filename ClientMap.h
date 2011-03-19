@@ -11,7 +11,8 @@ class ClientMap : public Map
       ClientMap(const string&);
       
    protected:
-      virtual void InitGui(const std::string& fn);
+      virtual void Finish();
+      virtual void InitGui(const string&);
       virtual void SetProgress(const string&, const int);
       virtual void LoadLight();
       virtual void ResetGlobals();

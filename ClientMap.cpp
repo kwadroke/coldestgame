@@ -6,14 +6,22 @@ ClientMap::ClientMap(const string& mn)
 {
    mapmeshes = &meshes;
    Init(mn);
-   Load();
 }
 
+
+// This is mostly to ensure that I don't miss anything while moving code in here
 #define meshes ERROR DO NOT USE THIS DIRECTLY
 #define servermeshes ERROR DO NOT USE THIS DIRECTLY
 
+void ClientMap::Finish()
+{
+   ShowGUI(loadoutmenu);
+}
+
+
 void ClientMap::InitGui(const string& mn)
 {
+   ShowGUI(loadprogress);
    progress = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
    progtext = gui[loadprogress]->GetWidget("progresstext");
    progname = gui[loadprogress]->GetWidget("loadname");
@@ -63,9 +71,7 @@ void ClientMap::LoadLight()
 // Release any previously allocated resources so we don't leak memory
 void ClientMap::ResetGlobals()
 {
-   locks.Write(mapmeshes);
    mapmeshes->clear();
-   locks.EndWrite(mapmeshes);
    items.clear();
    spawnpoints.clear();
    resman.ReleaseAll();
@@ -318,7 +324,6 @@ void ClientMap::LoadObjects()
 {
    NTreeReader objectlist = mapdata.GetItemByName("Objects");
    string currmaterial;
-   locks.Write(mapmeshes);
    for (size_t i = 0; i < objectlist.NumChildren(); ++i)
    {
       const NTreeReader& currnode = objectlist(i);
@@ -340,7 +345,6 @@ void ClientMap::LoadObjects()
       }
       Keepalive();
    }
-   locks.EndWrite(mapmeshes);
 }
 
 
@@ -448,7 +452,6 @@ void ClientMap::CreateGrass()
       
       logout << "Generating grass" << endl;
       // Iterate over the entire map in groups of groupsize
-      locks.Write(mapmeshes);
       for (int x = 0; x < grassw; x += groupsize)
       {
          for (int y = 0; y < grassh; y += groupsize)
@@ -506,7 +509,6 @@ void ClientMap::CreateGrass()
             Keepalive();
          }
       }
-      locks.EndWrite(mapmeshes);
    }
    logout << "Generated " << grasstris << " grass tris\n";
 }
@@ -514,13 +516,11 @@ void ClientMap::CreateGrass()
 
 void ClientMap::GenerateKDTree()
 {
-   locks.Write(mapmeshes);
    // Must be done here so it's available for KDTree creation
    for (Meshlist::iterator i = mapmeshes->begin(); i != mapmeshes->end(); ++i)
    {
       i->Update();
    }
-   locks.EndWrite(mapmeshes);
    
    // Add objects to kd-tree
    Vector3vec points(8, Vector3());
@@ -533,11 +533,9 @@ void ClientMap::GenerateKDTree()
       points[i + 4] = worldbounds[5].GetVertex(i);
    }
    Keepalive();
-   locks.Read(mapmeshes);
    kdtree = ObjectKDTree(mapmeshes, points);
    logout << "Refining KD-Tree..." << std::flush;
    kdtree.refine(0);
-   locks.EndRead(mapmeshes);
    Keepalive();
    logout << "Done" << endl;
 }

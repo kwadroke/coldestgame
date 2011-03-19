@@ -3,9 +3,7 @@
 
 #include "Packet.h"
 #include "IDGen.h"
-#include "Mutex.h"
 #include <SDL_net.h>
-#include <SDL_thread.h>
 #include <list>
 
 using std::list;
@@ -22,14 +20,12 @@ class NetCode
       // No copying
       NetCode(const NetCode&);
       NetCode& operator=(const NetCode&);
-      virtual void PreInit(){}
       virtual void HandlePacket(stringstream&){}
       void HandleAck(const unsigned long);
       void Ack(const unsigned long);
       virtual void Send(){}
       
-      void SendThread();
-      static int Start(void*);
+      void SendLoop();
       
       virtual void Receive();
       virtual void ReceiveExtended(){}
@@ -41,7 +37,6 @@ class NetCode
       Uint32 lastnettick;
       Uint32 currnettick;
       IDGen sendpacketnum;
-      tsint running;
       bool error;
 
       SDL_Thread* thread;
@@ -52,7 +47,6 @@ class NetCode
       unsigned long packetnum;
 
    private:
-      Mutex sendmutex;
       list<Packet> sendqueue;
 };
 

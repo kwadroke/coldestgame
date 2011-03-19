@@ -5,6 +5,7 @@
 #include "ServerInfo.h"
 #include "Mesh.h"
 #include "Item.h"
+#include "tsint.h"
 #include <boost/shared_ptr.hpp>
 #include <set>
 #include <deque>
@@ -47,7 +48,6 @@ class ClientNetCode : public NetCode
       bool messageschanged;
 
    protected:
-      virtual void PreInit();
       virtual void Send();
       string FillUpdatePacket();
 

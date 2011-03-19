@@ -467,6 +467,10 @@ void SetupSDL()
       logout << "Couldn't initialize SDL: " << SDL_GetError() << endl;
       exit(1);
    }
+   else
+   {
+      logout << "SDL Initialized" << endl;
+   }
    
    SDL_EnableUNICODE(1);
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
@@ -523,6 +527,10 @@ void SetupSDL()
    {
       logout << "SDLNet_Init: " << SDLNet_GetError() << endl;
       exit(1);
+   }
+   else
+   {
+      logout << "Initialized SDL_net" << endl;
    }
    
    atexit(SDLNet_Quit);
@@ -803,10 +811,13 @@ void MainLoop()
       if (serverloadmap)
       {
          servermap = MapPtr(new Map(servermapname));
+         servermap->Load();
          serverloadmap = 0;
       }
 
       replayer->Update();
+
+      netcode->Update();
 
       clientmutex->lock();
       if (!PrimaryGUIVisible())
@@ -2643,6 +2654,7 @@ void LoadMap(const string& map)
 #endif
    clientmutex->lock();
    currmap = MapPtr(new ClientMap(map));
+   currmap->Load();
    clientmutex->unlock();
 
    winningteam = 0;

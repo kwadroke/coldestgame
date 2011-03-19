@@ -15,19 +15,8 @@ ClientNetCode::ClientNetCode() : serverfps(0),
                                  occpacketcounter(0),
                                  recpacketnum(0),
                                  lastsyncpacket(0),
+                                 annlisten(true),
                                  currversion(0)
-{
-   SendMasterListRequest();
-}
-
-
-ClientNetCode::~ClientNetCode()
-{
-   SDLNet_UDP_Close(annsocket);
-}
-
-
-void ClientNetCode::PreInit()
 {
    // Note: This socket should be opened before the other, on the off chance that it would choose
    // this port.  No, I didn't learn that the hard way, but I did almost forget.
@@ -36,12 +25,20 @@ void ClientNetCode::PreInit()
       logout << "Announce port SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       annlisten = false;
    }
-
+   
    if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
    {
-      logout << "Listen SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
+      logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       error = true;
    }
+   
+   SendMasterListRequest();
+}
+
+
+ClientNetCode::~ClientNetCode()
+{
+   SDLNet_UDP_Close(annsocket);
 }
 
 
@@ -342,6 +339,7 @@ void ClientNetCode::ReceiveExtended()
 
 void ClientNetCode::HandlePacket(stringstream& get)
 {
+   logout << "Got packet type " << packettype << endl;
    if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
       return;
    if ((address.host != packet->address.host || address.port != packet->address.port) &&
@@ -378,7 +376,7 @@ void ClientNetCode::HandlePacket(stringstream& get)
       ReadServerMessage(get);
    else if (packettype == "d")
       ReadDeath(get);
-   else if (packettype == "i")
+   else if (packettype == "I")
       ReadItem(get);
    else if (packettype == "R")
       ReadRemoveItem(get);

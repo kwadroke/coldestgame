@@ -51,6 +51,7 @@ void EditorLoop(const string editmap)
    gui[updateprogress]->visible = false;
    gui[loadprogress]->visible = true;
    currmap = MapPtr(new ClientMap(editmap));
+   currmap->Load();
    for (list<Mesh>::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain)

@@ -8,18 +8,14 @@ using std::endl;
 
 NetCode::NetCode() : lastnettick(SDL_GetTicks()),
                      currnettick(0),
-                     running(1),
                      error(false)
 {
-   PreInit();
    sendpacketnum.next(); // 0 has special meaning
    if (!(packet = SDLNet_AllocPacket(5000))) // 5000 is somewhat arbitrary
    {
       logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       error = true;
    }
-
-   thread = SDL_CreateThread(Start, this);
 }
 
 NetCode::~NetCode()
@@ -35,54 +31,35 @@ void NetCode::Update()
 {
    if (!error)
    {
+      SendLoop();
       Send();
       Receive();
    }
 }
 
 
-void NetCode::SendThread()
+void NetCode::SendLoop()
 {
-   while (running)
+   list<Packet>::iterator i = sendqueue.begin();
+   while (i != sendqueue.end())
    {
-      SDL_Delay(1); // Prevent this thread from hogging CPU
-      sendmutex.lock();
-      list<Packet>::iterator i = sendqueue.begin();
-      while (i != sendqueue.end())
+      if (i->sendtick <= currnettick)
       {
-         if (i->sendtick <= currnettick)
+         i->Send(packet, socket);
+         if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
          {
-            i->Send(packet, socket);
-            if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
-            {
-               i = sendqueue.erase(i);
-               continue;
-            }
+            i = sendqueue.erase(i);
+            continue;
          }
-         ++i;
       }
-      sendmutex.unlock();
+      ++i;
    }
-}
-
-
-// static
-int NetCode::Start(void* obj)
-{
-   setsighandler();
-   
-   logout << "Send thread id " << gettid() << " started." << endl;
-   
-   ((NetCode*)obj)->SendThread();
-   return 0;
 }
 
 
 void NetCode::SendPacket(Packet& p)
 {
-   sendmutex.lock();
    sendqueue.push_back(p);
-   sendmutex.unlock();
 }
 
 
@@ -105,7 +82,6 @@ void NetCode::Receive()
 
 void NetCode::HandleAck(const unsigned long acknum)
 {
-   sendmutex.lock();
    for (list<Packet>::iterator i = sendqueue.begin(); i != sendqueue.end(); ++i)
    {
       if (i->ack == acknum)
@@ -114,7 +90,6 @@ void NetCode::HandleAck(const unsigned long acknum)
          break;
       }
    }
-   sendmutex.unlock();
 }
 
 

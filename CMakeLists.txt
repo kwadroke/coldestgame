@@ -9,6 +9,7 @@ set(EXENAME coldest)
 option(BUILD_CLIENT           "Build the main game."    ON)
 option(BUILD_DEDICATED_SERVER "Build dedicated server." OFF)
 option(BUILD_MASTER_SERVER    "Build master server."    OFF)
+option(CHECKED_ITERATORS      "Checked iterators."      OFF)
 
 # Avoid source tree pollution
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -31,6 +32,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	# -pthread is unrecognized on Windows and ansi standard causes errors
 	if(NOT WIN32)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98 -pthread")
+      if (CHECKED_ITERATORS)
+         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DEBUG")
+      endif (CHECKED_ITERATORS)
 	endif(NOT WIN32)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
