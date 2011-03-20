@@ -1081,6 +1081,7 @@ int ServerSend(void* dummy)  // Thread for sending updates
 void ServerLoadMap(const string& mn)
 {
    gameover = 0;
+   servermeshes.clear();
    serveritems.clear();
    serverplayers.clear();
    PlayerData local(servermeshes); // Dummy placeholder for the local player
@@ -1122,7 +1123,7 @@ void ServerLoadMap(const string& mn)
    }
    for (int i = 0; i < 4; ++i)
    {
-      points[i + 4] = servermap->WorldBounds(0).GetVertex(i);
+      points[i + 4] = servermap->WorldBounds(5).GetVertex(i);
    }
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);

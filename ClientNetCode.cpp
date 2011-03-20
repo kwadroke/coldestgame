@@ -339,7 +339,6 @@ void ClientNetCode::ReceiveExtended()
 
 void ClientNetCode::HandlePacket(stringstream& get)
 {
-   logout << "Got packet type " << packettype << endl;
    if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
       return;
    if ((address.host != packet->address.host || address.port != packet->address.port) &&

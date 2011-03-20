@@ -280,10 +280,10 @@ void Map::BuildTerrain()
          tempmesh.Move(Vector3(x * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f),
                                0,
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
-                               tempmesh.terrain = true;
-                               tempmesh.dynamic = false;
-                               mapmeshes->push_front(tempmesh);
-                               meshits.push_back(mapmeshes->begin());
+         tempmesh.terrain = true;
+         tempmesh.dynamic = false;
+         mapmeshes->push_front(tempmesh);
+         meshits.push_back(mapmeshes->begin());
       }
    }
    
@@ -345,8 +345,7 @@ void Map::BuildTerrain()
 
          }
 
-         // Need the mesh center to be somewhere near the actual center of the tris or the object
-         // ends up getting collision detected too often
+         // Add up the average heights of the quads we add - these will be averaged below once all the quads have been added
          Vector3 midpoint;
          for (size_t i = 0; i < 4; ++i)
             midpoint += tempquad.GetVertex(i);
@@ -359,18 +358,23 @@ void Map::BuildTerrain()
       Keepalive();
    }
 
-   // Average out mesh positions
+   // Average out mesh positions so that we don't collision detect them unnecessarily
    for (size_t i = 0; i < meshits.size(); ++i)
    {
       Vector3 currpos = meshits[i]->GetPosition();
       currpos.y /= meshits[i]->NumTris() / 2.f;
       meshits[i]->Move(currpos);
+      logout << "Mesh info*******************************" << endl;
+      logout << meshits[i]->NumTris() << endl;
+      logout << meshits[i]->collide << endl;
+      logout << meshits[i]->terrain << endl;
    }
 }
 
 
 void Map::GenerateKDTree()
 {
+   /* This step is done outside of this class on the server so that it includes the base items that get created
    // Must be done here so it's available for KDTree creation
    for (Meshlist::iterator i = mapmeshes->begin(); i != mapmeshes->end(); ++i)
    {
@@ -393,6 +397,7 @@ void Map::GenerateKDTree()
    serverkdtree.refine(0);
    Keepalive();
    logout << "Done" << endl;
+   */
 }
 
 

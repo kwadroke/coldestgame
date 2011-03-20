@@ -31,9 +31,9 @@ void NetCode::Update()
 {
    if (!error)
    {
-      SendLoop();
-      Send();
       Receive();
+      Send();
+      SendLoop();
    }
 }
 

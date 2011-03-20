@@ -60,7 +60,7 @@ const int terrobjsize = 16; // Terrain objects are terrobjsize x terrobjsize til
 // Also note that fullscreen GUI's should be added before statsdisp so they don't cover it up
 // Another also: fullscreen GUI's need to be added to PrimaryGUIVisible or crashes will result
 enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, serverbrowser, credits, updateprogress, statsdisp, consolegui, 
-   ingamestatus, chat, endgame, loadoutmessage, editobject, editormain, numguis};
+   ingamestatus, chat, endgame, loadoutmessage, editobject, editormain, numguis}; // Never add anything after numguis
 
 extern MutexPtr clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
