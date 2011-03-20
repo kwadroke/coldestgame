@@ -365,7 +365,7 @@ void ClientNetCode::HandlePacket(stringstream& get)
       ReadServerInfo(get);
    else if (packettype == "S")
       ReadSpawnRequest(get);
-   else if (packettype == "a")
+   else if (packettype == "A")
       ReadAck(get);
    else if (packettype == "T")
       ReadText(get);
