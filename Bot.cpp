@@ -116,7 +116,7 @@ void Bot::Send()
       p << "Bot " << id << eol;
       p << 0 << eol; // Unit
       p << "Bot " << id << eol; // Name
-      p << ClientNetCode::Version() << eol;
+      p << NetCode::Version() << eol;
       sendqueue.push_back(p);
       needconnect = false;
    }

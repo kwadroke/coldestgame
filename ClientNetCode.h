@@ -19,7 +19,6 @@ class ClientNetCode : public NetCode
    public:
       ClientNetCode();
       virtual ~ClientNetCode();
-      static int Version(){return version;}
       bool Connected(){return connected;}
       int CurrVersion(){return currversion;}
       void AddItem(Item&);
@@ -87,7 +86,6 @@ class ClientNetCode : public NetCode
       UDPsocket annsocket;
       bool annlisten;
 
-      const static int version;
       int currversion;  // The version we get from the master server
       
       set<ServerInfo> knownservers;

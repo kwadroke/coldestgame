@@ -433,7 +433,7 @@ int ServerListen(void* dummy)
             int respondto = 0;
             servermutex->lock();
             
-            if (CountPlayers() < maxplayers && clientver == ClientNetCode::Version())
+            if (CountPlayers() < maxplayers && clientver == NetCode::Version())
             {
                for (size_t i = 1; i < serverplayers.size(); ++i)
                {

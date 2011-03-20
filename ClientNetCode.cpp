@@ -5,8 +5,6 @@
 
 using std::endl;
 
-const int ClientNetCode::version = 5;
-
 ClientNetCode::ClientNetCode() : serverfps(0),
                                  serverbps(0),
                                  lasthit(0),

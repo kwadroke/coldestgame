@@ -5,6 +5,7 @@
 
 using std::endl;
 
+const int NetCode::version = 5;
 
 NetCode::NetCode() : lastnettick(SDL_GetTicks()),
                      currnettick(0),

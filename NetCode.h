@@ -15,6 +15,7 @@ class NetCode
       virtual ~NetCode();
       virtual void Update();
       void SendPacket(Packet&);
+      static int Version(){return version;}
 
    protected:
       // No copying
@@ -45,6 +46,8 @@ class NetCode
       string getdata;
       string packettype;
       unsigned long packetnum;
+
+      const static int version;
 
    private:
       list<Packet> sendqueue;
