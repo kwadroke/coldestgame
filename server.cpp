@@ -194,7 +194,6 @@ int Server(void* dummy)
       console.Parse("set map riverside");
    LoadMapList();
    servermutex = MutexPtr(new Mutex());
-   locks.Register(servermeshes);
    if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
    {
       logout << "Server SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
@@ -796,9 +795,7 @@ int ServerListen(void* dummy)
                string command;
                get.ignore();
                getline(get, command);
-               clientmutex->lock();
                console.Parse(command, false);
-               clientmutex->unlock();
                servermutex->lock();
                for (size_t i = 0; i < serverplayers.size(); ++i)
                   SendSyncPacket(serverplayers[i], 0);

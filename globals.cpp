@@ -21,7 +21,6 @@
 #include "globals.h"
 #include "renderdefs.h"
 
-MutexPtr clientmutex;// Make sure client threads don't interfere with each other
 CollisionDetection coldet; // Collision detection handler object
 list<Particle> particles; // List of active particles
 vector<ParticleEmitter> emitters;
@@ -53,7 +52,6 @@ bool editor;
 KeyMap keys;
 bool reloadgui;
 string userpath;
-LockManager locks;
 RecorderPtr recorder;
 ReplayerPtr replayer;
 bool replaying;

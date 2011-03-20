@@ -53,14 +53,12 @@ PlayerData::PlayerData(Meshlist& ml) : speed(0.f), turnspeed(0.f), needsync(true
    temperature = 0.f;
    fallvelocity = 0.f;
    Weapon none(Weapon::NoWeapon);
-   locks.Read(ml);
    for (int i = 0; i < numbodyparts; ++i)
    {
       mesh.push_back(ml.end());
       weapons.push_back(none);
       lastfiretick.push_back(0);
    }
-   locks.EndRead(ml);
 }
 
 
@@ -75,7 +73,6 @@ void PlayerData::Kill()
 {
    spawned = false;
    leftclick = false;
-   locks.Write(*meshes);
    for (int part = 0; part < numbodyparts; ++part)
    {
       if (mesh[part] != meshes->end())
@@ -89,7 +86,6 @@ void PlayerData::Kill()
       indicator->ttl = 1;
       indicator = NULL;
    }
-   locks.EndWrite(*meshes);
 }
 
 

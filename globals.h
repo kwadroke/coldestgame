@@ -62,7 +62,6 @@ const int terrobjsize = 16; // Terrain objects are terrobjsize x terrobjsize til
 enum GUINames {mainmenu, loadprogress, loadoutmenu, settings, hud, serverbrowser, credits, updateprogress, statsdisp, consolegui, 
    ingamestatus, chat, endgame, loadoutmessage, editobject, editormain, numguis}; // Never add anything after numguis
 
-extern MutexPtr clientmutex;// Make sure client threads don't interfere with each other
 extern CollisionDetection coldet; // Collision detection handler object
 extern list<Particle> particles; // List of active particles
 extern vector<ParticleEmitter> emitters;
@@ -94,7 +93,6 @@ extern bool editor;
 extern KeyMap keys;
 extern bool reloadgui;
 extern string userpath;
-extern LockManager locks;
 extern RecorderPtr recorder;
 extern ReplayerPtr replayer;
 extern bool replaying;

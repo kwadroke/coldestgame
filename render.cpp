@@ -61,9 +61,7 @@ void Repaint()
    glLoadIdentity();
    trislastframe = 0;
    firstpass = true;
-   clientmutex->lock();
    localplayer = player[0];
-   clientmutex->unlock();
    
    if (!PrimaryGUIVisible())
    {
@@ -250,7 +248,6 @@ void RenderObjects(const PlayerData& localplayer)
    bool debug = false; // Turns off impostoring if true
    //debug = true;
    
-   locks.Write(meshes);
    list<Mesh*> m = kdtree.getmeshes();
    
    list<Mesh*>::iterator iptr;
@@ -333,7 +330,6 @@ void RenderObjects(const PlayerData& localplayer)
          trislastframe += i->NumTris();
       }
    }
-   locks.EndWrite(meshes);
    
    impostormesh->Render(override);
    trislastframe += impostormesh->NumTris();
@@ -853,7 +849,6 @@ void RenderHud(const PlayerData& localplayer)
 {
    // GetWidget can be time-consuming so it may make sense to cache these (note that making them static makes it
    // impossible to reload the GUI).  As always profiling is the key.
-   clientmutex->lock();
    GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
    GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
    GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
@@ -992,7 +987,6 @@ void RenderHud(const PlayerData& localplayer)
       gui[i]->Render();
    }
    
-   clientmutex->unlock();
    SDL_GL_Exit2dMode();
 }
 

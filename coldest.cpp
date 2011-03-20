@@ -294,8 +294,6 @@ void InitGlobals()
    if (console.GetInt("caminterp") == 1)
       console.Parse("setsave caminterp 50");
 
-   locks.Register(meshes);
-   
    // Can't create players until after SDL has been init'd in ReadConfig
    PlayerData dummy = PlayerData(meshes); // Local player is always index 0
    dummy.unit = Nemesis;
@@ -474,7 +472,6 @@ void SetupSDL()
    
    SDL_EnableUNICODE(1);
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-   clientmutex = MutexPtr(new Mutex()); // Make sure this gets created at the same time SDL is init'd
    
    atexit(SDL_Quit);
    
@@ -794,9 +791,7 @@ void MainLoop()
       // Can't do this in the event handler because that is called from within the GUI
       if (reloadgui)
       {
-         clientmutex->lock();
          InitGUI();
-         clientmutex->unlock();
       }
       
       // Check for end of game
@@ -819,10 +814,8 @@ void MainLoop()
 
       netcode->Update();
 
-      clientmutex->lock();
       if (!PrimaryGUIVisible())
          UpdatePlayer();
-      clientmutex->unlock();
 
       GUIUpdate();
 
@@ -848,7 +841,6 @@ void GUIUpdate()
    static Uint32 servupdatecounter = SDL_GetTicks();
    static Uint32 statupdatecounter = SDL_GetTicks();
    Uint32 currtick;
-   clientmutex->lock();
    if (gui[serverbrowser]->visible)
    {
       currtick = SDL_GetTicks();
@@ -1007,13 +999,11 @@ void GUIUpdate()
       dir.normalize();
       Vector3 checkstart = part.pos;
       Vector3 checkend = checkstart + dir * 5000.f;
-      locks.Write(meshes);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&player[servplayernum], meshes, kdtree, checkstart, checkend, .01f);
       Vector3 dummy;
       Mesh* hitmesh;
       coldet.CheckSphereHit(checkstart, checkend, .01f, check, currmap, dummy, hitmesh);
       PlayerData* p = PlayerFromMesh(hitmesh, player, meshes.end());
-      locks.EndWrite(meshes);
 
       // Populate GUI object
       GUI* targetplayer = gui[hud]->GetWidget("targetplayer");
@@ -1043,8 +1033,6 @@ void GUIUpdate()
          }
       }
    }
-   
-   clientmutex->unlock();
 #endif
 }
 
@@ -1052,14 +1040,12 @@ void GUIUpdate()
 bool GUIEventHandler(SDL_Event &event)
 {
 #ifndef DEDICATED
-   clientmutex->lock();
    // Mini keyboard handler to deal with the console and chat
    bool eatevent = false;
    GUI* chatin = gui[chat]->GetWidget("chatinput");
    if (!chatin)
    {
       logout << "Error getting chat input widget" << endl;
-      clientmutex->unlock();
       return false;
    }
    switch (event.type)
@@ -1120,11 +1106,9 @@ bool GUIEventHandler(SDL_Event &event)
                      logout << "Error getting chat input widget" << endl;
                      break;
                   }
-                  clientmutex->lock();
                   GUI* teamlabel = gui[chat]->GetWidget("chatteam");
                   netcode->SendChat(chatin->text, teamlabel->visible);
                   AppendToChat(0, chatin->text, teamlabel->visible);
-                  clientmutex->unlock();
                   chatin->text = "";
                   chatin->visible = false;
                   teamlabel->visible = false;
@@ -1139,11 +1123,9 @@ bool GUIEventHandler(SDL_Event &event)
          }
       
    };
-   clientmutex->unlock();
    
    if (eatevent) return eatevent;
    
-   clientmutex->lock();
    if (gui[consolegui]->visible)
    {
       SDL_ShowCursor(1);
@@ -1191,8 +1173,6 @@ bool GUIEventHandler(SDL_Event &event)
       gui[credits]->ProcessEvent(&event);
       eatevent = true;
    }
-   clientmutex->unlock();
-   
    
    return eatevent;
 #endif
@@ -1206,7 +1186,6 @@ void GameEventHandler(SDL_Event &event)
    SDL_ShowCursor(0);
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
-   clientmutex->lock();
    if (!player[servplayernum].powerdowntime)
    {
       switch(event.type) 
@@ -1350,14 +1329,12 @@ void GameEventHandler(SDL_Event &event)
             Quit();
       }
    }
-   clientmutex->unlock();
 #endif
 }
 
 
 void Quit()
 {
-   clientmutex->unlock(); // This was probably grabbed by GUI update code before calling us
    Cleanup();
    exit(0);
 }
@@ -1500,7 +1477,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          hillthreshold = .05f;
       }
       
-      locks.Write(ml);
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
 
       bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f + hillthreshold, check, movemap);
@@ -1523,7 +1499,6 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
       
       bool slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check, movemap);
       bool groundcheck = coldet.CheckSphereHit(old, old, mplayer.size * 2.05f, check, movemap);
-      locks.EndWrite(ml);
       
       if ((slopecheck && groundcheck) || mplayer.weight < .99f) // They were on the ground
       {
@@ -1580,8 +1555,6 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
       Vector3vec adjust;
       int count = 0;
       float slop = .01f;
-
-      locks.Write(ml);
 
       bool done = false;
       while (!done)
@@ -1658,7 +1631,6 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
          }
       }
       mplayer.pos = newpos;
-      locks.EndWrite(ml);
    }
    return nohit;
 }
@@ -1667,7 +1639,6 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
 vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, ObjectKDTree& kt,
                                      const Vector3& oldpos, const Vector3& newpos, const float size)
 {
-   locks.Read(ml);
    vector<Mesh*> check = kt.getmeshes(oldpos, newpos, size);
    AppendDynamicMeshes(check, ml);
    if (mplayer)
@@ -1680,7 +1651,6 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, Ob
          }
       }
    }
-   locks.EndRead(ml);
    return check;
 }
 
@@ -1908,10 +1878,6 @@ void SpectatePrev()
 
 void Animate()
 {
-   clientmutex->lock();
-   // Delete meshes as requested by the net thread
-   locks.Write(meshes);
-   
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
    for (size_t k = 1; k < player.size(); ++k)
@@ -1919,7 +1885,6 @@ void Animate()
       if (k != (size_t)servplayernum)
          UpdatePlayerModel(player[k], meshes);
    }
-   
    
    // Meshes
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
@@ -1930,9 +1895,6 @@ void Animate()
          i->updatedelay = maxdelay;
       i->Update(player[0].pos);
    }
-   
-   locks.EndWrite(meshes);
-   
    
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();
@@ -1946,7 +1908,6 @@ void Animate()
    }
    static int partupd = 100;
    UpdateParticles(particles, partupd, kdtree, meshes, player, player[0].pos);
-   clientmutex->unlock();
 }
 
 
@@ -1961,7 +1922,6 @@ void UpdateServerList()
       logout << "Failed to get pointer to serverlist" << endl;
       exit(-10);
    }
-   clientmutex->lock();
    for (i = netcode->servers.begin(); i != netcode->servers.end(); ++i)
    {
       if (!i->inlist && i->haveinfo)
@@ -1971,7 +1931,6 @@ void UpdateServerList()
          i->inlist = true;
       }
    }
-   clientmutex->unlock();
 #endif
 }
 
@@ -1981,7 +1940,6 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    if (!p.spawned || p.unit == numunits)
       return;
 
-   locks.Write(ml);
    if (p.mesh[Legs] == ml.end())
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/legs");
@@ -2070,7 +2028,6 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          }
       }
    }
-   locks.EndWrite(ml);
    
    // Add a particle to enemies to indicate their affiliation
    if (gl) // No reason to do this on the server
@@ -2125,7 +2082,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
    {
       // Update particles
       list<Particle>::iterator j = parts.begin();
-      locks.Write(ml);
       while (j != parts.end())
       {
          // Erase particles that hit something the next time through this function so that they still get rendered
@@ -2182,7 +2138,6 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
 #endif
          ++j;
       }
-      locks.EndWrite(ml);
       partupd = 0;
    }
    else
@@ -2235,8 +2190,6 @@ float GetTerrainHeight(const float x, const float y)
 void UpdatePlayerList()
 {
 #ifndef DEDICATED
-   clientmutex->lock();
-   
    Table* playerlist = dynamic_cast<Table*>(gui[ingamestatus]->GetWidget("playerlist"));
    Table* lplayerlist = dynamic_cast<Table*>(gui[loadoutmenu]->GetWidget("playerlist"));
    
@@ -2271,8 +2224,6 @@ void UpdatePlayerList()
          }
       }
    }
-   
-   clientmutex->unlock();
 #endif
 }
 
@@ -2298,23 +2249,19 @@ void AppendToChat(int playernum, string line, bool chatteam)
 void ShowGUI(int toshow)
 {
 #ifndef DEDICATED
-   clientmutex->lock();
    for (size_t i = 0; i < gui.size(); ++i)
       gui[i]->visible = false;
    gui[toshow]->visible = true;
    if (console.GetBool("showfps"))
       gui[statsdisp]->visible = true;
-   clientmutex->unlock();
 #endif
 }
 
 
 void ResetKeys()
 {
-   clientmutex->lock(); // Otherwise we can end up firing after we respawn
    player[0].leftclick = player[0].rightclick = false;
    player[0].moveforward = player[0].moveback = player[0].moveleft = player[0].moveright = false;
-   clientmutex->unlock();
 }
 
 
@@ -2434,8 +2381,6 @@ void CacheMeshes()
 void UpdatePlayer()
 {
    // Update player position
-   clientmutex->lock();
-
    if (player[0].spectate && player[0].spawned)
       UpdateSpectatePosition();
    else
@@ -2460,8 +2405,6 @@ void UpdatePlayer()
       UpdatePlayerModel(player[0], meshes);
    }
       
-   clientmutex->unlock();
-      
    int weaponslot = weaponslots[localplayer.currweapon];
    Weapon& currplayerweapon = localplayer.weapons[weaponslot];
    if (localplayer.leftclick && 
@@ -2471,14 +2414,12 @@ void UpdatePlayer()
 #ifndef DEDICATED
       netcode->SendFire();
 #endif
-      clientmutex->lock();
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
       if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
          player[0].weapons[weaponslot].ammo--;
          
       ClientCreateShot(localplayer, currplayerweapon);
       recorder->AddShot(0, currplayerweapon.Id());
-      clientmutex->unlock();
    }
 }
 
@@ -2488,9 +2429,7 @@ void AddHit(const Vector3& pos, const int type)
    Weapon dummy(type);
    ParticleEmitter newemitter(dummy.ExpFile(), resman);
    newemitter.position = pos;
-   clientmutex->lock();
    emitters.push_back(newemitter);
-   clientmutex->unlock();
 }
 
 
@@ -2545,7 +2484,6 @@ void RegenFBOList()
    FBO dummyfbo;
    impmeshes.clear();
    impfbolist.clear();
-   locks.Write(meshes);
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!floatzero(i->impdist))
@@ -2563,7 +2501,6 @@ void RegenFBOList()
       }
       i->Update();
    }
-   locks.EndWrite(meshes);
 #endif
 }
 
@@ -2652,10 +2589,8 @@ void LoadMap(const string& map)
    ShowGUI(loadprogress);
    Repaint();
 #endif
-   clientmutex->lock();
    currmap = MapPtr(new ClientMap(map));
    currmap->Load();
-   clientmutex->unlock();
 
    winningteam = 0;
    netcode->SendSync();

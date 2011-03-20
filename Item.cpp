@@ -26,10 +26,7 @@ Item::Item(const int newtype, Meshlist& ml) : id(0), usesleft(1), hp(100), team(
            
 {
    // Occasionally we are called with a dummy Meshlist, and multiple registrations are okay
-   locks.Register(ml);
-   locks.Read(ml);
    mesh = ml.end();
-   locks.EndRead(ml);
    
    switch (newtype)
    {

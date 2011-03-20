@@ -29,11 +29,9 @@ void Replayer::SetActive(const string& filename, const bool a)
    if (a && !active) // Read header information
    {
       logout << "Loading replay " << filename << endl;
-      clientmutex->lock();
       player[0].spectate = true;
       player[0].spawned = true;
       items.clear();
-      clientmutex->unlock();
 
       int version, minor;
       string fullpath = userpath + Recorder::savepath + filename;

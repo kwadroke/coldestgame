@@ -324,9 +324,7 @@ void ClientNetCode::ReceiveExtended()
                string dotteddec = AddressToDD(packet->address.host);
                logout << dotteddec << ":" << serverport << endl;
                addme.strip = dotteddec;
-               clientmutex->lock();
                servers.push_back(addme);
-               clientmutex->unlock();
                knownservers.insert(addme); // No need to wrap this, only used in this thread
             }
          }
@@ -409,7 +407,6 @@ void ClientNetCode::ReadUpdate(stringstream& get)
       long oppnum = 0;
       float oppx, oppy, oppz;
       float opprot, opppitch, opproll, oppfacing;
-      clientmutex->lock();
       
       get >> oppnum;
       while (oppnum != 0)
@@ -479,7 +476,6 @@ void ClientNetCode::ReadUpdate(stringstream& get)
          if (!i->spawned)
          {
             addemitter = false;
-            locks.Read(meshes);
             for (int part = 0; part < numbodyparts; ++part)
             {
                if (i->mesh[part] != meshes.end())
@@ -489,7 +485,6 @@ void ClientNetCode::ReadUpdate(stringstream& get)
                   addemitter = true;
                }
             }
-            locks.EndRead(meshes);
             if (addemitter)
             {
                ParticleEmitter newemitter("particles/emitters/explosion", resman);
@@ -507,7 +502,6 @@ void ClientNetCode::ReadUpdate(stringstream& get)
       // Adjust our position toward where the server thinks we are
       if (console.GetBool("serversync") && !player[0].spectate && player[0].spawned)
          SynchronizePosition();
-      clientmutex->unlock();
    }
 }
 
@@ -530,7 +524,6 @@ void ClientNetCode::ReadOccUpdate(stringstream& get)
       int getping;
       bool getspawned, getconnected;
       string getname;
-      clientmutex->lock();
       while (oppnum != 0)
       {
          get >> getteam;
@@ -575,7 +568,6 @@ void ClientNetCode::ReadOccUpdate(stringstream& get)
          if (gui[loadoutmenu]->visible)
             Action("updateunitselection");
       }
-      clientmutex->unlock();
    }
 }
 
@@ -585,7 +577,6 @@ void ClientNetCode::ReadConnect(stringstream& get)
    if (!connected)
    {
       string nextmap;
-      clientmutex->lock();
       get >> servplayernum;
       get >> nextmap;
       long newteam;
@@ -595,7 +586,6 @@ void ClientNetCode::ReadConnect(stringstream& get)
       connected = true;
       logout << "We are server player " << servplayernum << endl;
       logout << "Map is: " << nextmap << endl;
-      clientmutex->unlock();
       itemsreceived.clear();
       hitsreceived.clear();
    }
@@ -606,9 +596,7 @@ void ClientNetCode::ReadConnect(stringstream& get)
 void ClientNetCode::ReadFailedConnect(stringstream& get)
 {
    logout << "Error: Server is full or netcode version mismatch\n";
-   clientmutex->lock();
    ShowGUI(mainmenu);
-   clientmutex->unlock();
    HandleAck(packetnum);
 }
 
@@ -634,10 +622,8 @@ void ClientNetCode::ReadShot(stringstream& get)
       Weapon dummy(weapid);
       size_t pnum;
       get >> pnum;
-      clientmutex->lock();
       ClientCreateShot(player[pnum], dummy);
       recorder->AddShot(pnum, weapid);
-      clientmutex->unlock();
    }
    Ack(packetnum);
 }
@@ -673,7 +659,6 @@ void ClientNetCode::ReadDamage()
 void ClientNetCode::ReadServerInfo(stringstream& get)
 {
    vector<ServerInfo>::iterator i;
-   clientmutex->lock();
    for (i = servers.begin(); i != servers.end(); ++i)
    {
       if (i->address.host == packet->address.host)
@@ -688,7 +673,6 @@ void ClientNetCode::ReadServerInfo(stringstream& get)
          break;
       }
    }
-   clientmutex->unlock();
 }
 
 
@@ -701,7 +685,6 @@ void ClientNetCode::ReadSpawnRequest(stringstream& get)
    get >> acknum;
    get >> newpos.x >> newpos.y >> newpos.z;
    
-   clientmutex->lock();
    if (gui[loadoutmenu]->visible)
    {
       if (accepted)
@@ -721,7 +704,6 @@ void ClientNetCode::ReadSpawnRequest(stringstream& get)
          logout << "Spawn request not accepted.  This is either a program error or you're hacking.  If the latter, shame on you.  If the former, shame on me." << endl;
       }
    }
-   clientmutex->unlock();
    HandleAck(acknum);
 }
 
@@ -737,7 +719,6 @@ void ClientNetCode::ReadAck(stringstream& get)
 void ClientNetCode::ReadText(stringstream& get)
 {
    long oppnum = 0;
-   clientmutex->lock();
    string line;
    get >> oppnum;
    if (oppnum < player.size())
@@ -752,7 +733,6 @@ void ClientNetCode::ReadText(stringstream& get)
       // Ack it
       Ack(packetnum); // Danger: this grabs the net mutex while we hold the clientmutex
    }
-   clientmutex->unlock();
 }
 
 
@@ -767,7 +747,6 @@ void ClientNetCode::ReadTeamChange(stringstream& get)
    if (accepted)
    {
       get >> newteam;
-      clientmutex->lock();
       if (player[0].team != newteam)
       {
          logout << "Joined team " << newteam << endl;
@@ -807,7 +786,6 @@ void ClientNetCode::ReadTeamChange(stringstream& get)
          team2button->togglestate = 0;
          specbutton->togglestate = 1;
       }
-      clientmutex->unlock();
    }
 }
 
@@ -820,10 +798,8 @@ void ClientNetCode::ReadServerMessage(stringstream& get)
       string message;
       get.ignore();
       getline(get, message);
-      clientmutex->lock();
       messageschanged = true;
       servermessages.push_back(message);
-      clientmutex->unlock();
    }
    Ack(packetnum);
 }
@@ -837,7 +813,6 @@ void ClientNetCode::ReadDeath(stringstream& get)
       size_t killed, killer;
       get >> killed >> killer;
       
-      clientmutex->lock();
       if (killed == servplayernum)
       {
          player[0].weight = -1.f;
@@ -848,7 +823,6 @@ void ClientNetCode::ReadDeath(stringstream& get)
       }
       string message = player[killer].name + " killed " + player[killed].name;
       servermessages.push_back(message);
-      clientmutex->unlock();
    }
    // Ack it
    Ack(packetnum);
@@ -871,9 +845,7 @@ void ClientNetCode::ReadItem(stringstream& get)
       newitem.id = id;
       newitem.team = team;
       newitem.position = itempos;
-      clientmutex->lock();
       AddItem(newitem);
-      clientmutex->unlock();
       itemsreceived.insert(id);
    }
    Ack(packetnum);
@@ -902,11 +874,9 @@ void ClientNetCode::ReadRemoveItem(stringstream& get)
    {
       if (i->id == id)
       {
-         clientmutex->lock();
          DeleteMesh(i->mesh);
          items.erase(i);
          spawnschanged = true;
-         clientmutex->unlock();
          break;
       }
    }
@@ -924,12 +894,10 @@ void ClientNetCode::ReadSync(stringstream& get)
       HandleAck(acknum);
       lastsyncpacket = packetnum;
       string buffer;
-      clientmutex->lock();
       while (getline(get, buffer) && buffer != "endofcommands")
       {
          console.Parse(buffer, false);
       }
-      clientmutex->unlock();
       Ack(packetnum);
    }
 }
@@ -961,13 +929,9 @@ void ClientNetCode::ReadRemovePart(stringstream& get)
    if (num == servplayernum)
       num = 0;
    
-   clientmutex->lock();
-   locks.Read(meshes);
    DeleteMesh(player[num].mesh[part]);
    player[num].mesh[part] = meshes.end();
    player[num].hp[part] = 0;
-   locks.EndRead(meshes);
-   clientmutex->unlock();
    
    Ack(packetnum);
 }
@@ -987,9 +951,7 @@ void ClientNetCode::ReadAnnounce(stringstream& get)
       string dotteddec = AddressToDD(addme.address.host);
       logout << dotteddec << ":" << serverport << endl;
       addme.strip = dotteddec;
-      clientmutex->lock();
       servers.push_back(addme);
-      clientmutex->unlock();
       knownservers.insert(addme); // No need to wrap this, only used in this thread
    }
 }

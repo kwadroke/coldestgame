@@ -336,9 +336,7 @@ void Console::Action(const string& action)
    }
    else if (action == "reloadres")
    {
-      clientmutex->lock();
       LoadMap(GetString("map"));
-      clientmutex->unlock();
    }
    else if (action == "laghax action")
    {
@@ -390,10 +388,8 @@ void Console::Action(const string& action)
       // because they'll be properly initialized later.
       if (SDL_WasInit(0))
       {
-         clientmutex->lock();
          if (player.size())
             player[0].name = GetString("name");
-         clientmutex->unlock();
       }
    }
    else if (action == "af action")
