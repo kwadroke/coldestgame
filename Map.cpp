@@ -364,10 +364,6 @@ void Map::BuildTerrain()
       Vector3 currpos = meshits[i]->GetPosition();
       currpos.y /= meshits[i]->NumTris() / 2.f;
       meshits[i]->Move(currpos);
-      logout << "Mesh info*******************************" << endl;
-      logout << meshits[i]->NumTris() << endl;
-      logout << meshits[i]->collide << endl;
-      logout << meshits[i]->terrain << endl;
    }
 }
 

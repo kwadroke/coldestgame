@@ -192,8 +192,6 @@ void ClientMap::CalcMapTextures()
 // Sets up the material for the quad at x, y
 void ClientMap::SetTerrainTextures(int x, int y, Quad& tempquad)
 {
-   map<set<GLuint>, Material*> texmats;
-   
    set<GLuint> currtex;
    currtex.insert(tex1[x][y]);
    currtex.insert(tex2[x][y]);

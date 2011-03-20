@@ -32,6 +32,7 @@ class ClientMap : public Map
       ProgressBar* progress;
       GUI* progtext;
       GUI* progname;
+      map<set<GLuint>, Material*> texmats;
 };
 
 #endif // CLIENTMAP_H
