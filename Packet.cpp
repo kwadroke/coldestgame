@@ -24,13 +24,30 @@ using std::endl;
 
 int Packet::laghax = 0;
 
-Packet::Packet(IPaddress* inaddr, string s) : data(s), ack(0),
+Packet::Packet(IPaddress* inaddr) : ack(0),
                attempts(0), lastsent(0), sendinterval(100)
 {
    if (inaddr)
       addr = *inaddr;
    else addr.host = INADDR_NONE;
    sendtick = SDL_GetTicks() + laghax;
+}
+
+
+Packet::Packet(IPaddress* inaddr, const string type, const unsigned long num, const bool needack) :
+               ack(0),
+               attempts(0),
+               lastsent(0),
+               sendinterval(100)
+{
+   if (inaddr)
+      addr = *inaddr;
+   else addr.host = INADDR_NONE;
+   sendtick = SDL_GetTicks() + laghax;
+   *this << type << eol;
+   *this << num << eol;
+   if (needack)
+      ack = num;
 }
 
 
@@ -50,7 +67,7 @@ size_t Packet::Send(UDPpacket* packet, UDPsocket& socket)
    packet->address = addr;
    strcpy((char*)packet->data, data.c_str());
    packet->len = data.length() + 1;
-   
+
    SDLNet_UDP_Send(socket, -1, packet);
    ++attempts;
    return data.length();

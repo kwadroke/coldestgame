@@ -9,7 +9,8 @@ const int NetCode::version = 5;
 
 NetCode::NetCode() : lastnettick(SDL_GetTicks()),
                      currnettick(0),
-                     error(false)
+                     error(false),
+                     sendbps(0)
 {
    sendpacketnum.next(); // 0 has special meaning
    if (!(packet = SDLNet_AllocPacket(5000))) // 5000 is somewhat arbitrary
@@ -22,7 +23,6 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
 NetCode::~NetCode()
 {
    running = 0;
-   SDL_WaitThread(thread, NULL);
    SDLNet_FreePacket(packet);
    SDLNet_UDP_Close(socket);
 }
@@ -42,11 +42,12 @@ void NetCode::Update()
 void NetCode::SendLoop()
 {
    list<Packet>::iterator i = sendqueue.begin();
+   size_t sentbytes = 0;
    while (i != sendqueue.end())
    {
       if (i->sendtick <= currnettick)
       {
-         i->Send(packet, socket);
+         sentbytes += i->Send(packet, socket);
          if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
          {
             i = sendqueue.erase(i);
@@ -54,6 +55,13 @@ void NetCode::SendLoop()
          }
       }
       ++i;
+   }
+
+   if (sentbytestimer.elapsed() > 1000)
+   {
+      sendbps = (size_t)((float)sentbytes / (float)sentbytestimer.elapsed() * 1000.f);
+      sentbytes = 0;
+      sentbytestimer.start();
    }
 }
 

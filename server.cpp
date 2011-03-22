@@ -43,43 +43,13 @@
 #include "util.h"
 #include "Bot.h"
 #include "Mutex.h"
+#include "ServerNetCode.h"
 #include "serverdefs.h"
 
-// Necessary declarations
-void ServerLoop();
-int ServerSend(void*);
-int ServerListen(void*);
-int ServerInput(void*);
-void HandleHit(Particle&, Mesh*, const Vector3&);
-void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
-void ApplyDamage(Mesh*, const float, const size_t, const bool teamdamage = false);
-void ServerUpdatePlayer(int);
-void Rewind(Uint32, const Vector3&, const Vector3&, const float);
-void SaveState();
-void AddItem(const Item&, int);
-void SendItem(const Item&, const int);
-vector<Item>::iterator RemoveItem(const vector<Item>::iterator&);
-void SendKill(size_t, size_t);
-void RemoveTeam(int);
-void SendToAll(Packet, const size_t exclude = 0);
-void SendSyncPacket(PlayerData&, unsigned long);
-void SendGameOver(PlayerData&, int);
-void SendShot(const Particle&);
-void SendHit(const Vector3&, const Particle& p);
-void SendDamage(const int);
-void SendRemove(const int, const int);
-void SendMessage(const string&);
-string AddressToDD(Uint32);
-void LoadMapList();
-void Ack(unsigned long acknum, UDPpacket* inpack);
-void KillPlayer(const int, const int);
-int CountPlayers();
-
-SDL_Thread* serversend;
-SDL_Thread* serverlisten;
 SDL_Thread* serverinput;
 UDPsocket servsock;
 MapPtr servermap;
+ServerNetCodePtr servernetcode;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 vector<Item> serveritems;
@@ -108,21 +78,6 @@ Uint32 lastfpsupdate;
 int servfps;
 vector<BotPtr> bots;
 
-class SortableIPaddress
-{
-   public:
-      //SortableIPaddress() : addr(INADDR_NONE){}
-      SortableIPaddress(const IPaddress& a) : addr(a){}
-      bool operator<(const SortableIPaddress& a) const
-      {
-         if (addr.host != a.addr.host) return addr.host < a.addr.host;
-         return addr.port < a.addr.port;
-      }
-      
-      IPaddress addr;
-};
-
-set<SortableIPaddress> validaddrs;
 
 int Server(void* dummy)
 {
@@ -193,24 +148,15 @@ int Server(void* dummy)
    if (console.GetString("map") == "")
       console.Parse("set map riverside");
    LoadMapList();
+   servernetcode = ServerNetCodePtr(new ServerNetCode());
    servermutex = MutexPtr(new Mutex());
-   if (!(servsock = SDLNet_UDP_Open(console.GetInt("serverport"))))
-   {
-      logout << "Server SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
-      return -1;
-   }
    ServerLoadMap(console.GetString("map"));
-   serversend = SDL_CreateThread(ServerSend, NULL);
-   serverlisten = SDL_CreateThread(ServerListen, NULL);
    serverinput = SDL_CreateThread(ServerInput, NULL);
    
    ServerLoop();
    
    bots.clear();
-   SDL_WaitThread(serversend, NULL);
-   SDL_WaitThread(serverlisten, NULL);
    SDL_WaitThread(serverinput, NULL);
-   SDLNet_UDP_Close(servsock);
    return 0;
 }
 
@@ -228,10 +174,15 @@ void ServerLoop()
    
    while (running)
    {
+      servernetcode->Update();
+      
       if (console.GetBool("limitserverrate"))
       {
          while (frametimer.elapsed() < Uint32(1000 / servertickrate - 1))
+         {
+            servernetcode->Update();
             SDL_Delay(1);
+         }
       }
       else
       {
@@ -253,9 +204,9 @@ void ServerLoop()
          currtick = SDL_GetTicks();
          if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + timeout * 1000)
          {
-            validaddrs.erase(SortableIPaddress(serverplayers[i].addr));
+            servernetcode->EraseValidAddr(serverplayers[i].addr);
             serverplayers[i].Disconnect();
-            SendMessage(serverplayers[i].name + " timed out.");
+            servernetcode->SendMessage(serverplayers[i].name + " timed out.");
          }
          else if (serverplayers[i].connected)
          {
@@ -291,787 +242,9 @@ void ServerLoop()
          framecount = 0;
          lastfpsupdate = currtick;
       }
-         
+
       servermutex->unlock();
    }
-}
-
-
-int ServerListen(void* dummy)
-{
-   UDPpacket *inpack;
-   unsigned long packetnum;
-   string getdata;
-   string packettype;
-   float oppx, oppy, oppz;
-   //float dummy;
-   unsigned short oppnum;
-   
-   setsighandler();
-   
-   // Debugging
-   Timer t;
-   unsigned long runtimes = 0;
-   
-   if (!(inpack = SDLNet_AllocPacket(5000)))
-   {
-      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
-      return -1;
-   }
-   
-   logout << "ServerListen " << gettid() << endl;
-   
-   while (running)
-   {
-      ++runtimes;
-      SDL_Delay(1); // Prevent CPU hogging
-      
-      /* While loop FTW!  (showing my noobness to networking, I was only allowing it to process one
-         packet per outer loop, which meant it did the entire ~20 ms particle/player update
-         process between every single packet it received.  Needless to say, this caused serious
-         ping problems.)
-      
-         Note: Having this blindly loop as long as there are packets could cause problems under
-         extremely heavy network loads.  It remains to be seen whether that's actually an issue
-         (or whether the server would be usable under such circumstances, loop or not)
-      */
-      while (SDLNet_UDP_Recv(servsock, inpack))
-      {
-         getdata = (char*)inpack->data;
-         stringstream get(getdata);
-         
-         string debug = getdata;
-         
-         get >> packettype;
-         get >> packetnum;
-         
-         // Packet from an address that is not connected.  Inform them that they need to connect.
-         if (packettype != "C" && packettype != "i" && validaddrs.find(SortableIPaddress(inpack->address)) == validaddrs.end())
-         {
-            Packet p(&inpack->address);
-            p << "C\n";
-            p << 0 << eol;
-            
-            servermutex->lock();
-            servqueue.push_back(p);
-            servermutex->unlock();
-            continue;
-         }
-         
-         for (size_t i = 1; i < serverplayers.size(); ++i)
-         {
-            if (serverplayers[i].addr.host == inpack->address.host &&
-               serverplayers[i].addr.port == inpack->address.port)
-            {
-               //logout << "Packet " << packettype << " " << packetnum << " from " << i << endl;
-               oppnum = i;
-               break;
-            }
-         }
-         
-         if (packettype == "U") // Update packet
-         {
-            servermutex->lock();
-            if (oppnum < serverplayers.size() && (packetnum > serverplayers[oppnum].recpacketnum))  // Ignore out of order packets
-            {
-               serverplayers[oppnum].recpacketnum = packetnum;
-               get >> oppx >> oppy >> oppz;
-               get >> serverplayers[oppnum].rotation;
-               get >> serverplayers[oppnum].pitch;
-               get >> serverplayers[oppnum].roll;
-               get >> serverplayers[oppnum].facing;//dummy; // We tell them their facing now Edit: or not
-               get >> serverplayers[oppnum].moveforward;
-               get >> serverplayers[oppnum].moveback;
-               get >> dummy;//serverplayers[oppnum].moveleft;
-               get >> dummy;//serverplayers[oppnum].moveright;
-               get >> serverplayers[oppnum].leftclick;
-               get >> serverplayers[oppnum].rightclick;
-               get >> serverplayers[oppnum].run;
-               get >> serverplayers[oppnum].unit;
-               get >> serverplayers[oppnum].currweapon;
-               serverplayers[oppnum].clientpos.x = oppx; // Keep track of where the player thinks they are
-               serverplayers[oppnum].clientpos.y = oppy;
-               serverplayers[oppnum].clientpos.z = oppz;
-               serverplayers[oppnum].lastupdate = SDL_GetTicks();
-               
-               //logout << oppx << "  " << oppy << "  " << oppz << endl << flush;
-               
-               // Freak out if we get a packet whose checksum isn't right
-               size_t value = 0;
-               for (size_t i = 0; i < debug.length(); ++i)
-               {
-                  if (debug[i] == '&')
-                     break;
-                  value += (char)(debug[i]);
-               }
-               string dummy;
-               get >> dummy;
-               size_t checksum;
-               get >> checksum;
-               if (checksum != value)
-               {
-                  logout << "Freaking out on packet " << packetnum << endl;
-                  logout << debug << endl;
-                  logout << checksum << "  " << value << endl;
-               }
-            }
-            servermutex->unlock();
-         }
-         else if (packettype == "C")
-         {
-            short unit;
-            string name, hostname;
-            int clientver;
-            get.ignore();
-            getline(get, hostname);
-            get >> unit;
-            get.ignore();
-            getline(get, name);
-            get >> clientver;
-            bool add = true;
-            int respondto = 0;
-            servermutex->lock();
-            
-            if (CountPlayers() < maxplayers && clientver == NetCode::Version())
-            {
-               for (size_t i = 1; i < serverplayers.size(); ++i)
-               {
-                  if (serverplayers[i].addr.host == inpack->address.host && serverplayers[i].hostname == hostname)
-                  {
-                     respondto = i;
-                     add = false;
-                  }
-               }
-               // Always do this, in case a player is reconnecting from a different port
-               validaddrs.insert(SortableIPaddress(inpack->address));
-               if (add)
-               {
-                  PlayerData temp(servermeshes);
-                  temp.addr = inpack->address;
-                  temp.hostname = hostname;
-                  temp.unit = unit;
-                  temp.acked.insert(packetnum);
-                  temp.salvage = console.GetInt("startsalvage");
-                  UpdatePlayerModel(temp, servermeshes, false);
-                  
-                  serverplayers.push_back(temp);
-                  respondto = serverplayers.size() - 1;
-                  
-                  // Choose a team for them
-                  vector<int> teamcount(2, 0);
-                  for (size_t i = 1; i < serverplayers.size(); ++i)
-                  {
-                     if (serverplayers[i].team != 0 && serverplayers[i].connected)
-                        ++teamcount[serverplayers[i].team - 1];
-                  }
-                  logout << "Team 1: " << teamcount[0] << " Team 2: " << teamcount[1] << endl;
-                  int newteam = teamcount[0] > teamcount[1] ? 2 : 1;
-                  serverplayers[respondto].team = newteam;
-               }
-               
-               if (!serverplayers[respondto].connected)
-               {
-                  serverplayers[respondto].lastupdate = SDL_GetTicks();
-                  serverplayers[respondto].recpacketnum = packetnum;
-                  validaddrs.erase(SortableIPaddress(serverplayers[respondto].addr));
-                  serverplayers[respondto].addr = inpack->address;
-                  validaddrs.insert(SortableIPaddress(serverplayers[respondto].addr));
-                  serverplayers[respondto].needsync = true;
-               }
-               serverplayers[respondto].connected = true;
-               serverplayers[respondto].name = name;
-
-               Packet fill;
-               fill << "c\n";
-               fill << packetnum << eol;
-               fill << respondto << eol;
-               fill << console.GetString("map") << eol;
-               fill << serverplayers[respondto].team << eol;
-               
-               fill.addr = serverplayers[respondto].addr;
-               servqueue.push_back(fill);
-
-               if (add)
-               {
-                  SendMessage(name + " connected"); // Has to happen after connection is completed
-               }
-            }
-            else
-            {
-               Packet respond(&inpack->address);
-               respond << "f\n";
-               respond << packetnum << eol;
-               servqueue.push_back(respond);
-            }
-            
-            servermutex->unlock();
-         }
-         else if (packettype == "p")
-         {
-            servermutex->lock();
-            serverplayers[oppnum].ping = SDL_GetTicks() - serverplayers[oppnum].pingtick;
-            servermutex->unlock();
-         }
-         else if (packettype == "i")
-         {
-            Packet response(&inpack->address);
-            response << "i\n";
-            response << 0 << eol; // Don't care about the packet number
-            servermutex->lock();
-            response << servername << eol;
-            response << console.GetString("map") << eol;
-            response << CountPlayers() << eol;
-            response << maxplayers << eol;
-            servqueue.push_back(response);
-            servermutex->unlock();
-         }
-         else if (packettype == "S")
-         {
-            bool accepted = false;
-            Vector3 spawnpointreq;
-            
-            logout << "Player " << oppnum << " is spawning" << endl;
-            servermutex->lock();
-            get >> serverplayers[oppnum].unit;
-            int weapid;
-            for (int i = 0; i < numbodyparts; ++i)
-            {
-               get >> weapid;
-               serverplayers[oppnum].weapons[i] = Weapon(weapid);
-            }
-            int itemtype;
-            get >> itemtype;
-            serverplayers[oppnum].item = Item(itemtype, servermeshes);
-            get >> spawnpointreq.x;
-            get >> spawnpointreq.y;
-            get >> spawnpointreq.z;
-            
-            vector<SpawnPointData> allspawns = servermap->SpawnPoints();
-            vector<SpawnPointData> itemspawns = GetSpawns(serveritems);
-            allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
-            for (size_t i = 0; i < allspawns.size(); ++i)
-            {
-               if (spawnpointreq.distance(allspawns[i].position) < 1.f && allspawns[i].team == serverplayers[oppnum].team)
-               {
-                  accepted = true;
-                  break;
-               }
-            }
-            
-            // Make sure we don't spawn some place invalid
-            vector<Mesh*> check;
-            check = serverkdtree.getmeshes(spawnpointreq, spawnpointreq, 150.f);
-            AppendDynamicMeshes(check, servermeshes);
-            Vector3 checkvec;
-            bool found = false;
-            spawnpointreq.y += 50.f;
-            float maxsize = 100.f;
-
-            if (coldet.CheckSphereHit(spawnpointreq, spawnpointreq, 30.f, check, servermap))
-            {
-               for (float ycheck = spawnpointreq.y; ycheck <= 100000.f; ycheck += 100.f)
-               {
-                  for (float xcheck = spawnpointreq.x - maxsize; xcheck <= spawnpointreq.x + maxsize + 1.f; xcheck += maxsize)
-                  {
-                     for (float zcheck = spawnpointreq.z - maxsize; zcheck <= spawnpointreq.z + maxsize + 1.f; zcheck += maxsize)
-                     {
-                        checkvec = Vector3(xcheck, ycheck, zcheck);
-                        if (!coldet.CheckSphereHit(checkvec, checkvec, 30.f, check, servermap) && GetTerrainHeight(xcheck, zcheck) < ycheck - 1.f)
-                        {
-                           spawnpointreq = checkvec;
-                           found = true;
-                           break;
-                        }
-                     }
-                     if (found)
-                        break;
-                  }
-                  if (found)
-                     break;
-               }
-            }
-            
-            if (serverplayers[oppnum].spawntimer)
-               accepted = false;
-            
-            // Weight of weapons and items
-            int maxweight = units[serverplayers[oppnum].unit].weight;
-            int totalweight = 0;
-            for (size_t i = 0; i < numbodyparts; ++i)
-               totalweight += serverplayers[oppnum].weapons[i].Weight();
-            totalweight += serverplayers[oppnum].item.Weight();
-            
-            if (totalweight > maxweight || CalculatePlayerWeight(serverplayers[oppnum]) > serverplayers[oppnum].salvage)
-               accepted = false;
-            
-            if (accepted)
-            {
-               if (!serverplayers[oppnum].spawned)
-               {
-                  if (serverplayers[oppnum].team != 0)
-                  {
-                     serverplayers[oppnum].salvage -= CalculatePlayerWeight(serverplayers[oppnum]);
-                     serverplayers[oppnum].spawned = true;
-                  }
-                  serverplayers[oppnum].pos = spawnpointreq;
-                  serverplayers[oppnum].lastmovetick = 0;
-                  serverplayers[oppnum].Reset();
-                  for (int i = 0; i < numbodyparts; ++i)
-                  {
-                     serverplayers[oppnum].hp[i] = units[serverplayers[oppnum].unit].maxhp[i];
-                     serverplayers[oppnum].weapons[i].ammo = int(float(serverplayers[oppnum].weapons[i].ammo) * serverplayers[oppnum].item.AmmoMult());
-                  }
-                  UpdatePlayerModel(serverplayers[oppnum], servermeshes, false);
-                  for (size_t i = 0; i < numbodyparts; ++i)
-                  {
-                     if (serverplayers[oppnum].mesh[i] != servermeshes.end())
-                        serverplayers[oppnum].mesh[i]->Update();
-                  }
-               }
-            }
-            
-            Packet response(&inpack->address);
-            response << "S\n";
-            response << 0 << eol;
-            if (accepted)
-               response << 1 << eol;
-            else response << 0 << eol;
-            response << packetnum << eol;
-            response << spawnpointreq.x << eol << spawnpointreq.y << eol << spawnpointreq.z << eol;
-            
-            servqueue.push_back(response);
-            servermutex->unlock();
-         }
-         else if (packettype == "T")  // Chat packet
-         {
-            string line;
-            bool team;
-            get >> team;
-            get.ignore(); // \n is still in buffer
-            getline(get, line);
-            servermutex->lock();
-            if (serverplayers[oppnum].acked.find(packetnum) == serverplayers[oppnum].acked.end())
-            {
-               serverplayers[oppnum].acked.insert(packetnum);
-               
-               // Propogate that chat text to all other connected players
-               for (size_t i = 1; i < serverplayers.size(); ++i)
-               {
-                  if (serverplayers[i].connected && i != oppnum && (!team || serverplayers[i].team == serverplayers[oppnum].team))
-                  {
-                     unsigned long packid = servsendpacketnum;
-                     Packet temp;
-                     temp.ack = packid;
-                     temp << "T\n";
-                     temp << packid << eol;
-                     temp << oppnum << eol;
-                     if (team)
-                        temp << "[Team]";
-                     temp << line << eol;
-                     temp.addr = serverplayers[i].addr;
-                     servqueue.push_back(temp);
-                  }
-               }
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "A")  // Ack
-         {
-            unsigned long acknum;
-            get >> acknum;
-            servermutex->lock();
-            for (list<Packet>::iterator i = servqueue.begin(); i != servqueue.end(); ++i)
-            {
-               if (i->ack == acknum)
-               {
-                  servqueue.erase(i);
-                  break;
-               }
-            }
-            servermutex->unlock();
-         }
-         else if (packettype == "M")  // Team switch request
-         {
-            // For the moment just ack it, we probably want to ensure even teams at some point
-            short newteam;
-            get >> newteam;
-            
-            Packet response(&inpack->address);
-            response << "M\n";
-            response << servsendpacketnum << eol;
-            response << packetnum << eol;
-            response << 1 << eol;
-            response << newteam << eol;
-            servermutex->lock();
-            serverplayers[oppnum].team = newteam;
-            for (size_t i = 0; i < servermap->SpawnPoints().size(); ++i)
-            {
-               if ((servermap->SpawnPoints(i).team == serverplayers[oppnum].team) || serverplayers[oppnum].team == 0)
-               {
-                  response << "1\n"; // Indicate that there are more spawn points to be read
-                  response << servermap->SpawnPoints(i).position.x << eol;
-                  response << servermap->SpawnPoints(i).position.y << eol;
-                  response << servermap->SpawnPoints(i).position.z << eol;
-                  response << servermap->SpawnPoints(i).name << eol;
-               }
-            }
-            response << 0 << eol; // No more spawn points
-            
-            servqueue.push_back(response);
-            servermutex->unlock();
-         }
-         else if (packettype == "I") // Player wants to use item
-         {
-            servermutex->lock();
-            if (serverplayers[oppnum].item.usesleft > 0)
-            {
-               AddItem(serverplayers[oppnum].item, oppnum);
-               serverplayers[oppnum].item.usesleft--;
-               if (serverplayers[oppnum].item.Type() == Item::SpawnPoint)
-                  serverplayers[oppnum].item = Item(Item::NoItem, servermeshes);
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "K")
-         {
-            servermutex->lock();
-            if (serverplayers[oppnum].spawned)
-            {
-               serverplayers[oppnum].spawned = false;
-               serverplayers[oppnum].Kill();
-               if (serverplayers[oppnum].salvage < 100)
-                  serverplayers[oppnum].salvage = 100;
-               SendKill(oppnum, oppnum);
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "Y") // Client is ready to sync
-         {
-            servermutex->lock();
-            if (serverplayers[oppnum].needsync)
-            {
-               logout << "Syncing with " << oppnum << endl;
-               SendSyncPacket(serverplayers[oppnum], packetnum);
-               for (size_t i = 0; i < serveritems.size(); ++i)
-                  SendItem(serveritems[i], oppnum);
-               serverplayers[oppnum].needsync = false;
-            }
-            servermutex->unlock();
-         }
-         else if (packettype == "P") // Powerdown - be careful, we send this type as a ping packet, but don't receive it
-         {
-            servermutex->lock();
-            // Note: Theoretically this could cause someone to accidentally power down when they don't
-            // want to, but if their packets are delayed 5+ seconds then the game is probably not
-            // playable anyway.  I suppose a single packet could for some reason get delayed, but
-            // we'll see if that's actually a realistic problem.
-            if (!serverplayers[oppnum].powerdowntime)
-            {
-               serverplayers[oppnum].powerdowntime = 5000;
-               for (int i = 0; i < numbodyparts; ++i)
-               {
-                  if (serverplayers[oppnum].hp[i] > 0)
-                  {
-                     int maxhp = units[serverplayers[oppnum].unit].maxhp[i];
-                     serverplayers[oppnum].hp[i] += maxhp * 3 / 4;
-                     if (serverplayers[oppnum].hp[i] > maxhp)
-                        serverplayers[oppnum].hp[i] = maxhp;
-                  }
-               }
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "c") // Console command
-         {
-            servermutex->lock();
-            if (serverplayers[oppnum].commandids.find(packetnum) == serverplayers[oppnum].commandids.end() && serverplayers[oppnum].admin)
-            {
-               serverplayers[oppnum].commandids.insert(packetnum);
-               servermutex->unlock(); // Don't hold two mutexes at a time
-               string command;
-               get.ignore();
-               getline(get, command);
-               console.Parse(command, false);
-               servermutex->lock();
-               for (size_t i = 0; i < serverplayers.size(); ++i)
-                  SendSyncPacket(serverplayers[i], 0);
-               
-            }
-            else if (!serverplayers[oppnum].admin)
-            {
-               logout << "Command received from non-admin player" << endl;
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "f") // Fire request
-         {
-            servermutex->lock();
-            if (serverplayers[oppnum].fireids.find(packetnum) == serverplayers[oppnum].fireids.end())
-            {
-               serverplayers[oppnum].fireids.insert(packetnum);
-               serverplayers[oppnum].firerequests++;
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "t") // Authenticate admin
-         {
-            string password;
-            get >> password;
-            servermutex->lock();
-            if (password == console.GetString("serverpwd"))
-            {
-               if (!serverplayers[oppnum].admin)
-                  logout << "Player " << oppnum << " authenticated from " << AddressToDD(inpack->address.host) << endl;
-               serverplayers[oppnum].admin = true;
-            }
-            else
-            {
-               logout << "Password incorrect" << endl;
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "L") // Loadout request
-         {
-            servermutex->lock();
-            vector<SpawnPointData> allspawns = servermap->SpawnPoints();
-            vector<SpawnPointData> itemspawns = GetSpawns(items);
-            allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
-            if (serverplayers[oppnum].spawned && NearSpawn(serverplayers[oppnum], allspawns))
-            {
-               serverplayers[oppnum].salvage += CalculatePlayerWeight(serverplayers[oppnum]);
-               serverplayers[oppnum].Kill();
-               serverplayers[oppnum].spawntimer = console.GetInt("respawntime");
-            }
-            servermutex->unlock();
-            Ack(packetnum, inpack);
-         }
-         else if (packettype == "k") // Keepalive
-         {
-            servermutex->lock();
-            serverplayers[oppnum].lastupdate = SDL_GetTicks();
-            servermutex->unlock();
-         }
-      }
-      //t.stop();
-   }
-   
-   logout << "Server Listen " << runtimes << endl;
-   
-   // Clean up
-   SDLNet_FreePacket(inpack);
-   return 0;
-}
-
-
-int ServerSend(void* dummy)  // Thread for sending updates
-{
-   Uint32 lastnettick = SDL_GetTicks();
-   Uint32 currnettick = 0;
-   short int pingtick = 0;
-   size_t sentbytes = 0, servbps;
-   UDPsocket broadcastsock;
-   Timer frametimer, sentbytestimer;
-   frametimer.start();
-   sentbytestimer.start();
-   
-   setsighandler();
-   
-   // Debugging
-   Timer t;
-   unsigned long runtimes = 0;
-   
-   if (!(servoutpack = SDLNet_AllocPacket(5000)))  // 5000 is arbitrary at this point
-   {
-      logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
-      return -1;
-   }
-   
-   if (!(broadcastsock = SDLNet_UDP_Open(0)))
-   {
-      logout << "Broadcast SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
-      return -1;
-   }
-   
-   logout << "ServerSend " << gettid() << endl;
-   
-   while (running)
-   {
-      ++runtimes;
-      t.start();
-      SDL_Delay(1);  // Keep the loop from eating too much CPU
-      frametimer.start();
-      
-      currnettick = SDL_GetTicks();
-      if (currnettick - lastnettick >= 1000 / servertickrate)
-      {
-         lastnettick = currnettick;
-         // Send out an update packet
-         Packet temp;
-   
-         temp << "U" << eol;
-         temp << servsendpacketnum << eol;
-         servermutex->lock();
-         for (size_t i = 1; i < serverplayers.size(); ++i)
-         {
-            temp << i << eol;
-            temp << serverplayers[i].spawned << eol;
-            if (serverplayers[i].spawned)
-            {
-               temp << serverplayers[i].pos.x << eol;
-               temp << serverplayers[i].pos.y << eol;
-               temp << serverplayers[i].pos.z << eol;
-               temp << serverplayers[i].rotation << eol;
-               temp << serverplayers[i].pitch << eol;
-               temp << serverplayers[i].roll << eol;
-               temp << serverplayers[i].facing << eol;
-               temp << serverplayers[i].temperature << eol;
-               temp << serverplayers[i].moveforward << eol;
-               temp << serverplayers[i].moveback << eol;
-               temp << serverplayers[i].moveleft << eol;
-               temp << serverplayers[i].moveright << eol;
-               temp << serverplayers[i].speed << eol;
-               temp << serverplayers[i].powerdowntime << eol; // This may not belong here
-            }
-         }
-         temp << 0 << eol; // Indicates end of player data
-         
-         servermutex->unlock();
-         
-         // Quick and dirty checksumming
-         unsigned long value = 0;
-         for (size_t i = 0; i < temp.data.length(); ++i)
-         {
-            value += (char)(temp.data[i]);
-         }
-         temp << "&\n";
-         temp << value << eol;
-         
-         // Add updates to send queue
-         if (temp.data.length() < 5000)
-         {
-            servermutex->lock();
-            for (size_t i = 1; i < serverplayers.size(); ++i)
-            {
-               if (serverplayers[i].connected)
-               {
-                  temp.addr = serverplayers[i].addr;
-                  servqueue.push_back(temp);
-               }
-            }
-            servermutex->unlock();
-         }
-         else logout << "Error: data too long\n" << std::flush;
-         
-         // Send pings to monitor network performance
-         // Also use this opportunity to send occasional updates
-         pingtick++;
-         if (pingtick > 30)
-         {
-            Packet pingpack;
-            
-            pingpack << "P\n";
-            pingpack << servsendpacketnum << eol;
-            servermutex->lock();
-            for (size_t i = 1; i < serverplayers.size(); ++i)
-            {
-               if (serverplayers[i].connected)
-               {
-                  pingpack.addr = serverplayers[i].addr;
-                  servqueue.push_back(pingpack);
-                  serverplayers[i].pingtick = SDL_GetTicks();
-               }
-            }
-            pingtick = 0;
-            
-            // Occasional update packet
-            Packet occup;
-            
-            occup << "u\n";
-            occup << servsendpacketnum << eol;
-            occup << servfps << eol;
-            occup << servbps << eol;
-            for (size_t i = 1; i < serverplayers.size(); ++i)
-            {
-               if (serverplayers[i].connected)
-               {
-                  occup << i << eol;
-                  occup << serverplayers[i].team << eol;
-                  occup << serverplayers[i].unit << eol;
-                  occup << serverplayers[i].kills << eol;
-                  occup << serverplayers[i].deaths << eol;
-                  for (int j = 0; j < numbodyparts; ++j)
-                     occup << serverplayers[i].hp[j] << eol;
-                  occup << serverplayers[i].ping << eol;
-                  occup << serverplayers[i].spawned << eol;
-                  occup << serverplayers[i].connected << eol;
-                  occup << serverplayers[i].name << eol;
-                  occup << serverplayers[i].salvage << eol;
-                  occup << serverplayers[i].spawntimer << eol;
-               }
-            }
-            occup << 0 << eol;
-            for (size_t i = 1; i < serverplayers.size(); ++i)
-            {
-               if (serverplayers[i].connected)
-               {
-                  occup.addr = serverplayers[i].addr;
-                  servqueue.push_back(occup);
-               }
-            }
-            
-            // Broadcast announcement packets to the subnet for LAN servers
-            IPaddress bc;
-            bc.host = INADDR_BROADCAST;
-            SDLNet_Write16(12011, &(bc.port));
-            Packet bcpack(&bc);
-            bcpack.sendinterval = 0;
-            bcpack << "a\n";
-            bcpack << servsendpacketnum << eol;
-            bcpack << console.GetString("serverport") << eol;
-            bcpack.Send(servoutpack, broadcastsock);
-            
-            // Resend to just master server
-            SDLNet_ResolveHost(&bcpack.addr, console.GetString("master").c_str(), 12011);
-            bcpack.Send(servoutpack, servsock);
-            
-            servermutex->unlock();
-         }
-      }
-      
-      servermutex->lock();
-      list<Packet>::iterator i = servqueue.begin();
-      while (i != servqueue.end())
-      {
-         if (i->sendtick <= currnettick)
-         {
-            sentbytes += i->Send(servoutpack, servsock);
-            if (!i->ack || i->attempts > 5000) // Non-ack packets get sent once and then are on their own
-            {
-               i = servqueue.erase(i);
-               continue;
-            }
-         }
-         ++i;
-      }
-      
-      if (sentbytestimer.elapsed() > 1000)
-      {
-         servbps = (size_t)((float)sentbytes / (float)sentbytestimer.elapsed() * 1000.f);
-         sentbytes = 0;
-         sentbytestimer.start();
-      }
-      servermutex->unlock();
-      //t.stop();
-   }
-   logout << "Server Send " << runtimes << endl;
-   return 0;
 }
 
 
@@ -1083,7 +256,7 @@ void ServerLoadMap(const string& mn)
    serverplayers.clear();
    PlayerData local(servermeshes); // Dummy placeholder for the local player
    serverplayers.push_back(local);
-   validaddrs.clear();
+   servernetcode->ClearValidAddrs();
    servparticles.clear();
 
    // Unfortunately SDL_Image is not thread safe, so we have to signal the main thread to do this
@@ -1138,7 +311,7 @@ void ServerLoadMap(const string& mn)
 // No need to grab the servermutex in this function because it is only called from code that already has the mutex
 void HandleHit(Particle& p, Mesh* curr, const Vector3& hitpos)
 {
-   SendHit(hitpos, p);
+   servernetcode->SendHit(hitpos, p);
    
    if (!curr)
       return;
@@ -1195,7 +368,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
             {
                logout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage * serverplayers[i].item.ArmorMult());
-               SendDamage(i);
+               servernetcode->SendDamage(i);
                if (serverplayers[i].hp[part] <= 0)
                {
                   if (part != LArm && part != RArm)
@@ -1204,7 +377,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
                   {
                      servermeshes.erase(serverplayers[i].mesh[part]);
                      serverplayers[i].mesh[part] = servermeshes.end();
-                     SendRemove(i, part);
+                     servernetcode->SendRemove(i, part);
                   }
                }
             }
@@ -1354,7 +527,7 @@ void ServerUpdatePlayer(int i)
       
       servparticles.push_back(part);
       
-      SendShot(part);
+      servernetcode->SendShot(part);
    }
 }
 
@@ -1476,29 +649,10 @@ void AddItem(const Item& it, int oppnum)
       {
          if (serverplayers[i].connected)
          {
-            SendItem(curritem, i);
+            servernetcode->SendItem(curritem, i);
          }
       }
    }
-}
-
-
-// Grab the servermutex before calling
-void SendItem(const Item& curritem, int oppnum)
-{
-   Packet p(&serverplayers[oppnum].addr);
-   p.ack = servsendpacketnum;
-   p << "I\n";
-   p << p.ack << eol;
-   p << curritem.Type() << eol;
-   p << curritem.id << eol;
-   Vector3 mpos = curritem.mesh->GetPosition();
-   p << mpos.x << eol;
-   p << mpos.y << eol;
-   p << mpos.z << eol;
-   p << curritem.team << eol;
-      
-   servqueue.push_back(p);
 }
 
 
@@ -1522,27 +676,6 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
 }
 
 
-// Note: Must grab mutex first
-void SendKill(size_t killed, size_t killer)
-{
-   for (size_t i = 1; i < serverplayers.size(); ++i)
-   {
-      if (serverplayers[i].connected)
-      {
-         Packet deadpacket;
-         deadpacket.ack = servsendpacketnum;
-         deadpacket.addr = serverplayers[i].addr;
-                  
-         deadpacket << "d\n";
-         deadpacket << deadpacket.ack << eol; // This line is kind of strange looking, but it's okay
-         deadpacket << killed << eol;
-         deadpacket << killer << eol;
-         servqueue.push_back(deadpacket);
-      }
-   }
-}
-
-
 // At this time just ends the game because only two teams are supported.  Will more be in the future?  Who knows.
 // Must have mutex before calling this function
 void RemoveTeam(int num)
@@ -1556,119 +689,10 @@ void RemoveTeam(int num)
       {
          if (serverplayers[i].connected)
          {
-            SendGameOver(serverplayers[i], num == 1 ? 2 : 1);
+            servernetcode->SendGameOver(serverplayers[i], num == 1 ? 2 : 1);
          }
       }
    }
-}
-
-
-void SendToAll(Packet p, const size_t exclude)
-{
-   for (size_t i = 1; i < serverplayers.size(); ++i)
-   {
-      if (serverplayers[i].connected && i != exclude)
-      {
-         p.addr = serverplayers[i].addr;
-         servqueue.push_back(p);
-      }
-   }
-}
-
-
-void SendSyncPacket(PlayerData& p, unsigned long packetnum)
-{
-   Packet pack(&p.addr);
-   pack.ack = servsendpacketnum;
-   pack << "Y\n";
-   pack << pack.ack << eol;
-   pack << packetnum << eol;
-   pack << "set movestep " << console.GetInt("movestep") << eol;
-   pack << "set ghost " << console.GetBool("ghost") << eol;
-   pack << "set fly " << console.GetBool("fly") << eol;
-   pack << "set tickrate " << console.GetInt("tickrate") << eol;
-   pack << "endofcommands\n";
-   
-   servqueue.push_back(pack);
-}
-
-
-void SendGameOver(PlayerData& p, const int winner)
-{
-   Packet pack(&p.addr);
-   pack.ack = servsendpacketnum;
-   pack << "O\n";
-   pack << pack.ack << eol;
-   pack << winner << eol;
-   
-   servqueue.push_back(pack);
-}
-
-
-void SendShot(const Particle& p)
-{
-   Packet pack;
-   pack.ack = servsendpacketnum;
-   pack << "s\n";
-   pack << pack.ack << eol;
-   pack << p.id << eol;
-   pack << p.weapid << eol;
-   pack << p.playernum << eol;
-
-   SendToAll(pack, p.playernum);
-}
-
-
-void SendHit(const Vector3& hitpos, const Particle& p)
-{
-   unsigned long hid = nexthitid;
-   Packet pack;
-   pack.ack = servsendpacketnum;
-   pack << "h\n";
-   pack << pack.ack << eol;
-   pack << hid << eol;
-   pack << hitpos.x << eol << hitpos.y << eol << hitpos.z << eol;
-   pack << p.weapid << eol;
-
-   SendToAll(pack);
-}
-
-
-void SendDamage(const int i)
-{
-   Packet pack(&serverplayers[i].addr);
-   pack.ack = servsendpacketnum;
-   pack << "D\n";
-   pack << pack.ack << eol;
-   
-   servqueue.push_back(pack);
-}
-
-
-void SendRemove(const int i, const int part)
-{
-   Packet pack;
-   pack.ack = servsendpacketnum;
-   pack << "r\n";
-   pack << pack.ack << eol;
-   pack << i << eol;
-   pack << part << eol;
-
-   SendToAll(pack);
-}
-
-
-void SendMessage(const string& message)
-{
-   Packet pack;
-   pack.ack = servsendpacketnum;
-   pack << "m\n";
-   pack << pack.ack << eol;
-   pack << message << eol;
-
-   logout << message << endl;
-
-   SendToAll(pack);
 }
 
 
@@ -1686,24 +710,12 @@ void LoadMapList()
 }
 
 
-void Ack(unsigned long acknum, UDPpacket* inpack)
-{
-   Packet response(&inpack->address);
-   response << "A\n";
-   response << 0 << eol;
-   response << acknum << eol;
-   servermutex->lock();
-   servqueue.push_back(response);
-   servermutex->unlock();
-}
-
-
 void KillPlayer(const int i, const int killer)
 {
    serverplayers[i].deaths++;
    serverplayers[i].Kill();
    serverplayers[i].spawntimer = console.GetInt("respawntime");
-   SendKill(i, killer);
+   servernetcode->SendKill(i, killer);
    SplashDamage(serverplayers[i].pos, 50.f, 50.f, 0, true);
 }
 

@@ -52,7 +52,7 @@ set(COMMON_SOURCES
 	renderdefs.cpp globals.cpp PlayerData.cpp Log.cpp logout.cpp
 	NTreeReader.cpp Material.cpp ResourceManager.cpp Mesh.cpp Triangle.cpp
 	Quad.cpp MeshNode.cpp ServerState.cpp MeshCache.cpp tsint.cpp Bot.cpp
-	Item.cpp util.cpp Mutex.cpp Map.cpp NetCode.cpp
+	Item.cpp util.cpp Mutex.cpp Map.cpp NetCode.cpp ServerNetCode.cpp
 	)
 
 set(CLIENT_SOURCES

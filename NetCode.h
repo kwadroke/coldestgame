@@ -3,6 +3,7 @@
 
 #include "Packet.h"
 #include "IDGen.h"
+#include "Timer.h"
 #include <SDL_net.h>
 #include <list>
 
@@ -40,14 +41,15 @@ class NetCode
       IDGen sendpacketnum;
       bool error;
 
-      SDL_Thread* thread;
-
       stringstream get;
       string getdata;
       string packettype;
       unsigned long packetnum;
 
       const static int version;
+
+      size_t sendbps;
+      Timer sentbytestimer;
 
    private:
       list<Packet> sendqueue;

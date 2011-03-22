@@ -31,7 +31,8 @@ using std::stringstream;
 class Packet
 {
    public:
-      Packet(IPaddress* address = NULL, string s = "");
+      Packet(IPaddress* address = NULL);
+      Packet(IPaddress*, const string, const unsigned long num = 0, const bool needack = false);
       template <typename T>
       Packet& operator<<(const T&);
       
