@@ -53,7 +53,6 @@ ServerNetCodePtr servernetcode;
 vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 vector<Item> serveritems;
-MutexPtr servermutex;
 tsint serverloadmap;
 string servermapname;
 IDGen servsendpacketnum;
@@ -149,7 +148,6 @@ int Server(void* dummy)
       console.Parse("set map riverside");
    LoadMapList();
    servernetcode = ServerNetCodePtr(new ServerNetCode());
-   servermutex = MutexPtr(new Mutex());
    ServerLoadMap(console.GetString("map"));
    serverinput = SDL_CreateThread(ServerInput, NULL);
    
@@ -161,7 +159,6 @@ int Server(void* dummy)
 }
 
 
-// Make sure to unlock the mutex in between long operations so the other threads don't end up waiting on us
 void ServerLoop()
 {
    setsighandler();
@@ -197,7 +194,6 @@ void ServerLoop()
          ServerLoadMap(maplist[choosemap]);
       }
 
-      servermutex->lock();
       Uint32 timeout = console.GetInt("timeout");
       for (size_t i = 1; i < serverplayers.size(); ++i)
       {
@@ -213,24 +209,18 @@ void ServerLoop()
             ServerUpdatePlayer(i);
          }
       }
-      servermutex->unlock();
          
       // Update server meshes
-      servermutex->lock();
       for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
       {
          i->Update();
       }
-      servermutex->unlock();
       
-      servermutex->lock();
       // Save state so we can recall it for collision detection
       SaveState();
-      servermutex->unlock();
          
       // Update particles
       int updinterval = 100;
-      servermutex->lock();
       UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
          
       // Update server FPS
@@ -242,8 +232,6 @@ void ServerLoop()
          framecount = 0;
          lastfpsupdate = currtick;
       }
-
-      servermutex->unlock();
    }
 }
 
@@ -304,7 +292,6 @@ void ServerLoadMap(const string& mn)
    size_t numbots = console.GetInt("bots");
    for (size_t i = 0; i < numbots; ++i)
       bots.push_back(BotPtr(new Bot()));
-   servermutex->unlock();
 }
 
 
