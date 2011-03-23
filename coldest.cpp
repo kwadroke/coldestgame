@@ -2407,8 +2407,13 @@ void UpdatePlayer()
       
    int weaponslot = weaponslots[localplayer.currweapon];
    Weapon& currplayerweapon = localplayer.weapons[weaponslot];
+   /* We need to add 1000 / netcode->serverfps / 2 to our reload time because it will, on average, take half a server frame for it to get to
+      our fire request, so we'll always be that much ahead with our fire requests and that causes us to see things well before
+      they actually happen on the server.
+      */
+   int reloadadjust = 1000 / netcode->serverfps / 2;
    if (localplayer.leftclick && 
-       (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
+       (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime() + reloadadjust) &&
        (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
    {
 #ifndef DEDICATED

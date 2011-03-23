@@ -58,7 +58,7 @@ class PlayerData
       set<unsigned long> acked;
       set<unsigned long> commandids;
       set<unsigned long> fireids;
-      int firerequests;
+      list<unsigned long> firerequests;
       vector<Weapon> weapons;
       Item item;
       Uint32 lastupdate;

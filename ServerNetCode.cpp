@@ -540,7 +540,7 @@ void ServerNetCode::HandleFire()
    if (serverplayers[playernum].fireids.find(packetnum) == serverplayers[playernum].fireids.end())
    {
       serverplayers[playernum].fireids.insert(packetnum);
-      serverplayers[playernum].firerequests++;
+      serverplayers[playernum].firerequests.push_back(packetnum);
    }
    Ack(packetnum, packet);
 }

@@ -295,7 +295,6 @@ void ServerLoadMap(const string& mn)
 }
 
 
-// No need to grab the servermutex in this function because it is only called from code that already has the mutex
 void HandleHit(Particle& p, Mesh* curr, const Vector3& hitpos)
 {
    servernetcode->SendHit(hitpos, p);
@@ -488,11 +487,10 @@ void ServerUpdatePlayer(int i)
    // Shots fired!
    int weaponslot = weaponslots[serverplayers[i].currweapon];
    Weapon& currplayerweapon = serverplayers[i].weapons[weaponslot];
-   while (serverplayers[i].firerequests && 
+   while (serverplayers[i].firerequests.size() && 
        (SDL_GetTicks() - serverplayers[i].lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0) && serverplayers[i].hp[weaponslot] > 0)
    {
-      serverplayers[i].firerequests--;
       /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
       slide the player around as much because this way they see their shots going exactly where
       they expect, even if the positions don't match exactly (and they rarely will:-).*/
@@ -513,6 +511,8 @@ void ServerUpdatePlayer(int i)
          currplayerweapon.ammo--;
       
       servparticles.push_back(part);
+
+      serverplayers[i].firerequests.pop_front();
       
       servernetcode->SendShot(part);
    }
