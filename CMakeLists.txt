@@ -72,7 +72,7 @@ set(MASTER_SERVER_SOURCES
 # Libraries
 
 # Boost
-find_package(Boost 1.36 REQUIRED COMPONENTS filesystem)
+find_package(Boost 1.35 REQUIRED COMPONENTS filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 list(APPEND LIBS ${Boost_LIBRARIES})
 list(APPEND CLIENTLIBS ${Boost_LIBRARIES})
