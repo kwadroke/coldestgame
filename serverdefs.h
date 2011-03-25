@@ -46,6 +46,7 @@ void AddItem(const Item&, int);
 extern Meshlist servermeshes;
 extern MapPtr servermap;
 extern tsint serverloadmap;
+extern tsint consoleloadmap;
 extern string servermapname;
 extern ObjectKDTree serverkdtree;
 extern vector<PlayerData> serverplayers;

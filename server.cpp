@@ -54,6 +54,7 @@ vector<PlayerData> serverplayers;
 list<Particle> servparticles;
 vector<Item> serveritems;
 tsint serverloadmap;
+tsint consoleloadmap;
 string servermapname;
 IDGen servsendpacketnum;
 IDGen nextservparticleid;
@@ -194,6 +195,11 @@ void ServerLoop()
          ServerLoadMap(maplist[choosemap]);
       }
 
+      if (consoleloadmap)
+      {
+         ServerLoadMap(servermapname);
+      }
+
       Uint32 timeout = console.GetInt("timeout");
       for (size_t i = 1; i < serverplayers.size(); ++i)
       {
@@ -287,6 +293,8 @@ void ServerLoadMap(const string& mn)
    serverkdtree.refine(0);
    
    logout << "Server map loaded" << endl;
+
+   consoleloadmap = 0;
    
    bots.clear();
    size_t numbots = console.GetInt("bots");

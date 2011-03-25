@@ -2590,6 +2590,8 @@ void TakeScreenshot()
 
 void LoadMap(const string& map)
 {
+   if (!initialized)
+      return;
 #ifndef DEDICATED
    ShowGUI(loadprogress);
    Repaint();

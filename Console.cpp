@@ -316,14 +316,13 @@ void Console::Action(const string& action)
       WriteToConsole(string("set <variable name> <value>"));
       WriteToConsole(string("help"));
    }
-   else if (action == "map")
+   else if (action == "map action")
    {
-#ifndef DEDICATED
-      LoadMap(GetString("map"));
-#endif
       if (server)
-         ServerLoadMap(GetString("map"));
-      
+      {
+         servermapname = GetString("map");
+         consoleloadmap = 1;
+      }
    }
    else if (action == "connect")
    {
