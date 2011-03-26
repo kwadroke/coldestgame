@@ -59,6 +59,7 @@ void Replayer::SetActive(const string& filename, const bool a)
       first = true;
       servplayernum = 0;
       LoadMap(nextmap);
+      gui[loadoutmenu]->visible = false;
    }
    else if (!a)
    {

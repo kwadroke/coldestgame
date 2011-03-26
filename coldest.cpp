@@ -2382,7 +2382,9 @@ void UpdatePlayer()
 {
    // Update player position
    if (player[0].spectate && player[0].spawned)
+   {
       UpdateSpectatePosition();
+   }
    else
    {
       Move(player[0], meshes, kdtree, currmap);
@@ -2403,6 +2405,10 @@ void UpdatePlayer()
    if (!player[0].spectate)
    {
       UpdatePlayerModel(player[0], meshes);
+   }
+   else
+   {
+      return; // We can't do the serverfps bit below while spectating because serverfps will be 0
    }
       
    int weaponslot = weaponslots[localplayer.currweapon];
