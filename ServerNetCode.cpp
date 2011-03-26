@@ -242,7 +242,7 @@ void ServerNetCode::ReadConnect(stringstream& get)
       
       Packet fill(&serverplayers[respondto].addr, "c", packetnum);
       fill << respondto << eol;
-      fill << console.GetString("map") << eol;
+      fill << servermap->MapName() << eol;
       fill << serverplayers[respondto].team << eol;
       SendPacket(fill);
       
