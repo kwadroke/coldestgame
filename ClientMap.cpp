@@ -39,13 +39,13 @@ void ClientMap::Finish()
 
 void ClientMap::InitGui(const string& mn)
 {
-   ShowGUI(loadprogress);
    progress = (ProgressBar*)gui[loadprogress]->GetWidget("loadprogressbar");
    progtext = gui[loadprogress]->GetWidget("progresstext");
    progname = gui[loadprogress]->GetWidget("loadname");
    progname->text = "Loading " + mn;
    progress->SetRange(0, 7);
    progress->value = 0;
+   ShowGUI(loadprogress);
 }
 
 

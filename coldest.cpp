@@ -2599,7 +2599,6 @@ void LoadMap(const string& map)
    if (!initialized)
       return;
 #ifndef DEDICATED
-   ShowGUI(loadprogress);
    Repaint();
 #endif
    currmap = MapPtr(new ClientMap(map));
