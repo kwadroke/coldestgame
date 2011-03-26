@@ -23,6 +23,22 @@ else
    LIB=lib
 fi
 
+
+# This one is not in the ldd output because it is dynamically opened by libSDL_image, so we have to
+# hardcode it.  I don't anticipate it changing much though so that should be okay.
+cp /usr/$LIB/libpng.so.3 ./lib >> $outfile 2>&1
+echo "/usr/$LIB/libpng.so.3" >> $outfile 2>&1
+
+echo "Building"
+git pull >> $outfile 2>&1
+REVISION=`git log --pretty=oneline | wc -l`
+cd build
+make clean >> $outfile 2>&1
+make -j3 >> $outfile 2>&1
+cd ..
+cp build/coldest . >> $outfile 2>&1
+
+# This needs to happen after the build or the binary isn't going to be there/up to date.
 echo "Copying libraries"
 mkdir lib >> $outfile 2>&1
 rm lib/* >> $outfile 2>&1
@@ -33,17 +49,6 @@ do
    echo $REALFILE >> $outfile 2>&1
 done
 
-# This one is not in the ldd output because it is dynamically opened by libSDL_image, so we have to
-# hardcode it.  I don't anticipate it changing much though so that should be okay.
-cp /usr/$LIB/libpng.so.3 ./lib >> $outfile 2>&1
-echo "/usr/$LIB/libpng.so.3" >> $outfile 2>&1
-
-echo "Building"
-svn update >> $outfile 2>&1
-REVISION=`svn info | grep Revision | cut -f 2 -d \ `
-make depend >> $outfile 2>&1
-make clean >> $outfile 2>&1
-make -j3 >> $outfile 2>&1
 rm -rf Coldest$REVISION >> $outfile 2>&1
 echo $REVISION > version
 echo "Kitting"
