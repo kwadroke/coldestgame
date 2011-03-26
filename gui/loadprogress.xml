@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/vtcorona.ttf" visible="false">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
-   <Label x="400" y="600" width="200" height="30" align="center" text="Loading" name="loadname"
+   <Label x="300" y="600" width="400" height="30" align="center" text="Loading" name="loadname"
           normal="textures/buttonnorm.png"/>
    <ScrollView x="300" y="700" width="400" height="150" name="loadingprogress"
                normal="textures/buttonnorm.png">
-      <Button x="20" y="10" width="360" height="30" text="Loading Progress..." name="progresstext"
+      <Label x="20" y="10" width="360" height="30" align="center" text="Loading Progress..." name="progresstext"
               normal="textures/buttonnorm.png"/>
       <ProgressBar x="20" y="100" width="360" height="30" name="loadprogressbar"
                    normal="textures/buttonhover.png"
