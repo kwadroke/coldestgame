@@ -3,11 +3,11 @@
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
    <Label x="400" y="600" width="200" height="30" align="center" text="Loading" name="loadname"
           normal="textures/buttonnorm.png"/>
-   <ScrollView x="400" y="700" width="200" height="150" name="loadingprogress"
+   <ScrollView x="300" y="700" width="400" height="150" name="loadingprogress"
                normal="textures/buttonnorm.png">
-      <Button x="10" y="10" width="180" height="30" text="Loading Progress..." name="progresstext"
+      <Button x="20" y="10" width="360" height="30" text="Loading Progress..." name="progresstext"
               normal="textures/buttonnorm.png"/>
-      <ProgressBar x="10" y="100" width="180" height="30" name="loadprogressbar"
+      <ProgressBar x="20" y="100" width="360" height="30" name="loadprogressbar"
                    normal="textures/buttonhover.png"
                    hover="textures/buttonpressed.png"/>
    </ScrollView>
