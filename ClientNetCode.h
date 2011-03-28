@@ -93,7 +93,7 @@ class ClientNetCode : public NetCode
       void ReadReconnect();
       void ReadGameOver(stringstream&);
       void ReadRemovePart(stringstream&);
-      void ReadAnnounce(stringstream&);
+      void ReadAnnounce(stringstream&, bool);
       void ReadVersion(stringstream&);
 
       bool connected;

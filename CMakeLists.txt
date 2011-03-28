@@ -45,9 +45,9 @@ file(GLOB GUI_SOURCES gui/*.cpp) # GUI is nicely in its own directory so let's G
 
 set(COMMON_SOURCES
 	coldest.cpp Vector3.cpp GraphicMatrix.cpp CollisionDetection.cpp
-	Particle.cpp ProceduralTree.cpp TextureHandler.cpp Hit.cpp Vertex.cpp
+	Particle.cpp ProceduralTree.cpp Hit.cpp Vertex.cpp
 	Console.cpp server.cpp IDGen.cpp Weapon.cpp Recorder.cpp Replayer.cpp
-	ObjectKDTree.cpp TextureManager.cpp Packet.cpp VBO.cpp MeshData.cpp
+	ObjectKDTree.cpp Packet.cpp MeshData.cpp
 	Timer.cpp ServerInfo.cpp ParticleEmitter.cpp StableRandom.cpp
 	renderdefs.cpp globals.cpp PlayerData.cpp Log.cpp logout.cpp
 	NTreeReader.cpp Material.cpp ResourceManager.cpp Mesh.cpp Triangle.cpp
@@ -58,7 +58,7 @@ set(COMMON_SOURCES
 set(CLIENT_SOURCES
 	actions.cpp ALBuffer.cpp ALSource.cpp Camera.cpp editor.cpp FBO.cpp Light.cpp
 	render.cpp settings.cpp Shader.cpp SoundManager.cpp TextureHandler.cpp
-	Updater.cpp ClientMap.cpp ClientNetCode.cpp
+	Updater.cpp ClientMap.cpp ClientNetCode.cpp VBO.cpp TextureManager.cpp
 	)
 
 set(DEDICATED_SERVER_SOURCES "") # Nothing apparently

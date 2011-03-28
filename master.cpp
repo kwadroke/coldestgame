@@ -44,7 +44,6 @@ void GetAnnounce(stringstream&, UDPpacket*);
 void GetRequest(stringstream&, UDPpacket*);
 void GetVersionRequest(stringstream&, UDPpacket*, unsigned long);
 
-tsint running;
 list<Packet> queue;
 vector<ServerInfo> servers;
 set<ServerInfo> knownservers;

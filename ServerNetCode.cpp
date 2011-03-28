@@ -261,9 +261,9 @@ void ServerNetCode::ReadConnect(stringstream& get)
 
 void ServerNetCode::HandleInfo()
 {
-   Packet response(&packet->address, "i", 0);
+   Packet response(&packet->address, "i");
    response << servername << eol;
-   response << console.GetString("map") << eol;
+   response << servermap->MapName() << eol;
    response << CountPlayers() << eol;
    response << console.GetInt("maxplayers") << eol;
    SendPacket(response);

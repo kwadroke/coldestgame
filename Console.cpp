@@ -326,7 +326,9 @@ void Console::Action(const string& action)
    }
    else if (action == "connect")
    {
+#ifndef DEDICATED
       netcode->Connect();
+#endif
    }
    else if (action == "restartgl")
    {
@@ -408,7 +410,9 @@ void Console::Action(const string& action)
    }
    else if (action == "kill")
    {
+#ifndef DEDICATED
       netcode->SendKill();
+#endif
    }
    else if (action == "exit" || action == "quit")
    {

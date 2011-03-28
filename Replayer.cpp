@@ -59,7 +59,9 @@ void Replayer::SetActive(const string& filename, const bool a)
       first = true;
       servplayernum = 0;
       LoadMap(nextmap);
+#ifndef DEDICATED
       gui[loadoutmenu]->visible = false;
+#endif
    }
    else if (!a)
    {
@@ -204,7 +206,9 @@ void Replayer::ReadItems()
       newitem.position = pos;
       newitem.team = team;
       newitem.id = id;
+#ifndef DEDICATED
       netcode->AddItem(newitem);
+#endif
    }
 }
 

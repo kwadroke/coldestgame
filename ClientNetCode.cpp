@@ -65,14 +65,14 @@ void ClientNetCode::Send()
    {
       if (connected)
       {
-         lastnettick = currnettick;
          Packet p(&address);
          p << FillUpdatePacket();
          SendPacket(p);
       }
-      ++occpacketcounter;
+      lastnettick = currnettick;
+      --occpacketcounter;
    }
-   if (occpacketcounter > 100)
+   if (occpacketcounter <= 0)
    {
       // Send a request for the server's information
       vector<ServerInfo>::iterator i;
@@ -84,7 +84,7 @@ void ClientNetCode::Send()
          SendPacket(p);
          i->tick = SDL_GetTicks();
       }
-      occpacketcounter = 0;
+      occpacketcounter = 100;
    }
 }
 
@@ -331,20 +331,7 @@ void ClientNetCode::ReceiveExtended()
          get >> packetnum;
          if (anntype == "a")
          {
-            Uint16 serverport;
-            get >> serverport;
-            ServerInfo addme;
-            addme.address = packet->address;
-            SDLNet_Write16(serverport, &addme.address.port);
-            if (knownservers.find(addme) == knownservers.end())
-            {
-               logout << "Received announcement packet from ";
-               string dotteddec = AddressToDD(packet->address.host);
-               logout << dotteddec << ":" << serverport << endl;
-               addme.strip = dotteddec;
-               servers.push_back(addme);
-               knownservers.insert(addme); // No need to wrap this, only used in this thread
-            }
+            ReadAnnounce(get, false);
          }
       }
    }
@@ -402,7 +389,7 @@ void ClientNetCode::HandlePacket(stringstream& get)
    else if (packettype == "r")
       ReadRemovePart(get);
    else if (packettype == "a")
-      ReadAnnounce(get);
+      ReadAnnounce(get, true);
    else if (packettype == "v")
       ReadVersion(get);
    else if (packettype != "Y")
@@ -955,22 +942,30 @@ void ClientNetCode::ReadRemovePart(stringstream& get)
 }
 
 
-void ClientNetCode::ReadAnnounce(stringstream& get)
+void ClientNetCode::ReadAnnounce(stringstream& get, bool master)
 {
    Uint32 serverhost;
    Uint16 serverport;
-   get >> serverhost >> serverport;
+   if (master)
+   {
+      get >> serverhost >> serverport;
+   }
+   else
+   {
+      serverhost = packet->address.host;
+      serverport = SDLNet_Read16(&packet->address.port);
+   }
    ServerInfo addme;
    addme.address.host = serverhost;
    SDLNet_Write16(serverport, &addme.address.port);
    if (knownservers.find(addme) == knownservers.end())
    {
-      logout << "Received master server announcement for ";
+      logout << "Received server announcement for ";
       string dotteddec = AddressToDD(addme.address.host);
       logout << dotteddec << ":" << serverport << endl;
       addme.strip = dotteddec;
       servers.push_back(addme);
-      knownservers.insert(addme); // No need to wrap this, only used in this thread
+      knownservers.insert(addme);
    }
 }
 

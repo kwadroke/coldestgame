@@ -534,6 +534,7 @@ void Mesh::GenVbo()
 
 void Mesh::GenVboData()
 {
+#ifndef DEDICATED
    size_t currindex = 0;
    
    size_t numverts = meshdata.vertices.size();
@@ -557,11 +558,13 @@ void Mesh::GenVboData()
       currv.GetVboData(vbo.vbodata[currindex], dynamic);
       ++currindex;
    }
+#endif
 }
 
 
 void Mesh::GenIboData()
 {
+#ifndef DEDICATED
    // Build IBO
    sort(meshdata.tris.begin(), meshdata.tris.end());
    vbo.indexdata.clear();
@@ -605,6 +608,7 @@ void Mesh::GenIboData()
    maxindex.push_back(currmax);
 
    trischanged = false;
+#endif
 }
 
 

@@ -111,7 +111,9 @@ class Mesh
       vector<void*> offsets;
       intvec minindex, maxindex;
       vector<Material*> materials;
+#ifndef DEDICATED
       VBO vbo;
+#endif
 
       // Mesh state
       intvec frametime;

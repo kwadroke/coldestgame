@@ -770,6 +770,14 @@ void MainLoop()
       {
          replayer->SetActive("", false);
       }
+
+      // Maps have to be loaded in this thread, so the server signals us to do it
+      if (serverloadmap)
+      {
+         servermap = MapPtr(new Map(servermapname));
+         servermap->Load();
+         serverloadmap = 0;
+      }
       
 #ifndef DEDICATED
       // process pending events
@@ -800,14 +808,6 @@ void MainLoop()
          GUI* gotext = gui[endgame]->GetWidget("GameOverText");
          gotext->text = "Team " + ToString(winningteam) + " wins!";
          ShowGUI(endgame);
-      }
-
-      // Maps have to be loaded in this thread, so the server signals us to do it
-      if (serverloadmap)
-      {
-         servermap = MapPtr(new Map(servermapname));
-         servermap->Load();
-         serverloadmap = 0;
       }
 
       replayer->Update();
@@ -2549,6 +2549,7 @@ vector<SpawnPointData> GetSpawns(vector<Item>& allitems)
 
 void TakeScreenshot()
 {
+#ifndef DEDICATED
    logout << "Saving screenshot" << endl;
    glPixelStorei(GL_PACK_ALIGNMENT,1);
    int screenwidth = console.GetInt("screenwidth");
@@ -2591,30 +2592,32 @@ void TakeScreenshot()
    for (size_t i = 0; i < pixels.size(); ++i)
       screenshot << pixels[i];
    screenshot.close();
+#endif
 }
 
 
 void LoadMap(const string& map)
 {
+// This no longer needs to be used on the dedicated server
+#ifndef DEDICATED
    if (!initialized)
       return;
-#ifndef DEDICATED
+
    Repaint();
-#endif
+
    currmap = MapPtr(new ClientMap(map));
    currmap->Load();
 
    winningteam = 0;
    netcode->SendSync();
 
-#ifndef DEDICATED
    if (!replaying)
       ShowGUI(loadoutmenu);
    else
       gui[loadprogress]->visible = false;
-#endif
    if (!replayer->Active())
       recorder->SetActive(console.GetBool("record"));
+#endif
 }
 
 
