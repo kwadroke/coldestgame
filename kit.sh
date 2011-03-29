@@ -10,7 +10,9 @@ mkdir -p $1
 
 cp -r fonts items lib maps materials models particles shaders textures weapons units sounds gpl.txt version $1
 cp coldest $1/coldest.bin
+cp server $1/server.bin
 cp startscript $1/coldest
+cp startscriptserver $1/server
 mkdir $1/gui
 cp gui/*.xml $1/gui
 

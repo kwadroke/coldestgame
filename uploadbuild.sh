@@ -24,7 +24,8 @@ rsync -avz -e ssh --delete Coldest$REVISION/* coldestgame.com:$path
 if [[ $# != 2 || $2 != "nofull" ]]
 then
    echo "Uploading full build"
-   rsync -avz -e ssh $filename coldestgame.com:/var/www/files
+   #rsync -avz -e ssh $filename coldestgame.com:/var/www/files
+   rsync -avz -e ssh $filename cybertronix,coldestgame@frs.sourceforge.net:/home/frs/project/c/co/coldestgame/
 fi
 
 ssh coldestgame.com "cd $path && /usr/local/sbin/gencrcfile"
