@@ -6,7 +6,7 @@ then
    exit 0
 fi
 
-REVISION=`svn info | grep Revision | cut -f 2 -d \ `
+REVISION=`git log --pretty=oneline | wc -l`
 
 arch=`uname -m`
 
