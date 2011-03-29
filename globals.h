@@ -106,7 +106,7 @@ void UpdateParticles(list<Particle>&, int&, ObjectKDTree&, Meshlist&, vector<Pla
                      void (*HitHandler)(Particle&, Mesh*, const Vector3&) = NULL,
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float) = NULL);
 void Move(PlayerData&, Meshlist&, ObjectKDTree&, MapPtr);
-bool ValidateMove(PlayerData&, Vector3, Meshlist&, ObjectKDTree&);
+bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap);
 void AppendDynamicMeshes(vector<Mesh*>&, Meshlist&);
 int Server(void* dummy);
 void ShowGUI(int);

@@ -39,7 +39,7 @@ string AddressToDD(Uint32);
 bool floatzero(float, float error = .00001);
 float Random(float min, float max);
 Vector3 RotateBetweenVectors(Vector3, const Vector3&);
-int gettid();
+pid_t gettid();
 int bitcount();
 void setsighandler();
 vector<string> split(const string&, const string&);

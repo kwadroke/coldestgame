@@ -55,7 +55,7 @@ struct eqptr
    }
 };
 
-#ifdef linux
+#ifdef __linux__
 //#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3)
 typedef __gnu_cxx::hash_set<Mesh*, eqptr, eqptr> MeshSet;
 //#else

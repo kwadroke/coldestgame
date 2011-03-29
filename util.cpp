@@ -114,10 +114,9 @@ void setsighandler()
 }
 
 
-// This maybe shouldn't return an int...
-int gettid()
+pid_t gettid()
 {
-#ifdef linux
+#ifdef __linux__
    return syscall(SYS_gettid);
 #endif
    return 0;

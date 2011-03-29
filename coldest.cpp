@@ -774,9 +774,11 @@ void MainLoop()
       // Maps have to be loaded in this thread, so the server signals us to do it
       if (serverloadmap)
       {
+         logout << "loading map" << endl;
          servermap = MapPtr(new Map(servermapname));
          servermap->Load();
          serverloadmap = 0;
+         logout << "done" << endl;
       }
       
 #ifndef DEDICATED
@@ -1540,11 +1542,11 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
    }
    else mplayer.weight = 1.f;
    
-   ValidateMove(mplayer, old, ml, kt);
+   ValidateMove(mplayer, old, ml, kt, movemap);
 }
 
 
-bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& kt)
+bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
 {
    bool nohit = true;
    // Did we hit something?  If so, deal with it
@@ -1561,7 +1563,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
       {
          vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-         bool hit = coldet.CheckSphereHit(old, newpos, checksize, check, currmap, &adjust);
+         bool hit = coldet.CheckSphereHit(old, newpos, checksize, check, movemap, &adjust);
 
          if (!hit) // Move is okay
          {
@@ -1578,7 +1580,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
 
             Vector3 saveadj1 = adjust[1];
 
-            hit = coldet.CheckSphereHit(old, newpos, checksize, check, currmap, &adjust);
+            hit = coldet.CheckSphereHit(old, newpos, checksize, check, movemap, &adjust);
 
             if (!hit)
             {
@@ -1587,7 +1589,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
 
                check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, newpos, checksize);
 
-               hit = coldet.CheckSphereHit(old, newpos, checksize, check, currmap, &adjust);
+               hit = coldet.CheckSphereHit(old, newpos, checksize, check, movemap, &adjust);
 
                if (!hit) // Our position is now collision-free
                {
@@ -1807,7 +1809,7 @@ void SynchronizePosition()
    {
       Vector3 old = player[0].pos;
       player[0].pos += posadj;
-      ValidateMove(player[0], old, meshes, kdtree);
+      ValidateMove(player[0], old, meshes, kdtree, currmap);
 
       for (deque<OldPosition>::iterator i = oldpos.begin(); i != oldpos.end(); ++i)
       {
@@ -2063,6 +2065,12 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
                      void (*HitHandler)(Particle&, Mesh*, const Vector3&),
                      void (*Rewind)(Uint32, const Vector3&, const Vector3&, const float))
 {
+   MapPtr localmap;
+   if (HitHandler)
+      localmap = servermap;
+   else
+      localmap = currmap;
+   
    int updint = console.GetInt("partupdateinterval");
 #ifndef DEDICATED
    if (!HitHandler && partupd >= updint)
@@ -2099,7 +2107,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             if (Rewind)
                Rewind(j->rewind, oldpos, j->pos, j->radius);
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
-            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, currmap, hitpos, hitmesh, NULL, &hitmeshes);
+            partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, localmap, hitpos, hitmesh, NULL, &hitmeshes);
          }
          
          if (!partcheck) // Didn't hit anything

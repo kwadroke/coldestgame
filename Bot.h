@@ -55,7 +55,7 @@ class Bot{
       Timer timer;
       Timer movetimer;
       
-      int id;
+      pid_t id;
       SDL_Thread* thread;
       
       // Don't really want to copy this object because threads would need
