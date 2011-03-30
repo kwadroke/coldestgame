@@ -774,11 +774,9 @@ void MainLoop()
       // Maps have to be loaded in this thread, so the server signals us to do it
       if (serverloadmap)
       {
-         logout << "loading map" << endl;
          servermap = MapPtr(new Map(servermapname));
          servermap->Load();
          serverloadmap = 0;
-         logout << "done" << endl;
       }
       
 #ifndef DEDICATED
