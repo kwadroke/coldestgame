@@ -336,8 +336,8 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
       
       Mesh* dummymesh;
       coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, servermap, dummy, dummymesh, NULL, &hitmeshes);
-      sort(hitmeshes.begin(), hitmeshes.end());
-      hitmeshes.erase(unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
+      std::sort(hitmeshes.begin(), hitmeshes.end());
+      hitmeshes.erase(std::unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
       
       for (vector<Mesh*>::iterator j = hitmeshes.begin(); j != hitmeshes.end(); ++j)
       {

@@ -34,6 +34,10 @@ using std::string;
 using std::stringstream;
 using std::ostringstream;
 
+#ifdef _WIN32
+typedef long pid_t;
+#endif
+
 string PadNum(int, int);
 string AddressToDD(Uint32);
 bool floatzero(float, float error = .00001);

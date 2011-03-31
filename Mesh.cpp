@@ -566,7 +566,7 @@ void Mesh::GenIboData()
 {
 #ifndef DEDICATED
    // Build IBO
-   sort(meshdata.tris.begin(), meshdata.tris.end());
+   std::sort(meshdata.tris.begin(), meshdata.tris.end());
    vbo.indexdata.clear();
    vbosteps.clear();
    offsets.clear();
@@ -701,7 +701,7 @@ void Mesh::Add(Triangle& triangle)
    Triangle& tri = meshdata.tris.back();
    for (size_t i = 0; i < 3; ++i)
    {
-      if (find(meshdata.vertices.begin(), meshdata.vertices.end(), tri.v[i]) == meshdata.vertices.end())
+      if (std::find(meshdata.vertices.begin(), meshdata.vertices.end(), tri.v[i]) == meshdata.vertices.end())
       {
          meshdata.vertices.push_back(tri.v[i]);
          tri.v[i]->id = meshdata.vertices.size() - 1;

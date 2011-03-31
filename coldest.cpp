@@ -1647,7 +1647,7 @@ vector<Mesh*> GetMeshesWithoutPlayer(const PlayerData* mplayer, Meshlist& ml, Ob
       {
          if (mplayer->mesh[part] != ml.end())
          {
-            check.erase(remove(check.begin(), check.end(), &(*mplayer->mesh[part])), check.end());
+            check.erase(std::remove(check.begin(), check.end(), &(*mplayer->mesh[part])), check.end());
          }
       }
    }

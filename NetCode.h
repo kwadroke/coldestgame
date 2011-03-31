@@ -22,7 +22,7 @@
 #include "Packet.h"
 #include "IDGen.h"
 #include "Timer.h"
-#include <SDL_net.h>
+#include <SDL/SDL_net.h>
 #include <list>
 
 using std::list;

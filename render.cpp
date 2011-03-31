@@ -373,8 +373,8 @@ void UpdateFBO(const PlayerData& localplayer)
    
    sortedbyimpdim = impmeshes;
    
-   sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
-   sort(impmeshes.begin(), impmeshes.end(), meshptrcomp);
+   std::sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
+   std::sort(impmeshes.begin(), impmeshes.end(), meshptrcomp);
    
    for (iptr = impmeshes.begin(); iptr != impmeshes.end(); ++iptr)
    {
@@ -435,7 +435,7 @@ void UpdateFBO(const PlayerData& localplayer)
             if (visiblemeshes.find(toswap) != visiblemeshes.end())
                needsupdate.push_back(toswap);
             currfbo = &(impfbolist[i->impostorfbo]);
-            sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
+            std::sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
          }
       }
       ++counter;

@@ -20,6 +20,9 @@
 #include "globals.h"
 #include "gui/ComboBox.h"
 #include <iostream>
+#ifdef _WIN32
+#include <Winsock2.h>
+#endif
 
 using std::endl;
 

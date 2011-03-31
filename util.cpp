@@ -20,7 +20,9 @@
 
 #include "util.h"
 #include <SDL/SDL.h>
+#ifdef __linux__
 #include <sys/syscall.h>
+#endif
 
 bool running;
 

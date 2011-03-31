@@ -630,7 +630,7 @@ void SaveMap()
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain && 
-           find(spawnmeshes.begin(), spawnmeshes.end(), &(*i)) == spawnmeshes.end())
+         std::find(spawnmeshes.begin(), spawnmeshes.end(), &(*i)) == spawnmeshes.end())
       {
          newmap << "   Node\n";
          if (treemap.find(&(*i)) == treemap.end()) // Not a proctree
