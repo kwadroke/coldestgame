@@ -217,7 +217,7 @@ void Updater::ReplaceAndRestart()
    {
       logout << "Error removing temporary update files: " << error << endl;
    }
-   error = system("chmod +x ./coldest*");
+   error = system("chmod +x ./coldest* ./server*");
    if (error)
    {
       logout << "Error setting execute bit: " << error << endl;
