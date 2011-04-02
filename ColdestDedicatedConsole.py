@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 
 from PyQt4 import QtCore, QtGui
 import time
@@ -111,7 +112,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
          # We read from console.log directly because Windows doesn't support polling
          # stdout and we don't want to block (and I haven't found a good way around it yet)
          appdatapath = os.getenv("APPDATA") # Hopefully this will always be right
-         coldestpath = os.path.join(".coldest", "console.log")
+         coldestpath = os.path.join(".coldest", "server.log")
          logpath = os.path.join(appdatapath, coldestpath)
          if not os.path.exists(logpath):
             return # Guess we get no output - input should still work though
