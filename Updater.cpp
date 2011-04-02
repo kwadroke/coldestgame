@@ -207,10 +207,10 @@ void Updater::ReplaceAndRestart()
    Cleanup();
 #ifndef WIN32
    // This is a bit lazy, but it should work on any Unix-like that allows you to replace in-use files
-   error = system("cp -r updates/* .");
+   error = system("cp -rf updates/* .");
    if (error)
    {
-      logout << "Error moving update files: " << error << endl;
+      logout << "Error copying update files: " << error << endl;
    }
    error = system("rm -rf updates/*");
    if (error)
@@ -226,7 +226,7 @@ void Updater::ReplaceAndRestart()
    execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
 #else
    // Have to do this here or the doupdate.bat file will be in use
-   error = system("move updates\\doupdate.bat");
+   error = system("move /Y updates\\doupdate.bat");
    if (error)
    {
       logout << "Error moving update files: " << error << endl;
