@@ -253,6 +253,7 @@ void RefreshServers()
    {
       i->inlist = false;
    }
+   netcode->SendMasterListRequest();
 }
 
 

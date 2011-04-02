@@ -527,7 +527,7 @@ void SetupSDL()
    }
    else
    {
-      logout << "Initialized SDL_net" << endl;
+      logout << "SDL_net Initialized" << endl;
    }
    
    atexit(SDLNet_Quit);

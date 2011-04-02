@@ -343,8 +343,6 @@ void ClientNetCode::ReceiveExtended()
 
 void ClientNetCode::HandlePacket(stringstream& get)
 {
-   if (!connected && (packettype == "U" || packettype == "u")) // Causes problems on reconnect
-      return;
    if ((address.host != packet->address.host || address.port != packet->address.port) &&
       packettype != "c" && packettype != "f" && packettype != "i" && packettype != "a" && packettype != "v")
       return;
