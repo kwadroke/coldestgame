@@ -28,7 +28,8 @@ const int NetCode::version = 6;
 NetCode::NetCode() : lastnettick(SDL_GetTicks()),
                      currnettick(0),
                      error(false),
-                     sendbps(0)
+                     sendbps(0),
+                     sentbytes(0)
 {
    sendpacketnum.next(); // 0 has special meaning
    if (!(packet = SDLNet_AllocPacket(5000))) // 5000 is somewhat arbitrary
@@ -60,7 +61,6 @@ void NetCode::Update()
 void NetCode::SendLoop()
 {
    list<Packet>::iterator i = sendqueue.begin();
-   size_t sentbytes = 0;
    while (i != sendqueue.end())
    {
       if (i->sendtick <= currnettick)

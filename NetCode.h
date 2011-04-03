@@ -68,6 +68,7 @@ class NetCode
 
       size_t sendbps;
       Timer sentbytestimer;
+      size_t sentbytes;
 
    private:
       list<Packet> sendqueue;
