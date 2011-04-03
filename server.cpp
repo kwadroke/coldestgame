@@ -207,6 +207,7 @@ void ServerLoop()
          if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + timeout * 1000)
          {
             servernetcode->EraseValidAddr(serverplayers[i].addr);
+            serverplayers[i].salvage += CalculatePlayerWeight(serverplayers[i]); 
             serverplayers[i].Disconnect();
             servernetcode->SendMessage(serverplayers[i].name + " timed out.");
          }
