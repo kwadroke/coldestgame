@@ -29,5 +29,6 @@ then
 fi
 
 ssh coldestgame.com "cd $path && /usr/local/sbin/gencrcfile"
+ssh coldestgame.com "cd ~/coldestmaster && echo $REVISION > version"
 
 
