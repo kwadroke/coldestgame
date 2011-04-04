@@ -72,7 +72,7 @@ MeshPtr MeshCache::GetNewMesh(string filename)
 
 void MeshCache::EnsureBase(string& filename)
 {
-   if (filename.substr(filename.length() - 4) != "base")
+   if (filename.substr(filename.length() - 4) != "base" || filename == "models/base")
    {
       if (filename.substr(filename.length() - 1) != "/")
          filename += "/base";
