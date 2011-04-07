@@ -417,7 +417,6 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
 }
 
 
-// Note: must be called from within mutex'd code
 void ServerUpdatePlayer(int i)
 {
    Uint32 ticks = SDL_GetTicks() - serverplayers[i].lastcoolingtick;
@@ -626,7 +625,6 @@ int ServerInput(void* dummy)
 }
 
 
-// Grab the servermutex before calling
 void AddItem(const Item& it, int oppnum)
 {
    if (it.Type() == Item::SpawnPoint)
@@ -673,7 +671,6 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
 
 
 // At this time just ends the game because only two teams are supported.  Will more be in the future?  Who knows.
-// Must have mutex before calling this function
 void RemoveTeam(int num)
 {
    if (!gameover)

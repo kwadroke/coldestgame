@@ -1667,7 +1667,6 @@ void AppendDynamicMeshes(vector<Mesh*>& appto, Meshlist& ml)
 }
 
 
-// No mutex needed, only called from mutex'd code
 void SynchronizePosition()
 {
 #if 0
@@ -2234,7 +2233,6 @@ void UpdatePlayerList()
 }
 
 
-// Must grab clientmutex before calling this function
 void AppendToChat(int playernum, string line, bool chatteam)
 {
 #ifndef DEDICATED
@@ -2330,10 +2328,9 @@ Vector3 GetShotVector(const float focus, const Vector3& rawoffset, const Vector3
 }
 
 
-// Should have the client mutex before calling this
 void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerweapon)
 {
-   #ifndef DEDICATED
+#ifndef DEDICATED
    int weaponslot = weaponslots[localplayer.currweapon];
    Vector3 startpos = localplayer.pos;
    Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);
@@ -2349,7 +2346,7 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
    
    if (currplayerweapon.Id() != Weapon::NoWeapon)
       resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
-   #endif
+#endif
 }
 
 

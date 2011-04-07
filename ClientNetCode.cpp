@@ -737,7 +737,7 @@ void ClientNetCode::ReadText(stringstream& get)
          AppendToChat(oppnum, line, false); // TODO Right now all chats appear to be global, this should be fixed
       }
       // Ack it
-      Ack(packetnum); // Danger: this grabs the net mutex while we hold the clientmutex
+      Ack(packetnum);
    }
 }
 
