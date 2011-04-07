@@ -344,7 +344,7 @@ void ClientNetCode::ReceiveExtended()
 void ClientNetCode::HandlePacket(stringstream& get)
 {
    if ((address.host != packet->address.host || address.port != packet->address.port) &&
-      packettype != "c" && packettype != "f" && packettype != "i" && packettype != "a" && packettype != "v")
+      packettype != "c" && packettype != "f" && packettype != "i" && packettype != "a" && packettype != "v" && packettype != "A")
       return;
 
    if (packettype == "U")
@@ -974,10 +974,7 @@ void ClientNetCode::ReadAnnounce(stringstream& get, bool master)
 void ClientNetCode::ReadVersion(stringstream& get)
 {
    long v;
-   unsigned long acknum;
    get >> v;
-   get >> acknum;
    currversion = v;
-   HandleAck(acknum);
 }
 
