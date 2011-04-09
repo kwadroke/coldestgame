@@ -1221,6 +1221,7 @@ void GameEventHandler(SDL_Event &event)
                   gui[loadoutmenu]->visible = true;
                   gui[hud]->visible = false;
                   netcode->SendLoadout();
+                  player[0].Kill();
                }
             }
             else if (event.key.keysym.sym == keys.keyuseitem)
