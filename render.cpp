@@ -215,7 +215,7 @@ void SetMainCamera(PlayerData& localplayer)
    
    if (/*console.GetBool("thirdperson") &&*/ !editor && !guncam)
    {
-      maincam.SetPosition(localplayer.pos - viewdir * 100.f + Vector3(0.f, 40.f, 0.f));
+      maincam.SetPosition(localplayer.pos - viewdir * (100.f + localplayer.size) + Vector3(0.f, localplayer.size * 3.f, 0.f));
       maincam.lookat = localplayer.pos + Vector3(0.f, localplayer.size * 2.f, 0.f);
       maincam.interp = console.GetFloat("caminterp");
       maincam.lookinterp = console.GetFloat("caminterp");
