@@ -113,8 +113,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    netcode = ClientNetCodePtr(new ClientNetCode());
    
    ShowGUI(updateprogress);
-   Updater upd;
-   upd.DoUpdate();
+   updater = UpdaterPtr(new Updater());
+   updater->DoUpdate();
 #else
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);

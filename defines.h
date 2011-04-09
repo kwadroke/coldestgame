@@ -67,7 +67,6 @@
 #include "NTreeReader.h"
 #include "gui/TextArea.h"
 #include "gui/ComboBox.h"
-#include "Updater.h"
 
 /*
 using std::endl;

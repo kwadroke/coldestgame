@@ -57,3 +57,4 @@ ReplayerPtr replayer;
 bool replaying;
 bool spawnschanged;
 ClientNetCodePtr netcode;
+UpdaterPtr updater;

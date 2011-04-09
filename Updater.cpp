@@ -17,6 +17,8 @@
 // Copyright 2008, 2011 Ben Nemec
 // @End License@
 #include "Updater.h"
+#include "globals.h"
+#include "util.h"
 
 #ifdef _WIN32
 string Updater::remotebase = "updates/windows/32bit/";
@@ -106,6 +108,9 @@ void Updater::DoUpdate()
       return;
    
    GetNewFiles();
+
+   if (cancelled)
+      return;
    
    ReplaceAndRestart();
 }
@@ -145,35 +150,97 @@ void Updater::BuildFileList()
 
 void Updater::GetNewFiles()
 {
+   SDL_Event event;
+   GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
+   GUI* fileprogresstext = gui[updateprogress]->GetWidget("fileprogresstext");
+   ProgressBar* updateprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("updateprogressbar"));
+   ProgressBar* fileprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("fileprogressbar"));
+   updateprogressbar->SetRange(0, filelist.size());
+
+   vector<string> locallist = filelist;
+   SDL_Thread* thread;
+
+   thread = SDL_CreateThread(StartDownloadThread, this);
+
+   while (!finished)
+   {
+      SDL_Delay(1);
+      
+      if (cancelled)
+         break;
+      
+      progresstext->text = "Downloading " + locallist[currentfile];
+      updateprogressbar->value = currentfile;
+      fileprogressbar->value = current;
+      fileprogressbar->SetRange(0, total);
+      fileprogresstext->text = ToString(current) + " KB /" + ToString(total) + " KB";
+      
+      while(SDL_PollEvent(&event))
+      {
+         gui[updateprogress]->ProcessEvent(&event);
+      }
+      Repaint();
+   }
+
+   SDL_WaitThread(thread, NULL);
+
+   progresstext->text = "Finished Updating";
+   updateprogressbar->value = filelist.size();
+   Repaint();
+   SDL_Delay(1000);
+}
+
+
+//static
+int Updater::StartDownloadThread(void* obj)
+{
+   setsighandler();
+   
+   logout << "Download thread id " << gettid() << " started." << endl;
+   
+   ((Updater*)obj)->DownloadThread();
+   return 0;
+}
+
+
+void Updater::DownloadThread()
+{
    FILE* getfile;
    string currfile, localfile;
-   
-   GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
-   ProgressBar* updateprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("updateprogressbar"));
-   updateprogressbar->SetRange(0, filelist.size());
-   
    for (size_t i = 0; i < filelist.size(); ++i)
    {
+      currentfile = i;
       currfile = remotebase + filelist[i];
       localfile = "updates/" + filelist[i];
       CreateParentDirectory(localfile);
-      
-      progresstext->text = "Downloading " + currfile;
-      updateprogressbar->value = i;
-      Repaint();
       
       getfile = fopen(localfile.c_str(), "wb");
       logout << "Downloading " << currfile << endl;
       string curlpath = "www.coldestgame.com/files/" + currfile;
       curl_easy_setopt(handle, CURLOPT_URL, curlpath.c_str());
       curl_easy_setopt(handle, CURLOPT_WRITEDATA, getfile);
+      curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0);
+      curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, &Updater::ProgressCallback);
+      curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, this);
       curl_easy_perform(handle);
+      
+      if (cancelled)
+         break;
+      
       fclose(getfile);
    }
-   progresstext->text = "Finished Updating";
-   updateprogressbar->value = filelist.size();
-   Repaint();
-   SDL_Delay(1000);
+   finished = 1;
+}
+
+//static
+int Updater::ProgressCallback(void* clientp, double dltotal, double dlnow, double ultotal, double ulnow)
+{
+   Updater* obj = (Updater*)clientp;
+   obj->current = dlnow / 1024;
+   obj->total = dltotal / 1024;
+   if (obj->cancelled)
+      return 1;
+   return 0;
 }
 
 

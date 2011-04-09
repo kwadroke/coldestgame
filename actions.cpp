@@ -257,6 +257,13 @@ void RefreshServers()
 }
 
 
+void CancelUpdate()
+{
+   logout << "Update Cancelled" << endl;
+   updater->Cancel();
+}
+
+
 void DoBind(SDLKey& key)
 {
    GUI* message = gui[settings]->GetWidget("bindmessage");
@@ -377,6 +384,8 @@ void Action(const string& action)
       BindUseItem();
    else if (action == "refreshservers")
       RefreshServers();
+   else if (action == "cancelupdate")
+      CancelUpdate();
    else if (action != "")
       logout << "Warning: Attempted to do undefined action " << action << endl;
 }

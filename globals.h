@@ -44,6 +44,7 @@
 #include "Mutex.h"
 #include "Map.h"
 #include "ClientNetCode.h"
+#include "Updater.h"
 
 
 #define PI 3.14159265
@@ -98,6 +99,7 @@ extern ReplayerPtr replayer;
 extern bool replaying;
 extern bool spawnschanged;
 extern ClientNetCodePtr netcode;
+extern UpdaterPtr updater;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

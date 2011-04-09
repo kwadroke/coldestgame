@@ -22,10 +22,10 @@
 #include <boost/crc.hpp>
 #include <curl/curl.h>
 #include "defines.h"
-#include "globals.h"
 #include "renderdefs.h"
 #include <vector>
 #include <string>
+#include <boost/shared_ptr.hpp>
 #ifndef _WIN32
 #include <boost/filesystem.hpp>
 #else
@@ -43,18 +43,28 @@ class Updater
       
       bool Available();
       void DoUpdate();
+      void Cancel() {cancelled = true;}
+
+      tsint current, total;
+      tsint cancelled, finished;
+      tsint currentfile;
       
    private:
       Updater(const Updater&);
       Updater& operator=(const Updater&);
       void BuildFileList();
       void GetNewFiles();
+      static int StartDownloadThread(void*);
+      void DownloadThread();
+      static int ProgressCallback(void*, double, double, double, double);
       void CreateParentDirectory(const string&);
       void ReplaceAndRestart();
-      
+
       CURL* handle;
       vector<string> filelist;
       static string remotebase;
 };
+
+typedef boost::shared_ptr<Updater> UpdaterPtr;
 
 #endif
