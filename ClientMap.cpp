@@ -33,7 +33,8 @@ ClientMap::ClientMap(const string& mn)
 
 void ClientMap::Finish()
 {
-   ShowGUI(loadoutmenu);
+   if (!editor)
+      ShowGUI(loadoutmenu);
 }
 
 
@@ -318,15 +319,15 @@ void ClientMap::ReadSpawnPointsExtra()
    if (editor)
    {
       NTreeReader spawnnode = mapdata.GetItemByName("SpawnPoints");
-      
+
       for (size_t i = 0; i < spawnnode.NumChildren(); ++i)
       {
+         const NTreeReader& currnode = spawnnode(i);
          Vector3 position;
-         spawnnode.Read(position.x, "Location", 0);
-         spawnnode.Read(position.y, "Location", 1);
-         spawnnode.Read(position.z, "Location", 2);
+         currnode.Read(position.x, "Location", 0);
+         currnode.Read(position.y, "Location", 1);
+         currnode.Read(position.z, "Location", 2);
          MeshPtr newmesh = meshcache->GetNewMesh("models/base/base");
-         newmesh->dynamic = true;
          newmesh->Move(position);
          newmesh->Update();
          mapmeshes->push_back(*newmesh);
