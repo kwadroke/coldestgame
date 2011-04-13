@@ -46,6 +46,7 @@ class ClientMap : public Map
       virtual void GenBuffers();
       virtual void CreateShadowmap();
       virtual void CreateMinimap();
+      virtual void Keepalive();
       
       ProgressBar* progress;
       GUI* progtext;

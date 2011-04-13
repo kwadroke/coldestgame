@@ -300,6 +300,7 @@ void ClientNetCode::SendKeepalive()
    pack << "k\n";
    pack << 0 << eol;
    SendPacket(pack);
+   SendLoop(); // Now that we're not threaded, we need to call this during long-running operations to actually do the send
 }
 
 
@@ -580,6 +581,7 @@ void ClientNetCode::ReadOccUpdate(stringstream& get)
 
 void ClientNetCode::ReadConnect(stringstream& get)
 {
+   HandleAck(packetnum); // Do this first so we don't keep trying to connect while loading the map
    if (!connected)
    {
       string nextmap;
@@ -595,7 +597,6 @@ void ClientNetCode::ReadConnect(stringstream& get)
       itemsreceived.clear();
       hitsreceived.clear();
    }
-   HandleAck(packetnum);
 }
 
 

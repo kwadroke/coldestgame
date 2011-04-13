@@ -58,6 +58,12 @@ void ClientMap::SetProgress(const string& text, const int step)
 }
 
 
+void ClientMap::Keepalive()
+{
+   netcode->SendKeepalive();
+}
+
+
 // Read global lighting information
 void ClientMap::LoadLight()
 {

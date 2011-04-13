@@ -61,12 +61,13 @@ void NetCode::Update()
 void NetCode::SendLoop()
 {
    list<Packet>::iterator i = sendqueue.begin();
+   Uint32 currtick = SDL_GetTicks();
    while (i != sendqueue.end())
    {
-      if (i->sendtick <= currnettick)
+      if (i->sendtick <= currtick)
       {
          sentbytes += i->Send(packet, socket);
-         if (!i->ack || i->attempts > 100000) // Non-ack packets get sent once and then are on their own
+         if (!i->ack || i->attempts > 5000) // Non-ack packets get sent once and then are on their own
          {
             i = sendqueue.erase(i);
             continue;
