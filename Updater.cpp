@@ -292,13 +292,17 @@ void Updater::ReplaceAndRestart()
    logout << "Restarting" << endl;
    execlp("./coldest.bin", "./coldest.bin", (char*) NULL);
 #else
-   // Have to do this here or the doupdate.bat file will be in use
-   error = system("move /Y updates\\doupdate.bat");
+   error = system("move /Y Coldest.exe Coldest.old");
    if (error)
    {
-      logout << "Error moving update files: " << error << endl;
+      logout << "Error moving executable: " << error << endl;
    }
-   _execlp("doupdate.bat", "doupdate.bat", (char*) NULL);
+   error = system("xcopy /Y /E updates\\*");
+   if (error)
+   {
+      logout << "Error copying update files: " << error << endl;
+   }
+   _execlp("Coldest.exe", "Coldest.exe", (char*) NULL);
 #endif
 }
 
