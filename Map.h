@@ -67,9 +67,9 @@ class Map
       void ReadSpawnPoints();
       virtual void ReadSpawnPointsExtra(){}
       virtual void LoadObjects();
-      virtual void SetProgress(const string& text, const int step){}
+      virtual void SetProgress(const string& text, const int step) { (void)text; (void)step; }
       void LoadMapData();
-      virtual void SetTerrainTextures(int x, int y, Quad&){}
+      virtual void SetTerrainTextures(int x, int y, Quad&) { (void)x; (void)y; }
       void BuildTerrain();
 
       Vector3 GetTerrainNormal(int, int, int, int);
