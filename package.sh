@@ -14,6 +14,7 @@ then
    cd ..
 else
    rm $2/coldest*
+   rm $2/server*
    rm -rf $2/lib
    cp Coldest.exe $2
    cp windlls.zip $2
