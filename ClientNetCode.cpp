@@ -977,5 +977,12 @@ void ClientNetCode::ReadVersion(stringstream& get)
    long v;
    get >> v;
    currversion = v;
+
+   // Can't use ack because that only works for the server we're connected to
+   IPaddress masteraddr;
+   SDLNet_ResolveHost(&masteraddr, console.GetString("master").c_str(), 12011);
+   Packet pack(&masteraddr, "A");
+   pack << packetnum << eol;
+   SendPacket(pack);
 }
 
