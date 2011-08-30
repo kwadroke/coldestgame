@@ -1,0 +1,25 @@
+a:link {color:#ffffff; text-decoration:none;}
+a:visited {color:#ffffff; text-decoration:none;}
+a:hover {color:#ffffff; text-decoration:underline;}
+a:active {color:#ffffff;}
+body {background-color:black; color:#00ff00}
+img {border:0px;}
+form.button {display: inline;}
+.styledInput
+{
+   background-color: black; 
+   color: #00ff00;
+   border-style:solid;
+   border-color:#00ff00;
+   border-width: 1px;
+   padding: 5px;
+}
+.textarea
+{
+   width: 90%; 
+   height:600px;
+}
+.commandEntry
+{
+   width: 75%;
+}

@@ -619,6 +619,7 @@ int ServerInput(void* dummy)
          getline(std::cin, command);
          console.Parse(command, false);
       }
+      SDL_Delay(1);
    }
 #endif
    return 0;

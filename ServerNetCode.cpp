@@ -34,6 +34,15 @@ ServerNetCode::ServerNetCode() : playernum(0),
 
 void ServerNetCode::HandlePacket(std::stringstream& get)
 {
+   // Always trust commands coming from localhost so the web admin interface isn't hopelessly complicated
+   IPaddress localhost;
+   SDLNet_ResolveHost(&localhost, "localhost", 1);
+   if (packettype == "c" && packet->address.host == localhost.host)
+   {
+      playernum = 0;
+      ReadCommand(get);
+   }
+   
    if (packettype != "C" && packettype != "i" && validaddrs.find(SortableIPaddress(packet->address)) == validaddrs.end())
    {
       Packet p(&packet->address, "C");
@@ -516,9 +525,11 @@ void ServerNetCode::HandlePowerDown()
 
 void ServerNetCode::ReadCommand(stringstream& get)
 {
-   if (serverplayers[playernum].commandids.find(packetnum) == serverplayers[playernum].commandids.end() && serverplayers[playernum].admin)
+   // If playernum is 0 then it means the command came from localhost
+   if (serverplayers[playernum].commandids.find(packetnum) == serverplayers[playernum].commandids.end() && serverplayers[playernum].admin || !playernum)
    {
-      serverplayers[playernum].commandids.insert(packetnum);
+      if (playernum)
+         serverplayers[playernum].commandids.insert(packetnum);
       string command;
       get.ignore();
       getline(get, command);
@@ -531,7 +542,8 @@ void ServerNetCode::ReadCommand(stringstream& get)
    {
       logout << "Command received from non-admin player" << endl;
    }
-   Ack(packetnum, packet);
+   if (playernum)
+      Ack(packetnum, packet);
 }
 
 
