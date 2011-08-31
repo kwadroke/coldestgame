@@ -1,4 +1,6 @@
 <?php
+   require_once 'config.inc';
+
    $endl = "\n";
 
    function authenticated()
@@ -22,5 +24,11 @@
    function linkToPrevious($text)
    {
       echo '<a href="' . cleanUrl($_SERVER['HTTP_REFERER']) . '">' . $text . '</a>';
+   }
+
+   function runAsUser($command)
+   {
+      global $user;
+      return `sudo -u $user $command`;
    }
 ?>

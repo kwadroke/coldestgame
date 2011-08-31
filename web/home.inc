@@ -14,9 +14,7 @@
    echo '<br><br>';
    
    echo '<textarea id="serverLog" class="styledInput textarea">';
-   //$command = "sudo -u " . $user . " -s tail -n 1000 \$HOME/.coldest/server.log";
-   //echo `sudo -H -u cybertron tail -n 1000 /home/cybertron/.coldest/server.log`;
-   $command = "tail -n 1000 /tmp/.coldest/server.log";
+   $command = "sudo -u $user tail -n 1000 $home/.coldest/server.log";
    echo `$command`;
    echo '</textarea><br>';
    echo '<form action="index.php" method="post">';

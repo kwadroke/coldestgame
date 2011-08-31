@@ -1,10 +1,10 @@
 <?php
    require_once 'util.inc';
    
-   $f = fopen('/tmp/.coldest/pid', 'r');
+   $f = fopen('/tmp/coldestServer.pid', 'r');
    $pid = fgets($f);
    $command = "kill $pid";
-   `$command`;
-   
+   runAsUser($command);
+
    echo "Server stopped<br><br>";
 ?>

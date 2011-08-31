@@ -19,8 +19,8 @@
    <h1><a href="index.php">Coldest WebAdmin Interface</a></h1>
    
    <?php
-      require_once 'util.inc';
       require_once 'config.inc';
+      require_once 'util.inc';
       
       session_start();
       
