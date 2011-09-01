@@ -18,7 +18,7 @@
    echo '</form>';
    echo '<br><br>';
    
-   echo '<textarea id="serverLog" class="styledInput textarea">';
+   echo '<textarea id="serverLog" class="styledInput textarea" readonly="readonly">';
    $command = "sudo -u $user tail -n $logLines $home/.coldest/server.log";
    echo `$command`;
    echo '</textarea><br>';
