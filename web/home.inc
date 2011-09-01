@@ -1,6 +1,11 @@
 <?php
    require_once 'util.inc';
    
+   echo '<form action="index.php" method="post" class="button">';
+   echo '<input type="hidden" name="logout"/>';
+   echo '<input type="submit" value="Logout"/>';
+   echo '</form><br><br>';
+   
    echo 'Server Controls: ';
    echo '<form action="index.php" method="post" class="button">';
    echo '<input type="hidden" name="start"/>';
@@ -14,7 +19,7 @@
    echo '<br><br>';
    
    echo '<textarea id="serverLog" class="styledInput textarea">';
-   $command = "sudo -u $user tail -n 1000 $home/.coldest/server.log";
+   $command = "sudo -u $user tail -n $logLines $home/.coldest/server.log";
    echo `$command`;
    echo '</textarea><br>';
    echo '<form action="index.php" method="post">';
