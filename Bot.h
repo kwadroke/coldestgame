@@ -26,6 +26,7 @@
 #include <SDL/SDL_net.h>
 #include "IDGen.h"
 #include "Packet.h"
+#include "BotNetCode.h"
 #include "util.h"
 #include "globals.h"
 
@@ -39,23 +40,14 @@ class Bot{
    
    private:
       bool botrunning;
-      UDPsocket socket;
-      UDPpacket* packet;
-      IPaddress addr;
-      IDGen sendpacketnum;
+      
+      BotNetCodePtr netcode;
       
       Uint32 lasttick;
-      bool needconnect, botconnected;
-      list<Packet> sendqueue;
       
-      int playernum;
-      Meshlist dummymeshes;
-      PlayerData bot;
-      vector<SpawnPointData> spawns;
       Timer timer;
       Timer movetimer;
       
-      pid_t id;
       SDL_Thread* thread;
       
       // Don't really want to copy this object because threads would need
@@ -67,10 +59,6 @@ class Bot{
       static int Start(void*);
       void Update();
       void Loop();
-      void Send();
-      void Listen();
-      void HandleAck(unsigned long);
-      string FillUpdatePacket();
 };
 
 typedef boost::shared_ptr<Bot> BotPtr;
