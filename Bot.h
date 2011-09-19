@@ -37,6 +37,10 @@ class Bot{
    public:
       Bot();
       ~Bot();
+      
+      static void Initialize();
+      static void SetPlayers(vector<PlayerData>&);
+      static vector<PlayerData> GetPlayers();
    
    private:
       bool botrunning;
@@ -47,8 +51,12 @@ class Bot{
       
       Timer timer;
       Timer movetimer;
+      Timer firetimer;
       
       SDL_Thread* thread;
+      
+      static vector<PlayerData> players;
+      static MutexPtr playermutex;
       
       // Don't really want to copy this object because threads would need
       // to be restarted every time.  To use in an STL container use

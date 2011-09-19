@@ -20,6 +20,10 @@
 
 #include "Bot.h"
 
+// Static initialization
+vector<PlayerData> Bot::players = vector<PlayerData>();
+MutexPtr Bot::playermutex = MutexPtr();
+
 // Should leave thread to be initialized last so that all other data has been initialized first
 Bot::Bot() : botrunning(true),
              netcode(new BotNetCode())
@@ -64,28 +68,87 @@ void Bot::Loop()
 
 void Bot::Update()
 {
+   // Movement
    if (netcode->bot.moveleft)
       netcode->bot.facing -= .1f * movetimer.elapsed();
    if (netcode->bot.moveright)
       netcode->bot.facing += .1f * movetimer.elapsed();
    movetimer.start();
-   if (console.GetBool("botsmove") && timer.elapsed() > 2000)
+   if (console.GetBool("botsmove"))
    {
-      if (Random(0, 1) > .2)
-         netcode->bot.moveforward = true;
-      else
-         netcode->bot.moveforward = false;
+      if (timer.elapsed() > Random(0, 2000))
+      {
+         if (Random(0, 1) > .2)
+            netcode->bot.moveforward = true;
+         else
+            netcode->bot.moveforward = false;
+         
+         if (Random(0, 1) > .5)
+            netcode->bot.moveleft = true;
+         else
+            netcode->bot.moveleft = false;
+         
+         if (Random(0, 1) > .5)
+            netcode->bot.moveright = true;
+         else
+            netcode->bot.moveright = false;
+         timer.start();
+      }
       
-      if (Random(0, 1) > .5)
-         netcode->bot.moveleft = true;
-      else
-         netcode->bot.moveleft = false;
+      vector<PlayerData> p = GetPlayers();
+      if (p.size() > 2)
+      {
+         Vector3 aimvec = p[1].pos - p[2].pos;//netcode->bot.pos;
+         
+         Vector3 facingvec(0.f, 0.f, -1.f);
+         GraphicMatrix m;
+         m.rotatey(netcode->bot.facing);
+         facingvec.transform(m);
+         
+         Vector3 rots = RotateBetweenVectors(facingvec, aimvec);
+         logout << rots << endl;
+         logout << facingvec << endl;
+         logout << p[1].pos << endl;
+         logout << aimvec << endl << endl;
+
+         netcode->bot.rotation = rots.y;
+         netcode->bot.pitch = rots.x;
+      }
       
-      if (Random(0, 1) > .5)
-         netcode->bot.moveright = true;
-      else
-         netcode->bot.moveright = false;
-      timer.start();
    }
+   
+   // Weapons fire
+   if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
+      netcode->bot.temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
+   )
+   {
+      netcode->SendFire();
+      firetimer.start();
+   }
+}
+
+// This must be called before creating bots
+//static
+void Bot::Initialize()
+{
+   if (!playermutex)
+      playermutex = MutexPtr(new Mutex);
+}
+
+//static
+void Bot::SetPlayers(vector<PlayerData>& in)
+{
+   playermutex->lock();
+   players = in;
+   playermutex->unlock();
+}
+
+//static
+vector<PlayerData> Bot::GetPlayers()
+{
+   playermutex->lock();
+   vector<PlayerData> retval = players;
+   playermutex->unlock();
+   return retval;
 }
 

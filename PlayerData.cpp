@@ -104,3 +104,10 @@ void PlayerData::Reset()
    weight = 1.f;
 }
 
+
+Weapon& PlayerData::CurrentWeapon()
+{
+   int weaponslot = weaponslots[currweapon];
+   return weapons[weaponslot];
+}
+

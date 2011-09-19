@@ -13,12 +13,13 @@ BotNetCode::BotNetCode() : bot(dummymeshes),
       logout << "Bot failed to open socket: " << SDLNet_GetError() << endl;
       return;
    }
+   
+   bot.weapons[1] = Weapon(Weapon::Laser);
 }
 
 
 void BotNetCode::Send()
 {
-   logout << "Sending" << endl;
    if (needconnect)
    {
       SDLNet_ResolveHost(&address, "localhost", console.GetInt("serverport"));
@@ -97,15 +98,24 @@ void BotNetCode::SendSpawnRequest()
    // Otherwise the bots bog the server down something terrible - and since they're
    // running on the same machine as the server it's highly unlikely the packet will
    // actually get lost and need to be resent
-   p.sendinterval = 1000;
+   p.sendinterval = 5000;
    
    SendPacket(p);
 }
 
 
+void BotNetCode::SendFire()
+{
+   Packet pack(&address);
+   pack.ack = sendpacketnum;
+   pack << "f\n";
+   pack << pack.ack << eol;
+   SendPacket(pack);
+}
+
+
 void BotNetCode::HandlePacket(stringstream& get)
 {
-   logout << "Got packet " << packettype << endl;
    if (packettype == "c")
       ReadConnect(get);
    else if (packettype == "M")

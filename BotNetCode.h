@@ -12,6 +12,7 @@ class BotNetCode : public NetCode
 {
    public:
       BotNetCode();
+      void SendFire();
       
       PlayerData bot;
       pid_t id;

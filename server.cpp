@@ -223,6 +223,8 @@ void ServerLoop()
          i->Update();
       }
       
+      Bot::SetPlayers(serverplayers);
+      
       // Save state so we can recall it for collision detection
       SaveState();
          
@@ -299,6 +301,7 @@ void ServerLoadMap(const string& mn)
    
    bots.clear();
    size_t numbots = console.GetInt("bots");
+   Bot::Initialize();
    for (size_t i = 0; i < numbots; ++i)
       bots.push_back(BotPtr(new Bot()));
 }

@@ -2416,7 +2416,7 @@ void UpdatePlayer()
    }
       
    int weaponslot = weaponslots[localplayer.currweapon];
-   Weapon& currplayerweapon = localplayer.weapons[weaponslot];
+   Weapon& currplayerweapon = localplayer.CurrentWeapon();
    /* We need to add 1000 / netcode->serverfps / 2 to our reload time because it will, on average, take half a server frame for it to get to
       our fire request, so we'll always be that much ahead with our fire requests and that causes us to see things well before
       they actually happen on the server.

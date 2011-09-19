@@ -40,7 +40,7 @@ class PlayerData
       void Disconnect();
       void Kill();
       void Reset();
-      void PlayFireSound(ALBufferPtr);
+      Weapon& CurrentWeapon();
       
       Vector3 pos;
       Vector3 clientpos; // So server can keep track of both
