@@ -106,13 +106,9 @@ void Bot::Update()
          facingvec.transform(m);
          
          Vector3 rots = RotateBetweenVectors(facingvec, aimvec);
-         logout << rots << endl;
-         logout << facingvec << endl;
-         logout << p[1].pos << endl;
-         logout << aimvec << endl << endl;
 
-         netcode->bot.rotation = rots.y;
-         netcode->bot.pitch = rots.x;
+         netcode->bot.rotation = rots.y + Random(-3.f, 3.f);
+         netcode->bot.pitch = rots.x + Random(-1.f, 1.f);
       }
       
    }
