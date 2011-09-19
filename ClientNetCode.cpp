@@ -830,6 +830,7 @@ void ClientNetCode::ReadDeath(stringstream& get)
       }
       string message = player[killer].name + " killed " + player[killed].name;
       servermessages.push_back(message);
+      messageschanged = true;
    }
    // Ack it
    Ack(packetnum);
