@@ -55,6 +55,9 @@ class Bot{
       
       SDL_Thread* thread;
       
+      vector<PlayerData> localplayers; // Thread-specific copy of players to avoid locking issues
+      int targetplayer;
+      
       static vector<PlayerData> players;
       static MutexPtr playermutex;
       
@@ -67,6 +70,9 @@ class Bot{
       static int Start(void*);
       void Update();
       void Loop();
+      
+      int SelectTarget();
+      void AimAtTarget(int);
 };
 
 typedef boost::shared_ptr<Bot> BotPtr;

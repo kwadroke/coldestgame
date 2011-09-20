@@ -26,7 +26,8 @@ MutexPtr Bot::playermutex = MutexPtr();
 
 // Should leave thread to be initialized last so that all other data has been initialized first
 Bot::Bot() : botrunning(true),
-             netcode(new BotNetCode())
+             netcode(new BotNetCode()),
+             targetplayer(0)
 {
    timer.start();
    movetimer.start();
@@ -68,6 +69,8 @@ void Bot::Loop()
 
 void Bot::Update()
 {
+   localplayers = GetPlayers();
+   
    // Movement
    if (netcode->bot.moveleft)
       netcode->bot.facing -= .1f * movetimer.elapsed();
@@ -95,32 +98,63 @@ void Bot::Update()
          timer.start();
       }
       
-      vector<PlayerData> p = GetPlayers();
-      if (p.size() > 2)
+      if (!targetplayer || !localplayers[targetplayer].spawned)
+         targetplayer = SelectTarget();
+      
+      if (targetplayer)
       {
-         Vector3 aimvec = p[1].pos - p[2].pos;//netcode->bot.pos;
+         AimAtTarget(targetplayer);
          
-         Vector3 facingvec(0.f, 0.f, -1.f);
-         GraphicMatrix m;
-         m.rotatey(netcode->bot.facing);
-         facingvec.transform(m);
-         
-         Vector3 rots = RotateBetweenVectors(facingvec, aimvec);
-
-         netcode->bot.rotation = rots.y + Random(-3.f, 3.f);
-         netcode->bot.pitch = rots.x + Random(-1.f, 1.f);
+         // Weapons fire
+         if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
+            netcode->bot.temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
+         )
+         {
+            netcode->SendFire();
+            firetimer.start();
+         }
       }
       
    }
-   
-   // Weapons fire
-   if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
-      netcode->bot.temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
-   )
+}
+
+
+int Bot::SelectTarget()
+{
+   // Build list of players on the other team
+   intvec otherteam;
+   for (int i = 1; i < localplayers.size(); ++i)
    {
-      netcode->SendFire();
-      firetimer.start();
+      if (i != netcode->PlayerNum())
+      {
+         if (localplayers[i].team != localplayers[netcode->PlayerNum()].team && localplayers[i].spawned)
+         {
+            otherteam.push_back(i);
+         }
+      }
    }
+   
+   if (!otherteam.size())
+      return 0;
+
+   size_t index = Random(0, otherteam.size() - 1e-5f);
+   return otherteam[index];
+}
+
+
+void Bot::AimAtTarget(int target)
+{
+   Vector3 aimvec = localplayers[target].pos - localplayers[netcode->PlayerNum()].pos;
+   
+   Vector3 facingvec(0.f, 0.f, -1.f);
+   GraphicMatrix m;
+   m.rotatey(netcode->bot.facing);
+   facingvec.transform(m);
+   
+   Vector3 rots = RotateBetweenVectors(facingvec, aimvec);
+   
+   netcode->bot.rotation = rots.y + Random(-3.f, 3.f);
+   netcode->bot.pitch = rots.x + Random(-1.f, 1.f);
 }
 
 // This must be called before creating bots
