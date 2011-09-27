@@ -60,9 +60,13 @@ void Bot::Loop()
    netcode->id = gettid();
    while (botrunning)
    {
+      while (updatetimer.elapsed() < 1000 / console.GetInt("tickrate"))
+      {
+         SDL_Delay(1);
+      }
+      updatetimer.start();
       Update();
       netcode->Update();
-      SDL_Delay(1);
    }
 }
 

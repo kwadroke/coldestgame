@@ -52,6 +52,7 @@ class Bot{
       Timer timer;
       Timer movetimer;
       Timer firetimer;
+      Timer updatetimer;
       
       SDL_Thread* thread;
       
