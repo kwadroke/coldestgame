@@ -37,6 +37,13 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
       logout << "SDLNet_AllocPacket: " << SDLNet_GetError() << endl;
       error = true;
    }
+   
+   acktypes.insert("h");
+   acktypes.insert("s");
+   acktypes.insert("D");
+   acktypes.insert("m");
+   acktypes.insert("O");
+   acktypes.insert("r");
 }
 
 NetCode::~NetCode()

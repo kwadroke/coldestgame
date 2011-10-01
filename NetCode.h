@@ -24,8 +24,10 @@
 #include "Timer.h"
 #include <SDL/SDL_net.h>
 #include <list>
+#include <set>
 
 using std::list;
+using std::set;
 
 class NetCode
 {
@@ -69,6 +71,8 @@ class NetCode
       size_t sendbps;
       Timer sentbytestimer;
       size_t sentbytes;
+      
+      set<string> acktypes;
 
    private:
       list<Packet> sendqueue;

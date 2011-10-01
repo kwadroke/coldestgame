@@ -128,6 +128,13 @@ void BotNetCode::HandlePacket(stringstream& get)
       ReadPing();
    else if (packettype == "d")
       ReadDeath(get);
+   else if (packettype == "O")
+      running = false;
+   else if (acktypes.find(packettype) == acktypes.end() && packettype != "U" && packettype != "u")
+      logout << "Got unhandled packet: " << packettype << endl;
+   
+   if (acktypes.find(packettype) != acktypes.end())
+      Ack(packetnum);
 }
 
 
