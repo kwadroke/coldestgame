@@ -67,6 +67,9 @@ Particle::Particle(const string& filename, ResourceManager& resman) : playernum(
    read.Read(meshname, "Mesh");
    mesh = meshcache->GetMesh(meshname);
    t.start();
+   
+   string sound;
+   read.Read(sound, "Sound");
 }
 
 

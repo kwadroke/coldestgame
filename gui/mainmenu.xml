@@ -19,7 +19,7 @@
      tablerowpressed="textures/buttonnormsquare.png"
      tablerowhover=""
      cursornormal="textures/sliderbuttonnorm.png"
-     leftclicksound="sounds/beep-3.ogg">
+     leftclicksound="sounds/click.ogg">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
    
    <Label x="300" y="25" width="400" height="200" text="" name="logo" xmargin="0" ymargin="0" font="fonts/igloo.ttf" align="center"

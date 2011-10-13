@@ -13,7 +13,7 @@
      bgpressed="textures/buttonnormsquare.png"
      bghover="textures/buttonnormsquare.png"
      cursornormal="textures/sliderbuttonnorm.png"
-     leftclicksound="sounds/beep-3.ogg">
+     leftclicksound="sounds/click.ogg">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
    
    <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center"/>
