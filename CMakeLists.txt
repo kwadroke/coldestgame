@@ -73,7 +73,7 @@ set(MASTER_SERVER_SOURCES
 # Libraries
 
 # Boost
-find_package(Boost 1.35 REQUIRED COMPONENTS filesystem)
+find_package(Boost 1.35 REQUIRED COMPONENTS filesystem system)
 include_directories(${Boost_INCLUDE_DIRS})
 list(APPEND LIBS ${Boost_LIBRARIES})
 list(APPEND CLIENTLIBS ${Boost_LIBRARIES})
@@ -104,7 +104,7 @@ foreach(lib ${FINDCLIENTLIBS})
 endforeach(lib)
 
 # Master server has fewer deps
-list(APPEND MASTER_SERVER_LIBS ${SDL_net_LIBRARIES})
+list(APPEND MASTER_SERVER_LIBS ${SDL_LIBRARIES} ${SDL_net_LIBRARIES})
 
 
 # Targets
