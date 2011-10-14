@@ -59,14 +59,14 @@ void SoundManager::SetListenDir(Vector3& v)
 
 void SoundManager::SetPosition(const Vector3& v, SoundSource* s)
 {
-   if (s->id == sources[s->source]->soundsource->id)
+   if (s->id == sources[s->source]->managerid)
       sources[s->source]->SetPosition(v);
 }
 
 
 void SoundManager::StopSource(SoundSource* s)
 {
-   if (s->id == sources[s->source]->soundsource->id)
+   if (s->id == sources[s->source]->managerid)
       sources[s->source]->Stop();
 }
 
@@ -80,17 +80,21 @@ SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& po
    if (num >= sources.size() || filename == "")
       return SoundSourcePtr(new SoundSource());
 
-   SoundSourcePtr retval(new SoundSource(num, this));
    ALSourcePtr selected = sources[num];
-   if (selected)
+   selected->loop = loop;
+   selected->position = pos;
+   selected->Stop();
+   selected->Play(GetBuffer(filename));
+   
+   // If we're looping then the caller needs to keep track of it so it can be stopped at some point
+   if (loop)
    {
-      selected->loop = loop;
-      selected->position = pos;
-      selected->soundsource = retval;
-      selected->Stop();
-      selected->Play(GetBuffer(filename));
+      SoundSourcePtr retval(new SoundSource(num, this));
+      selected->managerid = retval->id;
+      return retval;
    }
-   return retval;
+   // Otherwise we don't actually bind a SoundSource or it will immediately stop playback when the object is destroyed
+   return SoundSourcePtr(new SoundSource());
 }
 
 

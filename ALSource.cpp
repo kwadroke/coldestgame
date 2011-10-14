@@ -22,7 +22,7 @@
 
 ALSource::ALSource() : position(Vector3()),
                    pitch(1.f), gain(1.f), loop(AL_FALSE), refdist(200.f), maxdist(5000.f),
-                         rolloff(1.f), relative(AL_FALSE), velocity(floatvec(3, 0.f))
+                         rolloff(1.f), relative(AL_FALSE), velocity(floatvec(3, 0.f)), managerid(0)
 {
    alGenSources(1, &id);
 }
@@ -30,7 +30,7 @@ ALSource::ALSource() : position(Vector3()),
 
 ALSource::ALSource(const ALSource& s) : position(s.position),
                    pitch(s.pitch), gain(s.gain), loop(s.loop), refdist(s.refdist), maxdist(s.maxdist),
-                         rolloff(s.rolloff), relative(s.relative), velocity(s.velocity)
+                         rolloff(s.rolloff), relative(s.relative), velocity(s.velocity), managerid(s.managerid)
 {
    alGenSources(1, &id);
 }
@@ -42,6 +42,7 @@ ALSource& ALSource::operator=(const ALSource& s)
    pitch = s.pitch;
    gain = s.gain;
    loop = s.loop;
+   managerid = s.managerid;
    alGenSources(1, &id);
    return *this;
 }

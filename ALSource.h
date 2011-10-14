@@ -52,7 +52,7 @@ class ALSource
       ALfloat maxdist;
       ALfloat rolloff;
       ALuint relative;
-      SoundSourcePtr soundsource;
+      size_t managerid;
       
    private:
       ALuint id;
