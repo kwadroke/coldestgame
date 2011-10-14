@@ -1622,7 +1622,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
          ++count;
          if (count > 2)
             slop *= 2.f;
-         if ((count > 5) && hit) // Damage control in case something goes wrong
+         if ((count > 10) && hit) // Damage control in case something goes wrong
          {
             logout << "Collision Detection Error " << adjust[0].distance() << endl;
             adjust[0].print();
@@ -2344,6 +2344,7 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
       part.tracertime = currplayerweapon.TracerTime();
    }
    particles.push_back(part);
+   particles.back().PlaySound(currplayerweapon.Sound(), resman);
    
    if (currplayerweapon.Id() != Weapon::NoWeapon)
       resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);

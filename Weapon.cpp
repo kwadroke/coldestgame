@@ -80,6 +80,7 @@ void Weapon::LoadFromFile(const string& file)
    read.Read(tracertime, "TracerTime");
    read.ReadLine(expfile, "ExplosionEmitter");
    read.ReadLine(firesound, "FireSound");
+   read.ReadLine(sound, "Sound");
 }
 
 

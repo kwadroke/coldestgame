@@ -46,6 +46,7 @@ class Weapon
       string Name() const {return name;}
       string Tracer() const {return tracerfile;}
       string FireSound() const {return firesound;}
+      string Sound() const {return sound;}
       int TracerTime() const {return tracertime;}
       string ExpFile() const {return expfile;}
       
@@ -72,6 +73,7 @@ class Weapon
       string tracerfile;
       string expfile;
       string firesound;
+      string sound;
       int tracertime;
 
 };

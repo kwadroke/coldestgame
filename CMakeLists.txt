@@ -53,6 +53,7 @@ set(COMMON_SOURCES
 	NTreeReader.cpp Material.cpp ResourceManager.cpp Mesh.cpp Triangle.cpp
 	Quad.cpp MeshNode.cpp ServerState.cpp MeshCache.cpp tsint.cpp Bot.cpp
 	Item.cpp util.cpp Mutex.cpp Map.cpp NetCode.cpp ServerNetCode.cpp BotNetCode.cpp
+	SoundSource.cpp
 	)
 
 set(CLIENT_SOURCES

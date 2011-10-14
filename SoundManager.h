@@ -28,6 +28,7 @@
 #include "ALBuffer.h"
 #include "ALSource.h"
 #include "Vector3.h"
+#include "SoundSource.h"
 #include "types.h"
 
 using std::map;
@@ -35,7 +36,7 @@ using std::string;
 using std::list;
 using std::vector;
 
-typedef list<ALSourcePtr> SourceList;
+typedef vector<ALSourcePtr> SourceList;
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
@@ -47,14 +48,17 @@ class SoundManager
       ALBufferPtr GetBuffer(const string&);
       void SetListenPos(Vector3&);
       void SetListenDir(Vector3&);
-      void PlaySound(const string&, const Vector3&);
-      void Update();
-      ALSourcePtr SelectSource(const Vector3&);
+      void SetPosition(const Vector3&, SoundSource*);
+      void StopSource(SoundSource*);
+      SoundSourcePtr PlaySound(const string&, const Vector3&, bool loop = false);
+      ALSourcePtr GetSource(const string&);
       void SetMaxSources(const size_t);
       
    private:
       SoundManager(const SoundManager&);
       SoundManager& operator=(const SoundManager&);
+      size_t SelectSource(const Vector3&);
+      
       map<string, ALBufferPtr> buffers;
       SourceList sources;
       Vector3 listenpos;

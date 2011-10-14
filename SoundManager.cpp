@@ -22,7 +22,7 @@
 
 SoundManager::SoundManager()
 {
-   sources = list<ALSourcePtr>(16);
+   sources = SourceList(16);
 }
 
 
@@ -57,58 +57,67 @@ void SoundManager::SetListenDir(Vector3& v)
 }
 
 
-void SoundManager::PlaySound(const string& filename, const Vector3& pos)
+void SoundManager::SetPosition(const Vector3& v, SoundSource* s)
 {
-   if (filename == "")
-      return;
-   ALSourcePtr selected;
-   selected = SelectSource(pos);
+   if (s->id == sources[s->source]->soundsource->id)
+      sources[s->source]->SetPosition(v);
+}
+
+
+void SoundManager::StopSource(SoundSource* s)
+{
+   if (s->id == sources[s->source]->soundsource->id)
+      sources[s->source]->Stop();
+}
+
+
+SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& pos, bool loop)
+{
+#ifdef DEDICATED
+   return SoundSourcePtr(new SoundSource());
+#endif
+   size_t num = SelectSource(pos);
+   if (num >= sources.size() || filename == "")
+      return SoundSourcePtr(new SoundSource());
+
+   SoundSourcePtr retval(new SoundSource(num, this));
+   ALSourcePtr selected = sources[num];
    if (selected)
    {
-      selected->Stop();
+      selected->loop = loop;
       selected->position = pos;
+      selected->soundsource = retval;
+      selected->Stop();
       selected->Play(GetBuffer(filename));
    }
+   return retval;
 }
 
 
-ALSourcePtr SoundManager::SelectSource(const Vector3& pos)
+size_t SoundManager::SelectSource(const Vector3& pos)
 {
-   SourceList::iterator i;
-   for (i = sources.begin(); i != sources.end(); ++i)
+   for (size_t i = 0; i <= sources.size(); ++i)
    {
-      if (!*i)
-         *i = ALSourcePtr(new ALSource());
-      ALSourcePtr p = *i;
-      if (!p->Playing())
-         return p;
+      if (!sources[i])
+         sources[i] = ALSourcePtr(new ALSource());
+      if (!sources[i]->Playing())
+         return i;
    }
-   for (i = sources.begin(); i != sources.end(); ++i)
+   for (size_t i = 0; i <= sources.size(); ++i)
    {
-      ALSourcePtr p = *i;
-      if (p->position.distance2(listenpos) < pos.distance2(listenpos))
-         return p;
+      if (sources[i]->position.distance2(listenpos) < pos.distance2(listenpos))
+         return i;
    }
-   return ALSourcePtr();
-}
-
-
-void SoundManager::Update()
-{
-   vector<list<ALSourcePtr>::iterator> remove;
-   for (list<ALSourcePtr>::iterator i = sources.begin(); i != sources.end(); ++i)
-   {
-      ALSourcePtr p = *i;
-      if (!p->Playing())
-         remove.push_back(i);
-   }
-   for (size_t i = 0; i < remove.size(); ++i)
-      sources.erase(remove[i]);
+   logout << "Warning: Failed to find sound source" << endl;
+   return sources.size();
 }
 
 
 void SoundManager::SetMaxSources(const size_t num)
 {
+   if (num < sources.size())
+      logout << "Warning: Setting max sources to a smaller value.  This may cause undesired behavior." << endl;
+   
    while (sources.size() < num)
    {
       ALSourcePtr newsource(new ALSource());

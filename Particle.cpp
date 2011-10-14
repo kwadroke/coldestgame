@@ -25,7 +25,7 @@
 Particle::Particle(Mesh& meshin) : playernum(0), id(0), velocity(0.f), accel(0.f),
                    weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f), 
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), clientonly(false), tracertime(10000), mesh(meshin),
-                   debug(false)
+                   debug(false), source(new SoundSource)
 {
    t.start();
 }
@@ -35,7 +35,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
                    float rad, bool exp, Uint32 tick, Mesh& meshin) : playernum(0), id(nid),
                    dir(v), pos(p), origin(p), lasttracer(p), velocity(vel), accel(acc), weight(w), radius(rad), explode(exp),
                    lasttick(tick), damage(0), dmgrad(0.f), rewind(0), collide(false), ttl(10000), expired(false), weapid(-1),
-                   clientonly(false), tracertime(10000), mesh(meshin), debug(false)
+                   clientonly(false), tracertime(10000), mesh(meshin), debug(false), source(new SoundSource)
 {
    dir.normalize();
    t.start();
@@ -45,7 +45,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 Particle::Particle(const string& filename, ResourceManager& resman) : playernum(0), id(0),
                    velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), clientonly(false), tracertime(10000), mesh(meshcache->GetMesh("models/empty")),
-                   debug(false)
+                   debug(false), source(new SoundSource)
 {
    NTreeReader read(filename);
    read.Read(velocity, "Velocity");
@@ -83,10 +83,15 @@ Vector3 Particle::Update()
    dir.y -= weight * float(interval) / 1000.f;
    pos += dir * (velocity * interval);
    mesh.Move(pos);
+#ifndef DEDICATED
+   source->SetPosition(pos);
+#endif
    if (ttl >= 0) // A negative ttl means never expire this particle
    {
       if (t.elapsed() >= Uint32(ttl))
+      {
          expired = true;
+      }
    }
    return oldpos;
 }
@@ -106,5 +111,13 @@ void Particle::Render(Mesh* rendermesh, const Vector3& campos)
    {
       mesh.Update(campos);
    }
+}
+
+
+void Particle::PlaySound(const string& filename, ResourceManager& resman)
+{
+#if !defined(DEDICATED) && !defined(EDITOR)
+   source = resman.soundman.PlaySound(filename, pos, true);
+#endif
 }
 

@@ -26,6 +26,7 @@
 #include "CollisionDetection.h"
 #include "Vector3.h"
 #include "Timer.h"
+#include "SoundSource.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
@@ -39,6 +40,7 @@ class Particle
       Particle(const string&, ResourceManager&);
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
+      void PlaySound(const string&, ResourceManager&);
       
       size_t playernum;
       unsigned long id;
@@ -70,6 +72,7 @@ class Particle
    private:
       Timer t;
       bool debug;
+      SoundSourcePtr source;
 };
 
 

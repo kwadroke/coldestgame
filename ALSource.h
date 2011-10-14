@@ -23,6 +23,7 @@
 
 #include "types.h"
 #include "ALBuffer.h"
+#include "SoundSource.h"
 #include <boost/shared_ptr.hpp>
 
 using boost::shared_ptr;
@@ -40,6 +41,7 @@ class ALSource
       void Play(const ALBuffer&);
       void Play(const ALBufferPtr&);
       void Stop();
+      void SetPosition(const Vector3&);
       static void CheckError();
       bool Playing();
       
@@ -50,6 +52,7 @@ class ALSource
       ALfloat maxdist;
       ALfloat rolloff;
       ALuint relative;
+      SoundSourcePtr soundsource;
       
    private:
       ALuint id;

@@ -92,6 +92,17 @@ void ALSource::Stop()
 }
 
 
+void ALSource::SetPosition(const Vector3& v)
+{
+   position = v;
+   floatvec arrpos(3);
+   arrpos[0] = position.x;
+   arrpos[1] = position.y;
+   arrpos[2] = position.z;
+   alSourcefv(id, AL_POSITION, &arrpos[0]);
+}
+
+
 bool ALSource::Playing()
 {
    ALenum state;

@@ -11,3 +11,4 @@ Model projectile
 ExplosionEmitter particles/emitters/explosion
 Tracer smoke
 TracerTime 1000
+Sound sounds/rocket.ogg
