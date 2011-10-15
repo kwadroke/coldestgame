@@ -50,7 +50,7 @@ class SoundManager
       void SetListenDir(Vector3&);
       void SetPosition(const Vector3&, SoundSource*);
       void StopSource(SoundSource*);
-      SoundSourcePtr PlaySound(const string&, const Vector3&, bool loop = false);
+      SoundSourcePtr PlaySound(const string&, const Vector3&, const bool loop = false, const bool relative = false);
       ALSourcePtr GetSource(const string&);
       void SetMaxSources(const size_t);
       

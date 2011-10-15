@@ -366,7 +366,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
             {
                logout << "Hit " << part << endl;
                serverplayers[i].hp[part] -= int(damage * serverplayers[i].item.ArmorMult());
-               servernetcode->SendDamage(i);
+               servernetcode->SendDamage(i, playernum);
                if (serverplayers[i].hp[part] <= 0)
                {
                   if (part != LArm && part != RArm)

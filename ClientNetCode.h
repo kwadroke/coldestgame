@@ -79,7 +79,7 @@ class ClientNetCode : public NetCode
       void ReadPing(stringstream&);
       void ReadShot(stringstream&);
       void ReadHit(stringstream&);
-      void ReadDamage();
+      void ReadDamage(stringstream&);
       void ReadServerInfo(stringstream&);
       void ReadSpawnRequest(stringstream&);
       void ReadAck(stringstream&);

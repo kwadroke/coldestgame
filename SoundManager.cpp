@@ -71,7 +71,7 @@ void SoundManager::StopSource(SoundSource* s)
 }
 
 
-SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& pos, bool loop)
+SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& pos, const bool loop, const bool relative)
 {
 #ifdef DEDICATED
    return SoundSourcePtr(new SoundSource());
@@ -81,7 +81,8 @@ SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& po
       return SoundSourcePtr(new SoundSource());
 
    ALSourcePtr selected = sources[num];
-   selected->loop = loop;
+   selected->loop = loop ? AL_TRUE : AL_FALSE;
+   selected->relative = relative ? AL_TRUE: AL_FALSE;
    selected->position = pos;
    selected->Stop();
    selected->Play(GetBuffer(filename));

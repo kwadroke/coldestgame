@@ -56,7 +56,7 @@ class ServerNetCode : public NetCode
       void SendGameOver(PlayerData&, const int);
       void SendShot(const Particle&);
       void SendHit(const Vector3&, const Particle&);
-      void SendDamage(const int);
+      void SendDamage(const int, const int);
       void SendRemove(const int, const int);
       void SendMessage(const string&);
 

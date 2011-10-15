@@ -363,7 +363,7 @@ void ClientNetCode::HandlePacket(stringstream& get)
    else if (packettype == "h")
       ReadHit(get);
    else if (packettype == "D")
-      ReadDamage();
+      ReadDamage(get);
    else if (packettype == "i")
       ReadServerInfo(get);
    else if (packettype == "S")
@@ -656,9 +656,14 @@ void ClientNetCode::ReadHit(stringstream& get)
 }
 
 
-void ClientNetCode::ReadDamage()
+void ClientNetCode::ReadDamage(stringstream& get)
 {
-   lasthit = SDL_GetTicks();
+   bool hitme;
+   get >> hitme;
+   if (!hitme)
+      resman.soundman.PlaySound("sounds/click.ogg", Vector3(), false, true);
+   else
+      lasthit = SDL_GetTicks();
    Ack(packetnum);
 }
 

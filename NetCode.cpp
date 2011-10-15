@@ -23,7 +23,7 @@
 
 using std::endl;
 
-const int NetCode::version = 6;
+const int NetCode::version = 7;
 
 NetCode::NetCode() : lastnettick(SDL_GetTicks()),
                      currnettick(0),

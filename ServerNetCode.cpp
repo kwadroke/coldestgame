@@ -807,10 +807,14 @@ void ServerNetCode::SendHit(const Vector3& hitpos, const Particle& p)
 }
 
 
-void ServerNetCode::SendDamage(const int i)
+void ServerNetCode::SendDamage(const int i, const int j)
 {
    Packet pack(&serverplayers[i].addr, "D", sendpacketnum, true);
+   pack << 1 << eol;
    SendPacket(pack);
+   Packet p(&serverplayers[j].addr, "D", sendpacketnum, true);
+   p << 0 << eol;
+   SendPacket(p);
 }
 
 

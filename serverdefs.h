@@ -29,8 +29,8 @@
 void ServerLoop();
 int ServerInput(void*);
 void HandleHit(Particle&, Mesh*, const Vector3&);
-void SplashDamage(const Vector3&, const float, const float, const int, const bool teamdamage = false);
-void ApplyDamage(Mesh*, const float, const size_t, const bool teamdamage = false);
+void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playernum, const bool teamdamage = false);
+void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const bool teamdamage = false);
 void ServerUpdatePlayer(int);
 void Rewind(Uint32, const Vector3&, const Vector3&, const float);
 void SaveState();
