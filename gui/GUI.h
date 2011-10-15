@@ -44,7 +44,6 @@
 #include "../TextureManager.h"
 #include "XSWrapper.h"
 #include "../util.h"
-#include "../ALSource.h"
 
 using xercesc::DOMElement;
 using xercesc::XercesDOMParser;
@@ -163,7 +162,6 @@ class GUI
       string oldtext;
       GLuint texttexture;
       vector<string> sounds;
-      ALSourcePtr soundsource;
       vector<string> textures;
       vector<GLuint> texids;
       TextureManager *texman;

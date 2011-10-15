@@ -227,6 +227,7 @@ void InitGlobals()
    console.Parse("set respawntime 15000", false);
    console.Parse("set cache 1", false);
    console.Parse("set musicvol 40", false);
+   console.Parse("set effectsvol 40", false);
    console.Parse("set servername @none@", false);
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 0", false);
@@ -2481,13 +2482,9 @@ bool PrimaryGUIVisible()
 void StartBGMusic()
 {
 #ifndef DEDICATED
-   //if (!musicsource)
-      musicsource = ALSourcePtr(new ALSource());
-   musicsource->loop = AL_TRUE;
-   musicsource->rolloff = 0.f;
-   //musicsource->relative = AL_TRUE;
-   musicsource->gain = console.GetFloat("musicvol") / 100.f;
-   musicsource->Play(resman.soundman.GetBuffer("sounds/bgmusic.ogg"));
+   resman.soundman.SetVolume(console.GetFloat("effectsvol"));
+   musicsource = resman.soundman.PlaySound("sounds/bgmusic.ogg", Vector3(), true, true);
+   musicsource->SetGain(console.GetFloat("musicvol") / 100.f);
 #endif
 }
 

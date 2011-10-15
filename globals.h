@@ -89,7 +89,7 @@ extern tsint winningteam;
 extern vector<BodyParts> weaponslots;
 extern MeshCachePtr meshcache;
 extern tsint spectateplayer;
-extern ALSourcePtr musicsource;
+extern SoundSourcePtr musicsource;
 extern bool editor;
 extern KeyMap keys;
 extern bool reloadgui;

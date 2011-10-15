@@ -15,6 +15,7 @@ class SoundSource
       SoundSource(size_t s, SoundManager* sm) : valid(true), source(s), id(nextid), soundman(sm) {}
       ~SoundSource();
       void SetPosition(const Vector3&);
+      void SetGain(const float);
       
    private:
       // Copying this object would require reference counting - just use a smart pointer

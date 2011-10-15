@@ -47,7 +47,7 @@ tsint winningteam;
 vector<BodyParts> weaponslots;
 MeshCachePtr meshcache;
 tsint spectateplayer;
-ALSourcePtr musicsource;
+SoundSourcePtr musicsource;
 bool editor;
 KeyMap keys;
 bool reloadgui;

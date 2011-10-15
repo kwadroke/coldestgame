@@ -42,6 +42,7 @@ class ALSource
       void Play(const ALBufferPtr&);
       void Stop();
       void SetPosition(const Vector3&);
+      void SetGain(const float);
       static void CheckError();
       bool Playing();
       

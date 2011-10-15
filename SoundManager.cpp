@@ -22,7 +22,6 @@
 
 SoundManager::SoundManager()
 {
-   sources = SourceList(16);
 }
 
 
@@ -64,6 +63,13 @@ void SoundManager::SetPosition(const Vector3& v, SoundSource* s)
 }
 
 
+void SoundManager::SetGain(const float g, SoundSource* s)
+{
+   if (s->id == sources[s->source]->managerid)
+      sources[s->source]->SetGain(g);
+}
+
+
 void SoundManager::StopSource(SoundSource* s)
 {
    if (s->id == sources[s->source]->managerid)
@@ -76,6 +82,7 @@ SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& po
 #ifdef DEDICATED
    return SoundSourcePtr(new SoundSource());
 #endif
+   SetMaxSources(16); // Can't do this in the constructor because OpenAL hasn't been initialized yet
    size_t num = SelectSource(pos);
    if (num >= sources.size() || filename == "")
       return SoundSourcePtr(new SoundSource());
@@ -103,8 +110,6 @@ size_t SoundManager::SelectSource(const Vector3& pos)
 {
    for (size_t i = 0; i <= sources.size(); ++i)
    {
-      if (!sources[i])
-         sources[i] = ALSourcePtr(new ALSource());
       if (!sources[i]->Playing())
          return i;
    }
@@ -127,6 +132,16 @@ void SoundManager::SetMaxSources(const size_t num)
    {
       ALSourcePtr newsource(new ALSource());
       sources.push_back(newsource);
+   }
+}
+
+
+// v should be [0 - 100]
+void SoundManager::SetVolume(const float v)
+{
+   for (size_t i = 0; i < sources.size(); ++i)
+   {
+      sources[i]->SetGain(v / 100.f);
    }
 }
 

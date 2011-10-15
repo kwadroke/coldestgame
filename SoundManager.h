@@ -49,10 +49,12 @@ class SoundManager
       void SetListenPos(Vector3&);
       void SetListenDir(Vector3&);
       void SetPosition(const Vector3&, SoundSource*);
+      void SetGain(const float, SoundSource*);
       void StopSource(SoundSource*);
       SoundSourcePtr PlaySound(const string&, const Vector3&, const bool loop = false, const bool relative = false);
       ALSourcePtr GetSource(const string&);
       void SetMaxSources(const size_t);
+      void SetVolume(const float);
       
    private:
       SoundManager(const SoundManager&);

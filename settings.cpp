@@ -44,6 +44,7 @@ void UpdateSettings()
    ComboBox* afbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("afbox"));
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
    Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
+   Slider* effectsvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("effectsvolslider"));
    GUI* forwardbutton = gui[settings]->GetWidget("forwardbutton");
    GUI* backbutton = gui[settings]->GetWidget("backbutton");
    GUI* leftbutton = gui[settings]->GetWidget("leftbutton");
@@ -66,6 +67,7 @@ void UpdateSettings()
    weaponfocusslider->value = console.GetInt("weaponfocus");
    nameedit->text = console.GetString("name");
    musicvolslider->value = console.GetInt("musicvol");
+   effectsvolslider->value = console.GetInt("effectsvol");
    forwardbutton->text = SDL_GetKeyName(keys.keyforward);
    backbutton->text = SDL_GetKeyName(keys.keyback);
    leftbutton->text = SDL_GetKeyName(keys.keyleft);
@@ -140,6 +142,7 @@ void SaveSettings()
    ComboBox* afbox = dynamic_cast<ComboBox*>(gui[settings]->GetWidget("afbox"));
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
    Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
+   Slider* effectsvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("effectsvolslider"));
    
    bool dorestart = false;
    
@@ -162,8 +165,11 @@ void SaveSettings()
    console.Parse("setsave aa " + ToString(aabox->SelectedText()), false);
    console.Parse("setsave af " + ToString(afbox->SelectedText()), false);
    console.Parse("setsave name " + nameedit->text, false);
+   // Need to do this first, or it will override the music volume setting
+   console.Parse("setsave effectsvol " + ToString(effectsvolslider->value), false);
+   resman.soundman.SetVolume(effectsvolslider->value);
    console.Parse("setsave musicvol " + ToString(musicvolslider->value), false);
-   StartBGMusic();
+   musicsource->SetGain(musicvolslider->value / 100.f);
    
    stringstream selectedres(resolutionbox->SelectedText());
    int newwidth, newheight;

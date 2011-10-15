@@ -103,6 +103,11 @@ void ALSource::SetPosition(const Vector3& v)
    alSourcefv(id, AL_POSITION, &arrpos[0]);
 }
 
+void ALSource::SetGain(const float g)
+{
+   alSourcef(id, AL_GAIN, g);
+}
+
 
 bool ALSource::Playing()
 {

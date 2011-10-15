@@ -18,3 +18,12 @@ void SoundSource::SetPosition(const Vector3& pos)
       soundman->SetPosition(pos, this);
 #endif
 }
+
+
+void SoundSource::SetGain(const float gain)
+{
+   #ifndef DEDICATED
+   if (valid)
+      soundman->SetGain(gain, this);
+   #endif
+}

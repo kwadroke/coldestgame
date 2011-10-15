@@ -129,11 +129,18 @@
            normal="textures/buttonnormsquare.png">
          <Layout x="0" y="0" padding="10" xmargin="20" ymargin="20">
             <Label x="0" y="0" width="180" height="30" text="Volume"/>
-            <Label x="0" y="0" width="200" height="25" text="Music">
-               <Slider x="0" y="25" width="180" height="30" name="musicvolslider" min="0" max="100">
-                  <Label x="190" y="0" width="50" height="25" name="musicvolslidervalue"/>
-               </Slider>
-            </Label>
+            <Layout x="0" y="0" padding="10">
+               <Label width="200" height="25" text="Music">
+                  <Slider x="0" y="25" width="180" height="30" name="musicvolslider" min="0" max="100">
+                     <Label x="190" y="0" width="50" height="25" name="musicvolslidervalue"/>
+                  </Slider>
+               </Label>
+               <Label width="200" height="25" text="Effects">
+                  <Slider x="0" y="25" width="180" height="30" name="effectsvolslider" min="0" max="100">
+                     <Label x="190" y="0" width="50" height="25" name="effectsvolslidervalue"/>
+                  </Slider>
+               </Label>
+            </Layout>
          </Layout>
       </Tab>
       <Tab text="Controls" buttonwidth="120"
