@@ -822,6 +822,8 @@ void MainLoop()
 
       // Update any animated objects
       Animate();
+      
+      SoundUpdate();
 
       // update the screen
       Repaint();
@@ -2619,6 +2621,17 @@ void LoadMap(const string& map)
       gui[loadprogress]->visible = false;
    if (!replayer->Active())
       recorder->SetActive(console.GetBool("record"));
+#endif
+}
+
+
+void SoundUpdate()
+{
+#ifndef DEDICATED
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      resman.soundman.PlaySound(i->CurrentSound(), i->GetPosition());
+   }
 #endif
 }
 

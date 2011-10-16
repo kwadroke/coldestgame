@@ -104,5 +104,6 @@ void GameEventHandler(SDL_Event&);
 void AddTracer(const Particle&);
 void UpdatePlayer();
 void TakeScreenshot();
+void SoundUpdate();
 
 #endif

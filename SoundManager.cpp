@@ -86,7 +86,7 @@ SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& po
    size_t num = SelectSource(pos);
    if (num >= sources.size() || filename == "")
       return SoundSourcePtr(new SoundSource());
-
+   
    ALSourcePtr selected = sources[num];
    selected->loop = loop ? AL_TRUE : AL_FALSE;
    selected->relative = relative ? AL_TRUE: AL_FALSE;
@@ -118,7 +118,7 @@ size_t SoundManager::SelectSource(const Vector3& pos)
       if (sources[i]->position.distance2(listenpos) < pos.distance2(listenpos))
          return i;
    }
-   logout << "Warning: Failed to find sound source" << endl;
+   //logout << "Warning: Failed to find sound source" << endl;
    return sources.size();
 }
 

@@ -105,6 +105,9 @@ void Mesh::Load(const NTreeReader& reader)
          int currft = 0;
          currframe.Read(currft, "TimeToNextFrame");
          frametime.push_back(currft);
+         string currsound;
+         currframe.Read(currsound, "Sound");
+         framesound.push_back(currsound);
          
          MeshNodeMap nodes;
          for (int j = 0; j < currframe.GetItemIndex("Triangles"); ++j)
@@ -352,6 +355,8 @@ void Mesh::AdvanceAnimation()
       animtime -= frametime[currkeyframe];
 
       currkeyframe = NextKeyFrame();
+      
+      currentsound = framesound[currkeyframe];
    }
 
    trismoved = true;

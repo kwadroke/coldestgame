@@ -43,6 +43,12 @@ ALBuffer::ALBuffer(const string& filename)
       
       f = fopen(filename.c_str(), "rb");
       
+      if (!f)
+      {
+         logout << "Failed to open ogg file " << filename << endl;
+         return;
+      }
+      
       vorbis_info *info;
       OggVorbis_File oggfile;
       

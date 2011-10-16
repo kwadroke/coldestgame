@@ -48,8 +48,9 @@ class Mesh
       const Vector3 GetPosition() const {return position;}
       const Vector3 GetRotation() const {return rotation;}
       string GetFile() const {return basefile;}
-      float GetAnimSpeed() const{return animspeed;}
+      float GetAnimSpeed() const {return animspeed;}
       float GetScale() const {return scale;}
+      string CurrentSound() {string retval = currentsound; currentsound = ""; return retval;}
 
       void Render(Material* overridemat = NULL);
       void SetAnimation(const int);
@@ -111,6 +112,7 @@ class Mesh
       vector<void*> offsets;
       intvec minindex, maxindex;
       vector<Material*> materials;
+      vector<string> framesound;
 #ifndef DEDICATED
       VBO vbo;
 #endif
@@ -138,6 +140,7 @@ class Mesh
       int curranimation, nextanimation;
       intvec numframes;
       intvec startframe;
+      string currentsound;
 };
 
 typedef list<Mesh> Meshlist;

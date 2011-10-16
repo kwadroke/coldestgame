@@ -1,6 +1,7 @@
 Version Version5
 NextID 649
 TimeToNextFrame 200
+Sound sounds/footstep.ogg
 Container
    ID 0
    ParentID -1
