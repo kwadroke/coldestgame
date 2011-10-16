@@ -138,7 +138,9 @@ bool CollisionDetection::CheckSphereHit(const Vector3& oldpos, const Vector3& ne
              hitpos);
    
    // Check edges of polys as well.
-   if (!adjusted[0])
+   // If there's no move, it may mean we're checking splash damage and we need to get all hit objects, not just the ones
+   // we hit in CheckMain.  Note that it is not necessary to do CheckCorners for nomove because CheckEdges with no move already handles that
+   if (!adjusted[0] || nomove)
    {
       CheckEdges(oldpos,
                  newpos,

@@ -2,7 +2,7 @@ ReloadTime 1000
 Velocity 1
 Weight 30
 Name Mortar
-Splash 100
+Splash 150
 Damage 150
 Ammo 8
 ExplosionEmitter particles/emitters/explosion

@@ -332,14 +332,14 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
    Vector3 dummy; // Don't care about where we hit with splash
    
    unsigned int numlevels = console.GetInt("splashlevels");
-   for (size_t i = 0; i < numlevels; ++i)
+   for (size_t i = 1; i <= numlevels; ++i)
    {
       // Have to reget the meshes each time or we can end up checking removed ones
       check = serverkdtree.getmeshes(hitpos, hitpos, dmgrad);
       AppendDynamicMeshes(check, servermeshes);
       
       Mesh* dummymesh;
-      coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i + 1) / float(numlevels)), check, servermap, dummy, dummymesh, NULL, &hitmeshes);
+      coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i) / float(numlevels)), check, servermap, dummy, dummymesh, NULL, &hitmeshes);
       std::sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(std::unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
       

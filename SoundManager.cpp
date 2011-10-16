@@ -108,12 +108,12 @@ SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& po
 
 size_t SoundManager::SelectSource(const Vector3& pos)
 {
-   for (size_t i = 0; i <= sources.size(); ++i)
+   for (size_t i = 0; i < sources.size(); ++i)
    {
       if (!sources[i]->Playing())
          return i;
    }
-   for (size_t i = 0; i <= sources.size(); ++i)
+   for (size_t i = 0; i < sources.size(); ++i)
    {
       if (sources[i]->position.distance2(listenpos) < pos.distance2(listenpos))
          return i;
