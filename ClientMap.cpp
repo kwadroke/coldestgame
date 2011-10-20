@@ -60,7 +60,8 @@ void ClientMap::SetProgress(const string& text, const int step)
 
 void ClientMap::Keepalive()
 {
-   netcode->SendKeepalive();
+   if (!editor)
+      netcode->SendKeepalive();
 }
 
 
