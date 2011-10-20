@@ -626,12 +626,14 @@ void SaveMap()
    }
    
    // Write objects
+   size_t count = 0;
    newmap << "Objects\n";
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (!i->terrain && 
          std::find(spawnmeshes.begin(), spawnmeshes.end(), &(*i)) == spawnmeshes.end())
       {
+         ++count;
          newmap << "   Node\n";
          if (treemap.find(&(*i)) == treemap.end()) // Not a proctree
          {
@@ -694,6 +696,8 @@ void SaveMap()
          }
       }
    }
+   if (!count)
+      newmap << "   Node\n";
    newmap.close();
 
    ifstream tempmap(tempname.c_str());
