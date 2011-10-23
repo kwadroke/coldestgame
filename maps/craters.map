@@ -1,0 +1,39 @@
+TileSize 60
+HeightScale 5
+ZeroHeight -10
+Stretch 8
+
+LightData
+Direction 1 1.1 1
+Diffuse .8 .8 .8 1
+Specular 1 1 1 1
+Ambient .4 .3 .4 1
+
+SkyBox materials/stars
+Water materials/water
+TerrainParams
+   Texture0
+      File textures/rock/MoonRock.png
+      HeightRange -10000 10000
+      SlopeRange 0 0
+      RandRange 0 100
+   Texture1
+      File textures/rock/MoonRock1.png
+      HeightRange -10000 10000
+      SlopeRange 0 0
+      RandRange 0 100
+      
+GrassData
+   Node
+
+SpawnPoints
+   Node
+      Team 1
+      Location 3760.35 411 1655.43
+      Name Base1
+   Node
+      Team 2
+      Location 3748.49 421 5942.42
+      Name Base2
+Objects
+   Node
