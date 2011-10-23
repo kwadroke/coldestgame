@@ -1,6 +1,6 @@
 Version Version5
 NextID 29
-TimeToNextFrame 200
+TimeToNextFrame 400
 Container
    ID 0
    ParentID -1

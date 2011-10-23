@@ -7,4 +7,4 @@ Damage 150
 Ammo 8
 ExplosionEmitter particles/emitters/explosion
 Model projectile
-FireSound sounds/bullethit.ogg
+FireSound sounds/mortarshot.ogg
