@@ -700,9 +700,7 @@ void LoadMapList()
    for (size_t i = 0; i < readmaps.NumChildren(); ++i)
    {
       const NTreeReader& currmap = readmaps(i);
-      string buffer;
-      currmap.Read(buffer, "File");
-      maplist.push_back(buffer);
+      maplist.push_back(currmap.GetName());
    }
 }
 
