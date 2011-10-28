@@ -7,7 +7,7 @@ LightData
 Direction 1 1.1 1
 Diffuse .8 .8 .8 1
 Specular 1 1 1 1
-Ambient .4 .3 .4 1
+Ambient .4 .33 .4 1
 
 SkyBox materials/stars
 Water materials/water
