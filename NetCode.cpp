@@ -38,6 +38,7 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
       error = true;
    }
    
+   // Keep a universal list of packets that need acking so we don't have to handle it specially in every subclass
    acktypes.insert("h");
    acktypes.insert("s");
    acktypes.insert("D");
