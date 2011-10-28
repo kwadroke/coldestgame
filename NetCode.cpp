@@ -44,6 +44,16 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
    acktypes.insert("m");
    acktypes.insert("O");
    acktypes.insert("r");
+   acktypes.insert("T");
+   acktypes.insert("I");
+   acktypes.insert("K");
+   acktypes.insert("P");
+   acktypes.insert("f");
+   acktypes.insert("t");
+   acktypes.insert("L");
+   acktypes.insert("d");
+   acktypes.insert("R");
+   acktypes.insert("Y");
 }
 
 NetCode::~NetCode()
@@ -109,6 +119,8 @@ void NetCode::Receive()
       get >> packetnum;
 
       HandlePacket(get);
+      
+      DoAck();
    }
 
    ReceiveExtended();
@@ -135,6 +147,14 @@ void NetCode::Ack(const unsigned long acknum)
    response << 0 << eol;
    response << acknum << eol;
    SendPacket(response);
+}
+
+
+// If you need to use a different Ack function, you will need to override this
+void NetCode::DoAck()
+{
+   if (acktypes.find(packettype) != acktypes.end())
+      Ack(packetnum);
 }
 
 

@@ -80,6 +80,7 @@ class ServerNetCode : public NetCode
 
       virtual void Send();
       void Ack(const unsigned long, UDPpacket*);
+      virtual void DoAck();
 
       size_t playernum;
       set<SortableIPaddress> validaddrs;

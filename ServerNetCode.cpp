@@ -284,7 +284,9 @@ void ServerNetCode::ReadSpawn(stringstream& get)
    bool accepted = false;
    Vector3 spawnpointreq;
    
-   logout << "Player " << playernum << " is spawning" << endl;
+   if (!serverplayers[playernum].spawned)
+      logout << "Player " << playernum << " is spawning" << endl;
+   
    get >> serverplayers[playernum].unit;
    int weapid;
    for (int i = 0; i < numbodyparts; ++i)
@@ -389,7 +391,7 @@ void ServerNetCode::ReadSpawn(stringstream& get)
    else response << 0 << eol;
    response << packetnum << eol;
    response << spawnpointreq.x << eol << spawnpointreq.y << eol << spawnpointreq.z << eol;
-
+   
    SendPacket(response);
 }
 
@@ -419,7 +421,6 @@ void ServerNetCode::ReadChat(stringstream& get)
          }
       }
    }
-   Ack(packetnum, packet);
 }
 
 
@@ -468,7 +469,6 @@ void ServerNetCode::HandleUseItem()
       if (serverplayers[playernum].item.Type() == Item::SpawnPoint)
          serverplayers[playernum].item = Item(Item::NoItem, servermeshes);
    }
-   Ack(packetnum, packet);
 }
 
 
@@ -482,7 +482,6 @@ void ServerNetCode::HandleKill()
          serverplayers[playernum].salvage = 100;
       SendKill(playernum, playernum);
    }
-   Ack(packetnum, packet);
 }
 
 
@@ -519,7 +518,6 @@ void ServerNetCode::HandlePowerDown()
          }
       }
    }
-   Ack(packetnum, packet);
 }
 
 
@@ -554,7 +552,6 @@ void ServerNetCode::HandleFire()
       serverplayers[playernum].fireids.insert(packetnum);
       serverplayers[playernum].firerequests.push_back(packetnum);
    }
-   Ack(packetnum, packet);
 }
 
 
@@ -572,7 +569,6 @@ void ServerNetCode::ReadAuthentication(stringstream& get)
    {
       logout << "Password incorrect" << endl;
    }
-   Ack(packetnum, packet);
 }
 
 
@@ -587,7 +583,6 @@ void ServerNetCode::HandleLoadout()
       serverplayers[playernum].Kill();
       serverplayers[playernum].spawntimer = console.GetInt("respawntime");
    }
-   Ack(packetnum, packet);
 }
 
 void ServerNetCode::Send()
@@ -844,6 +839,13 @@ void ServerNetCode::Ack(const unsigned long num, UDPpacket* pack)
    Packet response(&pack->address, "A", 0);
    response << num << eol;
    SendPacket(response);
+}
+
+
+void ServerNetCode::DoAck()
+{
+   if (acktypes.find(packettype) != acktypes.end())
+      Ack(packetnum, packet);
 }
 
 

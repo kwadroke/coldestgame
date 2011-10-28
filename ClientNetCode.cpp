@@ -632,7 +632,6 @@ void ClientNetCode::ReadShot(stringstream& get)
       ClientCreateShot(player[pnum], dummy);
       recorder->AddShot(pnum, weapid);
    }
-   Ack(packetnum);
 }
 
 
@@ -652,7 +651,6 @@ void ClientNetCode::ReadHit(stringstream& get)
       recorder->AddHit(hitpos, type);
    }
    
-   Ack(packetnum);
 }
 
 
@@ -664,7 +662,6 @@ void ClientNetCode::ReadDamage(stringstream& get)
       resman.soundman.PlaySound("sounds/click.ogg", Vector3(), false, true);
    else
       lasthit = SDL_GetTicks();
-   Ack(packetnum);
 }
 
 
@@ -742,8 +739,6 @@ void ClientNetCode::ReadText(stringstream& get)
          getline(get, line);
          AppendToChat(oppnum, line, false); // TODO Right now all chats appear to be global, this should be fixed
       }
-      // Ack it
-      Ack(packetnum);
    }
 }
 
@@ -813,7 +808,6 @@ void ClientNetCode::ReadServerMessage(stringstream& get)
       messageschanged = true;
       servermessages.push_back(message);
    }
-   Ack(packetnum);
 }
 
 
@@ -837,8 +831,6 @@ void ClientNetCode::ReadDeath(stringstream& get)
       servermessages.push_back(message);
       messageschanged = true;
    }
-   // Ack it
-   Ack(packetnum);
 }
 
 
@@ -861,7 +853,6 @@ void ClientNetCode::ReadItem(stringstream& get)
       AddItem(newitem);
       itemsreceived.insert(id);
    }
-   Ack(packetnum);
 }
 
 
@@ -893,7 +884,6 @@ void ClientNetCode::ReadRemoveItem(stringstream& get)
          break;
       }
    }
-   Ack(packetnum);
 }
 
 
@@ -911,7 +901,6 @@ void ClientNetCode::ReadSync(stringstream& get)
       {
          console.Parse(buffer, false);
       }
-      Ack(packetnum);
    }
 }
 
@@ -929,7 +918,6 @@ void ClientNetCode::ReadGameOver(stringstream& get)
    get >> getteam;
    winningteam = getteam;
    logout << "Team " << winningteam << " wins!" << endl;
-   Ack(packetnum);
 }
 
 
@@ -945,8 +933,6 @@ void ClientNetCode::ReadRemovePart(stringstream& get)
    DeleteMesh(player[num].mesh[part]);
    player[num].mesh[part] = meshes.end();
    player[num].hp[part] = 0;
-   
-   Ack(packetnum);
 }
 
 

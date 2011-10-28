@@ -150,9 +150,6 @@ void BotNetCode::HandlePacket(stringstream& get)
       running = false;
    else if (acktypes.find(packettype) == acktypes.end() && packettype != "U" && packettype != "u")
       logout << "Got unhandled packet: " << packettype << endl;
-   
-   if (acktypes.find(packettype) != acktypes.end())
-      Ack(packetnum);
 }
 
 

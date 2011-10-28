@@ -45,6 +45,7 @@ class NetCode
       virtual void HandlePacket(stringstream&){}
       void HandleAck(const unsigned long);
       void Ack(const unsigned long);
+      virtual void DoAck();
       virtual void Send(){}
       
       void SendLoop();
