@@ -19,6 +19,7 @@
 
 
 #include "ResourceManager.h"
+#include "globals.h"
 
 #ifndef DEDICATED
 ResourceManager::ResourceManager() : texhand(), texman(&texhand)
@@ -73,6 +74,7 @@ void ResourceManager::ReleaseAll()
    materials.clear();
    texhand.ForgetCurrent();
    shaderman.ReloadAll(false);
+   fontcache.Clear();
 #endif
 }
 

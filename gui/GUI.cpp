@@ -32,6 +32,7 @@
 #include "TabWidget.h"
 #include "Layout.h"
 #include "../globals.h"
+#include "Font.h"
 
 using std::hex;
 
@@ -73,7 +74,7 @@ void GUI::Init(GUI* p, TextureManager* tm)
    texman = tm;
    wratio = p->wratio;
    hratio = p->hratio;
-   font = p->font;
+   fontname = p->fontname;
    actualw = p->actualw;
    actualh = p->actualh;
    active = false;
@@ -81,9 +82,8 @@ void GUI::Init(GUI* p, TextureManager* tm)
    align = Left;
    xmargin = 6.f;
    ymargin = 2.f;
-   basefontsize = 48.f; // Font is rendered at this pt size and scaled
-   fontscale = 12.f / basefontsize; // Default font size is 12
-   text = oldtext = "";
+   fontscale = 12.f / Font::basesize; // Default font size is 12
+   text = "";
    textcolor.r = textcolor.g = textcolor.b = textcolor.unused = 255;
    lastclick = 0;
    for (size_t i = 0; i < numdefaults; ++i)
@@ -97,7 +97,6 @@ void GUI::Init(GUI* p, TextureManager* tm)
    for (size_t j = 0; j < numdefaults; ++j)
       defaulttextures[j] = p->defaulttextures[j];
    textures = vector<string>(3, "");
-   glGenTextures(1, &texttexture);
    
    sounds = vector<string>(2, "");
    sounds = p->sounds;
@@ -106,17 +105,11 @@ void GUI::Init(GUI* p, TextureManager* tm)
 
 void GUI::Cleanup()
 {
-   // Smart pointers should make this unnecessary
-   //guiiter i;
-   //for (i = children.begin(); i != children.end(); ++i)
-   //   delete *i;
-   glDeleteTextures(1, &texttexture);
 }
 
 
 void GUI::SetTextureManager(TextureManager* texm)
 {
-   //realtm = texm;
    texman = texm;
 }
 
@@ -367,7 +360,7 @@ void GUI::InitFromFile(string filename)
       parser->parse(filename.c_str());
    
       // doc is owned by the parser, we don't need to worry about it
-	  xercesc::DOMDocument* doc = parser->getDocument();
+      xercesc::DOMDocument* doc = parser->getDocument();
       if (doc)
       {
          DOMElement* element = doc->getDocumentElement();
@@ -428,18 +421,8 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
             virtualh = atof(ReadAttribute(current, XSWrapper("virtualh")).c_str());
             wratio = actualw / virtualw;
             hratio = actualh / virtualh;
-            string fontname = ReadAttribute(current, XSWrapper("font"));
-            if (!TTF_WasInit())
-               logout << "Warning: GUI detected that SDL_ttf was not initialized" << endl;
-            else
-            {
-               font = TTF_OpenFont(fontname.c_str(), 48);
-               if (!font)
-               {
-                  logout << "Failed to initialize font: " << TTF_GetError() << endl;
-                  exit(1);
-               }
-            }
+            fontname = ReadAttribute(current, XSWrapper("font"));
+            
             sounds[LeftSound] = ReadAttribute(current, XSWrapper("leftclicksound"));
             sounds[RightSound] = ReadAttribute(current, XSWrapper("rightclicksound"));
             string val = ReadAttribute(current, XSWrapper("visible"));
@@ -500,7 +483,7 @@ void GUI::ReadNode(DOMNode *current, GUI* parent)
          newwidget->height = atof(ReadAttribute(current, XSWrapper("height")).c_str());
          newwidget->text = ReadAttribute(current, XSWrapper("text"));
          newwidget->name = ReadAttribute(current, XSWrapper("name"));
-         newwidget->fontscale = atof(ReadAttribute(current, XSWrapper("fontsize")).c_str()) / basefontsize;
+         newwidget->fontscale = atof(ReadAttribute(current, XSWrapper("fontsize")).c_str()) / Font::basesize;
          newwidget->xmargin = atof(ReadAttribute(current, XSWrapper("xmargin")).c_str());
          newwidget->ymargin = atof(ReadAttribute(current, XSWrapper("ymargin")).c_str());
          newwidget->leftclickaction = ReadAttribute(current, XSWrapper("leftclick"));
@@ -658,145 +641,58 @@ bool GUI::InWidget(const SDL_Event* event)
 }
 
 
-// Returns the height and width in pixels of the text in the height and width params
-void GUI::StringDim(TTF_Font* font, string text, int& width, int& height)
-{
-   if (text.length() == 0 || !TTF_WasInit())
-   {
-      width = 0;
-      height = 0;
-      return;
-   }
-   
-   SDL_Color col;
-   col.r = 255;
-   col.g = 255;
-   col.b = 255;
-   
-   SDL_Surface *t = TTF_RenderText_Solid(font, text.c_str(), col);
-   if (!t)  // Had some problems with sdl-ttf at one point
-   {        // At least this way it won't segfault
-      logout << "Error rendering text: " << text << endl;
-      logout << "TTF Error: " << TTF_GetError() << endl;
-      exit(-10);
-   }
-   
-   height = t->h;
-   width = t->w;
-   
-   SDL_FreeSurface(t);
-}
-
-
 /* Call SDL_GL_Enter2dMode before using this function.  After finishing with it call
    SDL_GL_Exit2dMode to undo the changes.
 
    justify: 0 = left, 1 = right
-   
-   If str == oldstr then it won't re-render the text, it will just properly display the texture
 */
-void GUI::RenderText(string str, string oldstr, int x, int y, int justify, TTF_Font *font, GLuint tex, SDL_Color col, float scale, bool shadow)
+void GUI::RenderText(const string& str, int x, int y, int justify, SDL_Color col, float scale, bool shadow)
 {
-   if (str.length() == 0 || !TTF_WasInit())
+   if (!str.length())
       return;
-   SDL_Color white;
-   white.r = 255;
-   white.g = 255;
-   white.b = 255;
    
-   SDL_Surface *t = TTF_RenderText_Solid(font, str.c_str(), white);
-   if (!t)  // Had some problems with sdl-ttf at one point
-   {        // At least this way it won't segfault
-      logout << "Error rendering text: " << str << endl;
-      exit(-11);
-   }
-   int neww = PowerOf2(t->w);
-   int newh = PowerOf2(t->h);
-   
-   texman->texhand->BindTexture(tex);
-   
-   if (oldstr != str)
+   if (shadow)
    {
-      Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-      rmask = 0xff000000;
-      gmask = 0x00ff0000;
-      bmask = 0x0000ff00;
-      amask = 0x000000ff;
-#else
-      rmask = 0x000000ff;
-      gmask = 0x0000ff00;
-      bmask = 0x00ff0000;
-      amask = 0xff000000;
-#endif
-      SDL_Surface *text = SDL_CreateRGBSurface(SDL_SWSURFACE, neww, newh, 32,
-                              rmask, gmask, bmask, amask);
-   
-  
-      SDL_BlitSurface(t, NULL, text, NULL);
-      
-      SDL_LockSurface(text);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, text->w, text->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, text->pixels);
-      
-      SDL_FreeSurface(text);
+      SDL_Color black = col;
+      black.r = black.g = black.b = 0;
+      RenderText(str, x + 2, y + 2, justify, black, scale, false);
    }
    
-   float texwidth = (float)t->w / (float)neww;
-   float texheight = (float)t->h / (float)newh;
+   FontPtr font = fontcache.GetFont(fontname);
    
-   int offset = 2;
-   int shadowpass = shadow ? 1 : 0;
-   while (shadowpass >= 0)
+   int currx = x;
+   int width = 0;
+   int height; // Don't actually care about this right now
+   float z = .5f;
+   if (shadow)
+      z = .9f;
+   GLubytevec color(4, 255);
+   color[0] = col.r;
+   color[1] = col.g;
+   color[2] = col.b;
+   color[3] = col.unused;
+   Quadvec& quads = shadow ? shadowquads : textquads;
+   if (quads.size() < str.size())
+      quads.resize(str.size());
+   for (size_t i = 0; i < str.size(); ++i)
    {
-      if (shadow)
-      {
-         if (shadowpass)
-         {
-            glColor4f(0, 0, 0, 1);
-            x += offset;
-            y += offset;
-         }
-         else 
-         {
-            float r = float(col.r) / 255.f;
-            float g = float(col.g) / 255.f;
-            float b = float(col.b) / 255.f;
-            float a = float(col.unused) / 255.f;
-            glColor4f(r, g, b, a);
-            x -= offset;
-            y -= offset;
-         }
-      }
-      glBegin(GL_TRIANGLE_STRIP);
-      if (justify == 0)
-      {
-         glTexCoord2f(0, 0);
-         glVertex2f(x, y);
-         glTexCoord2f(0, texheight);
-         glVertex2f(x, y + t->h * scale);
-         glTexCoord2f(texwidth, 0);
-         glVertex2f(x + t->w * scale, y);
-         glTexCoord2f(texwidth, texheight);
-         glVertex2f(x + t->w * scale, y + t->h * scale);
-      }
-      else if (justify == 1)
-      {
-         glTexCoord2f(0, 0);
-         glVertex2f(x - t->w, y);
-         glTexCoord2f(0, texheight);
-         glVertex2f(x - t->w, y + t->h);
-         glTexCoord2f(texwidth, 0);
-         glVertex2f(x, y);
-         glTexCoord2f(texwidth, texheight);
-         glVertex2f(x, y + t->h);
-      }
-      glEnd();
-      --shadowpass;
+      Quad& q = quads[i];
+      font->GetChar(str[i], q);
+      q.Scale(scale);
+      q.Translate(Vector3(currx, y, z));
+      for (size_t j = 0; j < 4; ++j)
+         q.SetColor(j, color);
+      textmesh->Add(q);
+      font->StringDim(str.substr(0, std::min(i + 1, str.size())), width, height);
+      currx = width * scale + x;
    }
-   glColor4f(1, 1, 1, 1);
-   
-   SDL_FreeSurface(t);
+}
+
+
+void GUI::StringDim(const string& s, int& w, int& h)
+{
+   FontPtr font = fontcache.GetFont(fontname);
+   font->StringDim(s, w, h);
 }
 
 

@@ -58,3 +58,6 @@ bool replaying;
 bool spawnschanged;
 ClientNetCodePtr netcode;
 UpdaterPtr updater;
+#ifndef DEDICATED
+FontCache fontcache;
+#endif

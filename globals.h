@@ -45,6 +45,7 @@
 #include "Map.h"
 #include "ClientNetCode.h"
 #include "Updater.h"
+#include "gui/FontCache.h"
 
 
 #define PI 3.14159265
@@ -100,6 +101,7 @@ extern bool replaying;
 extern bool spawnschanged;
 extern ClientNetCodePtr netcode;
 extern UpdaterPtr updater;
+extern FontCache fontcache;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

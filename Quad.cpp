@@ -179,4 +179,45 @@ void Quad::SetMaterial(Material* m)
 }
 
 
+void Quad::Translate(const Vector3& v)
+{
+   for (int i = 0; i < 4; ++i)
+   {
+      int vert, vert1;
+      
+      GetVertNums(i, vert, vert1);
+      
+      Vector3 current;
+      if (vert >= 0 && vert < 3)
+         current = first->v[vert]->pos;
+      if (vert1 >= 0 && vert1 < 3)
+         current = second->v[vert1]->pos;
+      SetVertex(i, current + v);
+   }
+}
+
+
+void Quad::Scale(const float scale)
+{
+   int vert, vert1;
+   GetVertNums(0, vert, vert1);
+   Vector3 offset = first->v[vert]->pos;
+   Translate(-offset);
+   
+   for (int i = 1; i < 4; ++i)
+   {
+      GetVertNums(i, vert, vert1);
+      
+      Vector3 current;
+      if (vert >= 0 && vert < 3)
+         current = first->v[vert]->pos;
+      if (vert1 >= 0 && vert1 < 3)
+         current = second->v[vert1]->pos;
+      SetVertex(i, current * scale);
+   }
+   
+   Translate(offset);
+}
+
+
 

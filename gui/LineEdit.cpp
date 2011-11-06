@@ -42,7 +42,7 @@ void LineEdit::RenderWidget()
       if (offset > text.length()) offset = 0;
       if (cursorpos > text.length()) cursorpos = 0;
       string textlen = text.substr(offset, cursorpos);
-      StringDim(font, textlen, w, h);
+      StringDim(textlen, w, h);
       float fw = (float)w / wratio * fontscale;
       texman->BindTexture(defaulttextures[CursorTex][Normal]);
       glBegin(GL_TRIANGLE_STRIP);
@@ -59,7 +59,7 @@ void LineEdit::RenderWidget()
    
    if (text != "") // Empty text messes up our scale calculations, and there's no need to do them if we're not rendering any
    {
-      StringDim(font, text, w, h);
+      StringDim(text, w, h);
       float fh = (float)h / hratio;
       //float fw = (float)w / wratio;    unused
       
@@ -67,8 +67,7 @@ void LineEdit::RenderWidget()
       fh *= scale;
       
       float centery = height / 2.f - fh / 2.f;
-      RenderText(GetVisible(), oldtext, int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, textcolor, scale);
-      oldtext = GetVisible();
+      RenderText(GetVisible(), int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, textcolor, scale);
       fontscale = scale;
    }
    
@@ -148,12 +147,12 @@ int LineEdit::CalculateMousePos(int mx, int my)
    int counter = 1;
    int strw, strh;
    string temp = GetVisible().substr(0, counter);
-   StringDim(font, temp, strw, strh);
+   StringDim(temp, strw, strh);
    while (vx > x + xoff + strw / wratio * fontscale && temp.length() < GetVisible().length())
    {
       ++counter;
       temp = GetVisible().substr(0, counter);
-      StringDim(font, temp, strw, strh);
+      StringDim(temp, strw, strh);
    }
    if (vx > x + xoff + strw / wratio * fontscale)
       ++counter;
@@ -200,11 +199,11 @@ string LineEdit::GetVisible()
    string available = text.substr(offset);
    size_t counter = 1;
    int strw, strh;
-   StringDim(font, available.substr(0, counter), strw, strh);
+   StringDim(available.substr(0, counter), strw, strh);
    while (strw / wratio * fontscale < width - 2.f && available.substr(0, counter).length() < available.length())
    {
       ++counter;
-      StringDim(font, available.substr(0, counter), strw, strh);
+      StringDim(available.substr(0, counter), strw, strh);
    }
    if (counter < available.length() || strw / wratio * fontscale >= width - 2.f) --counter;
    return available.substr(0, counter);

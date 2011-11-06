@@ -42,6 +42,8 @@ class Quad
       void SetColor(const int, const GLubytevec);
       void SetTexCoords(const int, const int, const floatvec);
       void SetTerrainWeight(const int, const int, const float);
+      void Translate(const Vector3&);
+      void Scale(const float);
       TrianglePtr First() {return first;}
       TrianglePtr Second() {return second;}
       

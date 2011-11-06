@@ -40,10 +40,10 @@
 #include <vector>
 #include <string>
 #include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 #include "../TextureManager.h"
 #include "XSWrapper.h"
 #include "../util.h"
+#include "../Quad.h"
 
 using xercesc::DOMElement;
 using xercesc::XercesDOMParser;
@@ -92,12 +92,13 @@ class GUI
       virtual bool FloatsInWidget(float, float);
       bool InWidget(float, float);
       bool InWidget(const SDL_Event*);
-      void RenderText(string, string, int, int, int, TTF_Font*, GLuint, SDL_Color, float scale = 1.f, bool shadow = true);
+      void RenderText(const string&, int, int, int, SDL_Color, float scale = 1.f, bool shadow = true);
       void SetActive(bool act = true);
       void SetTextureID(int, GLuint);
       void SetTexture(int, const string&);
       float MaxX();
       float MaxY();
+      void StringDim(const string&, int&, int&);
       
       bool visible;
       bool readonly;
@@ -121,7 +122,6 @@ class GUI
       virtual void RenderWidget(){}
       virtual void PostRender(){}
       void Init(GUI*, TextureManager*);
-      void StringDim(TTF_Font*, string, int&, int&);
       void RenderBase();
       vector<string> ReadTextures(DOMNode*, const string& prefix = "");
       void UseDefaultTextures(int);
@@ -155,17 +155,17 @@ class GUI
       float wratio, hratio;
       float xoff, yoff;
       float fontscale;
-      float basefontsize;
       int state;
       bool active;
       string name;
-      string oldtext;
-      GLuint texttexture;
+      Quadvec textquads;
+      Quadvec shadowquads;
       vector<string> sounds;
       vector<string> textures;
       vector<GLuint> texids;
       TextureManager *texman;
-      TTF_Font* font;
+      // Store the font name instead of a pointer to it so that fonts can be reloaded easily when necessary
+      string fontname;
       Uint32 lastclick;
       
 };

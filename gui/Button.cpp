@@ -39,7 +39,7 @@ void Button::RenderWidget()
       state = Normal;
    RenderBase();
    int w, h;
-   StringDim(font, text, w, h);
+   StringDim(text, w, h);
    float fh = (float)h / hratio;
    float fw = (float)w / wratio;
    
@@ -56,8 +56,7 @@ void Button::RenderWidget()
    float centerx = 0.f;
    if (align == Center)
       centerx = (width - fw) / 2.f - xmargin;
-   RenderText(text, oldtext, int((x + xoff + xmargin + centerx) * wratio), int((y + yoff + centery) * hratio), 0, font, texttexture, textcolor, scale);
-   oldtext = text;
+   RenderText(text, int((x + xoff + xmargin + centerx) * wratio), int((y + yoff + centery) * hratio), 0, textcolor, scale);
 }
 
 

@@ -101,7 +101,7 @@ void TextArea::Refresh()
          }
       }
       
-      StringDim(font, working.substr(0, i), swidth, sheight);
+      StringDim(working.substr(0, i), swidth, sheight);
       float scale = (table->rowheight - ymargin * 2.f) * hratio / (float)sheight;
       float fw = (float)swidth / wratio * scale;
       

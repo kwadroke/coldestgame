@@ -619,7 +619,7 @@ void Mesh::GenIboData()
 
 void Mesh::BindAttribs()
 {
-   #ifndef DEDICATED
+#ifndef DEDICATED
    if (meshdata.resman.shaderman.CurrentShader() == 0) return;
    VBOData dummy;
    int location;
@@ -641,13 +641,13 @@ void Mesh::BindAttribs()
       glEnableVertexAttribArrayARB(location);
       glVertexAttribPointerARB(location, 3, GL_FLOAT, GL_FALSE, sizeof(VBOData), (void*)((ptrdiff_t)&(dummy.tx) - (ptrdiff_t)&dummy));
    }
-   #endif
+#endif
 }
 
 
 void Mesh::UnbindAttribs()
 {
-   #ifndef DEDICATED
+#ifndef DEDICATED
    if (meshdata.resman.shaderman.CurrentShader() == 0) return;
    int location = meshdata.resman.shaderman.GetAttribLocation(meshdata.resman.shaderman.CurrentShader(), "terrainwt");
    if (location >= 0)
@@ -664,13 +664,13 @@ void Mesh::UnbindAttribs()
    {
       glDisableVertexAttribArrayARB(location);
    }
-   #endif
+#endif
 }
 
 
 void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 {
-   #ifndef DEDICATED
+#ifndef DEDICATED
    if (!meshdata.impmat)
    {
       meshdata.impmat = MaterialPtr(new Material("materials/impostor", meshdata.resman.texman, meshdata.resman.shaderman));
@@ -696,7 +696,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    meshdata.impostor->Move(moveto);
    meshdata.impostor->Update(campos);
    rendermesh.Add(*meshdata.impostor);
-   #endif
+#endif
 }
 
 

@@ -2653,7 +2653,7 @@ void SDL_GL_Enter2dMode()
    glPushMatrix();
    glLoadIdentity();
    
-   glOrtho(0.0, screenwidth, screenheight, 0.0, -1.0, 1.0);
+   glOrtho(0.0, screenwidth, screenheight, 0.0, -100.0, 100.0);
    
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();

@@ -847,8 +847,6 @@ void RenderWater()
 
 void RenderHud(const PlayerData& localplayer)
 {
-   // GetWidget can be time-consuming so it may make sense to cache these (note that making them static makes it
-   // impossible to reload the GUI).  As always profiling is the key.
    GUI* fpslabel = gui[statsdisp]->GetWidget("fps");
    GUI* tpslabel = gui[statsdisp]->GetWidget("trispersec");
    GUI* tpflabel = gui[statsdisp]->GetWidget("trisperframe");
@@ -975,18 +973,17 @@ void RenderHud(const PlayerData& localplayer)
 #endif
    
    // Render all of the GUI objects, they know whether they're visible or not
-   resman.shaderman.UseShader("none");
-   // This should really be done by setting a GUI material, but for the moment it will work
-   glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glDisable(GL_ALPHA_TEST);
-   glColor4f(1, 1, 1, 1);
+   if (!textmesh)
+      textmesh = meshcache->GetNewMesh("models/empty");
+   textmesh->Clear();
+   
+   resman.LoadMaterial("materials/ui").Use();
+   
    for (size_t i = 0; i < gui.size(); ++i)
    {
       gui[i]->Render();
    }
-   
+   textmesh->Render();
    SDL_GL_Exit2dMode();
 }
 
