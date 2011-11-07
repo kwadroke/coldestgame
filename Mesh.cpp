@@ -703,6 +703,7 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 void Mesh::Add(Triangle& triangle)
 {
    meshdata.tris.push_back(triangle);
+   
    Triangle& tri = meshdata.tris.back();
    for (size_t i = 0; i < 3; ++i)
    {
@@ -738,8 +739,8 @@ void Mesh::Add(Mesh &mesh)
 
 void Mesh::Clear()
 {
-   meshdata.tris.clear();
-   meshdata.vertices.clear();
+   meshdata.tris.resize(0);
+   meshdata.vertices.resize(0);
    trischanged = true;
    updatevbo = true;
    boundschanged = true;

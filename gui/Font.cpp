@@ -114,7 +114,7 @@ void Font::InitAtlas()
 }
 
 
-Quad Font::GetChar(const char c, Quad& q)
+Quad& Font::GetChar(const char c, Quad& q)
 {
    CharData cd = GetCharData(c);
    q.SetMaterial(material);

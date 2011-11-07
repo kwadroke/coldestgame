@@ -19,7 +19,7 @@ class Font
    public:
       Font(const string&);
       ~Font();
-      Quad GetChar(const char, Quad&);
+      Quad& GetChar(const char, Quad&);
       void StringDim(const string&, int&, int&);
       void LoadMaterial();
       
