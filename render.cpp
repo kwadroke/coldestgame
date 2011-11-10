@@ -883,8 +883,8 @@ void RenderHud(const PlayerData& localplayer)
    if (frames >= 30) // Update FPS
    {
       Uint32 currtick = SDL_GetTicks();
-      fps = (float) frames / ((currtick - lasttick) / 1000.);
-      mpflabel->text = "ms/frame: " + ToString(1000. / fps);
+      fps = (float) frames / ((currtick - lasttick) / 1000.f);
+      mpflabel->text = "ms/frame: " + ToString(1000.f / fps, 2);
       frames = 0;
       lasttick = currtick;
    }
@@ -892,8 +892,8 @@ void RenderHud(const PlayerData& localplayer)
    
    // Update GUI values
    SDL_GL_Enter2dMode();
-   fpslabel->text = ToString(fps) + "/" + ToString(smoothfps);
-   tpslabel->text = "Tris/sec: " + ToString(trislastframe * fps / 1000000.f) + " million";
+   fpslabel->text = ToString(fps, 1) + "/" + ToString(smoothfps, 1);
+   tpslabel->text = "Tris/sec: " + ToString(trislastframe * fps / 1000000.f, 2) + " million";
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
    pinglabel->text = "Ping: " + ToString(localplayer.ping);
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);

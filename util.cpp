@@ -149,3 +149,11 @@ vector<string> split(const string& str, const string& sep)
    return retval;
 }
 
+
+string ToString(const float input, const int i)
+{
+   stringstream temp;
+   temp << std::fixed << std::setprecision(i) << input;
+   return temp.str();
+}
+

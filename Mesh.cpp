@@ -759,10 +759,10 @@ void Mesh::Clear(const bool cleartris)
    {
       meshdata.tris.resize(0);
       meshdata.vertices.resize(0);
+      trischanged = true;
+      boundschanged = true;
    }
-   trischanged = true;
    updatevbo = true;
-   boundschanged = true;
 }
 
 

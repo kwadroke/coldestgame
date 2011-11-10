@@ -23,6 +23,7 @@
 
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <csignal>
 #include <SDL/SDL.h>
 #include "Vector3.h"
@@ -47,6 +48,7 @@ pid_t gettid();
 int bitcount();
 void setsighandler();
 vector<string> split(const string&, const string&);
+string ToString(const float, const int);
 
 extern bool running;
 
@@ -57,6 +59,7 @@ string ToString(const T &input)
    temp << input;
    return temp.str();
 }
+
 
 template <typename T>
 int ToInt(const T &input, std::ios_base& (*f)(std::ios_base&) = std::dec)
