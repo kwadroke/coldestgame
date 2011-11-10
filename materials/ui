@@ -3,4 +3,3 @@ Ambient 1 1 1 1
 Specular 1 1 1 1
 Texture0 
 Shader shaders/flat
-DepthWrite 0
