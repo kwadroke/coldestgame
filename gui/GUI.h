@@ -45,6 +45,7 @@
 #include "../util.h"
 #include "../Quad.h"
 #include "../Mesh.h"
+#include "Font.h"
 
 using xercesc::DOMElement;
 using xercesc::XercesDOMParser;
@@ -164,6 +165,8 @@ class GUI
       Quadlist shadowquads;
       MeshPtr textmesh;
       MeshPtr shadowtextmesh;
+      string oldchars;
+      FontPtr oldfont;
       
       vector<string> sounds;
       vector<string> textures;

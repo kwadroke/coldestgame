@@ -148,12 +148,10 @@ void GUI::Render()
       
       if (textmesh)
       {
-         textmesh->Clear(false);
          textmesh->Render();
       }
       if (shadowtextmesh)
       {
-         shadowtextmesh->Clear(false);
          shadowtextmesh->Render();
       }
       // Some widgets, such as ScrollView, want to render their children using the scissor test
@@ -714,19 +712,32 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
       
       Quad& q = *j;
       ++j;
-      font->GetChar(str[i], q);
-      q.Scale(scale);
-      q.Translate(Vector3(currx, y, z));
-      for (size_t j = 0; j < 4; ++j)
-         q.SetColor(j, color);
+      if (i >= oldchars.size() || oldchars[i] != str[i] || oldfont != font)
+      {
+         font->GetChar(str[i], q);
+         q.Scale(scale);
+         q.Translate(Vector3(currx, y, z));
+         for (size_t j = 0; j < 4; ++j)
+            q.SetColor(j, color);
+         mesh->Clear(false);
+      }
       font->StringDim(str.substr(0, std::min(i + 1, str.size())), width, height);
       currx = width * scale + x;
    }
    // Blank out the remaining quads so we don't end up with leftover characters
+   size_t i = str.size();
    for (; j != quads.end(); ++j)
    {
-      Quad& q = *j;
-      font->GetChar(' ', q);
+      if (i >= oldchars.size() || oldchars[i] != ' ' || oldfont != font)
+      {
+         Quad& q = *j;
+         font->GetChar(' ', q);
+      }
+   }
+   if (shadow)
+   {
+      oldchars = str + string(' ', quads.size() - str.size());
+      oldfont = font;
    }
 }
 

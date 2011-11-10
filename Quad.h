@@ -34,14 +34,14 @@ class Quad
       Quad(const Quad&);
       Quad& operator=(const Quad&);
       void SetVertexPtr(const int, const VertexPtr&);
-      VertexPtr GetVertexPtr(const int) const;
+      VertexPtr GetVertexPtr(const int);
       void SetVertex(const int, const Vector3&);
-      inline Vector3 GetVertex(const int) const;
+      inline Vector3 GetVertex(const int);
       void SetNormal(const int, const Vector3&);
       void SetCollide(bool);
       void SetMaterial(Material*);
-      void SetColor(const int, const GLubytevec);
-      void SetTexCoords(const int, const int, const floatvec);
+      void SetColor(const int, const GLubytevec&);
+      void SetTexCoords(const int, const int, const floatvec&);
       void SetTerrainWeight(const int, const int, const float);
       void Translate(const Vector3&);
       void Scale(const float);
@@ -49,9 +49,10 @@ class Quad
       TrianglePtr Second() {return second;}
       
    private:
-      inline void GetVertNums(const int, int&, int&) const;
+      inline void GetVertNums(const int);
       
       TrianglePtr first, second;
+      int vert, vert1;
 
 };
 
@@ -59,11 +60,9 @@ typedef vector<Quad> Quadvec;
 typedef std::list<Quad> Quadlist;
 
 
-Vector3 Quad::GetVertex(const int num) const
+Vector3 Quad::GetVertex(const int num)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       return first->v[vert]->pos;
@@ -72,29 +71,29 @@ Vector3 Quad::GetVertex(const int num) const
    return Vector3(); // Uh oh
 }
 
-void Quad::GetVertNums(const int num, int& firstv, int& secondv) const
+void Quad::GetVertNums(const int num)
 {
    switch(num)
    {
       case 0:
-         firstv = 0;
-         secondv = -1;
+         vert = 0;
+         vert1 = -1;
          break;
       case 1:
-         firstv = 1;
-         secondv = 0;
+         vert = 1;
+         vert1 = 0;
          break;
       case 2:
-         firstv = -1;
-         secondv = 1;
+         vert = -1;
+         vert1 = 1;
          break;
       case 3:
-         firstv = 2;
-         secondv = 2;
+         vert = 2;
+         vert1 = 2;
          break;
       default:
-         firstv = -1; // Avoid uninitialized variable warnings
-         secondv = -1;
+         vert = -1; // Avoid uninitialized variable warnings
+         vert1 = -1;
          logout << "Warning, bogus vertex passed to GetVertNums" << endl;
          break;
    };

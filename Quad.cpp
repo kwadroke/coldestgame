@@ -30,12 +30,11 @@ Quad::Quad() : first(new Triangle()), second(new Triangle())
    tcv[2][0] = 1.f;
    tcv[2][1] = 1.f;
    tcv[3][0] = 1.f;
-   int vert, vert1;
    for (int i = 0; i < 8; ++i)
    {
       for (int j = 0; j < 4; ++j)
       {
-         GetVertNums(j, vert, vert1);
+         GetVertNums(j);
          if (vert >= 0)
             first->v[vert]->texcoords[i] = tcv[j];
          if (vert1 >= 0)
@@ -74,9 +73,7 @@ Quad& Quad::operator=(const Quad& q)
 
 void Quad::SetVertexPtr(const int num, const VertexPtr& v)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       first->v[vert] = v;
@@ -85,11 +82,9 @@ void Quad::SetVertexPtr(const int num, const VertexPtr& v)
 }
 
 
-VertexPtr Quad::GetVertexPtr(const int num) const
+VertexPtr Quad::GetVertexPtr(const int num)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       return first->v[vert];
@@ -101,9 +96,7 @@ VertexPtr Quad::GetVertexPtr(const int num) const
 
 void Quad::SetVertex(const int num, const Vector3& v)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       first->v[vert]->pos = v;
@@ -114,9 +107,7 @@ void Quad::SetVertex(const int num, const Vector3& v)
 
 void Quad::SetNormal(const int num, const Vector3& v)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       first->v[vert]->norm = v;
@@ -125,11 +116,9 @@ void Quad::SetNormal(const int num, const Vector3& v)
 }
 
 
-void Quad::SetColor(const int num, const GLubytevec val)
+void Quad::SetColor(const int num, const GLubytevec& val)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       first->v[vert]->color = val;
@@ -138,11 +127,9 @@ void Quad::SetColor(const int num, const GLubytevec val)
 }
 
 
-void Quad::SetTexCoords(const int num, const int texunit, const floatvec val)
+void Quad::SetTexCoords(const int num, const int texunit, const floatvec& val)
 {
-   int vert, vert1;
-   
-   GetVertNums(num, vert, vert1);
+   GetVertNums(num);
    
    if (vert >= 0 && vert < 3)
       first->v[vert]->texcoords[texunit] = val;
@@ -153,9 +140,7 @@ void Quad::SetTexCoords(const int num, const int texunit, const floatvec val)
 
 void Quad::SetTerrainWeight(const int vertex, const int tex, const float val)
 {
-   int vert, vert1;
-   
-   GetVertNums(vertex, vert, vert1);
+   GetVertNums(vertex);
    
    if (vert >= 0 && vert < 3)
       first->v[vert]->terrainwt[tex] = val;
@@ -183,9 +168,7 @@ void Quad::Translate(const Vector3& v)
 {
    for (int i = 0; i < 4; ++i)
    {
-      int vert, vert1;
-      
-      GetVertNums(i, vert, vert1);
+      GetVertNums(i);
       
       Vector3 current;
       if (vert >= 0 && vert < 3)
@@ -199,14 +182,13 @@ void Quad::Translate(const Vector3& v)
 
 void Quad::Scale(const float scale)
 {
-   int vert, vert1;
-   GetVertNums(0, vert, vert1);
+   GetVertNums(0);
    Vector3 offset = first->v[vert]->pos;
    Translate(-offset);
    
    for (int i = 1; i < 4; ++i)
    {
-      GetVertNums(i, vert, vert1);
+      GetVertNums(i);
       
       Vector3 current;
       if (vert >= 0 && vert < 3)
