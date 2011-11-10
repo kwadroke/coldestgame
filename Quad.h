@@ -22,6 +22,7 @@
 #define __QUAD_H
 
 #include "Triangle.h"
+#include <list>
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
@@ -55,6 +56,7 @@ class Quad
 };
 
 typedef vector<Quad> Quadvec;
+typedef std::list<Quad> Quadlist;
 
 
 Vector3 Quad::GetVertex(const int num) const

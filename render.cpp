@@ -973,17 +973,12 @@ void RenderHud(const PlayerData& localplayer)
 #endif
    
    // Render all of the GUI objects, they know whether they're visible or not
-   if (!textmesh)
-      textmesh = meshcache->GetNewMesh("models/empty");
-   textmesh->Clear();
-   
    resman.LoadMaterial("materials/ui").Use();
    
    for (size_t i = 0; i < gui.size(); ++i)
    {
       gui[i]->Render();
    }
-   textmesh->Render();
    SDL_GL_Exit2dMode();
 }
 

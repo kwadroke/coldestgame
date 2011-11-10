@@ -104,7 +104,6 @@ extern Material* shadowmat;
 extern MeshPtr particlemesh;
 extern vector<GUIPtr> spawnbuttons;
 extern Camera maincam;
-extern MeshPtr textmesh;
 #endif
 
 #endif

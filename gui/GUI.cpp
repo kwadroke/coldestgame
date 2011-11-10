@@ -145,6 +145,17 @@ void GUI::Render()
       {
          (*i)->Render();
       }
+      
+      if (textmesh)
+      {
+         textmesh->Clear(false);
+         textmesh->Render();
+      }
+      if (shadowtextmesh)
+      {
+         shadowtextmesh->Clear(false);
+         shadowtextmesh->Render();
+      }
       // Some widgets, such as ScrollView, want to render their children using the scissor test
       // This virtual function allows them to enable it in RenderWidget and disable it again
       // after all the children have been rendered.  It could be used for other things in the
@@ -671,20 +682,41 @@ void GUI::RenderText(const string& str, int x, int y, int justify, SDL_Color col
    color[1] = col.g;
    color[2] = col.b;
    color[3] = col.unused;
-   Quadvec& quads = shadow ? shadowquads : textquads;
-   if (quads.size() < str.size())
-      quads.resize(str.size());
+   
+   // Only allocate these objects for widgets that actually use them
+   if (!textmesh && !shadow)
+      textmesh = meshcache->GetNewMesh("models/empty");
+   else if (!shadowtextmesh && shadow)
+      shadowtextmesh = meshcache->GetNewMesh("models/empty");
+   
+   Quadlist& quads = shadow ? shadowquads : textquads;
+   MeshPtr mesh = shadow ? shadowtextmesh : textmesh;
+   while (quads.size() < str.size())
+   {
+      quads.push_back(Quad());
+      if (!mesh)
+         logout << "Textmesh not initialized before rendering text" << endl;
+      mesh->AddNoCopy(quads.back());
+   }
+   
+   Quadlist::iterator j = quads.begin();
    for (size_t i = 0; i < str.size(); ++i)
    {
-      Quad& q = quads[i];
+      Quad& q = *j;
+      ++j;
       font->GetChar(str[i], q);
       q.Scale(scale);
       q.Translate(Vector3(currx, y, z));
       for (size_t j = 0; j < 4; ++j)
          q.SetColor(j, color);
-      textmesh->Add(q);
       font->StringDim(str.substr(0, std::min(i + 1, str.size())), width, height);
       currx = width * scale + x;
+   }
+   // Blank out the remaining quads so we don't end up with leftover characters
+   for (; j != quads.end(); ++j)
+   {
+      Quad& q = *j;
+      font->GetChar(' ', q);
    }
 }
 

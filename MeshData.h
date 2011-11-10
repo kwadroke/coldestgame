@@ -42,7 +42,7 @@ class MeshData
       void DeepCopy(const MeshData&);
       
       ResourceManager& resman;
-      Trianglevec tris;
+      TrianglePtrvec tris;
       VertexPtrvec vertices;
       vector<MeshNodePtr> frameroot;
 

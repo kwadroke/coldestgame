@@ -51,13 +51,16 @@ void MeshData::DeepCopy(const MeshData& md)
    }
 #endif
 
-   tris = md.tris;
-   
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
    vertices.clear();
    frameroot.clear();
+   tris.clear();
+   for (size_t i = 0; i < md.tris.size(); ++i)
+   {
+      tris.push_back(TrianglePtr(new Triangle(*md.tris[i])));
+   }
    VertexPtrvec localvert = md.vertices;
    for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
    {
@@ -68,7 +71,7 @@ void MeshData::DeepCopy(const MeshData& md)
    {
       for (size_t j = 0; j < 3; ++j)
       {
-         tris[i].v[j] = vertices[tris[i].v[j]->id];
+         tris[i]->v[j] = vertices[tris[i]->v[j]->id];
       }
    }
    for (size_t i = 0; i < md.frameroot.size(); ++i)
@@ -83,7 +86,7 @@ void MeshData::EnsureMaterials()
    size_t tsize = tris.size();
    for (size_t i = 0; i < tsize; ++i)
    {
-      if (!tris[i].material && tris[i].matname != "")
-         tris[i].material = &resman.LoadMaterial(tris[i].matname);
+      if (!tris[i]->material && tris[i]->matname != "")
+         tris[i]->material = &resman.LoadMaterial(tris[i]->matname);
    }
 }

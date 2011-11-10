@@ -58,15 +58,18 @@ class Mesh
       void RenderImpostor(Mesh&, FBO&, const Vector3&);
 
       void Add(Triangle&);
+      void Add(TrianglePtr);
+      void AddVertices(Triangle&);
       void Add(Quad&);
+      void AddNoCopy(Quad&);
       void Add(Mesh&);
-      void Clear();
+      void Clear(const bool cleartris = true);
       void GenTangents();
       void EnsureMaterials();
 
       void Begin() {next = 0;}
       bool HasNext() const {return next < NumTris();}
-      Triangle& Next() {++next; return meshdata.tris[next - 1];}
+      Triangle& Next() {++next; return *meshdata.tris[next - 1];}
       size_t NumTris() const {return meshdata.tris.size();}
       float GetHeight() {return height;}
       float GetWidth() {return width;}

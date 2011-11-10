@@ -44,6 +44,7 @@
 #include "XSWrapper.h"
 #include "../util.h"
 #include "../Quad.h"
+#include "../Mesh.h"
 
 using xercesc::DOMElement;
 using xercesc::XercesDOMParser;
@@ -158,8 +159,12 @@ class GUI
       int state;
       bool active;
       string name;
-      Quadvec textquads;
-      Quadvec shadowquads;
+      
+      Quadlist textquads;
+      Quadlist shadowquads;
+      MeshPtr textmesh;
+      MeshPtr shadowtextmesh;
+      
       vector<string> sounds;
       vector<string> textures;
       vector<GLuint> texids;

@@ -49,5 +49,4 @@ Material* shadowmat;
 MeshPtr particlemesh;
 vector<GUIPtr> spawnbuttons;
 Camera maincam;
-MeshPtr textmesh;
 #endif
