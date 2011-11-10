@@ -147,8 +147,11 @@ void Font::StringDim(const string& s, int& w, int& h)
    w = 0;
    for (size_t i = 0; i < s.size(); ++i)
    {
-      if (IsColorTag(s, i))
-         i += 4;
+      if (IsColorTag(s, i)) // Color tags aren't rendered, so they shouldn't be included in the length
+      {
+         i += 3;
+         continue;
+      }
       CharData cd = GetCharData(s[i]);
       w += cd.width;
       if (cd.height > h)

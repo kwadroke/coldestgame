@@ -57,19 +57,17 @@ void LineEdit::RenderWidget()
       glEnd();
    }
    
-   if (text != "") // Empty text messes up our scale calculations, and there's no need to do them if we're not rendering any
-   {
-      StringDim(text, w, h);
-      float fh = (float)h / hratio;
-      //float fw = (float)w / wratio;    unused
-      
-      float scale = (height - ymargin * 2.f) / fh;
-      fh *= scale;
-      
-      float centery = height / 2.f - fh / 2.f;
-      RenderText(GetVisible(), int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, textcolor, scale);
-      fontscale = scale;
-   }
+   StringDim(text, w, h);
+   float fh = (float)h / hratio;
+   
+   float scale = 0.f;
+   if (text != "") // Even if there is currently no text, we need to try to render it in case there previously was and there are characters that need to be cleared
+      scale = (height - ymargin * 2.f) / fh;
+   fh *= scale;
+   
+   float centery = height / 2.f - fh / 2.f;
+   RenderText(GetVisible(), int((x + xoff + xmargin) * wratio), int((y + yoff + centery) * hratio), 0, textcolor, scale);
+   fontscale = scale;
    
    /*StringDim(font, GetVisible(), w, h);
    float centery = height / 2.f - h * fontscale / hratio / 2.f;

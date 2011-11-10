@@ -659,7 +659,7 @@ bool GUI::InWidget(const SDL_Event* event)
 */
 void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float scale, bool shadow)
 {
-   if (!str.length() && !(textquads.size() || shadowquads.size()))
+   if (!str.length() && !textquads.size() && !shadowquads.size())
       return;
    
    if (shadow)
