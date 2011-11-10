@@ -674,9 +674,7 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
    int currx = x;
    int width = 0;
    int height; // Don't actually care about this right now
-   float z = .5f;
-   if (shadow)
-      z = .9f;
+   float z = 0.f;
    GLubytevec color(4, 255);
    color[0] = col.r;
    color[1] = col.g;
