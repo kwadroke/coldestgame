@@ -147,6 +147,8 @@ void Font::StringDim(const string& s, int& w, int& h)
    w = 0;
    for (size_t i = 0; i < s.size(); ++i)
    {
+      if (IsColorTag(s, i))
+         i += 4;
       CharData cd = GetCharData(s[i]);
       w += cd.width;
       if (cd.height > h)
@@ -191,4 +193,19 @@ void Font::LoadMaterial()
    newmat.SetTexture(0, texture);
    resman.AddMaterial(fontname, newmat);
    material = &resman.LoadMaterial(fontname);
+}
+
+
+void Font::RemoveColorTag(string& s, size_t i)
+{
+   if (IsColorTag(s, i))
+      s.erase(i, 4);
+}
+
+
+bool Font::IsColorTag(const string& s, size_t i)
+{
+   if (i + 3 < s.size())
+      return (s[i] == '#' && isdigit(s[i + 1]) && isdigit(s[i + 2]) && isdigit(s[i + 3]));
+   return false;
 }

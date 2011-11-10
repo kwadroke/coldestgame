@@ -22,6 +22,8 @@ class Font
       Quad& GetChar(const char, Quad&);
       void StringDim(const string&, int&, int&);
       void LoadMaterial();
+      bool IsColorTag(const string&, size_t);
+      void RemoveColorTag(string&, size_t);
       
       static float basesize;
       

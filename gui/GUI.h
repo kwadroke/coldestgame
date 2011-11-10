@@ -93,7 +93,7 @@ class GUI
       virtual bool FloatsInWidget(float, float);
       bool InWidget(float, float);
       bool InWidget(const SDL_Event*);
-      void RenderText(const string&, int, int, int, SDL_Color, float scale = 1.f, bool shadow = true);
+      void RenderText(string, int, int, int, SDL_Color, float scale = 1.f, bool shadow = true);
       void SetActive(bool act = true);
       void SetTextureID(int, GLuint);
       void SetTexture(int, const string&);

@@ -657,9 +657,9 @@ bool GUI::InWidget(const SDL_Event* event)
 
    justify: 0 = left, 1 = right
 */
-void GUI::RenderText(const string& str, int x, int y, int justify, SDL_Color col, float scale, bool shadow)
+void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float scale, bool shadow)
 {
-   if (!str.length())
+   if (!str.length() && !(textquads.size() || shadowquads.size()))
       return;
    
    if (shadow)
@@ -702,6 +702,18 @@ void GUI::RenderText(const string& str, int x, int y, int justify, SDL_Color col
    Quadlist::iterator j = quads.begin();
    for (size_t i = 0; i < str.size(); ++i)
    {
+      if (font->IsColorTag(str, i))
+      {
+         if (shadow) // This won't work right for unshadowed text.  Right now there isn't any, but it's a potential issue.
+         {
+            for (uint j = 1; j < 4; ++j)
+               color[j - 1] = float(ToInt(str[i + j])) / 9.f * 255.f;
+         }
+         font->RemoveColorTag(str, i);
+         i -= 1;
+         continue;
+      }
+      
       Quad& q = *j;
       ++j;
       font->GetChar(str[i], q);
