@@ -300,6 +300,7 @@ void Map::BuildTerrain()
                                y * terrobjsize * tilesize + tilesize * (terrobjsize / 2.f)));
          tempmesh.terrain = true;
          tempmesh.dynamic = false;
+         tempmesh.occluder = true;
          mapmeshes->push_front(tempmesh);
          meshits.push_back(mapmeshes->begin());
       }

@@ -77,6 +77,7 @@ size_t framecount;
 Uint32 lastfpsupdate;
 int servfps;
 vector<BotPtr> bots;
+vector<intvec> visible;
 
 
 int Server(void* dummy)
@@ -222,6 +223,8 @@ void ServerLoop()
       {
          i->Update();
       }
+      
+      UpdateVisibility();
       
       Bot::SetPlayers(serverplayers);
       
@@ -724,5 +727,33 @@ int CountPlayers()
          ++retval;
    }
    return retval;
+}
+
+
+void UpdateVisibility()
+{
+   visible.clear();
+   visible = vector<intvec>(serverplayers.size(), intvec(serverplayers.size(), -1));
+   
+   for (size_t i = 1; i < serverplayers.size(); ++i)
+   {
+      for (size_t j = 1; j < serverplayers.size(); ++j)
+      {
+         if (visible[i][j] < 0 && i != j)
+         {
+            Vector3 dummy;
+            vector<Mesh*> check = serverkdtree.getmeshes(serverplayers[i].pos, serverplayers[j].pos, 1);
+            bool hit = coldet.CheckSphereHit(serverplayers[i].pos,
+                                             serverplayers[j].pos,
+                                             -serverplayers[i].size,
+                                             check,
+                                             servermap,
+                                             NULL);
+         
+            visible[i][j] = hit ? 0 : 1;
+            visible[j][i] = visible[i][j]; // If j is visible to i, then the reverse should also be true
+         }
+      }
+   }
 }
 
