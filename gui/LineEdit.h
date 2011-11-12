@@ -43,8 +43,8 @@ class LineEdit : public GUI
       virtual void KeyDown(SDL_Event*);
       virtual void ReadNodeExtra(DOMNode*, GUI*);
       
-      size_t cursorpos;
-      size_t offset;
+      ssize_t cursorpos;
+      ssize_t offset;
       size_t dragstart, dragend;
       
       // Copying not allowed - this may not be necessary anymore
