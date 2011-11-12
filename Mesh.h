@@ -69,8 +69,8 @@ class Mesh
 
       void Begin() {next = 0;}
       bool HasNext() const {return next < NumTris();}
-      Triangle& Next() {++next; return *meshdata.tris[next - 1];}
-      size_t NumTris() const {return meshdata.tris.size();}
+      Triangle& Next() {++next; return meshdata.Tri(next - 1);}
+      size_t NumTris() const {return meshdata.NumTris();}
       float GetHeight() {return height;}
       float GetWidth() {return width;}
       float GetSize() {return size;}
@@ -86,6 +86,7 @@ class Mesh
       bool collide;
       bool terrain;
       bool reverseanim;
+      bool occluder;
       string name;
       float dist;
       float impdist;
@@ -102,7 +103,7 @@ class Mesh
 
       void AdvanceAnimation();
       int NextKeyFrame();
-      void UpdateTris(const Vector3& campos = Vector3(.003, .004, .005));
+      void UpdateTris(const Vector3& campos = Vector3(.003, .004, .005)); // Why these numbers?  I suspect it was for debugging...
       void GenVbo();
       void GenVboData();
       void GenIboData();

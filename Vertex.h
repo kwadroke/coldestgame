@@ -71,13 +71,12 @@ class Vertex
       vector<floatvec> texcoords; // [Texture unit][x/y]
       GLubytevec color;
       floatvec terrainwt;
-      
-      unsigned short index;
 #ifdef EDITOR
       string id;
 #else
       size_t id;
 #endif
+      unsigned short index;
 };
 
 typedef vector<Vertex> Vertexvec;

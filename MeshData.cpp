@@ -51,15 +51,17 @@ void MeshData::DeepCopy(const MeshData& md)
    }
 #endif
 
+   tris = md.tris;
+
    // The following containers hold smart pointers, which means that when we copy them
    // the objects are still shared.  That's a bad thing, so we manually copy every
    // object to the new container
    vertices.clear();
    frameroot.clear();
-   tris.clear();
-   for (size_t i = 0; i < md.tris.size(); ++i)
+   triptrs.clear();
+   for (size_t i = 0; i < md.triptrs.size(); ++i)
    {
-      tris.push_back(TrianglePtr(new Triangle(*md.tris[i])));
+      triptrs.push_back(TrianglePtr(new Triangle(*md.triptrs[i])));
    }
    VertexPtrvec localvert = md.vertices;
    for (VertexPtrvec::iterator i = localvert.begin(); i != localvert.end(); ++i)
@@ -67,11 +69,19 @@ void MeshData::DeepCopy(const MeshData& md)
       VertexPtr p(new Vertex(**i));
       vertices.push_back(p);
    }
+   // Only one of the following two for loops should actually happen
    for (size_t i = 0; i < md.tris.size(); ++i)
    {
       for (size_t j = 0; j < 3; ++j)
       {
-         tris[i]->v[j] = vertices[tris[i]->v[j]->id];
+         tris[i].v[j] = vertices[tris[i].v[j]->id];
+      }
+   }
+   for (size_t i = 0; i < md.triptrs.size(); ++i)
+   {
+      for (size_t j = 0; j < 3; ++j)
+      {
+         triptrs[i]->v[j] = vertices[triptrs[i]->v[j]->id];
       }
    }
    for (size_t i = 0; i < md.frameroot.size(); ++i)
@@ -83,10 +93,19 @@ void MeshData::DeepCopy(const MeshData& md)
 
 void MeshData::EnsureMaterials()
 {
-   size_t tsize = tris.size();
+   size_t tsize = NumTris();
    for (size_t i = 0; i < tsize; ++i)
    {
-      if (!tris[i]->material && tris[i]->matname != "")
-         tris[i]->material = &resman.LoadMaterial(tris[i]->matname);
+      if (!Tri(i).material && Tri(i).matname != "")
+         Tri(i).material = &resman.LoadMaterial(Tri(i).matname);
    }
+}
+
+
+void MeshData::SortTris()
+{
+   if (tris.size())
+      std::sort(tris.begin(), tris.end());
+   else
+      std::sort(triptrs.begin(), triptrs.end(), Triangle::TriPtrComp);
 }

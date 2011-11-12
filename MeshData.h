@@ -31,23 +31,31 @@ class Mesh;  // Forward declaration because of the circular reference
 // copy constructor for the main Mesh class.
 class MeshData
 {
-   friend class Mesh;
    public:
       MeshData(ResourceManager&);
       MeshData(const MeshData&);
       MeshData& operator=(const MeshData&);
       void EnsureMaterials();
+      
+      void AddTriangle(const Triangle& t) {tris.push_back(t);}
+      void AddTriangle(const TrianglePtr& t) {triptrs.push_back(t);}
+      Triangle& Tri(const size_t i) {return tris.size() ? tris[i] : *triptrs[i];}
+      size_t NumTris() const {return tris.size() ? tris.size() : triptrs.size();}
+      void SortTris();
+      void ClearTris() {tris.resize(0); triptrs.resize(0);}
+      
+      VertexPtrvec vertices;
+      vector<MeshNodePtr> frameroot;
+      ResourceManager& resman;
+      
+      MaterialPtr impmat;
+      shared_ptr<Mesh> impostor;
 
    private:
       void DeepCopy(const MeshData&);
       
-      ResourceManager& resman;
-      TrianglePtrvec tris;
-      VertexPtrvec vertices;
-      vector<MeshNodePtr> frameroot;
-
-      MaterialPtr impmat;
-      shared_ptr<Mesh> impostor;
+      Trianglevec tris;
+      TrianglePtrvec triptrs;
 };
 
 #endif // MESHDATA_H

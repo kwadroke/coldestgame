@@ -210,7 +210,7 @@ void Mesh::Load(const NTreeReader& reader)
                curr.Read(newtri->collide, "Collide");
                curr.Read(newtri->id, "ID");
                
-               meshdata.tris.push_back(newtri);
+               meshdata.AddTriangle(*newtri);
             }
          }
          
@@ -219,9 +219,9 @@ void Mesh::Load(const NTreeReader& reader)
          GraphicMatrix m;
          meshdata.frameroot[currf]->Transform(meshdata.frameroot[currf], 0.f, meshdata.vertices, m, Vector3());
          
-         for (size_t k = 0; k < meshdata.tris.size(); ++k)
+         for (size_t k = 0; k < meshdata.NumTris(); ++k)
          {
-            Triangle& newtri = *meshdata.tris[k];
+            Triangle& newtri = meshdata.Tri(k);
             Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
             Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
             float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
@@ -444,14 +444,14 @@ void Mesh::CalcBounds()
    float temp;
    Vector3 localpos = GetPosition();
    Vector3 localwpos, localhpos;
-   size_t tsize = meshdata.tris.size();
+   size_t tsize = meshdata.NumTris();
    height = 0;
    width = 0;
    for (size_t i = 0; i < tsize; ++i)
    {
       for (int j = 0; j < 3; ++j)
       {
-         Triangle& currtri = *meshdata.tris[i];
+         Triangle& currtri = meshdata.Tri(i);
          dist = currtri.v[j]->pos.distance(localpos) + currtri.radmod;
          if (dist > size) size = dist;
 
@@ -477,9 +477,9 @@ void Mesh::CalcBounds()
 // the collision detection code to regenerate the midpoint of the tri for culling calculations
 void Mesh::ResetTriMaxDims()
 {
-   size_t s = meshdata.tris.size();
+   size_t s = meshdata.NumTris();
    for (size_t i = 0; i < s; ++i)
-      meshdata.tris[i]->maxdim = -1.f;
+      meshdata.Tri(i).maxdim = -1.f;
 }
 
 
@@ -489,7 +489,7 @@ void Mesh::ResetTriMaxDims()
 void Mesh::Render(Material* overridemat)
 {
 #ifndef DEDICATED
-   if (!render || !meshdata.tris.size())
+   if (!render || !meshdata.NumTris())
       return;
    EnsureMaterials();
    if (updatevbo)
@@ -502,15 +502,15 @@ void Mesh::Render(Material* overridemat)
       overridemat->Use();
    for (size_t i = 0; i < vbosteps.size(); ++i)
    {
-      if (meshdata.tris[currindex]->material)
+      if (meshdata.Tri(currindex).material)
       {
          if (!overridemat)
-            meshdata.tris[currindex]->material->Use();
-         else meshdata.tris[currindex]->material->UseTextureOnly();
+            meshdata.Tri(currindex).material->Use();
+         else meshdata.Tri(currindex).material->UseTextureOnly();
       }
       else
       {
-         logout << "NULL material? " << meshdata.tris[currindex].get() << "  " << vbosteps[i] << endl;
+         logout << "NULL material? " << &meshdata.Tri(currindex) << "  " << vbosteps[i] << endl;
       }
       BindAttribs();
       void* offset = offsets[i];
@@ -525,7 +525,7 @@ void Mesh::Render(Material* overridemat)
 void Mesh::GenVbo()
 {
 #ifndef DEDICATED
-   if (meshdata.tris.size())
+   if (meshdata.NumTris())
    {
       GenVboData();
       if (trischanged)
@@ -571,7 +571,7 @@ void Mesh::GenIboData()
 {
 #ifndef DEDICATED
    // Build IBO
-   std::sort(meshdata.tris.begin(), meshdata.tris.end(), Triangle::TriPtrComp);
+   meshdata.SortTris();
    vbo.indexdata.clear();
    vbosteps.clear();
    offsets.clear();
@@ -579,12 +579,12 @@ void Mesh::GenIboData()
    maxindex.clear();
    int counter = 0;
    unsigned short currmin = 0, currmax = 0;
-   TrianglePtrvec::iterator last = meshdata.tris.begin();
-   TrianglePtrvec::iterator tend = meshdata.tris.end();
+   size_t last = 0;
+   size_t tend = meshdata.NumTris();
    offsets.push_back((void*)0);
-   for (TrianglePtrvec::iterator i = meshdata.tris.begin(); i != tend; ++i)
+   for (size_t i = 0; i < tend; ++i)
    {
-      if ((*last)->material != (*i)->material)
+      if (meshdata.Tri(last).material != meshdata.Tri(i).material)
       {
          vbosteps.push_back(counter);
 
@@ -598,7 +598,7 @@ void Mesh::GenIboData()
          currmin = 0;
          currmax = 0;
       }
-      ushortvec ind = (*i)->GetIndices();
+      ushortvec ind = meshdata.Tri(i).GetIndices();
       vbo.indexdata.insert(vbo.indexdata.end(), ind.begin(), ind.end());
       last = i;
       ++counter;
@@ -678,8 +678,8 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
    if (!meshdata.impostor)
    {
       meshdata.impostor = MeshPtr(new Mesh(NTreeReader("models/impostor/base"), meshdata.resman));
-      Triangle& first = *meshdata.impostor->meshdata.tris[0];
-      Triangle& second = *meshdata.impostor->meshdata.tris[1];
+      Triangle& first = meshdata.impostor->meshdata.Tri(0);
+      Triangle& second = meshdata.impostor->meshdata.Tri(1);
       first.material = meshdata.impmat.get();
       second.material = meshdata.impmat.get();
    }
@@ -702,14 +702,14 @@ void Mesh::RenderImpostor(Mesh& rendermesh, FBO& impfbo, const Vector3& campos)
 
 void Mesh::Add(Triangle& triangle)
 {
-   meshdata.tris.push_back(TrianglePtr(new Triangle(triangle)));
-   AddVertices(*meshdata.tris.back());
+   meshdata.AddTriangle(triangle);
+   AddVertices(meshdata.Tri(meshdata.NumTris() - 1));
 }
 
 void Mesh::Add(TrianglePtr triangle)
 {
-   meshdata.tris.push_back(triangle);
-   AddVertices(*meshdata.tris.back());
+   meshdata.AddTriangle(triangle);
+   AddVertices(meshdata.Tri(meshdata.NumTris() - 1));
 }
 
 
@@ -745,9 +745,10 @@ void Mesh::AddNoCopy(Quad& quad)
 
 void Mesh::Add(Mesh &mesh)
 {
-   for (size_t i = 0; i < mesh.meshdata.tris.size(); ++i)
+   for (size_t i = 0; i < mesh.meshdata.NumTris(); ++i)
    {
-      Add(*mesh.meshdata.tris[i]);
+      // It's likely that it would be better to add pointers here, but at the moment there's no way to do that
+      Add(mesh.meshdata.Tri(i));
    }
 }
 
@@ -757,8 +758,8 @@ void Mesh::Clear(const bool cleartris)
    // Not clearing the tris allows the GUI to update triangles directly through pointers and signal the mesh that they were changed
    if (cleartris)
    {
-      meshdata.tris.resize(0);
-      meshdata.vertices.resize(0);
+      meshdata.ClearTris();
+      meshdata.ClearTris();
       trischanged = true;
       boundschanged = true;
    }
@@ -769,9 +770,9 @@ void Mesh::Clear(const bool cleartris)
 // Only for meshes that are built out of raw triangles - meshes loaded from a file should already have this done
 void Mesh::GenTangents()
 {
-   for (size_t k = 0; k < meshdata.tris.size(); ++k)
+   for (size_t k = 0; k < meshdata.NumTris(); ++k)
    {
-      Triangle& newtri = *meshdata.tris[k];
+      Triangle& newtri = meshdata.Tri(k);
       Vector3 one = newtri.v[1]->pos - newtri.v[0]->pos;
       Vector3 two = newtri.v[2]->pos - newtri.v[0]->pos;
       float tcone = newtri.v[1]->texcoords[0][1] - newtri.v[0]->texcoords[0][1];
@@ -842,12 +843,12 @@ void Mesh::debug()
    if (basefile == "models/sighthit/base")
    {
       logout << "debug" << endl;
-      for (size_t i = 0; i < meshdata.tris.size(); ++i)
+      for (size_t i = 0; i < meshdata.NumTris(); ++i)
       {
          for (size_t j = 0; j < 3; ++j)
          {
-            logout << meshdata.tris[i]->v[j]->texcoords[0][0] << endl;
-            logout << meshdata.tris[i]->v[j]->texcoords[0][1] << endl;
+            logout << meshdata.Tri(i).v[j]->texcoords[0][0] << endl;
+            logout << meshdata.Tri(i).v[j]->texcoords[0][1] << endl;
          }
       }
    }
