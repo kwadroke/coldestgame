@@ -892,6 +892,7 @@ void RenderHud(const PlayerData& localplayer)
    
    // Update GUI values
    SDL_GL_Enter2dMode();
+   //logout << fps << "/" << smoothfps << endl;
    fpslabel->text = ToString(fps, 1) + "/" + ToString(smoothfps, 1);
    tpslabel->text = "Tris/sec: " + ToString(trislastframe * fps / 1000000.f, 2) + " million";
    tpflabel->text = "Tris/frame: " + ToString(trislastframe);
