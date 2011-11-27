@@ -759,7 +759,7 @@ void Mesh::Clear(const bool cleartris)
    if (cleartris)
    {
       meshdata.ClearTris();
-      meshdata.ClearTris();
+      meshdata.vertices.resize(0);
       trischanged = true;
       boundschanged = true;
    }

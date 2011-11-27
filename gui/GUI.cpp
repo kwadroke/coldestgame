@@ -33,6 +33,7 @@
 #include "Layout.h"
 #include "../globals.h"
 #include "Font.h"
+#include "../renderdefs.h"
 
 using std::hex;
 
@@ -149,10 +150,12 @@ void GUI::Render()
       if (textmesh)
       {
          textmesh->Render();
+         trislastframe += textmesh->NumTris();
       }
       if (shadowtextmesh)
       {
          shadowtextmesh->Render();
+         trislastframe += shadowtextmesh->NumTris();
       }
       // Some widgets, such as ScrollView, want to render their children using the scissor test
       // This virtual function allows them to enable it in RenderWidget and disable it again
