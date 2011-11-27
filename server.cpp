@@ -45,6 +45,7 @@
 #include "Mutex.h"
 #include "ServerNetCode.h"
 #include "serverdefs.h"
+#include "PathNode.h"
 
 SDL_Thread* serverinput;
 UDPsocket servsock;
@@ -78,6 +79,7 @@ Uint32 lastfpsupdate;
 int servfps;
 vector<BotPtr> bots;
 vector<intvec> visible;
+vector<PathNodePtr> pathnodes;
 
 
 int Server(void* dummy)
@@ -297,6 +299,8 @@ void ServerLoadMap(const string& mn)
    }
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
+   
+   GenPathData();
    
    logout << "Server map loaded" << endl;
 
@@ -745,7 +749,7 @@ void UpdateVisibility()
             vector<Mesh*> check = serverkdtree.getmeshes(serverplayers[i].pos, serverplayers[j].pos, 1);
             bool hit = coldet.CheckSphereHit(serverplayers[i].pos,
                                              serverplayers[j].pos,
-                                             -serverplayers[i].size,
+                                             -std::max(serverplayers[i].size, serverplayers[j].size),
                                              check,
                                              servermap,
                                              NULL);
@@ -755,5 +759,89 @@ void UpdateVisibility()
          }
       }
    }
+}
+
+
+void GenPathData()
+{
+   float step = tilesize;
+   float checkdist = 200.f;
+   size_t width = servermap->Width();
+   size_t height = servermap->Height();
+   
+   Vector3 base(step / 2.f, 0.f, step / 2.f);
+   Vector3 start(base);
+   start.y = servermap->MaxHeight();
+   vector<Mesh*> check = serverkdtree.getmeshes(start, base, step);
+   Vector3 hitpos;
+   Mesh* dummy;
+   coldet.CheckSphereHit(start,
+                         base,
+                         step,
+                         check,
+                         servermap,
+                         hitpos,
+                         dummy);
+   base.y = hitpos.y;
+   
+   pathnodes.push_back(PathNodePtr(new PathNode(base)));
+   size_t i = 0;
+   bool hit = false;
+   logout << width << "  " << height << endl;
+   while (i < pathnodes.size())
+   {
+      Timer t;
+      t.start();
+      logout << "Processing " << i << " out of " << (float(width) / step * (float(height) / step)) << endl;
+      Vector3vec add = pathnodes[i]->GetAdjacent(step);
+      for (size_t j = 0; j < add.size(); ++j)
+      {
+         if (add[j].x > 0 && add[j].x < width &&
+             add[j].z > 0 && add[j].z < height)
+         {
+            base = start = add[j];
+            base.y = 0;
+            hit = false;
+            while (!hit)
+            {
+               start.y += checkdist;
+               
+               check = serverkdtree.getmeshes(start, base, step);
+               hit = coldet.CheckSphereHit(start,
+                                          base,
+                                          step,
+                                          check,
+                                          servermap,
+                                          hitpos,
+                                          dummy);
+            }
+            add[j].y = hitpos.y;
+            
+            bool addnew = true;
+            for (size_t k = 0; k < pathnodes.size(); ++k)
+            {
+               if (pathnodes[k]->position.distance2(add[j]) < 1.f)
+               {
+                  pathnodes[i]->nodes[j] = pathnodes[k];
+                  addnew = false;
+               }
+               /*Vector3 one = pathnodes[k]->position;
+               Vector3 two = add[j];
+               one.y = two.y = 0.f;
+               if (one.distance2(two) < 1.f && addnew)
+                  logout << pathnodes[k]->position << "  " << add[j] << endl;*/
+            }
+            
+            if (addnew)
+            {
+               pathnodes.push_back(PathNodePtr(new PathNode(add[j])));
+            }
+         }
+      }
+      ++i;
+      t.stop();
+   }
+   
+   // Mark passable or not
 }
 

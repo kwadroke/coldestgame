@@ -43,6 +43,7 @@ void ServerLoadMap(const string&);
 int CountPlayers();
 void AddItem(const Item&, int);
 void UpdateVisibility();
+void GenPathData();
 
 extern Meshlist servermeshes;
 extern MapPtr servermap;

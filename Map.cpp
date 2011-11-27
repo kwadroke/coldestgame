@@ -17,8 +17,8 @@
 // Copyright 2008, 2011 Ben Nemec
 // @End License@
 #include "Map.h"
-#include "ProceduralTree.h"
 #include "globals.h"
+#include "ProceduralTree.h"
 #include "serverdefs.h"
 
 Map::Map(const string& mn)
@@ -529,6 +529,17 @@ float Map::GetSmoothedTerrain(int x, int y, int mapw, int maph, vector<floatvec>
       ++count;
    }
    return total / (float)count;
+}
+
+
+size_t Map::Width()
+{
+   return (mapw - 1) * tilesize;
+}
+
+size_t Map::Height()
+{
+   return (maph - 1) * tilesize;
 }
 
 

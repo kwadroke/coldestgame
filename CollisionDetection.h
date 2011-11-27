@@ -36,6 +36,7 @@ class CollisionDetection
 {
    public:
       CollisionDetection();
+      // Note that you cannot pass in null for the last non-defaulted parameter
       bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, MapPtr, Vector3&, Mesh*&, Vector3vec* retval = NULL, 
                              vector<Mesh*>* = NULL, const bool debug = false);
       bool CheckSphereHit(const Vector3&, const Vector3&, const float&, vector<Mesh*>&, MapPtr, Vector3vec* retval = NULL, const bool debug = false);
