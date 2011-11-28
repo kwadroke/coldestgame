@@ -29,6 +29,7 @@
 #include "BotNetCode.h"
 #include "util.h"
 #include "globals.h"
+#include "PathNode.h"
 
 /**
 	@author Ben Nemec <cybertron@nemebean.com>
@@ -41,6 +42,7 @@ class Bot{
       static void Initialize();
       static void SetPlayers(vector<PlayerData>&);
       static vector<PlayerData> GetPlayers();
+      static void SetPathNodes(vector<PathNodePtr>& p) {pathnodes = p;}
    
    private:
       bool botrunning;
@@ -59,8 +61,12 @@ class Bot{
       vector<PlayerData> localplayers; // Thread-specific copy of players to avoid locking issues
       int targetplayer;
       
+      Vector3 movetarget;
+      PathNodePtr currpathnode;
+      
       static vector<PlayerData> players;
       static MutexPtr playermutex;
+      static vector<PathNodePtr> pathnodes;
       
       // Don't really want to copy this object because threads would need
       // to be restarted every time.  To use in an STL container use
@@ -74,6 +80,8 @@ class Bot{
       
       int SelectTarget();
       void AimAtTarget(int);
+      void FindCurrPathNode();
+      void UpdateHeading();
 };
 
 typedef boost::shared_ptr<Bot> BotPtr;

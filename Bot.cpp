@@ -23,6 +23,7 @@
 // Static initialization
 vector<PlayerData> Bot::players = vector<PlayerData>();
 MutexPtr Bot::playermutex = MutexPtr();
+vector<PathNodePtr> Bot::pathnodes = vector<PathNodePtr>();
 
 // Should leave thread to be initialized last so that all other data has been initialized first
 Bot::Bot() : botrunning(true),
@@ -81,32 +82,18 @@ void Bot::Update()
    if (netcode->bot.moveright)
       netcode->bot.facing += .1f * movetimer.elapsed();
    movetimer.start();
-   if (console.GetBool("botsmove"))
+   if (console.GetBool("botsmove") && netcode->bot.spawned)
    {
-      if (timer.elapsed() > Random(0, 2000))
-      {
-         if (Random(0, 1) > .2)
-            netcode->bot.moveforward = true;
-         else
-            netcode->bot.moveforward = false;
-         
-         if (Random(0, 1) > .5)
-            netcode->bot.moveleft = true;
-         else
-            netcode->bot.moveleft = false;
-         
-         if (Random(0, 1) > .5)
-            netcode->bot.moveright = true;
-         else
-            netcode->bot.moveright = false;
-         timer.start();
-      }
+      if (!currpathnode)
+         FindCurrPathNode();
       
       if (!targetplayer || !localplayers[targetplayer].spawned)
          targetplayer = SelectTarget();
       
       if (targetplayer)
       {
+         UpdateHeading();
+         
          AimAtTarget(targetplayer);
          
          // Weapons fire
@@ -118,7 +105,10 @@ void Bot::Update()
             firetimer.start();
          }
       }
-      
+   }
+   else if (!netcode->bot.spawned)
+   {
+      currpathnode = PathNodePtr();
    }
 }
 
@@ -159,6 +149,36 @@ void Bot::AimAtTarget(int target)
    
    netcode->bot.rotation = rots.y + Random(-3.f, 3.f);
    netcode->bot.pitch = rots.x + Random(-1.f, 1.f);
+}
+
+
+// This will probably be a touch slow, but it won't need to be done much so that should be okay
+void Bot::FindCurrPathNode()
+{
+   float currdist = 1e38f;
+   for (size_t i = 0; i < pathnodes.size(); ++i)
+   {
+      float checkdist = pathnodes[i]->position.distance2(netcode->bot.pos);
+      if (checkdist < currdist)
+      {
+         currdist = checkdist;
+         currpathnode = pathnodes[i];
+      }
+   }
+}
+
+
+void Bot::UpdateHeading()
+{
+   Vector3 direct = localplayers[targetplayer].pos - localplayers[netcode->PlayerNum()].pos;
+   direct.normalize();
+   direct *= 100.f;
+   Vector3 current = direct;
+   
+   while (!currpathnode->Validate(current, netcode->bot.size))
+   {
+      
+   }
 }
 
 // This must be called before creating bots

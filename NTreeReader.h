@@ -64,6 +64,7 @@ class NTreeReader
       size_t NumChildren() const;
       string GetPath() const;
       string GetName() const {return name;}
+      bool Error() const {return error;}
 
    private:
       void Parse(istringstream&);
@@ -82,6 +83,7 @@ class NTreeReader
       size_t level;
       string name;
       string path;
+      bool error;
 };
 
 typedef shared_ptr<NTreeReader> NTreeReaderPtr;

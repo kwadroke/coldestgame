@@ -20,11 +20,11 @@
 
 #include "NTreeReader.h"
 
-NTreeReader::NTreeReader(int lev, const string& n) : level(lev), name(n), path("")
+NTreeReader::NTreeReader(int lev, const string& n) : level(lev), name(n), path(""), error(false)
 {
 }
 
-NTreeReader::NTreeReader(string filename) : level(0), name(""), path(filename)
+NTreeReader::NTreeReader(string filename) : level(0), name(""), path(filename), error(false)
 {
    if (filename == "") return; // Don't think this is necessary anymore, but it doesn't hurt
 
@@ -33,6 +33,7 @@ NTreeReader::NTreeReader(string filename) : level(0), name(""), path(filename)
    if (in.fail())
    {
       logout << "Failed to open file " << filename << endl;
+      error = true;
       return;
    }
 

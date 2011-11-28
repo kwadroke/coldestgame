@@ -44,6 +44,7 @@ int CountPlayers();
 void AddItem(const Item&, int);
 void UpdateVisibility();
 void GenPathData();
+bool LoadPathData();
 
 extern Meshlist servermeshes;
 extern MapPtr servermap;

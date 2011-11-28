@@ -300,7 +300,8 @@ void ServerLoadMap(const string& mn)
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
    
-   GenPathData();
+   if (!LoadPathData())
+      GenPathData();
    
    logout << "Server map loaded" << endl;
 
@@ -309,6 +310,7 @@ void ServerLoadMap(const string& mn)
    bots.clear();
    size_t numbots = console.GetInt("bots");
    Bot::Initialize();
+   Bot::SetPathNodes(pathnodes);
    for (size_t i = 0; i < numbots; ++i)
       bots.push_back(BotPtr(new Bot()));
 }
@@ -777,7 +779,7 @@ void GenPathData()
    Mesh* dummy;
    coldet.CheckSphereHit(start,
                          base,
-                         step,
+                         step / 2.f,
                          check,
                          servermap,
                          hitpos,
@@ -787,12 +789,9 @@ void GenPathData()
    pathnodes.push_back(PathNodePtr(new PathNode(base)));
    size_t i = 0;
    bool hit = false;
-   logout << width << "  " << height << endl;
    while (i < pathnodes.size())
    {
-      Timer t;
-      t.start();
-      logout << "Processing " << i << " out of " << (float(width) / step * (float(height) / step)) << endl;
+      logout << "Processing " << i << " out of approximately " << (float(width) / step * (float(height) / step)) << endl;
       Vector3vec add = pathnodes[i]->GetAdjacent(step);
       for (size_t j = 0; j < add.size(); ++j)
       {
@@ -823,8 +822,10 @@ void GenPathData()
                if (pathnodes[k]->position.distance2(add[j]) < 1.f)
                {
                   pathnodes[i]->nodes[j] = pathnodes[k];
+                  pathnodes[i]->num[j] = k;
                   addnew = false;
                }
+               // Useful for debugging problems with nodes not lining up when they should
                /*Vector3 one = pathnodes[k]->position;
                Vector3 two = add[j];
                one.y = two.y = 0.f;
@@ -835,13 +836,82 @@ void GenPathData()
             if (addnew)
             {
                pathnodes.push_back(PathNodePtr(new PathNode(add[j])));
+               pathnodes[i]->num[j] = pathnodes.size() - 1;
             }
          }
       }
       ++i;
-      t.stop();
    }
    
-   // Mark passable or not
+   // Determine whether nodes are passable
+   for (i = 0; i < pathnodes.size(); ++i)
+   {
+      PathNodePtr curr = pathnodes[i];
+      for (size_t j = 0; j < curr->nodes.size(); ++j)
+      {
+         if (curr->nodes[j] && (curr->position.y > curr->nodes[j]->position.y - step / 2.f)) // This will likely need tweaking
+         {
+            curr->passable[j] = true;
+         }
+      }
+   }
+   
+   // Write results to file so we don't have to do this again
+   ofstream out(servermap->PathName().c_str());
+   
+   for (i = 0; i < pathnodes.size(); ++i)
+   {
+      out << i << endl;
+      Vector3 p = pathnodes[i]->position;
+      out << "   Pos " << p.x << " " << p.y << " " << p.z << endl;
+      out << "   Nodes";
+      for (size_t j = 0; j < pathnodes[i]->nodes.size(); ++j)
+      {
+         out << " " << pathnodes[i]->num[j];
+      }
+      out << endl << "   Passable";
+      for (size_t j = 0; j < pathnodes[i]->nodes.size(); ++j)
+      {
+         out << " " << pathnodes[i]->passable[j];
+      }
+      out << endl;
+   }
+}
+
+
+bool LoadPathData()
+{
+   NTreeReader reader(servermap->PathName());
+   if (reader.Error())
+      return false;
+   
+   for (size_t i = 0; i < reader.NumChildren(); ++i)
+   {
+      const NTreeReader& curr = reader(i);
+      Vector3 pos;
+      curr.Read(pos.x, "Position", 0);
+      curr.Read(pos.y, "Position", 1);
+      curr.Read(pos.z, "Position", 2);
+      
+      PathNodePtr p(new PathNode(pos));
+      for (size_t j = 0; j < p->nodes.size(); ++j)
+      {
+         bool passable = false;
+         curr.Read(passable, "Passable", j);
+         p->passable[j] = passable;
+         curr.Read(p->num[j], "Nodes", j);
+      }
+      pathnodes.push_back(p);
+   }
+   
+   for (size_t i = 0; i < pathnodes.size(); ++i)
+   {
+      for (size_t j = 0; j < pathnodes[i]->nodes.size(); ++j)
+      {
+         if (pathnodes[i]->num[j] >= 0)
+            pathnodes[i]->nodes[j] = pathnodes[pathnodes[i]->num[j]];
+      }
+   }
+   return true;
 }
 

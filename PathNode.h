@@ -10,10 +10,12 @@ class PathNode
    public:
       PathNode(const Vector3&);
       Vector3vec GetAdjacent(const float);
+      bool Validate(const Vector3&, const float);
       
       Vector3 position;
       vector<boost::shared_ptr<PathNode> > nodes;
       vector<bool> passable;
+      vector<ssize_t> num; // To save us time while serializing
 };
 
 typedef boost::shared_ptr<PathNode> PathNodePtr;
