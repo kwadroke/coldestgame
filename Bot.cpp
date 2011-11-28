@@ -170,15 +170,37 @@ void Bot::FindCurrPathNode()
 
 void Bot::UpdateHeading()
 {
-   Vector3 direct = localplayers[targetplayer].pos - localplayers[netcode->PlayerNum()].pos;
+   Vector3 start = localplayers[netcode->PlayerNum()].pos;
+   Vector3 direct = localplayers[targetplayer].pos - start;
    direct.normalize();
    direct *= 100.f;
-   Vector3 current = direct;
+   Vector3 current = heading;
+   float angle = 0.f;
    
-   while (!currpathnode->Validate(current, netcode->bot.size))
+   if (current.distance2(direct) > 1.f)
    {
-      
+      current = (heading + direct) / 2.f;
+      current.normalize();
+      current *= 100.f;
+      if (currpathnode->Validate(start, current, netcode->bot.size))
+      {
+         heading = current;
+         return;
+      }
    }
+   
+   while (!currpathnode->Validate(start, current, netcode->bot.size))
+   {
+      if (angle > -1e-5f)
+         angle += 15.f;
+      angle *= -1.f;
+      current = heading;
+      GraphicMatrix m;
+      m.rotatey(angle);
+      current.transform(m);
+   }
+   
+   heading = current;
 }
 
 // This must be called before creating bots

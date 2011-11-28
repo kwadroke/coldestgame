@@ -10,7 +10,7 @@ class PathNode
    public:
       PathNode(const Vector3&);
       Vector3vec GetAdjacent(const float);
-      bool Validate(const Vector3&, const float);
+      bool Validate(const Vector3&, const Vector3&, const float);
       
       Vector3 position;
       vector<boost::shared_ptr<PathNode> > nodes;

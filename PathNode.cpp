@@ -1,4 +1,5 @@
 #include "PathNode.h"
+#include "CollisionDetection.h"
 
 PathNode::PathNode(const Vector3& pos) : position(pos),
                                          nodes(8),
@@ -23,7 +24,21 @@ Vector3vec PathNode::GetAdjacent(const float step)
 }
 
 
-bool PathNode::Validate(const Vector3& v, const float radius)
+bool PathNode::Validate(const Vector3& start, const Vector3& move, const float radius)
 {
-   
+   CollisionDetection cd;
+   Vector3 end = start + move;
+   for (size_t i = 0; i < nodes.size(); ++i)
+   {
+      // Because DistanceBetween... checks an infinite line, we need to check that the node is in the direction
+      // of the movement, and is not past the end of the movement
+      if (nodes[i]->position.distance2(end) < position.distance2(end) &&
+         move.distance() > nodes[i]->position.distance(start) + radius &&
+         cd.DistanceBetweenPointAndLine(nodes[i]->position, start, move, 1.f / move.magnitude()) < radius)
+      {
+         if (!passable[i] || !nodes[i]->Validate(start, move, radius))
+            return false;
+      }
+   }
+   return true;
 }

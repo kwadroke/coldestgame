@@ -917,7 +917,7 @@ float CollisionDetection::DistanceBetweenPointAndLine(const Vector3& point, cons
 {
    // This check is not required for any code that calls us and it helps performance significantly if we don't do it
    //if (movemag < 1e-5f) return 0.f;
-   return(move.cross(start - point).magnitude() * movemaginv);
+   return (move.cross(start - point).magnitude() * movemaginv);
 }
 #endif
 

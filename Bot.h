@@ -63,6 +63,7 @@ class Bot{
       
       Vector3 movetarget;
       PathNodePtr currpathnode;
+      Vector3 heading;
       
       static vector<PlayerData> players;
       static MutexPtr playermutex;
