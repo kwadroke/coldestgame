@@ -30,8 +30,6 @@ bool PathNode::Validate(Vector3 start, Vector3 move, const float radius)
    start.y = position.y;
    move.y = 0.f;
    Vector3 end = start + move;
-   //logout << position.distance(start) << endl;
-   //logout << position << endl << start << endl << move << endl << end << endl << endl;
    for (size_t i = 0; i < nodes.size(); ++i)
    {
       // Because DistanceBetween... checks an infinite line, we need to check that the node is in the direction
@@ -40,10 +38,6 @@ bool PathNode::Validate(Vector3 start, Vector3 move, const float radius)
       {
          Vector3 flatpos = nodes[i]->position;
          flatpos.y = position.y;
-         /*logout << start << endl << flatpos << endl << position << endl << end << endl;
-         logout << flatpos.distance2(end) << "  " << position.distance2(end) << endl;
-         logout << (move.distance() + radius) << "  " << flatpos.distance(start) << endl;
-         logout << cd.DistanceBetweenPointAndLine(flatpos, start, move, 1.f / move.magnitude()) << endl << endl;*/
          if (flatpos.distance2(end) < position.distance2(end) &&
             move.distance() + radius > flatpos.distance(start) &&
             cd.DistanceBetweenPointAndLine(flatpos, start, move, 1.f / move.magnitude()) < radius + 60)
