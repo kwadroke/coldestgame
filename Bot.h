@@ -64,6 +64,8 @@ class Bot{
       Vector3 movetarget;
       PathNodePtr currpathnode;
       Vector3 heading;
+      // Determines how close the bot wants to get - smaller numbers make it closer
+      float closingdistance;
       
       static vector<PlayerData> players;
       static MutexPtr playermutex;
@@ -83,6 +85,7 @@ class Bot{
       void AimAtTarget(int);
       void FindCurrPathNode();
       void UpdateHeading();
+      void TurnToHeading();
 };
 
 typedef boost::shared_ptr<Bot> BotPtr;

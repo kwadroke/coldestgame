@@ -1834,6 +1834,7 @@ void UpdateSpectatePosition()
       player[0].facing = player[spectateplayer].facing;
       player[0].pitch = player[spectateplayer].pitch;
       player[0].rotation = player[spectateplayer].rotation;
+      player[0].size = player[spectateplayer].size;
    }
 }
 
@@ -2621,6 +2622,29 @@ void LoadMap(const string& map)
       gui[loadprogress]->visible = false;
    if (!replayer->Active())
       recorder->SetActive(console.GetBool("record"));
+   
+   // Visualize the bot paths to aid debugging
+   // Note that this may cause you to time out connecting to the server - increase the timeout if that is the case
+   bool visualize = true;
+   if (server && visualize)
+   {
+      MeshPtr testmesh = meshcache->GetNewMesh("models/empty");
+      for (size_t i = 0; i < pathnodes.size(); ++i)
+      {
+         for (size_t j = 0; j < pathnodes[i]->nodes.size(); ++j)
+         {
+            if (pathnodes[i]->nodes[j] && !pathnodes[i]->passable[j])
+            {
+               MeshPtr newmesh = meshcache->GetNewMesh("models/projectile");
+               newmesh->Move(pathnodes[i]->nodes[j]->position);
+               newmesh->EnsureMaterials();
+               newmesh->Update(Vector3());
+               testmesh->Add(*newmesh);
+            }
+         }
+      }
+      meshes.push_back(*testmesh);
+   }
 #endif
 }
 

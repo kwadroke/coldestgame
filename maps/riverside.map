@@ -2,6 +2,7 @@ TileSize 60
 HeightScale 3.8
 ZeroHeight 30
 Stretch 8
+PathNodeSize 60
 
 LightData
 Direction -1 1 -1

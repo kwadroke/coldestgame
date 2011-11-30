@@ -25,6 +25,7 @@
 #include "PlayerData.h"
 #include "Particle.h"
 #include "Item.h"
+#include "PathNode.h"
 
 void ServerLoop();
 int ServerInput(void*);
@@ -57,5 +58,6 @@ extern list<Particle> servparticles;
 extern vector<Item> serveritems;
 extern string servername;
 extern int servfps;
+extern vector<PathNodePtr> pathnodes;
 
 #endif

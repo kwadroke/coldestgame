@@ -766,8 +766,8 @@ void UpdateVisibility()
 
 void GenPathData()
 {
-   float step = tilesize;
-   float checkdist = 200.f;
+   float step = servermap->PathNodeSize();
+   float checkdist = servermap->PathNodeCheckDist();
    size_t width = servermap->Width();
    size_t height = servermap->Height();
    
@@ -836,6 +836,7 @@ void GenPathData()
             if (addnew)
             {
                pathnodes.push_back(PathNodePtr(new PathNode(add[j])));
+               pathnodes[i]->nodes[j] = pathnodes.back();
                pathnodes[i]->num[j] = pathnodes.size() - 1;
             }
          }
@@ -849,7 +850,7 @@ void GenPathData()
       PathNodePtr curr = pathnodes[i];
       for (size_t j = 0; j < curr->nodes.size(); ++j)
       {
-         if (curr->nodes[j] && (curr->position.y > curr->nodes[j]->position.y - step / 2.f)) // This will likely need tweaking
+         if (curr->nodes[j] && (curr->position.y > curr->nodes[j]->position.y - step)) // This will likely need tweaking
          {
             curr->passable[j] = true;
          }
@@ -889,9 +890,9 @@ bool LoadPathData()
    {
       const NTreeReader& curr = reader(i);
       Vector3 pos;
-      curr.Read(pos.x, "Position", 0);
-      curr.Read(pos.y, "Position", 1);
-      curr.Read(pos.z, "Position", 2);
+      curr.Read(pos.x, "Pos", 0);
+      curr.Read(pos.y, "Pos", 1);
+      curr.Read(pos.z, "Pos", 2);
       
       PathNodePtr p(new PathNode(pos));
       for (size_t j = 0; j < p->nodes.size(); ++j)

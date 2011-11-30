@@ -41,6 +41,8 @@ void Map::Init(const string& mn)
    terrainstretch = 8;
    zeroheight = 0.f;
    heightscale = 0.f;
+   pathnodesize = 50.f;
+   pathnodecheckdist = 10000.f;
    mapname = mn;
    waterfile = "materials/water";
    worldbounds.resize(6);
@@ -101,6 +103,8 @@ void Map::ReadBasics()
    mapdata.Read(numtextures, "NumTextures");
    mapdata.Read(numobjects, "NumObjects");
    mapdata.Read(terrainstretch, "Stretch");
+   mapdata.Read(pathnodesize, "PathNodeSize");
+   mapdata.Read(pathnodecheckdist, "PathNodeCheckDist");
 }
 
 

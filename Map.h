@@ -57,6 +57,8 @@ class Map
       size_t Width();
       size_t Height();
       size_t MaxHeight() {return worldbounds[0].GetVertex(0).y;}
+      float PathNodeSize() {return pathnodesize;}
+      float PathNodeCheckDist() {return pathnodecheckdist;}
 
    protected:
       void Init(const string&);
@@ -98,6 +100,8 @@ class Map
       int terrainstretch;
       float zeroheight;
       float heightscale;
+      float pathnodesize;
+      float pathnodecheckdist;
 
       string base;
       string mapname;
