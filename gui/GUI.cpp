@@ -735,11 +735,12 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
       {
          Quad& q = *j;
          font->GetChar(' ', q);
+         mesh->Clear(false);
       }
    }
    if (shadow)
    {
-      oldchars = str + string(' ', quads.size() - str.size());
+      oldchars = str + string(quads.size() - str.size(), ' ');
       oldfont = font;
    }
 }
