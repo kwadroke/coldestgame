@@ -306,7 +306,7 @@ void ServerNetCode::ReadSpawn(stringstream& get)
    allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
    for (size_t i = 0; i < allspawns.size(); ++i)
    {
-      if (spawnpointreq.distance(allspawns[i].position) < 1.f && allspawns[i].team == serverplayers[playernum].team)
+      if (spawnpointreq.distance(allspawns[i].position) < 1.f && (allspawns[i].team == serverplayers[playernum].team || serverplayers[playernum].team == 0))
       {
          accepted = true;
          break;
@@ -357,7 +357,9 @@ void ServerNetCode::ReadSpawn(stringstream& get)
    totalweight += serverplayers[playernum].item.Weight();
    
    if (totalweight > maxweight || CalculatePlayerWeight(serverplayers[playernum]) > serverplayers[playernum].salvage)
+   {
       accepted = false;
+   }
    
    if (accepted)
    {

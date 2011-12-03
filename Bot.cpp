@@ -29,6 +29,7 @@ vector<PathNodePtr> Bot::pathnodes = vector<PathNodePtr>();
 Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
+             heading(Vector3(0, 0, -1.f)),
              closingdistance(Random(300, 1000))
 {
    timer.start();
@@ -178,13 +179,17 @@ void Bot::UpdateHeading()
    Vector3 perp = direct.cross(Vector3(0.f, 1.f, 0.f));
    perp.normalize();
    perp *= closingdistance;
-   direct += perp;
    
+   direct += perp;
    direct.normalize();
    direct *= checkdist;
+   
+   if (heading.magnitude() < 1e-4f)
+      heading = Vector3(0, 0, -1.f);
    Vector3 current = heading;
    current.normalize();
    current *= checkdist;
+   
    Vector3 savecurrent = current;
    float angle = 0.f;
    
@@ -237,6 +242,7 @@ void Bot::TurnToHeading()
    facing.transform(m);
    
    Vector3 rots = RotateBetweenVectors(heading, facing);
+   logout << rots.y << endl;
    if (fabs(rots.y) < 2.f)
       netcode->bot.facing += rots.y;
    else if (rots.y > 0.f)

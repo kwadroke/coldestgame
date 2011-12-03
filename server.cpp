@@ -774,7 +774,7 @@ void GenPathData()
    Vector3 base(step / 2.f, 0.f, step / 2.f);
    Vector3 start(base);
    start.y = servermap->MaxHeight();
-   vector<Mesh*> check = serverkdtree.getmeshes(start, base, step);
+   vector<Mesh*> check = serverkdtree.getmeshes(start, base, step / 2.f);
    Vector3 hitpos;
    Mesh* dummy;
    coldet.CheckSphereHit(start,
@@ -805,10 +805,10 @@ void GenPathData()
             {
                start.y += checkdist;
                
-               check = serverkdtree.getmeshes(start, base, step);
+               check = serverkdtree.getmeshes(start, base, step / 2.f);
                hit = coldet.CheckSphereHit(start,
                                           base,
-                                          step,
+                                          step / 2.f,
                                           check,
                                           servermap,
                                           hitpos,
@@ -819,18 +819,18 @@ void GenPathData()
             bool addnew = true;
             for (size_t k = 0; k < pathnodes.size(); ++k)
             {
-               if (pathnodes[k]->position.distance2(add[j]) < 1.f)
+               if (pathnodes[k]->position.distance2(add[j]) < 10.f)
                {
                   pathnodes[i]->nodes[j] = pathnodes[k];
                   pathnodes[i]->num[j] = k;
                   addnew = false;
                }
                // Useful for debugging problems with nodes not lining up when they should
-               /*Vector3 one = pathnodes[k]->position;
+               Vector3 one = pathnodes[k]->position;
                Vector3 two = add[j];
                one.y = two.y = 0.f;
-               if (one.distance2(two) < 1.f && addnew)
-                  logout << pathnodes[k]->position << "  " << add[j] << endl;*/
+               if (one.distance2(two) < 10.f && addnew)
+                  logout << pathnodes[k]->position << "  " << add[j] << endl;
             }
             
             if (addnew)

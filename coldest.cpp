@@ -2626,14 +2626,23 @@ void LoadMap(const string& map)
    // Visualize the bot paths to aid debugging
    // Note that this may cause you to time out connecting to the server - increase the timeout if that is the case
    bool visualize = true;
+   bool all = false;
    if (server && visualize)
    {
       MeshPtr testmesh = meshcache->GetNewMesh("models/empty");
       for (size_t i = 0; i < pathnodes.size(); ++i)
       {
+         if (all && pathnodes[i]->position.y > 100 && pathnodes[i]->position.y < 500)
+         {
+            MeshPtr newmesh = meshcache->GetNewMesh("models/projectile");
+            newmesh->Move(pathnodes[i]->position);
+            newmesh->EnsureMaterials();
+            newmesh->Update(Vector3());
+            testmesh->Add(*newmesh);
+         }
          for (size_t j = 0; j < pathnodes[i]->nodes.size(); ++j)
          {
-            if (pathnodes[i]->nodes[j] && !pathnodes[i]->passable[j])
+            if (!all && pathnodes[i]->nodes[j] && !pathnodes[i]->passable[j])
             {
                MeshPtr newmesh = meshcache->GetNewMesh("models/projectile");
                newmesh->Move(pathnodes[i]->nodes[j]->position);
