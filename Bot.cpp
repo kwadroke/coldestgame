@@ -86,8 +86,7 @@ void Bot::Update()
    movetimer.start();
    if (console.GetBool("botsmove") && netcode->bot.spawned)
    {
-      //if (!currpathnode)
-         FindCurrPathNode();
+      FindCurrPathNode();
       
       if (!targetplayer || !localplayers[targetplayer].spawned)
          targetplayer = SelectTarget();
@@ -221,11 +220,13 @@ void Bot::UpdateHeading()
       if (count > 20)
       {
          logout << "Failed to find valid path: " << start << "  " << current << endl;
+         netcode->bot.moveforward = false;
          return;
       }
       ++count;
    }
    
+   netcode->bot.moveforward = true;
    heading = current;
 }
 
@@ -234,7 +235,6 @@ void Bot::TurnToHeading()
 {
    netcode->bot.moveleft = false;
    netcode->bot.moveright = false;
-   netcode->bot.moveforward = true;
    
    Vector3 facing(0.f, 0.f, -1.f);
    GraphicMatrix m;
