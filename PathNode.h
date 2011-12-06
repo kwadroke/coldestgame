@@ -16,6 +16,7 @@ class PathNode
       vector<boost::shared_ptr<PathNode> > nodes;
       vector<bool> passable;
       vector<ssize_t> num; // To save us time while serializing
+      float step;
 };
 
 typedef boost::shared_ptr<PathNode> PathNodePtr;

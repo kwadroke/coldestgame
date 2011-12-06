@@ -172,7 +172,7 @@ void Bot::FindCurrPathNode()
 
 void Bot::UpdateHeading()
 {
-   float checkdist = 500.f;
+   float checkdist = 1000.f;
    Vector3 start = localplayers[netcode->PlayerNum()].pos;
    Vector3 direct = localplayers[targetplayer].pos - start;
    Vector3 perp = direct.cross(Vector3(0.f, 1.f, 0.f));
@@ -197,11 +197,14 @@ void Bot::UpdateHeading()
       current = (heading + direct) / 2.f;
       current.normalize();
       current *= checkdist;
+      Timer t;
       if (currpathnode->Validate(start, current, netcode->bot.size))
       {
+         t.stop();
          heading = current;
          return;
       }
+      t.stop();
    }
    
    current = savecurrent;
@@ -210,14 +213,14 @@ void Bot::UpdateHeading()
    while (!currpathnode->Validate(start, current, netcode->bot.size))
    {
       if (angle > -1e-5f)
-         angle += 10.f;
+         angle += 20.f;
       angle *= -1.f;
       current = heading;
       GraphicMatrix m;
       m.rotatey(angle);
       current.transform(m);
       
-      if (count > 20)
+      if (count > 18)
       {
          logout << "Failed to find valid path: " << start << "  " << current << endl;
          netcode->bot.moveforward = false;
@@ -226,7 +229,6 @@ void Bot::UpdateHeading()
       ++count;
    }
    
-   netcode->bot.moveforward = true;
    heading = current;
 }
 
@@ -242,13 +244,18 @@ void Bot::TurnToHeading()
    facing.transform(m);
    
    Vector3 rots = RotateBetweenVectors(heading, facing);
-   logout << rots.y << endl;
    if (fabs(rots.y) < 2.f)
       netcode->bot.facing += rots.y;
    else if (rots.y > 0.f)
       netcode->bot.moveleft = true;
    else if (rots.y < 0.f)
       netcode->bot.moveright = true;
+   
+   facing *= 500.f;
+   if (currpathnode->Validate(localplayers[netcode->PlayerNum()].pos, facing, netcode->bot.size))
+      netcode->bot.moveforward = true;
+   else
+      netcode->bot.moveforward = false;
 }
 
 // This must be called before creating bots

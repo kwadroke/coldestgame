@@ -80,6 +80,7 @@ int servfps;
 vector<BotPtr> bots;
 vector<intvec> visible;
 vector<PathNodePtr> pathnodes;
+int aipathversion = 1;
 
 
 int Server(void* dummy)
@@ -300,7 +301,8 @@ void ServerLoadMap(const string& mn)
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
    
-   if (!LoadPathData())
+   size_t numbots = console.GetInt("bots");
+   if (numbots && !LoadPathData())
       GenPathData();
    
    logout << "Server map loaded" << endl;
@@ -308,7 +310,6 @@ void ServerLoadMap(const string& mn)
    consoleloadmap = 0;
    
    bots.clear();
-   size_t numbots = console.GetInt("bots");
    Bot::Initialize();
    Bot::SetPathNodes(pathnodes);
    for (size_t i = 0; i < numbots; ++i)
@@ -793,6 +794,7 @@ void GenPathData()
    {
       logout << "Processing " << i << " out of approximately " << (float(width) / step * (float(height) / step)) << endl;
       Vector3vec add = pathnodes[i]->GetAdjacent(step);
+      pathnodes[i]->step = step;
       for (size_t j = 0; j < add.size(); ++j)
       {
          if (add[j].x > 0 && add[j].x < width &&
@@ -826,11 +828,11 @@ void GenPathData()
                   addnew = false;
                }
                // Useful for debugging problems with nodes not lining up when they should
-               Vector3 one = pathnodes[k]->position;
+               /*Vector3 one = pathnodes[k]->position;
                Vector3 two = add[j];
                one.y = two.y = 0.f;
                if (one.distance2(two) < 10.f && addnew)
-                  logout << pathnodes[k]->position << "  " << add[j] << endl;
+                  logout << pathnodes[k]->position << "  " << add[j] << endl;*/
             }
             
             if (addnew)
@@ -859,7 +861,8 @@ void GenPathData()
    
    // Write results to file so we don't have to do this again
    ofstream out(servermap->PathName().c_str());
-   
+   out << "FileVersion " << aipathversion << endl;
+   out << "Step " << step << endl;
    for (i = 0; i < pathnodes.size(); ++i)
    {
       out << i << endl;
@@ -886,6 +889,14 @@ bool LoadPathData()
    if (reader.Error())
       return false;
    
+   int version = 0;
+   reader.Read(version, "FileVersion");
+   if (version != aipathversion)
+      return false;
+   float step = 0.f;
+   reader.Read(step, "Step");
+   logout << step << endl;
+   
    for (size_t i = 0; i < reader.NumChildren(); ++i)
    {
       const NTreeReader& curr = reader(i);
@@ -895,6 +906,7 @@ bool LoadPathData()
       curr.Read(pos.z, "Pos", 2);
       
       PathNodePtr p(new PathNode(pos));
+      p->step = step;
       for (size_t j = 0; j < p->nodes.size(); ++j)
       {
          bool passable = false;

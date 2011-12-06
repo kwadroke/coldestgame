@@ -4,7 +4,8 @@
 PathNode::PathNode(const Vector3& pos) : position(pos),
                                          nodes(8),
                                          passable(8, false),
-                                         num(8, -1)
+                                         num(8, -1),
+                                         step(50.f)
 {
 }
 
@@ -38,12 +39,21 @@ bool PathNode::Validate(Vector3 start, Vector3 move, const float radius)
       {
          Vector3 flatpos = nodes[i]->position;
          flatpos.y = position.y;
-         if (flatpos.distance2(end) < position.distance2(end) &&
-            move.distance() + radius > flatpos.distance(start) &&
-            cd.DistanceBetweenPointAndLine(flatpos, start, move, 1.f / move.magnitude()) < radius + 60)
+         
+         Vector3 flatvec = flatpos - position;
+         flatvec.normalize();
+         Vector3 movenorm = move;
+         movenorm.normalize();
+         float dot = flatvec.dot(movenorm);
+         
+         if (dot > 1e-4f &&
+             flatpos.distance(start) < move.distance() + radius &&
+             cd.DistanceBetweenPointAndLine(flatpos, start, move, 1.f / move.magnitude()) < radius + step / 2.f)
          {
             if (!passable[i] || !nodes[i]->Validate(start, move, radius))
+            {
                return false;
+            }
          }
       }
    }

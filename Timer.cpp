@@ -20,7 +20,7 @@
 
 #include "Timer.h"
 
-Timer::Timer() : starttick(0)
+Timer::Timer() : starttick(SDL_GetTicks())
 {
 }
 
