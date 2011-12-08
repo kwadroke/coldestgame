@@ -172,7 +172,7 @@ void Bot::FindCurrPathNode()
 
 void Bot::UpdateHeading()
 {
-   float checkdist = 1000.f;
+   float checkdist = 500.f;
    Vector3 start = localplayers[netcode->PlayerNum()].pos;
    Vector3 direct = localplayers[targetplayer].pos - start;
    Vector3 perp = direct.cross(Vector3(0.f, 1.f, 0.f));

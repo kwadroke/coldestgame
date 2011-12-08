@@ -895,7 +895,6 @@ bool LoadPathData()
       return false;
    float step = 0.f;
    reader.Read(step, "Step");
-   logout << step << endl;
    
    for (size_t i = 0; i < reader.NumChildren(); ++i)
    {
