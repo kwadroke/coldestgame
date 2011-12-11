@@ -80,6 +80,8 @@ class Bot{
       static int Start(void*);
       void Update();
       void Loop();
+      // Returns the PlayerData object that represents our current state (note that netcode->bot does not!)
+      PlayerData& BotPlayer() {return localplayers[netcode->PlayerNum()];}
       
       int SelectTarget();
       void AimAtTarget(int);

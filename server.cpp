@@ -892,7 +892,10 @@ bool LoadPathData()
    int version = 0;
    reader.Read(version, "FileVersion");
    if (version != aipathversion)
+   {
+      logout << "Wrong AI path version for " << servermap->PathName() << endl;
       return false;
+   }
    float step = 0.f;
    reader.Read(step, "Step");
    

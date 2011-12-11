@@ -55,6 +55,7 @@ class BotNetCode : public NetCode
       int playernum;
       string map;
       Timer sendtimer;
+      Timer respawntimer;
       vector<SpawnPointData> spawns;
 };
 

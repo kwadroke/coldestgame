@@ -30,7 +30,7 @@ Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
              heading(Vector3(0, 0, -1.f)),
-             closingdistance(Random(300, 1000))
+             closingdistance(Random(700, 1500))
 {
    timer.start();
    movetimer.start();
@@ -100,7 +100,7 @@ void Bot::Update()
          
          // Weapons fire
          if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
-            netcode->bot.temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
+            BotPlayer().temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
          )
          {
             netcode->SendFire();
@@ -123,7 +123,7 @@ int Bot::SelectTarget()
    {
       if (i != netcode->PlayerNum())
       {
-         if (localplayers[i].team != localplayers[netcode->PlayerNum()].team && localplayers[i].spawned)
+         if (localplayers[i].team != BotPlayer().team && localplayers[i].spawned)
          {
             otherteam.push_back(i);
          }
@@ -197,14 +197,11 @@ void Bot::UpdateHeading()
       current = (heading + direct) / 2.f;
       current.normalize();
       current *= checkdist;
-      Timer t;
       if (currpathnode->Validate(start, current, netcode->bot.size))
       {
-         t.stop();
          heading = current;
          return;
       }
-      t.stop();
    }
    
    current = savecurrent;

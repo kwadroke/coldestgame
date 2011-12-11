@@ -52,13 +52,21 @@ void BotNetCode::Send()
       SendPacket(p);
       needconnect = false;
    }
-   else if (sendtimer.elapsed() > 1000 / (Uint32)console.GetInt("tickrate"))
+   else 
    {
-      Packet p(&address);
-      p << FillUpdatePacket();
-      SendPacket(p);
-      sendtimer.start();
+      if (sendtimer.elapsed() > 1000 / (Uint32)console.GetInt("tickrate"))
+      {
+         Packet p(&address);
+         p << FillUpdatePacket();
+         SendPacket(p);
+         sendtimer.start();
+      }
+      if (respawntimer.elapsed() > console.GetInt("respawntime") && !bot.spawned)
+      {
+         SendSpawnRequest();
+      }
    }
+   
 }
 
 
@@ -267,9 +275,7 @@ void BotNetCode::ReadDeath(stringstream& get)
    
    if (killed == playernum && bot.spawned)
    {
-      // We're dead so we can't do anything - wait until the spawn timer is up
-      SDL_Delay(console.GetInt("respawntime"));
-      SendSpawnRequest();
+      respawntimer.start();
       bot.spawned = false;
    }
 }

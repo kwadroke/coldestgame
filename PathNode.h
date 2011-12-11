@@ -4,6 +4,9 @@
 #include "Vector3.h"
 #include "types.h"
 #include <boost/shared_ptr.hpp>
+#include <set>
+
+using std::set;
 
 class PathNode
 {
@@ -17,6 +20,9 @@ class PathNode
       vector<bool> passable;
       vector<ssize_t> num; // To save us time while serializing
       float step;
+      
+   private:
+      bool Validate(Vector3, Vector3, const float, set<PathNode*>&);
 };
 
 typedef boost::shared_ptr<PathNode> PathNodePtr;

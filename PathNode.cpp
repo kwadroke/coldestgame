@@ -27,16 +27,21 @@ Vector3vec PathNode::GetAdjacent(const float step)
 
 bool PathNode::Validate(Vector3 start, Vector3 move, const float radius)
 {
+   set<PathNode*> dummy;
+   return Validate(start, move, radius, dummy);
+}
+
+bool PathNode::Validate(Vector3 start, Vector3 move, const float radius, set<PathNode*>& checked)
+{
    CollisionDetection cd;
    start.y = position.y;
    move.y = 0.f;
    Vector3 end = start + move;
    for (size_t i = 0; i < nodes.size(); ++i)
    {
-      // Because DistanceBetween... checks an infinite line, we need to check that the node is in the direction
-      // of the movement, and is not past the end of the movement
-      if (nodes[i])
+      if (nodes[i] && checked.find(nodes[i].get()) == checked.end())
       {
+         checked.insert(nodes[i].get());
          Vector3 flatpos = nodes[i]->position;
          flatpos.y = position.y;
          
@@ -46,11 +51,13 @@ bool PathNode::Validate(Vector3 start, Vector3 move, const float radius)
          movenorm.normalize();
          float dot = flatvec.dot(movenorm);
          
+         // Because DistanceBetween... checks an infinite line, we need to check that the node is in the direction
+         // of the movement, and is not past the end of the movement
          if (dot > 1e-4f &&
              flatpos.distance(start) < move.distance() + radius &&
              cd.DistanceBetweenPointAndLine(flatpos, start, move, 1.f / move.magnitude()) < radius + step / 2.f)
          {
-            if (!passable[i] || !nodes[i]->Validate(start, move, radius))
+            if (!passable[i] || !nodes[i]->Validate(start, move, radius, checked))
             {
                return false;
             }
