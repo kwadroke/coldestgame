@@ -900,10 +900,11 @@ void RenderHud(const PlayerData& localplayer)
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
    if (particlemesh)
       partlabel->text = "Particles: " + ToString(particlemesh->NumTris());
-   torsohplabel->text = "Torso: " + ToString(localplayer.hp[Torso]);
-   legshplabel->text = "Legs: " + ToString(localplayer.hp[Legs]);
-   leftarmhplabel->text = "Left Arm: " + ToString(localplayer.hp[LArm]);
-   rightarmhplabel->text = "Right Arm: " + ToString(localplayer.hp[RArm]);
+   
+   torsohplabel->text = "Torso: " + GetColorCode(localplayer, Torso) + ToString(localplayer.hp[Torso]);
+   legshplabel->text = "Legs: " + GetColorCode(localplayer, Legs) + ToString(localplayer.hp[Legs]);
+   leftarmhplabel->text = "Left Arm: " + GetColorCode(localplayer, LArm) + ToString(localplayer.hp[LArm]);
+   rightarmhplabel->text = "Right Arm: " + GetColorCode(localplayer, RArm) + ToString(localplayer.hp[RArm]);
    
    torsoweaponlabel->text = localplayer.weapons[Torso].Name();
    if (localplayer.weapons[Torso].ammo >= 0)
@@ -981,6 +982,16 @@ void RenderHud(const PlayerData& localplayer)
       gui[i]->Render();
    }
    SDL_GL_Exit2dMode();
+}
+
+
+string GetColorCode(const PlayerData& localplayer, const int part)
+{
+   float percent = float(localplayer.hp[part]) / float(units[localplayer.unit].maxhp[part]);
+   int r = 9.f - 9.f * smoothstep(.5f, 1.f, percent);
+   int g = 9.f * smoothstep(0.f, .5f, percent);
+   logout << r <<  " " << g << endl;
+   return "#" + ToString(r) + ToString(g) + "0";
 }
 
 
