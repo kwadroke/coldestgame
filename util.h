@@ -94,4 +94,20 @@ T clamp(T min, T max, T val)
    return val;
 }
 
+
+// Compares two subscriptable containers to see if their contents are the same
+template <typename T>
+bool equal(T first, T second)
+{
+   size_t fsize = first.size();
+   if (fsize != second.size()) return false;
+   
+   for (size_t i = 0; i < fsize; ++i)
+   {
+      if (first[i] != second[i])
+         return false;
+   }
+   return true;
+}
+
 #endif

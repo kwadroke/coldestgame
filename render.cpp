@@ -984,13 +984,12 @@ void RenderHud(const PlayerData& localplayer)
    SDL_GL_Exit2dMode();
 }
 
-
+// Returns an appropriate green, yellow, or red color code for the player's HP of the specified body part
 string GetColorCode(const PlayerData& localplayer, const int part)
 {
    float percent = float(localplayer.hp[part]) / float(units[localplayer.unit].maxhp[part]);
    int r = 9.f - 9.f * smoothstep(.5f, 1.f, percent);
    int g = 9.f * smoothstep(0.f, .5f, percent);
-   logout << r <<  " " << g << endl;
    return "#" + ToString(r) + ToString(g) + "0";
 }
 

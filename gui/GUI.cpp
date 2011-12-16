@@ -714,8 +714,9 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
       }
       
       Quad& q = *j;
+      GLubytevec& oldcolor = q.GetVertexPtr(0)->color;
       ++j;
-      if (i >= oldchars.size() || oldchars[i] != str[i] || oldfont != font)
+      if (i >= oldchars.size() || oldchars[i] != str[i] || oldfont != font || !equal(oldcolor, color))
       {
          font->GetChar(str[i], q);
          q.Scale(scale);
