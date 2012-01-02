@@ -804,10 +804,13 @@ void ServerNetCode::SendHit(const Vector3& hitpos, const Particle& p)
 }
 
 
+// Sends 1 to the player who was hit, and 0 to the one who did the hitting.
+// Also sends the player number who did the hitting so that bots know who hit them.
 void ServerNetCode::SendDamage(const int i, const int j)
 {
    Packet pack(&serverplayers[i].addr, "D", sendpacketnum, true);
    pack << 1 << eol;
+   pack << j << eol;
    SendPacket(pack);
    Packet p(&serverplayers[j].addr, "D", sendpacketnum, true);
    p << 0 << eol;

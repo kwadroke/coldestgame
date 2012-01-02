@@ -22,6 +22,7 @@ using std::getline;
 
 BotNetCode::BotNetCode() : bot(dummymeshes),
                            id(0),
+                           attacker(0),
                            connected(false),
                            needconnect(true),
                            playernum(0)
@@ -156,6 +157,8 @@ void BotNetCode::HandlePacket(stringstream& get)
       ReadDeath(get);
    else if (packettype == "O")
       running = false;
+   else if (packettype == "D")
+      ReadDamage(get);
    else if (acktypes.find(packettype) == acktypes.end() && packettype != "U" && packettype != "u")
       logout << "Got unhandled packet: " << packettype << endl;
 }
@@ -277,6 +280,17 @@ void BotNetCode::ReadDeath(stringstream& get)
    {
       respawntimer.start();
       bot.spawned = false;
+   }
+}
+
+
+void BotNetCode::ReadDamage(stringstream& get)
+{
+   bool hitme;
+   get >> hitme;
+   if (hitme)
+   {
+      get >> attacker;
    }
 }
 

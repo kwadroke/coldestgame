@@ -88,6 +88,21 @@ void Bot::Update()
    {
       FindCurrPathNode();
       
+      if (targettimer.elapsed() > 3000)
+      {
+         if (baseattacker)
+         {
+            targetplayer = baseattacker;
+            baseattacker = 0;
+         }
+         else if (netcode->attacker)
+         {
+            targetplayer = netcode->attacker;
+            netcode->attacker = 0;
+         }
+         targettimer.start();
+      }
+      
       if (!targetplayer || !localplayers[targetplayer].spawned)
          targetplayer = SelectTarget();
       
@@ -133,14 +148,15 @@ int Bot::SelectTarget()
    if (!otherteam.size())
       return 0;
 
-   size_t index = Random(0, otherteam.size() - 1e-5f);
+   // I think this random should always return valid indices, but clamp just to be safe
+   size_t index = clamp(size_t(0), otherteam.size() - 1, size_t(Random(0, otherteam.size() - 1e-5f)));
    return otherteam[index];
 }
 
 
 void Bot::AimAtTarget(int target)
 {
-   Vector3 aimvec = localplayers[target].pos - localplayers[netcode->PlayerNum()].pos;
+   Vector3 aimvec = localplayers[target].pos - BotPlayer().pos;
    
    Vector3 facingvec(0.f, 0.f, -1.f);
    GraphicMatrix m;
@@ -154,17 +170,38 @@ void Bot::AimAtTarget(int target)
 }
 
 
-// This will probably be a touch slow, but it won't need to be done much so that should be okay
 void Bot::FindCurrPathNode()
 {
-   float currdist = 100000.f;
-   for (size_t i = 0; i < pathnodes.size(); ++i)
+   if (!currpathnode)
+      currpathnode = pathnodes[0];
+   
+   list<PathNodePtr> candidates;
+   float currdist = currpathnode->position.distance2(BotPlayer().pos);
+   PathNodePtr current = currpathnode;
+   candidates.push_back(current);
+   while (candidates.size())
    {
-      float checkdist = pathnodes[i]->position.distance2(localplayers[netcode->PlayerNum()].pos);
-      if (checkdist < currdist)
+      current = candidates.front();
+      candidates.pop_front();
+      
+      float currcheck = current->position.distance2(BotPlayer().pos);
+      if (currcheck < currdist)
       {
-         currdist = checkdist;
-         currpathnode = pathnodes[i];
+         currdist = currcheck;
+         currpathnode = current;
+      }
+      
+      for (size_t i = 0; i < 8; ++i)
+      {
+         if (current->nodes[i])
+         {
+            float checkdist = current->nodes[i]->position.distance2(BotPlayer().pos);
+            if (checkdist < currdist)
+            {
+               if (std::find(candidates.begin(), candidates.end(), current->nodes[i]) == candidates.end())
+                  candidates.push_back(current->nodes[i]);
+            }
+         }
       }
    }
 }

@@ -43,6 +43,9 @@ class Bot{
       static void SetPlayers(vector<PlayerData>&);
       static vector<PlayerData> GetPlayers();
       static void SetPathNodes(vector<PathNodePtr>& p) {pathnodes = p;}
+      int Team() {return BotPlayer().team;}
+      
+      tsint baseattacker;
    
    private:
       bool botrunning;
@@ -55,6 +58,7 @@ class Bot{
       Timer movetimer;
       Timer firetimer;
       Timer updatetimer;
+      Timer targettimer;
       
       SDL_Thread* thread;
       

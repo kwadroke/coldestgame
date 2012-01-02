@@ -35,6 +35,7 @@ class BotNetCode : public NetCode
       
       PlayerData bot;
       pid_t id;
+      size_t attacker;
 
    protected:
       virtual void HandlePacket(stringstream&);
@@ -49,6 +50,7 @@ class BotNetCode : public NetCode
       void ReadSpawnRequest(stringstream&);
       void ReadPing();
       void ReadDeath(stringstream&);
+      void ReadDamage(stringstream&);
       
       bool connected, needconnect;
       Meshlist dummymeshes;

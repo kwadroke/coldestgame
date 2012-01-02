@@ -408,16 +408,30 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
       {
          logout << "Hit item " << curr << endl;
          i->hp -= int(damage);
+         
+         size_t spawnpoint = servermap->SpawnPoints().size();
+         for (size_t j = 0; j < servermap->SpawnPoints().size(); ++j)
+         {
+            if (&(*serveritems[j].mesh) == curr)
+            {
+               spawnpoint = j;
+               if (servermap->SpawnPoints(spawnpoint).team != serverplayers[playernum].team)
+               {
+                  for (size_t k = 0; k < bots.size(); ++k)
+                  {
+                     if (bots[k]->Team() == servermap->SpawnPoints(spawnpoint).team)
+                        bots[k]->baseattacker = playernum;
+                  }
+               }
+            }
+         }
          if (i->hp < 0)
          {
             doremove = true;
-            for (size_t j = 0; j < servermap->SpawnPoints().size(); ++j)
+            if (spawnpoint < servermap->SpawnPoints().size())
             {
-               if (&(*serveritems[j].mesh) == curr)
-               {
-                  RemoveTeam(servermap->SpawnPoints(j).team);
-                  doremove = false;
-               }
+               RemoveTeam(servermap->SpawnPoints(spawnpoint).team);
+               doremove = false;
             }
             if (doremove)
                i = RemoveItem(i);
