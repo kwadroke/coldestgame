@@ -127,6 +127,7 @@ class GUI
       void RenderBase();
       vector<string> ReadTextures(DOMNode*, const string& prefix = "");
       void UseDefaultTextures(int);
+      void AddSound(const string&);
       
       // Event handlers
       virtual void CustomProcessEvent(SDL_Event*){}
@@ -169,6 +170,7 @@ class GUI
       FontPtr oldfont;
       
       vector<string> sounds;
+      set<string> playedsounds;
       vector<string> textures;
       vector<GLuint> texids;
       TextureManager *texman;

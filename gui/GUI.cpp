@@ -45,9 +45,9 @@ GUI::GUI(float aw, float ah, TextureManager* texm, const string file)
    virtualw = virtualh = 1000.f;
    wratio = actualw / virtualw;
    hratio = actualh / virtualh;
-   name = "root";
    xoff = yoff = 0;
    Init(this, texm);
+   name = "root"; // Init sets this to "", so has to come after that.
    if (file != "")
       InitFromFile(file);
 }
@@ -261,8 +261,7 @@ void GUI::ProcessEvent(SDL_Event* event)
                Uint32 currtick = SDL_GetTicks();
                if (currtick - lastclick > 400)
                {
-                  if (sounds[LeftSound] != "")
-                     resman.soundman.PlaySound(sounds[LeftSound], Vector3(), false, true);
+                  AddSound(sounds[LeftSound]);
                   if (wasclicked)
                   {
                      LeftClick(event);
@@ -278,8 +277,7 @@ void GUI::ProcessEvent(SDL_Event* event)
             }
             else if (event->button.button == SDL_BUTTON_RIGHT)
             {
-               if (sounds[RightSound] != "")
-                  resman.soundman.PlaySound(sounds[RightSound], Vector3(), false, true);
+               AddSound(sounds[RightSound]);
                if (wasclicked)
                {
                   RightClick(event);
@@ -326,6 +324,15 @@ void GUI::ProcessEvent(SDL_Event* event)
    guiiter i;
    for (i = children.begin(); i != children.end(); ++i)
       (*i)->ProcessEvent(event);
+   
+   for (set<string>::iterator i = playedsounds.begin(); i != playedsounds.end(); ++i)
+   {
+      if (*i != "")
+      {
+         resman.soundman.PlaySound(*i, Vector3(), false, true);
+      }
+   }
+   playedsounds.clear();
 }
 
 
@@ -824,5 +831,14 @@ float GUI::MaxY()
          retval = tempval;
    }
    return retval;
+}
+
+
+void GUI::AddSound(const string& sound)
+{
+   if (name == "root")
+      playedsounds.insert(sound);
+   else
+      parent->AddSound(sound);
 }
 
