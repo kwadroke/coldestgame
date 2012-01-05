@@ -659,7 +659,7 @@ void ClientNetCode::ReadDamage(stringstream& get)
    bool hitme;
    get >> hitme;
    if (!hitme)
-      resman.soundman.PlaySound("sounds/click.ogg", Vector3(), false, true);
+      resman.soundman.PlaySound("sounds/hit.ogg", Vector3(), false, true);
    else
       lasthit = SDL_GetTicks();
 }
