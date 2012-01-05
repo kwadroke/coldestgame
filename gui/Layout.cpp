@@ -72,7 +72,9 @@ void Layout::UpdatePositions()
          if (currwidth > max)
             max = currwidth;
       }
-      height = previous->MaxY() + ymargin;
+      // No previous if we have no children - in which case we also don't care about height
+      if (previous)
+         height = previous->MaxY() + ymargin;
       width = max + xmargin * 2.f;
    }
    else
@@ -96,6 +98,8 @@ void Layout::UpdatePositions()
             max = currheight;
       }
       height = max + ymargin * 2.f;
-      width = previous->MaxX() + xmargin;
+      // No previous if we have no children - in which case we also don't care about width
+      if (previous)
+         width = previous->MaxX() + xmargin;
    }
 }
