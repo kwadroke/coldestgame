@@ -252,6 +252,9 @@ void GUI::ProcessEvent(SDL_Event* event)
       case SDL_MOUSEBUTTONUP:
          if (InWidget(event))
          {
+            bool wasclicked = false;
+            if (state == Clicked)
+               wasclicked = true;
             state = Hover;
             if (event->button.button == SDL_BUTTON_LEFT)
             {
@@ -260,10 +263,13 @@ void GUI::ProcessEvent(SDL_Event* event)
                {
                   if (sounds[LeftSound] != "")
                      resman.soundman.PlaySound(sounds[LeftSound], Vector3(), false, true);
-                  LeftClick(event);
+                  if (wasclicked)
+                  {
+                     LeftClick(event);
+                     DoAction(leftclickaction);
+                     lastclick = currtick;
+                  }
                   GlobalLeftClick(event); // The globals get done regardless of whether the click is in the widget
-                  DoAction(leftclickaction);
-                  lastclick = currtick;
                }
                else
                {
@@ -274,9 +280,12 @@ void GUI::ProcessEvent(SDL_Event* event)
             {
                if (sounds[RightSound] != "")
                   resman.soundman.PlaySound(sounds[RightSound], Vector3(), false, true);
-               RightClick(event);
+               if (wasclicked)
+               {
+                  RightClick(event);
+                  DoAction(rightclickaction);
+               }
                GlobalRightClick(event);
-               DoAction(rightclickaction);
             }
          }
          else
