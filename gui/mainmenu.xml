@@ -30,7 +30,7 @@
       <Button width="200" height="40" text="Join" name="joinbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="join"/>
       <Button width="200" height="40" text="Host" name="hostbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
-            leftclick="host"/>
+            leftclick="hostsetup"/>
       <Button width="200" height="40" text="Settings" name="settingsbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="showsettings"/>
       <Button width="200" height="40" text="Credits" name="settingsbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"

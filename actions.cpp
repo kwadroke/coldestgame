@@ -37,6 +37,7 @@ using boost::char_separator;
 
 void ConsoleHandler(string);
 void Quit();
+void PopulateMapList();
 
 void UpdateUnitSelection()
 {
@@ -138,10 +139,26 @@ void ConnectToIp()
 }
 
 
+void ShowHostSetup()
+{
+   if (server)
+      return;
+   
+   PopulateMapList();
+   ShowGUI(hostsetup);
+}
+
+
 void Host()
 {
    if (server) // Starting two servers == BAD
       return;
+   
+   Slider* botcountslider = dynamic_cast<Slider*>(gui[hostsetup]->GetWidget("botcountslider"));
+   ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
+   console.Parse("set bots " + ToString(botcountslider->value));
+   console.Parse("set map " + ToString(mapbox->SelectedText()));
+   
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
    console.Parse("set serveraddr localhost", false);
@@ -330,6 +347,8 @@ void Action(const string& action)
       Connect();
    else if (action == "connectip")
       ConnectToIp();
+   else if (action == "hostsetup")
+      ShowHostSetup();
    else if (action == "host")
       Host();
    else if (action == "join")

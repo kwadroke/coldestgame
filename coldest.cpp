@@ -346,7 +346,8 @@ void InitGUI()
    gui[editormain] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/editormain.xml"));
    gui[serverbrowser] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/serverbrowser.xml"));
    gui[credits] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/credits.xml"));
-   gui[updateprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/updateprogress.xml")); 
+   gui[updateprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/updateprogress.xml"));
+   gui[hostsetup] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/hostsetup.xml")); 
    
    
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
@@ -1173,7 +1174,13 @@ bool GUIEventHandler(SDL_Event &event)
    else if (gui[updateprogress]->visible)
    {
       SDL_ShowCursor(1);
-      gui[credits]->ProcessEvent(&event);
+      gui[updateprogress]->ProcessEvent(&event);
+      eatevent = true;
+   }
+   else if (gui[hostsetup]->visible)
+   {
+      SDL_ShowCursor(1);
+      gui[hostsetup]->ProcessEvent(&event);
       eatevent = true;
    }
    
@@ -2476,7 +2483,7 @@ bool PrimaryGUIVisible()
    // A bit counterintuitive...
    return !(!gui[mainmenu]->visible && !gui[loadprogress]->visible && !gui[loadoutmenu]->visible &&
          !gui[settings]->visible && !gui[endgame]->visible && !gui[serverbrowser]->visible && !gui[credits]->visible &&
-         !gui[updateprogress]->visible);
+         !gui[updateprogress]->visible && !gui[hostsetup]->visible);
 #endif
    return false;
 }
@@ -2664,6 +2671,21 @@ void SoundUpdate()
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       resman.soundman.PlaySound(i->CurrentSound(), i->GetPosition());
+   }
+#endif
+}
+
+
+void PopulateMapList()
+{
+#ifndef DEDICATED
+   ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
+   NTreeReader readmaps("maps/maplist");
+   
+   for (size_t i = 0; i < readmaps.NumChildren(); ++i)
+   {
+      const NTreeReader& currmap = readmaps(i);
+      mapbox->Add(currmap.GetName());
    }
 #endif
 }

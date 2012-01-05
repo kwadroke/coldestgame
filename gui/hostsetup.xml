@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/vtcorona.ttf" visible="false"
+     buttonnormal="textures/buttonnorm.png"
+     buttonpressed="textures/buttonpressed.png"
+     buttonhover="textures/buttonhover.png"
+     gutternormal="textures/buttonnorm.png"
+     gutterpressed="textures/buttonnorm.png"
+     gutterhover="textures/buttonnorm.png"
+     slidernormal="textures/sliderbuttonnorm.png"
+     sliderpressed="textures/sliderbuttonnorm.png"
+     sliderhover="textures/sliderbuttonnorm.png"
+     bgnormal="textures/buttonnormsquare.png"
+     bgpressed="textures/buttonnormsquare.png"
+     bghover="textures/buttonnormsquare.png"
+     tablecellnormal="textures/transparent.png"
+     tablecellpressed="textures/transparent.png"
+     tablecellhover="textures/transparent.png"
+     tablerownormal=""
+     tablerowpressed="textures/buttonhover.png"
+     tablerowhover=""
+     cursornormal="textures/sliderbuttonnorm.png"
+     leftclicksound="sounds/click.ogg">
+   <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
+   
+   <Label x="400" y="50" width="200" height="50" text="Server Setup" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   
+   <Layout x="300" y="150" orientation="horizontal" padding="5">
+      <Label width="100" height="30" text="Bots"/>
+      <Slider width="180" height="30" name="botcountslider" min="0" max="16">
+         <Label x="190" y="0" width="50" height="30" name="botcountslidervalue"/>
+      </Slider>
+   </Layout>
+   
+   <Layout x="300" y="250" orientation="horizontal" padding="5">
+      <Label width="100" height="30" text="Map"/>
+      <ComboBox width="200" height="30" name="mapbox"
+                normal="textures/buttonnorm.png"
+                pressed="textures/buttonpressed.png"
+                hover="textures/buttonhover.png"/>
+   </Layout>
+   
+   <Button x="100" y="910" width="200" height="50" text="Main Menu" align="center"
+           leftclick="showmain"/>
+           
+   <Button x="350" y="910" width="200" height="50" text="Host" align="center"
+           leftclick="host"/>
+   
+   <Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/>
+</GUI>
