@@ -106,6 +106,7 @@ void ALSource::SetPosition(const Vector3& v)
 void ALSource::SetGain(const float g)
 {
    alSourcef(id, AL_GAIN, g);
+   gain = g;
 }
 
 
