@@ -35,8 +35,7 @@ void Button::RenderWidget()
 {
    if (togglestate == 1)
       state = Clicked;
-   else if (toggle && togglestate == 0 && state == Clicked)
-      state = Normal;
+
    RenderBase();
    int w, h;
    StringDim(text, w, h);
