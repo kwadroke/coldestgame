@@ -289,8 +289,8 @@ void Map::LoadMapData()
 // Build terrain meshes
 void Map::BuildTerrain()
 {
-   int numobjsx = mapw / terrobjsize;
-   int numobjsy = maph / terrobjsize;
+   int numobjsx = std::max(1, mapw / terrobjsize);
+   int numobjsy = std::max(1, maph / terrobjsize);
    vector<Meshlist::iterator> meshits;
    Mesh baseterrain(NTreeReader("models/terrain/base"), resman);
    

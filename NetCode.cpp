@@ -59,7 +59,6 @@ NetCode::NetCode() : lastnettick(SDL_GetTicks()),
 
 NetCode::~NetCode()
 {
-   running = 0;
    SDLNet_FreePacket(packet);
    SDLNet_UDP_Close(socket);
 }

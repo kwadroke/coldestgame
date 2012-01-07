@@ -155,8 +155,6 @@ void BotNetCode::HandlePacket(stringstream& get)
       ReadPing();
    else if (packettype == "d")
       ReadDeath(get);
-   else if (packettype == "O")
-      running = false;
    else if (packettype == "D")
       ReadDamage(get);
    else if (acktypes.find(packettype) == acktypes.end() && packettype != "U" && packettype != "u")

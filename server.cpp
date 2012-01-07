@@ -786,9 +786,10 @@ void GenPathData()
    size_t width = servermap->Width();
    size_t height = servermap->Height();
    
-   Vector3 base(step / 2.f, 0.f, step / 2.f);
+   Vector3 base(step / 2.f, -1000.f, step / 2.f);
    Vector3 start(base);
-   start.y = servermap->MaxHeight();
+   start.y = servermap->MaxHeight() + step;
+   
    vector<Mesh*> check = serverkdtree.getmeshes(start, base, step / 2.f);
    Vector3 hitpos;
    Mesh* dummy;
