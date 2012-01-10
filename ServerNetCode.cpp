@@ -533,7 +533,7 @@ void ServerNetCode::ReadCommand(stringstream& get)
       string command;
       get.ignore();
       getline(get, command);
-      console.Parse(command, false);
+      console.Parse(command);
       for (size_t i = 0; i < serverplayers.size(); ++i)
          SendSyncPacket(serverplayers[i], 0);
       
