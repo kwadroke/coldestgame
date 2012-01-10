@@ -208,7 +208,7 @@ void InitGlobals()
    console.Parse("set detailmapsize 600", false);
    console.Parse("set softshadows 0", false);
    console.Parse("set turnsmooth 20", false);
-   console.Parse("set endgametime 10", false);
+   console.Parse("set endgametime 3", false);
    console.Parse("set splashlevels 3", false);
    console.Parse("set grassdrawdist 1000", false);
    console.Parse("set grassdensity 1", false);
