@@ -1,0 +1,49 @@
+#!/bin/bash
+
+CWD=`pwd`
+cd /games/w/GLSL\ Validate
+rm ~/source/coldest/vertex.log > /dev/null 2>&1
+rm ~/source/coldest/fragment.log > /dev/null 2>&1
+
+for i in `ls ~/source/coldest/shaders/*.glsl | grep frag`
+do
+   wine ./glslvalidate.exe --fragment="$i"
+   echo "" >> ~/source/coldest/fragment.log
+   echo $i >> ~/source/coldest/fragment.log
+   echo "" >> ~/source/coldest/fragment.log
+   cat ./fragment.log >> ~/source/coldest/fragment.log
+done
+
+for i in `ls ~/source/coldest/shaders/*.glsl | grep -v frag | grep -v vert`
+do
+   wine ./glslvalidate.exe --fragment="$i"
+   echo "" >> ~/source/coldest/fragment.log
+   echo $i >> ~/source/coldest/fragment.log
+   echo "" >> ~/source/coldest/fragment.log
+   cat ./fragment.log >> ~/source/coldest/fragment.log
+done
+
+for i in `ls ~/source/coldest/shaders/*.glsl | grep vert`
+do
+   wine ./glslvalidate.exe --vertex="$i"
+   echo "" >> ~/source/coldest/vertex.log
+   echo $i >> ~/source/coldest/vertex.log
+   echo "" >> ~/source/coldest/vertex.log
+   cat ./vertex.log >> ~/source/coldest/vertex.log
+done
+
+if [ -z "`cat ~/source/coldest/fragment.log | grep ERROR`" ]
+then
+   echo "Fragment shaders passed"
+else
+   echo "Fragment shaders failed!"
+fi
+
+if [ -z "`cat ~/source/coldest/vertex.log | grep ERROR`" ]
+then
+   echo "Vertex shaders passed"
+else
+   echo "Vertex shaders failed!"
+fi
+
+cd $CWD
