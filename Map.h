@@ -53,7 +53,7 @@ class Map
       string PathName() {return dataname.substr(0, dataname.length() - 4) + ".path";}
       vector<SpawnPointData> SpawnPoints() {return spawnpoints;}
       SpawnPointData SpawnPoints(const size_t i) {return spawnpoints[i];}
-      Quad WorldBounds(const int i) {return worldbounds[i];}
+      Quad& WorldBounds(const int i) {return worldbounds[i];}
       size_t Width();
       size_t Height();
       size_t MaxHeight() {return worldbounds[0].GetVertex(0).y;}

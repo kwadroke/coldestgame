@@ -62,7 +62,7 @@ void BotNetCode::Send()
          SendPacket(p);
          sendtimer.start();
       }
-      if (respawntimer.elapsed() > console.GetInt("respawntime") && !bot.spawned)
+      if (respawntimer.elapsed() > console.GetInt("respawntime") && !bot.spawned && spawns.size())
       {
          SendSpawnRequest();
       }

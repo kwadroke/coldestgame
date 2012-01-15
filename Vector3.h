@@ -32,7 +32,7 @@ using std::ostream;
 // Doesn't make a huge difference in performance, but can be useful for profiling
 // because it causes the time taken by Vector3 calls to be lumped into the calling
 // function's profile time
-#define INLINE_VECTOR3 1
+//#define INLINE_VECTOR3 1
 
 class Vector3
 {

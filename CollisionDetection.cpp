@@ -234,7 +234,7 @@ void CollisionDetection::CheckMain(const Vector3& oldpos,
             float checkrad = currtri.maxdim + radius;
             
             if ((!nomove && DistanceBetweenPointAndLine(currtri.midpoint, oldpos, move, movemaginv) < checkrad) ||
-               oldpos.distance(currtri.midpoint) < checkrad)
+               oldpos.distance2(currtri.midpoint) < checkrad * checkrad)
             {
                // Cache the results of the previous calculations for later use
                neartris.push_back(&currtri);

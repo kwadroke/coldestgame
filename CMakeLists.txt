@@ -10,6 +10,7 @@ option(BUILD_CLIENT           "Build the main game."    ON)
 option(BUILD_DEDICATED_SERVER "Build dedicated server." OFF)
 option(BUILD_MASTER_SERVER    "Build master server."    OFF)
 option(CHECKED_ITERATORS      "Checked iterators."      OFF)
+option(NO_OMIT_FRAME_POINTER  "Don't omit frame pointer." OFF)
 
 # Avoid source tree pollution
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -35,6 +36,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
       if (CHECKED_ITERATORS)
          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DEBUG")
       endif (CHECKED_ITERATORS)
+      if (NO_OMIT_FRAME_POINTER)
+         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer")
+      endif (NO_OMIT_FRAME_POINTER)
 	endif(NOT WIN32)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
