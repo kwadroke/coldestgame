@@ -914,6 +914,7 @@ bool LoadPathData()
    float step = 0.f;
    reader.Read(step, "Step");
    
+   pathnodes.clear();
    for (size_t i = 0; i < reader.NumChildren(); ++i)
    {
       const NTreeReader& curr = reader(i);
