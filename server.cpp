@@ -230,6 +230,10 @@ void ServerLoop()
       UpdateVisibility();
       
       Bot::SetPlayers(serverplayers);
+      for (size_t i = 0; i < bots.size(); ++i)
+      {
+         bots[i]->SetAllSpawns(servermap->SpawnPoints());
+      }
       
       // Save state so we can recall it for collision detection
       SaveState();

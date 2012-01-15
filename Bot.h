@@ -44,6 +44,7 @@ class Bot{
       static vector<PlayerData> GetPlayers();
       static void SetPathNodes(vector<PathNodePtr>& p) {pathnodes = p;}
       int Team() {return BotPlayer().team;}
+      void SetAllSpawns(vector<SpawnPointData> s) {allspawns = s;}
       
       tsint baseattacker;
    
@@ -63,7 +64,9 @@ class Bot{
       SDL_Thread* thread;
       
       vector<PlayerData> localplayers; // Thread-specific copy of players to avoid locking issues
-      int targetplayer;
+      size_t targetplayer;
+      vector<SpawnPointData> allspawns; // Netcode only gives us the ones for our team
+      size_t targetspawn;
       
       Vector3 movetarget;
       PathNodePtr currpathnode;
@@ -87,8 +90,9 @@ class Bot{
       // Returns the PlayerData object that represents our current state (note that netcode->bot does not!)
       PlayerData& BotPlayer() {return localplayers[netcode->PlayerNum()];}
       
-      int SelectTarget();
-      void AimAtTarget(int);
+      size_t SelectTarget();
+      size_t SelectTargetSpawn();
+      void AimAtTarget(const Vector3&);
       void FindCurrPathNode();
       void UpdateHeading();
       void TurnToHeading();

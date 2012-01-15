@@ -29,6 +29,7 @@ vector<PathNodePtr> Bot::pathnodes = vector<PathNodePtr>();
 Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
+             targetspawn(0),
              heading(Vector3(0, 0, -1.f)),
              closingdistance(Random(700, 1500))
 {
@@ -92,11 +93,15 @@ void Bot::Update()
       {
          if (baseattacker)
          {
+            if (baseattacker == netcode->PlayerNum())
+               logout << "Error: baseattacker set to self" << endl;
             targetplayer = baseattacker;
             baseattacker = 0;
          }
          else if (netcode->attacker)
          {
+            if (netcode->attacker == netcode->PlayerNum())
+               logout << "Error: attacker set to self" << endl;
             targetplayer = netcode->attacker;
             netcode->attacker = 0;
          }
@@ -105,22 +110,27 @@ void Bot::Update()
       
       if (!targetplayer || !localplayers[targetplayer].spawned)
          targetplayer = SelectTarget();
+      if (targetplayer == netcode->PlayerNum())
+         logout << "Error: target selected is self" << endl;
       
+      if (!targetplayer)
+         targetspawn = SelectTargetSpawn();
+      
+      UpdateHeading();
+      TurnToHeading();
+         
       if (targetplayer)
-      {
-         UpdateHeading();
-         TurnToHeading();
+         AimAtTarget(localplayers[targetplayer].pos);
+      else
+         AimAtTarget(allspawns[targetspawn].position);
          
-         AimAtTarget(targetplayer);
-         
-         // Weapons fire
-         if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
-            BotPlayer().temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
+      // Weapons fire
+      if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
+         BotPlayer().temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
          )
-         {
-            netcode->SendFire();
-            firetimer.start();
-         }
+      {
+         netcode->SendFire();
+         firetimer.start();
       }
    }
    else if (!netcode->bot.spawned)
@@ -130,7 +140,7 @@ void Bot::Update()
 }
 
 
-int Bot::SelectTarget()
+size_t Bot::SelectTarget()
 {
    // Build list of players on the other team
    intvec otherteam;
@@ -154,9 +164,26 @@ int Bot::SelectTarget()
 }
 
 
-void Bot::AimAtTarget(int target)
+size_t Bot::SelectTargetSpawn()
 {
-   Vector3 aimvec = localplayers[target].pos - BotPlayer().pos;
+   intvec otherteam;
+   for (size_t i = 0; i < allspawns.size(); ++i)
+   {
+      if (allspawns[i].team != Team())
+      {
+         otherteam.push_back(i);
+      }
+   }
+   
+   // I think this random should always return valid indices, but clamp just to be safe
+   size_t index = clamp(size_t(0), otherteam.size() - 1, size_t(Random(0, otherteam.size() - 1e-5f)));
+   return otherteam[index];
+}
+
+
+void Bot::AimAtTarget(const Vector3& target)
+{
+   Vector3 aimvec = target - BotPlayer().pos;
    
    Vector3 facingvec(0.f, 0.f, -1.f);
    GraphicMatrix m;
@@ -211,7 +238,11 @@ void Bot::UpdateHeading()
 {
    float checkdist = 500.f;
    Vector3 start = localplayers[netcode->PlayerNum()].pos;
-   Vector3 direct = localplayers[targetplayer].pos - start;
+   Vector3 direct;
+   if (targetplayer)
+      direct = localplayers[targetplayer].pos - start;
+   else
+      direct = allspawns[targetspawn].position - start;
    Vector3 perp = direct.cross(Vector3(0.f, 1.f, 0.f));
    perp.normalize();
    perp *= closingdistance;
