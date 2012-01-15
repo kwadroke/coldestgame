@@ -208,7 +208,7 @@ string Recorder::GetFilename()
    char buffer[buffersize];
    strftime(buffer, buffersize - 1, "%Y-%m-%d-%H%M%S", timeinfo);
 
-   string retval = userpath + savepath + "Coldest";
+   string retval = userpath + savepath + currmap->MapName();
    retval += buffer;
    retval += ".cor";
    return retval;
