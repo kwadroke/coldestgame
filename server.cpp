@@ -217,6 +217,29 @@ void ServerLoop()
          }
          else if (serverplayers[i].connected)
          {
+            // *** Debugging of pathing code ***
+            /*PathNodePtr currpathnode = pathnodes[0];
+            float currdist = pathnodes[0]->position.distance2(serverplayers[i].pos);
+            for (size_t j = 1; j < pathnodes.size(); ++j)
+            {
+               float checkdist = pathnodes[j]->position.distance2(serverplayers[i].pos);
+               if (checkdist < currdist)
+               {
+                  currdist = checkdist;
+                  currpathnode = pathnodes[j];
+               }
+            }
+            
+            Vector3 facingvec(0.f, 0.f, -1.f);
+            GraphicMatrix m;
+            m.rotatey(serverplayers[i].facing);
+            facingvec.transform(m);
+            facingvec *= 500.f;*/
+            
+            //logout << "currpathnode " << currpathnode << endl;
+            
+            //logout << currpathnode->Validate(serverplayers[i].pos, facingvec, serverplayers[i].size) << endl;;
+            
             ServerUpdatePlayer(i);
          }
       }
@@ -869,9 +892,19 @@ void GenPathData()
    for (i = 0; i < pathnodes.size(); ++i)
    {
       PathNodePtr curr = pathnodes[i];
+      Vector3 flatcurr = curr->position;
+      flatcurr.y = 0;
       for (size_t j = 0; j < curr->nodes.size(); ++j)
       {
-         if (curr->nodes[j] && (curr->position.y > curr->nodes[j]->position.y - step)) // This will likely need tweaking
+         Vector3 flatcheck;
+         float ratio = 1.f;
+         if (curr->nodes[j])
+         {
+            flatcheck = curr->nodes[j]->position;
+            flatcheck.y = 0;
+            ratio = flatcheck.distance(flatcurr) / step;
+         }
+         if (curr->nodes[j] && (curr->position.y > curr->nodes[j]->position.y - step * .75f * ratio)) // This may need tweaking
          {
             curr->passable[j] = true;
          }

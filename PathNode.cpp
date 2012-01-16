@@ -37,6 +37,7 @@ bool PathNode::Validate(Vector3 start, Vector3 move, const float radius, set<Pat
    start.y = position.y;
    move.y = 0.f;
    Vector3 end = start + move;
+   float movemaginv = 1.f / move.magnitude();
    for (size_t i = 0; i < nodes.size(); ++i)
    {
       if (nodes[i] && checked.find(nodes[i].get()) == checked.end())
@@ -55,7 +56,7 @@ bool PathNode::Validate(Vector3 start, Vector3 move, const float radius, set<Pat
          // of the movement, and is not past the end of the movement
          if (dot > 1e-4f &&
              flatpos.distance(start) < move.distance() + radius &&
-             cd.DistanceBetweenPointAndLine(flatpos, start, move, 1.f / move.magnitude()) < radius + step / 2.f)
+             cd.DistanceBetweenPointAndLine(flatpos, start, move, movemaginv) < radius + step / 2.f)
          {
             if (!passable[i] || !nodes[i]->Validate(start, move, radius, checked))
             {

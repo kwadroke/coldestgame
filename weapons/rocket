@@ -1,9 +1,9 @@
 Name Rocket
 Weight 30
 ProjectileWeight 0
-Damage 80
-Ammo 8
-Splash 50
+Damage 50
+Ammo 10
+Splash 100
 Acceleration .01
 Velocity 1
 ReloadTime 600
