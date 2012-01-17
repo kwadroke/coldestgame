@@ -218,27 +218,31 @@ void ServerLoop()
          else if (serverplayers[i].connected)
          {
             // *** Debugging of pathing code ***
-            /*PathNodePtr currpathnode = pathnodes[0];
-            float currdist = pathnodes[0]->position.distance2(serverplayers[i].pos);
-            for (size_t j = 1; j < pathnodes.size(); ++j)
+            if (false)
             {
-               float checkdist = pathnodes[j]->position.distance2(serverplayers[i].pos);
-               if (checkdist < currdist)
+               PathNodePtr currpathnode = pathnodes[0];
+               float currdist = pathnodes[0]->position.distance2(serverplayers[i].pos);
+               for (size_t j = 1; j < pathnodes.size(); ++j)
                {
-                  currdist = checkdist;
-                  currpathnode = pathnodes[j];
+                  float checkdist = pathnodes[j]->position.distance2(serverplayers[i].pos);
+                  if (checkdist < currdist)
+                  {
+                     currdist = checkdist;
+                     currpathnode = pathnodes[j];
+                  }
                }
+               
+               Vector3 facingvec(0.f, 0.f, -1.f);
+               GraphicMatrix m;
+               m.rotatey(serverplayers[i].facing);
+               facingvec.transform(m);
+               facingvec *= 500.f;
+               
+               //logout << "currpathnode " << currpathnode << endl;
+               
+               logout << "Server validation " << currpathnode->Validate(serverplayers[i].pos, facingvec, serverplayers[i].size) << endl;
+               logout << serverplayers[i].pos << endl << facingvec << endl << serverplayers[i].size << endl;
             }
-            
-            Vector3 facingvec(0.f, 0.f, -1.f);
-            GraphicMatrix m;
-            m.rotatey(serverplayers[i].facing);
-            facingvec.transform(m);
-            facingvec *= 500.f;*/
-            
-            //logout << "currpathnode " << currpathnode << endl;
-            
-            //logout << currpathnode->Validate(serverplayers[i].pos, facingvec, serverplayers[i].size) << endl;;
             
             ServerUpdatePlayer(i);
          }

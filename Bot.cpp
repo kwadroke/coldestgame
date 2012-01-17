@@ -29,7 +29,7 @@ vector<PathNodePtr> Bot::pathnodes = vector<PathNodePtr>();
 Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
-             targetspawn(0),
+             targetspawn(-1),
              heading(Vector3(0, 0, -1.f)),
              closingdistance(Random(700, 1500))
 {
@@ -113,7 +113,7 @@ void Bot::Update()
       if (targetplayer == netcode->PlayerNum())
          logout << "Error: target selected is self" << endl;
       
-      if (!targetplayer)
+      if (!targetplayer && targetspawn == -1)
          targetspawn = SelectTargetSpawn();
       
       UpdateHeading();
@@ -199,8 +199,21 @@ void Bot::AimAtTarget(const Vector3& target)
 
 void Bot::FindCurrPathNode()
 {
+   // Brute force it the first time - if we try to be clever there's a good chance we'll get it wrong.
    if (!currpathnode)
+   {
       currpathnode = pathnodes[0];
+      float currdist = pathnodes[0]->position.distance2(BotPlayer().pos);
+      for (size_t j = 1; j < pathnodes.size(); ++j)
+      {
+         float checkdist = pathnodes[j]->position.distance2(BotPlayer().pos);
+         if (checkdist < currdist)
+         {
+            currdist = checkdist;
+            currpathnode = pathnodes[j];
+         }
+      }
+   }
    
    list<PathNodePtr> candidates;
    float currdist = currpathnode->position.distance2(BotPlayer().pos);
@@ -237,7 +250,7 @@ void Bot::FindCurrPathNode()
 void Bot::UpdateHeading()
 {
    float checkdist = 500.f;
-   Vector3 start = localplayers[netcode->PlayerNum()].pos;
+   Vector3 start = BotPlayer().pos;
    Vector3 direct;
    if (targetplayer)
       direct = localplayers[targetplayer].pos - start;
@@ -252,7 +265,7 @@ void Bot::UpdateHeading()
    direct *= checkdist;
    
    if (heading.magnitude() < 1e-4f)
-      heading = Vector3(0, 0, -1.f);
+      heading = Vector3(0, 0, -checkdist);
    Vector3 current = heading;
    current.normalize();
    current *= checkdist;
@@ -268,6 +281,7 @@ void Bot::UpdateHeading()
       if (currpathnode->Validate(start, current, netcode->bot.size))
       {
          heading = current;
+         heading.y = 0.f;
          return;
       }
    }
@@ -295,6 +309,7 @@ void Bot::UpdateHeading()
    }
    
    heading = current;
+   heading.y = 0.f;
 }
 
 
@@ -316,8 +331,8 @@ void Bot::TurnToHeading()
    else if (rots.y < 0.f)
       netcode->bot.moveright = true;
    
-   facing *= 500.f;
-   if (currpathnode->Validate(localplayers[netcode->PlayerNum()].pos, facing, netcode->bot.size))
+   facing *= 100.f;
+   if (currpathnode->Validate(BotPlayer().pos, facing, netcode->bot.size))
       netcode->bot.moveforward = true;
    else
       netcode->bot.moveforward = false;
