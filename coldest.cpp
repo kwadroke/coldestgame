@@ -1441,7 +1441,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
    {
       if (fabs(oldspeed) > maxspeed) accmodifier = -1;
       mplayer.speed += acceleration * accmodifier * step * direction;
-      if (fabs(mplayer.speed) > maxspeed) mplayer.speed = maxspeed * direction;
+      if (mplayer.speed > maxspeed)
+         mplayer.speed = maxspeed * direction;
+      else if (mplayer.speed < -maxspeed * .8f)
+         mplayer.speed = maxspeed * direction *.8f;
    }
    else if (!floatzero(mplayer.speed)) // Decelerate them back to 0 speed
    {
