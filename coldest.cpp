@@ -2637,7 +2637,7 @@ void LoadMap(const string& map)
    
    // Visualize the bot paths to aid debugging
    // Note that this may cause you to time out connecting to the server - increase the timeout if that is the case
-   bool visualize = true;
+   bool visualize = false;
    bool all = false;
    if (server && visualize)
    {
