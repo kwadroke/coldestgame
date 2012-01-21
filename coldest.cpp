@@ -931,6 +931,7 @@ void GUIUpdate()
    else
       gui[loadoutmessage]->visible = false;
    
+   // Display or hide hit indicator
    GUI* hitind = gui[hud]->GetWidget("hitind");
    if (SDL_GetTicks() - netcode->lasthit < console.GetInt("hitindtime"))
    {
@@ -939,11 +940,13 @@ void GUIUpdate()
    else
       hitind->visible = false;
    
+   // Update server fps and bps display
    GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
    servfps->text = "Server FPS: " + ToString(netcode->serverfps);
    GUI* bpslabel = gui[statsdisp]->GetWidget("serverbps");
    bpslabel->text = "Server BPS: " + ToString(netcode->serverbps);
    
+   // Show or hide the resume button
    if (gui[mainmenu]->visible)
    {
       GUI* resumebutton = gui[mainmenu]->GetWidget("resumebutton");
@@ -966,6 +969,56 @@ void GUIUpdate()
       for (size_t i = 0; i < netcode->servermessages.size(); ++i)
          messagetable->Add(netcode->servermessages[i]);
       netcode->messageschanged = 0;
+   }
+   
+   // Add player indicators to maps
+   GUI* minimaplabel = gui[hud]->GetWidget("minimap");
+   GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
+   GUI* loadoutmapplayerslabel = gui[loadoutmenu]->GetWidget("MapPlayers");
+   minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
+   minimaplabel->ClearChildren();
+   loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
+   loadoutmapplayerslabel->ClearChildren();
+   
+   for (size_t i = 1; i < player.size(); ++i)
+   {
+      // Add to in-game minimap
+      GUIPtr playerposlabel(new Button(minimaplabel, &resman.texman));
+      if (i == servplayernum)
+         playerposlabel->SetTexture(Normal, "textures/miniplayer.png");
+      else if (player[i].team == player[servplayernum].team)
+         playerposlabel->SetTexture(Normal, "textures/minifriend.png");
+      else
+         playerposlabel->SetTexture(Normal, "textures/minienemy.png");
+      playerposlabel->width = 10;
+      playerposlabel->height = 16;
+      playerposlabel->x = player[i].pos.x / mapwidth;
+      playerposlabel->x *= minimaplabel->width;
+      playerposlabel->x -= playerposlabel->width / 2.f;
+      playerposlabel->y = player[i].pos.z / mapheight;
+      playerposlabel->y *= minimaplabel->height;
+      playerposlabel->y -= playerposlabel->height / 2.f;
+      if (player[i].spawned)
+         minimaplabel->Add(playerposlabel);
+      
+      // Add to loadout screen map
+      playerposlabel = GUIPtr(new Button(loadoutmapplayerslabel, &resman.texman));
+      if (i == servplayernum)
+         playerposlabel->SetTexture(Normal, "textures/miniplayer.png");
+      else if (player[i].team == player[servplayernum].team)
+         playerposlabel->SetTexture(Normal, "textures/minifriend.png");
+      else
+         playerposlabel->SetTexture(Normal, "textures/minienemy.png");
+      playerposlabel->width = 20;
+      playerposlabel->height = 32;
+      playerposlabel->x = player[i].pos.x / mapwidth;
+      playerposlabel->x *= loadoutmapplayerslabel->width;
+      playerposlabel->x -= playerposlabel->width / 2.f;
+      playerposlabel->y = player[i].pos.z / mapheight;
+      playerposlabel->y *= loadoutmapplayerslabel->height;
+      playerposlabel->y -= playerposlabel->height / 2.f;
+      if (player[i].spawned)
+         loadoutmapplayerslabel->Add(playerposlabel);
    }
    
    // Check to see if anyone is under our crosshair and display their info

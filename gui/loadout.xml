@@ -13,6 +13,8 @@
          <Label x="0" y="0" width="500" height="600" readonly="true" xmargin="100" ymargin="100" align="center" name="Map"
                normal="textures/buttonnormsquare.png">
          </Label>
+         <!-- Spawn buttons go directly on the map, so we can't clear its children to add player indicators.  That's what this label is for. -->
+         <Label x="0" y="0" width="500" height="600" readonly="true" xmargin="100" ymargin="100" align="center" name="MapPlayers"/>
       </Tab>
       <Tab text="Players" buttonwidth="120"
            buttonnormal="textures/buttonnorm.png"

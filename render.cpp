@@ -866,8 +866,6 @@ void RenderHud(const PlayerData& localplayer)
    GUI* rarmselectedlabel = gui[hud]->GetWidget("rarmselected");
    ProgressBar* tempbar = (ProgressBar*)gui[hud]->GetWidget("temperature");
    ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
-   GUI* minimaplabel = gui[hud]->GetWidget("minimap");
-   GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
    
    static Timer fpstimer;
    static int longfpscounter = 0;
@@ -929,32 +927,6 @@ void RenderHud(const PlayerData& localplayer)
    tempbar->SetRange(0, 100);
    tempbar->value = (int)localplayer.temperature;
    rotbar->value = (int)localplayer.rotation;
-   
-   minimaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
-   minimaplabel->ClearChildren();
-   
-   for (size_t i = 1; i < player.size(); ++i)
-   {
-      GUIPtr playerposlabel(new Button(minimaplabel, &resman.texman));
-      if (i == servplayernum)
-         playerposlabel->SetTexture(Normal, "textures/miniplayer.png");
-      else if (player[i].team == player[servplayernum].team)
-         playerposlabel->SetTexture(Normal, "textures/minifriend.png");
-      else
-         playerposlabel->SetTexture(Normal, "textures/minienemy.png");
-      playerposlabel->width = 10;
-      playerposlabel->height = 16;
-      playerposlabel->x = player[i].pos.x / mapwidth;
-      playerposlabel->x *= minimaplabel->width;
-      playerposlabel->x -= playerposlabel->width / 2.f;
-      playerposlabel->y = player[i].pos.z / mapheight;
-      playerposlabel->y *= minimaplabel->height;
-      playerposlabel->y -= playerposlabel->height / 2.f;
-      if (player[i].spawned)
-         minimaplabel->Add(playerposlabel);
-   }
-   
-   loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    
 #ifdef DEBUGSMT
    // Debug the shadowmap texture
