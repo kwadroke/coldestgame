@@ -232,6 +232,8 @@ void InitGlobals()
    console.Parse("set serverpwd password", false);
    console.Parse("set bots 0", false);
    console.Parse("set botsmove 1", false);
+   console.Parse("set botskill 3", false);
+   console.Parse("set botskillmax 5", false);
    console.Parse("set overheat 1", false);
    console.Parse("set syncmax 10", false);
    console.Parse("set name Nooblet", false);
@@ -2165,7 +2167,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       ++partupd;
    }
    if (Rewind)
-      Rewind(0, Vector3(), Vector3(), 1e38f); // Rewind all to 0
+      Rewind(0, Vector3(0.f, -1e38f, 0.f), Vector3(0.f, 1e38f, 0.f), 1e38f); // Rewind all to 0
 }
 
 

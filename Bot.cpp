@@ -30,9 +30,12 @@ Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
              targetspawn(-1),
-             heading(Vector3(0, 0, -1.f)),
-             closingdistance(Random(700, 1500))
+             heading(Vector3(0, 0, -1.f))
 {
+   // More difficult bots will try to get closer
+   float min = 1000.f + (SkillAverage() - Skill()) * 100.f;
+   closingdistance = Random(min, min + 500.f);
+   
    timer.start();
    movetimer.start();
    thread = SDL_CreateThread(Start, this);
@@ -192,8 +195,15 @@ void Bot::AimAtTarget(const Vector3& target)
    
    Vector3 rots = RotateBetweenVectors(facingvec, aimvec);
    
-   netcode->bot.rotation = rots.y + Random(-3.f, 3.f);
-   netcode->bot.pitch = rots.x + Random(-1.f, 1.f);
+   float mult = SkillAverage() / Skill();
+   mult *= mult;
+   float r = Random(-1.f, 1.f);
+   float slop = r * r;
+   slop *= mult;
+   if (r < 0)
+      slop *= -1.f;
+   netcode->bot.rotation = rots.y + 2.f * slop;
+   netcode->bot.pitch = rots.x + .5f * slop;
 }
 
 

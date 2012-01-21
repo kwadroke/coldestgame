@@ -96,6 +96,9 @@ class Bot{
       void FindCurrPathNode();
       void UpdateHeading();
       void TurnToHeading();
+      float SkillAverage() {return (console.GetFloat("botskillmax") + 1.f) / 2.f;}
+      float SkillMax() {return console.GetFloat("botskillmax");}
+      float Skill() {return console.GetFloat("botskill");}
 };
 
 typedef boost::shared_ptr<Bot> BotPtr;

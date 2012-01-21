@@ -557,12 +557,8 @@ void ServerUpdatePlayer(int i)
        (SDL_GetTicks() - serverplayers[i].lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0) && serverplayers[i].hp[weaponslot] > 0)
    {
-      /* Use the client position if it's within ten units of the serverpos.  This avoids the need to
-      slide the player around as much because this way they see their shots going exactly where
-      they expect, even if the positions don't match exactly (and they rarely will:-).*/
+      RewindPlayer(serverplayers[i].ping, i);
       Vector3 startpos = serverplayers[i].pos;
-      if (serverplayers[i].pos.distance2(serverplayers[i].clientpos) < 100)
-         startpos = serverplayers[i].clientpos;
       Vector3 rot(serverplayers[i].pitch, serverplayers[i].facing + serverplayers[i].rotation, 0.f);
       Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
       
@@ -581,16 +577,18 @@ void ServerUpdatePlayer(int i)
       serverplayers[i].firerequests.pop_front();
       
       servernetcode->SendShot(part);
+      
+      RewindPlayer(0, i);
    }
 }
 
 
-
-// Only rewinds meshes that fall within the cylinder defined by start, end, and radius
-void Rewind(Uint32 ticks, const Vector3& start, const Vector3& end, const float radius)
+ServerState& GetState(Uint32 ticks)
 {
+   if (!oldstate.size())
+      logout << "Error: GetState called with no old states" << endl;
+   
    Uint32 currtick = SDL_GetTicks();
-   size_t i;
    
    // Remove states older than 500 ms
    while (oldstate.size() && currtick - oldstate[0].tick > 500)
@@ -598,33 +596,81 @@ void Rewind(Uint32 ticks, const Vector3& start, const Vector3& end, const float 
       oldstate.pop_front();
    }
    
-   if (!oldstate.size()) return;
-   
    // Search backwards through our old states.  Stop at 0 and use that if we don't have a state old enough
+   size_t i;
    for (i = oldstate.size() - 1; i > 0; --i)
    {
       if (currtick - oldstate[i].tick >= ticks) break;
    }
    
+   return oldstate[i];
+}
+
+
+
+// Only rewinds meshes that fall within the cylinder defined by start, end, and radius
+void Rewind(Uint32 ticks, const Vector3& start, const Vector3& end, const float radius)
+{
+   if (!oldstate.size()) return;
+   
+   ServerState& state = GetState(ticks);
+   
    Vector3 move = end - start;
    float movemaginv = 1.f / start.distance(end);
    size_t rewindcounter = 0;
-   for (size_t j = 0; j < oldstate[i].index.size(); ++j)
+   for (size_t j = 0; j < state.index.size(); ++j)
    {
-      size_t p = oldstate[i].index[j];
+      size_t p = state.index[j];
       if (serverplayers[p].spawned)
       {
          for (size_t k = 0; k < numbodyparts; ++k)
          {
-            if (coldet.DistanceBetweenPointAndLine(oldstate[i].position[j][k], start, move, movemaginv) < radius + oldstate[i].size[j][k] &&
+            if (coldet.DistanceBetweenPointAndLine(state.position[j][k], start, move, movemaginv) < radius + state.size[j][k] &&
                serverplayers[p].hp[k] > 0)
             {
                ++rewindcounter;
-               serverplayers[p].mesh[k]->SetState(oldstate[i].position[j][k], oldstate[i].rots[j][k],
-                                             oldstate[i].frame[j][k], oldstate[i].animtime[j][k],
-                                             oldstate[i].animspeed[j][k]);
+               serverplayers[p].mesh[k]->SetState(state.position[j][k], state.rots[j][k],
+                                             state.frame[j][k], state.animtime[j][k],
+                                             state.animspeed[j][k]);
             }
          }
+      }
+   }
+}
+
+// Rewind all to 0
+void Rewind()
+{
+   Rewind(0, Vector3(0.f, -1e38f, 0.f), Vector3(0.f, 1e38f, 0.f), 1e38f);
+}
+
+void RewindPlayer(Uint32 ticks, size_t p)
+{
+   if (!oldstate.size()) return;
+   
+   if (serverplayers[p].spawned)
+   {
+      ServerState& state = GetState(ticks);
+      
+      bool found = false;
+      size_t j = 0;
+      for (; j < state.index.size(); ++j)
+      {
+         if (state.index[j] == p)
+         {
+            found = true;
+            break;
+         }
+      }
+      if (!found)
+         return;
+      
+      for (size_t k = 0; k < numbodyparts; ++k)
+      {
+         if (serverplayers[p].hp[k] > 0)
+            serverplayers[p].mesh[k]->SetState(state.position[j][k], state.rots[j][k],
+                                               state.frame[j][k], state.animtime[j][k],
+                                               state.animspeed[j][k]);
       }
    }
 }
