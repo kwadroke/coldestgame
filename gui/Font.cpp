@@ -161,6 +161,13 @@ Quad& Font::GetChar(const char c, Quad& q)
 // This should be a lot faster than the internal version
 void Font::StringDim(const string& s, int& w, int& h)
 {
+   if (!s.size())
+   {
+      w = 0;
+      h = 0;
+      return;
+   }
+   
    h = GetCharData(s[0]).height;
    w = 0;
    for (size_t i = 0; i < s.size(); ++i)

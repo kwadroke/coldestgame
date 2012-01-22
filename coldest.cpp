@@ -2401,6 +2401,8 @@ Vector3 GetShotVector(const float focus, const Vector3& rawoffset, const Vector3
 void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerweapon)
 {
 #ifndef DEDICATED
+   if (localplayer.unit >= numunits)
+      return;
    int weaponslot = weaponslots[localplayer.currweapon];
    Vector3 startpos = localplayer.pos;
    Vector3 rot(localplayer.pitch, localplayer.facing + localplayer.rotation, 0.f);

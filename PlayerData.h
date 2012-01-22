@@ -39,6 +39,7 @@ class PlayerData
       PlayerData(Meshlist&);
       void Disconnect();
       void Kill();
+      void ClearMeshes(bool erase = true);
       void Reset();
       Weapon& CurrentWeapon();
       

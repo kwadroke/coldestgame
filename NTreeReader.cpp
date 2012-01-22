@@ -61,7 +61,7 @@ void NTreeReader::Parse(istringstream& in)
    while(getline(in, currline))
    {
       // Ooh, nasty.  On CR/LF formatted files the \r is left in currline, which messes up lots of things
-      if (currline[currline.length() - 1] == '\r')
+      if (currline.length() && currline[currline.length() - 1] == '\r')
          currline = currline.substr(0, currline.length() - 1);
       linelevel = currline.find_first_not_of(" \t");
       if (linelevel == string::npos) // Skip whitespace

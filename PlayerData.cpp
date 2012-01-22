@@ -73,18 +73,25 @@ void PlayerData::Kill()
 {
    spawned = false;
    leftclick = false;
-   for (int part = 0; part < numbodyparts; ++part)
-   {
-      if (mesh[part] != meshes->end())
-      {
-         meshes->erase(mesh[part]);
-         mesh[part] = meshes->end();
-      }
-   }
+   ClearMeshes();
    if (indicator)
    {
       indicator->ttl = 1;
       indicator = NULL;
+   }
+}
+
+
+void PlayerData::ClearMeshes(bool erase)
+{
+   for (int part = 0; part < numbodyparts; ++part)
+   {
+      if (mesh[part] != meshes->end())
+      {
+         if (erase)
+            meshes->erase(mesh[part]);
+         mesh[part] = meshes->end();
+      }
    }
 }
 

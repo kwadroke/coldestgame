@@ -341,7 +341,7 @@ void Bot::TurnToHeading()
    else if (rots.y < 0.f)
       netcode->bot.moveright = true;
    
-   facing *= 100.f;
+   facing *= 250.f;
    if (currpathnode->Validate(BotPlayer().pos, facing, netcode->bot.size))
       netcode->bot.moveforward = true;
    else
@@ -361,6 +361,11 @@ void Bot::SetPlayers(vector<PlayerData>& in)
 {
    playermutex->lock();
    players = in;
+   // We don't care about player meshes, and if we leave the iterators then it's possible for us to try to copy an iterator that has been invalidated
+   for (size_t i = 0; i < players.size(); ++i)
+   {
+      players[i].ClearMeshes(false);
+   }
    playermutex->unlock();
 }
 

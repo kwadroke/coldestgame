@@ -33,6 +33,7 @@ class BotNetCode : public NetCode
       void SendFire();
       int PlayerNum() {return playernum;}
       
+      Meshlist dummymeshes; // Has to be before bot so it gets initialized first
       PlayerData bot;
       pid_t id;
       size_t attacker;
@@ -53,7 +54,6 @@ class BotNetCode : public NetCode
       void ReadDamage(stringstream&);
       
       bool connected, needconnect;
-      Meshlist dummymeshes;
       int playernum;
       string map;
       Timer sendtimer;
