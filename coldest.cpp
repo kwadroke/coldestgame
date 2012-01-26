@@ -2269,22 +2269,22 @@ void UpdatePlayerList()
    Table* lplayerlist = dynamic_cast<Table*>(gui[loadoutmenu]->GetWidget("playerlist"));
    
    playerlist->Clear();
-   playerlist->Add("Name|Kills|Deaths|Ping");
+   playerlist->Add("#700Name|Kills|Deaths|Ping");
    lplayerlist->Clear();
-   lplayerlist->Add("ID|Name|Kills|Deaths|Ping");
+   lplayerlist->Add("#700Name|Kills|Deaths|Ping|ID");
    
    string add;
    for (size_t j = 0; j < 3; ++j)
    {
       if (j < 2)
       {
-         playerlist->Add("Team " + ToString((j + 1) % 3) + "|||");
-         lplayerlist->Add("Team " + ToString((j + 1) % 3) + "||||");
+         playerlist->Add("#070Team " + ToString((j + 1) % 3) + "|||");
+         lplayerlist->Add("#070Team " + ToString((j + 1) % 3) + "||||");
       }
       else
       {
-         playerlist->Add(string("Spectators") + "|||");
-         lplayerlist->Add(string("Spectators") + "||||");
+         playerlist->Add(string("#070Spectators") + "|||");
+         lplayerlist->Add(string("#070Spectators") + "||||");
       }
       for (size_t i = 1; i < player.size(); ++i)
       {
@@ -2295,7 +2295,7 @@ void UpdatePlayerList()
             add += ToString(player[i].deaths) + "|";
             add += ToString(player[i].ping);
             playerlist->Add(add);
-            lplayerlist->Add(ToString(i) + "|" + add);
+            lplayerlist->Add(add + "|" + ToString(i));
          }
       }
    }
@@ -2482,10 +2482,6 @@ void UpdatePlayer()
    {
       UpdatePlayerModel(player[0], meshes);
    }
-   else
-   {
-      return; // We can't do the serverfps bit below while spectating because serverfps will be 0
-   }
       
    int weaponslot = weaponslots[localplayer.currweapon];
    Weapon& currplayerweapon = localplayer.CurrentWeapon();
@@ -2493,7 +2489,9 @@ void UpdatePlayer()
       our fire request, so we'll always be that much ahead with our fire requests and that causes us to see things well before
       they actually happen on the server.
       */
-   int reloadadjust = 1000 / netcode->serverfps / 2;
+   int reloadadjust = 1000 / 60;
+   if (netcode->serverfps != 0)
+      int reloadadjust = 1000 / netcode->serverfps / 2;
    if (localplayer.leftclick && 
        (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime() + reloadadjust) &&
        (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)

@@ -20,7 +20,7 @@
            buttonnormal="textures/buttonnorm.png"
            buttonpressed="textures/buttonpressed.png"
            buttonhover="textures/buttonhover.png">
-         <Table x="10" y="10" width="530" height="600" name="playerlist" columns="4" colwidths="50|220|80|80|50" rowheight="25"
+         <Table x="10" y="10" width="510" height="600" name="playerlist" columns="4" colwidths="220|80|80|50|50" rowheight="25"
           normal="textures/buttonnormsquare.png"/>
       </Tab>
    </TabWidget>

@@ -111,7 +111,7 @@ void Bot::Update()
          targettimer.start();
       }
       
-      if (!targetplayer || !localplayers[targetplayer].spawned)
+      if (!targetplayer || !localplayers[targetplayer].spawned || targetplayer == netcode->PlayerNum())
          targetplayer = SelectTarget();
       if (targetplayer == netcode->PlayerNum())
          logout << "Error: target selected is self" << endl;
