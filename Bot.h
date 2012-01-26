@@ -47,6 +47,7 @@ class Bot{
       void SetAllSpawns(vector<SpawnPointData> s) {allspawns = s;}
       
       tsint baseattacker;
+      float checkdist;
    
    private:
       bool botrunning;

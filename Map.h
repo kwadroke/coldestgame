@@ -59,6 +59,7 @@ class Map
       size_t MaxHeight() {return worldbounds[0].GetVertex(0).y;}
       float PathNodeSize() {return pathnodesize;}
       float PathNodeCheckDist() {return pathnodecheckdist;}
+      float BotCheckDist() {return botcheckdist;}
 
    protected:
       void Init(const string&);
@@ -102,6 +103,7 @@ class Map
       float heightscale;
       float pathnodesize;
       float pathnodecheckdist;
+      float botcheckdist;
 
       string base;
       string mapname;

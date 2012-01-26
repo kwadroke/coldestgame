@@ -344,7 +344,10 @@ void ServerLoadMap(const string& mn)
    Bot::Initialize();
    Bot::SetPathNodes(pathnodes);
    for (size_t i = 0; i < numbots; ++i)
+   {
       bots.push_back(BotPtr(new Bot()));
+      bots.back()->checkdist = servermap->BotCheckDist();
+   }
 }
 
 

@@ -259,7 +259,6 @@ void Bot::FindCurrPathNode()
 
 void Bot::UpdateHeading()
 {
-   float checkdist = 500.f;
    Vector3 start = BotPlayer().pos;
    Vector3 direct;
    if (targetplayer)

@@ -43,6 +43,7 @@ void Map::Init(const string& mn)
    heightscale = 0.f;
    pathnodesize = 50.f;
    pathnodecheckdist = 10000.f;
+   botcheckdist = 500.f;
    mapname = mn;
    waterfile = "materials/water";
    worldbounds.resize(6);
@@ -105,6 +106,7 @@ void Map::ReadBasics()
    mapdata.Read(terrainstretch, "Stretch");
    mapdata.Read(pathnodesize, "PathNodeSize");
    mapdata.Read(pathnodecheckdist, "PathNodeCheckDist");
+   mapdata.Read(botcheckdist, "BotCheckDist");
 }
 
 

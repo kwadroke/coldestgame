@@ -2,6 +2,7 @@ TileSize 60
 HeightScale 2
 ZeroHeight 10
 Stretch 8
+BotCheckDist 300
 
 LightData
 Direction 1 1.1 1
