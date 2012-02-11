@@ -26,6 +26,9 @@
 #ifndef _WIN32
 #include <poll.h>
 #else
+// Winsock2 apparently pulls in windows.h, because this breaks std::max.  Sigh.
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include <Winsock2.h>
 #endif
 #include "Particle.h"

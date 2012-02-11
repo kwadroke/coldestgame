@@ -721,7 +721,7 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
       {
          if (shadow) // This won't work right for unshadowed text.  Right now there isn't any, but it's a potential issue.
          {
-            for (uint j = 1; j < 4; ++j)
+            for (unsigned int j = 1; j < 4; ++j)
                color[j - 1] = float(ToInt(str[i + j])) / 9.f * 255.f;
          }
          font->RemoveColorTag(str, i);

@@ -121,7 +121,7 @@ pid_t gettid()
 #ifdef __linux__
    return syscall(SYS_gettid);
 #endif
-   return 0;
+   return GetCurrentThreadId();
 }
 
 
