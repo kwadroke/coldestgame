@@ -356,7 +356,8 @@ void Mesh::AdvanceAnimation()
 
       currkeyframe = NextKeyFrame();
       
-      currentsound = framesound[currkeyframe];
+      if (framesound[currkeyframe] != "")
+         currentsound = framesound[currkeyframe];
    }
 
    trismoved = true;

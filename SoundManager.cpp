@@ -83,9 +83,13 @@ SoundSourcePtr SoundManager::PlaySound(const string& filename, const Vector3& po
    return SoundSourcePtr(new SoundSource());
 #endif
    SetMaxSources(16); // Can't do this in the constructor because OpenAL hasn't been initialized yet
-   size_t num = SelectSource(pos);
-   if (num >= sources.size() || filename == "")
+   if (filename == "")
       return SoundSourcePtr(new SoundSource());
+   size_t num = SelectSource(pos);
+   if (num >= sources.size())
+   {
+      return SoundSourcePtr(new SoundSource());
+   }
    
    ALSourcePtr selected = sources[num];
    selected->loop = loop ? AL_TRUE : AL_FALSE;
@@ -111,14 +115,22 @@ size_t SoundManager::SelectSource(const Vector3& pos)
    for (size_t i = 0; i < sources.size(); ++i)
    {
       if (!sources[i]->Playing())
+      {
          return i;
+      }
    }
-   for (size_t i = 0; i < sources.size(); ++i)
+   size_t selected = 0;
+   for (size_t i = 1; i < sources.size(); ++i)
    {
-      if (sources[i]->position.distance2(listenpos) < pos.distance2(listenpos))
-         return i;
+      if (sources[i]->position.distance2(listenpos) > sources[selected]->position.distance2(listenpos) && !sources[i]->relative)
+         selected = i;
+   }
+   if (sources[selected]->position.distance2(listenpos) > pos.distance2(listenpos) && !sources[selected]->relative)
+   {
+      return selected;
    }
    //logout << "Warning: Failed to find sound source" << endl;
+   //logout << listenpos << "  " << pos << endl;
    return sources.size();
 }
 

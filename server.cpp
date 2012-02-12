@@ -591,15 +591,18 @@ void ServerUpdatePlayer(int i)
 
 ServerState& GetState(Uint32 ticks)
 {
-   if (!oldstate.size())
-      logout << "Error: GetState called with no old states" << endl;
-   
    Uint32 currtick = SDL_GetTicks();
    
    // Remove states older than 500 ms
-   while (oldstate.size() && currtick - oldstate[0].tick > 500)
+   while (oldstate.size() && currtick - oldstate[0].tick > 3000)
    {
       oldstate.pop_front();
+   }
+   
+   if (!oldstate.size())
+   {
+      logout << "Error: GetState ran out of states" << endl;
+      oldstate.push_back(ServerState(0));
    }
    
    // Search backwards through our old states.  Stop at 0 and use that if we don't have a state old enough
