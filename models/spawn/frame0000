@@ -41,7 +41,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 10
-      Pos 1248.485 202.202 -0.0
+      Pos 1248.485 202.202 0.0
       Norm -0.657632 0.702366 -0.2724
       TC 0.485345 0.74194
       Color 255 255 255 255
@@ -59,7 +59,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 15
-      Pos 1248.485 202.202 -0.0
+      Pos 1248.485 202.202 0.0
       Norm -0.236779 0.9666 -0.098077
       TC 0.485345 0.74194
       Color 255 255 255 255
@@ -119,7 +119,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 29
-      Pos 1006.239 -682.35 1006.24
+      Pos 1006.239 -682.35 1006.239
       Norm -0.270274 -0.956253 -0.111951
       TC 0.891256 0.351436
       Color 255 255 255 255
@@ -149,7 +149,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 36
-      Pos 1006.239 -682.35 1006.24
+      Pos 1006.239 -682.35 1006.239
       Norm 0.270274 -0.956253 0.111951
       TC 0.891256 0.351436
       Color 255 255 255 255
@@ -167,7 +167,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 41
-      Pos 1713.346 0.0 1713.346
+      Pos 1713.346 -0.0 1713.346
       Norm 0.805804 -0.489156 0.333775
       TC 0.852430 0.217526
       Color 255 255 255 255
@@ -197,13 +197,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 48
-      Pos 1713.346 0.0 1713.346
+      Pos 1713.346 -0.0 1713.346
       Norm 0.860087 0.365143 0.35626
       TC 0.366162 1.0
       Color 255 255 255 255
    Vertex
       ID 51
-      Pos 1713.346 0.0 1713.346
+      Pos 1713.346 -0.0 1713.346
       Norm 0.35626 0.365143 0.860087
       TC 0.366162 1.0
       Color 255 255 255 255
@@ -221,7 +221,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 54
-      Pos -0.0 0.0 2423.038
+      Pos -0.0 -0.0 2423.038
       Norm 0.35626 0.365143 0.860087
       TC 0.187608 0.938374
       Color 255 255 255 255
@@ -233,13 +233,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 58
-      Pos 1713.346 0.0 1713.346
+      Pos 1713.346 -0.0 1713.346
       Norm 0.333775 -0.489156 0.805804
       TC 0.852430 0.217526
       Color 255 255 255 255
    Vertex
       ID 59
-      Pos -0.0 0.0 2423.038
+      Pos -0.0 -0.0 2423.038
       Norm 0.333775 -0.489156 0.805804
       TC 0.723037 0.285999
       Color 255 255 255 255
@@ -251,7 +251,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 63
-      Pos 1006.239 -682.35 1006.24
+      Pos 1006.239 -682.35 1006.239
       Norm 0.111951 -0.956253 0.270274
       TC 0.891256 0.351436
       Color 255 255 255 255
@@ -269,7 +269,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 66
-      Pos -0.0 -682.35 1423.038
+      Pos -0.0 -682.35 1423.037
       Norm 0.111951 -0.956253 0.270274
       TC 0.815523 0.398129
       Color 255 255 255 255
@@ -281,13 +281,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 70
-      Pos 1006.239 -682.35 1006.24
+      Pos 1006.239 -682.35 1006.239
       Norm -0.111951 -0.956253 -0.270274
       TC 0.891256 0.351436
       Color 255 255 255 255
    Vertex
       ID 71
-      Pos -0.0 -682.35 1423.038
+      Pos -0.0 -682.35 1423.037
       Norm -0.111951 -0.956253 -0.270274
       TC 0.815523 0.398129
       Color 255 255 255 255
@@ -497,7 +497,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 124
-      Pos -0.0 -682.35 1423.038
+      Pos -0.0 -682.35 1423.037
       Norm 0.111951 -0.956253 -0.270274
       TC 0.815523 0.398129
       Color 255 255 255 255
@@ -515,26 +515,26 @@ Container
       Color 255 255 255 255
    Vertex
       ID 129
-      Pos -0.0 -682.35 1423.038
-      Norm -0.111951 -0.956253 0.270274
+      Pos -0.0 -682.35 1423.037
+      Norm -0.111951 -0.956252 0.270274
       TC 0.815523 0.398129
       Color 255 255 255 255
    Vertex
       ID 130
       Pos -0.0 -482.494 2130.144
-      Norm -0.111951 -0.956253 0.270274
+      Norm -0.111951 -0.956252 0.270274
       TC 0.772472 0.348535
       Color 255 255 255 255
    Vertex
       ID 131
       Pos -1506.24 -482.494 1506.239
-      Norm -0.111951 -0.956253 0.270274
+      Norm -0.111951 -0.956252 0.270274
       TC 0.700719 0.442545
       Color 255 255 255 255
    Vertex
       ID 132
       Pos -1006.24 -682.35 1006.239
-      Norm -0.111951 -0.956253 0.270274
+      Norm -0.111951 -0.956252 0.270274
       TC 0.756994 0.470682
       Color 255 255 255 255
    Vertex
@@ -545,13 +545,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 136
-      Pos -0.0 0.0 2423.038
+      Pos -0.0 -0.0 2423.038
       Norm -0.333775 -0.489156 0.805804
       TC 0.723037 0.285999
       Color 255 255 255 255
    Vertex
       ID 137
-      Pos -1713.346 0.0 1713.346
+      Pos -1713.346 -0.0 1713.346
       Norm -0.333775 -0.489156 0.805804
       TC 0.629278 0.402754
       Color 255 255 255 255
@@ -563,7 +563,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 141
-      Pos -0.0 0.0 2423.038
+      Pos -0.0 -0.0 2423.038
       Norm -0.35626 0.365143 0.860087
       TC 0.187608 0.938374
       Color 255 255 255 255
@@ -581,13 +581,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 144
-      Pos -1713.346 0.0 1713.346
+      Pos -1713.346 -0.0 1713.346
       Norm -0.35626 0.365143 0.860087
       TC 0.050914 0.793357
       Color 255 255 255 255
    Vertex
       ID 147
-      Pos -1713.346 0.0 1713.346
+      Pos -1713.346 -0.0 1713.346
       Norm -0.860087 0.365143 0.35626
       TC 0.050914 0.793357
       Color 255 255 255 255
@@ -617,7 +617,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 154
-      Pos -1713.346 0.0 1713.346
+      Pos -1713.346 -0.0 1713.346
       Norm -0.805804 -0.489156 0.333775
       TC 0.629278 0.402754
       Color 255 255 255 255
@@ -839,7 +839,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 209
-      Pos -299.133 -0.0 -299.133
+      Pos -299.133 0.0 -299.133
       Norm 0.236779 0.9666 0.098077
       TC 0.354026 0.563873
       Color 255 255 255 255
@@ -852,25 +852,25 @@ Container
    Vertex
       ID 213
       Pos -423.037 0.0 -0.0
-      Norm 0.805805 -0.489155 0.333775
+      Norm 0.805804 -0.489155 0.333775
       TC 0.926567 0.569847
       Color 255 255 255 255
    Vertex
       ID 214
       Pos -715.931 -482.494 -0.0
-      Norm 0.805805 -0.489155 0.333775
+      Norm 0.805804 -0.489155 0.333775
       TC 0.821449 0.570809
       Color 255 255 255 255
    Vertex
       ID 215
       Pos -506.239 -482.494 -506.24
-      Norm 0.805805 -0.489155 0.333775
+      Norm 0.805804 -0.489155 0.333775
       TC 0.833353 0.635352
       Color 255 255 255 255
    Vertex
       ID 216
-      Pos -299.133 -0.0 -299.133
-      Norm 0.805805 -0.489155 0.333775
+      Pos -299.133 0.0 -299.133
+      Norm 0.805804 -0.489155 0.333775
       TC 0.933140 0.597289
       Color 255 255 255 255
    Vertex
@@ -900,25 +900,25 @@ Container
    Vertex
       ID 225
       Pos -1423.038 -682.35 -0.0
-      Norm -0.270274 -0.956253 -0.111951
+      Norm -0.270274 -0.956252 -0.111951
       TC 0.735091 0.562537
       Color 255 255 255 255
    Vertex
       ID 226
       Pos -2130.144 -482.494 -0.0
-      Norm -0.270274 -0.956253 -0.111951
+      Norm -0.270274 -0.956252 -0.111951
       TC 0.667929 0.557335
       Color 255 255 255 255
    Vertex
       ID 227
       Pos -1506.239 -482.494 -1506.24
-      Norm -0.270274 -0.956253 -0.111951
+      Norm -0.270274 -0.956252 -0.111951
       TC 0.682154 0.682439
       Color 255 255 255 255
    Vertex
       ID 228
       Pos -1006.239 -682.35 -1006.24
-      Norm -0.270274 -0.956253 -0.111951
+      Norm -0.270274 -0.956252 -0.111951
       TC 0.749816 0.659297
       Color 255 255 255 255
    Vertex
@@ -972,25 +972,25 @@ Container
    Vertex
       ID 243
       Pos -1713.346 -0.0 -1713.347
-      Norm -0.356259 0.365143 -0.860087
+      Norm -0.35626 0.365143 -0.860087
       TC 0.045642 0.401412
       Color 255 255 255 255
    Vertex
       ID 244
       Pos -1565.698 491.837 -1565.699
-      Norm -0.356259 0.365143 -0.860087
+      Norm -0.35626 0.365143 -0.860087
       TC 0.143782 0.447165
       Color 255 255 255 255
    Vertex
       ID 245
       Pos 0.0 491.837 -2214.232
-      Norm -0.356259 0.365143 -0.860087
+      Norm -0.35626 0.365143 -0.860087
       TC 0.244512 0.332635
       Color 255 255 255 255
    Vertex
       ID 246
       Pos 0.001 -0.0 -2423.038
-      Norm -0.356259 0.365143 -0.860087
+      Norm -0.35626 0.365143 -0.860087
       TC 0.176610 0.238889
       Color 255 255 255 255
    Vertex
@@ -1067,7 +1067,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 267
-      Pos -299.133 -0.0 -299.133
+      Pos -299.133 0.0 -299.133
       Norm 0.333775 -0.489156 0.805805
       TC 0.933140 0.597289
       Color 255 255 255 255
@@ -1085,7 +1085,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 270
-      Pos 0.0 -0.0 -423.037
+      Pos 0.0 0.0 -423.037
       Norm 0.333775 -0.489156 0.805805
       TC 0.948916 0.621593
       Color 255 255 255 255
@@ -1097,13 +1097,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 274
-      Pos -299.133 -0.0 -299.133
+      Pos -299.133 0.0 -299.133
       Norm 0.098077 0.9666 0.236779
       TC 0.354026 0.563873
       Color 255 255 255 255
    Vertex
       ID 275
-      Pos 0.0 -0.0 -423.037
+      Pos 0.0 0.0 -423.037
       Norm 0.098077 0.9666 0.236779
       TC 0.380333 0.539538
       Color 255 255 255 255
@@ -1140,49 +1140,49 @@ Container
    Vertex
       ID 285
       Pos -1224.255 654.321 -1224.255
-      Norm -0.130964 0.939618 -0.316175
+      Norm -0.130964 0.939618 -0.316174
       TC 0.189154 0.471461
       Color 255 255 255 255
    Vertex
       ID 286
       Pos 0.0 654.321 -1731.358
-      Norm -0.130964 0.939618 -0.316175
+      Norm -0.130964 0.939618 -0.316174
       TC 0.276925 0.377436
       Color 255 255 255 255
    Vertex
       ID 287
       Pos 0.0 491.837 -2214.232
-      Norm -0.130964 0.939618 -0.316175
+      Norm -0.130964 0.939618 -0.316174
       TC 0.244512 0.332635
       Color 255 255 255 255
    Vertex
       ID 288
       Pos -1565.698 491.837 -1565.699
-      Norm -0.130964 0.939618 -0.316175
+      Norm -0.130964 0.939618 -0.316174
       TC 0.143782 0.447165
       Color 255 255 255 255
    Vertex
       ID 291
       Pos 0.0 654.321 -1731.358
-      Norm 0.130964 0.939618 -0.316175
+      Norm 0.130964 0.939618 -0.316174
       TC 0.276925 0.377436
       Color 255 255 255 255
    Vertex
       ID 292
       Pos 1224.255 654.321 -1224.255
-      Norm 0.130964 0.939618 -0.316175
+      Norm 0.130964 0.939618 -0.316174
       TC 0.402761 0.327034
       Color 255 255 255 255
    Vertex
       ID 293
       Pos 1565.699 491.837 -1565.698
-      Norm 0.130964 0.939618 -0.316175
+      Norm 0.130964 0.939618 -0.316174
       TC 0.392500 0.267162
       Color 255 255 255 255
    Vertex
       ID 294
       Pos 0.0 491.837 -2214.232
-      Norm 0.130964 0.939618 -0.316175
+      Norm 0.130964 0.939618 -0.316174
       TC 0.244512 0.332635
       Color 255 255 255 255
    Vertex
@@ -1217,13 +1217,13 @@ Container
       Color 255 255 255 255
    Vertex
       ID 304
-      Pos 0.0 -0.0 -423.037
+      Pos 0.0 0.0 -423.037
       Norm -0.098077 0.9666 0.236779
       TC 0.380333 0.539538
       Color 255 255 255 255
    Vertex
       ID 305
-      Pos 299.133 -0.0 -299.133
+      Pos 299.133 0.0 -299.133
       Norm -0.098077 0.9666 0.236779
       TC 0.414827 0.527675
       Color 255 255 255 255
@@ -1235,7 +1235,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 309
-      Pos 0.0 -0.0 -423.037
+      Pos 0.0 0.0 -423.037
       Norm -0.333775 -0.489156 0.805804
       TC 0.948916 0.621593
       Color 255 255 255 255
@@ -1253,7 +1253,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 312
-      Pos 299.133 -0.0 -299.133
+      Pos 299.133 0.0 -299.133
       Norm -0.333775 -0.489156 0.805804
       TC 0.970986 0.641124
       Color 255 255 255 255
@@ -1271,7 +1271,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 317
-      Pos 1006.24 -682.35 -1006.239
+      Pos 1006.24 -682.35 -1006.24
       Norm -0.111951 -0.956253 0.270274
       TC 0.883898 0.805059
       Color 255 255 255 255
@@ -1301,7 +1301,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 324
-      Pos 1006.24 -682.35 -1006.239
+      Pos 1006.24 -682.35 -1006.24
       Norm 0.111951 -0.956253 -0.270274
       TC 0.883898 0.805059
       Color 255 255 255 255
@@ -1403,7 +1403,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 351
-      Pos 1006.24 -682.35 -1006.239
+      Pos 1006.24 -682.35 -1006.24
       Norm 0.270274 -0.956253 -0.111951
       TC 0.883898 0.805059
       Color 255 255 255 255
@@ -1433,7 +1433,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 358
-      Pos 1006.24 -682.35 -1006.239
+      Pos 1006.24 -682.35 -1006.24
       Norm -0.270274 -0.956253 0.111951
       TC 0.883898 0.805059
       Color 255 255 255 255
@@ -1451,26 +1451,26 @@ Container
       Color 255 255 255 255
    Vertex
       ID 363
-      Pos 299.133 -0.0 -299.133
-      Norm -0.805805 -0.489156 0.333775
+      Pos 299.133 0.0 -299.133
+      Norm -0.805805 -0.489155 0.333775
       TC 0.970986 0.641124
       Color 255 255 255 255
    Vertex
       ID 364
       Pos 506.24 -482.494 -506.239
-      Norm -0.805805 -0.489156 0.333775
+      Norm -0.805805 -0.489155 0.333775
       TC 0.916695 0.726732
       Color 255 255 255 255
    Vertex
       ID 365
       Pos 715.931 -482.494 0.0
-      Norm -0.805805 -0.489156 0.333775
+      Norm -0.805805 -0.489155 0.333775
       TC 0.971564 0.741712
       Color 255 255 255 255
    Vertex
       ID 366
       Pos 423.037 0.0 0.0
-      Norm -0.805805 -0.489156 0.333775
+      Norm -0.805805 -0.489155 0.333775
       TC 0.997322 0.653013
       Color 255 255 255 255
    Vertex
@@ -1481,7 +1481,7 @@ Container
       Color 255 255 255 255
    Vertex
       ID 370
-      Pos 299.133 -0.0 -299.133
+      Pos 299.133 0.0 -299.133
       Norm -0.236779 0.9666 0.098077
       TC 0.414827 0.527675
       Color 255 255 255 255
@@ -1524,25 +1524,25 @@ Container
    Vertex
       ID 381
       Pos 1224.255 654.321 -1224.255
-      Norm 0.316175 0.939618 -0.130964
+      Norm 0.316174 0.939618 -0.130964
       TC 0.402761 0.327034
       Color 255 255 255 255
    Vertex
       ID 382
       Pos 1731.358 654.321 0.0
-      Norm 0.316175 0.939618 -0.130964
+      Norm 0.316174 0.939618 -0.130964
       TC 0.549809 0.340056
       Color 255 255 255 255
    Vertex
       ID 383
       Pos 2214.232 491.837 0.001
-      Norm 0.316175 0.939618 -0.130964
+      Norm 0.316174 0.939618 -0.130964
       TC 0.575218 0.274432
       Color 255 255 255 255
    Vertex
       ID 384
       Pos 1565.699 491.837 -1565.698
-      Norm 0.316175 0.939618 -0.130964
+      Norm 0.316174 0.939618 -0.130964
       TC 0.392500 0.267162
       Color 255 255 255 255
 Triangles
@@ -1550,639 +1550,639 @@ Triangles
       ID 1
       Verts 3 4 6 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 2
       Verts 4 5 6 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 7
       Verts 9 10 12 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 8
       Verts 10 11 12 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 13
       Verts 15 16 18 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 14
       Verts 16 17 18 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 19
       Verts 21 22 24 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 20
       Verts 22 23 24 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 25
       Verts 27 28 30 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 26
       Verts 28 29 30 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 31
       Verts 33 34 36 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 32
       Verts 34 35 36 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 37
       Verts 39 40 42 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 38
       Verts 40 41 42 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 43
       Verts 45 46 48 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 44
       Verts 46 47 48 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 49
       Verts 51 52 54 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 50
       Verts 52 53 54 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 55
       Verts 57 58 60 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 56
       Verts 58 59 60 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 61
       Verts 63 64 66 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 62
       Verts 64 65 66 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 67
       Verts 69 70 72 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 68
       Verts 70 71 72 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 73
       Verts 75 76 78 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 74
       Verts 76 77 78 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 79
       Verts 81 82 84 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 80
       Verts 82 83 84 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 85
       Verts 87 88 90 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 86
       Verts 88 89 90 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 91
       Verts 93 94 96 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 92
       Verts 94 95 96 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 97
       Verts 99 100 102 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 98
       Verts 100 101 102 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 103
       Verts 105 106 108 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 104
       Verts 106 107 108 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 109
       Verts 111 112 114 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 110
       Verts 112 113 114 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 115
       Verts 117 118 120 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 116
       Verts 118 119 120 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 121
       Verts 123 124 126 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 122
       Verts 124 125 126 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 127
       Verts 129 130 132 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 128
       Verts 130 131 132 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 133
       Verts 135 136 138 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 134
       Verts 136 137 138 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 139
       Verts 141 142 144 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 140
       Verts 142 143 144 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 145
       Verts 147 148 150 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 146
       Verts 148 149 150 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 151
       Verts 153 154 156 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 152
       Verts 154 155 156 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 157
       Verts 159 160 162 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 158
       Verts 160 161 162 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 163
       Verts 165 166 168 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 164
       Verts 166 167 168 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 169
       Verts 171 172 174 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 170
       Verts 172 173 174 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 175
       Verts 177 178 180 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 176
       Verts 178 179 180 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 181
       Verts 183 184 186 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 182
       Verts 184 185 186 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 187
       Verts 189 190 192 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 188
       Verts 190 191 192 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 193
       Verts 195 196 198 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 194
       Verts 196 197 198 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 199
       Verts 201 202 204 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 200
       Verts 202 203 204 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 205
       Verts 207 208 210 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 206
       Verts 208 209 210 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 211
       Verts 213 214 216 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 212
       Verts 214 215 216 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 217
       Verts 219 220 222 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 218
       Verts 220 221 222 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 223
       Verts 225 226 228 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 224
       Verts 226 227 228 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 229
       Verts 231 232 234 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 230
       Verts 232 233 234 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 235
       Verts 237 238 240 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 236
       Verts 238 239 240 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 241
       Verts 243 244 246 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 242
       Verts 244 245 246 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 247
       Verts 249 250 252 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 248
       Verts 250 251 252 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 253
       Verts 255 256 258 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 254
       Verts 256 257 258 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 259
       Verts 261 262 264 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 260
       Verts 262 263 264 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 265
       Verts 267 268 270 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 266
       Verts 268 269 270 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 271
       Verts 273 274 276 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 272
       Verts 274 275 276 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 277
       Verts 279 280 282 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 278
       Verts 280 281 282 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 283
       Verts 285 286 288 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 284
       Verts 286 287 288 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 289
       Verts 291 292 294 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 290
       Verts 292 293 294 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 295
       Verts 297 298 300 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 296
       Verts 298 299 300 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 301
       Verts 303 304 306 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 302
       Verts 304 305 306 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 307
       Verts 309 310 312 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 308
       Verts 310 311 312 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 313
       Verts 315 316 318 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 314
       Verts 316 317 318 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 319
       Verts 321 322 324 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 320
       Verts 322 323 324 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 325
       Verts 327 328 330 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 326
       Verts 328 329 330 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 331
       Verts 333 334 336 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 332
       Verts 334 335 336 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 337
       Verts 339 340 342 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 338
       Verts 340 341 342 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 343
       Verts 345 346 348 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 344
       Verts 346 347 348 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 349
       Verts 351 352 354 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 350
       Verts 352 353 354 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 355
       Verts 357 358 360 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 356
       Verts 358 359 360 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 361
       Verts 363 364 366 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 362
       Verts 364 365 366 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 367
       Verts 369 370 372 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 368
       Verts 370 371 372 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 373
       Verts 375 376 378 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 374
       Verts 376 377 378 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 379
       Verts 381 382 384 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1
    Tri
       ID 380
       Verts 382 383 384 
       Material materials/metal/spawn
-      Collide 0
+      Collide 1

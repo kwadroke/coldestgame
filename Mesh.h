@@ -151,6 +151,7 @@ typedef list<Mesh> Meshlist;
 typedef map<int, MeshNodePtr> MeshNodeMap;
 typedef shared_ptr<Mesh> MeshPtr;
 
+// *** If you change this, do not forget to update objconvert! ***
 const string objectfilever = "Version5";
 
 #endif // MESH_H

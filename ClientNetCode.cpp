@@ -860,7 +860,6 @@ void ClientNetCode::AddItem(Item& newitem)
 {
    MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
    newmesh->Move(newitem.position);
-   newmesh->dynamic = true;
    meshes.push_front(*newmesh);
    items.push_back(newitem);
    Item& curritem = items.back();

@@ -819,15 +819,16 @@ void MainLoop()
       replayer->Update();
 
       netcode->Update();
+      
+      // Update any animated objects
+      // This needs to happen between netcode update and player update, or objects added by netcode may end up with bogus collision detection data
+      Animate();
 
       if (!PrimaryGUIVisible())
          UpdatePlayer();
 
       GUIUpdate();
 
-      // Update any animated objects
-      Animate();
-      
       SoundUpdate();
 
       // update the screen

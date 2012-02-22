@@ -271,7 +271,6 @@ void Mesh::Move(const Vector3& v, const bool movetris)
          (*i)->pos += move;
       }
       updatevbo = true;
-      ResetTriMaxDims();
    }
    ResetTriMaxDims();
    position = v;
