@@ -206,6 +206,13 @@ void ServerLoop()
       {
          ServerLoadMap(servermapname);
       }
+      
+      // Update server meshes
+      // Needs to happen before updating players or meshes added by netcode may end up with bogus collision detection data
+      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
+      {
+         i->Update();
+      }
 
       Uint32 timeout = console.GetInt("timeout");
       for (size_t i = 1; i < serverplayers.size(); ++i)
@@ -251,12 +258,6 @@ void ServerLoop()
          }
       }
          
-      // Update server meshes
-      for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
-      {
-         i->Update();
-      }
-      
       UpdateVisibility();
       
       Bot::SetPlayers(serverplayers);
@@ -745,7 +746,6 @@ void AddItem(const Item& it, int oppnum)
    {
       MeshPtr newmesh = meshcache->GetNewMesh(it.ModelFile());
       newmesh->Move(serverplayers[oppnum].pos - Vector3(0, serverplayers[oppnum].size * 2.f, 0));
-      newmesh->dynamic = true;
       servermeshes.push_front(*newmesh);
       serveritems.push_back(serverplayers[oppnum].item);
       Item& curritem = serveritems.back();
