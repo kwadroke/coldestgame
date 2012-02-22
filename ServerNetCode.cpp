@@ -294,12 +294,16 @@ void ServerNetCode::ReadSpawn(stringstream& get)
       get >> weapid;
       serverplayers[playernum].weapons[i] = Weapon(weapid);
    }
+   
    int itemtype;
    get >> itemtype;
    serverplayers[playernum].item = Item(itemtype, servermeshes);
    get >> spawnpointreq.x;
    get >> spawnpointreq.y;
    get >> spawnpointreq.z;
+   
+   for (int i = 0; i < numbodyparts; ++i)
+      serverplayers[playernum].weapons[i].ammo *= serverplayers[playernum].item.AmmoMult();
    
    vector<SpawnPointData> allspawns = servermap->SpawnPoints();
    vector<SpawnPointData> itemspawns = GetSpawns(serveritems);
