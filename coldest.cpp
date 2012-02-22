@@ -2740,6 +2740,7 @@ void PopulateMapList()
 {
 #ifndef DEDICATED
    ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
+   mapbox->Clear();
    NTreeReader readmaps("maps/maplist");
    
    for (size_t i = 0; i < readmaps.NumChildren(); ++i)
