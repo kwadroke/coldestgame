@@ -1,7 +1,6 @@
 Vertex:
 shaders/flatvert.glsl
 Pixel:
-$fog
 shaders/flatfrag.glsl
 Uniforms:
 int tex 0
