@@ -61,7 +61,6 @@ void GenClouds();
 void SDL_GL_Enter2dMode();
 void SDL_GL_Exit2dMode();
 int PowerOf2(int);
-void Animate();
 void GLError();
 void UpdateClouds();
 void SetReflection(bool);

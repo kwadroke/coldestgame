@@ -820,14 +820,15 @@ void MainLoop()
 
       netcode->Update();
       
-      // Update any animated objects
-      // This needs to happen between netcode update and player update, or objects added by netcode may end up with bogus collision detection data
-      Animate();
-
+      UpdateMeshes();
+      
       if (!PrimaryGUIVisible())
          UpdatePlayer();
 
       GUIUpdate();
+      
+      // This needs to happen between netcode update and player update, or objects added by netcode may end up with bogus collision detection data
+      RunUpdates();
 
       SoundUpdate();
 
@@ -1948,7 +1949,7 @@ void SpectatePrev()
 }
 
 
-void Animate()
+void RunUpdates()
 {
    // Also need to update player models because they can be changed by the net thread
    // Note that they are inserted into meshes so they should be automatically animated
@@ -1958,15 +1959,7 @@ void Animate()
          UpdatePlayerModel(player[k], meshes);
    }
    
-   // Meshes
-   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
-   {
-      i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 30.f);
-      size_t maxdelay = console.GetInt("maxanimdelay");
-      if (i->updatedelay > maxdelay)
-         i->updatedelay = maxdelay;
-      i->Update(player[0].pos);
-   }
+   UpdateMeshes();
    
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();
@@ -1980,6 +1973,22 @@ void Animate()
    }
    static int partupd = 100;
    UpdateParticles(particles, partupd, kdtree, meshes, player, player[0].pos);
+}
+
+
+// Calling update on a mesh when it doesn't need it is a no-op, but updating more often than necessary can still be bad,
+// so don't get carried away calling this function
+void UpdateMeshes()
+{
+   // Meshes
+   for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
+   {
+      i->updatedelay = (int)(player[0].pos.distance(i->GetPosition()) / 30.f);
+      size_t maxdelay = console.GetInt("maxanimdelay");
+      if (i->updatedelay > maxdelay)
+         i->updatedelay = maxdelay;
+      i->Update(player[0].pos);
+   }
 }
 
 
