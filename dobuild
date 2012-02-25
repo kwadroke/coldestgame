@@ -58,6 +58,9 @@ echo "Packaging"
 # Patches should no longer be necessary thanks to the updater
 #echo "Building Patch"
 #./buildpatch linux $RELEASE >> $outfile 2>&1
-echo "Uploading"
-./uploadbuild.sh linux $1 >> $outfile 2>&1
+if [ $1 != "noupload" ]
+then
+   echo "Uploading"
+   ./uploadbuild.sh linux $1 >> $outfile 2>&1
+fi
 
