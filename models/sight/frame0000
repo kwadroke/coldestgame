@@ -19,25 +19,25 @@ Container
    Trans 0 0 0
    Vertex
       ID 2
-      Pos -250 0 1000
+      Pos -1001 0 1000
       Norm 0 -1 0
       TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
       Color 255 255 255 255
    Vertex
       ID 3
-      Pos -250 0 0
+      Pos -1001 0 0
       Norm 0 -1 0
       TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
       Color 255 255 255 255
    Vertex
       ID 4
-      Pos 250 0 1000
+      Pos 1001 0 1000
       Norm 0 -1 0
       TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
       Color 255 255 255 255
    Vertex
       ID 5
-      Pos 250 0 0
+      Pos 1001 0 0
       Norm 0 -1 0
       TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
       Color 255 255 255 255
@@ -51,25 +51,25 @@ Container
    Trans 0 0 0
    Vertex
       ID 10
-      Pos -250 0 0
+      Pos -1001 0 0
       Norm 1 4.37114e-08 0
       TC 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
       Color 255 255 255 255
    Vertex
       ID 11
-      Pos 250 0 1000
+      Pos 1001 0 1000
       Norm 1 4.37114e-08 0
       TC 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
       Color 255 255 255 255
    Vertex
       ID 12
-      Pos 250 0 0
+      Pos 1001 0 0
       Norm 1 4.37114e-08 0
       TC 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
       Color 255 255 255 255
    Vertex
       ID 9
-      Pos -250 0 1000
+      Pos -1001 0 1000
       Norm 1 4.37114e-08 0
       TC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
       Color 255 255 255 255
