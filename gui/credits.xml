@@ -31,14 +31,14 @@ Music: Pierre Gerwig Langer
 Textures: TextureMate (http://www.texturemate.com)
           M@dcow (http://blenderartists.org/forum/showthread.php?t=24038)
 
-Sound Effects: PacDV (http://www.pacdv.com/sounds/index.html)
-               Absolute Sound Effects Archive (http://www.grsites.com/sounds/)
+Sound Effects: sfxr (http://www.drpetter.se/project_sfxr.html)
 
 Fonts: Fonts101 (http://www.fonts101.com)
 
 Special Thanks To: Antonio Ramires Fernandes
                    Stefan Gustavson
                    Bill Licea-Kane
+                   Tapio Vierros
    </TextArea>
    
    <Button x="100" y="910" width="200" height="50" text="Main Menu" align="center"
