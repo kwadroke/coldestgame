@@ -102,6 +102,12 @@ void TextArea::Refresh()
       }
       
       StringDim(working.substr(0, i), swidth, sheight);
+      // Zero height chars (such as space) don't work right for scale calculations, so get height of a non-zero height char
+      if (sheight < 1e-4f)
+      {
+         int dummy;
+         StringDim("a", dummy, sheight);
+      }
       float scale = (table->rowheight - ymargin * 2.f) * hratio / (float)sheight;
       float fw = (float)swidth / wratio * scale;
       

@@ -755,6 +755,7 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
          font->GetChar(' ', q);
          mesh->Clear(false);
       }
+      ++i;
    }
    if (shadow)
    {
