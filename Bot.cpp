@@ -202,7 +202,7 @@ void Bot::AimAtTarget(const Vector3& target)
    slop *= mult;
    if (r < 0)
       slop *= -1.f;
-   netcode->bot.rotation = rots.y + 2.f * slop;
+   netcode->bot.rotation = rots.y + 3.f * slop;
    netcode->bot.pitch = rots.x + .5f * slop;
 }
 
