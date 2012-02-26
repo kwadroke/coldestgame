@@ -59,7 +59,7 @@ void Button::RenderWidget()
 }
 
 
-void Button::ReadNodeExtra(DOMNode* current, GUI* parentw)
+void Button::ReadNodeExtra(DOMNode* current, GUI*)
 {
    string val = ReadAttribute(current, XSWrapper("toggle"));
    if (val == "true") toggle = true;
@@ -67,7 +67,7 @@ void Button::ReadNodeExtra(DOMNode* current, GUI* parentw)
 }
 
 
-void Button::LeftClick(SDL_Event* event)
+void Button::LeftClick(SDL_Event*)
 {
    if (toggle)
    {

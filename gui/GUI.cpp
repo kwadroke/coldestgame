@@ -710,7 +710,7 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
    {
       quads.push_back(Quad());
       if (!mesh)
-         logout << "Textmesh not initialized before rendering text" << endl;
+         logout << "Textmesh not initialized before rendering text: " << str << endl;
       mesh->AddNoCopy(quads.back());
    }
    
@@ -731,8 +731,9 @@ void GUI::RenderText(string str, int x, int y, int justify, SDL_Color col, float
       
       Quad& q = *j;
       GLubytevec& oldcolor = q.GetVertexPtr(0)->color;
+      Vector3 vertex = q.GetVertex(0);
       ++j;
-      if (i >= oldchars.size() || oldchars[i] != str[i] || oldfont != font || !equal(oldcolor, color))
+      if (i >= oldchars.size() || oldchars[i] != str[i] || oldfont != font || !equal(oldcolor, color) || vertex.x != currx || vertex.y != y)
       {
          font->GetChar(str[i], q);
          q.Scale(scale);

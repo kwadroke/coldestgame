@@ -184,8 +184,8 @@ void OutputDiagnosticData()
 void InitGlobals()
 {
    // Default cvars
-   console.Parse("set screenwidth 800", false);
-   console.Parse("set screenheight 600", false);
+   console.Parse("set screenwidth 1024", false);
+   console.Parse("set screenheight 768", false);
    console.Parse("set fullscreen 0", false);
    console.Parse("set showfps 0", false);
    console.Parse("set quiet 1", false);
