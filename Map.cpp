@@ -33,6 +33,8 @@ Map::Map(const string& mn)
 
 void Map::Init(const string& mn)
 {
+   // Map meshes are terrobjsize x terrobjsize tiles
+   terrobjsize = 16;
    numtextures = 0;
    numobjects = 0;
    mapw = 0;

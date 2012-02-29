@@ -99,6 +99,7 @@ class Map
       int mapw, maph;
       int maxterrainparams;
       int terrainstretch;
+      int terrobjsize;
       float zeroheight;
       float heightscale;
       float pathnodesize;
