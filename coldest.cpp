@@ -928,7 +928,7 @@ void GUIUpdate()
       {
          spawnbutton->visible = false;
          spawntimer->visible = true;
-         spawntimer->text = "Spawn in " + ToString(player[0].spawntimer / 1000);
+         spawntimer->text = "Spawn in " + ToString(player[0].spawntimer / 1000 + 1);
       }
       else
       {
