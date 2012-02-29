@@ -514,10 +514,17 @@ void SetupSDL()
    Uint32 flags = SDL_OPENGL;
    if (console.GetBool("fullscreen"))
       flags |= SDL_FULLSCREEN;
-   if( SDL_SetVideoMode(console.GetInt("screenwidth"), console.GetInt("screenheight"), video->vfmt->BitsPerPixel, flags) == 0 ) 
+   if (SDL_SetVideoMode(console.GetInt("screenwidth"), console.GetInt("screenheight"), video->vfmt->BitsPerPixel, flags) == 0 ) 
    {
       logout << "Couldn't set video mode: " << SDL_GetError() << endl;
-      exit(1);
+      logout << "Falling back to basic setting" << endl;
+      SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+      SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+      if (SDL_SetVideoMode(1024, 768, video->vfmt->BitsPerPixel, SDL_OPENGL) == 0 )
+      {
+         logout << "Basic setting failed too.  Bailing out..." << endl;
+         exit(1);
+      }
    }
    
    SDL_WM_SetCaption("Coldest", "");
