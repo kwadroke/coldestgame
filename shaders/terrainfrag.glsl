@@ -47,7 +47,7 @@ void main()
    
    vec4 color = vec4(0, 0, 0, 0);
    
-   float normweight = smoothstep(-300., 600., dist) * .7;
+   float normweight = smoothstep(-100., 800., dist) * .7;
    float detailweight = 1. - normweight;
    
    texterrain(color, texweight, texweight1, normweight, detailweight);
