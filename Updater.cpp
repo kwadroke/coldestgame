@@ -72,6 +72,9 @@ bool Updater::Available()
          logout << "Timed out waiting for master server version" << endl;
          return false;
       }
+      GuiUpdate();
+      if (cancelled)
+         return false;
    }
    
    long thisversion;
@@ -150,7 +153,6 @@ void Updater::BuildFileList()
 
 void Updater::GetNewFiles()
 {
-   SDL_Event event;
    GUI* progresstext = gui[updateprogress]->GetWidget("progresstext");
    GUI* fileprogresstext = gui[updateprogress]->GetWidget("fileprogresstext");
    ProgressBar* updateprogressbar = dynamic_cast<ProgressBar*>(gui[updateprogress]->GetWidget("updateprogressbar"));
@@ -175,11 +177,7 @@ void Updater::GetNewFiles()
       fileprogressbar->SetRange(0, total);
       fileprogresstext->text = ToString(current) + " KB /" + ToString(total) + " KB";
       
-      while(SDL_PollEvent(&event))
-      {
-         gui[updateprogress]->ProcessEvent(&event);
-      }
-      Repaint();
+      GuiUpdate();
    }
 
    SDL_WaitThread(thread, NULL);
@@ -188,6 +186,17 @@ void Updater::GetNewFiles()
    updateprogressbar->value = filelist.size();
    Repaint();
    SDL_Delay(1000);
+}
+
+
+void Updater::GuiUpdate()
+{
+   SDL_Event event;
+   while(SDL_PollEvent(&event))
+   {
+      gui[updateprogress]->ProcessEvent(&event);
+   }
+   Repaint();
 }
 
 

@@ -54,6 +54,7 @@ class Updater
       Updater& operator=(const Updater&);
       void BuildFileList();
       void GetNewFiles();
+      void GuiUpdate();
       static int StartDownloadThread(void*);
       void DownloadThread();
       static int ProgressCallback(void*, double, double, double, double);
