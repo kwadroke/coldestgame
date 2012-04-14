@@ -2514,10 +2514,12 @@ void UpdatePlayer()
    /* We need to add 1000 / netcode->serverfps / 2 to our reload time because it will, on average, take half a server frame for it to get to
       our fire request, so we'll always be that much ahead with our fire requests and that causes us to see things well before
       they actually happen on the server.
+      
+      Added an extra 10 ms delay to account for rounding errors and any other minor variations in the timing.  Yeah, that's kludgy.
       */
-   int reloadadjust = 1000 / 60;
+   int reloadadjust = 1000 / 30 + 10;
    if (netcode->serverfps != 0)
-      int reloadadjust = 1000 / netcode->serverfps / 2;
+      reloadadjust = 1000 / netcode->serverfps / 2 + 10;
    if (localplayer.leftclick && 
        (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime() + reloadadjust) &&
        (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
