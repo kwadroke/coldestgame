@@ -191,7 +191,7 @@ void SetMainCamera(PlayerData& localplayer)
    Vector3 rawoffset;
    Vector3 rots(localplayer.pitch, localplayer.rotation + localplayer.facing, 0.f);
    
-   if (!editor)
+   if (!editor && localplayer.spawned)
    {
       viewoff = units[localplayer.unit].viewoffset;
       rawoffset = units[localplayer.unit].weaponoffset[weaponslots[localplayer.currweapon]];
@@ -213,7 +213,7 @@ void SetMainCamera(PlayerData& localplayer)
       viewdir.transform(m);
    }
    
-   if (/*console.GetBool("thirdperson") &&*/ !editor && !guncam)
+   if (/*console.GetBool("thirdperson") &&*/ !editor && !guncam && localplayer.spawned)
    {
       maincam.SetPosition(localplayer.pos - viewdir * (100.f + localplayer.size) + Vector3(0.f, localplayer.size * 3.f, 0.f));
       maincam.lookat = localplayer.pos + Vector3(0.f, localplayer.size * 2.f, 0.f);

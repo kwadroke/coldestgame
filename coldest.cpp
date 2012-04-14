@@ -1060,7 +1060,7 @@ void GUIUpdate()
       part.tracer = "models/sight/base";
       part.clientonly = true;
 
-      if (!guncam)
+      if (!guncam && player[0].spawned)
       {
          particles.push_back(part);
       }
@@ -1364,8 +1364,11 @@ void GameEventHandler(SDL_Event &event)
                if (player[0].pitch >= 89.99) player[0].pitch = 89.99;
                
                player[0].rotation += event.motion.xrel / mousespeed / zoomfactor;
-               if (player[0].rotation < minrot) player[0].rotation = minrot;
-               if (player[0].rotation > maxrot) player[0].rotation = maxrot;
+               if (player[0].spawned)
+               {
+                  if (player[0].rotation < minrot) player[0].rotation = minrot;
+                  if (player[0].rotation > maxrot) player[0].rotation = maxrot;
+               }
                SDL_WarpMouse(screenwidth / 2, screenheight / 2);
             }
             break;
@@ -1589,7 +1592,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          mplayer.fallvelocity = 0.f;
          if (mplayer.weight < .99f)
          {
-            mplayer.pos.y -= step * 30.f * mplayer.weight;
+            mplayer.pos.y -= step * 10.f * mplayer.weight;
          }
          else if (!floatzero(mplayer.speed) && downslope) // Moving downhill
          {
@@ -1617,6 +1620,10 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
    if (mplayer.weight < 0.f)
    {
       mplayer.weight += step * .01f;
+   }
+   else if (mplayer.weight < .99f && mplayer.spawned == false)
+   {
+      mplayer.weight = .02f;
    }
    else mplayer.weight = 1.f;
    
