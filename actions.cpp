@@ -72,16 +72,28 @@ void UpdateUnitSelection()
    for (size_t i = 0; i < numbodyparts; ++i)
       totalweight += player[0].weapons[i].Weight();
    totalweight += player[0].item.Weight();
+   int sweight = CalculatePlayerWeight(player[0]);
+   
    GUI* weightbox = gui[loadoutmenu]->GetWidget("Weight");
    GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
    ComboBox* spawnbox = dynamic_cast<ComboBox*>(gui[loadoutmenu]->GetWidget("SpawnPoints"));
    GUI* salvagebox = gui[loadoutmenu]->GetWidget("Salvage");
-   weightbox->text = ToString(totalweight) + "/" + ToString(maxweight) + " tons";
-   int sweight = CalculatePlayerWeight(player[0]);
-   salvagebox->text = ToString(player[0].salvage - sweight) + " tons";
+   
+   // Handle invalid configurations
+   string weightcolor = "#999";
+   string salvagecolor = "#999";
    if (totalweight > maxweight || sweight > player[0].salvage || spawnbox->Selected() == -1)
+   {
       spawnbutton->visible = false;
+      if (totalweight > maxweight)
+         weightcolor = "#900";
+      if (sweight > player[0].salvage)
+         salvagecolor = "#900";
+   }
    else spawnbutton->visible = true;
+   
+   weightbox->text = weightcolor + ToString(totalweight) + "/" + ToString(maxweight) + " tons";
+   salvagebox->text = salvagecolor + ToString(player[0].salvage - sweight) + " tons";
 }
 
 
