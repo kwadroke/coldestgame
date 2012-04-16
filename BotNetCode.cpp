@@ -133,10 +133,11 @@ void BotNetCode::SendSpawnRequest()
 
 void BotNetCode::SendFire()
 {
+   // Bots are local so this doesn't need to be acked, and if the server gets bogged down making this
+   // an ack packet can cause it to be sent twice, and possibly overheat the bot.
    Packet pack(&address);
-   pack.ack = sendpacketnum;
    pack << "f\n";
-   pack << pack.ack << eol;
+   pack << sendpacketnum << eol;
    SendPacket(pack);
 }
 

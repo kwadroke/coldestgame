@@ -509,6 +509,8 @@ void ServerUpdatePlayer(int i)
       if (serverplayers[i].salvage < 100)
          serverplayers[i].salvage = 100;
       KillPlayer(i, i);
+      logout << "Player " << i << " overheated." << endl;
+      logout << serverplayers[i].temperature << endl;
    }
    
    // Powered down?

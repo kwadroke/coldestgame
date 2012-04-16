@@ -74,10 +74,12 @@ class Bot{
       Vector3 heading;
       // Determines how close the bot wants to get - smaller numbers make it closer
       float closingdistance;
+      Uint32 lastupdate;
       
       static vector<PlayerData> players;
       static MutexPtr playermutex;
       static vector<PathNodePtr> pathnodes;
+      static tsint lastserverupdate;
       
       // Don't really want to copy this object because threads would need
       // to be restarted every time.  To use in an STL container use

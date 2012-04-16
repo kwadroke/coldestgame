@@ -24,13 +24,15 @@
 vector<PlayerData> Bot::players = vector<PlayerData>();
 MutexPtr Bot::playermutex = MutexPtr();
 vector<PathNodePtr> Bot::pathnodes = vector<PathNodePtr>();
+tsint Bot::lastserverupdate;
 
 // Should leave thread to be initialized last so that all other data has been initialized first
 Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
              targetspawn(-1),
-             heading(Vector3(0, 0, -1.f))
+             heading(Vector3(0, 0, -1.f)),
+             lastupdate(0)
 {
    // More difficult bots will try to get closer
    float min = 1000.f + (SkillAverage() - Skill()) * 100.f;
@@ -67,13 +69,14 @@ void Bot::Loop()
    netcode->id = gettid();
    while (botrunning)
    {
-      while (updatetimer.elapsed() < 1000 / console.GetInt("tickrate"))
+      while (updatetimer.elapsed() < 1000 / console.GetInt("tickrate") || lastserverupdate == lastupdate && botrunning)
       {
          SDL_Delay(1);
       }
       updatetimer.start();
       Update();
       netcode->Update();
+      lastupdate = lastserverupdate;
    }
 }
 
@@ -97,14 +100,14 @@ void Bot::Update()
          if (baseattacker)
          {
             if (baseattacker == netcode->PlayerNum())
-               logout << "Error: baseattacker set to self" << endl;
+               logout << "Error: baseattacker set to self " << baseattacker << "  " << netcode->PlayerNum() << endl;
             targetplayer = baseattacker;
             baseattacker = 0;
          }
          else if (netcode->attacker)
          {
             if (netcode->attacker == netcode->PlayerNum())
-               logout << "Error: attacker set to self" << endl;
+               logout << "Error: attacker set to self " << netcode->attacker << "  " << netcode->PlayerNum() << endl;
             targetplayer = netcode->attacker;
             netcode->attacker = 0;
          }
@@ -114,7 +117,7 @@ void Bot::Update()
       if (!targetplayer || !localplayers[targetplayer].spawned || targetplayer == netcode->PlayerNum())
          targetplayer = SelectTarget();
       if (targetplayer == netcode->PlayerNum())
-         logout << "Error: target selected is self" << endl;
+         logout << "Error: target selected is self " << targetplayer << "  " << netcode->PlayerNum() << endl;
       
       if (!targetplayer && targetspawn == -1)
          targetspawn = SelectTargetSpawn();
@@ -128,8 +131,8 @@ void Bot::Update()
          AimAtTarget(allspawns[targetspawn].position);
          
       // Weapons fire
-      if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() &&
-         BotPlayer().temperature < 100.f - netcode->bot.CurrentWeapon().Heat()
+      if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() + 50 &&
+         BotPlayer().temperature < 99.f - netcode->bot.CurrentWeapon().Heat()
          )
       {
          netcode->SendFire();
@@ -365,6 +368,7 @@ void Bot::SetPlayers(vector<PlayerData>& in)
    {
       players[i].ClearMeshes(false);
    }
+   lastserverupdate = SDL_GetTicks();
    playermutex->unlock();
 }
 
