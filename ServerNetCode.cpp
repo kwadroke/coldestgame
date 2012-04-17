@@ -653,7 +653,7 @@ void ServerNetCode::Send()
       // Send pings to monitor network performance
       // Also use this opportunity to send occasional updates
       pingtick++;
-      if (pingtick > 30)
+      if (pingtick > 15)
       {
          Packet pingpack(NULL, "P", sendpacketnum);
          
