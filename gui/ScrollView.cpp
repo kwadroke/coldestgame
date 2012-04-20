@@ -154,26 +154,41 @@ void ScrollView::KeyDown(SDL_Event* event)
    switch (event->key.keysym.sym)
    {
       case SDLK_UP:
-         vpoffsety -= 5.f;
-         yoff += 5.f;
-         if (vpoffsety < 0)
-         {
-            yoff += vpoffsety;
-            vpoffsety = 0;
-         }
+         ScrollUp();
          break;
       case SDLK_DOWN:
-         vpoffsety += 5.f;
-         yoff -= 5.f;
-         if (vpoffsety + height > canvasy)
-         {
-            yoff += (vpoffsety + height - canvasy);
-            vpoffsety = canvasy - height;
-         }
+         ScrollDown();
          break;
       default:
          break;
    }
+}
+
+
+void ScrollView::ScrollUp()
+{
+   logout << vpoffsety << endl;
+   vpoffsety -= 50.f;
+   yoff += 50.f;
+   if (vpoffsety < 0)
+   {
+      yoff += vpoffsety;
+      vpoffsety = 0;
+   }
+   vertbar->value = int(vpoffsety);
+   logout << "Scrollup " << vpoffsety << endl;
+}
+
+void ScrollView::ScrollDown()
+{
+   vpoffsety += 50.f;
+   yoff -= 50.f;
+   if (vpoffsety + height > canvasy)
+   {
+      yoff += (vpoffsety + height - canvasy);
+      vpoffsety = canvasy - height;
+   }
+   vertbar->value = int(vpoffsety);
 }
 
 

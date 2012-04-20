@@ -171,3 +171,14 @@ void Table::ScrollToBottom()
    scrollview->ScrollToBottom();
 }
 
+
+void Table::ScrollUp()
+{
+   scrollview->ScrollUp();
+}
+
+void Table::ScrollDown()
+{
+   scrollview->ScrollDown();
+}
+

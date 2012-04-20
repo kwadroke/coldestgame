@@ -41,6 +41,8 @@ class Table : public GUI
       string GetSelectedString(int);
       bool InScrollbar(float, float);
       void ScrollToBottom();
+      void ScrollUp();
+      void ScrollDown();
       
    protected:
       virtual void RenderWidget();

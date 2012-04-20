@@ -35,6 +35,8 @@ class ScrollView : public GUI
       bool FloatsInWidget(float, float);
       float scrollbarwidth;
       void ScrollToBottom();
+      void ScrollUp();
+      void ScrollDown();
       
    protected:
       float vpoffsetx, vpoffsety;

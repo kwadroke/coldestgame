@@ -1316,6 +1316,17 @@ void GameEventHandler(SDL_Event &event)
             {
                netcode->SendPowerdown();
             }
+            else if (event.key.keysym.sym == SDLK_PAGEUP)
+            {
+               TextArea* chatoutput = (TextArea*) gui[chat]->GetWidget("chatoutput");
+               chatoutput->ScrollUp();
+               logout << "Scrollup" << endl;
+            }
+            else if (event.key.keysym.sym == SDLK_PAGEDOWN)
+            {
+               TextArea* chatoutput = (TextArea*) gui[chat]->GetWidget("chatoutput");
+               chatoutput->ScrollDown();
+            }
             break;
             
          case SDL_KEYUP:

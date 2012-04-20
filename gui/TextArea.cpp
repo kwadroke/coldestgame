@@ -136,3 +136,15 @@ void TextArea::ScrollToBottom()
    table->height = height;
    table->ScrollToBottom();
 }
+
+
+void TextArea::ScrollUp()
+{
+   table->ScrollUp();
+}
+
+
+void TextArea::ScrollDown()
+{
+   table->ScrollDown();
+}

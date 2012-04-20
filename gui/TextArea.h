@@ -39,6 +39,8 @@ class TextArea : public GUI
       void Append(string);
       void Refresh();
       void ScrollToBottom();
+      void ScrollUp();
+      void ScrollDown();
       
    protected:
       void ReadNodeExtra(DOMNode*, GUI*);
