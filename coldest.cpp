@@ -1320,7 +1320,6 @@ void GameEventHandler(SDL_Event &event)
             {
                TextArea* chatoutput = (TextArea*) gui[chat]->GetWidget("chatoutput");
                chatoutput->ScrollUp();
-               logout << "Scrollup" << endl;
             }
             else if (event.key.keysym.sym == SDLK_PAGEDOWN)
             {

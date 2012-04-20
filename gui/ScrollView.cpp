@@ -176,7 +176,6 @@ void ScrollView::ScrollUp()
       vpoffsety = 0;
    }
    vertbar->value = int(vpoffsety);
-   logout << "Scrollup " << vpoffsety << endl;
 }
 
 void ScrollView::ScrollDown()
