@@ -21,6 +21,7 @@
 #include "util.h"
 #include <SDL/SDL.h>
 #ifdef __linux__
+#include <unistd.h>
 #include <sys/syscall.h>
 #endif
 
