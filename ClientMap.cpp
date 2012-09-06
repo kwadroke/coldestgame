@@ -24,6 +24,7 @@ ClientMap::ClientMap(const string& mn)
 {
    mapmeshes = &meshes;
    Init(mn);
+   terrobjsize = 16;
 }
 
 
