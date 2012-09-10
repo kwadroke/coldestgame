@@ -32,20 +32,25 @@ class ParticleEmitter
 {
    public:
       ParticleEmitter(const Vector3&, Particle&, Uint32, float, int);
-      ParticleEmitter(const string&, ResourceManager&);
+      ParticleEmitter(const string&);
       bool Update(list<Particle>&);
+      void ResetTime() {lastupdate = SDL_GetTicks();}
       Vector3 position;
+      float minx, maxx;
+      float miny, maxy;
       
    private:
       Particle particle;
-      Uint32 emittertime;
+      int emittertime;
       Uint32 lastupdate;
       float density;
+      float densityaccum;
       int count;
       ALSourcePtr soundsource;
       string soundfile;
       bool firstupdate;
       bool one;
+      string partfile;
 
       bool debug;
 

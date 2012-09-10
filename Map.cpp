@@ -69,6 +69,7 @@ void Map::Load()
    ReadSpawnPoints();
    SetProgress("Loading objects", 0);
    LoadObjects();
+   LoadEmitters();
    SetProgress("Loading map data", 1);
    LoadMapData();
    SetProgress("Building terrain", 2);

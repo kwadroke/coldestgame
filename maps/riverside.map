@@ -62,6 +62,11 @@ SpawnPoints
       Team 2
       Location 6082.83 323 6222.2
       Name Base2
+#Emitters
+   Node
+      File particles/emitters/mist
+      Position 400 -100 2800
+      XRange 0 180
 Objects
    Node
       Type proctree

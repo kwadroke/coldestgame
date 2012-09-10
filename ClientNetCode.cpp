@@ -494,7 +494,7 @@ void ClientNetCode::ReadUpdate(stringstream& get)
             }
             if (addemitter)
             {
-               ParticleEmitter newemitter("particles/emitters/explosion", resman);
+               ParticleEmitter newemitter("particles/emitters/explosion");
                newemitter.position = i->pos;
                emitters.push_back(newemitter);
             }

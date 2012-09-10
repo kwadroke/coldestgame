@@ -373,6 +373,32 @@ void ClientMap::LoadObjects()
 }
 
 
+void ClientMap::LoadEmitters()
+{
+   if (mapdata.GetItemIndex("Emitters") != -1)
+   {
+      NTreeReader emitterlist = mapdata.GetItemByName("Emitters");
+      string currfile;
+      for (size_t i = 0; i < emitterlist.NumChildren(); ++i)
+      {
+         const NTreeReader& currnode = emitterlist(i);
+         currnode.ReadLine(currfile, "File");
+         Vector3 position;
+         currnode.Read(position.x, "Position", 0);
+         currnode.Read(position.y, "Position", 1);
+         currnode.Read(position.z, "Position", 2);
+         ParticleEmitter emitter(currfile);
+         currnode.Read(emitter.minx, "XRange", 0);
+         currnode.Read(emitter.maxx, "XRange", 1);
+         currnode.Read(emitter.miny, "YRange", 0);
+         currnode.Read(emitter.maxy, "YRange", 1);
+         emitter.position = position;
+         emitters.push_back(emitter);
+      }
+   }
+}
+
+
 void ClientMap::LoadWater()
 {
    // Build water object

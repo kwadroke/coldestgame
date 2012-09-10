@@ -37,10 +37,11 @@ class Particle
    public:
       Particle(Mesh&);
       Particle(unsigned long, Vector3, Vector3, float, float, float, float, bool, Uint32, Mesh&);
-      Particle(const string&, ResourceManager&);
+      Particle(const string&);
       Vector3 Update();
       void Render(Mesh *rendermesh = NULL, const Vector3& campos = Vector3());
       void PlaySound(const string&, ResourceManager&);
+      void ResetTimer() {t.start();}
       
       size_t playernum;
       unsigned long id;

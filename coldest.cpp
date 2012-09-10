@@ -2550,7 +2550,7 @@ void UpdatePlayer()
 void AddHit(const Vector3& pos, const int type)
 {
    Weapon dummy(type);
-   ParticleEmitter newemitter(dummy.ExpFile(), resman);
+   ParticleEmitter newemitter(dummy.ExpFile());
    newemitter.position = pos;
    emitters.push_back(newemitter);
 }

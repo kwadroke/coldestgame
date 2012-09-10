@@ -22,19 +22,21 @@
 #include "globals.h"
 
 ParticleEmitter::ParticleEmitter(const Vector3& pos, Particle& p, Uint32 etime, float d, int maxcount) : 
-                                 position(pos), particle(p), emittertime(etime), lastupdate(SDL_GetTicks()), density(d), count(maxcount),
+                                 position(pos), minx(0.f), maxx(360.f), miny(0.f), maxy(360.f), particle(p), emittertime(etime), 
+                                 lastupdate(SDL_GetTicks()), density(d), densityaccum(0.f), count(maxcount),
                                  firstupdate(true), one(false), debug(false)
 {
 }
 
 
-ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman) : 
-                                 particle("particles/explosion", resman), lastupdate(SDL_GetTicks()), firstupdate(true), one(false), debug(false)
+ParticleEmitter::ParticleEmitter(const string& filename) : 
+                                 minx(0.f), maxx(360.f), miny(0.f), maxy(360.f), particle("particles/explosion"), 
+                                 lastupdate(SDL_GetTicks()), densityaccum(0.f), firstupdate(true), one(false), 
+                                 debug(false)
 {
    NTreeReader read(filename);
-   string partfile;
    read.Read(partfile, "Particle");
-   particle = Particle(partfile, resman);
+   particle = Particle(partfile);
    read.Read(emittertime, "EmitterTime");
    read.Read(density, "Density");
    read.Read(count, "Count");
@@ -47,9 +49,10 @@ ParticleEmitter::ParticleEmitter(const string& filename, ResourceManager& resman
 bool ParticleEmitter::Update(list<Particle>& partlist)
 {
 #ifndef DEDICATED
-   if (firstupdate && soundfile != "")
+   if (firstupdate) 
    {
-      resman.soundman.PlaySound(soundfile, position);
+      if (soundfile != "")
+         resman.soundman.PlaySound(soundfile, position);
       firstupdate = false;
    }
 #endif
@@ -58,25 +61,37 @@ bool ParticleEmitter::Update(list<Particle>& partlist)
    Uint32 numticks = currtick - lastupdate;
    ssize_t addcount;
    if (!one)
-      addcount = int(Random(0.f, density * float(numticks)));
+   {
+      float addval = Random(0.f, (density + densityaccum) * float(numticks));
+      addcount = int(addval);
+      if (addcount == 0)
+      {
+         densityaccum += density;
+      }
+      else
+         densityaccum = 0.f;
+   }
    else
       addcount = 1;
    lastupdate = currtick;
-   for (ssize_t i = 0; (i < addcount), count != 0; ++i)
+   for (ssize_t i = 0; (i < addcount) && count != 0; ++i)
    {
-      Particle newpart(particle);
+      Particle newpart(partfile);
       newpart.pos = position;
       newpart.lasttick = currtick;
       GraphicMatrix m;
-      m.rotatex(Random(0, 360));
-      m.rotatey(Random(0, 360));
+      m.rotatex(Random(minx, maxx));
+      m.rotatey(Random(miny, maxy));
       newpart.dir = Vector3(0, 0, 1);
       newpart.dir.transform(m);
       partlist.push_back(newpart);
       --count;
    }
+   if (emittertime < 0)
+      return false;
    // Don't return even if count is 0 so that sounds can continue playing
-   if (numticks >= emittertime) return true;
+   if (numticks >= emittertime)
+      return true;
    emittertime -= numticks;
    return false;
 }

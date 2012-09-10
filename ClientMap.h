@@ -40,6 +40,7 @@ class ClientMap : public Map
       virtual void SetTerrainTextures(int, int, Quad&);
       virtual void ReadSpawnPointsExtra();
       virtual void LoadObjects();
+      virtual void LoadEmitters();
       virtual void LoadWater();
       virtual void CreateGrass();
       virtual void GenerateKDTree();

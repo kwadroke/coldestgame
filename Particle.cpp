@@ -42,7 +42,7 @@ Particle::Particle(unsigned long nid, Vector3 p, Vector3 v, float vel, float acc
 }
 
 
-Particle::Particle(const string& filename, ResourceManager& resman) : playernum(0), id(0),
+Particle::Particle(const string& filename) : playernum(0), id(0),
                    velocity(0.f), accel(0.f), weight(0.f), radius(0.f), explode(true), lasttick(0), damage(0), dmgrad(0.f),
                    rewind(0), collide(false), ttl(10000), expired(false), weapid(-1), clientonly(false), tracertime(10000), mesh(meshcache->GetMesh("models/empty")),
                    debug(false), source(new SoundSource)
@@ -59,11 +59,12 @@ Particle::Particle(const string& filename, ResourceManager& resman) : playernum(
    int temp = 10000;
    read.Read(temp, "TTL");
    ttl = temp;
+   read.Read(tracer, "Tracer");
    temp = 10000;
    read.Read(temp, "TracerTime");
    tracertime = temp;
    
-   string meshname;
+   string meshname = "models/empty";
    read.Read(meshname, "Mesh");
    mesh = meshcache->GetMesh(meshname);
    t.start();
