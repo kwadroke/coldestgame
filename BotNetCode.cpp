@@ -112,7 +112,20 @@ void BotNetCode::SendSpawnRequest()
    p.ack = sendpacketnum;
    p << "S\n";
    p << p.ack << eol;
+   
+   // Select unit and item based on salvage
    bot.unit = 0;
+   bot.item = Item(Item::NoItem, dummymeshes);
+   if (bot.salvage > 100)
+      bot.unit = 1;
+   if (bot.salvage > 115)
+   {
+      if (bot.salvage % 2 == 0)
+         bot.item = Item(Item::HeatSink, dummymeshes);
+      else 
+         bot.item = Item(Item::Armor, dummymeshes);
+   }
+   
    p << bot.unit << eol;
    for (int i = 0; i < numbodyparts; ++i)
    {
@@ -172,8 +185,6 @@ void BotNetCode::ReadConnect(stringstream& get)
       get >> map;
       get >> newteam;
       connected = true;
-      /*itemsreceived.clear();
-       hitsreceived.clear*();*/
       
       // Immediately send the team change request
       Packet p(&address);

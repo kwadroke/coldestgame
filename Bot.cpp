@@ -90,6 +90,7 @@ void Bot::Update()
       netcode->bot.facing -= .1f * movetimer.elapsed();
    if (netcode->bot.moveright)
       netcode->bot.facing += .1f * movetimer.elapsed();
+   netcode->bot.salvage = BotPlayer().salvage;
    movetimer.start();
    if (console.GetBool("botsmove") && netcode->bot.spawned)
    {
