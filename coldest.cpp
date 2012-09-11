@@ -2777,13 +2777,18 @@ void PopulateMapList()
 #ifndef DEDICATED
    ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
    mapbox->Clear();
+   string map = console.GetString("map");
    NTreeReader readmaps("maps/maplist");
    
    for (size_t i = 0; i < readmaps.NumChildren(); ++i)
    {
       const NTreeReader& currmap = readmaps(i);
       mapbox->Add(currmap.GetName());
+      if (currmap.GetName() == map)
+         mapbox->Select(i);
    }
+   if (mapbox->Selected() == -1)
+      mapbox->Select(0);
 #endif
 }
 
