@@ -41,9 +41,14 @@ void Repaint()
    static bool updateclouds = true;
    bool shadows = console.GetBool("shadows");
    PlayerData localplayer(meshes);
+   localplayer = player[0];
+   
    float fov = console.GetFloat("fov");
+   if (localplayer.spectate)
+      guncam = false;
    if (guncam)
       fov /= console.GetFloat("zoomfactor");
+   
    t.start();
    
    // Apparently if this is turned off even glClear doesn't override it, so we end up never
@@ -61,7 +66,6 @@ void Repaint()
    glLoadIdentity();
    trislastframe = 0;
    firstpass = true;
-   localplayer = player[0];
    
    if (!PrimaryGUIVisible())
    {
