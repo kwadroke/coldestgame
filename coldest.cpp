@@ -2137,8 +2137,8 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
    // Add a particle to enemies to indicate their affiliation
    if (gl) // No reason to do this on the server
    {
-      if ((!player[0].spectate && p.team != player[servplayernum].team) ||
-         (player[0].spectate && p.team != player[spectateplayer].team))
+      if ((player[0].team != 0 && p.team != player[servplayernum].team) ||
+         (player[0].team == 0 && p.team != player[spectateplayer].team))
       {
          if (!p.indicator)
          {
