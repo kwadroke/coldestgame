@@ -1607,7 +1607,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          else if (!floatzero(mplayer.speed) && downslope) // Moving downhill
          {
             // Give them a little push down to keep them on the ground
-            mplayer.pos.y -= step * 2.f;
+            mplayer.pos.y -= step;
          }
          else if (!floatzero(mplayer.speed) && !flat) // Moving uphill
          {
@@ -1615,7 +1615,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          }
          else if (!floatzero(mplayer.speed)) // Mostly flat
          {
-            mplayer.pos.y -= step;
+            mplayer.pos.y -= step / 2.f;
          }
       }
       else
