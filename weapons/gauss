@@ -3,7 +3,7 @@ Velocity 100
 ProjectileWeight .25
 Weight 30
 Radius 2
-Damage 150
+Damage 125
 Name Gauss Rifle
 Heat 10
 Ammo 5

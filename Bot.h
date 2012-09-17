@@ -99,6 +99,8 @@ class Bot{
       void FindCurrPathNode();
       void UpdateHeading();
       void TurnToHeading();
+      void CheckForNearerTarget();
+      intvec GetOpponents();
       float SkillAverage() {return (console.GetFloat("botskillmax") + 1.f) / 2.f;}
       float SkillMax() {return console.GetFloat("botskillmax");}
       float Skill() {return console.GetFloat("botskill");}

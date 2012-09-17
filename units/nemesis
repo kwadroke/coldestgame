@@ -1,4 +1,4 @@
-TurnSpeed 1
+TurnSpeed .7
 Acceleration .02
 MaxSpeed 1.5
 Size 15
@@ -8,4 +8,4 @@ TorsoOffset 0 17 -20
 LArmOffset -23 16 -5
 RArmOffset 23 16 -5
 ViewOffset 0 20 -5
-HP 200 200 200 200
+HP 300 300 300 300

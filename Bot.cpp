@@ -112,6 +112,10 @@ void Bot::Update()
             targetplayer = netcode->attacker;
             netcode->attacker = 0;
          }
+         else
+         {
+            CheckForNearerTarget();
+         }
          targettimer.start();
       }
       
@@ -149,6 +153,18 @@ void Bot::Update()
 
 size_t Bot::SelectTarget()
 {
+   intvec otherteam = GetOpponents();
+   if (!otherteam.size())
+      return 0;
+
+   // I think this random should always return valid indices, but clamp just to be safe
+   size_t index = clamp(size_t(0), otherteam.size() - 1, size_t(Random(0, otherteam.size() - 1e-5f)));
+   return otherteam[index];
+}
+
+
+intvec Bot::GetOpponents()
+{
    // Build list of players on the other team
    intvec otherteam;
    for (int i = 1; i < localplayers.size(); ++i)
@@ -161,13 +177,7 @@ size_t Bot::SelectTarget()
          }
       }
    }
-   
-   if (!otherteam.size())
-      return 0;
-
-   // I think this random should always return valid indices, but clamp just to be safe
-   size_t index = clamp(size_t(0), otherteam.size() - 1, size_t(Random(0, otherteam.size() - 1e-5f)));
-   return otherteam[index];
+   return otherteam;
 }
 
 
@@ -185,6 +195,29 @@ size_t Bot::SelectTargetSpawn()
    // I think this random should always return valid indices, but clamp just to be safe
    size_t index = clamp(size_t(0), otherteam.size() - 1, size_t(Random(0, otherteam.size() - 1e-5f)));
    return otherteam[index];
+}
+
+
+void Bot::CheckForNearerTarget()
+{
+   intvec otherteam = GetOpponents();
+   if (!otherteam.size() || !targetplayer)
+      return;
+   
+   float currdist = 0.f;
+   size_t newtarget = targetplayer;
+   currdist = BotPlayer().pos.distance2(localplayers[targetplayer].pos);
+   for (size_t i = 0; i < otherteam.size(); ++i)
+   {
+      size_t current = otherteam[i];
+      if (current != targetplayer)
+      {
+         float check = BotPlayer().pos.distance2(localplayers[current].pos);
+         if (check < currdist * .75f)
+            newtarget = current;
+      }
+   }
+   targetplayer = newtarget;
 }
 
 
@@ -273,9 +306,9 @@ void Bot::UpdateHeading()
    perp.normalize();
    perp *= closingdistance;
    
-   direct += perp;
    direct.normalize();
    direct *= checkdist;
+   direct += perp;
    
    if (heading.magnitude() < 1e-4f)
       heading = Vector3(0, 0, -checkdist);
@@ -288,15 +321,23 @@ void Bot::UpdateHeading()
    
    if (current.distance2(direct) > 1.f)
    {
-      current = (heading + direct) / 2.f;
-      current.normalize();
-      current *= checkdist;
-      if (currpathnode->Validate(start, current, netcode->bot.size))
+      for (int i = 0; i < 2; ++i) // Try both with and without perp
       {
-         heading = current;
-         heading.y = 0.f;
-         return;
+         current = (heading + direct) / 2.f;
+         current.normalize();
+         current *= checkdist;
+         if (currpathnode->Validate(start, current, netcode->bot.size))
+         {
+            heading = current;
+            heading.y = 0.f;
+            return;
+         }
+         direct -= perp; // If we can't validate moving to their side, just try directly at them
       }
+   }
+   else
+   {
+      direct -= perp; // See above
    }
    
    current = savecurrent;
