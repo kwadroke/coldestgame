@@ -30,12 +30,11 @@ tsint Bot::lastserverupdate;
 Bot::Bot() : botrunning(true),
              netcode(new BotNetCode()),
              targetplayer(0),
-             targetspawn(-1),
              heading(Vector3(0, 0, -1.f)),
              lastupdate(0)
 {
    // More difficult bots will try to get closer
-   float min = 1000.f + (SkillAverage() - Skill()) * 100.f;
+   float min = 300.f + (SkillAverage() - Skill()) * 50.f;
    closingdistance = Random(min, min + 500.f);
    
    timer.start();
@@ -124,8 +123,8 @@ void Bot::Update()
       if (targetplayer == netcode->PlayerNum())
          logout << "Error: target selected is self " << targetplayer << "  " << netcode->PlayerNum() << endl;
       
-      if (!targetplayer && targetspawn == -1)
-         targetspawn = SelectTargetSpawn();
+      if (!targetplayer)
+         SelectTargetSpawn();
       
       UpdateHeading();
       TurnToHeading();
@@ -133,7 +132,7 @@ void Bot::Update()
       if (targetplayer)
          AimAtTarget(localplayers[targetplayer].pos);
       else
-         AimAtTarget(allspawns[targetspawn].position);
+         AimAtTarget(targetspawn.position);
          
       // Weapons fire
       if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() + 50 &&
@@ -147,6 +146,7 @@ void Bot::Update()
    else if (!netcode->bot.spawned)
    {
       currpathnode = PathNodePtr();
+      SelectSpawn();
    }
 }
 
@@ -181,20 +181,24 @@ intvec Bot::GetOpponents()
 }
 
 
-size_t Bot::SelectTargetSpawn()
+void Bot::SelectTargetSpawn()
 {
-   intvec otherteam;
+   vector<SpawnPointData> otherteam = netcode->GetBotSpawns(Team() == 1 ? 2 : 1);
    for (size_t i = 0; i < allspawns.size(); ++i)
    {
       if (allspawns[i].team != Team())
       {
-         otherteam.push_back(i);
+         otherteam.push_back(allspawns[i]);
       }
    }
    
-   // I think this random should always return valid indices, but clamp just to be safe
-   size_t index = clamp(size_t(0), otherteam.size() - 1, size_t(Random(0, otherteam.size() - 1e-5f)));
-   return otherteam[index];
+   targetspawn = otherteam[0];
+   float dist = otherteam[0].position.distance2(BotPlayer().pos);
+   for (size_t i = 1; i < otherteam.size(); ++i)
+   {
+      if (otherteam[i].position.distance2(BotPlayer().pos) < dist)
+         targetspawn = otherteam[i];
+   }
 }
 
 
@@ -218,6 +222,16 @@ void Bot::CheckForNearerTarget()
       }
    }
    targetplayer = newtarget;
+}
+
+
+void Bot::SelectSpawn()
+{
+   vector<SpawnPointData> available = netcode->GetBotSpawns(BotPlayer().team);
+   if (available.size())
+   {
+      netcode->selectedspawn = available[(int(Random(0, 1000)) % available.size())];
+   }
 }
 
 
@@ -301,7 +315,7 @@ void Bot::UpdateHeading()
    if (targetplayer)
       direct = localplayers[targetplayer].pos - start;
    else
-      direct = allspawns[targetspawn].position - start;
+      direct = targetspawn.position - start;
    Vector3 perp = direct.cross(Vector3(0.f, 1.f, 0.f));
    perp.normalize();
    perp *= closingdistance;

@@ -67,7 +67,7 @@ class Bot{
       vector<PlayerData> localplayers; // Thread-specific copy of players to avoid locking issues
       size_t targetplayer;
       vector<SpawnPointData> allspawns; // Netcode only gives us the ones for our team
-      ssize_t targetspawn;
+      SpawnPointData targetspawn;
       
       Vector3 movetarget;
       PathNodePtr currpathnode;
@@ -94,7 +94,8 @@ class Bot{
       PlayerData& BotPlayer() {return localplayers[netcode->PlayerNum()];}
       
       size_t SelectTarget();
-      size_t SelectTargetSpawn();
+      void SelectTargetSpawn();
+      void SelectSpawn();
       void AimAtTarget(const Vector3&);
       void FindCurrPathNode();
       void UpdateHeading();

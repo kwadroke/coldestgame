@@ -32,11 +32,13 @@ class BotNetCode : public NetCode
       BotNetCode();
       void SendFire();
       int PlayerNum() {return playernum;}
+      vector<SpawnPointData> GetBotSpawns(int);
       
       Meshlist dummymeshes; // Has to be before bot so it gets initialized first
       PlayerData bot;
       pid_t id;
       size_t attacker;
+      SpawnPointData selectedspawn;
 
    protected:
       virtual void HandlePacket(stringstream&);
@@ -52,6 +54,8 @@ class BotNetCode : public NetCode
       void ReadPing();
       void ReadDeath(stringstream&);
       void ReadDamage(stringstream&);
+      void ReadItem(stringstream&);
+      void ReadRemoveItem(stringstream&);
       
       bool connected, needconnect;
       int playernum;
@@ -59,6 +63,8 @@ class BotNetCode : public NetCode
       Timer sendtimer;
       Timer respawntimer;
       vector<SpawnPointData> spawns;
+      set<unsigned long> itemsreceived;
+      vector<Item> items;
 };
 
 typedef boost::shared_ptr<BotNetCode> BotNetCodePtr;

@@ -132,9 +132,9 @@ void BotNetCode::SendSpawnRequest()
       p << bot.weapons[i].Id() << eol;
    }
    p << bot.item.Type() << eol;
-   p << spawns[0].position.x << eol;
-   p << spawns[0].position.y << eol;
-   p << spawns[0].position.z << eol;
+   p << selectedspawn.position.x << eol;
+   p << selectedspawn.position.y << eol;
+   p << selectedspawn.position.z << eol;
    // Otherwise the bots bog the server down something terrible - and since they're
    // running on the same machine as the server it's highly unlikely the packet will
    // actually get lost and need to be resent
@@ -155,6 +155,24 @@ void BotNetCode::SendFire()
 }
 
 
+vector<SpawnPointData> BotNetCode::GetBotSpawns(int team)
+{
+   vector<SpawnPointData> retval;
+   vector<SpawnPointData> itemspawns = GetSpawns(items);
+   for (size_t i = 0; i < spawns.size(); ++i)
+   {
+      if (spawns[i].team == team)
+         retval.push_back(spawns[i]);
+   }
+   for (size_t i = 0; i < itemspawns.size(); ++i)
+   {
+      if (itemspawns[i].team == team)
+         retval.push_back(itemspawns[i]);
+   }
+   return retval;
+}
+
+
 void BotNetCode::HandlePacket(stringstream& get)
 {
    if (packettype == "c")
@@ -171,6 +189,10 @@ void BotNetCode::HandlePacket(stringstream& get)
       ReadDeath(get);
    else if (packettype == "D")
       ReadDamage(get);
+   else if (packettype == "I")
+      ReadItem(get);
+   else if (packettype == "R")
+      ReadRemoveItem(get);
    else if (acktypes.find(packettype) == acktypes.end() && packettype != "U" && packettype != "u")
       logout << "Got unhandled packet: " << packettype << endl;
 }
@@ -221,8 +243,10 @@ void BotNetCode::ReadTeamChange(stringstream& get)
             get >> read.position.x >> read.position.y >> read.position.z;
             get.ignore(); // Throw out \n
             getline(get, read.name);
+            read.team = newteam;
             spawns.push_back(read);
          }
+         selectedspawn = spawns[0];
          
          // Immediately send a spawn request
          SendSpawnRequest();
@@ -301,6 +325,52 @@ void BotNetCode::ReadDamage(stringstream& get)
    if (hitme)
    {
       get >> attacker;
+   }
+}
+
+
+void BotNetCode::ReadItem(stringstream& get)
+{
+   Vector3 itempos;
+   unsigned long id;
+   int type, team;
+   get >> type;
+   get >> id;
+   get >> itempos.x >> itempos.y >> itempos.z;
+   get >> team;
+   
+   if (itemsreceived.find(id) == itemsreceived.end())
+   {
+      Item newitem(type, dummymeshes);
+      newitem.id = id;
+      newitem.team = team;
+      newitem.position = itempos;
+      
+      MeshPtr newmesh = meshcache->GetNewMesh(newitem.ModelFile());
+      newmesh->Move(newitem.position);
+      dummymeshes.push_front(*newmesh);
+      items.push_back(newitem);
+      Item& curritem = items.back();
+      curritem.mesh = dummymeshes.begin();
+      
+      itemsreceived.insert(id);
+   }
+}
+
+
+void BotNetCode::ReadRemoveItem(stringstream& get)
+{
+   unsigned long id;
+   get >> id;
+   for (vector<Item>::iterator i = items.begin(); i != items.end(); ++i)
+   {
+      if (i->id == id)
+      {
+         if (i->mesh != dummymeshes.end())
+            dummymeshes.erase(i->mesh);
+         items.erase(i);
+         break;
+      }
    }
 }
 
