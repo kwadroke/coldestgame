@@ -514,10 +514,24 @@ void ServerUpdatePlayer(int i)
    }
    
    // Powered down?
+   bool powereddown = (serverplayers[i].powerdowntime > 0);
    serverplayers[i].powerdowntime -= ticks; // Reuse lastcoolingtick
    if (serverplayers[i].powerdowntime <= 0)
    {
       serverplayers[i].powerdowntime = 0;
+      if (powereddown)
+      {
+         for (int j = 0; j < numbodyparts; ++j)
+         {
+            if (serverplayers[i].hp[j] > 0)
+            {
+               int maxhp = units[serverplayers[i].unit].maxhp[j];
+               serverplayers[i].hp[j] += maxhp * 3 / 4;
+               if (serverplayers[i].hp[j] > maxhp)
+                  serverplayers[i].hp[j] = maxhp;
+            }
+         }
+      }
    }
    
    if (serverplayers[i].powerdowntime) return;

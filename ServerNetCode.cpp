@@ -513,16 +513,6 @@ void ServerNetCode::HandlePowerDown()
    if (!serverplayers[playernum].powerdowntime)
    {
       serverplayers[playernum].powerdowntime = 5000;
-      for (int i = 0; i < numbodyparts; ++i)
-      {
-         if (serverplayers[playernum].hp[i] > 0)
-         {
-            int maxhp = units[serverplayers[playernum].unit].maxhp[i];
-            serverplayers[playernum].hp[i] += maxhp * 3 / 4;
-            if (serverplayers[playernum].hp[i] > maxhp)
-               serverplayers[playernum].hp[i] = maxhp;
-         }
-      }
    }
 }
 
