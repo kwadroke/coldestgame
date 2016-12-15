@@ -3,3 +3,13 @@ build
 updates
 working
 crcfile
+coldest
+coldest-bin
+*.bz2
+*.zip
+Coldest
+Coldest????
+lib/*
+version
+buildoutput
+*.pyc
