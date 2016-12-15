@@ -1,0 +1,6 @@
+{
+  "name": "Coldestgame",
+  "tagline": "Coldest: Absolute Zero - A continuation of the Open Source Mech game \"Coldest\"",
+  "body": "# Coldest: Absolute Zero\r\n\r\n_Coldest: Absolute Zero_ is a continuation/fork of the Open Source Mech Game [_Coldest_](http://coldestgame.com) by Cybertron.\r\n\r\n### Project Goals:\r\n* Make it playable on Raspberry Pi (at least the Pi3)  \r\n* Make the GUI optional  \r\n* Update & add more mech models  \r\n* Update Sounds  \r\n* Improve AI  \r\n* Joystick/Gamepad Controls  \r\n* Create Dockerfile for Dedicated Servers  \r\n* Add documentation\r\n* Additional Maps including Urban settings\r\n* Cockpit HUD\r\n\r\n### Nice to haves:\r\n* OpenGL ES port (Android & RPi)  \r\n* External Display via network for Mech Stats for Simpits\r\n* Joystick/Gamepad controlled GUI\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
