@@ -6,8 +6,9 @@
 # Copy libraries from the system folder to our local lib folder
 # This way our lib folder always matches what gets compiled
 LIBS="libGLEW libSDL- libSDL_image libSDL_net libSDL_ttf libalut libboost_filesystem libboost_system libfreetype libgcc_s libogg libopenal libstdc++ libvorbis libvorbisfile libxerces-c libz libcurl libnsl"
-RELEASE=543
+RELEASE=550
 outfile=buildoutput
+
 
 if [ $# != 1 ]
 then
@@ -24,11 +25,36 @@ else
 fi
 
 echo "Building"
-git pull >> $outfile 2>&1
+##git pull >> $outfile 2>&1
 REVISION=`git log --pretty=oneline | wc -l`
+
+if [ ! -d build ]; then
+ mkdir build
+fi
 cd build
+
+echo Running CMake...
+cmake ..
+if [ "$?" != "0" ]; then
+ echo 
+ echo CMAKE FAILED. EXITING.
+ exit $?
+fi
+
+echo Running Make ...
 make clean >> $outfile 2>&1
 make -j3 >> $outfile 2>&1
+if [ "$?" != "0" ]; then
+ echo 
+ echo MAKE FAILED. EXITING.
+ echo
+ echo Shwoing last 40 lines of buildoutput...
+ tail -n 40 buildoutput
+ exit $?
+
+fi
+echo Make Complete.
+
 cd ..
 cp build/coldest . >> $outfile 2>&1
 cp build/server . >> $outfile 2>&1
@@ -55,11 +81,12 @@ echo "Kitting"
 ./kit.sh Coldest$REVISION >> $outfile 2>&1
 echo "Packaging"
 ./package.sh linux Coldest$REVISION >> $outfile 2>&1
+
 # Patches should no longer be necessary thanks to the updater
 #echo "Building Patch"
 #./buildpatch linux $RELEASE >> $outfile 2>&1
-if [ $1 != "noupload" ]
-then
+
+if [ "$1" == "upload" ]; then
    echo "Uploading"
    ./uploadbuild.sh linux $1 >> $outfile 2>&1
 fi
