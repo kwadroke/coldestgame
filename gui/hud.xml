@@ -20,7 +20,7 @@
    <Label x="850" y="70" width="150" height="30" text="Right Arm" name="rarmweapon"/>
    
    <ProgressBar x="10" y="830" width="100" height="30" name="temperature"
-                normal="textures/hud/button.png"
+                normal="textures/hud/tempgauge.png"
                 hover="textures/hud/buttonred.png"/>
    <Label x="485" y="800" width="30" height="30" name="facingcenter"
           normal="textures/hud/buttonred.png"/>
