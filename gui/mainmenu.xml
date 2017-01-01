@@ -21,7 +21,7 @@
      cursornormal="textures/sliderbuttonnorm.png"
      leftclicksound="sounds/click.ogg">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
-   
+
    <Label x="300" y="25" width="400" height="200" text="" name="logo" xmargin="0" ymargin="0" align="center"
           normal="textures/logo.png"/>
       <Layout x="390" y="240" padding="10" orientation="vertical">
@@ -44,7 +44,7 @@
         <Button width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="exit"/>
         </Layout>
-   
-   <Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/>
-   
+
+   <!-- Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/ -->
+
 </GUI>

@@ -15,16 +15,16 @@
      cursornormal="textures/sliderbuttonnorm.png"
      leftclicksound="sounds/click.ogg">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
-   
+
    <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center"/>
-   
+
    <TabWidget x="100" y="110" width="800" height="800" text="">
       <Tab text="Graphics" buttonwidth="120"
            buttonnormal="textures/buttonnorm.png"
            buttonpressed="textures/buttonpressed.png"
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
-         
+
          <Layout x="0" y="0" padding="20" xmargin="20" ymargin="20" orientation="horizontal">
             <Layout padding="10">
                <Label x="0" y="0" width="180" height="30" text="Particles"/>
@@ -39,7 +39,7 @@
                   </Slider>
                </Label>
             </Layout>
-            
+
             <Layout padding="10">
                <Label x="0" y="0" width="180" height="30" text="View Distances"/>
                <Label x="0" y="0" width="200" height="25" text="Max Draw">
@@ -53,7 +53,7 @@
                   </Slider>
                </Label>
             </Layout>
-            
+
             <Layout padding="10">
                <Label x="0" y="0" width="180" height="30" text="Grass"/>
                <Label x="0" y="0" width="200" height="25" text="Grass Density">
@@ -68,7 +68,7 @@
                </Label>
             </Layout>
          </Layout>
-         
+
          <Layout x="10" y="400" padding="10" xmargin="10" orientation="horizontal">
             <Layout padding="10">
                <Label x="0" y="0" width="180" height="30" text="Rendering"/>
@@ -93,7 +93,7 @@
                      pressed="textures/buttonpressed.png"
                      hover="textures/buttonhover.png"/>
             </Layout>
-               
+
             <Layout padding="10">
                <Label width="80" height="30" text="AA">
                   <ComboBox x="80" y="0" width="50" height="30" name="aabox"
@@ -158,7 +158,7 @@
                      <Label x="190" y="0" width="50" height="25" name="turnsmoothslidervalue"/>
                   </Slider>
                </Label>
-               
+
                <Label x="0" y="0" width="200" height="25" text="Mouse Speed">
                   <Slider x="0" y="25" width="180" height="30" name="mousespeedslider" min="1" max="1000"
                         normal="textures/buttonnorm.png"
@@ -167,7 +167,7 @@
                      <Label x="190" y="0" width="50" height="25" name="mousespeedslidervalue"/>
                   </Slider>
                </Label>
-               
+
                <Label x="0" y="0" width="200" height="25" text="Weapon Focus">
                   <Slider x="0" y="25" width="180" height="30" name="weaponfocusslider" min="0" max="10000"
                         normal="textures/buttonnorm.png"
@@ -227,10 +227,10 @@
             <ComboBoxItem>So what?</ComboBoxItem>
             <ComboBoxItem>****!</ComboBoxItem>
          </ComboBox>
-         
+
          <LineEdit x="40" y="600" width="120" height="20" text="Some large amount of text that will overflow"/>
-         
-         <ScrollView x="400" y="10" width="100" height="100" 
+
+         <ScrollView x="400" y="10" width="100" height="100"
                      vnormal="textures/buttonnorm.png"
                      hnormal="textures/buttonnorm.png">
             <Button x="10" y="155" width="200" height="50" text="Back" align="center"
@@ -239,32 +239,32 @@
                     pressed="textures/buttonpressed.png"
                     leftclick="showmain"/>
          </ScrollView>
-         
+
          <TextArea x="10" y="100" width="200" height="100" name="testta"
                    normal="textures/buttonnormsquare.png"
                    vnormal="textures/buttonnormsquare.png">
             Some test textarea text.  Don't even need \n characters because it picks them up out of the XML automatically.  Cool:-)
          </TextArea>
-         
+
          <Slider x="10" y="300" width="180" height="30" name="testslider" min="4" max="10" value="5"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
                  hover="textures/buttonhover.png">
             <Label x="180" y="0" width="100" height="30" name="testslidervalue"/>
          </Slider>
-         
+
          <Slider x="300" y="10" width="30" height="180" name="testslidervert" min="4" max="6000" value="5" orientation="vertical"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
                  hover="textures/buttonhover.png">
             <Label x="0" y="180" width="100" height="30" name="testslidervertvalue"/>
          </Slider>
-         
+
          <Button x="10" y="400" width="200" height="40" text="Toggle" name="testtogglebutton" xmargin="3" ymargin="6" align="center" toggle="true"
                  normal="textures/buttonnorm.png"
                  pressed="textures/buttonpressed.png"
                  hover="textures/buttonhover.png"/>
-         
+
          <TabWidget x="300" y="300" width="250" height="300" name="testtw" text="">
             <Tab buttonwidth="100" text="Test Tab"
                  buttonnormal="textures/buttonnorm.png"
@@ -292,7 +292,7 @@
          </TabWidget>
       </Tab>
    </TabWidget>
-   
+
    <Button x="100" y="925" width="200" height="50" text="Save" align="center"
            normal="textures/buttonnorm.png"
            hover="textures/buttonhover.png"
@@ -307,8 +307,8 @@
    </Button>
    <Label x="600" y="925" width="350" height="50" text="Some settings may require a restart" align="center"
           normal="textures/buttonnorm.png"/>
-   
+
    <Label x="250" y="450" width="500" height="50" text="Press key to bind (esc to cancel)" name="bindmessage" visible="false"/>
-   
-   <Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/>
+
+   <!-- Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/ -->
 </GUI>

@@ -11,5 +11,5 @@
                    normal="textures/buttonhover.png"
                    hover="textures/buttonpressed.png"/>
    </Label>
-   <Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/>
+   <!-- Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/ -->
 </GUI>
