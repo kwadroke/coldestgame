@@ -12,7 +12,7 @@ outfile=buildoutput
 
 if [ $# != 1 ]
 then
-   echo "Warning: Will upload full build.  This can take a while."
+   echo "Warning: Will make full build.  This can take a while."
 fi
 
 rm $outfile
@@ -36,16 +36,17 @@ cd build
 echo Running CMake...
 cmake ..
 if [ "$?" != "0" ]; then
- echo 
+ echo
  echo CMAKE FAILED. EXITING.
  exit $?
 fi
 
-echo Running Make ...
+CPUCOUNT=$(grep processor /proc/cpuinfo | wc -l)
+echo Running Make with $CPUCOUNT processors ...
 make clean >> $outfile 2>&1
-make -j3 >> $outfile 2>&1
+make -j$CPUCOUNT >> $outfile 2>&1
 if [ "$?" != "0" ]; then
- echo 
+ echo
  echo MAKE FAILED. EXITING.
  echo
  echo Shwoing last 40 lines of buildoutput...
@@ -90,4 +91,3 @@ if [ "$1" == "upload" ]; then
    echo "Uploading"
    ./uploadbuild.sh linux $1 >> $outfile 2>&1
 fi
-
