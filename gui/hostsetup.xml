@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<GUI virtualw="1000" virtualh="1000" font="fonts/vtcorona.ttf" visible="false"
+s<?xml version="1.0" encoding="UTF-8"?>
+<GUI virtualw="1000" virtualh="1000" font="fonts/xolonium.ttf" visible="false"
      buttonnormal="textures/buttonnorm.png"
      buttonpressed="textures/buttonpressed.png"
      buttonhover="textures/buttonhover.png"
