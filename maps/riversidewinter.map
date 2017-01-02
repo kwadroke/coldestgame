@@ -6,10 +6,10 @@ PathNodeSize 60
 BotCheckDist 1000
 
 LightData
-Direction -1 1 -1
-Diffuse .4 .4 .4 .8
+Direction 1 -1 1
+Diffuse .8 .8 .8 1
 Specular 1 1 1 1
-Ambient .2 .2 .2 .5
+Ambient .4 .4 .4 .5
 
 SkyBox materials/stars
 FogColor .5 .5 .6
@@ -42,7 +42,7 @@ TerrainParams
       SlopeRange 0 0
       RandRange 50 50
       Blend 10
-      
+
 GrassData
    Node
       File grass
