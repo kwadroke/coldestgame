@@ -44,6 +44,7 @@
         <Button width="200" height="40" text="Exit" name="exitbutton" xmargin="3" ymargin="0" align="center" textcolor="fffc"
             leftclick="exit"/>
         </Layout>
+   <Label x="10" y="970" width="300" height="24" normal="textures/url.png"/>
 
    <!-- Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/ -->
 
