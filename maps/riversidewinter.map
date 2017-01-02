@@ -9,7 +9,7 @@ LightData
 Direction 1 -1 1
 Diffuse .8 .8 .8 1
 Specular 1 1 1 1
-Ambient .4 .4 .4 .5
+Ambient .4 .4 .4 1
 
 SkyBox materials/stars
 FogColor .5 .5 .6
