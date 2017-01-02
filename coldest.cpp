@@ -67,17 +67,17 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #endif
 {
    //Debug();
-   
+
    setsighandler();
    initialized = false;
-   
+
    // This function has to be before OutputDiagnosticData because that sets the log path based on this
    CreateAppDir();
    OutputDiagnosticData();
    logout << "Main " << gettid() << endl;
    InitGlobals();
    initialized = true;
-   
+
 #if !defined(_WIN32) || defined(DEDICATED)
    // Ahh, something is wrong here.  I assume this if was to prevent starting the music when editing, but if so it's still
    // not right because it should be coming after the Windows-specific stuff.
@@ -100,7 +100,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
    LoadMaterials();
    InitShaders();
    InitNoise();
-   
+
 #if !defined(DEDICATED)
    if (argc > 1)
    {
@@ -109,21 +109,21 @@ int APIENTRY WinMain(HINSTANCE hInstance,
       return 0;
    }
 #endif
-   
+
    // Start network threads
 #ifndef DEDICATED
    netcode = ClientNetCodePtr(new ClientNetCode());
-   
+
    ShowGUI(updateprogress);
    updater = UpdaterPtr(new Updater());
-   updater->DoUpdate();
+   //updater->DoUpdate();
 #else
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
 #endif
-   
+
    ShowGUI(mainmenu);
-   
+
    MainLoop();
 
    return 0;
@@ -137,7 +137,7 @@ void CreateAppDir()
 #else
    TCHAR szPath[MAX_PATH];
 
-   if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, szPath))) 
+   if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, szPath)))
 {
    // Hmm, this cast might be a bad idea...
    userpath = (char*)szPath;
@@ -148,10 +148,10 @@ void CreateAppDir()
 }
 #endif
    if (userpath.substr(userpath.length() - 1) != "/")
-      userpath += "/.coldest/";
+      userpath += "/.coldestaz/";
    else
-      userpath += ".coldest/";
-   
+      userpath += ".coldestaz/";
+
 #ifndef _WIN32
    if (!boost::filesystem::is_directory(userpath))
       boost::filesystem::create_directory(userpath);
@@ -169,7 +169,7 @@ void OutputDiagnosticData()
 #else
    logout.SetFile(userpath + "server.log");
 #endif
-   logout << "Initializing Coldest\n";
+   logout << "Initializing Coldest Absolute Zero\n";
    logout << "Built on: " << __DATE__ << " at " << __TIME__ << endl;
 #ifdef __GNUC__
    logout << "GCC version: " << __VERSION__ << endl;
@@ -264,7 +264,7 @@ void InitGlobals()
    console.Parse("set record 0", false); // This requires the recorder pointer to have been set
    replayer = ReplayerPtr(new Replayer());
    console.Parse("set replay @none@", false);
-   
+
    // Variables that cannot be set from the console
 #ifndef DEDICATED
    lasttick = SDL_GetTicks();
@@ -279,7 +279,7 @@ void InitGlobals()
    weaponslots.push_back(LArm);
    weaponslots.push_back(RArm);
    meshcache = MeshCachePtr(new MeshCache(resman));
-   
+
 #ifndef DEDICATED
    standardshader = "shaders/standard";
    noiseshader = "shaders/noise";
@@ -304,9 +304,9 @@ void InitGlobals()
    dummy.unit = Nemesis;
    dummy.name = console.GetString("name");
    player.push_back(dummy);
-   
+
    SetupOpenAL();
-   
+
 #ifndef DEDICATED
    // These have to be done here because GL has to be initialized first
    if (console.GetInt("reflectionres") < 1)
@@ -315,7 +315,7 @@ void InitGlobals()
       console.Parse("setsave cloudres 1024", false);
    if (console.GetInt("shadowres") < 1)
       console.Parse("setsave shadowres 1024", false);
-   
+
    InitGUI();
 #endif
    InitUnits();
@@ -351,9 +351,9 @@ void InitGUI()
    gui[serverbrowser] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/serverbrowser.xml"));
    gui[credits] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/credits.xml"));
    gui[updateprogress] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/updateprogress.xml"));
-   gui[hostsetup] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/hostsetup.xml")); 
-   
-   
+   gui[hostsetup] = GUIPtr(new GUI(screenwidth, screenheight, &resman.texman, "gui/hostsetup.xml"));
+
+
    TextArea* consoleout = dynamic_cast<TextArea*>(gui[consolegui]->GetWidget("consoleoutput"));
    console.InitWidget(*consoleout);
    reloadgui = false;
@@ -380,7 +380,7 @@ void InitUnits()
       dummy.maxhp[i] = 200;
    for (short i = 0; i < numunits; ++i)
       units.push_back(dummy);
-   
+
    units[Ultra].file = "ultra";
    units[Omega].file = "omega";
    for (size_t i = 0; i < numunits; ++i)
@@ -407,7 +407,7 @@ void InitUnits()
       for (size_t j = 0; j < numbodyparts; ++j)
          read.Read(units[i].maxhp[j], "HP", j);
    }
-   
+
    // Just while we don't have unique models for each unit
    units[Ultra].scale = units[Nemesis].scale * units[Ultra].size / units[Nemesis].size;
    units[Omega].scale = units[Nemesis].scale * units[Omega].size / units[Nemesis].size;
@@ -425,9 +425,9 @@ void ReadConfig()
 {
    string conffile = userpath + "autoexec.cfg";
    string buffer;
-   
+
    ifstream checkconf(conffile.c_str(), ios_base::in);
-   
+
    if (checkconf.fail())
    {
       checkconf.close();
@@ -436,13 +436,13 @@ void ReadConfig()
    }
 
    ifstream getconf(conffile.c_str(), ios_base::in);
-   
+
    while (!getconf.eof())
    {
       getline(getconf, buffer);
       console.Parse(buffer);
    }
-   
+
    // Populate keybindings
    keys.keyforward = SDLKey(console.GetInt("keyforward"));
    keys.keyback = SDLKey(console.GetInt("keyback"));
@@ -458,10 +458,10 @@ void ReadConfig()
 }
 
 
-void SetupSDL() 
+void SetupSDL()
 {
    const SDL_VideoInfo* video;
-   
+
 #ifndef DEDICATED
    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 #else
@@ -475,21 +475,21 @@ void SetupSDL()
    {
       logout << "SDL Initialized" << endl;
    }
-   
+
    SDL_EnableUNICODE(1);
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-   
+
    atexit(SDL_Quit);
-   
+
 #ifndef DEDICATED
    video = SDL_GetVideoInfo();
-   
-   if (!video) 
+
+   if (!video)
    {
       logout << "Couldn't get video information: " << SDL_GetError() << endl;
       exit(1);
    }
-   
+
    // Set the minimum requirements for the OpenGL window
    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
@@ -497,7 +497,7 @@ void SetupSDL()
    SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-   
+
    // Add antialiasing support
    int aalevel = console.GetInt("aa");
    if (aalevel)
@@ -505,16 +505,16 @@ void SetupSDL()
       SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
       SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, aalevel);
    }
-   
-   /* Note the SDL_DOUBLEBUF flag is not required to enable double 
-   * buffering when setting an OpenGL video mode. 
-   * Double buffering is enabled or disabled using the 
+
+   /* Note the SDL_DOUBLEBUF flag is not required to enable double
+   * buffering when setting an OpenGL video mode.
+   * Double buffering is enabled or disabled using the
    * SDL_GL_DOUBLEBUFFER attribute.
    */
    Uint32 flags = SDL_OPENGL;
    if (console.GetBool("fullscreen"))
       flags |= SDL_FULLSCREEN;
-   if (SDL_SetVideoMode(console.GetInt("screenwidth"), console.GetInt("screenheight"), video->vfmt->BitsPerPixel, flags) == 0 ) 
+   if (SDL_SetVideoMode(console.GetInt("screenwidth"), console.GetInt("screenheight"), video->vfmt->BitsPerPixel, flags) == 0 )
    {
       logout << "Couldn't set video mode: " << SDL_GetError() << endl;
       logout << "Falling back to basic setting" << endl;
@@ -526,13 +526,13 @@ void SetupSDL()
          exit(1);
       }
    }
-   
-   SDL_WM_SetCaption("Coldest", "");
-   
+
+   SDL_WM_SetCaption("Coldest: Absolute Zero", "");
+
    SDL_ShowCursor(1);
    //SDL_WM_GrabInput(SDL_GRAB_ON);
 #endif
-   
+
    if (SDLNet_Init() == -1)
    {
       logout << "SDLNet_Init: " << SDLNet_GetError() << endl;
@@ -542,7 +542,7 @@ void SetupSDL()
    {
       logout << "SDL_net Initialized" << endl;
    }
-   
+
    atexit(SDLNet_Quit);
 }
 
@@ -559,16 +559,16 @@ void SetupOpenGL()
 
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   
+
    gluPerspective(console.GetFloat("fov"), aspect, nearclip, console.GetFloat("viewdist"));
    //glFrustum(-1, 1, -1 / aspect, 1 / aspect, 1, 10000.);
-   
+
    glMatrixMode(GL_MODELVIEW);
 
    resman.texman.Clear();
 
    glClearColor(0.0, 0.0 ,0.0, 0);
-   
+
    // We want z-buffer tests enabled
    glEnable(GL_DEPTH_TEST);
    glEnable(GL_LIGHTING);
@@ -580,7 +580,7 @@ void SetupOpenGL()
    //glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    glDepthFunc(GL_LEQUAL);
-   
+
    glDisable(GL_FOG); // Done by shader anyway
    float viewdist = console.GetFloat("viewdist");
    glFogf(GL_FOG_START, viewdist * .8);
@@ -591,16 +591,16 @@ void SetupOpenGL()
    glDisable(GL_CULL_FACE);
    //glEnable(GL_CULL_FACE);
    //glCullFace(GL_BACK);
-   
+
    // Set the alpha function, then can disable or enable
    glAlphaFunc(GL_GREATER, 0.5);
    glDisable(GL_ALPHA_TEST);
-   
+
    if (console.GetInt("aa"))
       glEnable(GL_MULTISAMPLE);
-   
+
    glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
-   
+
    GLenum err = glewInit();
    if (err != GLEW_OK)
    {
@@ -638,7 +638,7 @@ void SetupOpenGL()
       logout << "We don't have ARB_multitexture.  This is fatal." << endl;
       exit(-8);
    }
-   
+
    noisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
    fastnoisefbo = FBO(noiseres, noiseres, false, &resman.texhand);
    resman.texhand.BindTexture(noisefbo.GetTexture());
@@ -682,30 +682,30 @@ void InitShaders()
    resman.shaderman.SetShadow(console.GetBool("shadows"), console.GetBool("softshadows"));
    resman.shaderman.ReloadAll();
    resman.shaderman.LoadShader(standardshader);
-   
+
    resman.shaderman.LoadShader(noiseshader);
    resman.shaderman.SetUniform1f(noiseshader, "time", SDL_GetTicks());
-   
+
    resman.shaderman.LoadShader(cloudshader);
-   
+
    resman.shaderman.LoadShader(cloudgenshader);
    resman.shaderman.SetUniform1f(cloudgenshader, "noiseres", noiseres);
-   
+
    resman.shaderman.LoadShader(shadowshader);
-   
+
    resman.shaderman.LoadShader(watershader);
-   
+
    resman.shaderman.LoadShader(bumpshader);
-   
+
    resman.shaderman.LoadShader(flatshader);
-   
+
    resman.shaderman.UseShader("none");
 #endif
 }
 
 
 // Sets up textures for noise shader
-/* 
+/*
  * Author: Stefan Gustavson ITN-LiTH (stegu@itn.liu.se) 2004-12-05
  * Simplex indexing functions by Bill Licea-Kane, ATI (bill@ati.com)
  *
@@ -740,10 +740,10 @@ void InitNoise()
                      {1,1,0},{1,-1,0},{-1,1,0},{-1,-1,0}, // 12 cube edges
                      {1,0,-1},{-1,0,-1},{0,-1,1},{0,1,1}}; // 4 more to make 16
    int i,j;
-   
+
    glGenTextures(1, &noisetex); // Generate a unique texture ID
    resman.texhand.BindTexture(noisetex); // Bind the texture to texture unit 0
-   
+
    GLubyte pixels[256 * 256 * 4];
    for (i = 0; i<256; i++)
       for (j = 0; j<256; j++)
@@ -755,7 +755,7 @@ void InitNoise()
          pixels[offset+2] = grad3[value & 0x0F][2] * 64 + 64; // Gradient z
          pixels[offset+3] = value;                     // Permuted index
       }
-   
+
    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
@@ -767,7 +767,7 @@ void MainLoop()
 {
    static bool repeat = true;
    SDL_Event event;
-   while(1) 
+   while(1)
    {
       if (!running)
          Quit();
@@ -791,10 +791,10 @@ void MainLoop()
          servermap->Load();
          serverloadmap = 0;
       }
-      
+
 #ifndef DEDICATED
       // process pending events
-      while(SDL_PollEvent(&event)) 
+      while(SDL_PollEvent(&event))
       {
          if (!GUIEventHandler(event))
          {
@@ -808,13 +808,13 @@ void MainLoop()
             repeat = true;
          }
       }
-      
+
       // Can't do this in the event handler because that is called from within the GUI
       if (reloadgui)
       {
          InitGUI();
       }
-      
+
       // Check for end of game
       if (winningteam)
       {
@@ -826,14 +826,14 @@ void MainLoop()
       replayer->Update();
 
       netcode->Update();
-      
+
       UpdateMeshes();
-      
+
       if (!PrimaryGUIVisible())
          UpdatePlayer();
 
       GUIUpdate();
-      
+
       // This needs to happen between netcode update and player update, or objects added by netcode may end up with bogus collision detection data
       RunUpdates();
 
@@ -876,7 +876,7 @@ void GUIUpdate()
          statupdatecounter = currtick;
       }
    }
-   
+
    if (gui[loadoutmenu]->visible)
    {
       if (spawnschanged)
@@ -941,7 +941,7 @@ void GUIUpdate()
    }
    else
       gui[loadoutmessage]->visible = false;
-   
+
    // Display or hide hit indicator
    GUI* hitind = gui[hud]->GetWidget("hitind");
    if (SDL_GetTicks() - netcode->lasthit < console.GetInt("hitindtime"))
@@ -950,13 +950,13 @@ void GUIUpdate()
    }
    else
       hitind->visible = false;
-   
+
    // Update server fps and bps display
    GUI* servfps = gui[statsdisp]->GetWidget("serverfps");
    servfps->text = "Server FPS: " + ToString(netcode->serverfps);
    GUI* bpslabel = gui[statsdisp]->GetWidget("serverbps");
    bpslabel->text = "Server BPS: " + ToString(netcode->serverbps);
-   
+
    // Show or hide the resume button
    if (gui[mainmenu]->visible)
    {
@@ -966,7 +966,7 @@ void GUIUpdate()
       else
          resumebutton->visible = false;
    }
-   
+
    // For some reason killtable->Clear() is extremely slow (2-5 ms), so we can't do this every
    // time through.  Hence the messageschanged flag.
    // This may no longer be true, but there's no reason to change it now
@@ -974,14 +974,14 @@ void GUIUpdate()
    {
       while (netcode->servermessages.size() > 6)
          netcode->servermessages.pop_front();
-      
+
       Table* messagetable = dynamic_cast<Table*>(gui[hud]->GetWidget("servermessages"));
       messagetable->Clear();
       for (size_t i = 0; i < netcode->servermessages.size(); ++i)
          messagetable->Add(netcode->servermessages[i]);
       netcode->messageschanged = 0;
    }
-   
+
    // Add player indicators to maps
    GUI* minimaplabel = gui[hud]->GetWidget("minimap");
    GUI* loadoutmaplabel = gui[loadoutmenu]->GetWidget("Map");
@@ -990,7 +990,7 @@ void GUIUpdate()
    minimaplabel->ClearChildren();
    loadoutmaplabel->SetTextureID(Normal, minimapfbo.GetTexture());
    loadoutmapplayerslabel->ClearChildren();
-   
+
    for (size_t i = 1; i < player.size(); ++i)
    {
       // Add to in-game minimap
@@ -1011,7 +1011,7 @@ void GUIUpdate()
       playerposlabel->y -= playerposlabel->height / 2.f;
       if (player[i].spawned)
          minimaplabel->Add(playerposlabel);
-      
+
       // Add to loadout screen map
       playerposlabel = GUIPtr(new Button(loadoutmapplayerslabel, &resman.texman));
       if (i == servplayernum)
@@ -1031,7 +1031,7 @@ void GUIUpdate()
       if (player[i].spawned)
          loadoutmapplayerslabel->Add(playerposlabel);
    }
-   
+
    // Check to see if anyone is under our crosshair and display their info
    if (!PrimaryGUIVisible())
    {
@@ -1055,7 +1055,7 @@ void GUIUpdate()
       part.collide = true;
       part.ttl = 100;
       part.lasttick = SDL_GetTicks() - 1; // Ensure that we do a real update, otherwise the update can happen after 0 ticks and the sight is invisible
-      
+
       part.lasttracer = part.pos;
       part.tracer = "models/sight/base";
       part.clientonly = true;
@@ -1191,11 +1191,11 @@ bool GUIEventHandler(SDL_Event &event)
             default:
                break;
          }
-      
+
    };
-   
+
    if (eatevent) return eatevent;
-   
+
    if (gui[consolegui]->visible)
    {
       SDL_ShowCursor(1);
@@ -1207,7 +1207,7 @@ bool GUIEventHandler(SDL_Event &event)
       gui[chat]->ProcessEvent(&event);
       eatevent = true;
    }
-   else if (gui[mainmenu]->visible) 
+   else if (gui[mainmenu]->visible)
    {
       SDL_ShowCursor(1);
       gui[mainmenu]->ProcessEvent(&event);
@@ -1225,13 +1225,13 @@ bool GUIEventHandler(SDL_Event &event)
       gui[settings]->ProcessEvent(&event);
       eatevent = true;
    }
-   else if (gui[serverbrowser]->visible) 
+   else if (gui[serverbrowser]->visible)
    {
       SDL_ShowCursor(1);
       gui[serverbrowser]->ProcessEvent(&event);
       eatevent = true;
    }
-   else if (gui[credits]->visible) 
+   else if (gui[credits]->visible)
    {
       SDL_ShowCursor(1);
       gui[credits]->ProcessEvent(&event);
@@ -1249,7 +1249,7 @@ bool GUIEventHandler(SDL_Event &event)
       gui[hostsetup]->ProcessEvent(&event);
       eatevent = true;
    }
-   
+
    return eatevent;
 #endif
    return false;
@@ -1264,7 +1264,7 @@ void GameEventHandler(SDL_Event &event)
    int screenheight = console.GetInt("screenheight");
    if (!player[servplayernum].powerdowntime)
    {
-      switch(event.type) 
+      switch(event.type)
       {
          case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE)
@@ -1327,7 +1327,7 @@ void GameEventHandler(SDL_Event &event)
                chatoutput->ScrollDown();
             }
             break;
-            
+
          case SDL_KEYUP:
             if (event.key.keysym.sym == keys.keyleft)
             {
@@ -1354,25 +1354,25 @@ void GameEventHandler(SDL_Event &event)
                gui[ingamestatus]->visible = false;
             }
             break;
-            
+
          case SDL_MOUSEMOTION:
-            if ((event.motion.x != screenwidth / 2 || 
+            if ((event.motion.x != screenwidth / 2 ||
                event.motion.y != screenheight / 2) && !gui[consolegui]->visible &&
                (SDL_GetAppState() & SDL_APPINPUTFOCUS))
             {
                float zoomfactor = console.GetFloat("zoomfactor");
                float mousespeed = console.GetFloat("mousespeed") / 100.f;
-               if (!guncam) 
+               if (!guncam)
                   zoomfactor = 1.f;
-               
+
                // If you change these values, don't forget to update the HUD indicator with the new ones
                float minrot = -120.f;
                float maxrot = 120.f;
-               
+
                player[0].pitch += event.motion.yrel / mousespeed / zoomfactor;
                if (player[0].pitch <= -89.99) player[0].pitch = -89.99;
                if (player[0].pitch >= 89.99) player[0].pitch = 89.99;
-               
+
                player[0].rotation += event.motion.xrel / mousespeed / zoomfactor;
                if (player[0].spawned)
                {
@@ -1382,7 +1382,7 @@ void GameEventHandler(SDL_Event &event)
                SDL_WarpMouse(screenwidth / 2, screenheight / 2);
             }
             break;
-            
+
          case SDL_MOUSEBUTTONDOWN:
             if (event.button.button == keys.mousefire)
             {
@@ -1414,7 +1414,7 @@ void GameEventHandler(SDL_Event &event)
             if (event.button.button == keys.mousefire)
                player[0].leftclick = false;
             break;
-            
+
          case SDL_QUIT:
             Quit();
       }
@@ -1443,7 +1443,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
 {
    // In case we run into problems
    Vector3 old = mplayer.pos;
-   
+
    // Calculate how far to move based on time since last frame
    Uint32 currtick = SDL_GetTicks();
    if (!mplayer.lastmovetick)
@@ -1452,9 +1452,9 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
    if (numticks > 50) numticks = 50;
    mplayer.lastmovetick = currtick;
    float step = (float)numticks * (console.GetFloat("movestep") / 1000.);
-   
+
    bool moving = false;
-   
+
    float direction;
    if (mplayer.moveforward)
    {
@@ -1464,7 +1464,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
    {
       direction = -1;
    }
-   
+
    if (mplayer.moveleft)
    {
       mplayer.turnspeed -= step / console.GetFloat("turnsmooth");
@@ -1479,12 +1479,12 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
       moving = true;
    if (!mplayer.moveleft && !mplayer.moveright)
       mplayer.turnspeed = 0;
-   
+
    // Turning
    mplayer.facing += mplayer.turnspeed * step;
    if (mplayer.facing < 0.f) mplayer.facing += 360.f;
    if (mplayer.facing > 360.f) mplayer.facing -= 360.f;
-   
+
    Vector3 d = Vector3(0, 0, 1);
    GraphicMatrix rot;
    if (mplayer.pitch > 89.99)
@@ -1497,7 +1497,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
    if (!console.GetBool("fly") && !mplayer.spectate)
       d.y = 0.f;
    d.normalize();
-   
+
    float oldspeed = mplayer.speed;
    UnitData punit = units[mplayer.unit];
    float maxspeed = punit.maxspeed;
@@ -1538,7 +1538,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          if (mplayer.speed > 0.f) mplayer.speed = 0.f;
       }
    }
-   
+
    if (mplayer.spawned)
    {
       mplayer.pos.x += d.x * step * mplayer.speed;
@@ -1547,7 +1547,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
 
    static const float threshold = .3f;
    static float gravity = .15f;
-   
+
    if (console.GetBool("fly") || (mplayer.spectate && mplayer.spawned))
       mplayer.pos.y += d.y * step * mplayer.speed;
    else
@@ -1556,7 +1556,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
       bool flat = false;
       float movedist = mplayer.pos.distance(old);
       float hillthreshold = .1f * movedist;
-      
+
       Vector3 checkpos = mplayer.pos;
 
       // Vicious hack to deal with problem where short moves would sometimes fail to properly determine whether they
@@ -1569,7 +1569,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          checkpos = old + checkdiff;
          hillthreshold = .05f;
       }
-      
+
       vector<Mesh*> check = GetMeshesWithoutPlayer(&mplayer, ml, kt, old, mplayer.pos, mplayer.size * 2.f * (threshold + hillthreshold + 1.f));
 
       bool downcheck = coldet.CheckSphereHit(checkpos, checkpos, mplayer.size * 2.f + hillthreshold, check, movemap);
@@ -1586,13 +1586,13 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
             flat = true;
          }
       }
-      
+
       Vector3 slopecheckpos = old;
       slopecheckpos.y -= mplayer.size * 2.f + mplayer.size * 2.f * threshold;
-      
+
       bool slopecheck = coldet.CheckSphereHit(old, slopecheckpos, .01f, check, movemap);
       bool groundcheck = coldet.CheckSphereHit(old, old, mplayer.size * 2.05f, check, movemap);
-      
+
       if ((slopecheck && groundcheck) || mplayer.weight < .99f) // They were on the ground
       {
          // Fall damage if wanted (disabled for now)
@@ -1626,7 +1626,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
          mplayer.pos.y -= mplayer.fallvelocity * step;
       }
    }
-   
+
    if (mplayer.weight < 0.f)
    {
       mplayer.weight += step * .01f;
@@ -1636,7 +1636,7 @@ void Move(PlayerData& mplayer, Meshlist& ml, ObjectKDTree& kt, MapPtr movemap)
       mplayer.weight = .02f;
    }
    else mplayer.weight = 1.f;
-   
+
    ValidateMove(mplayer, old, ml, kt, movemap);
 }
 
@@ -1714,7 +1714,7 @@ bool ValidateMove(PlayerData& mplayer, Vector3 old, Meshlist& ml, ObjectKDTree& 
             if ((count > 10) && hit)
                innerdone = true;
          }
-         
+
          ++count;
          if (count > 2)
             slop *= 2.f;
@@ -1777,17 +1777,17 @@ void SynchronizePosition()
    Uint32 currtick = SDL_GetTicks();
    Vector3 smoothserverpos;
    Vector3 smootholdpos;
-   
+
    if (player.size() <= servplayernum || servplayernum <= 0)
       return;
-   
+
    // Smooth out our ping so we don't get jumpy movement
    static deque<Uint32> pings;
    if (player[servplayernum].ping >= 0 && player[servplayernum].ping < 2000)
       pings.push_back(player[servplayernum].ping);
    while (pings.size() > 10)
       pings.pop_front();
-   
+
    int ping = 0;
    for (deque<Uint32>::iterator i = pings.begin(); i != pings.end(); ++i)
       ping += *i;
@@ -1800,7 +1800,7 @@ void SynchronizePosition()
    // Also smooth out positions over a few frames to further reduce jumpiness
    static deque<int> recentoldpos;
    static deque<PlayerData> recentservinfo;
-   
+
    recentservinfo.push_back(player[servplayernum]);
    while (recentservinfo.size() > smoothfactor)
       recentservinfo.pop_front();
@@ -1815,14 +1815,14 @@ void SynchronizePosition()
    {
       temp.tick = currtick;
       temp.pos = player[0].pos;
-   
+
       oldpos.push_back(temp);
    }
-   
+
    int currindex = oldpos.size() / 2;
    int upper = oldpos.size();
    int lower = 0;
-   
+
    while ((oldpos[currindex].tick != currtick - ping) && (upper - lower > 0))
    {
       if (oldpos[currindex].tick < currtick - ping)
@@ -1847,7 +1847,7 @@ void SynchronizePosition()
    for (deque<int>::iterator i = recentoldpos.begin(); i != recentoldpos.end(); ++i)
       smootholdpos += oldpos[*i].pos;
    smootholdpos /= recentoldpos.size();
-   
+
    float difference = smoothserverpos.distance(smootholdpos);
    int tickdiff = abs(int(currtick - ping - oldpos[currindex].tick));
    float pingslop = 0.f;//.3f;
@@ -1857,7 +1857,7 @@ void SynchronizePosition()
    smoothserverpos = player[servplayernum].pos;
    smootholdpos = oldpos[currindex].pos;
    float difference = smoothserverpos.distance(smootholdpos);
-   
+
 #ifndef DEDICATED
    deque<float> diffs;
    float dispdiff = 0.f;
@@ -1870,14 +1870,14 @@ void SynchronizePosition()
    posvariance->text = "Pos Variance: " + ToString(difference);
 #endif
 #endif
-   
+
    Vector3 posadj = smoothserverpos - smootholdpos;
-   
+
 #if SMOOTHPOS
    posadj.normalize();
    posadj *= difference;
 #endif
-   
+
    // Limit the max adjustment to syncmax in general so that we don't get nasty hitching while
    // moving.  The exception is if we're way off in which case some hitching is necessary
    float syncmax = console.GetFloat("syncmax") / 100.f;
@@ -1910,10 +1910,10 @@ void SynchronizePosition()
          i->pos += posadj;
       }
    }
-   
+
    temp.tick = currtick;
    temp.pos = player[0].pos;
-   
+
    oldpos.push_back(temp);
 }
 
@@ -1982,9 +1982,9 @@ void RunUpdates()
       if (k != (size_t)servplayernum)
          UpdatePlayerModel(player[k], meshes);
    }
-   
+
    UpdateMeshes();
-   
+
    // Particles
    vector<ParticleEmitter>::iterator i = emitters.begin();
    while (i != emitters.end())
@@ -2072,13 +2072,13 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
 
    p.mesh[Legs]->Rotate(Vector3(0.f, p.facing, 0.f));
    p.mesh[Legs]->Move(p.pos);
-   
+
    p.mesh[Torso]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
    p.mesh[Torso]->Move(p.pos);
-   
+
    p.mesh[Hips]->Rotate(Vector3(0/*-p.pitch*/, p.facing, p.roll));
    p.mesh[Hips]->Move(p.pos);
-   
+
    if (p.mesh[LArm] == ml.end() && p.hp[LArm] > 0)
    {
       MeshPtr newmesh = meshcache->GetNewMesh("models/" + units[p.unit].file + "/larm");
@@ -2095,19 +2095,19 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
       p.mesh[RArm] = ml.begin();
       p.mesh[RArm]->Scale(units[p.unit].scale);
    }
-   
+
    if (p.mesh[LArm] != ml.end())
    {
       p.mesh[LArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
       p.mesh[LArm]->Move(p.pos);
    }
-   
+
    if (p.mesh[RArm] != ml.end())
    {
       p.mesh[RArm]->Rotate(Vector3(-p.pitch, p.facing + p.rotation, p.roll));
       p.mesh[RArm]->Move(p.pos);
    }
-   
+
    p.size = units[p.unit].size;
 
    for (size_t i = 0; i < numbodyparts; ++i)
@@ -2133,7 +2133,7 @@ void UpdatePlayerModel(PlayerData& p, Meshlist& ml, bool gl)
          }
       }
    }
-   
+
    // Add a particle to enemies to indicate their affiliation
    if (gl) // No reason to do this on the server
    {
@@ -2173,7 +2173,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
       localmap = servermap;
    else
       localmap = currmap;
-   
+
    int updint = console.GetInt("partupdateinterval");
 #ifndef DEDICATED
    if (!HitHandler && partupd >= updint)
@@ -2202,7 +2202,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             j = parts.erase(j);
             continue;
          }
-         
+
          partcheck = false;
          oldpos = j->Update();
          if (j->collide)
@@ -2212,7 +2212,7 @@ void UpdateParticles(list<Particle>& parts, int& partupd, ObjectKDTree& kt, Mesh
             vector<Mesh*> check = GetMeshesWithoutPlayer(&playervec[j->playernum], ml, kt, oldpos, j->pos, j->radius);
             partcheck = coldet.CheckSphereHit(oldpos, j->pos, j->radius, check, localmap, hitpos, hitmesh, NULL, &hitmeshes);
          }
-         
+
          if (!partcheck) // Didn't hit anything
          {
             if (!HitHandler && j->tracer != "" && j->lasttracer.distance2(j->pos) > 10000.f)
@@ -2280,20 +2280,20 @@ float GetTerrainHeight(const float x, const float y)
    if ((x < 0 || x > mapwidth) || y < 0 || y > mapheight) return 0.f;
    int xindex = (int)floor(x / (float)tilesize);
    int yindex = (int)floor(y / (float)tilesize);
-   
+
    float xweight = x / (float)tilesize - xindex;
    xweight = 1 - xweight;
    float yweight = y / (float)tilesize - yindex;
    yweight = 1 - yweight;
-   
+
    float h0 = heightmap[xindex][yindex];
    float h1 = heightmap[xindex + 1][yindex];
    float h2 = heightmap[xindex][yindex + 1];
    float h3 = heightmap[xindex + 1][yindex + 1];
-   
+
    float intermediate = lerp(h0, h1, xweight);
    float intermediate1 = lerp(h2, h3, xweight);
-   
+
    return lerp(intermediate, intermediate1, yweight);
 }
 
@@ -2303,12 +2303,12 @@ void UpdatePlayerList()
 #ifndef DEDICATED
    Table* playerlist = dynamic_cast<Table*>(gui[ingamestatus]->GetWidget("playerlist"));
    Table* lplayerlist = dynamic_cast<Table*>(gui[loadoutmenu]->GetWidget("playerlist"));
-   
+
    playerlist->Clear();
    playerlist->Add("#700Name|Kills|Deaths|Ping");
    lplayerlist->Clear();
    lplayerlist->Add("#700Name|Kills|Deaths|Ping|ID");
-   
+
    string add;
    for (size_t j = 0; j < 3; ++j)
    {
@@ -2398,7 +2398,7 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    float w = weapon.ProjectileWeight();
    float rad = weapon.Radius();
    bool exp = weapon.Explode();
-   
+
    MeshPtr weaponmesh = meshcache->GetNewMesh("models/" + weapon.ModelFile() + "/base");
    Particle part(0, start, dir, vel, acc, w, rad, exp, SDL_GetTicks(), *weaponmesh);
    part.playernum = pnum;
@@ -2406,7 +2406,7 @@ Particle CreateShot(const Weapon& weapon, const Vector3& rots, const Vector3& st
    part.damage = weapon.Damage();
    part.dmgrad = weapon.Splash();
    part.collide = true;
-      
+
    Vector3 rawoffset = offset;
    offset.transform(m);
    part.pos += offset;
@@ -2452,7 +2452,7 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
    }
    particles.push_back(part);
    particles.back().PlaySound(currplayerweapon.Sound(), resman);
-   
+
    if (currplayerweapon.Id() != Weapon::NoWeapon)
       resman.soundman.PlaySound(currplayerweapon.FireSound(), localplayer.pos);
 #endif
@@ -2464,7 +2464,7 @@ void ClientCreateShot(const PlayerData& localplayer, const Weapon& currplayerwea
 void CacheMeshes()
 {
    vector<string> tocache;
-   
+
    tocache.push_back("models/nemesis/legs");
    tocache.push_back("models/nemesis/torso");
    tocache.push_back("models/nemesis/larm");
@@ -2480,11 +2480,11 @@ void CacheMeshes()
    tocache.push_back("models/omega/larm");
    tocache.push_back("models/omega/rarm");
    tocache.push_back("models/omega/hips");
-   
+
    tocache.push_back("models/explosion");
    tocache.push_back("models/spawn");
    tocache.push_back("models/base");
-   
+
    for (size_t i = 0; i < tocache.size(); ++i)
       meshcache->GetNewMesh(tocache[i]);
 }
@@ -2502,7 +2502,7 @@ void UpdatePlayer()
       Move(player[0], meshes, kdtree, currmap);
    }
    PlayerData localplayer = player[0];
-      
+
    // Set position for sound listener
    GraphicMatrix r;
    r.rotatex(-localplayer.pitch);
@@ -2513,24 +2513,24 @@ void UpdatePlayer()
    resman.soundman.SetListenDir(slook);
    resman.soundman.SetListenPos(localplayer.pos);
 #endif
-      
+
    if (!player[0].spectate)
    {
       UpdatePlayerModel(player[0], meshes);
    }
-      
+
    int weaponslot = weaponslots[localplayer.currweapon];
    Weapon& currplayerweapon = localplayer.CurrentWeapon();
    /* We need to add 1000 / netcode->serverfps / 2 to our reload time because it will, on average, take half a server frame for it to get to
       our fire request, so we'll always be that much ahead with our fire requests and that causes us to see things well before
       they actually happen on the server.
-      
+
       Added an extra 10 ms delay to account for rounding errors and any other minor variations in the timing.  Yeah, that's kludgy.
       */
    int reloadadjust = 1000 / 30 + 10;
    if (netcode->serverfps != 0)
       reloadadjust = 1000 / netcode->serverfps / 2 + 10;
-   if (localplayer.leftclick && 
+   if (localplayer.leftclick &&
        (SDL_GetTicks() - localplayer.lastfiretick[weaponslot] >= currplayerweapon.ReloadTime() + reloadadjust) &&
        (currplayerweapon.ammo != 0) && localplayer.hp[weaponslot] > 0 && localplayer.spawned)
    {
@@ -2540,7 +2540,7 @@ void UpdatePlayer()
       player[0].lastfiretick[weaponslot] = SDL_GetTicks();
       if (player[0].weapons[weaponslot].ammo > 0) // Negative ammo value indicates infinite ammo
          player[0].weapons[weaponslot].ammo--;
-         
+
       ClientCreateShot(localplayer, currplayerweapon);
       recorder->AddShot(0, currplayerweapon.Id());
    }
@@ -2663,7 +2663,7 @@ void TakeScreenshot()
    int screenwidth = console.GetInt("screenwidth");
    int screenheight = console.GetInt("screenheight");
    GLubytevec pixels(screenwidth * screenheight * 3);
-   
+
    glReadPixels(0, 0, screenwidth, screenheight, GL_BGR, GL_UNSIGNED_BYTE, &pixels[0]);
    vector<unsigned char> header(12, 0);
    header[2] = 2;
@@ -2673,7 +2673,7 @@ void TakeScreenshot()
    header.push_back(screenheight / 256);
    header.push_back(24);
    header.push_back(0);
-   
+
    int num = 0;
    string filename;
    bool finished = false;
@@ -2725,7 +2725,7 @@ void LoadMap(const string& map)
       gui[loadprogress]->visible = false;
    if (!replayer->Active())
       recorder->SetActive(console.GetBool("record"));
-   
+
    // Visualize the bot paths to aid debugging
    // Note that this may cause you to time out connecting to the server - increase the timeout if that is the case
    bool visualize = false;
@@ -2779,7 +2779,7 @@ void PopulateMapList()
    mapbox->Clear();
    string map = console.GetString("map");
    NTreeReader readmaps("maps/maplist");
-   
+
    for (size_t i = 0; i < readmaps.NumChildren(); ++i)
    {
       const NTreeReader& currmap = readmaps(i);
@@ -2809,13 +2809,13 @@ void SDL_GL_Enter2dMode()
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
-   
+
    glOrtho(0.0, screenwidth, screenheight, 0.0, -100.0, 100.0);
-   
+
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadIdentity();
-   
+
    glColor4f(1, 1, 1, 1);
    glPushAttrib(GL_ENABLE_BIT);
    glEnable(GL_BLEND);
@@ -2834,10 +2834,10 @@ void SDL_GL_Exit2dMode()
 #ifndef DEDICATED
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
-   
+
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
-   
+
    glPopAttrib();
 #endif
 }
@@ -2884,5 +2884,3 @@ void GLError()
    }
 #endif
 }
-
-
