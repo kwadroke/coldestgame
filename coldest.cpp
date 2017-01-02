@@ -961,10 +961,14 @@ void GUIUpdate()
    if (gui[mainmenu]->visible)
    {
       GUI* resumebutton = gui[mainmenu]->GetWidget("resumebutton");
-      if (netcode->Connected())
+      GUI* hostbutton = gui[mainmenu]->GetWidget("hostbutton");
+      if (netcode->Connected()) {
          resumebutton->visible = true;
-      else
+         hostbutton->visible = false;
+      } else {
          resumebutton->visible = false;
+         hostbutton->visible = true;
+      }
    }
 
    // For some reason killtable->Clear() is extremely slow (2-5 ms), so we can't do this every
