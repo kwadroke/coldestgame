@@ -24,18 +24,23 @@
 
    <Label x="400" y="50" width="200" height="50" text="Credits" xmargin="0" ymargin="0" align="center"/>
 
-   <TextArea x="100" y="150" width="800" height="750">Programming, Art, and Game Design: Ben Nemec
+   <TextArea x="100" y="150" width="800" height="750">Original Coldest Programming, Art, and Game Design: Ben Nemec
+
+Coldest: Absolute Zero Programming: Tony Bates (Kwadroke of the Wired)
 
 Music: Pierre Gerwig Langer
 
-Textures: TextureMate (http://www.texturemate.com)
+Textures: Tony Bates
+          TextureMate (http://www.texturemate.com)
           M@dcow (http://blenderartists.org/forum/showthread.php?t=24038)
 
 Sound Effects: sfxr (http://www.drpetter.se/project_sfxr.html)
 
 Fonts: Fonts101 (http://www.fonts101.com)
+       Severin Meyer (http://fontlibrary.org/en/font/xolonium)
 
-Special Thanks To: Antonio Ramires Fernandes
+Special Thanks To: Ben Nemec
+                   Antonio Ramires Fernandes
                    Stefan Gustavson
                    Bill Licea-Kane
                    Tapio Vierros
@@ -44,5 +49,5 @@ Special Thanks To: Antonio Ramires Fernandes
    <Button x="100" y="910" width="200" height="50" text="Main Menu" align="center"
            leftclick="showmain"/>
 
-   <Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/>
+   <!-- Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/ -->
 </GUI>

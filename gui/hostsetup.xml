@@ -22,26 +22,26 @@
      leftclicksound="sounds/click.ogg">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
 
-   <Label x="400" y="50" width="200" height="50" text="Server Setup" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   <Label x="400" y="50" width="200" height="50" text="Server Setup" readonly="true" xmargin="0" ymargin="0" align="center" normal="textures/labelclear.png"/>
 
    <Layout x="300" y="150" orientation="horizontal" padding="5">
-      <Label width="100" height="30" text="Bots"/>
+      <Label width="100" height="30" text="Bots" normal="textures/labelclear.png"/>
       <Slider width="180" height="30" name="botcountslider" min="0" max="16">
-         <Label x="190" y="0" width="50" height="30" name="botcountslidervalue"/>
+         <Label x="190" y="0" width="50" height="30" name="botcountslidervalue" normal="textures/label.png"/>
       </Slider>
    </Layout>
 
    <Layout x="300" y="250" orientation="horizontal" padding="5">
-      <Label width="100" height="30" text="Bot Skill"/>
+      <Label width="100" height="30" text="Bot Skill" normal="textures/labelclear.png"/>
       <Label width="80" height="30" text="Newbie"/>
       <Slider width="180" height="30" name="botskillslider" min="1" max="5" value="3">
-         <Label x="75" y="30" width="30" height="30" name="botskillslidervalue"/>
+         <Label x="75" y="30" width="30" height="30" name="botskillslidervalue" normal="textures/label.png"/>
       </Slider>
-      <Label width="80" height="30" text="Aimbot"/>
+      <Label width="80" height="30" text="Aimbot" normal="textures/label.png"/>
    </Layout>
 
    <Layout x="300" y="350" orientation="horizontal" padding="5">
-      <Label width="100" height="30" text="Map"/>
+      <Label width="100" height="30" text="Map" normal="textures/labelclear.png"/>
       <ComboBox width="200" height="30" name="mapbox"
                 normal="textures/buttonnorm.png"
                 pressed="textures/buttonpressed.png"

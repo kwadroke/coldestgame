@@ -16,7 +16,7 @@
      leftclicksound="sounds/click.ogg">
    <Label x="0" y="0" width="1000" height="1000" normal="textures/menubg.png"/>
 
-   <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center"/>
+   <Label x="400" y="50" width="200" height="50" text="Settings" readonly="true" xmargin="0" ymargin="0" align="center" normal="textures/labelclear.png"/>
 
    <TabWidget x="100" y="110" width="800" height="800" text="">
       <Tab text="Graphics" buttonwidth="120"
@@ -27,43 +27,43 @@
 
          <Layout x="0" y="0" padding="20" xmargin="20" ymargin="20" orientation="horizontal">
             <Layout padding="10">
-               <Label x="0" y="0" width="180" height="30" text="Particles"/>
-               <Label x="0" y="0" width="200" height="25" text="Particle Update Freq">
+               <Label x="0" y="0" width="180" height="30" text="Particles" normal="textures/labelclear.png"/>
+               <Label x="0" y="0" width="200" height="25" text="Particle Update Freq" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="partupdintslider" min="0" max="10">
-                     <Label x="190" y="0" width="50" height="25" name="partupdintslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="partupdintslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
-               <Label x="0" y="0" width="200" height="25" text="Particle Count">
+               <Label x="0" y="0" width="200" height="25" text="Particle Count" normal="textures/labelclear.png" >
                   <Slider x="0" y="25" width="180" height="30" name="partcountslider" min="0" max="10000">
-                     <Label x="190" y="0" width="50" height="25" name="partcountslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="partcountslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
             </Layout>
 
             <Layout padding="10">
-               <Label x="0" y="0" width="180" height="30" text="View Distances"/>
-               <Label x="0" y="0" width="200" height="25" text="Max Draw">
+               <Label x="0" y="0" width="180" height="30" text="View Distances" normal="textures/labelclear.png"/>
+               <Label x="0" y="0" width="200" height="25" text="Max Draw" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="viewdistslider" min="100" max="20000">
-                     <Label x="190" y="0" width="50" height="25" name="viewdistslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="viewdistslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
-               <Label x="0" y="0" width="200" height="25" text="Impostor Multiplier">
+               <Label x="0" y="0" width="200" height="25" text="Impostor Multiplier" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="impdistslider" min="1" max="100">
-                     <Label x="190" y="0" width="50" height="25" name="impdistslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="impdistslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
             </Layout>
 
             <Layout padding="10">
-               <Label x="0" y="0" width="180" height="30" text="Grass"/>
-               <Label x="0" y="0" width="200" height="25" text="Grass Density">
+               <Label x="0" y="0" width="180" height="30" text="Grass" normal="textures/labelclear.png"/>
+               <Label x="0" y="0" width="200" height="25" text="Grass Density" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="grassdensityslider" min="0" max="100">
-                     <Label x="190" y="0" width="50" height="25" name="grassdensityslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="grassdensityslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
-               <Label x="0" y="0" width="200" height="25" text="Grass Distance">
+               <Label x="0" y="0" width="200" height="25" text="Grass Distance" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="grassdistslider" min="0" max="20000">
-                     <Label x="190" y="0" width="50" height="25" name="grassdistslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="grassdistslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
             </Layout>
@@ -71,11 +71,11 @@
 
          <Layout x="10" y="400" padding="10" xmargin="10" orientation="horizontal">
             <Layout padding="10">
-               <Label x="0" y="0" width="180" height="30" text="Rendering"/>
+               <Label x="0" y="0" width="180" height="30" text="Rendering" normal="textures/labelclear.png" />
                <ComboBox x="0" y="50" width="180" height="30" name="resolutionbox"
-                        normal="textures/buttonnorm.png"
-                        pressed="textures/buttonpressed.png"
-                        hover="textures/buttonhover.png"/>
+                           normal="textures/dropnorm.png"
+                           pressed="textures/droppressed.png"
+                           hover="textures/drophover.png"/>
                <Button x="0" y="100" width="180" height="30" text="Fullscreen" toggle="true" name="fullscreenbutton"
                      normal="textures/buttonnorm.png"
                      pressed="textures/buttonpressed.png"
@@ -95,11 +95,11 @@
             </Layout>
 
             <Layout padding="10">
-               <Label width="80" height="30" text="AA">
+               <Label width="80" height="30" text="AA" normal="textures/labelclear.png">
                   <ComboBox x="80" y="0" width="50" height="30" name="aabox"
-                           normal="textures/buttonnorm.png"
-                           pressed="textures/buttonpressed.png"
-                           hover="textures/buttonhover.png">
+                           normal="textures/dropnorm.png"
+                           pressed="textures/droppressed.png"
+                           hover="textures/drophover.png">
                      <ComboBoxItem>0</ComboBoxItem>
                      <ComboBoxItem>2</ComboBoxItem>
                      <ComboBoxItem>4</ComboBoxItem>
@@ -107,11 +107,11 @@
                      <ComboBoxItem>16</ComboBoxItem>
                   </ComboBox>
                </Label>
-               <Label width="80" height="30" text="AF">
+               <Label width="80" height="30" text="AF" normal="textures/labelclear.png">
                   <ComboBox x="80" y="0" width="50" height="30" name="afbox"
-                           normal="textures/buttonnorm.png"
-                           pressed="textures/buttonpressed.png"
-                           hover="textures/buttonhover.png">
+                           normal="textures/dropnorm.png"
+                           pressed="textures/droppressed.png"
+                           hover="textures/drophover.png">
                      <ComboBoxItem>1</ComboBoxItem>
                      <ComboBoxItem>2</ComboBoxItem>
                      <ComboBoxItem>4</ComboBoxItem>
@@ -128,16 +128,16 @@
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
          <Layout x="0" y="0" padding="10" xmargin="20" ymargin="20">
-            <Label x="0" y="0" width="180" height="30" text="Volume"/>
+            <Label x="0" y="0" width="180" height="30" text="Volume" normal="textures/labelclear.png"/>
             <Layout x="0" y="0" padding="10">
-               <Label width="200" height="25" text="Music">
+               <Label width="200" height="25" text="Music" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="musicvolslider" min="0" max="100">
-                     <Label x="190" y="0" width="50" height="25" name="musicvolslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="musicvolslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
-               <Label width="200" height="25" text="Effects">
+               <Label width="200" height="25" text="Effects" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="effectsvolslider" min="0" max="100">
-                     <Label x="190" y="0" width="50" height="25" name="effectsvolslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="effectsvolslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
             </Layout>
@@ -150,62 +150,62 @@
            normal="textures/buttonnormsquare.png">
          <Layout x="0" y="0" padding="20" xmargin="20" ymargin="20">
             <Layout x="10" y="10" padding="10">
-               <Label x="0" y="0" width="200" height="25" text="Turn Smoothing">
+               <Label x="0" y="0" width="200" height="25" text="Turn Smoothing" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="turnsmoothslider" min="1" max="100"
                         normal="textures/buttonnorm.png"
                         pressed="textures/buttonpressed.png"
                         hover="textures/buttonhover.png">
-                     <Label x="190" y="0" width="50" height="25" name="turnsmoothslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="turnsmoothslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
 
-               <Label x="0" y="0" width="200" height="25" text="Mouse Speed">
+               <Label x="0" y="0" width="200" height="25" text="Mouse Speed" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="mousespeedslider" min="1" max="1000"
                         normal="textures/buttonnorm.png"
                         pressed="textures/buttonpressed.png"
                         hover="textures/buttonhover.png">
-                     <Label x="190" y="0" width="50" height="25" name="mousespeedslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="mousespeedslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
 
-               <Label x="0" y="0" width="200" height="25" text="Weapon Focus">
+               <Label x="0" y="0" width="200" height="25" text="Weapon Focus" normal="textures/labelclear.png">
                   <Slider x="0" y="25" width="180" height="30" name="weaponfocusslider" min="0" max="10000"
                         normal="textures/buttonnorm.png"
                         pressed="textures/buttonpressed.png"
                         hover="textures/buttonhover.png">
-                     <Label x="190" y="0" width="50" height="25" name="weaponfocusslidervalue"/>
+                     <Label x="190" y="0" width="50" height="25" name="weaponfocusslidervalue" normal="textures/label.png"/>
                   </Slider>
                </Label>
             </Layout>
             <Layout x="10" y="220" padding="10">
-               <Label x="0" y="0" width="300" height="30" text="Key Bindings"/>
-               <Label x="0" y="0" width="300" height="30" text="Forward">
+               <Label x="0" y="0" width="300" height="30" text="Key Bindings" normal="textures/labelclear.png"/>
+               <Label x="0" y="0" width="300" height="30" text="Forward" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="forwardbutton" leftclick="bindforward"/>
                </Label>
-               <Label x="0" y="0" width="300" height="30" text="Back">
+               <Label x="0" y="0" width="300" height="30" text="Back" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="backbutton" leftclick="bindback"/>
                </Label>
-               <Label x="0" y="0" width="300" height="30" text="Left">
+               <Label x="0" y="0" width="300" height="30" text="Left" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="leftbutton" leftclick="bindleft"/>
                </Label>
-               <Label x="0" y="0" width="300" height="30" text="Right">
+               <Label x="0" y="0" width="300" height="30" text="Right" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="rightbutton" leftclick="bindright"/>
                </Label>
-               <Label x="0" y="0" width="300" height="30" text="Loadout">
+               <Label x="0" y="0" width="300" height="30" text="Loadout" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="loadoutbutton" leftclick="bindloadout"/>
                </Label>
-               <Label width="300" height="30" text="Use Item">
+               <Label width="300" height="30" text="Use Item" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="useitembutton" leftclick="binduseitem"/>
                </Label>
             </Layout>
          </Layout>
       </Tab>
       <Tab text="Game" buttonwidth="100">
-         <Label x="10" y="30" width="100" height="30" text="Name"/>
+         <Label x="10" y="30" width="100" height="30" text="Name" normal="textures/labelclear.png"/>
          <LineEdit x="110" y="30" width="200" height="30" name="nameedit"
-                   normal="textures/buttonnorm.png"
-                   pressed="textures/buttonpressed.png"
-                   hover="textures/buttonhover.png"/>
+           normal="textures/textentry.png"
+           pressed="textures/textentrypressed.png"
+           hover="textures/textentryhover.png"/>
       </Tab>
       <Tab text="Test" buttonwidth="100"
            buttonnormal="textures/buttonnorm.png"
@@ -213,7 +213,9 @@
            buttonhover="textures/buttonhover.png"
            normal="textures/buttonnormsquare.png">
          <ComboBox x="40" y="500" width="120" height="20" name="testcb" text="Test"
-                   normal="textures/buttonnorm.png">
+			normal="textures/dropnorm.png"
+                        pressed="textures/droppressed.png"
+                        hover="textures/drophover.png">
             <ComboBoxItem>Test</ComboBoxItem>
             <ComboBoxItem>They have weapons</ComboBoxItem>
             <ComboBoxItem>So what?</ComboBoxItem>
@@ -306,7 +308,7 @@
            leftclick="showmain">
    </Button>
    <Label x="600" y="925" width="350" height="50" text="Some settings may require a restart" align="center"
-          normal="textures/buttonnorm.png"/>
+          normal="textures/labelclear.png"/>
 
    <Label x="250" y="450" width="500" height="50" text="Press key to bind (esc to cancel)" name="bindmessage" visible="false"/>
 
