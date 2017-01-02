@@ -1,12 +1,14 @@
 oneway
-   Players 4 32
+   Players 4 16
 tears
-   Players 2 32
+   Players 2 16
 riverside
-   Players 2 32
+   Players 2 16
+riversidewinter
+   Players 2 16
 craters
-   Players 2 32
+   Players 2 16
 test
-   Players 2 32
+   Players 2 16
 diamond
    Player 2 16
