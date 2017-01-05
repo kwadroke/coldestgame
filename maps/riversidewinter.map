@@ -6,7 +6,7 @@ PathNodeSize 60
 BotCheckDist 1000
 
 LightData
-Direction 1 -1 1
+Direction -1 1 -1
 Diffuse .8 .8 .8 1
 Specular 1 1 1 1
 Ambient .4 .4 .4 1
