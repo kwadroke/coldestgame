@@ -197,6 +197,9 @@
                <Label width="300" height="30" text="Use Item" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="useitembutton" leftclick="binduseitem"/>
                </Label>
+               <Label width="300" height="30" text="Toggle View" normal="textures/labelclear.png">
+                  <Button x="300" y="0" width="30" height="30" name="changeviewbutton" leftclick="bindchangeview"/>
+               </Label>
             </Layout>
          </Layout>
       </Tab>

@@ -254,12 +254,12 @@ void InitGlobals()
    console.Parse("set keyright " + ToString(SDLK_d), false);
    console.Parse("set keyloadout " + ToString(SDLK_l), false);
    console.Parse("set keyuseitem " + ToString(SDLK_u), false);
+   console.Parse("set keychangeview " + ToString(SDLK_r), false);
    console.Parse("set mousefire " + ToString(SDL_BUTTON_LEFT), false);
    console.Parse("set mousezoom " + ToString(SDL_BUTTON_RIGHT), false);
    console.Parse("set mouseuse " + ToString(SDL_BUTTON_MIDDLE), false);
    console.Parse("set mousenextweap " + ToString(SDL_BUTTON_WHEELDOWN), false);
    console.Parse("set mouseprevweap " + ToString(SDL_BUTTON_WHEELUP), false);
-
    recorder = RecorderPtr(new Recorder());
    console.Parse("set record 0", false); // This requires the recorder pointer to have been set
    replayer = ReplayerPtr(new Replayer());
@@ -450,6 +450,7 @@ void ReadConfig()
    keys.keyright = SDLKey(console.GetInt("keyright"));
    keys.keyloadout = SDLKey(console.GetInt("keyloadout"));
    keys.keyuseitem = SDLKey(console.GetInt("keyuseitem"));
+   keys.keychangeview = SDLKey(console.GetInt("keychangeview"));
    keys.mousefire = console.GetInt("mousefire");
    keys.mousezoom = console.GetInt("mousezoom");
    keys.mouseuse = console.GetInt("mouseuse");
@@ -1307,6 +1308,13 @@ void GameEventHandler(SDL_Event &event)
             else if (event.key.keysym.sym == keys.keyuseitem)
             {
                netcode->UseItem();
+            }
+            else if (event.key.keysym.sym == keys.keychangeview)
+            {
+              if (player[0].spectate)
+                 SpectatePrev();
+              else
+                 guncam = !guncam;
             }
             else if (event.key.keysym.sym == SDLK_LSHIFT)
             {

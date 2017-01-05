@@ -51,7 +51,8 @@ void UpdateSettings()
    GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
    GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
    GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
-   
+   GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");
+
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
    viewdistslider->value = console.GetInt("viewdist");
@@ -74,7 +75,8 @@ void UpdateSettings()
    rightbutton->text = SDL_GetKeyName(keys.keyright);
    loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
    useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
-   
+   changeviewbutton->text = SDL_GetKeyName(keys.keychangeview);
+
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");
    if (aa == 0)
@@ -98,7 +100,7 @@ void UpdateSettings()
       afbox->Select(3);
    else if (af == 16)
       afbox->Select(4);
-   
+
    // List available resolutions
    Uint32 flags = SDL_OPENGL | SDL_FULLSCREEN;
    SDL_Rect** modes = SDL_ListModes(NULL, flags);
@@ -143,9 +145,9 @@ void SaveSettings()
    LineEdit* nameedit = dynamic_cast<LineEdit*>(gui[settings]->GetWidget("nameedit"));
    Slider* musicvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("musicvolslider"));
    Slider* effectsvolslider = dynamic_cast<Slider*>(gui[settings]->GetWidget("effectsvolslider"));
-   
+
    bool dorestart = false;
-   
+
    console.Parse("setsave partupdint " + ToString(partupdintslider->value), false);
    // Not implemented yet
    //console.Parse("set partcount " + ToString(partcountslider->value), false);
@@ -170,7 +172,7 @@ void SaveSettings()
    resman.soundman.SetVolume(effectsvolslider->value);
    console.Parse("setsave musicvol " + ToString(musicvolslider->value), false);
    musicsource->SetGain(musicvolslider->value / 100.f);
-   
+
    stringstream selectedres(resolutionbox->SelectedText());
    int newwidth, newheight;
    selectedres >> newwidth;
@@ -188,12 +190,13 @@ void SaveSettings()
    console.Parse("setsave keyright " + ToString(keys.keyright), false);
    console.Parse("setsave keyloadout " + ToString(keys.keyloadout), true);
    console.Parse("setsave keyuseitem " + ToString(keys.keyuseitem), false);
+   console.Parse("setsave keychangeview " + ToString(keys.keychangeview), false);
    console.Parse("setsave mousefire " + ToString((int)keys.mousefire), false);
    console.Parse("setsave mousezoom " + ToString((int)keys.mousezoom), false);
    console.Parse("setsave mouseuse " + ToString((int)keys.mouseuse), false);
    console.Parse("setsave mousenextweap " + ToString((int)keys.mousenextweap), false);
    console.Parse("setsave mouseprevweap " + ToString((int)keys.mouseprevweap), false);
-   
+
    if (dorestart)
    {
       console.Parse("restartgl");

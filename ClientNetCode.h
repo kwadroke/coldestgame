@@ -46,6 +46,7 @@ class ClientNetCode : public NetCode
       void SendChat(const string&, const bool);
       void ChangeTeam(const int);
       void UseItem();
+      void ChangeView();      
       void SendKill();
       void SendSync();
       void SendLoadout();
@@ -105,7 +106,7 @@ class ClientNetCode : public NetCode
       bool annlisten;
 
       int currversion;  // The version we get from the master server
-      
+
       set<ServerInfo> knownservers;
       set<unsigned long> partids;
       set<unsigned long> itemsreceived;

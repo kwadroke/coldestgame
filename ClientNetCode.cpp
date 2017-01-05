@@ -44,13 +44,13 @@ ClientNetCode::ClientNetCode() : serverfps(0),
       logout << "Announce port SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       annlisten = false;
    }
-   
+
    if (!(socket = SDLNet_UDP_Open(0)))  // Use any open port
    {
       logout << "SDLNet_UDP_Open: " << SDLNet_GetError() << endl;
       error = true;
    }
-   
+
    SendMasterListRequest();
 }
 
@@ -95,7 +95,7 @@ void ClientNetCode::Send()
 string ClientNetCode::FillUpdatePacket()
 {
    stringstream temp;
-   
+
    temp << "U" << eol;
    temp << sendpacketnum << eol;
    temp << player[0].pos.x << eol;
@@ -114,7 +114,7 @@ string ClientNetCode::FillUpdatePacket()
    temp << player[0].run << eol;
    temp << player[0].unit << eol;
    temp << player[0].currweapon << eol;
-   
+
    // Quick and dirty checksumming
    unsigned long value = 0;
    for (size_t i = 0; i < temp.str().length(); ++i)
@@ -141,7 +141,7 @@ void ClientNetCode::Connect()
    {
       hostname = "Failed"; // This is no big deal as long as it doesn't happen to two people from the same public IP
    }
-   
+
    SDLNet_ResolveHost(&address, console.GetString("serveraddr").c_str(), console.GetInt("serverport"));
    Packet p(&address);
    p.ack = sendpacketnum;
@@ -173,7 +173,7 @@ void ClientNetCode::SpawnRequest()
    p << availablespawns[sel].position.x << eol;
    p << availablespawns[sel].position.y << eol;
    p << availablespawns[sel].position.z << eol;
-   
+
    SendPacket(p);
 }
 
@@ -211,6 +211,16 @@ void ClientNetCode::UseItem()
    SendPacket(p);
 }
 
+void ClientNetCode::ChangeView()
+{
+   /*
+   Packet p(&address);
+   p.ack = sendpacketnum;
+   p << "I\n";
+   p << p.ack << eol;
+   SendPacket(p);
+   */
+}
 
 void ClientNetCode::SendKill()
 {
@@ -330,7 +340,7 @@ void ClientNetCode::ReceiveExtended()
       {
          getdata = (char*)packet->data;
          stringstream get(getdata);
-         
+
          get >> anntype;
          get >> packetnum;
          if (anntype == "a")
@@ -414,7 +424,7 @@ void ClientNetCode::ReadUpdate(stringstream& get)
       long oppnum = 0;
       float oppx, oppy, oppz;
       float opprot, opppitch, opproll, oppfacing;
-      
+
       get >> oppnum;
       while (oppnum != 0)
       {
@@ -447,15 +457,15 @@ void ClientNetCode::ReadUpdate(stringstream& get)
             get >> player[oppnum].moveright;
             get >> player[oppnum].speed;
             get >> player[oppnum].powerdowntime;
-            
+
             player[oppnum].pos.x = oppx;
             player[oppnum].pos.y = oppy;
             player[oppnum].pos.z = oppz;
-            
+
          }
          get >> oppnum;
       }
-      
+
       // Freak out if we get a packet whose checksum isn't right
       size_t value = 0;
       string debug = get.str();
@@ -475,7 +485,7 @@ void ClientNetCode::ReadUpdate(stringstream& get)
          logout << checksum << endl << value << endl << dummy << endl;
          logout << debug << endl;
       }
-      
+
       // Indicate to main thread that models for unspawned players need to be removed
       bool addemitter;
       for (vector<PlayerData>::iterator i = player.begin(); i != player.end(); ++i)
@@ -505,7 +515,7 @@ void ClientNetCode::ReadUpdate(stringstream& get)
             }
          }
       }
-      
+
       // Adjust our position toward where the server thinks we are
       if (console.GetBool("serversync") && !player[0].spectate && player[0].spawned)
          SynchronizePosition();
@@ -518,7 +528,7 @@ void ClientNetCode::ReadOccUpdate(stringstream& get)
    if (packetnum > recpacketnum)
    {
       long oppnum = 0;
-      
+
       long temp;
       get >> temp;
       serverfps = temp;
@@ -620,7 +630,7 @@ void ClientNetCode::ReadPing(stringstream& get)
 void ClientNetCode::ReadShot(stringstream& get)
 {
    unsigned long id, weapid;
-   
+
    get >> id;
    if (partids.find(id) == partids.end())
    {
@@ -646,11 +656,11 @@ void ClientNetCode::ReadHit(stringstream& get)
       hitsreceived.insert(id);
       get >> hitpos.x >> hitpos.y >> hitpos.z;
       get >> type;
-      
+
       AddHit(hitpos, type);
       recorder->AddHit(hitpos, type);
    }
-   
+
 }
 
 
@@ -693,7 +703,7 @@ void ClientNetCode::ReadSpawnRequest(stringstream& get)
    get >> accepted;
    get >> acknum;
    get >> newpos.x >> newpos.y >> newpos.z;
-   
+
    if (gui[loadoutmenu]->visible)
    {
       if (accepted)
@@ -758,7 +768,7 @@ void ClientNetCode::ReadTeamChange(stringstream& get)
       {
          logout << "Joined team " << newteam << endl;
          player[0].team = newteam;
-         
+
          teamspawns.clear();
          bool morespawns;
          SpawnPointData read;
@@ -771,7 +781,7 @@ void ClientNetCode::ReadTeamChange(stringstream& get)
          }
          spawnschanged = true;
       }
-      
+
       Button* team1button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team1"));
       Button* team2button = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Team2"));
       Button* specbutton = dynamic_cast<Button*>(gui[loadoutmenu]->GetWidget("Spectate"));
@@ -818,7 +828,7 @@ void ClientNetCode::ReadDeath(stringstream& get)
       killsreceived.insert(packetnum);
       size_t killed, killer;
       get >> killed >> killer;
-      
+
       if (killed == servplayernum)
       {
          player[0].weight = -1.f;
@@ -843,7 +853,7 @@ void ClientNetCode::ReadItem(stringstream& get)
    get >> id;
    get >> itempos.x >> itempos.y >> itempos.z;
    get >> team;
-   
+
    if (itemsreceived.find(id) == itemsreceived.end())
    {
       Item newitem(type, meshes);
@@ -925,10 +935,10 @@ void ClientNetCode::ReadRemovePart(stringstream& get)
    size_t num, part;
    get >> num;
    get >> part;
-   
+
    if (num == servplayernum)
       num = 0;
-   
+
    DeleteMesh(player[num].mesh[part]);
    player[num].mesh[part] = meshes.end();
    player[num].hp[part] = 0;
@@ -976,4 +986,3 @@ void ClientNetCode::ReadVersion(stringstream& get)
    pack << packetnum << eol;
    SendPacket(pack);
 }
-

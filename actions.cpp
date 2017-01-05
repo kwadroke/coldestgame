@@ -46,7 +46,7 @@ void UpdateUnitSelection()
    ComboBox* larmbox = (ComboBox*)gui[loadoutmenu]->GetWidget("Left Arm");
    ComboBox* rarmbox = (ComboBox*)gui[loadoutmenu]->GetWidget("Right Arm");
    ComboBox* itembox = (ComboBox*)gui[loadoutmenu]->GetWidget("Item");
-   
+
    player[0].unit = unitbox->Selected();
    int weapid;
    weapid = torsobox->Selected();
@@ -62,10 +62,10 @@ void UpdateUnitSelection()
    itemtype = itembox->Selected();
    if (itemtype >= 0 && itemtype < Item::numitems)
       player[0].item = Item(itemtype, meshes);
-   
+
    for (size_t i = 0; i < numbodyparts; ++i)
       player[0].weapons[i].ammo = int(float(player[0].weapons[i].ammo) * player[0].item.AmmoMult());
-   
+
    // Calculate weight
    int maxweight = units[player[0].unit].weight;
    int totalweight = 0;
@@ -73,12 +73,12 @@ void UpdateUnitSelection()
       totalweight += player[0].weapons[i].Weight();
    totalweight += player[0].item.Weight();
    int sweight = CalculatePlayerWeight(player[0]);
-   
+
    GUI* weightbox = gui[loadoutmenu]->GetWidget("Weight");
    GUI* spawnbutton = gui[loadoutmenu]->GetWidget("Spawn");
    ComboBox* spawnbox = dynamic_cast<ComboBox*>(gui[loadoutmenu]->GetWidget("SpawnPoints"));
    GUI* salvagebox = gui[loadoutmenu]->GetWidget("Salvage");
-   
+
    // Handle invalid configurations
    string weightcolor = "#999";
    string salvagecolor = "#999";
@@ -91,7 +91,7 @@ void UpdateUnitSelection()
          salvagecolor = "#900";
    }
    else spawnbutton->visible = true;
-   
+
    weightbox->text = weightcolor + ToString(totalweight) + "/" + ToString(maxweight) + " tons";
    salvagebox->text = salvagecolor + ToString(player[0].salvage - sweight) + " tons";
 }
@@ -155,7 +155,7 @@ void ShowHostSetup()
 {
    if (server)
       return;
-   
+
    PopulateMapList();
    ShowGUI(hostsetup);
 }
@@ -165,14 +165,14 @@ void Host()
 {
    if (server) // Starting two servers == BAD
       return;
-   
+
    Slider* botcountslider = dynamic_cast<Slider*>(gui[hostsetup]->GetWidget("botcountslider"));
    Slider* botskillslider = dynamic_cast<Slider*>(gui[hostsetup]->GetWidget("botskillslider"));
    ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
    console.Parse("set bots " + ToString(botcountslider->value));
    console.Parse("set botskill " + ToString(botskillslider->value));
    console.Parse("set map " + ToString(mapbox->SelectedText()));
-   
+
    server = true;
    serverthread = SDL_CreateThread(Server, NULL);
    console.Parse("set serveraddr localhost", false);
@@ -306,19 +306,21 @@ void DoBind(SDLKey& key)
       key = event.key.keysym.sym;
 
    message->visible = false;
-   
+
    GUI* forwardbutton = gui[settings]->GetWidget("forwardbutton");
    GUI* backbutton = gui[settings]->GetWidget("backbutton");
    GUI* leftbutton = gui[settings]->GetWidget("leftbutton");
    GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
    GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
    GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
+   GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");   
    forwardbutton->text = SDL_GetKeyName(keys.keyforward);
    backbutton->text = SDL_GetKeyName(keys.keyback);
    leftbutton->text = SDL_GetKeyName(keys.keyleft);
    rightbutton->text = SDL_GetKeyName(keys.keyright);
    loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
    useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
+   changeviewbutton->text = SDL_GetKeyName(keys.keychangeview);
 }
 
 void BindForward()
@@ -351,6 +353,10 @@ void BindUseItem()
    DoBind(keys.keyuseitem);
 }
 
+void BindChangeView()
+{
+   DoBind(keys.keychangeview);
+}
 
 // Stick this outside of GUI so we don't have to update the class every time we add an action
 void Action(const string& action)
@@ -415,6 +421,8 @@ void Action(const string& action)
       BindLoadout();
    else if (action == "binduseitem")
       BindUseItem();
+   else if (action == "bindchangeview")
+      BindChangeView();
    else if (action == "refreshservers")
       RefreshServers();
    else if (action == "cancelupdate")
