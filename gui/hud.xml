@@ -21,6 +21,7 @@
            normal="textures/hud/monitor.png"/>
     <Label x="795" y="780" width="200" height="215" text="" name="bmonitor3"
             normal="textures/hud/monitor.png"/>
+
   </Label>
 
   <!-- Status -->
@@ -66,10 +67,12 @@
    <Table x="10" y="13" width="205" height="135" name="servermessages" columns="1" colwidths="300" rowheight="20"/>
 
    <!-- Map -->
-   <Label x="404" y="697" width="194" height="288" text="" name="minimapback"
+   <Label x="0" y="0" width="1000" height="1000" text="" name="hudmap">
+     <Label x="404" y="697" width="194" height="288" text="" name="minimapback"
           normal="textures/black.png"/>
-   <Label x="404" y="697" width="194" height="288" text="" name="minimap"/>
-   <Label x="404" y="697" width="194" height="288" text="" name="minimapoverlay"/>
+     <Label x="404" y="697" width="194" height="288" text="" name="minimap"/>
+     <Label x="404" y="697" width="194" height="288" text="" name="minimapoverlay"/>
+   </Label>
 
    <!-- Hit indicator-->
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"

@@ -1093,6 +1093,8 @@ void GUIUpdate()
 
       GUI* reticle = gui[hud]->GetWidget("reticle");
       GUI* cockpit = gui[hud]->GetWidget("cockpit");
+      GUI* hudmap = gui[hud]->GetWidget("hudmap");
+
       if (!reticle)
       {
          logout << "Error getting reticle widget" << endl;
@@ -1103,11 +1105,13 @@ void GUIUpdate()
          {
             reticle->visible = false;
             cockpit->visible = false;
+            hudmap->visible = false;
          }
          else
          {
             reticle->visible = true;
             cockpit->visible = true;
+            hudmap->visible = true;
          }
       }
    }
