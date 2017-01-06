@@ -313,7 +313,8 @@ void DoBind(SDLKey& key)
    GUI* rightbutton = gui[settings]->GetWidget("rightbutton");
    GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
    GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
-   GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");   
+   GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");
+   GUI* powerbutton = gui[settings]->GetWidget("powerbutton");
    forwardbutton->text = SDL_GetKeyName(keys.keyforward);
    backbutton->text = SDL_GetKeyName(keys.keyback);
    leftbutton->text = SDL_GetKeyName(keys.keyleft);
@@ -321,6 +322,7 @@ void DoBind(SDLKey& key)
    loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
    useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
    changeviewbutton->text = SDL_GetKeyName(keys.keychangeview);
+   powerbutton->text = SDL_GetKeyName(keys.keypower);
 }
 
 void BindForward()
@@ -357,7 +359,10 @@ void BindChangeView()
 {
    DoBind(keys.keychangeview);
 }
-
+void BindPower()
+{
+   DoBind(keys.keypower);
+}
 // Stick this outside of GUI so we don't have to update the class every time we add an action
 void Action(const string& action)
 {
@@ -423,6 +428,8 @@ void Action(const string& action)
       BindUseItem();
    else if (action == "bindchangeview")
       BindChangeView();
+   else if (action == "bindpower")
+         BindPower();
    else if (action == "refreshservers")
       RefreshServers();
    else if (action == "cancelupdate")

@@ -200,6 +200,9 @@
                <Label width="300" height="30" text="Toggle View" normal="textures/labelclear.png">
                   <Button x="300" y="0" width="30" height="30" name="changeviewbutton" leftclick="bindchangeview"/>
                </Label>
+               <Label width="300" height="30" text="Power On/Off" normal="textures/labelclear.png">
+                  <Button x="300" y="0" width="30" height="30" name="powerbutton" leftclick="bindpower"/>
+               </Label>
             </Layout>
          </Layout>
       </Tab>

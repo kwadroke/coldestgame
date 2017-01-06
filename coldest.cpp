@@ -255,6 +255,7 @@ void InitGlobals()
    console.Parse("set keyloadout " + ToString(SDLK_l), false);
    console.Parse("set keyuseitem " + ToString(SDLK_u), false);
    console.Parse("set keychangeview " + ToString(SDLK_r), false);
+   console.Parse("set keypower " + ToString(SDLK_p), false);
    console.Parse("set mousefire " + ToString(SDL_BUTTON_LEFT), false);
    console.Parse("set mousezoom " + ToString(SDL_BUTTON_RIGHT), false);
    console.Parse("set mouseuse " + ToString(SDL_BUTTON_MIDDLE), false);
@@ -451,6 +452,7 @@ void ReadConfig()
    keys.keyloadout = SDLKey(console.GetInt("keyloadout"));
    keys.keyuseitem = SDLKey(console.GetInt("keyuseitem"));
    keys.keychangeview = SDLKey(console.GetInt("keychangeview"));
+   keys.keypower = SDLKey(console.GetInt("keypower"));
    keys.mousefire = console.GetInt("mousefire");
    keys.mousezoom = console.GetInt("mousezoom");
    keys.mouseuse = console.GetInt("mouseuse");
@@ -1331,7 +1333,7 @@ void GameEventHandler(SDL_Event &event)
             {
                gui[ingamestatus]->visible = true;
             }
-            else if (event.key.keysym.sym == SDLK_p)
+            else if (event.key.keysym.sym == keys.keypower)
             {
                netcode->SendPowerdown();
             }

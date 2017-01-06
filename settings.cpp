@@ -52,6 +52,7 @@ void UpdateSettings()
    GUI* loadoutbutton = gui[settings]->GetWidget("loadoutbutton");
    GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
    GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");
+   GUI* powerbutton = gui[settings]->GetWidget("powerbutton");
 
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -76,6 +77,7 @@ void UpdateSettings()
    loadoutbutton->text = SDL_GetKeyName(keys.keyloadout);
    useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
    changeviewbutton->text = SDL_GetKeyName(keys.keychangeview);
+   powerbutton->text = SDL_GetKeyName(keys.keypower);
 
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");
@@ -191,6 +193,7 @@ void SaveSettings()
    console.Parse("setsave keyloadout " + ToString(keys.keyloadout), true);
    console.Parse("setsave keyuseitem " + ToString(keys.keyuseitem), false);
    console.Parse("setsave keychangeview " + ToString(keys.keychangeview), false);
+   console.Parse("setsave keypower " + ToString(keys.keypower), false);
    console.Parse("setsave mousefire " + ToString((int)keys.mousefire), false);
    console.Parse("setsave mousezoom " + ToString((int)keys.mousezoom), false);
    console.Parse("setsave mouseuse " + ToString((int)keys.mouseuse), false);
