@@ -25,8 +25,10 @@
    <Label x="400" y="50" width="200" height="50" text="Server Browser" readonly="true" xmargin="0" ymargin="0" align="center" normal="textures/labelclear.png"/>
 
    <Layout x="100" y="150" orientation="horizontal" padding="5">
+     <!--
       <Button x="100" y="150" width="100" height="40" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
             leftclick="connect"/>
+    -->
       <Button width="100" height="40" text="Refresh" name="refreshbutton" xmargin="3" ymargin="6" align="center"
               leftclick="refreshservers"/>
       <Button x="320" y="150" width="100" height="40" text="Connect to" name="connectipbutton" xmargin="3" ymargin="6" align="center"
@@ -41,6 +43,9 @@
 
    <Button x="100" y="910" width="200" height="50" text="Main Menu" align="center"
            leftclick="showmain"/>
+
+   <Button x="700" y="910" width="200" height="50" text="Connect" name="connectbutton" xmargin="3" ymargin="6" align="center"
+                 leftclick="connect"/>
 
    <!-- Label x="0" y="0" width="1000" height="1000" normal="textures/menuoverlay.png"/ -->
 </GUI>

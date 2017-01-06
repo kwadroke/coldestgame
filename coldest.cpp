@@ -214,7 +214,7 @@ void InitGlobals()
    console.Parse("set splashlevels 3", false);
    console.Parse("set grassdrawdist 1000", false);
    console.Parse("set grassdensity 1", false);
-   console.Parse("set zoomfactor 2", false);
+   console.Parse("set zoomfactor 1", false);
    console.Parse("set weaponfocus 1000", false);
    console.Parse("set serverport 12010", false);
    console.Parse("set hitindtime 1000", false);
