@@ -221,7 +221,7 @@ void InitGlobals()
    console.Parse("set startsalvage 100", false);
    console.Parse("set viewoffset 0", false);
    console.Parse("set limitserverrate 1", false);
-   console.Parse("set maxplayers 32", false);
+   console.Parse("set maxplayers 16", false);
    console.Parse("set mousespeed 400", false);
    console.Parse("set terrainmulti 3", false);
    console.Parse("set map riverside", false);
@@ -952,7 +952,21 @@ void GUIUpdate()
       hitind->visible = true;
    }
    else
+   {
       hitind->visible = false;
+   }
+
+   // Display or hide enemy hit indicator
+   /*
+   GUI* enemyhitind = gui[hud]->GetWidget("enemyhitind");
+   if (SDL_GetTicks() - netcode->lasthit < console.GetInt("hitindtime"))
+   {
+      enemyhitind->visible = true;
+   }
+   else
+      enemyhitind->visible = false;
+   }
+   */
 
    // Update server fps and bps display
    GUI* servfps = gui[statsdisp]->GetWidget("serverfps");

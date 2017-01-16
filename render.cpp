@@ -42,37 +42,37 @@ void Repaint()
    bool shadows = console.GetBool("shadows");
    PlayerData localplayer(meshes);
    localplayer = player[0];
-   
+
    float fov = console.GetFloat("fov");
    if (localplayer.spectate)
       guncam = false;
    if (guncam)
       fov /= console.GetFloat("zoomfactor");
-   
+
    t.start();
-   
+
    // Apparently if this is turned off even glClear doesn't override it, so we end up never
    // clearing the depth buffer (because particles are rendered last without depth writes)
    glDepthMask(GL_TRUE);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glShadeModel(GL_SMOOTH);
-   
+
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    // This should probably be part of the Camera class, but I'm leaving it alone for now
    gluPerspective(fov, aspect, nearclip, console.GetFloat("viewdist") * 10.f);
-   
+
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    trislastframe = 0;
    firstpass = true;
-   
+
    if (!PrimaryGUIVisible())
    {
       gui[chat]->visible = true;
-      
+
       dynmeshes = GetDynamicMeshes(localplayer);
-      
+
       if (shadows)
       {
          float shadowmapsizeworld = console.GetFloat("detailmapsize") * 1.42;
@@ -80,24 +80,24 @@ void Repaint()
          SetShadowFrustum(shadowmapsizeworld, look, localplayer);
          GenShadows(look, shadowmapsizeworld / 2.f, shadowmapfbo, localplayer);
       }
-      
+
       SetMainCamera(localplayer);
 
       RenderSkybox(localplayer);
-      
+
       // Place the light(s)
       lights.Place();
-      
+
       // Activate shadowing
       if (shadows)
       {
          // This is really buggy for some reason and seems to be unnecessary
          //glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
-         
+
          resman.texhand.ActiveTexture(6);
-         
+
          resman.texhand.BindTexture(shadowmapfbo.GetTexture());
-         
+
          GraphicMatrix biasmat;
          GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
          for (int i = 0; i < 16; ++i)
@@ -106,16 +106,16 @@ void Repaint()
          glLoadMatrixf(biasmat);
          glMultMatrixf(lightproj);
          glMultMatrixf(lightview);
-         
+
          glMatrixMode(GL_MODELVIEW);
-         
+
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
          glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
-         
+
          resman.texhand.ActiveTexture(0);
       }
-      
+
       if (updateclouds)
          UpdateClouds();
       updateclouds = false;
@@ -123,11 +123,11 @@ void Repaint()
       if (updcounter % 10 == 0)
          updateclouds = true;
       updcounter++;*/
-      
+
       //RenderClouds();
-      
+
       lights.Place();
-      
+
       RenderObjects(localplayer);
 
       // This produces bogus reflections, but that's better than rendering no water at all
@@ -137,10 +137,10 @@ void Repaint()
          UpdateReflection(localplayer);
          RenderWater();
       }
-      
+
       // Must be rendered last to blend correctly
       RenderParticles();
-      
+
       //if (shadows)
       //   glPopAttrib();
    } // if !mainmenu.visible
@@ -149,19 +149,19 @@ void Repaint()
       // Make sure materials are loaded.  Otherwise we have a long delay on the first spawn.
       for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
          i->EnsureMaterials();
-      
+
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       resman.shaderman.UseShader("none");
       gui[chat]->visible = false;
       Vector3 dummy;
       resman.soundman.SetListenPos(dummy);
    }
-   
+
    RenderHud(localplayer);
-   
+
    if (console.GetBool("showkdtree"))
       kdtree.visualize();
-   
+
    // For debugging, third person view
    if (console.GetBool("thirdperson"))
    {
@@ -174,7 +174,7 @@ void Repaint()
       gluDeleteQuadric(s);
       glColor4f(1, 1, 1, 1);
    }
-   
+
    // And finally, copy all of this stuff to the screen
    SDL_GL_SwapBuffers();
    if (t.elapsed() > (1000.f / fps) * 2.f)
@@ -194,7 +194,7 @@ void SetMainCamera(PlayerData& localplayer)
    Vector3 viewoff;
    Vector3 rawoffset;
    Vector3 rots(localplayer.pitch, localplayer.rotation + localplayer.facing, 0.f);
-   
+
    if (!editor && localplayer.spawned)
    {
       viewoff = units[localplayer.unit].viewoffset;
@@ -216,7 +216,7 @@ void SetMainCamera(PlayerData& localplayer)
       viewdir = Vector3(0.f, 0.f, -1.f);
       viewdir.transform(m);
    }
-   
+
    if (/*console.GetBool("thirdperson") &&*/ !editor && !guncam && localplayer.spawned)
    {
       maincam.SetPosition(localplayer.pos - viewdir * (100.f + localplayer.size) + Vector3(0.f, localplayer.size * 3.f, 0.f));
@@ -251,9 +251,9 @@ void RenderObjects(const PlayerData& localplayer)
    float dist;
    bool debug = false; // Turns off impostoring if true
    //debug = true;
-   
+
    list<Mesh*> m = kdtree.getmeshes();
-   
+
    list<Mesh*>::iterator iptr;
    implist.clear();
    visiblemeshes.clear();
@@ -265,12 +265,12 @@ void RenderObjects(const PlayerData& localplayer)
    }
 
    m.sort(meshptrcomp);
-   
+
    MeshPtr impostormesh = meshcache->GetNewMesh("models/empty/base");
    Material* override = NULL;
    if (shadowrender) override = shadowmat;
    float impmod = 1000.f;//10.f;
-   
+
    int viewdist = console.GetInt("viewdist");
    int currdrawdist = viewdist;
    int localdrawdist = 0;
@@ -279,28 +279,28 @@ void RenderObjects(const PlayerData& localplayer)
       glFogf(GL_FOG_START, float(viewdist) * .1f);
       glFogf(GL_FOG_END, float(viewdist));
    }
-   
+
    for (iptr = m.begin(); iptr != m.end(); ++iptr)
    {
       Mesh* i = *iptr;
       float adjustedimpdist = i->impdist * console.GetFloat("impdistmulti");
       adjustedimpdist *= adjustedimpdist;
       localdrawdist = int(viewdist * i->drawdistmult);
-      
+
       float isize = i->GetSize();
       if (i->dist > (localdrawdist + isize) * (localdrawdist + isize)
           && !staticdrawdist && !shadowrender)
       {
          continue; // Skip it if it's too far away
       }
-      
+
       if (localdrawdist != currdrawdist && !staticdrawdist)
       {
          currdrawdist = localdrawdist;
          glFogf(GL_FOG_START, float(viewdist) * .1f);
          glFogf(GL_FOG_END, float(localdrawdist));
       }
-      
+
       if (floatzero(i->impdist) || i->dist < adjustedimpdist || shadowrender || debug)
       {
          i->Render(override);
@@ -322,9 +322,9 @@ void RenderObjects(const PlayerData& localplayer)
       glFogf(GL_FOG_START, float(viewdist) * .1f);
       glFogf(GL_FOG_END, float(viewdist));
    }
-   
+
    UpdateFBO(localplayer);
-   
+
    // Render all dynamic meshes (since they won't show up in the KDTree)
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
@@ -334,10 +334,10 @@ void RenderObjects(const PlayerData& localplayer)
          trislastframe += i->NumTris();
       }
    }
-   
+
    impostormesh->Render(override);
    trislastframe += impostormesh->NumTris();
-   
+
    glDepthMask(GL_TRUE); // Otherwise we may screw up rendering elsewhere
 }
 
@@ -374,27 +374,27 @@ void UpdateFBO(const PlayerData& localplayer)
    int counter = 0;
    int desireddim = fbostarts[2];
    Vector3 playerpos = localplayer.pos;
-   
+
    sortedbyimpdim = impmeshes;
-   
+
    std::sort(sortedbyimpdim.begin(), sortedbyimpdim.end(), sortbyimpdim);
    std::sort(impmeshes.begin(), impmeshes.end(), meshptrcomp);
-   
+
    for (iptr = impmeshes.begin(); iptr != impmeshes.end(); ++iptr)
    {
       i = *iptr;
       if (implist.find(i) != implist.end())
       {
          needsupdate.push_back(i);
-         
+
          currfbo = &(impfbolist[i->impostorfbo]);
-         
+
          if (counter >= fbostarts[2])
             desireddim = fbodims[2];
          else if (counter >= fbostarts[1])
             desireddim = fbodims[1];
          else desireddim = fbodims[0];
-         
+
          size_t current = 0;
          size_t count = 0;
          Mesh* toswap;
@@ -416,7 +416,7 @@ void UpdateFBO(const PlayerData& localplayer)
                current = fbostarts[2];
                count = sortedbyimpdim.size() - fbostarts[2] + 1;
             }
-            
+
             toswap = sortedbyimpdim[current];
             // Find the object we want to swap with
             while (count > 0 && current < sortedbyimpdim.size())
@@ -429,7 +429,7 @@ void UpdateFBO(const PlayerData& localplayer)
                --count;
                ++current;
             }
-            
+
             // Do the swap and add the swapped object to our list of things to update (maybe)
             //logout << "Swapping for " << impfbolist[toswap->impostorfbo].GetWidth() << endl;
             //logout << desireddim << "  " << currfbo->GetWidth() << endl;
@@ -444,49 +444,49 @@ void UpdateFBO(const PlayerData& localplayer)
       }
       ++counter;
    }
-   
+
    // Now go through and update the impostor for any objects that need it
    for (iptr = needsupdate.begin(); iptr != needsupdate.end(); ++iptr)
    {
       i = *iptr;
       currfbo = &(impfbolist[i->impostorfbo]);
       currfbo->Bind();
-      
+
       Vector3 currpos = i->GetPosition();
       Vector3 center = currpos;
       float dist = playerpos.distance(center);
-         
+
       glPushAttrib(GL_VIEWPORT_BIT);
       glViewport(0, 0, currfbo->GetWidth(), currfbo->GetHeight());
-      
+
       glPushMatrix();
       glLoadIdentity();
       gluLookAt(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z, center.x, center.y, center.z, 0, 1, 0);
-      
+
       glMatrixMode(GL_PROJECTION);
       glPushMatrix();
       glLoadIdentity();
       float tempfov = atan(i->GetHeight() / 2.f / dist) * 360. / PI;
       float tempaspect = i->GetWidth() / i->GetHeight();
       gluPerspective(tempfov, tempaspect, 10, 10000.0);
-      
+
       glMatrixMode(GL_MODELVIEW);
       glClearColor(0, 0, 0, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       lights.Place();
-      
+
       i->Render();
       trislastframe += i->NumTris();
-      
+
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
       glMatrixMode(GL_MODELVIEW);
-      
+
       glPopMatrix();
       glPopAttrib();
       currfbo->Unbind();
       lights.Place();
-      
+
       // Should really do this last so time to update isn't included
       i->ImpTimer.start();
    }
@@ -497,61 +497,61 @@ void UpdateFBO(const PlayerData& localplayer)
 void GenShadows(const Vector3& center, float size, FBO& fbo, const PlayerData& localplayer)
 {
    fbo.Bind();
-   
+
    // Adjust a few global settings
    glDisable(GL_FOG);
    glDisable(GL_LIGHTING);
-   
+
    int shadowres = console.GetInt("shadowres");
    glViewport(0, 0, shadowres, shadowres);
-   
+
    // Set up light matrices
    lightview = lights.GetView(0, center);
    lightproj = lights.GetProj(0, size);
-   
+
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadMatrixf(lightproj);
-   
+
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadMatrixf(lightview);
-   
+
    glShadeModel(GL_FLAT);
 #ifndef DEBUGSMT
    glCullFace(GL_FRONT);
    glColorMask(0, 0, 0, 0);
 #endif
-   
+
    glEnable(GL_POLYGON_OFFSET_FILL);
    glPolygonOffset(2.0f, 2.0f);
-   
+
    // Render objects to depth map
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    shadowrender = true;
    RenderObjects(localplayer);
    shadowrender = false;
    glDisable(GL_POLYGON_OFFSET_FILL);
-   
+
    // Reset globals
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    glCullFace(GL_BACK);
    glShadeModel(GL_SMOOTH);
    glColorMask(1, 1, 1, 1);
-   
+
    glEnable(GL_FOG);
    glEnable(GL_LIGHTING);
-   
+
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
    //glLoadIdentity();
    //gluPerspective(console.GetFloat("fov"), aspect, nearclip, console.GetFloat("viewdist"));
-   
+
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
    //glLoadIdentity();
    fbo.Unbind();
-   
+
    // These calls don't need to be made for generating shadows, but it makes sure that they'll be
    // set before we try to use the shadow map
    resman.shaderman.GlobalSetUniform1f("shadowres", console.GetFloat("shadowres"));
@@ -562,27 +562,27 @@ void UpdateClouds()
 {
    int cloudres = console.GetInt("cloudres");
    UpdateNoise();
-   
+
    cloudfbo.Bind();
    resman.texhand.BindTexture(noisefbo.GetTexture());
    resman.shaderman.UseShader(cloudgenshader);
-   
+
    glViewport(0, 0, cloudres, cloudres);
-   
+
    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-   
+
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
    glOrtho(0, cloudres, cloudres, 0, -1, 1);
-   
+
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadIdentity();
-   
+
    //glEnable(GL_BLEND);
    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   
+
    glDisable(GL_TEXTURE_2D);
    glColor4f(1, 1, 1, 1);
    glBegin(GL_TRIANGLE_STRIP);
@@ -592,16 +592,16 @@ void UpdateClouds()
    glVertex2f(cloudres, cloudres);
    glEnd();
    glEnable(GL_TEXTURE_2D);
-   
+
    //glDisable(GL_BLEND);
-   
+
    glPopMatrix();
-   
+
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
-   
+
    glMatrixMode(GL_MODELVIEW);
-   
+
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    resman.shaderman.UseShader("none");
    cloudfbo.Unbind();
@@ -615,28 +615,28 @@ void UpdateNoise()
    // Don't remove this, it's not the texture we're trying to render to, it's used in the noise shader
    resman.texhand.BindTexture(noisetex);
    resman.shaderman.SetUniform1f(noiseshader, "time", float(SDL_GetTicks()));
-   
+
    glViewport(0, 0, noiseres, noiseres);
-   
+
    //glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
    glBlendFunc(GL_ONE, GL_ZERO);
-   
+
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
    glOrtho(0, noiseres, noiseres, 0, -1, 1);
-   
+
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadIdentity();
-   
+
    //glEnable(GL_BLEND);
    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   
+
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_TEXTURE_2D);
    glColor4f(1, 1, 1, 1);
-   
+
    resman.shaderman.SetUniform1f(noiseshader, "speed", 3000.f);
    glBegin(GL_TRIANGLE_STRIP);
    glVertex2f(0, 0);
@@ -644,7 +644,7 @@ void UpdateNoise()
    glVertex2f(noiseres, 0);
    glVertex2f(noiseres, noiseres);
    glEnd();
-   
+
    resman.shaderman.SetUniform1f(noiseshader, "speed", 700.f);
    fastnoisefbo.Bind();
    glBegin(GL_TRIANGLE_STRIP);
@@ -653,19 +653,19 @@ void UpdateNoise()
    glVertex2f(noiseres, 0);
    glVertex2f(noiseres, noiseres);
    glEnd();
-   
+
    glEnable(GL_TEXTURE_2D);
    glEnable(GL_DEPTH_TEST);
-   
+
    //glDisable(GL_BLEND);
-   
+
    glPopMatrix();
-   
+
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
-   
+
    glMatrixMode(GL_MODELVIEW);
-   
+
    glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    resman.shaderman.UseShader("none");
    fastnoisefbo.Unbind();
@@ -680,9 +680,9 @@ void UpdateReflection(const PlayerData& localplayer)
    glPushMatrix();
    {
       glViewport(0, 0, reflectionres, reflectionres);
-      
+
       glScalef(1, -1, 1);
-      
+
       glPushMatrix();
       {
          glLoadIdentity();
@@ -692,24 +692,24 @@ void UpdateReflection(const PlayerData& localplayer)
          RenderSkybox(localplayer);
       }
       glPopMatrix();
-      
+
       //RenderClouds();
-      
+
       if (console.GetBool("reflection"))
       {
          SetReflectionFrustum(localplayer);
-         
+
          lights.Place();
          SetReflection(true);
-         
+
          glFrontFace(GL_CW);
          RenderObjects(localplayer);
          RenderParticles();
          glFrontFace(GL_CCW);
-         
+
          SetReflection(false);
       }
-      
+
       glMatrixMode(GL_MODELVIEW);
       glViewport(0, 0, console.GetInt("screenwidth"), console.GetInt("screenheight"));
    }
@@ -727,7 +727,7 @@ void RenderClouds()
       glFogf(GL_FOG_END, 10000);
    }
    glDisable(GL_DEPTH_TEST);
-   
+
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
@@ -740,13 +740,13 @@ void RenderClouds()
       gluPerspective(console.GetFloat("fov") / console.GetFloat("zoomfactor"), aspect, 100, 10000);
    }
    glMatrixMode(GL_MODELVIEW);
-   
+
    float height = 1000;
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    resman.texhand.BindTexture(cloudfbo.GetTexture());
    glColor4f(1, 1, 1, 1);
-   
+
    glBegin(GL_TRIANGLE_STRIP);
    glTexCoord2i(0, 0);
    glVertex3f(-10000, height, -10000);
@@ -757,11 +757,11 @@ void RenderClouds()
    glTexCoord2i(1, 1);
    glVertex3f(30000, height, 30000);
    glEnd();
-   
+
    glMatrixMode(GL_PROJECTION);
    glPopMatrix();
    glMatrixMode(GL_MODELVIEW);
-   
+
    float viewdist = console.GetFloat("viewdist");
    if (!staticdrawdist)
    {
@@ -783,19 +783,19 @@ void RenderSkybox(const PlayerData& localplayer)
    glDisable(GL_LIGHTING);
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_BLEND);
-   
+
    glTexCoord3f(0, 0, 0);
    GLUquadricObj *s = gluNewQuadric();
    gluQuadricTexture(s, GL_TRUE);
-   
+
    glPushMatrix();
    glTranslatef(localplayer.pos.x, localplayer.pos.y, localplayer.pos.z);
    glRotatef(90, 1, 0, 0);
    gluSphere(s, console.GetFloat("viewdist"), 10, 10);
    glPopMatrix();
-   
+
    gluDeleteQuadric(s);
-   
+
    glEnable(GL_FOG);
    glEnable(GL_LIGHTING);
    glEnable(GL_DEPTH_TEST);
@@ -805,26 +805,26 @@ void RenderSkybox(const PlayerData& localplayer)
 void RenderWater()
 {
    lights.Place();
-   
+
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   
+
    GraphicMatrix biasmat, camproj, camview;
    GLfloat bias[16] = {.5, 0, 0, 0, 0, .5, 0, 0, 0, 0, .5, 0, .5, .5, .5, 1};
    for (int i = 0; i < 16; ++i)
       biasmat.members[i] = bias[i];
-      
+
    glMatrixMode(GL_PROJECTION);
    glGetFloatv(GL_PROJECTION_MATRIX, camproj);
    glMatrixMode(GL_MODELVIEW);
    glGetFloatv(GL_MODELVIEW_MATRIX, camview);
-      
+
    glMatrixMode(GL_TEXTURE);
    glPushMatrix();
    glLoadMatrixf(biasmat);
    glMultMatrixf(camproj);
    glMultMatrixf(camview);
-   
+
    resman.texhand.ActiveTexture(1);
    resman.texhand.BindTexture(noisefbo.GetTexture());
    resman.texhand.ActiveTexture(2);
@@ -832,7 +832,7 @@ void RenderWater()
    resman.texhand.ActiveTexture(0);
    resman.texhand.BindTexture(reflectionfbo.GetTexture());
    resman.shaderman.SetUniform1f("shaders/water", "time", float(SDL_GetTicks()));
-   
+
    if (!staticdrawdist)
    {
       int viewdist = console.GetInt("viewdist");
@@ -840,10 +840,10 @@ void RenderWater()
       glFogf(GL_FOG_END, float(viewdist));
    }
    watermesh->Render();
-   
+
    glMatrixMode(GL_TEXTURE);
    glPopMatrix();
-   
+
    glMatrixMode(GL_MODELVIEW);
    resman.shaderman.UseShader("none");
 }
@@ -870,7 +870,7 @@ void RenderHud(const PlayerData& localplayer)
    GUI* rarmselectedlabel = gui[hud]->GetWidget("rarmselected");
    ProgressBar* tempbar = (ProgressBar*)gui[hud]->GetWidget("temperature");
    ProgressBar* rotbar = (ProgressBar*)gui[hud]->GetWidget("facing");
-   
+
    static Timer fpstimer;
    static int longfpscounter = 0;
    static float smoothfps;
@@ -881,7 +881,7 @@ void RenderHud(const PlayerData& localplayer)
       fpstimer.start();
       longfpscounter = 0;
    }
-   
+
    if (frames >= 30) // Update FPS
    {
       Uint32 currtick = SDL_GetTicks();
@@ -891,7 +891,7 @@ void RenderHud(const PlayerData& localplayer)
       lasttick = currtick;
    }
    ++frames;
-   
+
    // Update GUI values
    SDL_GL_Enter2dMode();
    //logout << fps << "/" << smoothfps << endl;
@@ -902,12 +902,12 @@ void RenderHud(const PlayerData& localplayer)
    poslabel->text = "Position: " + ToString(localplayer.pos.x) + " " + ToString(localplayer.pos.y) + " " + ToString(localplayer.pos.z);
    if (particlemesh)
       partlabel->text = "Particles: " + ToString(particlemesh->NumTris());
-   
+
    torsohplabel->text = "Torso: " + GetColorCode(localplayer, Torso) + ToString(localplayer.hp[Torso]);
    legshplabel->text = "Legs: " + GetColorCode(localplayer, Legs) + ToString(localplayer.hp[Legs]);
    leftarmhplabel->text = "Left Arm: " + GetColorCode(localplayer, LArm) + ToString(localplayer.hp[LArm]);
    rightarmhplabel->text = "Right Arm: " + GetColorCode(localplayer, RArm) + ToString(localplayer.hp[RArm]);
-   
+
    torsoweaponlabel->text = localplayer.weapons[Torso].Name();
    if (localplayer.weapons[Torso].ammo >= 0)
       torsoweaponlabel->text += " " + ToString(localplayer.weapons[Torso].ammo);
@@ -917,7 +917,7 @@ void RenderHud(const PlayerData& localplayer)
    rarmweaponlabel->text = localplayer.weapons[RArm].Name();
    if (localplayer.weapons[RArm].ammo >= 0)
       rarmweaponlabel->text += " " + ToString(localplayer.weapons[RArm].ammo);
-   
+
    if (weaponslots[localplayer.currweapon] == Torso)
       torsoselectedlabel->visible = true;
    else torsoselectedlabel->visible = false;
@@ -927,15 +927,15 @@ void RenderHud(const PlayerData& localplayer)
    if (weaponslots[localplayer.currweapon] == RArm)
       rarmselectedlabel->visible = true;
    else rarmselectedlabel->visible = false;
-   
+
    tempbar->SetRange(0, 100);
    tempbar->value = (int)localplayer.temperature;
    rotbar->value = (int)localplayer.rotation;
-   
+
 #ifdef DEBUGSMT
    // Debug the shadowmap texture
    resman.texhand.BindTexture(shadowmapfbo.GetTexture());
-   
+
    glColor4f(1, 1, 1, 1);//.9);
    glBegin(GL_TRIANGLE_STRIP);
    glTexCoord2f(0, 1);
@@ -949,10 +949,10 @@ void RenderHud(const PlayerData& localplayer)
    glEnd();
    glColor4f(1, 1, 1, 1);
 #endif
-   
+
    // Render all of the GUI objects, they know whether they're visible or not
    resman.LoadMaterial("materials/ui").Use();
-   
+
    for (size_t i = 0; i < gui.size(); ++i)
    {
       gui[i]->Render();
@@ -990,13 +990,13 @@ vector<Mesh*> GetDynamicMeshes(const PlayerData& localplayer)
    set<Mesh*> retval;
    Vector3 look(localplayer.pitch, localplayer.rotation + localplayer.facing, localplayer.roll);
    kdtree.setfrustum(localplayer.pos, look, nearclip, console.GetFloat("viewdist"), console.GetFloat("fov"), aspect);
-   
+
    for (Meshlist::iterator i = meshes.begin(); i != meshes.end(); ++i)
    {
       if (i->dynamic && kdtree.infrustum(&(*i)) && i->render)
          retval.insert(&(*i));
    }
-   
+
    if (console.GetBool("reflection"))
    {
       SetReflectionFrustum(localplayer);
@@ -1033,7 +1033,7 @@ void SetShadowFrustum(const float size, const Vector3& look, const PlayerData& l
    // This should probably use the Camera class now
    Vector3 p = lights.GetPos(0);
    Vector3 rots = lights.GetRots(0);
-   
+
    // 1.5 is to leave some room for error since we're approximating an ortho view with
    // a perspective projection
    float lightfov = tan(size * 1.5f / Light::infinity) * 180.f / PI;
@@ -1055,7 +1055,7 @@ Vector3 GetShadowLook(const float shadowmapsizeworld, const PlayerData& localpla
    resman.shaderman.GlobalSetUniform1f("detailmapsize", detailmapsize);
    float shadowres = console.GetFloat("shadowres");
    float worldperoneshadow = shadowmapsizeworld / shadowres;
-         
+
    // Find out where we're looking, a little rough ATM
    GraphicMatrix rot;
    rot.rotatex(-localplayer.pitch);
@@ -1064,20 +1064,20 @@ Vector3 GetShadowLook(const float shadowmapsizeworld, const PlayerData& localpla
    Vector3 look(0, 0, -detailmapsize / 2.f);
    look.transform(rot);
    look += localplayer.pos;
-         
+
    GraphicMatrix invrot;
    rot.identity();
    rot.rotatex(-rots.x);
    rot.rotatey(rots.y);
    invrot.rotatey(-rots.y);
    invrot.rotatex(rots.x);
-         
+
    look.transform(invrot);
    look.x = (int)(look.x / worldperoneshadow);
    look.x *= worldperoneshadow;
    look.y = (int)(look.y / worldperoneshadow);
    look.y *= worldperoneshadow;
-         
+
    look.transform(rot);
    return look;
 }

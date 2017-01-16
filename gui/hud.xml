@@ -60,6 +60,12 @@
    <!-- targeting -->
    <Label x="490" y="484" width="20" height="32" text="" name="reticle"
           normal="textures/reticle.png"/>
+   <!-- Target Hit indicator -->
+   <!--
+   <Label x="485" y="479" width="30" height="30" text="" name="enemyhitind"
+          normal="textures/enemyhit.png"/>
+   -->
+   
    <Label x="250" y="520" width="500" height="30" text="" name="targetplayer" align="center"/>
 
    <Table x="10" y="13" width="205" height="135" name="servermessages" columns="1" colwidths="300" rowheight="20"/>
@@ -72,7 +78,8 @@
      <Label x="360" y="703" width="288" height="288" text="" name="minimapoverlay"/>
    </Label>
 
-   <!-- Hit indicator-->
+   <!-- Damage indicator-->
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
           normal="textures/hit.png"/>
+
 </GUI>
