@@ -1130,6 +1130,16 @@ void GUIUpdate()
             hudmap->visible = true;
          }
       }
+
+      // Hide show powered down hud gui
+      GUI* powerdownstatus = gui[hud]->GetWidget("powerdown");
+      if (!player[servplayernum].powerdowntime && !editor)
+      {
+         powerdownstatus->visible = false;
+      } else {
+         powerdownstatus->visible = true;
+
+      }
    }
 #endif
 }
@@ -1453,6 +1463,7 @@ void GameEventHandler(SDL_Event &event)
          case SDL_QUIT:
             Quit();
       }
+   
    }
 #endif
 }

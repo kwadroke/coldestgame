@@ -65,7 +65,7 @@
    <Label x="485" y="479" width="30" height="30" text="" name="enemyhitind"
           normal="textures/enemyhit.png"/>
    -->
-   
+
    <Label x="250" y="520" width="500" height="30" text="" name="targetplayer" align="center"/>
 
    <Table x="10" y="13" width="205" height="135" name="servermessages" columns="1" colwidths="300" rowheight="20"/>
@@ -82,4 +82,9 @@
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
           normal="textures/hit.png"/>
 
+   <Label x="0" y="0" width="1000" height="1000" text="" name="powerdown">
+      <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
+            normal="textures/hud/powerdownshade.png"/>
+      <Label x="425" y="350" width="150" height="30" text="Powered Down" align="center" name="powereddowntext"/>
+   </Label>
 </GUI>
