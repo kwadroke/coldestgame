@@ -1138,8 +1138,19 @@ void GUIUpdate()
          powerdownstatus->visible = false;
       } else {
          powerdownstatus->visible = true;
-
       }
+
+      // Hide show overheat status on hud gui
+      // Need to add timer for audio playback to make sure it doesn't replay back to back
+      GUI* overheatstatus = gui[hud]->GetWidget("overheatstatus");
+      if (!player[servplayernum].powerdowntime && !editor && player[servplayernum].temperature > 75)
+      {
+         overheatstatus->visible = true;
+      } else {
+         overheatstatus->visible = false;
+      }
+
+
    }
 #endif
 }
@@ -1463,7 +1474,7 @@ void GameEventHandler(SDL_Event &event)
          case SDL_QUIT:
             Quit();
       }
-   
+
    }
 #endif
 }

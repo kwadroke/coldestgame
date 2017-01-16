@@ -78,14 +78,22 @@
      <Label x="360" y="703" width="288" height="288" text="" name="minimapoverlay"/>
    </Label>
 
+   <!-- Over heat status -->
+
+   <Label x="410" y="280" width="180" height="50" text="Over Heat Warning" align="center" name="overheatstatus"/>
+
+
    <!-- Damage indicator-->
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
           normal="textures/hit.png"/>
 
+   <!-- Powerdown status -->
    <Label x="0" y="0" width="1000" height="1000" text="" name="powerdown">
       <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
             normal="textures/hud/powerdownshade.png"/>
       <Label x="425" y="350" width="150" height="30" text="Powered Down" align="center" name="powereddowntext"/>
       <Label x="425" y="380" width="150" height="30" text="Repairing" align="center" name="powereddowntext"/>
    </Label>
+
+
 </GUI>
