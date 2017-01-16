@@ -58,7 +58,7 @@ SpawnPoints
 Objects
    Node
       Type proctree
-      Position 2987.37 220.246 3433.58
+      Position 2987.37 204.246 3433.58
       Rotations 0 0 0
       Name Unnamed
       Materials materials/bark materials/leaves
@@ -96,7 +96,7 @@ Objects
       firstleaflevel 2
    Node
       Type proctree
-      Position 3419.09 207.988 2920.49
+      Position 3399.29 188.988 2912.19
       Rotations 0 0 0
       Name Unnamed
       Materials materials/bark materials/leaves
@@ -134,7 +134,7 @@ Objects
       firstleaflevel 2
    Node
       Type proctree
-      Position 3681.64 101.069 3703.34
+      Position 3679.42 89.069 3692.38
       Rotations 0 0 0
       Name Unnamed
       Materials materials/bark materials/leaves
@@ -172,7 +172,7 @@ Objects
       firstleaflevel 2
    Node
       Type proctree
-      Position 2536.98 63.7403 2542.07
+      Position 2536.98 43.7403 2542.07
       Rotations 0 0 0
       Name Unnamed
       Materials materials/bark materials/leaves
