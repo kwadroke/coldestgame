@@ -2,8 +2,8 @@ Diffuse 1 1 1 1
 Ambient 1 1 1 1
 Specular 1 1 1 1
 Shininess 32
-Texture0 textures/metal/arms.png
-Texture1 textures/metal/armsnorm.png
-Texture2 textures/metal/armsspec.png
+Texture0 textures/metal/ultra/arms.png
+Texture1 textures/metal/ultra/armsnorm.png
+Texture2 textures/metal/ultra/armsspec.png
 Shader shaders/bump
 CullFace 1
