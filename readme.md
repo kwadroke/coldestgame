@@ -2,6 +2,8 @@
 
 _Coldest: Absolute Zero_ is a continuation/fork of the Open Source Mech Game [_Coldest_](http://coldestgame.com) by Cybertron.
 
+[Gitter Chat](https://gitter.im/Coldest-Absolute-Zero/Lobby)
+
 ### Project Goals:
 * Make it playable on Raspberry Pi (at least the Pi3)  
 * Make the GUI optional  
