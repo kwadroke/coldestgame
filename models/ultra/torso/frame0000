@@ -925,330 +925,330 @@ Triangles
    Tri
       ID 1
       Verts 3 4 6 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 2
       Verts 4 5 6 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 7
       Verts 9 10 12 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 8
       Verts 10 11 12 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 13
       Verts 15 16 18 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 14
       Verts 16 17 18 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 19
       Verts 21 22 24 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 20
       Verts 22 23 24 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 25
       Verts 27 28 30 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 26
       Verts 28 29 30 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 31
       Verts 33 34 36 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 32
       Verts 34 35 36 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 37
       Verts 39 40 42 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 38
       Verts 40 41 42 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 43
       Verts 45 46 48 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 44
       Verts 46 47 48 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 49
       Verts 51 52 54 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 50
       Verts 52 53 54 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 55
       Verts 57 58 60 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 56
       Verts 58 59 60 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 61
       Verts 63 64 66 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 62
       Verts 64 65 66 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 67
       Verts 69 70 72 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 68
       Verts 70 71 72 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 73
       Verts 75 76 78 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 74
       Verts 76 77 78 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 79
       Verts 81 82 84 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 80
       Verts 82 83 84 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 85
       Verts 87 88 90 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 86
       Verts 88 89 90 
-      Material materials/metal/hips
+      Material materials/metal/ultra/hips
       Collide 1
    Tri
       ID 91
       Verts 92 93 94 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 95
       Verts 96 97 98 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 99
       Verts 100 101 102 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 103
       Verts 104 105 106 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 107
       Verts 108 109 110 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 111
       Verts 112 113 114 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 115
       Verts 117 118 120 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 116
       Verts 118 119 120 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 121
       Verts 123 124 126 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 122
       Verts 124 125 126 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 127
       Verts 129 130 132 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 128
       Verts 130 131 132 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 133
       Verts 135 136 138 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 134
       Verts 136 137 138 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 139
       Verts 141 142 144 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 140
       Verts 142 143 144 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 145
       Verts 147 148 150 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 146
       Verts 148 149 150 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 151
       Verts 153 154 156 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 152
       Verts 154 155 156 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 157
       Verts 159 160 162 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 158
       Verts 160 161 162 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 163
       Verts 164 165 166 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 167
       Verts 168 169 170 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 171
       Verts 172 173 174 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 175
       Verts 176 177 178 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 179
       Verts 180 181 182 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 183
       Verts 184 185 186 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 187
       Verts 188 189 190 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 191
       Verts 192 193 194 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 195
       Verts 196 197 198 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 199
       Verts 200 201 202 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 203
       Verts 204 205 206 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 207
       Verts 208 209 210 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 211
       Verts 212 213 214 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1
    Tri
       ID 215
       Verts 216 217 218 
-      Material materials/metal/torso
+      Material materials/metal/ultra/torso
       Collide 1

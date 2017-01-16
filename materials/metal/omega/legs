@@ -1,0 +1,9 @@
+Diffuse 1 1 1 1
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Shininess 32
+Texture0 textures/metal/omega/legs.png
+Texture1 textures/metal/omega/legsnorm.png
+Texture2 textures/metal/omega/legsspec.png
+Shader shaders/bump
+CullFace 1

@@ -157,60 +157,60 @@ Triangles
    Tri
       ID 1
       Verts 3 4 6 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 2
       Verts 4 5 6 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 7
       Verts 9 10 12 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 8
       Verts 10 11 12 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 13
       Verts 15 16 18 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 14
       Verts 16 17 18 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 19
       Verts 21 22 24 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 20
       Verts 22 23 24 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 25
       Verts 27 28 30 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 26
       Verts 28 29 30 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 31
       Verts 33 34 36 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
    Tri
       ID 32
       Verts 34 35 36 
-      Material materials/metal/hips
+      Material materials/metal/nemesis/hips
       Collide 1
