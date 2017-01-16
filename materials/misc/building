@@ -1,0 +1,9 @@
+Diffuse 1 1 1 1
+Ambient 1 1 1 1
+Specular 1 1 1 1
+Texture0 textures/misc/windodarktoptop.jpg
+Shader shaders/flat
+CullFace 0
+Additive 1
+DepthWrite 0
+DepthTest 0
