@@ -1150,6 +1150,25 @@ void GUIUpdate()
          overheatstatus->visible = false;
       }
 
+      //Display Direction
+      GUI* directionstatus = gui[hud]->GetWidget("directionstatus");
+      if (!player[servplayernum].powerdowntime && !editor)
+      {
+         directionstatus->visible = true;
+         directionstatus->text = ToString(round(player[servplayernum].facing));
+
+      } else {
+         directionstatus->visible = false;
+      }
+      //Display Speed
+      GUI* speedstatus = gui[hud]->GetWidget("speedstatus");
+      if (!player[servplayernum].powerdowntime && !editor)
+      {
+         speedstatus->visible = true;
+         speedstatus->text = ToString(roundf(player[servplayernum].speed * 100) / 100);
+      } else {
+         speedstatus->visible = false;
+      }
 
    }
 #endif

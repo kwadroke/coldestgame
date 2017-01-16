@@ -57,6 +57,9 @@
           normal="textures/hud/buttonred.png"/>
    <Slider x="400" y="175" width="200" height="30" name="facing" min="-120" max="120"
                 normal="textures/hud/button.png"/>
+
+
+
    <!-- targeting -->
    <Label x="490" y="484" width="20" height="32" text="" name="reticle"
           normal="textures/reticle.png"/>
@@ -79,9 +82,15 @@
    </Label>
 
    <!-- Over heat status -->
-
    <Label x="410" y="280" width="180" height="50" text="Over Heat Warning" align="center" name="overheatstatus"/>
 
+   <!-- Speed status -->
+   <Label x="790" y="13" width="90" height="30" text="Speed" name="speed"/>
+   <Label x="890" y="13" width="50" height="30" text="" name="speedstatus"/>
+
+   <!-- Direction -->
+   <Label x="790" y="53" width="90" height="30" text="Direction" name="direction"/>
+   <Label x="890" y="53" width="50" height="30" text="" name="directionstatus"/>
 
    <!-- Damage indicator-->
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
