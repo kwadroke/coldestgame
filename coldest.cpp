@@ -256,6 +256,10 @@ void InitGlobals()
    console.Parse("set keyuseitem " + ToString(SDLK_u), false);
    console.Parse("set keychangeview " + ToString(SDLK_r), false);
    console.Parse("set keypower " + ToString(SDLK_p), false);
+   console.Parse("set keyfire " + ToString(SDLK_LCTRL), false);
+   console.Parse("set keyweapon0 " + ToString(SDLK_1), false);
+   console.Parse("set keyweapon1 " + ToString(SDLK_2), false);
+   console.Parse("set keyweapon2 " + ToString(SDLK_3), false);
    console.Parse("set mousefire " + ToString(SDL_BUTTON_LEFT), false);
    console.Parse("set mousezoom " + ToString(SDL_BUTTON_RIGHT), false);
    console.Parse("set mouseuse " + ToString(SDL_BUTTON_MIDDLE), false);
@@ -453,6 +457,10 @@ void ReadConfig()
    keys.keyuseitem = SDLKey(console.GetInt("keyuseitem"));
    keys.keychangeview = SDLKey(console.GetInt("keychangeview"));
    keys.keypower = SDLKey(console.GetInt("keypower"));
+   keys.keyfire = SDLKey(console.GetInt("keyfire"));
+   keys.keyweapon0 = SDLKey(console.GetInt("keyweapon0"));
+   keys.keyweapon1 = SDLKey(console.GetInt("keyweapon1"));
+   keys.keyweapon2 = SDLKey(console.GetInt("keyweapon2"));
    keys.mousefire = console.GetInt("mousefire");
    keys.mousezoom = console.GetInt("mousezoom");
    keys.mouseuse = console.GetInt("mouseuse");
@@ -1391,6 +1399,12 @@ void GameEventHandler(SDL_Event &event)
             {
                netcode->SendPowerdown();
             }
+            else if (event.key.keysym.sym == keys.keyfire)
+            {
+                player[0].leftclick = true;
+                if (player[0].spectate)
+                   SpectateNext();
+            }
             else if (event.key.keysym.sym == SDLK_PAGEUP)
             {
                TextArea* chatoutput = (TextArea*) gui[chat]->GetWidget("chatoutput");
@@ -1427,6 +1441,22 @@ void GameEventHandler(SDL_Event &event)
             else if (event.key.keysym.sym == SDLK_TAB)
             {
                gui[ingamestatus]->visible = false;
+            }
+            else if (event.key.keysym.sym == keys.keyweapon0)
+            {
+               player[0].currweapon = 0;
+            }
+            else if (event.key.keysym.sym == keys.keyweapon1)
+            {
+               player[0].currweapon = 1;
+            }
+            else if (event.key.keysym.sym == keys.keyweapon2)
+            {
+               player[0].currweapon = 2;
+            }
+            else if (event.key.keysym.sym == keys.keyfire)
+            {
+               player[0].leftclick = false;
             }
             break;
 
