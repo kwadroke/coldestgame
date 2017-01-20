@@ -28,7 +28,7 @@
 class KeyMap
 {
    public:
-      KeyMap() : keyforward(SDLK_F13), keyback(SDLK_F13), keyleft(SDLK_F13), keyright(SDLK_F13), keyloadout(SDLK_F13), keyuseitem(SDLK_F13), keychangeview(SDLK_F13), keypower(SDLK_F13),
+      KeyMap() : keyforward(SDLK_F13), keyback(SDLK_F13), keyleft(SDLK_F13), keyright(SDLK_F13), keyloadout(SDLK_F13), keyuseitem(SDLK_F13), keychangeview(SDLK_F13), keypower(SDLK_F13), keyfire(SDLK_LCTRL), keyweapon0(SDLK_1), keyweapon1(SDLK_2), keyweapon2(SDLK_3),
 	         mousefire(255), mousezoom(255), mouseuse(255), mousenextweap(255), mouseprevweap(255)
 		 {};
       SDLKey keyforward;
@@ -39,6 +39,10 @@ class KeyMap
       SDLKey keyuseitem;
       SDLKey keychangeview;
       SDLKey keypower;
+      SDLKey keyfire;
+      SDLKey keyweapon0;
+      SDLKey keyweapon1;
+      SDLKey keyweapon2;
       Uint8 mousefire;
       Uint8 mousezoom;
       Uint8 mouseuse;

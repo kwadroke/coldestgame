@@ -53,6 +53,10 @@ void UpdateSettings()
    GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
    GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");
    GUI* powerbutton = gui[settings]->GetWidget("powerbutton");
+   GUI* firebutton = gui[settings]->GetWidget("firebutton");
+   GUI* weapon0button = gui[settings]->GetWidget("weapon0button");
+   GUI* weapon1button = gui[settings]->GetWidget("weapon1button");
+   GUI* weapon2button = gui[settings]->GetWidget("weapon2button");
 
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -78,6 +82,10 @@ void UpdateSettings()
    useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
    changeviewbutton->text = SDL_GetKeyName(keys.keychangeview);
    powerbutton->text = SDL_GetKeyName(keys.keypower);
+   firebutton->text = SDL_GetKeyName(keys.keyfire);
+   weapon0button->text = SDL_GetKeyName(keys.keyweapon0);
+   weapon1button->text = SDL_GetKeyName(keys.keyweapon1);
+   weapon2button->text = SDL_GetKeyName(keys.keyweapon2);
 
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");
@@ -194,6 +202,10 @@ void SaveSettings()
    console.Parse("setsave keyuseitem " + ToString(keys.keyuseitem), false);
    console.Parse("setsave keychangeview " + ToString(keys.keychangeview), false);
    console.Parse("setsave keypower " + ToString(keys.keypower), false);
+   console.Parse("setsave keyfire " + ToString(keys.keyfire), false);
+   console.Parse("setsave keyweapon0 " + ToString(keys.keyweapon0), false);
+   console.Parse("setsave keyweapon1 " + ToString(keys.keyweapon1), false);
+   console.Parse("setsave keyweapon2 " + ToString(keys.keyweapon2), false);
    console.Parse("setsave mousefire " + ToString((int)keys.mousefire), false);
    console.Parse("setsave mousezoom " + ToString((int)keys.mousezoom), false);
    console.Parse("setsave mouseuse " + ToString((int)keys.mouseuse), false);

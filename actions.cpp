@@ -315,6 +315,10 @@ void DoBind(SDLKey& key)
    GUI* useitembutton = gui[settings]->GetWidget("useitembutton");
    GUI* changeviewbutton = gui[settings]->GetWidget("changeviewbutton");
    GUI* powerbutton = gui[settings]->GetWidget("powerbutton");
+   GUI* firebutton = gui[settings]->GetWidget("firebutton");
+   GUI* weapon0button = gui[settings]->GetWidget("weapon0button");
+   GUI* weapon1button = gui[settings]->GetWidget("weapon1button");
+   GUI* weapon2button = gui[settings]->GetWidget("weapon2button");
    forwardbutton->text = SDL_GetKeyName(keys.keyforward);
    backbutton->text = SDL_GetKeyName(keys.keyback);
    leftbutton->text = SDL_GetKeyName(keys.keyleft);
@@ -323,6 +327,10 @@ void DoBind(SDLKey& key)
    useitembutton->text = SDL_GetKeyName(keys.keyuseitem);
    changeviewbutton->text = SDL_GetKeyName(keys.keychangeview);
    powerbutton->text = SDL_GetKeyName(keys.keypower);
+   firebutton->text = SDL_GetKeyName(keys.keyfire);
+   weapon0button->text = SDL_GetKeyName(keys.keyweapon0);
+   weapon1button->text = SDL_GetKeyName(keys.keyweapon1);
+   weapon2button->text = SDL_GetKeyName(keys.keyweapon2);
 }
 
 void BindForward()
@@ -363,6 +371,23 @@ void BindPower()
 {
    DoBind(keys.keypower);
 }
+void BindFire()
+{
+   DoBind(keys.keyfire);
+}
+void BindWeapon0()
+{
+   DoBind(keys.keyweapon0);
+}
+void BindWeapon1()
+{
+   DoBind(keys.keyweapon1);
+}
+void BindWeapon2()
+{
+   DoBind(keys.keyweapon2);
+}
+
 // Stick this outside of GUI so we don't have to update the class every time we add an action
 void Action(const string& action)
 {
@@ -430,6 +455,14 @@ void Action(const string& action)
       BindChangeView();
    else if (action == "bindpower")
          BindPower();
+   else if (action == "bindfire")
+         BindFire();
+   else if (action == "bindweapon0")
+         BindWeapon0();
+   else if (action == "bindweapon1")
+         BindWeapon1();
+   else if (action == "bindweapon2")
+         BindWeapon2();
    else if (action == "refreshservers")
       RefreshServers();
    else if (action == "cancelupdate")
