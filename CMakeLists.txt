@@ -1,9 +1,9 @@
-project(Coldest CXX C)
+project(ColdestAZ CXX C)
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(VERSION 2.6)
 #TODO: Project version handling
 set(PROJECT_VERSION "99999")
-set(EXENAME coldest)
+set(EXENAME coldestaz)
 
 # Allow control over what to build
 option(BUILD_CLIENT           "Build the main game."    ON)

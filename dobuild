@@ -57,7 +57,7 @@ fi
 echo Make Complete.
 
 cd ..
-cp build/coldest . >> $outfile 2>&1
+cp build/coldestaz . >> $outfile 2>&1
 cp build/server . >> $outfile 2>&1
 
 # This needs to happen after the build or the binary isn't going to be there/up to date.
@@ -66,7 +66,7 @@ mkdir lib >> $outfile 2>&1
 rm lib/* >> $outfile 2>&1
 for i in $LIBS
 do
-   REALFILE=`ldd ./coldest | grep $i | sed -e 's/[ \t]*\(.*\) *=> *\(.*\) .*/\2/'`
+   REALFILE=`ldd ./coldestaz | grep $i | sed -e 's/[ \t]*\(.*\) *=> *\(.*\) .*/\2/'`
    cp $REALFILE ./lib || echo "Failed to copy $REALFILE" >> $outfile 2>&1
    echo $REALFILE >> $outfile 2>&1
 done
@@ -76,12 +76,12 @@ done
 cp /usr/$LIB/libpng.so.3 ./lib >> $outfile 2>&1
 echo "/usr/$LIB/libpng.so.3" >> $outfile 2>&1
 
-rm -rf Coldest$REVISION >> $outfile 2>&1
+rm -rf ColdestAZ$REVISION >> $outfile 2>&1
 echo $REVISION > version
 echo "Kitting"
-./kit.sh Coldest$REVISION >> $outfile 2>&1
+./kit.sh ColdestAZ$REVISION >> $outfile 2>&1
 echo "Packaging"
-./package.sh linux Coldest$REVISION >> $outfile 2>&1
+./package.sh linux ColdestAZ$REVISION >> $outfile 2>&1
 
 # Patches should no longer be necessary thanks to the updater
 #echo "Building Patch"
