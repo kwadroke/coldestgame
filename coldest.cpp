@@ -270,6 +270,20 @@ void InitGlobals()
    replayer = ReplayerPtr(new Replayer());
    console.Parse("set replay @none@", false);
 
+   console.Parse("set joysticknumber 0", false);
+   console.Parse("set joylookxaxis 0", false);
+   console.Parse("set joylookyaxis 0", false);
+   console.Parse("set joylookanalog 1", false);
+   console.Parse("set joylookaxisxdeadzone 0", false);
+   console.Parse("set joylookaxisydeadzone 0", false);
+   console.Parse("set joylookaxisyinvert 0", false);
+   console.Parse("set joybuttonfire 0", false);
+   console.Parse("set joybuttonuseitem 5", false);
+   console.Parse("set joybuttonloadout 6", false);
+   console.Parse("set joybuttonnextweap 2", false);
+   console.Parse("set joybuttonprevweap 3", false);
+   console.Parse("set joybuttonpower 9", false);
+
    // Variables that cannot be set from the console
 #ifndef DEDICATED
    lasttick = SDL_GetTicks();
@@ -466,6 +480,25 @@ void ReadConfig()
    keys.mouseuse = console.GetInt("mouseuse");
    keys.mousenextweap = console.GetInt("mousenextweap");
    keys.mouseprevweap = console.GetInt("mouseprevweap");
+
+   //Populate joystickbindings
+   /*
+   int joysticknumber = console.GetInt("joysticknumber");
+   int joylookxaxis = console.GetInt("joylookxaxis");
+   int joylookyaxis = console.GetInt("joylookyaxis");
+   int joylookanalog = console.GetInt("joylookanalog");
+   int joylookaxisxdeadzone = console.GetInt("joylookaxisxdeadzone");
+   int joylookaxisydeadzone = console.GetInt("joylookaxisydeadzone");
+   int joylookaxisyinvert  = console.GetInt("joylookaxisyinvert");
+   int joybuttonfire= console.GetInt("joybuttonfire");
+   int joybuttonuseitem = console.GetInt("joybuttonuseitem");
+   int joybuttonloadout = console.GetInt("joybuttonloadout");
+   int joybuttonnextweap = console.GetInt("joybuttonnextweap");
+   int joybuttonprevweap = console.GetInt("joybuttonprevweap");
+   int joybuttonpower  = console.GetInt("joybuttonpower ");
+   //int joy. = console.GetInt("joy");
+   */
+
 }
 
 
@@ -555,6 +588,32 @@ void SetupSDL()
    }
 
    atexit(SDLNet_Quit);
+
+   //Added by Kwadroke - Joystick support
+   if (SDL_Init( SDL_INIT_JOYSTICK ) < 0)
+   {
+    logout << "Can not init Joystick." << endl;
+   }
+   else
+   {
+     logout << "SDL_Joystick Initialized. Checking for Joysticks" << endl;
+     logout << "Joysticks found: " <<  SDL_NumJoysticks() << endl;
+     if (SDL_NumJoysticks() > 0)
+     {
+        logout << "The names of the joysticks are:\n" << endl;
+        int i = 0;
+        for( i=0; i < SDL_NumJoysticks(); i++ )
+        {
+            logout << "  " << SDL_JoystickName(i) << endl;
+
+            //Show number of buttons - test...
+            //joystick= SDL_JoystickOpen(i);
+            logout << "Number of Buttons:  " << SDL_JoystickNumButtons(SDL_JoystickOpen(i)) << endl;
+           logout << "Number of Axis:  " << SDL_JoystickNumAxes(SDL_JoystickOpen(i)) << endl;
+        }
+     }
+   }
+
 }
 
 
@@ -1515,10 +1574,123 @@ void GameEventHandler(SDL_Event &event)
                   guncam = !guncam;
             }
             break;
+
          case SDL_MOUSEBUTTONUP:
             if (event.button.button == keys.mousefire)
+            {
                player[0].leftclick = false;
+            }
             break;
+
+
+        case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */{ // NEEDS WORK
+            // If you change these values, don't forget to update the HUD indicator with the new ones
+            float joyminrotx = -120.f;
+            float joymaxrotx = 120.f;
+            float joyminroty = -90.f;
+            float joymaxroty = 90.f;
+            float joyzoomfactor =  1.f;
+            //float joyspeed = console.GetFloat("joystickspeed") / 100.f;
+            float joyspeed =0.0035f;
+            if (!guncam)
+               joyzoomfactor = 1.f;
+
+            if ( ( event.jaxis.value > -34000 ) || (event.jaxis.value < 34000 ) )
+               {
+               logout << "Joystick Axis Value:  " << event.jaxis.value << endl;
+               logout << "Joystick Axis:  " << event.jaxis.axis << endl;
+               if( event.jaxis.axis == 0)
+               {
+                  //player[0].rotation = event.jaxis.value / joyspeed / joyzoomfactor;
+                  player[0].rotation = joyspeed / joyzoomfactor * event.jaxis.value;
+                  if (player[0].rotation < joyminrotx) player[0].rotation = joyminrotx;
+                  if (player[0].rotation > joymaxrotx) player[0].rotation = joymaxrotx;
+                  //SDL_WarpMouse(screenwidth / 2, screenheight / 2);
+               }
+
+               if( event.jaxis.axis == 1)
+               {
+                  //player[0].pitch = event.jaxis.value / joyspeed / joyzoomfactor;
+                  player[0].pitch = joyspeed / joyzoomfactor * event.jaxis.value;
+                  if (player[0].pitch <= joyminroty) player[0].pitch = joyminroty;
+                  if (player[0].pitch >= joymaxroty) player[0].pitch = joymaxroty;
+                }
+             }
+        }
+        break;
+
+
+        case SDL_JOYBUTTONDOWN:  /* Handle Joystick Button Presses */
+                   logout << "Joystick Down Button:  " << event.jbutton.button << endl;
+                   if ( event.jbutton.button == 0 )  //fire
+                   {
+                      player[0].leftclick = true;
+                      if (player[0].spectate)
+                          SpectateNext();
+                   }
+                   else if (event.jbutton.button == 11)
+                   {
+                          vector<SpawnPointData> allspawns = currmap->SpawnPoints();
+                          vector<SpawnPointData> itemspawns = GetSpawns(items);
+                          allspawns.insert(allspawns.end(), itemspawns.begin(), itemspawns.end());
+                          if (!player[0].spawned || NearSpawn(player[0], allspawns))
+                          {
+                             gui[loadoutmenu]->visible = true;
+                             gui[hud]->visible = false;
+                             netcode->SendLoadout();
+                             player[0].Kill();
+                          }
+                  }
+                  else if (event.jbutton.button == 6)
+                  {
+                      netcode->UseItem();
+                  }
+                  else if (event.jbutton.button == 5)
+                  {
+                      player[0].run = true;
+                  }
+                  else if (event.jbutton.button == 12)
+                  {
+                      gui[ingamestatus]->visible = true;
+                  }
+                  else if (event.jbutton.button == 8)
+                  {
+                          netcode->SendPowerdown();
+                  }
+                  else if (event.jbutton.button == 9)
+                  {
+                          //netcode->SendPowerup();
+                  }
+        break;
+
+        case SDL_JOYBUTTONUP:  /* Handle Joystick Button Presses */
+                   logout << "Joystick Up Button:  " << event.jbutton.button << endl;
+                    if ( event.jbutton.button == 0 )
+                    {
+                       player[0].leftclick = false;
+                    }
+                    else if (event.jbutton.button == 5)
+                    {
+                     player[0].run = false;
+                    }
+                    else if (event.jbutton.button == 6)
+                    {
+                    //Nothing
+                    }
+                    else if (event.jbutton.button == 12)
+                    {
+                       gui[ingamestatus]->visible = false;
+                    }
+                    else if (event.jbutton.button == 8)
+                    {
+                          //nothing
+                    }
+                    else if (event.jbutton.button == 9)
+                    {
+                          //nothing
+                    }
+         break;
+
 
          case SDL_QUIT:
             Quit();

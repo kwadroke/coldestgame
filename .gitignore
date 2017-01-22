@@ -18,5 +18,10 @@ version
 buildoutput
 *.pyc
 console.log
+server
+master
+cazserver
+cazmaster
+tmp
 
 docker
