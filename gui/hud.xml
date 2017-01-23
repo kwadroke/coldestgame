@@ -105,7 +105,7 @@
       <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
             normal="textures/hud/powerdownshade.png"/>
       <Label x="425" y="350" width="150" height="30" text="Powered Down" align="center" name="powereddowntext"/>
-      <Label x="425" y="380" width="150" height="30" text="Repairing" align="center" name="powereddowntext"/>
+      <Label x="420" y="380" width="160" height="30" text="Waiting for Game Start" align="center" name="powereddownstatustext"/>
    </Label>
 
 

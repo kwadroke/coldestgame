@@ -1205,11 +1205,13 @@ void GUIUpdate()
 
       // Hide show powered down hud gui
       GUI* powerdownstatus = gui[hud]->GetWidget("powerdown");
+      GUI* powereddownstatustext = gui[hud]->GetWidget("powereddownstatustext");
       if (!player[servplayernum].powerdowntime && !editor)
       {
          powerdownstatus->visible = false;
       } else {
          powerdownstatus->visible = true;
+         //powereddownstatustext->text = "Repairing";
       }
 
       // Hide show overheat status on hud gui
@@ -1487,6 +1489,8 @@ void GameEventHandler(SDL_Event &event)
             }
             else if (event.key.keysym.sym == keys.keypower)
             {
+               GUI* powereddownstatustext = gui[hud]->GetWidget("powereddownstatustext");
+               powereddownstatustext->text = "Repairing";
                netcode->SendPowerdown();
             }
             else if (event.key.keysym.sym == keys.keyfire)
@@ -1686,7 +1690,9 @@ void GameEventHandler(SDL_Event &event)
                   }
                   else if (event.jbutton.button == 8)
                   {
-                          netcode->SendPowerdown();
+                      GUI* powereddownstatustext = gui[hud]->GetWidget("powereddownstatustext");
+                      powereddownstatustext->text = "Repairing";
+                      netcode->SendPowerdown();
                   }
                   else if (event.jbutton.button == 9)
                   {

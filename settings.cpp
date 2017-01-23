@@ -57,6 +57,7 @@ void UpdateSettings()
    GUI* weapon0button = gui[settings]->GetWidget("weapon0button");
    GUI* weapon1button = gui[settings]->GetWidget("weapon1button");
    GUI* weapon2button = gui[settings]->GetWidget("weapon2button");
+   GUI* detectedjoystick = gui[settings]->GetWidget("detectedjoystick");
 
    partupdintslider->value = console.GetInt("partupdint");
    partcountslider->value = 0;//console.GetInt("partcount");
@@ -86,6 +87,19 @@ void UpdateSettings()
    weapon0button->text = SDL_GetKeyName(keys.keyweapon0);
    weapon1button->text = SDL_GetKeyName(keys.keyweapon1);
    weapon2button->text = SDL_GetKeyName(keys.keyweapon2);
+
+   //Display Joystick information
+
+   if ( SDL_Init( SDL_INIT_JOYSTICK ) < 0)
+   {
+      detectedjoystick->text = "No Joysticks Detected";
+   }
+   else
+   if (SDL_JoystickName(0))
+   {
+      detectedjoystick->text = ToString(SDL_JoystickName(0));
+   }
+
 
    // Set boxes to current aa/af settings
    int aa = console.GetInt("aa");

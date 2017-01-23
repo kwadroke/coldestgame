@@ -233,6 +233,11 @@
                <Label width="300" height="30" text="Screenshot" normal="textures/labelclear.png">
                   <Label x="300" y="0" width="80" height="30" text="F12" normal="textures/labelclear.png"/>
                </Label>
+               <Label width="300" height="30" text="Joysticks" normal="textures/labelclear.png">
+               </Label>
+               <Label x="0" y="0" width="300" height="30" text="Joystick Detected" normal="textures/labelclear.png">
+                 <Label x="300" y="0" width="400" height="30" name="detectedjoystick" text="None" normal="textures/labelclear.png"/>
+               </Label>
             </Layout>
          </Layout>
       </Tab>
