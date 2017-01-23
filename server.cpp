@@ -158,9 +158,9 @@ int Server(void* dummy)
    servernetcode = ServerNetCodePtr(new ServerNetCode());
    ServerLoadMap(console.GetString("map"));
    serverinput = SDL_CreateThread(ServerInput, NULL);
-   
+
    ServerLoop();
-   
+
    bots.clear();
    SDL_WaitThread(serverinput, NULL);
    return 0;
@@ -170,17 +170,17 @@ int Server(void* dummy)
 void ServerLoop()
 {
    setsighandler();
-   
+
    logout << "ServerLoop " << gettid() << endl;
-   
+
    Uint32 currtick;
    Timer frametimer;
    frametimer.start();
-   
+
    while (running)
    {
       servernetcode->Update();
-      
+
       if (console.GetBool("limitserverrate"))
       {
          while (frametimer.elapsed() < Uint32(1000 / servertickrate - 1))
@@ -206,7 +206,7 @@ void ServerLoop()
       {
          ServerLoadMap(servermapname);
       }
-      
+
       // Update server meshes
       // Needs to happen before updating players or meshes added by netcode may end up with bogus collision detection data
       for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
@@ -221,7 +221,7 @@ void ServerLoop()
          if (serverplayers[i].connected && currtick > serverplayers[i].lastupdate + timeout * 1000)
          {
             servernetcode->EraseValidAddr(serverplayers[i].addr);
-            serverplayers[i].salvage += CalculatePlayerWeight(serverplayers[i]); 
+            serverplayers[i].salvage += CalculatePlayerWeight(serverplayers[i]);
             serverplayers[i].Disconnect();
             servernetcode->SendMessage(serverplayers[i].name + " timed out.");
          }
@@ -241,38 +241,38 @@ void ServerLoop()
                      currpathnode = pathnodes[j];
                   }
                }
-               
+
                Vector3 facingvec(0.f, 0.f, -1.f);
                GraphicMatrix m;
                m.rotatey(serverplayers[i].facing);
                facingvec.transform(m);
                facingvec *= 500.f;
-               
+
                //logout << "currpathnode " << currpathnode << endl;
-               
+
                logout << "Server validation " << currpathnode->Validate(serverplayers[i].pos, facingvec, serverplayers[i].size) << endl;
                logout << serverplayers[i].pos << endl << facingvec << endl << serverplayers[i].size << endl;
             }
-            
+
             ServerUpdatePlayer(i);
          }
       }
-         
+
       UpdateVisibility();
-      
+
       Bot::SetPlayers(serverplayers);
       for (size_t i = 0; i < bots.size(); ++i)
       {
          bots[i]->SetAllSpawns(servermap->SpawnPoints());
       }
-      
+
       // Save state so we can recall it for collision detection
       SaveState();
-         
+
       // Update particles
       int updinterval = 100;
       UpdateParticles(servparticles, updinterval, serverkdtree, servermeshes, serverplayers, Vector3(), &HandleHit, &Rewind);
-         
+
       // Update server FPS
       ++framecount;
       currtick = SDL_GetTicks();
@@ -303,7 +303,7 @@ void ServerLoadMap(const string& mn)
 
    // Wait for main thread to load the map - after this completes servermap should be properly populated
    while (serverloadmap) {SDL_Delay(1);}
-   
+
    // Generate main base items
    for (size_t i = 0; i < servermap->SpawnPoints().size(); ++i)
    {
@@ -317,13 +317,13 @@ void ServerLoadMap(const string& mn)
       curritem.id = serveritemid;
       curritem.team = servermap->SpawnPoints(i).team;
    }
-   
+
    // Must be done here so it's available for KDTree creation
    for (Meshlist::iterator i = servermeshes.begin(); i != servermeshes.end(); ++i)
    {
       i->Update();
    }
-   
+
    Vector3vec points(8, Vector3());
    for (int i = 0; i < 4; ++i)
    {
@@ -335,15 +335,15 @@ void ServerLoadMap(const string& mn)
    }
    serverkdtree = ObjectKDTree(&servermeshes, points);
    serverkdtree.refine(0);
-   
+
    size_t numbots = console.GetInt("bots");
    if (numbots && !LoadPathData())
       GenPathData();
-   
+
    logout << "Server map loaded" << endl;
 
    consoleloadmap = 0;
-   
+
    bots.clear();
    Bot::Initialize();
    Bot::SetPathNodes(pathnodes);
@@ -358,10 +358,10 @@ void ServerLoadMap(const string& mn)
 void HandleHit(Particle& p, Mesh* curr, const Vector3& hitpos)
 {
    servernetcode->SendHit(hitpos, p);
-   
+
    if (!curr)
       return;
-   
+
    if (floatzero(p.dmgrad))
    {
       ApplyDamage(curr, p.damage, p.playernum);
@@ -378,19 +378,19 @@ void SplashDamage(const Vector3& hitpos, float damage, float dmgrad, int playern
    vector<Mesh*> hitmeshes;
    vector<Mesh*> check;
    Vector3 dummy; // Don't care about where we hit with splash
-   
+
    unsigned int numlevels = console.GetInt("splashlevels");
    for (size_t i = 1; i <= numlevels; ++i)
    {
       // Have to reget the meshes each time or we can end up checking removed ones
       check = serverkdtree.getmeshes(hitpos, hitpos, dmgrad);
       AppendDynamicMeshes(check, servermeshes);
-      
+
       Mesh* dummymesh;
       coldet.CheckSphereHit(hitpos, hitpos, dmgrad * (float(i) / float(numlevels)), check, servermap, dummy, dummymesh, NULL, &hitmeshes);
       std::sort(hitmeshes.begin(), hitmeshes.end());
       hitmeshes.erase(std::unique(hitmeshes.begin(), hitmeshes.end()), hitmeshes.end());
-      
+
       for (vector<Mesh*>::iterator j = hitmeshes.begin(); j != hitmeshes.end(); ++j)
       {
          ApplyDamage(*j, damage / float(numlevels), playernum, teamdamage);
@@ -446,7 +446,7 @@ void ApplyDamage(Mesh* curr, const float damage, const size_t playernum, const b
       {
          logout << "Hit item " << curr << endl;
          i->hp -= int(damage);
-         
+
          size_t spawnpoint = servermap->SpawnPoints().size();
          for (size_t j = 0; j < servermap->SpawnPoints().size(); ++j)
          {
@@ -494,15 +494,15 @@ void ServerUpdatePlayer(int i)
    serverplayers[i].temperature -= ticks * coolrate;
    if (serverplayers[i].temperature < 0)
       serverplayers[i].temperature = 0;
-   
+
    // Update spawn timer
    serverplayers[i].spawntimer -= ticks;
    if (serverplayers[i].spawntimer < 0)
       serverplayers[i].spawntimer = 0;
-   
+
    if (!serverplayers[i].spawned)
       return;
-   
+
    // Give them the benefit of the doubt and cool them before calculating overheating
    if (serverplayers[i].temperature > 100.f && serverplayers[i].spawned && console.GetBool("overheat"))
    {
@@ -512,7 +512,7 @@ void ServerUpdatePlayer(int i)
       logout << "Player " << i << " overheated." << endl;
       logout << serverplayers[i].temperature << endl;
    }
-   
+
    // Powered down?
    bool powereddown = (serverplayers[i].powerdowntime > 0);
    serverplayers[i].powerdowntime -= ticks; // Reuse lastcoolingtick
@@ -533,9 +533,9 @@ void ServerUpdatePlayer(int i)
          }
       }
    }
-   
+
    if (serverplayers[i].powerdowntime) return;
-   
+
    // Healing
    serverplayers[i].healaccum += float(ticks) * .0005f;
    if (serverplayers[i].healaccum > 1)
@@ -553,15 +553,15 @@ void ServerUpdatePlayer(int i)
          }
       }
    }
-   
+
    // Movement and necessary model updates
-   
+
    // This is odd, but I'm too lazy to fix it.  We call UpdatePlayerModel twice: once to make sure
    // the model is loaded, the second to move it to its new position.  Loading and moving should
    // probably be done separately, but I doubt this is going to have any significant effect
    // so I'm just going to leave it.
    UpdatePlayerModel(serverplayers[i], servermeshes, false);
-   
+
    // If we rewind here then when we put the state back to 0 time offset we actually get the
    // previous state, which is bad because player models get stuck.  Thus movement collisions
    // won't be lag-compensated for now (will this be a problem? We'll see).
@@ -572,11 +572,11 @@ void ServerUpdatePlayer(int i)
       //Rewind(0);
       UpdatePlayerModel(serverplayers[i], servermeshes, false);
    }
-   
+
    // Shots fired!
    int weaponslot = weaponslots[serverplayers[i].currweapon];
    Weapon& currplayerweapon = serverplayers[i].weapons[weaponslot];
-   while (serverplayers[i].firerequests.size() && 
+   while (serverplayers[i].firerequests.size() &&
        (SDL_GetTicks() - serverplayers[i].lastfiretick[weaponslot] >= currplayerweapon.ReloadTime()) &&
        (currplayerweapon.ammo != 0) && serverplayers[i].hp[weaponslot] > 0)
    {
@@ -584,23 +584,23 @@ void ServerUpdatePlayer(int i)
       Vector3 startpos = serverplayers[i].pos;
       Vector3 rot(serverplayers[i].pitch, serverplayers[i].facing + serverplayers[i].rotation, 0.f);
       Vector3 offset = units[serverplayers[i].unit].weaponoffset[weaponslots[serverplayers[i].currweapon]];
-      
+
       Particle part = CreateShot(currplayerweapon, rot, startpos, offset, units[serverplayers[i].unit].viewoffset, i);
       part.rewind = serverplayers[i].ping;
       part.id = nextservparticleid;
-      
+
 
       serverplayers[i].lastfiretick[weaponslot] = SDL_GetTicks();
       serverplayers[i].temperature += currplayerweapon.Heat();
       if (currplayerweapon.ammo > 0) // Negative ammo value indicates infinite ammo
          currplayerweapon.ammo--;
-      
+
       servparticles.push_back(part);
 
       serverplayers[i].firerequests.pop_front();
-      
+
       servernetcode->SendShot(part);
-      
+
       RewindPlayer(0, i);
    }
 }
@@ -609,26 +609,26 @@ void ServerUpdatePlayer(int i)
 ServerState& GetState(Uint32 ticks)
 {
    Uint32 currtick = SDL_GetTicks();
-   
+
    // Remove states older than 500 ms
    while (oldstate.size() && currtick - oldstate[0].tick > 3000)
    {
       oldstate.pop_front();
    }
-   
+
    if (!oldstate.size())
    {
       logout << "Error: GetState ran out of states" << endl;
       oldstate.push_back(ServerState(0));
    }
-   
+
    // Search backwards through our old states.  Stop at 0 and use that if we don't have a state old enough
    size_t i;
    for (i = oldstate.size() - 1; i > 0; --i)
    {
       if (currtick - oldstate[i].tick >= ticks) break;
    }
-   
+
    return oldstate[i];
 }
 
@@ -638,9 +638,9 @@ ServerState& GetState(Uint32 ticks)
 void Rewind(Uint32 ticks, const Vector3& start, const Vector3& end, const float radius)
 {
    if (!oldstate.size()) return;
-   
+
    ServerState& state = GetState(ticks);
-   
+
    Vector3 move = end - start;
    float movemaginv = 1.f / start.distance(end);
    size_t rewindcounter = 0;
@@ -673,11 +673,11 @@ void Rewind()
 void RewindPlayer(Uint32 ticks, size_t p)
 {
    if (!oldstate.size()) return;
-   
+
    if (serverplayers[p].spawned)
    {
       ServerState& state = GetState(ticks);
-      
+
       bool found = false;
       size_t j = 0;
       for (; j < state.index.size(); ++j)
@@ -690,7 +690,7 @@ void RewindPlayer(Uint32 ticks, size_t p)
       }
       if (!found)
          return;
-      
+
       for (size_t k = 0; k < numbodyparts; ++k)
       {
          if (serverplayers[p].hp[k] > 0)
@@ -705,7 +705,7 @@ void RewindPlayer(Uint32 ticks, size_t p)
 void SaveState()
 {
    ServerState newstate(SDL_GetTicks());
-   
+
    for (size_t i = 0; i < serverplayers.size(); ++i)
    {
       if (serverplayers[i].spawned)
@@ -768,7 +768,7 @@ void AddItem(const Item& it, int oppnum)
       curritem.mesh = servermeshes.begin();
       curritem.id = serveritemid;
       curritem.team = serverplayers[oppnum].team;
-      
+
       for (size_t i = 1; i < serverplayers.size(); ++i)
       {
          if (serverplayers[i].connected)
@@ -791,7 +791,7 @@ vector<Item>::iterator RemoveItem(const vector<Item>::iterator& it)
          p << "R\n";
          p << p.ack << eol;
          p << it->id << eol;
-         
+
          servqueue.push_back(p);
       }
    }
@@ -822,7 +822,7 @@ void RemoveTeam(int num)
 void LoadMapList()
 {
    NTreeReader readmaps("maps/maplist");
-   
+
    for (size_t i = 0; i < readmaps.NumChildren(); ++i)
    {
       const NTreeReader& currmap = readmaps(i);
@@ -857,7 +857,7 @@ void UpdateVisibility()
 {
    visible.clear();
    visible = vector<intvec>(serverplayers.size(), intvec(serverplayers.size(), -1));
-   
+
    for (size_t i = 1; i < serverplayers.size(); ++i)
    {
       for (size_t j = 1; j < serverplayers.size(); ++j)
@@ -872,7 +872,7 @@ void UpdateVisibility()
                                              check,
                                              servermap,
                                              NULL);
-         
+
             visible[i][j] = hit ? 0 : 1;
             visible[j][i] = visible[i][j]; // If j is visible to i, then the reverse should also be true
          }
@@ -887,11 +887,11 @@ void GenPathData()
    float checkdist = servermap->PathNodeCheckDist();
    size_t width = servermap->Width();
    size_t height = servermap->Height();
-   
+
    Vector3 base(step / 2.f, -1000.f, step / 2.f);
    Vector3 start(base);
    start.y = servermap->MaxHeight() + step;
-   
+
    vector<Mesh*> check = serverkdtree.getmeshes(start, base, step / 2.f);
    Vector3 hitpos;
    Mesh* dummy;
@@ -903,7 +903,7 @@ void GenPathData()
                          hitpos,
                          dummy);
    base.y = hitpos.y;
-   
+
    pathnodes.push_back(PathNodePtr(new PathNode(base)));
    size_t i = 0;
    bool hit = false;
@@ -923,7 +923,7 @@ void GenPathData()
             while (!hit)
             {
                start.y += checkdist;
-               
+
                check = serverkdtree.getmeshes(start, base, step / 2.f);
                hit = coldet.CheckSphereHit(start,
                                           base,
@@ -934,7 +934,7 @@ void GenPathData()
                                           dummy);
             }
             add[j].y = hitpos.y;
-            
+
             bool addnew = true;
             for (size_t k = 0; k < pathnodes.size(); ++k)
             {
@@ -951,7 +951,7 @@ void GenPathData()
                if (one.distance2(two) < 10.f && addnew)
                   logout << pathnodes[k]->position << "  " << add[j] << endl;*/
             }
-            
+
             if (addnew)
             {
                pathnodes.push_back(PathNodePtr(new PathNode(add[j])));
@@ -962,7 +962,7 @@ void GenPathData()
       }
       ++i;
    }
-   
+
    // Determine whether nodes are passable
    for (i = 0; i < pathnodes.size(); ++i)
    {
@@ -985,7 +985,7 @@ void GenPathData()
          }
       }
    }
-   
+
    // Write results to file so we don't have to do this again
    ofstream out(servermap->PathName().c_str());
    out << "FileVersion " << aipathversion << endl;
@@ -1015,7 +1015,7 @@ bool LoadPathData()
    NTreeReader reader(servermap->PathName());
    if (reader.Error())
       return false;
-   
+
    int version = 0;
    reader.Read(version, "FileVersion");
    if (version != aipathversion)
@@ -1025,7 +1025,7 @@ bool LoadPathData()
    }
    float step = 0.f;
    reader.Read(step, "Step");
-   
+
    pathnodes.clear();
    for (size_t i = 0; i < reader.NumChildren(); ++i)
    {
@@ -1034,7 +1034,7 @@ bool LoadPathData()
       curr.Read(pos.x, "Pos", 0);
       curr.Read(pos.y, "Pos", 1);
       curr.Read(pos.z, "Pos", 2);
-      
+
       PathNodePtr p(new PathNode(pos));
       p->step = step;
       for (size_t j = 0; j < p->nodes.size(); ++j)
@@ -1046,7 +1046,7 @@ bool LoadPathData()
       }
       pathnodes.push_back(p);
    }
-   
+
    for (size_t i = 0; i < pathnodes.size(); ++i)
    {
       for (size_t j = 0; j < pathnodes[i]->nodes.size(); ++j)
@@ -1057,4 +1057,3 @@ bool LoadPathData()
    }
    return true;
 }
-

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUI virtualw="1000" virtualh="1000" font="fonts/xirod.ttf" visible="false">
-   <Table x="100" y="100" width="800" height="600" name="playerlist" columns="4" colwidths="500|100|100|100" rowheight="25"
+   <Table x="100" y="200" width="800" height="600" name="playerlist" columns="4" colwidths="500|100|100|100" rowheight="25"
           normal="textures/hud/button.png">
    </Table>
 </GUI>

@@ -210,7 +210,7 @@ void InitGlobals()
    console.Parse("set detailmapsize 600", false);
    console.Parse("set softshadows 0", false);
    console.Parse("set turnsmooth 20", false);
-   console.Parse("set endgametime 3", false);
+   console.Parse("set endgametime 5", false);
    console.Parse("set splashlevels 3", false);
    console.Parse("set grassdrawdist 1000", false);
    console.Parse("set grassdensity 1", false);
@@ -890,7 +890,10 @@ void MainLoop()
       {
          GUI* gotext = gui[endgame]->GetWidget("GameOverText");
          gotext->text = "Team " + ToString(winningteam) + " wins!";
+
          ShowGUI(endgame);
+         //lets show the score on map end
+         gui[ingamestatus]->visible = true;
       }
 
       replayer->Update();
