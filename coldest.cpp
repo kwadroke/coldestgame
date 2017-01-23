@@ -2873,6 +2873,15 @@ void StartBGMusic()
 }
 
 
+void StopBGMusic()
+{
+#ifndef DEDICATED
+  musicsource = resman.soundman.PlaySound("", Vector3(), true, true);
+#endif
+}
+
+
+
 void RegenFBOList()
 {
 #ifndef DEDICATED
@@ -2996,7 +3005,7 @@ void LoadMap(const string& map)
 
    winningteam = 0;
    netcode->SendSync();
-
+   StopBGMusic();
    if (!replaying)
       ShowGUI(loadoutmenu);
    else
