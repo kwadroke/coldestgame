@@ -246,6 +246,8 @@ void InitGlobals()
    console.Parse("set checkupdates 1", false);
    console.Parse("set caminterp 50", false);
    console.Parse("set recordfps 30", false);
+   console.Parse("set startfpv 1", false);
+   console.Parse("set startupdelay 20", false);
 
    // Default keybindings
    console.Parse("set keyforward " + ToString(SDLK_w), false);

@@ -227,6 +227,21 @@ void ServerLoop()
          }
          else if (serverplayers[i].connected)
          {
+            //start powered down if greater than zero
+
+            int startupdelay = console.GetInt("startupdelay") * 1000;
+            if (currtick < startupdelay)
+            {
+              //Power down
+              serverplayers[i].powerdowntime = startupdelay - currtick;
+            }
+            /*
+             else
+            {
+                          serverplayers[i].powerdowntime = NULL;
+            }
+            */
+
             // *** Debugging of pathing code ***
             if (false)
             {
