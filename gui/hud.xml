@@ -92,6 +92,10 @@
    <Label x="790" y="53" width="90" height="30" text="Direction" name="direction"/>
    <Label x="890" y="53" width="50" height="30" text="" name="directionstatus"/>
 
+   <!-- Game Time -->
+   <Label x="790" y="93" width="90" height="30" text="Game Time" name="gametime"/>
+   <Label x="890" y="93" width="50" height="30" text="" name="gametimestatus"/>
+
    <!-- Damage indicator-->
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
           normal="textures/hit.png"/>

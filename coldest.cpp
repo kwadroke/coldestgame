@@ -1239,6 +1239,32 @@ void GUIUpdate()
       } else {
          speedstatus->visible = false;
       }
+      //Display Time
+      GUI* gametimestatus = gui[hud]->GetWidget("gametimestatus");
+      unsigned int lastdisplaytime = 0, currentdisplaytime;
+
+      currentdisplaytime = SDL_GetTicks();
+      if (!player[servplayernum].powerdowntime && !editor && currentdisplaytime > lastdisplaytime + 1000)
+      {
+         int total, seconds, minutes;
+         string displaytime, newseconds;
+         total = roundf(currentdisplaytime / 1000);
+         minutes = total / 60;
+         seconds = total % 60;
+         minutes = minutes % 60;
+         newseconds = ToString(seconds);
+         if (seconds < 10)
+         {
+           newseconds = "0" + newseconds;
+         }
+         displaytime = ToString(minutes) + ":" + ToString(newseconds);
+         gametimestatus->visible = true;
+         //gametimestatus->text = ToString(roundf( SDL_GetTicks() / 1000 ));
+         gametimestatus->text = ToString(displaytime);
+         lastdisplaytime = currentdisplaytime;
+      } else {
+         gametimestatus->visible = false;
+      }
 
    }
 #endif

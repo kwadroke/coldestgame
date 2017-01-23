@@ -58,6 +58,8 @@ bool replaying;
 bool spawnschanged;
 ClientNetCodePtr netcode;
 UpdaterPtr updater;
+int currentdisplaytime;
+int lastdisplaytime;
 #ifndef DEDICATED
 FontCache fontcache;
 #endif
