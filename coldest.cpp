@@ -1244,6 +1244,7 @@ void GUIUpdate()
          speedstatus->visible = false;
       }
       //Display Time
+      /* Disabling this for now until a way to get time from server
       GUI* gametimestatus = gui[hud]->GetWidget("gametimestatus");
       unsigned int lastdisplaytime = 0, currentdisplaytime;
 
@@ -1269,7 +1270,7 @@ void GUIUpdate()
       } else {
          gametimestatus->visible = false;
       }
-
+      */
    }
 #endif
 }

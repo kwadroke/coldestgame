@@ -82,7 +82,7 @@
    </Label>
 
    <!-- Over heat status -->
-   <Label x="410" y="280" width="180" height="50" text="Over Heat Warning" align="center" name="overheatstatus"/>
+   <Label x="390" y="280" width="220" height="60" text="#700Over Heat Warning" align="center" name="overheatstatus"/>
 
    <!-- Speed status -->
    <Label x="790" y="13" width="90" height="30" text="Speed" name="speed"/>
@@ -93,8 +93,10 @@
    <Label x="890" y="53" width="50" height="30" text="" name="directionstatus"/>
 
    <!-- Game Time -->
+   <!-- Taking this out for now...
    <Label x="790" y="93" width="90" height="30" text="Game Time" name="gametime"/>
    <Label x="890" y="93" width="50" height="30" text="" name="gametimestatus"/>
+   -->
 
    <!-- Damage indicator-->
    <Label x="0" y="0" width="1000" height="1000" text="" name="hitind"
