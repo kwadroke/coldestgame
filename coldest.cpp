@@ -954,6 +954,7 @@ void GUIUpdate()
 
    if (gui[loadoutmenu]->visible)
    {
+      guncam = true;
       if (spawnschanged)
       {
          ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
@@ -1217,13 +1218,22 @@ void GUIUpdate()
       // Hide show overheat status on hud gui
       // Need to add timer for audio playback to make sure it doesn't replay back to back
       GUI* overheatstatus = gui[hud]->GetWidget("overheatstatus");
-      if (!player[servplayernum].powerdowntime && !editor && player[servplayernum].temperature > 75)
-      {
-         overheatstatus->visible = true;
-      } else {
-         overheatstatus->visible = false;
-      }
+      GUI* templabel = gui[hud]->GetWidget("templabel");
+      GUI* temperature = gui[hud]->GetWidget("temperature");
 
+      if ( console.GetInt("overheat") != 0 )   // Don't check if overheat is disabled
+      {
+         if (!player[servplayernum].powerdowntime && !editor && player[servplayernum].temperature > 75 )
+         {
+            overheatstatus->visible = true;
+         } else {
+            overheatstatus->visible = false;
+         }
+      } else { //hide all temperature information as it is disabled
+        overheatstatus->visible = false;
+        templabel->visible = false;
+        temperature->visible = false;
+      }
       //Display Direction
       GUI* directionstatus = gui[hud]->GetWidget("directionstatus");
       if (!player[servplayernum].powerdowntime && !editor)
