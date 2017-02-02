@@ -95,52 +95,52 @@ int Server(void* dummy)
       switch (choosename)
       {
          case 0:
-            servername = "ORLY?";
+            servername = "Big Stompy Robots";
             break;
          case 1:
-            servername = "Scoop!";
+            servername = "Assaulting the Warriors";
             break;
          case 2:
-            servername = "YARLY!";
+            servername = "Hey look! A bird!";
             break;
          case 3:
-            servername = "Cybertron";
+            servername = "Admin didn't bother changing the name";
             break;
          case 4:
-            servername = "In ur server, pwnin ur cycles";
+            servername = "Death by Robot";
             break;
          case 5:
-            servername = "Nameless One";
+            servername = "Freaking freezing in here";
             break;
          case 6:
-            servername = "Aimbots Anonymous";
+            servername = "My Battle Frame is better";
             break;
          case 7:
-            servername = "Hax!";
+            servername = "Commanding the Tech";
             break;
          case 8:
-            servername = "Nooblet";
+            servername = "Giant Rust Buckets";
             break;
          case 9:
-            servername = "So yeah...and stuff";
+            servername = "Mechs shouldn't have hands";
             break;
          case 10:
-            servername = "<3 unnamed servers";
+            servername = "But it's a dry overheat";
             break;
          case 11:
-            servername = "Candy Land";
+            servername = "Burninating the countryside";
             break;
          case 12:
-            servername = "[insert server name here]";
+            servername = "Tin-foil Armor";
             break;
          case 13:
-            servername = "404: Server name not found";
+            servername = "Eject! Eject! Eject!";
             break;
          case 14:
-            servername = "I have a bad feeling about this...";
+            servername = "Mouthy Mercs";
             break;
          case 15:
-            servername = "Indubitably";
+            servername = "Awesome Server Name";
             break;
       }
       logout << "Chose name " << servername << " which is #" << choosename << endl;
