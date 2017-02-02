@@ -954,7 +954,7 @@ void GUIUpdate()
 
    if (gui[loadoutmenu]->visible)
    {
-      guncam = true;
+
       if (spawnschanged)
       {
          ComboBox *spawnpointsbox = (ComboBox*)gui[loadoutmenu]->GetWidget("SpawnPoints");
@@ -1010,6 +1010,7 @@ void GUIUpdate()
       {
          spawntimer->visible = false;
       }
+      guncam = true; //set view to fov
    }
    else if (!player[0].spawned && !PrimaryGUIVisible())
    {
@@ -1182,6 +1183,7 @@ void GUIUpdate()
 
       GUI* reticle = gui[hud]->GetWidget("reticle");
       GUI* cockpit = gui[hud]->GetWidget("cockpit");
+      GUI* dirmarker = gui[hud]->GetWidget("dirmarker");
       GUI* hudmap = gui[hud]->GetWidget("hudmap");
 
       if (!reticle)
@@ -1195,12 +1197,14 @@ void GUIUpdate()
             reticle->visible = false;
             cockpit->visible = false;
             hudmap->visible = false;
+            dirmarker->visible = false;
          }
          else
          {
             reticle->visible = true;
             cockpit->visible = true;
             hudmap->visible = true;
+            dirmarker->visible = true;
          }
       }
 

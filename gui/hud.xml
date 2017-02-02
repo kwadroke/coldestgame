@@ -53,10 +53,12 @@
 
 
    <!-- Center -->
-   <Label x="485" y="175" width="30" height="30" name="facingcenter"
-          normal="textures/hud/buttongreen.png"/>
-   <Slider x="400" y="175" width="200" height="30" name="facing" min="-120" max="120"
-                normal="textures/hud/posmarker.png"/>
+   <Label x="0" y="0" width="1000" height="1000" text="" name="dirmarker">
+      <Label x="485" y="175" width="30" height="30" name="facingcenter"
+             normal="textures/hud/buttongreen.png"/>
+      <Slider x="400" y="175" width="200" height="30" name="facing" min="-120" max="120"
+             normal="textures/hud/posmarker.png"/>
+   </Label>
 
 
 
