@@ -1015,6 +1015,7 @@ void GUIUpdate()
    else if (!player[0].spawned && !PrimaryGUIVisible())
    {
       gui[loadoutmessage]->visible = true;
+      guncam = true;
    }
    else
       gui[loadoutmessage]->visible = false;
@@ -2919,7 +2920,8 @@ void StartBGMusic()
 {
 #ifndef DEDICATED
    resman.soundman.SetVolume(console.GetFloat("effectsvol"));
-   musicsource = resman.soundman.PlaySound("sounds/bgmusic.ogg", Vector3(), true, true);
+   //musicsource = resman.soundman.PlaySound("sounds/bgmusic.ogg", Vector3(), true, true);
+   musicsource = resman.soundman.PlaySound("sounds/music/Mini_Epic_Theme.ogg", Vector3(), true, true);
    musicsource->SetGain(console.GetFloat("musicvol") / 100.f);
 #endif
 }

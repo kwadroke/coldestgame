@@ -75,7 +75,7 @@ short maxplayers;
 deque<ServerState> oldstate;
 vector<string> maplist;
 bool gameover;
-Uint32 nextmaptime;
+Uint32 nextmaptime = 0;
 set<unsigned long> commandids;
 size_t framecount;
 Uint32 lastfpsupdate;
@@ -195,16 +195,24 @@ void ServerLoop()
       }
       frametimer.start();
 
+      int mapstart;
+      int startupdelay = console.GetInt("startupdelay") * 1000;
+
       if (gameover && SDL_GetTicks() > nextmaptime)
       {
          srand(time(0));
          int choosemap = (int) Random(0, maplist.size());
          ServerLoadMap(maplist[choosemap]);
+         mapstart=SDL_GetTicks();
+         logout << "Map Start " << mapstart << endl;
       }
+
 
       if (consoleloadmap)
       {
          ServerLoadMap(servermapname);
+         mapstart=SDL_GetTicks();
+         logout << "Map Start " << mapstart << endl;
       }
 
       // Update server meshes
@@ -227,21 +235,7 @@ void ServerLoop()
          }
          else if (serverplayers[i].connected)
          {
-            //start powered down if greater than zero
-
-            int startupdelay = console.GetInt("startupdelay") * 1000;
-            if (currtick < startupdelay)
-            {
-              //Power down
-              serverplayers[i].powerdowntime = startupdelay - currtick;
-            }
-            /*
-             else
-            {
-                          serverplayers[i].powerdowntime = NULL;
-            }
-            */
-
+            
             // *** Debugging of pathing code ***
             if (false)
             {
