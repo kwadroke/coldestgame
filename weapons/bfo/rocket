@@ -1,0 +1,14 @@
+Name Rocket
+Weight 30
+ProjectileWeight 0
+Damage 50
+Ammo 10
+Splash 100
+Acceleration .01
+Velocity 1
+ReloadTime 1500
+Model projectile
+ExplosionEmitter particles/emitters/explosion
+Tracer smoke
+TracerTime 1000
+Sound sounds/rocket.ogg

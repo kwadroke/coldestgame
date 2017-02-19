@@ -1,0 +1,13 @@
+Damage 30
+ReloadTime 1300
+Velocity 1000
+Radius .02
+ProjectileWeight 0
+Weight 15
+Name Laser
+Heat 15
+Model empty
+Tracer laser
+TracerTime 70
+ExplosionEmitter particles/emitters/debris
+FireSound sounds/lasershot.ogg

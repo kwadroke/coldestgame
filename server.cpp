@@ -148,6 +148,7 @@ int Server(void* dummy)
    else
       servername = console.GetString("servername");
    nextservparticleid.next(); // 0 has special meaning
+   gametype = console.GetString("gametype");
    servertickrate = console.GetInt("tickrate");
    maxplayers = console.GetInt("maxplayers");
    framecount = 0;
@@ -235,7 +236,7 @@ void ServerLoop()
          }
          else if (serverplayers[i].connected)
          {
-            
+
             // *** Debugging of pathing code ***
             if (false)
             {

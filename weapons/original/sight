@@ -1,0 +1,12 @@
+Damage 0
+ReloadTime 0
+Velocity 9999
+Radius .01
+ProjectileWeight 0
+Weight 0
+Name Sight
+Heat 0
+Model empty
+Tracer sight
+TracerTime 0
+ExplosionEmitter particles/emitters/sighthit

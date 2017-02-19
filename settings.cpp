@@ -225,6 +225,7 @@ void SaveSettings()
    console.Parse("setsave mouseuse " + ToString((int)keys.mouseuse), false);
    console.Parse("setsave mousenextweap " + ToString((int)keys.mousenextweap), false);
    console.Parse("setsave mouseprevweap " + ToString((int)keys.mouseprevweap), false);
+   console.Parse("setsave gametype bfo", false);  //just to have something
 
    if (dorestart)
    {

@@ -1,0 +1,13 @@
+ReloadTime 2000
+Velocity 100
+ProjectileWeight .25
+Weight 30
+Radius 2
+Damage 125
+Name Gauss Rifle
+Heat 10
+Ammo 5
+ExplosionEmitter particles/emitters/debris
+Tracer gauss
+TracerTime 10
+FireSound sounds/gaussshot.ogg

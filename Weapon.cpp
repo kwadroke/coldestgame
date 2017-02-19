@@ -19,50 +19,80 @@
 
 
 #include "Weapon.h"
+#include "globals.h"
 
 Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), radius(1.f), velocity(1.f), acceleration(0.f),
                splashradius(0.f), projectileweight(1.f), heat(0.f), reloadtime(50000), explode(true), modelfile("empty"),
                name("None"), tracerfile(""), expfile("particles/emitters/none"), firesound(""), tracertime(10000)
 {
+
+  //Need to do something better here - duplicated code...
+  gametype=console.GetString("gametype");
+  if (gametype == "BFO" || gametype == "bfo" )
+  {
+    gametype="bfo";
+  }
+  else if (gametype == "FALCON" || gametype == "falcon" )
+  {
+    gametype="falcon";
+  }
+  else if (gametype =="WAR" || gametype == "war" )
+  {
+    gametype="war";
+  }
+  else if (gametype =="ORIGINAL"|| gametype == "original" )
+  {
+    gametype="original";
+  }
+  else
+  {
+    gametype="original";
+  }
+
+
    switch (newid)
    {
       case Weapon::NoWeapon:
          break;
       case Weapon::MachineGun:
-         LoadFromFile("weapons/machinegun");
+         LoadFromFile("weapons/"+ gametype +"/machinegun");
          break;
       case Weapon::Laser:
-         LoadFromFile("weapons/laser");
+         LoadFromFile("weapons/"+ gametype +"/laser");
          break;
       case Weapon::Autocannon:
-         LoadFromFile("weapons/autocannon");
+         LoadFromFile("weapons/"+ gametype +"/autocannon");
          break;
       case Weapon::GaussRifle:
-         LoadFromFile("weapons/gauss");
+         LoadFromFile("weapons/"+ gametype +"/gauss");
          break;
       case Weapon::NeutrinoCannon:
-         LoadFromFile("weapons/neutrino");
+         LoadFromFile("weapons/"+ gametype +"/neutrino");
          break;
       case Weapon::Mortar:
-         LoadFromFile("weapons/mortar");
+         LoadFromFile("weapons/"+ gametype +"/mortar");
          break;
       case Weapon::Rocket:
-         LoadFromFile("weapons/rocket");
+         LoadFromFile("weapons/"+ gametype +"/rocket");
          break;
       case Weapon::Sight:
-         LoadFromFile("weapons/sight");
+         LoadFromFile("weapons/"+ gametype +"/sight");
          break;
       default:
          logout << "Warning: attempted to create non-existent weapon: " << newid << endl;
          break;
    };
+
 }
 
 
 void Weapon::LoadFromFile(const string& file)
 {
    NTreeReader read(file);
-   
+
+   // ToDo - Seems like the files are read alot - FIXME
+   //logout << "Weapons file: " << file << endl;
+
    read.Read(ammo, "Ammo");
    read.Read(damage, "Damage");
    read.Read(radius, "Radius");
@@ -82,6 +112,3 @@ void Weapon::LoadFromFile(const string& file)
    read.ReadLine(firesound, "FireSound");
    read.ReadLine(sound, "Sound");
 }
-
-
-

@@ -10,3 +10,5 @@ bullethit.ogg (aka cg1.wav) http://opengameart.org/content/chaingun-pistol-rifle
 mortarshot.pgg (aka gun_fire.wav) http://opengameart.org/content/collection-gun-sounds - CC-BY 3.0 - by AVW
 mgshot.ogg (aka D_32P.wav) http://opengameart.org/content/the-free-firearm-sound-library - CC0 - by Ben Jaszczak, et al.
 acshot.ogg (aka cannon01.mp3) https://freesound.org/people/Taira%20Komori/sounds/215594/ - CC-BY 3.0 -  by Taira Komori
+engine.ogg (aka qubodup-edev.flac) http://opengameart.org/content/electronic-device-loop - CC0 - By qudodup
+hit.ogg (aka qubodup-crash.ogg) http://opengameart.org/content/crash-collision - CC0 - By qudodup

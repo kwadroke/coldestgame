@@ -49,14 +49,14 @@ class Weapon
       string Sound() const {return sound;}
       int TracerTime() const {return tracertime;}
       string ExpFile() const {return expfile;}
-      
+
       enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, Rocket, Sight, numweapons};
-      
+
       int ammo;
-      
+
    private:
       void LoadFromFile(const string&);
-      
+
       int id;
       int damage;
       int weight;
@@ -75,7 +75,7 @@ class Weapon
       string firesound;
       string sound;
       int tracertime;
-
+      string gametype;
 };
 
 #endif

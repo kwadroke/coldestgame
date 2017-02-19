@@ -1,0 +1,11 @@
+ReloadTime 100
+Velocity 30
+Radius 1
+Damage 5
+Ammo 500
+ProjectileWeight .1
+Weight 5
+Model empty
+Name Machine Gun
+ExplosionEmitter particles/emitters/debris
+FireSound sounds/mgshot.ogg

@@ -248,6 +248,7 @@ void InitGlobals()
    console.Parse("set recordfps 30", false);
    console.Parse("set startfpv 1", false);
    console.Parse("set startupdelay 20", false);
+   console.Parse("set gametype bfo", false);  //bfo, war, falcon
 
    // Default keybindings
    console.Parse("set keyforward " + ToString(SDLK_w), false);
@@ -501,6 +502,28 @@ void ReadConfig()
    //int joy. = console.GetInt("joy");
    */
 
+   gametype=console.GetString("gametype");
+   if (gametype == "BFO" || gametype == "bfo" )
+   {
+     gametype="bfo";
+   }
+   else if (gametype == "FALCON" || gametype == "falcon" )
+   {
+     gametype="falcon";
+   }
+   else if (gametype =="WAR" || gametype == "war" )
+   {
+     gametype="war";
+   }
+   else if (gametype =="ORIGINAL"|| gametype == "original" )
+   {
+     gametype="original";
+   }
+   else
+   {
+     gametype="original";
+   }
+   logout << "Game Type is: " << gametype << endl;
 }
 
 
@@ -1402,6 +1425,7 @@ bool GUIEventHandler(SDL_Event &event)
       SDL_ShowCursor(1);
       gui[loadoutmenu]->ProcessEvent(&event);
       eatevent = true;
+      guncam = true; //set view to fov
    }
    else if (gui[settings]->visible)
    {
@@ -1482,6 +1506,7 @@ void GameEventHandler(SDL_Event &event)
                   gui[hud]->visible = false;
                   netcode->SendLoadout();
                   player[0].Kill();
+                  guncam = true; //set view to fov
                }
             }
             else if (event.key.keysym.sym == keys.keyuseitem)
@@ -1690,6 +1715,7 @@ void GameEventHandler(SDL_Event &event)
                              gui[hud]->visible = false;
                              netcode->SendLoadout();
                              player[0].Kill();
+                             guncam = true; //set view to fov
                           }
                   }
                   else if (event.jbutton.button == 6)
@@ -2934,7 +2960,15 @@ void StopBGMusic()
 #endif
 }
 
-
+void StartBGNoise()
+{
+#ifndef DEDICATED
+   resman.soundman.SetVolume(console.GetFloat("effectsvol"));
+   //musicsource = resman.soundman.PlaySound("sounds/bgmusic.ogg", Vector3(), true, true);
+   musicsource = resman.soundman.PlaySound("sounds/engine.ogg", Vector3(), true, true);
+   musicsource->SetGain(console.GetFloat("effectsvol") / 100.f);
+#endif
+}
 
 void RegenFBOList()
 {
@@ -3060,6 +3094,7 @@ void LoadMap(const string& map)
    winningteam = 0;
    netcode->SendSync();
    StopBGMusic();
+   StartBGNoise();
    if (!replaying)
       ShowGUI(loadoutmenu);
    else

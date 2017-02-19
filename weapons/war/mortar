@@ -1,0 +1,10 @@
+ReloadTime 1700
+Velocity 1
+Weight 30
+Name Mortar
+Splash 75
+Damage 100
+Ammo 8
+ExplosionEmitter particles/emitters/explosion
+Model projectile
+FireSound sounds/mortarshot.ogg

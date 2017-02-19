@@ -36,7 +36,7 @@ Bot::Bot() : botrunning(true),
    // More difficult bots will try to get closer
    float min = 300.f + (SkillAverage() - Skill()) * 50.f;
    closingdistance = Random(min, min + 500.f);
-   
+
    timer.start();
    movetimer.start();
    thread = SDL_CreateThread(Start, this);
@@ -55,9 +55,9 @@ Bot::~Bot()
 int Bot::Start(void* obj)
 {
    setsighandler();
-   
+
    logout << "Bot id " << gettid() << " started." << endl;
-   
+
    ((Bot*)obj)->Loop();
    return 0;
 }
@@ -83,7 +83,7 @@ void Bot::Loop()
 void Bot::Update()
 {
    localplayers = GetPlayers();
-   
+
    // Movement
    if (netcode->bot.moveleft)
       netcode->bot.facing -= .1f * movetimer.elapsed();
@@ -94,7 +94,7 @@ void Bot::Update()
    if (console.GetBool("botsmove") && netcode->bot.spawned)
    {
       FindCurrPathNode();
-      
+
       if (targettimer.elapsed() > 3000)
       {
          if (baseattacker)
@@ -117,28 +117,29 @@ void Bot::Update()
          }
          targettimer.start();
       }
-      
+
       if (!targetplayer || !localplayers[targetplayer].spawned || targetplayer == netcode->PlayerNum())
          targetplayer = SelectTarget();
       if (targetplayer == netcode->PlayerNum())
          logout << "Error: target selected is self " << targetplayer << "  " << netcode->PlayerNum() << endl;
-      
+
       if (!targetplayer)
          SelectTargetSpawn();
-      
+
       UpdateHeading();
       TurnToHeading();
-         
+
       if (targetplayer)
          AimAtTarget(localplayers[targetplayer].pos);
       else
          AimAtTarget(targetspawn.position);
-         
+
       // Weapons fire
       if (firetimer.elapsed() > netcode->bot.CurrentWeapon().ReloadTime() + 50 &&
          BotPlayer().temperature < 99.f - netcode->bot.CurrentWeapon().Heat()
          )
       {
+         // ToDo - Need to check to see if enemy is visible
          netcode->SendFire();
          firetimer.start();
       }
@@ -191,7 +192,7 @@ void Bot::SelectTargetSpawn()
          otherteam.push_back(allspawns[i]);
       }
    }
-   
+
    targetspawn = otherteam[0];
    float dist = otherteam[0].position.distance2(BotPlayer().pos);
    for (size_t i = 1; i < otherteam.size(); ++i)
@@ -207,7 +208,7 @@ void Bot::CheckForNearerTarget()
    intvec otherteam = GetOpponents();
    if (!otherteam.size() || !targetplayer)
       return;
-   
+
    float currdist = 0.f;
    size_t newtarget = targetplayer;
    currdist = BotPlayer().pos.distance2(localplayers[targetplayer].pos);
@@ -238,14 +239,14 @@ void Bot::SelectSpawn()
 void Bot::AimAtTarget(const Vector3& target)
 {
    Vector3 aimvec = target - BotPlayer().pos;
-   
+
    Vector3 facingvec(0.f, 0.f, -1.f);
    GraphicMatrix m;
    m.rotatey(netcode->bot.facing);
    facingvec.transform(m);
-   
+
    Vector3 rots = RotateBetweenVectors(facingvec, aimvec);
-   
+
    float mult = SkillAverage() / Skill();
    mult *= mult;
    float r = Random(-1.f, 1.f);
@@ -275,7 +276,7 @@ void Bot::FindCurrPathNode()
          }
       }
    }
-   
+
    list<PathNodePtr> candidates;
    float currdist = currpathnode->position.distance2(BotPlayer().pos);
    PathNodePtr current = currpathnode;
@@ -284,14 +285,14 @@ void Bot::FindCurrPathNode()
    {
       current = candidates.front();
       candidates.pop_front();
-      
+
       float currcheck = current->position.distance2(BotPlayer().pos);
       if (currcheck < currdist)
       {
          currdist = currcheck;
          currpathnode = current;
       }
-      
+
       for (size_t i = 0; i < 8; ++i)
       {
          if (current->nodes[i])
@@ -319,20 +320,20 @@ void Bot::UpdateHeading()
    Vector3 perp = direct.cross(Vector3(0.f, 1.f, 0.f));
    perp.normalize();
    perp *= closingdistance;
-   
+
    direct.normalize();
    direct *= checkdist;
    direct += perp;
-   
+
    if (heading.magnitude() < 1e-4f)
       heading = Vector3(0, 0, -checkdist);
    Vector3 current = heading;
    current.normalize();
    current *= checkdist;
-   
+
    Vector3 savecurrent = current;
    float angle = 0.f;
-   
+
    if (current.distance2(direct) > 1.f)
    {
       for (int i = 0; i < 2; ++i) // Try both with and without perp
@@ -353,9 +354,9 @@ void Bot::UpdateHeading()
    {
       direct -= perp; // See above
    }
-   
+
    current = savecurrent;
-   
+
    size_t count = 0;
    while (!currpathnode->Validate(start, current, netcode->bot.size))
    {
@@ -366,7 +367,7 @@ void Bot::UpdateHeading()
       GraphicMatrix m;
       m.rotatey(angle);
       current.transform(m);
-      
+
       if (count > 18)
       {
          logout << "Failed to find valid path: " << start << "  " << current << endl;
@@ -375,7 +376,7 @@ void Bot::UpdateHeading()
       }
       ++count;
    }
-   
+
    heading = current;
    heading.y = 0.f;
 }
@@ -385,12 +386,12 @@ void Bot::TurnToHeading()
 {
    netcode->bot.moveleft = false;
    netcode->bot.moveright = false;
-   
+
    Vector3 facing(0.f, 0.f, -1.f);
    GraphicMatrix m;
    m.rotatey(netcode->bot.facing);
    facing.transform(m);
-   
+
    Vector3 rots = RotateBetweenVectors(heading, facing);
    if (fabs(rots.y) < 2.f)
       netcode->bot.facing += rots.y;
@@ -398,7 +399,7 @@ void Bot::TurnToHeading()
       netcode->bot.moveleft = true;
    else if (rots.y < 0.f)
       netcode->bot.moveright = true;
-   
+
    facing *= 250.f;
    if (currpathnode->Validate(BotPlayer().pos, facing, netcode->bot.size))
       netcode->bot.moveforward = true;
@@ -436,4 +437,3 @@ vector<PlayerData> Bot::GetPlayers()
    playermutex->unlock();
    return retval;
 }
-
