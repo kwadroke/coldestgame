@@ -248,7 +248,7 @@ void InitGlobals()
    console.Parse("set recordfps 30", false);
    console.Parse("set startfpv 1", false);
    console.Parse("set startupdelay 20", false);
-   console.Parse("set gametype bfo", false);  //bfo, war, falcon
+   console.Parse("set gamemode bfo", false);  //bfo, war, falcon
 
    // Default keybindings
    console.Parse("set keyforward " + ToString(SDLK_w), false);
@@ -502,28 +502,28 @@ void ReadConfig()
    //int joy. = console.GetInt("joy");
    */
 
-   gametype=console.GetString("gametype");
-   if (gametype == "BFO" || gametype == "bfo" )
+   gamemode=console.GetString("gamemode");
+   if (gamemode == "BFO" || gamemode == "bfo" )
    {
-     gametype="bfo";
+     gamemode="bfo";
    }
-   else if (gametype == "FALCON" || gametype == "falcon" )
+   else if (gamemode == "FALCON" || gamemode == "falcon" )
    {
-     gametype="falcon";
+     gamemode="falcon";
    }
-   else if (gametype =="WAR" || gametype == "war" )
+   else if (gamemode =="WAR" || gamemode == "war" )
    {
-     gametype="war";
+     gamemode="war";
    }
-   else if (gametype =="ORIGINAL"|| gametype == "original" )
+   else if (gamemode =="ORIGINAL"|| gamemode == "original" )
    {
-     gametype="original";
+     gamemode="original";
    }
    else
    {
-     gametype="original";
+     gamemode="original";
    }
-   logout << "Game Type is: " << gametype << endl;
+   logout << "Game Type is: " << gamemode << endl;
 }
 
 

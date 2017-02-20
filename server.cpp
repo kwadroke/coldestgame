@@ -148,7 +148,7 @@ int Server(void* dummy)
    else
       servername = console.GetString("servername");
    nextservparticleid.next(); // 0 has special meaning
-   gametype = console.GetString("gametype");
+   gamemode = console.GetString("gamemode");
    servertickrate = console.GetInt("tickrate");
    maxplayers = console.GetInt("maxplayers");
    framecount = 0;

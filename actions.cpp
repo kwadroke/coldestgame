@@ -166,12 +166,12 @@ void Host()
    if (server) // Starting two servers == BAD
       return;
 
-   ComboBox* gametypedropdown = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("gametypedropdown"));
+   ComboBox* gamemodedropdown = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("gamemodedropdown"));
    Slider* botcountslider = dynamic_cast<Slider*>(gui[hostsetup]->GetWidget("botcountslider"));
    Slider* botskillslider = dynamic_cast<Slider*>(gui[hostsetup]->GetWidget("botskillslider"));
    ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
 
-   console.Parse("set gametype " + ToString(gametypedropdown->SelectedText()));
+   console.Parse("set gamemodee " + ToString(gamemodedropdown->SelectedText()));
    console.Parse("set bots " + ToString(botcountslider->value));
    console.Parse("set botskill " + ToString(botskillslider->value));
    console.Parse("set map " + ToString(mapbox->SelectedText()));

@@ -27,26 +27,26 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), rad
 {
 
   //Need to do something better here - duplicated code...
-  gametype=console.GetString("gametype");
-  if (gametype == "BFO" || gametype == "bfo" )
+  gamemode=console.GetString("gamemode");
+  if (gamemode == "BFO" || gamemode == "bfo" )
   {
-    gametype="bfo";
+    gamemode="bfo";
   }
-  else if (gametype == "FALCON" || gametype == "falcon" )
+  else if (gamemode == "FALCON" || gamemode == "falcon" )
   {
-    gametype="falcon";
+    gamemode="falcon";
   }
-  else if (gametype =="WAR" || gametype == "war" )
+  else if (gamemode =="WAR" || gamemode == "war" )
   {
-    gametype="war";
+    gamemode="war";
   }
-  else if (gametype =="ORIGINAL"|| gametype == "original" )
+  else if (gamemode =="ORIGINAL"|| gamemode == "original" )
   {
-    gametype="original";
+    gamemode="original";
   }
   else
   {
-    gametype="original";
+    gamemode="original";
   }
 
 
@@ -55,28 +55,28 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), rad
       case Weapon::NoWeapon:
          break;
       case Weapon::MachineGun:
-         LoadFromFile("weapons/"+ gametype +"/machinegun");
+         LoadFromFile("weapons/"+ gamemode +"/machinegun");
          break;
       case Weapon::Laser:
-         LoadFromFile("weapons/"+ gametype +"/laser");
+         LoadFromFile("weapons/"+ gamemode +"/laser");
          break;
       case Weapon::Autocannon:
-         LoadFromFile("weapons/"+ gametype +"/autocannon");
+         LoadFromFile("weapons/"+ gamemode +"/autocannon");
          break;
       case Weapon::GaussRifle:
-         LoadFromFile("weapons/"+ gametype +"/gauss");
+         LoadFromFile("weapons/"+ gamemode +"/gauss");
          break;
       case Weapon::NeutrinoCannon:
-         LoadFromFile("weapons/"+ gametype +"/neutrino");
+         LoadFromFile("weapons/"+ gamemode +"/neutrino");
          break;
       case Weapon::Mortar:
-         LoadFromFile("weapons/"+ gametype +"/mortar");
+         LoadFromFile("weapons/"+ gamemode +"/mortar");
          break;
       case Weapon::Rocket:
-         LoadFromFile("weapons/"+ gametype +"/rocket");
+         LoadFromFile("weapons/"+ gamemode +"/rocket");
          break;
       case Weapon::Sight:
-         LoadFromFile("weapons/"+ gametype +"/sight");
+         LoadFromFile("weapons/"+ gamemode +"/sight");
          break;
       default:
          logout << "Warning: attempted to create non-existent weapon: " << newid << endl;

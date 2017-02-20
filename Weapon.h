@@ -75,7 +75,7 @@ class Weapon
       string firesound;
       string sound;
       int tracertime;
-      string gametype;
+      string gamemode;
 };
 
 #endif

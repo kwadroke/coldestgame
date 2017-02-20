@@ -60,7 +60,7 @@ ClientNetCodePtr netcode;
 UpdaterPtr updater;
 int currentdisplaytime;
 int lastdisplaytime;
-string gametype;
+string gamemode;
 
 #ifndef DEDICATED
 FontCache fontcache;

@@ -100,7 +100,7 @@ extern bool spawnschanged;
 extern ClientNetCodePtr netcode;
 extern UpdaterPtr updater;
 extern FontCache fontcache;
-extern string gametype;
+extern string gamemode;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);
