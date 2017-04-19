@@ -50,7 +50,8 @@ class Weapon
       int TracerTime() const {return tracertime;}
       string ExpFile() const {return expfile;}
 
-      enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, NeutrinoCannon, Mortar, Rocket, Sight, numweapons};
+      // If you change the order of the weapons in loadout.xml, change it here to match - or you will be selecting the wrong weapon
+      enum Weapons{NoWeapon, MachineGun, Laser, Autocannon, GaussRifle, Mortar, Rocket, Railgun, NeutrinoCannon, Sight, numweapons};
 
       int ammo;
 

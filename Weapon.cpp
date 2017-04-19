@@ -75,6 +75,9 @@ Weapon::Weapon(const int newid) : ammo(-1), id(newid), damage(0), weight(0), rad
       case Weapon::Rocket:
          LoadFromFile("weapons/"+ gamemode +"/rocket");
          break;
+      case Weapon::Railgun:
+         LoadFromFile("weapons/"+ gamemode +"/railgun");
+         break;
       case Weapon::Sight:
          LoadFromFile("weapons/"+ gamemode +"/sight");
          break;

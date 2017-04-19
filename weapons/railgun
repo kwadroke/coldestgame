@@ -1,0 +1,13 @@
+Damage 100
+ReloadTime 1000
+Velocity 10000
+Radius .001
+ProjectileWeight 0.00001
+Weight 30
+Name Railgun
+Heat 15
+Model empty
+Tracer laser
+TracerTime 30
+ExplosionEmitter particles/emitters/debris
+FireSound sounds/lasershot.ogg
