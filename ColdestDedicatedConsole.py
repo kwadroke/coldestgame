@@ -12,8 +12,8 @@ import platform
 class ColdestDedicatedConsole(QtGui.QDialog):
    def __init__(self, parent=None):
       QtGui.QWidget.__init__(self, parent)
-      self.setWindowTitle("Coldest Dedicated Server")
-      
+      self.setWindowTitle("Coldest: Absolute Zero Dedicated Server")
+
       global sendbutton
       global looptimer
       global server
@@ -26,7 +26,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       looptimer = QtCore.QTimer()
       looptimer.setInterval(500)
       self.connect(looptimer, QtCore.SIGNAL('timeout()'), self.mainloop)
-      
+
       output = QtGui.QTextEdit(self)
       inbox = QtGui.QLineEdit(self)
       sendbutton = QtGui.QPushButton("Send", self)
@@ -37,44 +37,44 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       layout = QtGui.QVBoxLayout(self)
       inlayout = QtGui.QHBoxLayout()
       servinfo = QtGui.QHBoxLayout()
-      
+
       inlayout.addWidget(inbox)
       inlayout.addWidget(sendbutton)
-      
+
       #servinfo.addWidget(servaddr)
       #servinfo.addWidget(servport)
       #servinfo.addWidget(servpass)
-      
+
       #layout.addLayout(servinfo)
       layout.addWidget(output)
       layout.addLayout(inlayout)
-      
+
       self.connect(sendbutton, QtCore.SIGNAL('clicked()'), self.send)
-      
+
       #servpass.setEchoMode(QtGui.QLineEdit.Password)
       #servport.setMaximumWidth(100)
       output.setReadOnly(True)
-      
+
       # Start the actual server process
       if not win32:
          server = subprocess.Popen("./server", stdin=subprocess.PIPE, stdout=subprocess.PIPE)
       else:
          server = subprocess.Popen("Dedicated.exe", stdin=subprocess.PIPE, stdout=None)
-      
+
       self.setLayout(layout)
       self.resize(500, 300)
       self.show()
       looptimer.start()
-      
-      
+
+
    def send(self):
       global inbox, server
       command = inbox.text() + "\n"
       server.stdin.write(command.toAscii())
       server.stdin.flush()
       inbox.clear()
-      
-      
+
+
    def closeEvent(self, event):
       global server, output
       global win32
@@ -90,15 +90,15 @@ class ColdestDedicatedConsole(QtGui.QDialog):
          else:
             server.terminate() # Best we can do on Windows
       event.accept()
-      
-      
+
+
    def mainloop(self):
       global server, output
       global win32
       print server.poll()
       if server.poll() != None:
          sys.exit(0)
-      
+
       if not win32:
          poller = select.poll()
          poller.register(server.stdout)
@@ -122,4 +122,3 @@ class ColdestDedicatedConsole(QtGui.QDialog):
             alllines += line
             if len(alllines) > len(output.toPlainText()):
                output.insertPlainText(line)
-		 
