@@ -48,7 +48,7 @@ void ComboBox::RenderWidget()
    table->y = height;
    table->width = width;
    table->height = menuheight;
-   
+
    button->textures[Normal] = textures[Normal];
    button->textures[Hover] = textures[Hover];
    button->textures[Clicked] = textures[Clicked];
@@ -56,7 +56,7 @@ void ComboBox::RenderWidget()
    button->y = 0;
    button->width = width;
    button->height = height;
-   
+
    glTranslatef(0, 0, 1);
    table->Render();
    glTranslatef(0, 0, -1);
@@ -68,7 +68,7 @@ void ComboBox::LeftDown(SDL_Event* event)
 {
 }
 
-
+//Replicate this with keyboard
 void ComboBox::LeftClick(SDL_Event* event)
 {
    if (table->InWidget(event) && table->visible && !table->InScrollbar(event->motion.x, event->motion.y))
@@ -78,7 +78,7 @@ void ComboBox::LeftClick(SDL_Event* event)
       table->visible = false;
       event->type = SDL_USEREVENT; // ComboBox tables eat events, so make sure nobody else processes this
    }
-   
+
    if (button->InWidget(event) && !table->visible)
    {
       table->visible = true;
@@ -90,7 +90,7 @@ void ComboBox::CustomProcessEvent(SDL_Event* event)
 {
    button->ProcessEvent(event);
    table->ProcessEvent(event);
-   
+
    if (!InWidget(event) && event->type == SDL_MOUSEBUTTONDOWN)
       table->visible = false;
 }

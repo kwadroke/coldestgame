@@ -1550,6 +1550,29 @@ void GameEventHandler(SDL_Event &event)
                TextArea* chatoutput = (TextArea*) gui[chat]->GetWidget("chatoutput");
                chatoutput->ScrollDown();
             }
+
+            else if (event.key.keys.sym == SDLK_I)
+            {
+              if (gui[loadoutmenu]->visible == true)
+              {
+                //select first weapon menu
+              }
+            }
+            else if (event.key.keys.sym == SDLK_O)
+            {
+              if (gui[loadoutmenu]->visible == true)
+              {
+                //select second weapon menu
+              }
+            }
+            else if (event.key.keys.sym == SDLK_P)
+            {
+              if (gui[loadoutmenu]->visible == true)
+              {
+                //select third weapon menu
+              }
+            }
+
             break;
 
          case SDL_KEYUP:
