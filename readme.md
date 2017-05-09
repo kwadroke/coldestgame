@@ -5,19 +5,18 @@ _Coldest: Absolute Zero_ is a continuation/fork of the Open Source Mech Game [_C
 [Gitter Chat](https://gitter.im/Coldest-Absolute-Zero/Lobby)
 
 ### Project Goals:
-* Make it playable on Raspberry Pi (at least the Pi3)  
-* Make the GUI optional  
+* Make the GUI optional/Skip GUI sections  
 * Update & add more mech models  
-* Update Sounds  
+* Update Sounds (Phase 1 Complete)    
 * Improve AI  
-* Joystick/Gamepad Controls  
+* Joystick/Gamepad Controls (WIP)  
 * Create Dockerfile for Dedicated Servers  
-* Add documentation
-* Additional Maps including Urban settings
-* Cockpit HUD
+* Add documentation (WIP - https://github.com/kwadroke/coldestgame/wiki)  
+* Additional Maps including Urban settings  
+* Cockpit HUD (WIP/Placeholder)  
 
 ### Nice to haves:
 * OpenGL ES port (Android & RPi)  
+  * Make it playable on Raspberry Pi (at least the Pi3)
 * External Display via network for Mech Stats for Simpits
 * Joystick/Gamepad controlled GUI
-
