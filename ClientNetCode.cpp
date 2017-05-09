@@ -969,6 +969,10 @@ void ClientNetCode::ReadAnnounce(stringstream& get, bool master)
       addme.strip = dotteddec;
       servers.push_back(addme);
       knownservers.insert(addme);
+      if (console.GetString("autoconnect") == "true" || console.GetString("autoconnect") == "1" || console.GetString("autoconnect")== "True")
+      {
+          //connect to dotteddecdotteddec;
+      }
    }
 }
 

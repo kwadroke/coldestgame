@@ -101,6 +101,7 @@ extern ClientNetCodePtr netcode;
 extern UpdaterPtr updater;
 extern FontCache fontcache;
 extern string gamemode;
+extern string autoconnect;
 
 void UpdatePlayerModel(PlayerData&, Meshlist&, bool gl = true);
 float GetTerrainHeight(const float x, const float y);

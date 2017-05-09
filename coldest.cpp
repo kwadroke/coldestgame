@@ -104,9 +104,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #if !defined(DEDICATED)
    if (argc > 1)
    {
-      logout << "Editing " << argv[1] << endl;
-      EditorLoop(argv[1]);
-      return 0;
+      if (argv[1] == "edit")
+      {
+          logout << "Editing " << argv[2] << endl;
+          EditorLoop(argv[2]);
+          return 0;
+      }
+      else if (argv[1] == "connect")
+      {
+          logout << "Connecting to " << argv[2] << endl;
+          //netcode->Connect(argv[2]);
+          return 0;
+      }
    }
 #endif
 
@@ -523,6 +532,14 @@ void ReadConfig()
    {
      gamemode="original";
    }
+
+   //Autoconnect to a server if specifed
+   autoconnect=console.GetString("autoconnect");
+   if ( autoconnect != "@none@" || autoconnect != "" || autoconnect != "false" )
+   {
+
+   }
+
    logout << "Game Type is: " << gamemode << endl;
 }
 
@@ -1551,21 +1568,21 @@ void GameEventHandler(SDL_Event &event)
                chatoutput->ScrollDown();
             }
 
-            else if (event.key.keys.sym == SDLK_I)
+            else if (event.key.keysym.sym == SDLK_i)
             {
               if (gui[loadoutmenu]->visible == true)
               {
                 //select first weapon menu
               }
             }
-            else if (event.key.keys.sym == SDLK_O)
+            else if (event.key.keysym.sym == SDLK_o)
             {
               if (gui[loadoutmenu]->visible == true)
               {
                 //select second weapon menu
               }
             }
-            else if (event.key.keys.sym == SDLK_P)
+            else if (event.key.keysym.sym == SDLK_p)
             {
               if (gui[loadoutmenu]->visible == true)
               {

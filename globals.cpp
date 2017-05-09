@@ -61,6 +61,7 @@ UpdaterPtr updater;
 int currentdisplaytime;
 int lastdisplaytime;
 string gamemode;
+string autoconnect;
 
 #ifndef DEDICATED
 FontCache fontcache;
