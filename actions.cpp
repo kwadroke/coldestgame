@@ -171,7 +171,7 @@ void Host()
    Slider* botskillslider = dynamic_cast<Slider*>(gui[hostsetup]->GetWidget("botskillslider"));
    ComboBox* mapbox = dynamic_cast<ComboBox*>(gui[hostsetup]->GetWidget("mapbox"));
 
-   console.Parse("set gamemodee " + ToString(gamemodedropdown->SelectedText()));
+   console.Parse("set gamemode " + ToString(gamemodedropdown->SelectedText()));
    console.Parse("set bots " + ToString(botcountslider->value));
    console.Parse("set botskill " + ToString(botskillslider->value));
    console.Parse("set map " + ToString(mapbox->SelectedText()));

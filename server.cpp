@@ -84,7 +84,8 @@ vector<BotPtr> bots;
 vector<intvec> visible;
 vector<PathNodePtr> pathnodes;
 int aipathversion = 1;
-
+int timedserver;
+int maptime;
 
 int Server(void* dummy)
 {
@@ -146,11 +147,20 @@ int Server(void* dummy)
       logout << "Chose name " << servername << " which is #" << choosename << endl;
    }
    else
+   {
       servername = console.GetString("servername");
+   }
    nextservparticleid.next(); // 0 has special meaning
    gamemode = console.GetString("gamemode");
    servertickrate = console.GetInt("tickrate");
    maxplayers = console.GetInt("maxplayers");
+   timedserver = console.GetInt("timedserver");
+   if (timedserver > 0)
+   {
+    timedserver = console.GetInt("timedserver") * 60000;
+    logout << "Time Limit Enabled. Round time is: " << timedserver << endl;
+   }
+
    framecount = 0;
    lastfpsupdate = SDL_GetTicks();
    if (console.GetString("map") == "")
@@ -178,6 +188,8 @@ void ServerLoop()
    Timer frametimer;
    frametimer.start();
 
+   int mapstart = 0;
+
    while (running)
    {
       servernetcode->Update();
@@ -196,7 +208,7 @@ void ServerLoop()
       }
       frametimer.start();
 
-      int mapstart;
+
       int startupdelay = console.GetInt("startupdelay") * 1000;
 
       if (gameover && SDL_GetTicks() > nextmaptime)
@@ -208,6 +220,12 @@ void ServerLoop()
          logout << "Map Start " << mapstart << endl;
       }
 
+      maptime = mapstart + timedserver;
+      if (!gameover && timedserver != 0 && SDL_GetTicks() >= maptime)
+      {
+        logout << "Round Time Limit Hit " << maptime << endl;
+        gameover = 1;
+      }
 
       if (consoleloadmap)
       {
