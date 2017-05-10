@@ -1,5 +1,5 @@
 #!/bin/sh
-# Start script for Coldest to make sure LD_LIBRARY_PATH is set correctly
+# Start script for ColdestAZ to make sure LD_LIBRARY_PATH is set correctly
 
 export LD_LIBRARY_PATH=lib:$LD_LIBRARY_PATH
 ./server

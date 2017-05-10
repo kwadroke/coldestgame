@@ -15,6 +15,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       self.setWindowTitle("Coldest: Absolute Zero Dedicated Server")
 
       global sendbutton
+      global restartmapbutton
       global looptimer
       global server
       global inbox, output
@@ -29,6 +30,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
 
       output = QtGui.QTextEdit(self)
       inbox = QtGui.QLineEdit(self)
+      #restartmapbutton = QtGui.QPushButton("Restart Map", self) #Currently Disabled
       sendbutton = QtGui.QPushButton("Send", self)
       # Add these back in if you decide to allow remote administration
       #servaddr = QtGui.QLineEdit("localhost", self)
@@ -39,6 +41,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       servinfo = QtGui.QHBoxLayout()
 
       inlayout.addWidget(inbox)
+      #inlayout.addWidget(restartmapbutton)
       inlayout.addWidget(sendbutton)
 
       #servinfo.addWidget(servaddr)
@@ -48,7 +51,7 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       #layout.addLayout(servinfo)
       layout.addWidget(output)
       layout.addLayout(inlayout)
-
+      #self.connect(restartmapbutton, QtCore.SIGNAL('clicked()'), self.restartmap)
       self.connect(sendbutton, QtCore.SIGNAL('clicked()'), self.send)
 
       #servpass.setEchoMode(QtGui.QLineEdit.Password)
@@ -65,6 +68,14 @@ class ColdestDedicatedConsole(QtGui.QDialog):
       self.resize(500, 300)
       self.show()
       looptimer.start()
+
+
+   def restartmap(self):
+      global inbox,server
+      command = "set map riverside\n"
+      server.stdin.write(command.toAscii())
+      server.stdin.flush()
+      inbox.clear()
 
 
    def send(self):
