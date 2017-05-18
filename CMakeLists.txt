@@ -120,13 +120,13 @@ if(BUILD_CLIENT)
 endif(BUILD_CLIENT)
 
 if(BUILD_DEDICATED_SERVER)
-	add_executable(server ${DEDICATED_SERVER_SOURCES} ${COMMON_SOURCES})
-	set_target_properties(server PROPERTIES COMPILE_FLAGS "-DDEDICATED")
-	target_link_libraries(server ${LIBS})
+	add_executable(cazserver ${DEDICATED_SERVER_SOURCES} ${COMMON_SOURCES})
+	set_target_properties(cazserver PROPERTIES COMPILE_FLAGS "-DDEDICATED")
+	target_link_libraries(cazserver ${LIBS})
 endif(BUILD_DEDICATED_SERVER)
 
 if(BUILD_MASTER_SERVER)
-	add_executable(master ${MASTER_SERVER_SOURCES})
-	target_link_libraries(master ${MASTER_SERVER_LIBS})
+	add_executable(cazmaster ${MASTER_SERVER_SOURCES})
+	target_link_libraries(cazmaster ${MASTER_SERVER_LIBS})
 endif(BUILD_MASTER_SERVER)
 
