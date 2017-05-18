@@ -104,18 +104,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #if !defined(DEDICATED)
    if (argc > 1)
    {
-      if (argv[1] == "edit")
-      {
+      //if (argv[1] == "edit")
+      //{
           logout << "Editing " << argv[2] << endl;
           EditorLoop(argv[2]);
           return 0;
-      }
-      else if (argv[1] == "connect")
-      {
-          logout << "Connecting to " << argv[2] << endl;
+      //}
+      //else if (argv[1] == "connect")
+    //{
+        //  logout << "Connecting to " << argv[2] << endl;
           //netcode->Connect(argv[2]);
-          return 0;
-      }
+      //    return 0;
+      //}
    }
 #endif
 
