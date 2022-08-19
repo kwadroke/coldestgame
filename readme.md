@@ -2,8 +2,6 @@
 
 _Coldest: Absolute Zero_ is a continuation/fork of the Open Source Mech Game [_Coldest_](http://coldestgame.com) by Cybertron.
 
-[Gitter Chat](https://gitter.im/Coldest-Absolute-Zero/Lobby)
-
 ### Project Goals:
 * Make the GUI optional/Skip GUI sections  
 * Update & add more mech models  
